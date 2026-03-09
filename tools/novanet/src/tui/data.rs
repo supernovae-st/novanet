@@ -173,7 +173,7 @@ pub struct ClassInfo {
     pub display_name: String,
     pub description: String,
     pub icon: String,
-    pub trait_name: String,
+    // v0.17.3 (ADR-036): trait_name removed, use layer for visual encoding
     pub instance_count: i64,
     pub arcs: Vec<ArcInfo>,
     pub yaml_path: String,
@@ -869,12 +869,7 @@ pub struct RealmDetails {
     pub total_instances: usize,
 }
 
-/// Class stats grouped by trait for Layer details view.
-#[derive(Debug, Clone)]
-pub struct TraitClassGroup {
-    pub trait_key: String,
-    pub class_names: Vec<String>,
-}
+// v0.17.3 (ADR-036): TraitClassGroup removed - traits no longer part of schema
 
 /// Complete details for a Layer, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
@@ -883,7 +878,8 @@ pub struct LayerDetails {
     pub display_name: String,
     pub description: String,
     pub realm: String,
-    pub classes_by_trait: Vec<TraitClassGroup>,
+    /// v0.17.3 (ADR-036): Flat list of class names (was classes_by_trait)
+    pub class_names: Vec<String>,
     pub total_classes: usize,
     pub total_instances: usize,
 }
@@ -953,7 +949,7 @@ RETURN
     coalesce(k.display_name, k.label) AS class_display,
     coalesce(k.llm_context, '') AS class_desc,
     coalesce(k.icon, '') AS class_icon,
-    coalesce(k.trait, '') AS trait_key,
+    // v0.17.3 (ADR-036): trait removed from schema
     coalesce(r.key, 'unknown') AS realm_key,
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
     coalesce(r.color, '#ffffff') AS realm_color,
@@ -989,7 +985,7 @@ ORDER BY realm_key, layer_key, class_key
             let class_display = row.str("class_display");
             let class_desc = row.str("class_desc");
             let class_icon = row.str("class_icon");
-            let trait_key = row.str("trait_key");
+            // v0.17.3 (ADR-036): trait_key removed
             let realm_key = row.str("realm_key");
             let realm_display = row.str("realm_display");
             let realm_color = row.str("realm_color");
@@ -1031,7 +1027,7 @@ ORDER BY realm_key, layer_key, class_key
                 display_name: class_display,
                 description: class_desc,
                 icon: class_icon,
-                trait_name: trait_key,
+                // v0.17.3 (ADR-036): trait_name removed
                 instance_count: instances,
                 arcs: Vec::new(), // Loaded separately
                 yaml_path,
@@ -1907,24 +1903,24 @@ RETURN l.key as layer_key,
         }
     }
 
-    /// Load Layer details from Neo4j (classes grouped by trait, stats).
+    /// Load Layer details from Neo4j (classes, stats).
+    /// v0.17.3 (ADR-036): Simplified - no longer groups by trait.
     pub async fn load_layer_details(db: &Db, layer_key: &str) -> crate::Result<LayerDetails> {
         let cypher = r#"
 MATCH (l:Layer {key: $layerKey})
 OPTIONAL MATCH (r:Realm)-[:HAS_LAYER]->(l)
 OPTIONAL MATCH (l)<-[:IN_LAYER]-(c:Class)
-OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
-OPTIONAL MATCH (c)<-[:OF_CLASS]-(n)
-WITH l, r, t.key as trait_key, c, count(DISTINCT n) as inst_count
-ORDER BY trait_key, c.label
-WITH l, r, trait_key, collect(coalesce(c.display_name, c.label)) as class_names, count(c) as trait_class_count, sum(inst_count) as trait_instances
+OPTIONAL MATCH (n) WHERE labels(n)[0] = c.label AND NOT n:Schema
+WITH l, r, c, count(DISTINCT n) as inst_count
+ORDER BY c.label
+WITH l, r, collect(coalesce(c.display_name, c.label)) as class_names, count(c) as total_classes, sum(inst_count) as total_instances
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as display_name,
        coalesce(l.llm_context, '') as description,
        coalesce(r.key, '') as realm,
-       collect({trait_key: trait_key, class_names: class_names}) as classes_by_trait,
-       sum(trait_class_count) as total_classes,
-       sum(trait_instances) as total_instances
+       class_names,
+       total_classes,
+       total_instances
 "#;
 
         let rows = db
@@ -1939,29 +1935,15 @@ RETURN l.key as layer_key,
             let total_classes: i64 = row.get("total_classes").unwrap_or(0);
             let total_instances: i64 = row.get("total_instances").unwrap_or(0);
 
-            // Parse classes_by_trait
-            let groups_list = row
-                .get::<Vec<neo4rs::BoltMap>>("classes_by_trait")
-                .unwrap_or_default();
-            let mut classes_by_trait: Vec<TraitClassGroup> = Vec::with_capacity(groups_list.len());
-            for group_map in groups_list {
-                if let Ok(trait_key) = group_map.get::<String>("trait_key") {
-                    let class_names: Vec<String> = group_map
-                        .get::<Vec<String>>("class_names")
-                        .unwrap_or_default();
-                    classes_by_trait.push(TraitClassGroup {
-                        trait_key,
-                        class_names,
-                    });
-                }
-            }
+            // v0.17.3 (ADR-036): Simple flat list of class names
+            let class_names: Vec<String> = row.get("class_names").unwrap_or_default();
 
             Ok(LayerDetails {
                 key,
                 display_name,
                 description,
                 realm,
-                classes_by_trait,
+                class_names,
                 total_classes: total_classes as usize,
                 total_instances: total_instances as usize,
             })
@@ -2975,156 +2957,9 @@ ORDER BY entity_key
     }
 
     // =========================================================================
-    // TRAIT FILTER METHODS (Quick Filter: fi/fl/fk/fg/fa)
+    // v0.17.3 (ADR-036): Trait filter methods removed - traits no longer in schema
+    // Quick Filter keybindings (fi/fl/fk/fg/fa) removed in tree.rs
     // =========================================================================
-
-    /// Check if a Layer has any Classes matching the trait filter.
-    fn layer_has_matching_classes(&self, layer: &LayerInfo, trait_filter: &str) -> bool {
-        layer.classes.iter().any(|k| k.trait_name == trait_filter)
-    }
-
-    /// Check if a Realm has any Layers with matching Classes.
-    fn realm_has_matching_classes(&self, realm: &RealmInfo, trait_filter: &str) -> bool {
-        realm
-            .layers
-            .iter()
-            .any(|l| self.layer_has_matching_classes(l, trait_filter))
-    }
-
-    /// Count visible items with trait filter applied.
-    /// Hides Classes that don't match, and Layers/Realms with no matching Classes.
-    pub fn item_count_with_trait_filter(&self, trait_filter: Option<&str>) -> usize {
-        let Some(filter) = trait_filter else {
-            return self.item_count(); // No filter, use normal count
-        };
-
-        let mut count = 0;
-
-        // Classs section
-        count += 1; // "Classes" header
-        if !self.is_collapsed("classes") {
-            for realm in &self.realms {
-                // Skip realms with no matching classes
-                if !self.realm_has_matching_classes(realm, filter) {
-                    continue;
-                }
-                count += 1; // realm header
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    for layer in &realm.layers {
-                        // Skip layers with no matching classes
-                        if !self.layer_has_matching_classes(layer, filter) {
-                            continue;
-                        }
-                        count += 1; // layer header
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            // Count only matching classes
-                            count += layer
-                                .classes
-                                .iter()
-                                .filter(|k| k.trait_name == filter)
-                                .count();
-                        }
-                    }
-                }
-            }
-        }
-
-        // Arcs section (not filtered by trait)
-        count += 1; // "Arcs" header
-        if !self.is_collapsed("arcs") {
-            for family in &self.arc_families {
-                count += 1; // family header
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    count += family.arc_classes.len();
-                }
-            }
-        }
-
-        count
-    }
-
-    /// Get item at cursor position with trait filter applied.
-    pub fn item_at_with_trait_filter(
-        &self,
-        cursor: usize,
-        trait_filter: Option<&str>,
-    ) -> Option<TreeItem<'_>> {
-        let Some(filter) = trait_filter else {
-            return self.item_at(cursor); // No filter, use normal lookup
-        };
-
-        let mut idx = 0;
-
-        // Classs section header
-        if idx == cursor {
-            return Some(TreeItem::ClassesSection);
-        }
-        idx += 1;
-
-        if !self.is_collapsed("classes") {
-            for realm in &self.realms {
-                // Skip realms with no matching classes
-                if !self.realm_has_matching_classes(realm, filter) {
-                    continue;
-                }
-                if idx == cursor {
-                    return Some(TreeItem::Realm(realm));
-                }
-                idx += 1;
-
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    for layer in &realm.layers {
-                        // Skip layers with no matching classes
-                        if !self.layer_has_matching_classes(layer, filter) {
-                            continue;
-                        }
-                        if idx == cursor {
-                            return Some(TreeItem::Layer(realm, layer));
-                        }
-                        idx += 1;
-
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            // Only include matching classes
-                            for class_info in
-                                layer.classes.iter().filter(|k| k.trait_name == filter)
-                            {
-                                if idx == cursor {
-                                    return Some(TreeItem::Class(realm, layer, class_info));
-                                }
-                                idx += 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Arcs section header
-        if idx == cursor {
-            return Some(TreeItem::ArcsSection);
-        }
-        idx += 1;
-
-        if !self.is_collapsed("arcs") {
-            for family in &self.arc_families {
-                if idx == cursor {
-                    return Some(TreeItem::ArcFamily(family));
-                }
-                idx += 1;
-
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_class in &family.arc_classes {
-                        if idx == cursor {
-                            return Some(TreeItem::ArcClass(family, arc_class));
-                        }
-                        idx += 1;
-                    }
-                }
-            }
-        }
-
-        None
-    }
 
     /// Get the collapse key for an item at cursor position.
     /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
@@ -3984,7 +3819,7 @@ impl TaxonomyTree {
             display_name: "App Config".to_string(),
             description: "Application configuration".to_string(),
             icon: String::new(),
-            trait_name: "defined".to_string(),
+            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -4002,7 +3837,7 @@ impl TaxonomyTree {
             display_name: "Entity".to_string(),
             description: "Foundation entity".to_string(),
             icon: String::new(),
-            trait_name: "defined".to_string(),
+            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -4145,7 +3980,7 @@ mod tests {
             display_name: display_name.to_string(),
             description: String::new(),
             icon: String::new(),
-            trait_name: "defined".to_string(),
+            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),

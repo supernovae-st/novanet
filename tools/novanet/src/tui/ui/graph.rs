@@ -352,11 +352,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         lines.push(Line::from(Span::raw("")));
 
         // === OUTGOING ARCS (Classes in this layer) ===
-        let total_classes: usize = details
-            .classes_by_trait
-            .iter()
-            .map(|g| g.class_names.len())
-            .sum();
+        // v0.17.3 (ADR-036): Simplified - no longer shows trait grouping
+        let total_classes = details.class_names.len();
 
         if total_classes > 0 {
             lines.push(Line::from(Span::styled(
@@ -367,28 +364,21 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             )));
             lines.push(Line::from(Span::styled(ARC_SEPARATOR, dim)));
 
-            for group in &details.classes_by_trait {
-                let trait_color = theme.trait_color(&group.trait_key);
-                let trait_icon = theme.icons.trait_icon(&group.trait_key);
-
-                for class_name in &group.class_names {
-                    lines.push(Line::from(vec![
-                        Span::styled(
-                            "    → ",
-                            Style::default()
-                                .fg(ownership_color)
-                                .add_modifier(Modifier::BOLD),
-                        ),
-                        Span::styled("HAS_CLASS", Style::default().fg(ownership_color)),
-                        Span::styled(" → ", dim),
-                        Span::styled(format!("{} ", trait_icon), Style::default().fg(trait_color)),
-                        Span::styled(
-                            class_name,
-                            Style::default().fg(theme.layer_color(&details.key)),
-                        ),
-                        Span::styled(format!(" [{}]", group.trait_key), dim),
-                    ]));
-                }
+            for class_name in &details.class_names {
+                lines.push(Line::from(vec![
+                    Span::styled(
+                        "    → ",
+                        Style::default()
+                            .fg(ownership_color)
+                            .add_modifier(Modifier::BOLD),
+                    ),
+                    Span::styled("HAS_CLASS", Style::default().fg(ownership_color)),
+                    Span::styled(" → ", dim),
+                    Span::styled(
+                        class_name,
+                        Style::default().fg(theme.layer_color(&details.key)),
+                    ),
+                ]));
             }
         } else {
             lines.push(Line::from(Span::styled(
@@ -850,25 +840,31 @@ fn layer_short(layer: &str) -> &'static str {
     }
 }
 
-/// Get trait icon (Unicode symbol).
-fn trait_icon(trait_name: &str) -> &'static str {
-    match trait_name {
-        "defined" => "■",
-        "authored" => "□",
-        "imported" => "◇",
-        "generated" => "✦",
-        "retrieved" => "⋆",
+/// Get layer icon (Unicode symbol).
+/// v0.17.3 (ADR-036): Replaced trait_icon with layer_icon
+fn layer_icon(layer_key: &str) -> &'static str {
+    match layer_key {
+        "config" => "⚙",
+        "locale" => "🌐",
+        "geography" => "📍",
+        "knowledge" => "📚",
+        "foundation" => "🏛",
+        "structure" => "🏗",
+        "semantic" => "💎",
+        "instruction" => "📝",
+        "output" => "📤",
         _ => "○",
     }
 }
 
-/// Build classification badge Span: [realm/layer] trait_icon
+/// Build classification badge Span: [realm/layer] layer_icon
 /// Example: [org/fnd] ■
+/// v0.17.3 (ADR-036): trait_icon removed, using layer icon instead
 fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> Span<'static> {
-    if let Some((realm, layer, class_info)) = app.tree.find_class(class_key) {
+    if let Some((realm, layer, _class_info)) = app.tree.find_class(class_key) {
         let realm_short = if realm.key == "shared" { "shd" } else { "org" };
         let layer_s = layer_short(&layer.key);
-        let icon = trait_icon(&class_info.trait_name);
+        let icon = layer_icon(&layer.key);
 
         let badge = format!("[{}/{}] {} ", realm_short, layer_s, icon);
         Span::styled(badge, Style::default().fg(theme.layer_color(&layer.key)))
@@ -1036,7 +1032,7 @@ mod tests {
             display_name: key.to_string(),
             description: String::new(),
             icon: String::new(),
-            trait_name: "defined".to_string(),
+            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -1276,8 +1272,7 @@ mod tests {
             all_content.contains("[org/str]"),
             "should contain realm/layer badge"
         );
-        // Should contain trait icon (■ for defined)
-        assert!(all_content.contains("■"), "should contain trait icon");
+        // v0.17.3 (ADR-036): trait icon assertion removed - traits no longer in schema
         // Both direction indicators
         assert!(
             all_content.contains("←"),

@@ -125,10 +125,7 @@ pub struct App {
     pub data_cursor_before_filter: usize,
     /// Hide empty: when true, hide classes/layers with 0 instances in Data mode.
     pub hide_empty: bool,
-    /// Active trait filter (None = show all, Some("defined") = filter by trait).
-    pub trait_filter: Option<String>,
-    /// Pending filter key (true when 'f' was pressed, waiting for second key).
-    pub filter_pending: bool,
+    // v0.17.3 (ADR-036): trait_filter and filter_pending removed - traits no longer in schema
 
     // ==========================================================================
     // Property Focus State (Feature 3)
@@ -205,8 +202,7 @@ impl App {
             data_filter_class: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
-            trait_filter: None,
-            filter_pending: false,
+            // v0.17.3 (ADR-036): trait_filter/filter_pending removed
 
             // Property focus state
             focused_property_idx: 0,
@@ -928,65 +924,7 @@ impl App {
             return self.handle_recent_items_key(key);
         }
 
-        // Filter pending mode: waiting for second key (fi/fl/fk/fg/fa/ff)
-        if self.filter_pending {
-            self.filter_pending = false; // Always clear pending state
-            // v11.8: Renamed per ADR-024 Data Origin semantics
-            match key.code {
-                KeyCode::Char('d') => {
-                    self.trait_filter = Some("defined".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: defined (■)");
-                    return true;
-                }
-                KeyCode::Char('a') => {
-                    self.trait_filter = Some("authored".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: authored (□)");
-                    return true;
-                }
-                KeyCode::Char('i') => {
-                    self.trait_filter = Some("imported".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: imported (◊)");
-                    return true;
-                }
-                KeyCode::Char('g') => {
-                    self.trait_filter = Some("generated".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: generated (★)");
-                    return true;
-                }
-                KeyCode::Char('r') => {
-                    self.trait_filter = Some("retrieved".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: retrieved (▪)");
-                    return true;
-                }
-                KeyCode::Char('f') => {
-                    // ff = clear filter
-                    self.trait_filter = None;
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter cleared");
-                    return true;
-                }
-                KeyCode::Esc => {
-                    // Cancel filter mode, do nothing
-                    return true;
-                }
-                _ => {
-                    // Unknown second key: fall through to activate search
-                    self.search.active = true;
-                    return true;
-                }
-            }
-        }
+        // v0.17.3 (ADR-036): filter_pending/trait_filter removed - traits no longer in schema
 
         // Search mode captures all input
         if self.search.active {
@@ -1030,14 +968,7 @@ impl App {
                 true
             }
 
-            // Trait filter prefix (f = filter, wait for second key: i/l/k/g/a/f)
-            KeyCode::Char('f') => {
-                self.filter_pending = true;
-                self.set_status(
-                    "Filter: [i]nvariant [l]ocalized [k]nowledge [g]enerated [a]ggregated [f]clear",
-                );
-                true
-            }
+            // v0.17.3 (ADR-036): 'f' trait filter keybinding removed
 
             // Open color legend (F1 = accessible, out of flow)
             KeyCode::F(1) => {
@@ -1906,9 +1837,8 @@ impl App {
             self.tree
                 .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         } else {
-            // Meta mode: apply trait filter if active
-            self.tree
-                .item_at_with_trait_filter(self.tree_cursor, self.trait_filter.as_deref())
+            // v0.17.3 (ADR-036): Meta mode - trait filtering removed
+            self.tree.item_at(self.tree_cursor)
         }
     }
 
@@ -1925,9 +1855,8 @@ impl App {
         if self.is_graph_mode() {
             self.tree.item_count_for_mode(true, self.hide_empty)
         } else {
-            // Meta mode: apply trait filter if active
-            self.tree
-                .item_count_with_trait_filter(self.trait_filter.as_deref())
+            // v0.17.3 (ADR-036): Meta mode - trait filtering removed
+            self.tree.item_count()
         }
     }
 
@@ -1978,28 +1907,16 @@ impl App {
                 format!("{} → {}", r.display_name, l.display_name)
             }
             Some(TreeItem::Class(r, l, k)) => {
-                // v0.16.4: Show trait in breadcrumb (moved from tree display)
-                let trait_abbrev = match k.trait_name.as_str() {
-                    "defined" => "def",
-                    "authored" => "auth",
-                    "imported" => "imp",
-                    "generated" => "gen",
-                    "retrieved" => "ret",
-                    _ => &k.trait_name,
-                };
+                // v0.17.3 (ADR-036): trait removed from breadcrumb display
                 if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
-                        "{} → {} → {} ({}) [{}]",
-                        r.display_name,
-                        l.display_name,
-                        k.display_name,
-                        k.instance_count,
-                        trait_abbrev
+                        "{} → {} → {} ({})",
+                        r.display_name, l.display_name, k.display_name, k.instance_count
                     )
                 } else {
                     format!(
-                        "{} → {} → {} [{}]",
-                        r.display_name, l.display_name, k.display_name, trait_abbrev
+                        "{} → {} → {}",
+                        r.display_name, l.display_name, k.display_name
                     )
                 }
             }

@@ -172,23 +172,6 @@ Press `/` from anywhere to open search.
 
 ---
 
-## Trait Filter
-
-Quick filter to show only Classes matching a specific trait (ADR-024 Data Origin).
-
-| Key | Action |
-|-----|--------|
-| `fd` | Filter: defined |
-| `fa` | Filter: authored |
-| `fi` | Filter: imported |
-| `fg` | Filter: generated |
-| `fr` | Filter: retrieved |
-| `ff` | Clear filter (show all) |
-
-When a filter is active, the title bar shows the active trait.
-
----
-
 ## Panel Scrolling
 
 When Info or Content panel is focused (v0.17.3: renamed from Detail/YAML):
@@ -224,7 +207,7 @@ When Info or Content panel is focused (v0.17.3: renamed from Detail/YAML):
 | Key | Action |
 |-----|--------|
 | `?` | Open help overlay (keyboard shortcuts) |
-| `F1` | Open color legend overlay (Realm/Layer/Trait colors) |
+| `F1` | Open color legend overlay (Realm/Layer colors) |
 | `Esc` | Close current overlay |
 
 ---
@@ -246,7 +229,6 @@ Navigation:  j/k (up/down)  h/l (collapse/expand)  d/u (page)  g/G (top/bottom) 
 Expand:      e (subtree)    c (collapse subtree)  H/L (global collapse/expand)
 Instances:   Enter (load)   r (refresh count)
 Focus:       Tab (cycle panels)
-Filter:      fd/fa/fi/fg/fr (trait)  ff (clear)
 Search:      / (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  O (open in editor)  Ctrl+o/i (back/forward)
 Modes:       2 (Views)  3 (Nexus)

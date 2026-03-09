@@ -275,31 +275,11 @@ impl TaxonomyTree {
             );
         }
 
-        // Collect classes by trait and layer
-        for realm in &self.realms {
-            for layer in &realm.layers {
-                for class_info in &layer.classes {
-                    let trait_key = class_info.trait_name.as_str();
-                    if let Some(stats) = stats_map.get_mut(trait_key) {
-                        stats.class_count += 1;
-
-                        // Find or create layer group
-                        let layer_key = &layer.key;
-                        if let Some(layer_group) = stats
-                            .classes_by_layer
-                            .iter_mut()
-                            .find(|(k, _)| k == layer_key)
-                        {
-                            layer_group.1.push(class_info.key.clone());
-                        } else {
-                            stats
-                                .classes_by_layer
-                                .push((layer_key.clone(), vec![class_info.key.clone()]));
-                        }
-                    }
-                }
-            }
-        }
+        // v0.17.3 (ADR-036): Traits removed from schema
+        // The trait stats are now populated from the static TRAIT_ORDER list only,
+        // without collecting classes since ClassInfo no longer has trait_name.
+        // This nexus section will be refactored in Phase 4 to teach about provenance instead.
+        let _ = stats_map; // silence unused warning, stats remain at 0
 
         // Return in canonical order
         TRAIT_ORDER

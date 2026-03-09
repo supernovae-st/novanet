@@ -222,8 +222,7 @@ struct QueryArgs {
     realm: Option<String>,
     #[arg(long)]
     layer: Option<String>,
-    #[arg(long, name = "trait")]
-    trait_filter: Option<String>,
+    // v0.17.3 (ADR-036): trait_filter removed - traits no longer in schema
     #[arg(long)]
     arc_family: Option<String>,
     #[arg(long, name = "class")]
@@ -551,10 +550,10 @@ async fn main() -> color_eyre::Result<()> {
         }
         Commands::Query(ref args) => {
             let db = connect_db(&uri, &user, password.as_ref()).await?;
+            // v0.17.3 (ADR-036): trait_filter param removed
             let filter = novanet::facets::FacetFilter::from_cli(
                 args.realm.as_deref(),
                 args.layer.as_deref(),
-                args.trait_filter.as_deref(),
                 args.arc_family.as_deref(),
                 args.class.as_deref(),
             );

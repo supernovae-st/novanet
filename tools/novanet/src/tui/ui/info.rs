@@ -22,7 +22,8 @@ use serde_json::Value as JsonValue;
 
 use super::{
     STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY,
-    STYLE_SUCCESS, arc_family_badge_icon, trait_icon, wrap_text,
+    STYLE_SUCCESS, arc_family_badge_icon, wrap_text,
+    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 
 // =============================================================================
@@ -810,39 +811,15 @@ fn build_layer_content(
         Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
     );
 
-    // COVERAGE - trait breakdown
+    // COVERAGE - v0.17.3 (ADR-036): trait breakdown removed, showing class count only
     if !layer.classes.is_empty() {
-        let mut trait_counts: std::collections::BTreeMap<String, usize> =
-            std::collections::BTreeMap::new();
-        for class_info in &layer.classes {
-            *trait_counts
-                .entry(class_info.trait_name.clone())
-                .or_insert(0) += 1;
-        }
-
-        let total = layer.classes.len();
-        let bar_width = 12usize;
-        for (trait_name, count) in &trait_counts {
-            let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
-            let filled = (*count * bar_width) / total.max(1);
-            let bar = "█".repeat(filled.max(1));
-            let empty = "░".repeat(bar_width.saturating_sub(filled));
-            let icon = trait_icon(trait_name);
-
-            content.coverage.add_line(Line::from(vec![
-                Span::styled(
-                    format!("{} ", icon),
-                    Style::default().fg(theme.trait_color(trait_name)),
-                ),
-                Span::styled(
-                    format!("{:10} ", trait_name),
-                    Style::default().fg(theme.trait_color(trait_name)),
-                ),
-                Span::styled(bar, Style::default().fg(theme.trait_color(trait_name))),
-                Span::styled(empty, STYLE_DIM),
-                Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-            ]));
-        }
+        content.coverage.add_line(Line::from(vec![
+            Span::styled("◆ ", STYLE_PRIMARY),
+            Span::styled(
+                format!("{} classes", layer.classes.len()),
+                STYLE_PRIMARY,
+            ),
+        ]));
     } else {
         content.coverage.add_empty();
     }
@@ -909,8 +886,8 @@ fn build_layer_content(
     ]));
 
     // Outgoing: HAS_CLASS to each class
+    // v0.17.3 (ADR-036): using layer color instead of trait color
     for class_info in layer.classes.iter().take(4) {
-        let trait_color = theme.trait_color(&class_info.trait_name);
         content.relationships.add_line(Line::from(vec![
             Span::styled(
                 "  → ",
@@ -922,7 +899,7 @@ fn build_layer_content(
             Span::styled(" → ", STYLE_DIM),
             Span::styled(
                 class_info.display_name.clone(),
-                Style::default().fg(trait_color),
+                Style::default().fg(layer_color),
             ),
             Span::styled(" [own]", STYLE_DIM),
         ]));
@@ -949,9 +926,9 @@ fn build_class_content(
     let mode = ColorMode::TrueColor; // v0.13: Use TrueColor for semantic colors
 
     // v0.13: Get semantic colors from colors.generated.rs
+    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
-    let trait_color = colors::traits::color(&class.trait_name, mode);
 
     // IDENTITY - clean explicit key:value format (no inline badges)
     content
@@ -970,7 +947,8 @@ fn build_class_content(
         ),
     );
 
-    // LOCATION (Classification) - explicit key:value format for all 3 axes
+    // LOCATION (Classification) - realm and layer only
+    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);
@@ -980,14 +958,6 @@ fn build_class_content(
         &layer.key,
         layer_color,
     );
-    if !class.trait_name.is_empty() {
-        content.location.add_classification(
-            "trait",
-            trait_icon(&class.trait_name),
-            &class.trait_name,
-            trait_color,
-        );
-    }
 
     // METRICS
     content.metrics.add_kv(
@@ -1529,9 +1499,9 @@ fn build_instance_content(
     let mode = ColorMode::TrueColor; // v0.13: semantic colors
 
     // v0.13: Get semantic colors from colors.generated.rs
+    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
-    let trait_color = colors::traits::color(&class.trait_name, mode);
 
     // IDENTITY - clean explicit key:value format (no inline badges)
     content
@@ -1551,7 +1521,8 @@ fn build_instance_content(
         Span::styled(class.display_name.clone(), Style::default().fg(layer_color)),
     );
 
-    // LOCATION (Classification) - explicit key:value format for all 3 axes
+    // LOCATION (Classification) - realm and layer only
+    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);
@@ -1561,14 +1532,6 @@ fn build_instance_content(
         &layer.key,
         layer_color,
     );
-    if !class.trait_name.is_empty() {
-        content.location.add_classification(
-            "trait",
-            trait_icon(&class.trait_name),
-            &class.trait_name,
-            trait_color,
-        );
-    }
 
     // METRICS - unified with Class view (same labels, same positions)
     content.metrics.add_kv(

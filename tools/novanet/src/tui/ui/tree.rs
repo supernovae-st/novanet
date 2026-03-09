@@ -20,7 +20,8 @@ use super::{
     COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
-    render_empty_state, spinner, trait_icon,
+    render_empty_state, spinner,
+    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::locale_to_flag;
@@ -199,9 +200,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 k.display_name.clone()
             };
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: class_label,
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
         }
         Some(TreeItem::EntityCategory(r, l, k, cat)) => {
@@ -216,9 +217,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◫",
@@ -238,9 +239,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "🌐",
@@ -261,9 +262,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◈",
@@ -283,9 +284,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "►",
@@ -348,9 +349,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◆",
@@ -674,25 +675,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let has_arcs = !app.tree.arc_families.is_empty();
 
-    // Trait filter: only show realms/layers/classes matching the filter
-    let trait_filter = app.trait_filter.as_deref();
-
+    // v0.17.3 (ADR-036): trait filter removed - show all realms
     if !classes_collapsed {
-        // Filter visible realms (skip realms with no matching classes when trait filter active)
-        let visible_realms: Vec<_> = app
-            .tree
-            .realms
-            .iter()
-            .filter(|r| {
-                if let Some(filter) = trait_filter {
-                    r.layers
-                        .iter()
-                        .any(|l| l.classes.iter().any(|k| k.trait_name == filter))
-                } else {
-                    true
-                }
-            })
-            .collect();
+        let visible_realms: Vec<_> = app.tree.realms.iter().collect();
         let realm_count = visible_realms.len();
 
         for (ri, realm) in visible_realms.iter().enumerate() {
@@ -777,17 +762,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 let is_data_mode = app.is_graph_mode();
                 let hide_empty = app.hide_empty && is_data_mode;
 
-                // Filter visible layers (hide empty if hide_empty, trait filter if active)
+                // v0.17.3 (ADR-036): trait filter removed
+                // Filter visible layers (hide empty if hide_empty)
                 let visible_layers: Vec<_> = realm
                     .layers
                     .iter()
                     .filter(|l| {
-                        // Trait filter: skip layers with no matching classes
-                        if let Some(filter) = trait_filter {
-                            if !l.classes.iter().any(|k| k.trait_name == filter) {
-                                return false;
-                            }
-                        }
                         // Hide empty filter (Data mode only)
                         if hide_empty {
                             l.classes.iter().map(|k| k.instance_count).sum::<i64>() > 0
@@ -901,17 +881,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
+                        // v0.17.3 (ADR-036): trait filter removed
                         // Filter visible classes (hide empty if hide_empty is true)
                         let visible_classes: Vec<_> = layer
                             .classes
                             .iter()
                             .filter(|k| {
-                                // Trait filter: skip classes that don't match
-                                if let Some(filter) = trait_filter {
-                                    if k.trait_name != filter {
-                                        return false;
-                                    }
-                                }
                                 // Hide empty filter (Data mode only)
                                 if hide_empty {
                                     k.instance_count > 0
@@ -1624,24 +1599,16 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "◆ Schema" // Diamond = structure/schema
     };
 
-    // v11.8: Renamed per ADR-024 Data Origin semantics
-    let filter_indicator = match app.trait_filter.as_deref() {
-        Some("defined") => " │ ■ defined",
-        Some("authored") => " │ □ authored",
-        Some("imported") => " │ ◊ imported",
-        Some("generated") => " │ ★ generated",
-        Some("retrieved") => " │ ▪ retrieved",
-        _ => "",
-    };
+    // v0.17.3 (ADR-036): trait filter indicator removed
 
     let hierarchy = app
         .tree
         .hierarchy_position(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
-        format!(" {}{} ", mode_prefix, filter_indicator)
+        format!(" {} ", mode_prefix)
     } else {
-        format!(" {} │ {}{} ", mode_prefix, hierarchy_str, filter_indicator)
+        format!(" {} │ {} ", mode_prefix, hierarchy_str)
     };
 
     // Render block with title

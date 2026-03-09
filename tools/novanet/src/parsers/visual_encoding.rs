@@ -269,11 +269,8 @@ pub fn load_visual_encoding(root: &Path) -> crate::Result<VisualEncodingDoc> {
             "visual-encoding.yaml has no node_states".to_string(),
         ));
     }
-    if doc.trait_borders.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "visual-encoding.yaml has no trait_borders".to_string(),
-        ));
-    }
+    // v0.17.3 (ADR-036): trait_borders validation removed - traits no longer in schema
+    // The YAML still has trait_borders for Studio visual consistency
     if doc.class_icons.is_empty() {
         return Err(crate::NovaNetError::Validation(
             "visual-encoding.yaml has no class_icons".to_string(),
@@ -319,12 +316,8 @@ mod tests {
         assert!(doc.node_states.contains_key("selected"));
         assert!(doc.node_states.contains_key("filtered"));
 
-        // Trait borders (5) — v0.12.0: renamed (ADR-024 Data Origin)
-        assert!(doc.trait_borders.contains_key("defined"));
-        assert!(doc.trait_borders.contains_key("authored"));
-        assert!(doc.trait_borders.contains_key("imported"));
-        assert!(doc.trait_borders.contains_key("generated"));
-        assert!(doc.trait_borders.contains_key("retrieved"));
+        // v0.17.3 (ADR-036): trait_borders assertions removed - traits no longer in schema
+        // YAML still has trait_borders for Studio visual consistency
 
         // Kind icons (44+)
         assert!(doc.class_icons.len() >= 30);
