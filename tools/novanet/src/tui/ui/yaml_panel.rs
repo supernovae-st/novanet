@@ -38,14 +38,87 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 /// Standard properties that appear at the top of the INSTANCE panel.
 /// These are present on all node types per schema conventions.
+/// v0.17.3: Reordered for readability - key/display_name first, timestamps last.
 const STANDARD_PROPERTIES: &[&str] = &[
     "key",
     "display_name",
     "description",
+    "llm_context",
     "created_at",
     "updated_at",
-    "llm_context",
 ];
+
+/// Timestamp property names for human-readable formatting.
+const TIMESTAMP_PROPERTIES: &[&str] = &["created_at", "updated_at"];
+
+/// Format a Unix timestamp as a human-readable date string.
+/// Returns "YYYY-MM-DD HH:MM" format or the original number if not a valid timestamp.
+fn format_timestamp(timestamp: i64) -> String {
+    // Neo4j timestamps can be in seconds or milliseconds
+    // Heuristic: if > 10_000_000_000, it's milliseconds
+    let secs = if timestamp > 10_000_000_000 {
+        timestamp / 1000
+    } else {
+        timestamp
+    };
+
+    // Only format positive timestamps (valid Unix time)
+    if secs < 0 {
+        return timestamp.to_string();
+    }
+
+    let total_secs = secs as u64;
+    let days = total_secs / 86400;
+    let remaining = total_secs % 86400;
+    let hours = remaining / 3600;
+    let minutes = (remaining % 3600) / 60;
+
+    // Simple year/month/day calculation (approximate, good enough for display)
+    // Starting from 1970-01-01
+    let mut year = 1970u32;
+    let mut remaining_days = days;
+
+    loop {
+        let days_in_year = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+        if remaining_days < days_in_year {
+            break;
+        }
+        remaining_days -= days_in_year;
+        year += 1;
+    }
+
+    let is_leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let days_in_month = [
+        31,
+        if is_leap { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+
+    let mut month = 1u32;
+    for &d in &days_in_month {
+        if remaining_days < d {
+            break;
+        }
+        remaining_days -= d;
+        month += 1;
+    }
+    let day = remaining_days + 1;
+
+    format!("{:04}-{:02}-{:02} {:02}:{:02}", year, month, day, hours, minutes)
+}
 
 // =============================================================================
 // v0.17.3 INSTANCE PANEL COLORS (rich YAML-style)
@@ -344,9 +417,14 @@ fn render_instance_info(
 
     if !standard_collapsed {
         lines.push(Line::from(""));
-        // Render standard properties
-        for (key, value) in standard_props.iter() {
-            render_property_lines(&mut lines, key, value, panel_width, 0);
+        // Render standard properties with spacing between each
+        let standard_len = standard_props.len();
+        for (idx, (key, value)) in standard_props.iter().enumerate() {
+            render_property_lines_with_timestamp(&mut lines, key, value, panel_width, 0);
+            // Add blank line between properties (but not after the last one)
+            if idx < standard_len - 1 {
+                lines.push(Line::from(""));
+            }
         }
     }
 
@@ -363,9 +441,14 @@ fn render_instance_info(
 
         if !specific_collapsed {
             lines.push(Line::from(""));
-            // Render specific properties
-            for (key, value) in specific_props.iter() {
-                render_property_lines(&mut lines, key, value, panel_width, 0);
+            // Render specific properties with spacing between each
+            let specific_len = specific_props.len();
+            for (idx, (key, value)) in specific_props.iter().enumerate() {
+                render_property_lines_with_timestamp(&mut lines, key, value, panel_width, 0);
+                // Add blank line between properties (but not after the last one)
+                if idx < specific_len - 1 {
+                    lines.push(Line::from(""));
+                }
             }
         }
     }
@@ -473,6 +556,19 @@ fn render_property_lines(
             ]));
         }
         JsonValue::String(s) => {
+            // v0.17.3: Check if string contains embedded JSON (common for denomination_forms etc.)
+            let trimmed = s.trim();
+            if (trimmed.starts_with('[') && trimmed.ends_with(']'))
+                || (trimmed.starts_with('{') && trimmed.ends_with('}'))
+            {
+                // Try to parse as JSON and render as proper YAML
+                if let Ok(parsed) = serde_json::from_str::<JsonValue>(trimmed) {
+                    // Render the parsed JSON recursively
+                    render_property_lines(lines, key, &parsed, width, indent);
+                    return;
+                }
+            }
+
             // Calculate available width for the string value
             let key_prefix_len = indent * 2 + key.chars().count() + 2; // indent + key + ": "
             let available_width = width.saturating_sub(key_prefix_len);
@@ -545,6 +641,36 @@ fn render_property_lines(
             }
         }
     }
+}
+
+/// Render a property with special handling for timestamps.
+/// v0.17.3: Timestamps (created_at, updated_at) are formatted as human-readable dates.
+fn render_property_lines_with_timestamp(
+    lines: &mut Vec<Line<'static>>,
+    key: &str,
+    value: &JsonValue,
+    width: usize,
+    indent: usize,
+) {
+    // Check if this is a timestamp property that should be formatted
+    if TIMESTAMP_PROPERTIES.contains(&key) {
+        if let JsonValue::Number(n) = value {
+            if let Some(ts) = n.as_i64() {
+                let indent_str = "  ".repeat(indent);
+                let formatted = format_timestamp(ts);
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(": ", Style::default().fg(Color::White)),
+                    Span::styled(formatted, Style::default().fg(Color::Rgb(136, 192, 208))), // Nord Frost for timestamps
+                ]));
+                return;
+            }
+        }
+    }
+
+    // Fall back to normal rendering
+    render_property_lines(lines, key, value, width, indent);
 }
 
 /// Render an array item as YAML list item (- value).
@@ -1771,5 +1897,105 @@ mod tests {
     fn test_standard_properties_count() {
         // 6 standard properties: key, display_name, description, created_at, updated_at, llm_context
         assert_eq!(STANDARD_PROPERTIES.len(), 6);
+    }
+
+    // =========================================================================
+    // v0.17.3 format_timestamp tests
+    // =========================================================================
+
+    #[test]
+    fn test_format_timestamp_unix_epoch() {
+        // Unix epoch (1970-01-01 00:00)
+        let result = format_timestamp(0);
+        assert_eq!(result, "1970-01-01 00:00");
+    }
+
+    #[test]
+    fn test_format_timestamp_known_date() {
+        // 2024-01-15 12:36:40 UTC = 1705322200 seconds
+        let result = format_timestamp(1705322200);
+        assert_eq!(result, "2024-01-15 12:36");
+    }
+
+    #[test]
+    fn test_format_timestamp_milliseconds() {
+        // Same timestamp but in milliseconds (> 10_000_000_000)
+        let result = format_timestamp(1705322200000);
+        assert_eq!(result, "2024-01-15 12:36");
+    }
+
+    #[test]
+    fn test_format_timestamp_negative() {
+        // Negative timestamps should return as-is
+        let result = format_timestamp(-1000);
+        assert_eq!(result, "-1000");
+    }
+
+    #[test]
+    fn test_timestamp_properties_list() {
+        assert!(TIMESTAMP_PROPERTIES.contains(&"created_at"));
+        assert!(TIMESTAMP_PROPERTIES.contains(&"updated_at"));
+        assert_eq!(TIMESTAMP_PROPERTIES.len(), 2);
+    }
+
+    #[test]
+    fn test_standard_properties_order() {
+        // v0.17.3: key and display_name should be first, timestamps last
+        let key_pos = STANDARD_PROPERTIES.iter().position(|p| *p == "key").unwrap();
+        let display_name_pos = STANDARD_PROPERTIES.iter().position(|p| *p == "display_name").unwrap();
+        let created_at_pos = STANDARD_PROPERTIES.iter().position(|p| *p == "created_at").unwrap();
+        let updated_at_pos = STANDARD_PROPERTIES.iter().position(|p| *p == "updated_at").unwrap();
+
+        // Key and display_name should come before timestamps
+        assert!(key_pos < created_at_pos);
+        assert!(display_name_pos < created_at_pos);
+        // created_at and updated_at should be last two
+        assert!(created_at_pos >= STANDARD_PROPERTIES.len() - 2);
+        assert!(updated_at_pos >= STANDARD_PROPERTIES.len() - 2);
+    }
+
+    // =========================================================================
+    // v0.17.3 embedded JSON parsing tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_property_lines_embedded_json_array() {
+        let mut lines = Vec::new();
+        let json_string = r#"[{"type":"text","value":"code QR"},{"type":"title","value":"Code QR"}]"#;
+        let value = JsonValue::String(json_string.to_string());
+        render_property_lines(&mut lines, "denomination_forms", &value, 80, 0);
+        // Should parse and render as YAML array, not as a single string
+        // First line should be "denomination_forms:" (the header)
+        assert!(lines.len() > 1, "Should render multiple lines for parsed JSON array");
+    }
+
+    #[test]
+    fn test_render_property_lines_embedded_json_object() {
+        let mut lines = Vec::new();
+        let json_string = r#"{"name":"test","value":123}"#;
+        let value = JsonValue::String(json_string.to_string());
+        render_property_lines(&mut lines, "metadata", &value, 80, 0);
+        // Should parse and render as YAML object
+        assert!(lines.len() > 1, "Should render multiple lines for parsed JSON object");
+    }
+
+    #[test]
+    fn test_render_property_lines_regular_string_not_parsed() {
+        let mut lines = Vec::new();
+        let regular_string = "This is just a regular string value";
+        let value = JsonValue::String(regular_string.to_string());
+        render_property_lines(&mut lines, "description", &value, 80, 0);
+        // Should render as single line (fits within width)
+        assert_eq!(lines.len(), 1, "Regular string should render as single line");
+    }
+
+    #[test]
+    fn test_render_property_lines_invalid_json_not_parsed() {
+        let mut lines = Vec::new();
+        let invalid_json = "[not valid json{";
+        let value = JsonValue::String(invalid_json.to_string());
+        render_property_lines(&mut lines, "data", &value, 80, 0);
+        // Should fall back to string rendering (doesn't crash)
+        assert!(!lines.is_empty(), "Invalid JSON should still render as string");
     }
 }
