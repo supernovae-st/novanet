@@ -132,57 +132,7 @@ export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   'locale': 'Locale',
 };
 
-// =============================================================================
-// TRAIT COLORS (5)
-// =============================================================================
-
-export type TraitKey = 'authored' | 'defined' | 'generated' | 'imported' | 'retrieved';
-
-export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
-  'authored': {
-    color: '#22c55e',
-    bg: 'bg-[#22c55e]/20',
-    text: 'text-[#22c55e]',
-    border: 'border-[#22c55e]/30',
-    bgSolid: 'bg-[#22c55e]',
-  },
-  'defined': {
-    color: '#3b82f6',
-    bg: 'bg-[#3b82f6]/20',
-    text: 'text-[#3b82f6]',
-    border: 'border-[#3b82f6]/30',
-    bgSolid: 'bg-[#3b82f6]',
-  },
-  'generated': {
-    color: '#b58900',
-    bg: 'bg-[#b58900]/20',
-    text: 'text-[#b58900]',
-    border: 'border-[#b58900]/30',
-    bgSolid: 'bg-[#b58900]',
-  },
-  'imported': {
-    color: '#8b5cf6',
-    bg: 'bg-[#8b5cf6]/20',
-    text: 'text-[#8b5cf6]',
-    border: 'border-[#8b5cf6]/30',
-    bgSolid: 'bg-[#8b5cf6]',
-  },
-  'retrieved': {
-    color: '#6c71c4',
-    bg: 'bg-[#6c71c4]/20',
-    text: 'text-[#6c71c4]',
-    border: 'border-[#6c71c4]/30',
-    bgSolid: 'bg-[#6c71c4]',
-  },
-};
-
-export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
-  'authored': 'Authored',
-  'defined': 'Defined',
-  'generated': 'Generated',
-  'imported': 'Imported',
-  'retrieved': 'Retrieved',
-};
+// v0.17.3 (ADR-036): TRAIT COLORS section removed, provenance is per-instance
 
 // =============================================================================
 // ARC FAMILY COLORS (6)
