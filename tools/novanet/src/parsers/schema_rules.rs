@@ -1,10 +1,11 @@
-//! Schema validation rules for v0.13.1 standardization.
+//! Schema validation rules for v0.18.0 standardization.
 //!
 //! Validates:
-//! - Standard properties presence (key, created_at, updated_at)
+//! - Standard properties presence (key, display_name, description, llm_context, created_by, created_by_meta, created_at, updated_at)
 //! - Composite key denormalization (entity_key, page_key, block_key, locale_key)
-//! - Property ordering (key → *_key → display_name → ...)
+//! - Property ordering (key → *_key → display_name → ... → created_at → updated_at)
 //! - ADR-030/032 compliance: slug derivation, TARGETS arc properties
+//! - ADR-035 compliance: Provenance tracking (created_by, created_by_meta)
 //!
 //! # Usage
 //!
@@ -103,7 +104,7 @@ const ORG_LAYERS: &[&str] = &[
     "output",
 ];
 
-/// Expected order for standard properties.
+/// Expected order for standard properties (ADR-035: Provenance Tracking).
 /// Properties present in the node must appear in this order (others can be interspersed).
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
@@ -113,6 +114,9 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];

@@ -14,6 +14,7 @@ use indexmap::IndexMap;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Canonical order for standard properties.
+/// NOTE: Must match STANDARD_PROPERTY_NAMES in info.rs, clipboard.rs, schema_rules.rs (ADR-035)
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
     "entity_key",
@@ -22,6 +23,9 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];
