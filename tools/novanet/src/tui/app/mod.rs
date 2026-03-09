@@ -1791,9 +1791,10 @@ impl App {
             _ => None,
         };
         if let Some(json) = json {
-            // Truncate for status display (full JSON in terminal can be copied)
-            let preview = if json.len() > 50 {
-                format!("{}...", &json[..50])
+            // Truncate for status display (UTF-8 safe using char boundaries)
+            let preview = if json.chars().count() > 50 {
+                let truncated: String = json.chars().take(50).collect();
+                format!("{}...", truncated)
             } else {
                 json
             };
@@ -1807,9 +1808,10 @@ impl App {
         if let Some((content, format_name)) = get_box_content(self) {
             match copy_to_clipboard(&content) {
                 Ok(()) => {
-                    // Show preview of copied content
-                    let preview = if content.len() > 40 {
-                        format!("{}...", &content[..40])
+                    // Show preview of copied content (UTF-8 safe)
+                    let preview = if content.chars().count() > 40 {
+                        let truncated: String = content.chars().take(40).collect();
+                        format!("{}...", truncated)
                     } else {
                         content.clone()
                     };
@@ -1829,9 +1831,10 @@ impl App {
     pub fn copy_focused_property(&mut self) {
         use super::clipboard::{copy_to_clipboard, get_focused_property};
         if let Some((key, value)) = get_focused_property(self) {
-            // Truncate preview for long values
-            let preview = if value.len() > 30 {
-                format!("{}...", &value[..30])
+            // Truncate preview for long values (UTF-8 safe)
+            let preview = if value.chars().count() > 30 {
+                let truncated: String = value.chars().take(30).collect();
+                format!("{}...", truncated)
             } else {
                 value.clone()
             };

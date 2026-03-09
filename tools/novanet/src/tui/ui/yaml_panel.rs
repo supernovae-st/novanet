@@ -331,9 +331,10 @@ fn format_json_value_as_yaml(value: &JsonValue) -> Span<'static> {
             Style::default().fg(Color::Rgb(209, 154, 102)), // Orange
         ),
         JsonValue::String(s) => {
-            // Truncate long strings
-            let display = if s.len() > 60 {
-                format!("\"{}...\"", &s[..57])
+            // Truncate long strings (UTF-8 safe using char boundaries)
+            let display = if s.chars().count() > 60 {
+                let truncated: String = s.chars().take(57).collect();
+                format!("\"{}...\"", truncated)
             } else {
                 format!("\"{}\"", s)
             };
@@ -358,9 +359,10 @@ fn build_neo4j_title(selected: bool, instance_key: &str) -> Line<'static> {
         BOX_BORDER_UNFOCUSED
     };
 
-    // Truncate instance key if too long
-    let display_key = if instance_key.len() > 30 {
-        format!("{}...", &instance_key[..27])
+    // Truncate instance key if too long (UTF-8 safe using char boundaries)
+    let display_key = if instance_key.chars().count() > 30 {
+        let truncated: String = instance_key.chars().take(27).collect();
+        format!("{}...", truncated)
     } else {
         instance_key.to_string()
     };
