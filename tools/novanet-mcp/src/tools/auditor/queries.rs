@@ -266,12 +266,19 @@ pub async fn audit_integrity(
     let mut issues = Vec::new();
 
     // Query: Find EntityNative nodes with key containing @ but no matching parent Entity
-    // Keys are now normalized: EntityNative 'entity:qr-code@fr-FR' → Entity 'entity:qr-code'
-    // Split by '@' gives the exact Entity key (no prefix manipulation needed)
+    // Handle both formats:
+    //   - 'entity:qr-code@fr-FR' → 'entity:qr-code' (already has prefix)
+    //   - 'qr-code@fr-FR' → 'entity:qr-code' (needs prefix added)
+    // Entity keys always have 'entity:' prefix
     let cypher = r#"
         MATCH (n:EntityNative)
         WHERE n.key CONTAINS '@'
-        WITH n, split(n.key, '@')[0] AS entity_key
+        WITH n,
+             split(n.key, '@')[0] AS base_key,
+             CASE
+               WHEN split(n.key, '@')[0] STARTS WITH 'entity:' THEN split(n.key, '@')[0]
+               ELSE 'entity:' + split(n.key, '@')[0]
+             END AS entity_key
         WHERE NOT EXISTS {
             MATCH (e:Entity {key: entity_key})
         }
