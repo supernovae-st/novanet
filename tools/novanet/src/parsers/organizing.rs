@@ -1,7 +1,8 @@
-//! Organizing principles types (realms, layers, traits, arc families).
+//! Organizing principles types (realms, layers, arc families).
 //!
-//! v0.12.5: Data now comes from individual YAML files (realms/, layers/, traits/, arc-families/)
+//! v0.12.5: Data now comes from individual YAML files (realms/, layers/, arc-families/)
 //! via `load_taxonomy_from_files()`. Legacy `taxonomy.yaml` is still used for arc_scopes and terminal config.
+//! v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 //!
 //! Used by:
 //! - `generators/organizing.rs` → Cypher seed
@@ -15,11 +16,12 @@ use std::path::Path;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Top-level document (converted from TaxonomyDoc).
+/// v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 #[derive(Debug, Deserialize)]
 pub struct OrganizingDoc {
     pub version: String,
     pub realms: Vec<RealmDef>,
-    pub traits: Vec<TraitDef>,
+    // v0.17.3 (ADR-036): traits field removed, provenance is per-instance
     pub arc_families: Vec<ArcFamilyDef>,
 }
 
@@ -44,14 +46,7 @@ pub struct LayerDef {
     pub llm_context: String,
 }
 
-/// Trait (locale behavior) definition.
-#[derive(Debug, Deserialize)]
-pub struct TraitDef {
-    pub key: String,
-    pub display_name: String,
-    pub color: String,
-    pub llm_context: String,
-}
+// v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
 
 /// Arc family definition.
 #[derive(Debug, Deserialize)]
@@ -69,9 +64,10 @@ pub struct ArcFamilyDef {
 
 /// Load organizing principles from individual YAML files (with backwards-compatible format).
 ///
-/// v0.12.5: This function now loads from individual YAML files (realms/, layers/, traits/,
-/// arc-families/) via `load_taxonomy_from_files()` and converts to `OrganizingDoc` format.
+/// v0.12.5: This function now loads from individual YAML files (realms/, layers/, arc-families/)
+/// via `load_taxonomy_from_files()` and converts to `OrganizingDoc` format.
 /// The return type remains `OrganizingDoc` for backwards compatibility with existing generators.
+/// v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
     // v0.12.5: Load from individual YAML files and convert to OrganizingDoc format
     let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
@@ -91,11 +87,7 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
             )));
         }
     }
-    if doc.traits.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "No traits defined in taxonomy".to_string(),
-        ));
-    }
+    // v0.17.3 (ADR-036): traits validation removed, provenance is per-instance
     if doc.arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
             "No arc_families defined in taxonomy".to_string(),
@@ -115,6 +107,7 @@ mod tests {
 
     #[test]
     fn parse_organizing_yaml() {
+        // v0.17.3 (ADR-036): traits section removed from YAML parsing
         let yaml = r##"
 version: "9.0.0"
 realms:
@@ -129,11 +122,6 @@ realms:
         emoji: "⚙️"
         color: "#64748b"
         llm_context: "Config layer."
-traits:
-  - key: defined
-    display_name: Defined
-    color: "#3b82f6"
-    llm_context: "Defined nodes (v11.8: was invariant)."
 arc_families:
   - key: ownership
     display_name: Ownership
@@ -147,8 +135,7 @@ arc_families:
         assert_eq!(doc.realms[0].key, "shared");
         assert_eq!(doc.realms[0].layers.len(), 1);
         assert_eq!(doc.realms[0].layers[0].key, "config");
-        assert_eq!(doc.traits.len(), 1);
-        assert_eq!(doc.traits[0].key, "defined"); // v11.8: was invariant
+        // v0.17.3 (ADR-036): traits assertions removed
         assert_eq!(doc.arc_families.len(), 1);
         assert_eq!(doc.arc_families[0].arrow_style, "-->");
     }
@@ -169,7 +156,7 @@ arc_families:
         // v0.13.0: Version from minimal taxonomy.yaml
         assert_eq!(doc.version, "0.13.0");
         assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
-        assert_eq!(doc.traits.len(), 5); // v11.2: split derived → generated + aggregated
+        // v0.17.3 (ADR-036): traits assertion removed, provenance is per-instance
         assert_eq!(doc.arc_families.len(), 6); // v0.13.1: added schema family
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();

@@ -218,7 +218,8 @@ fn render_hierarchy(doc: &organizing::OrganizingDoc) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
+    // v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef};
     use serial_test::serial;
 
     #[test]
@@ -293,12 +294,7 @@ mod tests {
                 },
                 // v11.2: 2 realms only (shared + org)
             ],
-            traits: vec![TraitDef {
-                key: "defined".to_string(),
-                display_name: "Defined".to_string(),
-                color: "#3b82f6".to_string(),
-                llm_context: "Invariant nodes.".to_string(),
-            }],
+            // v0.17.3 (ADR-036): traits removed, provenance is per-instance
             arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
@@ -478,12 +474,7 @@ mod tests {
                     ],
                 },
             ],
-            traits: vec![TraitDef {
-                key: "defined".to_string(),
-                display_name: "Defined".to_string(),
-                color: "#6366f1".to_string(),
-                llm_context: "Does not vary per locale.".to_string(),
-            }],
+            // v0.17.3 (ADR-036): traits removed, provenance is per-instance
             arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),

@@ -102,7 +102,8 @@ impl AutoFix for DenormalizedKeyFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
+    // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+    use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -136,7 +137,7 @@ mod tests {
                 name: "EntityNative".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Authored,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "EntityNative without denormalized keys".to_string(),
@@ -170,7 +171,7 @@ mod tests {
                 name: "PageNative".to_string(),
                 realm: "org".to_string(),
                 layer: "output".to_string(),
-                node_trait: NodeTrait::Generated,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "PageNative without denormalized keys".to_string(),
@@ -204,7 +205,7 @@ mod tests {
                 name: "BlockNative".to_string(),
                 realm: "org".to_string(),
                 layer: "output".to_string(),
-                node_trait: NodeTrait::Generated,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "BlockNative without denormalized keys".to_string(),
@@ -357,7 +358,7 @@ mod tests {
                 name: "EntityNative".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Authored,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test".to_string(),
@@ -407,7 +408,7 @@ mod tests {
                 name: "Entity".to_string(), // Not a composite key node
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test".to_string(),
@@ -470,11 +471,12 @@ mod tests {
             },
         );
 
-        let (realm, layer, trait_val) = match node_name.as_str() {
-            "EntityNative" => ("org", "semantic", NodeTrait::Authored),
-            "PageNative" => ("org", "output", NodeTrait::Generated),
-            "BlockNative" => ("org", "output", NodeTrait::Generated),
-            _ => ("org", "semantic", NodeTrait::Defined),
+        // v0.17.3 (ADR-036): trait removed, just need realm/layer
+        let (realm, layer) = match node_name.as_str() {
+            "EntityNative" => ("org", "semantic"),
+            "PageNative" => ("org", "output"),
+            "BlockNative" => ("org", "output"),
+            _ => ("org", "semantic"),
         };
 
         ParsedNode {
@@ -482,7 +484,7 @@ mod tests {
                 name: node_name,
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                node_trait: trait_val,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),
@@ -561,7 +563,8 @@ mod tests {
             prop_assert!(props2.contains_key("locale_key"));
         }
 
-        /// Property: Fix preserves node identity
+        /// Property: Fix preserves node identity (name, realm, layer)
+        /// v0.17.3 (ADR-036): trait removed, provenance is per-instance
         #[test]
         fn prop_preserves_node_identity(node_name in prop_composite_node_name()) {
             let mut node = create_node_without_denorm_keys(node_name.clone());
@@ -570,7 +573,6 @@ mod tests {
             let name_before = node.def.name.clone();
             let realm_before = node.realm.clone();
             let layer_before = node.layer.clone();
-            let trait_before = node.def.node_trait;
 
             let issue = SchemaIssue {
                 node_name,
@@ -586,7 +588,6 @@ mod tests {
             prop_assert_eq!(&node.def.name, &name_before);
             prop_assert_eq!(&node.realm, &realm_before);
             prop_assert_eq!(&node.layer, &layer_before);
-            prop_assert_eq!(node.def.node_trait, trait_before);
         }
 
         /// Property: Fix preserves existing properties

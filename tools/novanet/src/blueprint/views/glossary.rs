@@ -1,4 +1,6 @@
 //! Glossary view — concept definitions.
+//!
+//! v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance.
 
 use crate::blueprint::ascii::{pad_right, truncate};
 use crate::blueprint::sources::BlueprintData;
@@ -91,41 +93,7 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // Traits (v11.8: ADR-024 Data Origin renames)
-    out.push_str(
-        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
-    );
-    out.push_str(
-        "│  TRAIT                                                                       │\n",
-    );
-    out.push_str(
-        "├──────────────────────────────────────────────────────────────────────────────┤\n",
-    );
-    out.push_str(
-        "│  HOW a node behaves with respect to locales. Determines locale handling.     │\n",
-    );
-    out.push_str(
-        "│                                                                              │\n",
-    );
-    for trait_def in &data.taxonomy.node_traits {
-        let symbol = match trait_def.key.as_str() {
-            "defined" => "■",
-            "authored" => "□",
-            "imported" => "◊",
-            "generated" => "★",
-            "retrieved" => "▪",
-            _ => "?",
-        };
-        out.push_str(&format!(
-            "│  {} {:<10} — {}│\n",
-            symbol,
-            trait_def.key,
-            pad_right(&truncate(&trait_def.llm_context, 55), 55)
-        ));
-    }
-    out.push_str(
-        "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
-    );
+    // v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance
 
     // Arc Families
     out.push_str(
@@ -163,40 +131,7 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // Key Patterns (v11.8: ADR-024 Data Origin renames)
-    out.push_str(
-        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
-    );
-    out.push_str(
-        "│  KEY PATTERNS                                                                │\n",
-    );
-    out.push_str(
-        "├──────────────────────────────────────────────────────────────────────────────┤\n",
-    );
-    out.push_str(
-        "│  Node keys follow consistent patterns based on trait:                        │\n",
-    );
-    out.push_str(
-        "│                                                                              │\n",
-    );
-    out.push_str(
-        "│  ■ Defined:    {kind-key}                    → \"homepage\", \"qr-generator\"    │\n",
-    );
-    out.push_str(
-        "│  □ Authored:   {kind}:{defined}@{locale}     → \"entity:qr-gen@fr-FR\"         │\n",
-    );
-    out.push_str(
-        "│  ◊ Imported:   {locale}:{domain}:{key}       → \"fr-FR:tech:scanner\"          │\n",
-    );
-    out.push_str(
-        "│  ★ Generated:  {kind}:{defined}@{locale}     → \"page:home@fr-FR\"             │\n",
-    );
-    out.push_str(
-        "│  ▪ Retrieved:  {kind}:{defined}@{locale}     → \"metrics:seo-kw@fr-FR\"        │\n",
-    );
-    out.push_str(
-        "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
-    );
+    // v0.17.3 (ADR-036): KEY PATTERNS section removed (was trait-based)
 
     // Core Principle
     out.push_str(
@@ -250,7 +185,7 @@ mod tests {
         assert!(output.contains("NOVANET GLOSSARY"), "Should have header");
         assert!(output.contains("REALM"), "Should have realm section");
         assert!(output.contains("LAYER"), "Should have layer section");
-        assert!(output.contains("TRAIT"), "Should have trait section");
+        // v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance
         assert!(
             output.contains("ARC FAMILY"),
             "Should have arc family section"

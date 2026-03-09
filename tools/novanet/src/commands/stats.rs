@@ -1,8 +1,10 @@
 //! `novanet stats` — Schema statistics from YAML (offline, no Neo4j required).
 //!
 //! Shows graph statistics extracted from schema YAML files:
-//! - Node class counts by realm, layer, and trait
+//! - Node class counts by realm and layer
 //! - Arc class counts by family and scope
+//!
+//! v0.17.3 (ADR-036): trait counts removed, provenance is per-instance.
 //!
 //! Output formats: text (default), json, yaml
 
@@ -26,6 +28,7 @@ pub struct SchemaStats {
 }
 
 /// Node class statistics.
+/// v0.17.3 (ADR-036): by_trait removed, provenance is per-instance.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NodeStats {
     /// Total number of node classes.
@@ -34,8 +37,6 @@ pub struct NodeStats {
     pub by_realm: HashMap<String, usize>,
     /// Count by layer (10 layers: 4 shared + 6 org).
     pub by_layer: HashMap<String, usize>,
-    /// Count by trait (5 traits: defined, authored, imported, generated, retrieved).
-    pub by_trait: HashMap<String, usize>,
 }
 
 /// Arc class statistics.
@@ -75,19 +76,17 @@ fn compute_node_stats(root: &Path) -> crate::Result<NodeStats> {
 
     let mut by_realm: HashMap<String, usize> = HashMap::new();
     let mut by_layer: HashMap<String, usize> = HashMap::new();
-    let mut by_trait: HashMap<String, usize> = HashMap::new();
+    // v0.17.3 (ADR-036): by_trait removed, provenance is per-instance
 
     for node in &nodes {
         *by_realm.entry(node.def.realm.clone()).or_insert(0) += 1;
         *by_layer.entry(node.def.layer.clone()).or_insert(0) += 1;
-        *by_trait.entry(node.def.node_trait.to_string()).or_insert(0) += 1;
     }
 
     Ok(NodeStats {
         total: nodes.len(),
         by_realm,
         by_layer,
-        by_trait,
     })
 }
 
@@ -185,17 +184,7 @@ fn format_text(stats: &SchemaStats, detailed: bool) -> String {
             output.push_str(&format!("    {:<12} {:>3}  ({:.0}%)\n", layer, count, pct));
         }
 
-        // By Trait (detailed only)
-        output.push_str("\n  By Trait:\n");
-        let mut traits: Vec<_> = stats.nodes.by_trait.iter().collect();
-        traits.sort_by_key(|(name, _)| *name);
-        for (trait_name, count) in traits {
-            let pct = (*count as f64 / stats.nodes.total as f64) * 100.0;
-            output.push_str(&format!(
-                "    {:<12} {:>3}  ({:.0}%)\n",
-                trait_name, count, pct
-            ));
-        }
+        // v0.17.3 (ADR-036): By Trait section removed, provenance is per-instance
     }
 
     // Arc statistics (if included)
@@ -313,15 +302,7 @@ mod tests {
             stats.by_layer.len()
         );
 
-        // Should have 5 traits
-        assert_eq!(stats.by_trait.len(), 5, "should have 5 traits");
-        for trait_name in ["defined", "authored", "imported", "generated", "retrieved"] {
-            assert!(
-                stats.by_trait.contains_key(trait_name),
-                "should have {} trait",
-                trait_name
-            );
-        }
+        // v0.17.3 (ADR-036): traits removed, provenance is per-instance
 
         // Total should match sum of realms
         let realm_sum: usize = stats.by_realm.values().sum();
@@ -338,14 +319,7 @@ mod tests {
             "layer sum should match total: {} vs {}",
             layer_sum, stats.total
         );
-
-        // Total should match sum of traits
-        let trait_sum: usize = stats.by_trait.values().sum();
-        assert_eq!(
-            trait_sum, stats.total,
-            "trait sum should match total: {} vs {}",
-            trait_sum, stats.total
-        );
+        // v0.17.3 (ADR-036): by_trait assertions removed
     }
 
     #[test]
@@ -449,12 +423,7 @@ mod tests {
         by_layer.insert("knowledge".to_string(), 24);
         by_layer.insert("foundation".to_string(), 6);
 
-        let mut by_trait = HashMap::new();
-        by_trait.insert("defined".to_string(), 20);
-        by_trait.insert("authored".to_string(), 5);
-        by_trait.insert("imported".to_string(), 25);
-        by_trait.insert("generated".to_string(), 8);
-        by_trait.insert("retrieved".to_string(), 3);
+        // v0.17.3 (ADR-036): by_trait removed, provenance is per-instance
 
         let mut by_family = HashMap::new();
         by_family.insert("ownership".to_string(), 70);
@@ -473,7 +442,7 @@ mod tests {
                 total: 58, // v0.17: removed Market
                 by_realm,
                 by_layer,
-                by_trait,
+                // v0.17.3 (ADR-036): by_trait removed
             },
             arcs: Some(ArcStats {
                 total: 175, // v0.17: removed Market arcs
@@ -539,13 +508,12 @@ mod tests {
         // Should contain all breakdowns
         assert!(text.contains("By Realm:"));
         assert!(text.contains("By Layer:"));
-        assert!(text.contains("By Trait:"));
+        // v0.17.3 (ADR-036): "By Trait:" removed
         assert!(text.contains("By Family:"));
         assert!(text.contains("By Scope:"));
 
         // Should contain specific values
-        assert!(text.contains("defined"));
-        assert!(text.contains("authored"));
+        // v0.17.3 (ADR-036): trait values ("defined", "authored") removed
         assert!(text.contains("ownership"));
         assert!(text.contains("intra_realm"));
     }

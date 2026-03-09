@@ -90,6 +90,7 @@ fn highlight_matches_with_bg(
 
 /// Horizontal padding inside tree panel (left side only, right has minimap).
 const TREE_PADDING_LEFT: u16 = 1;
+const SCROLLBAR_WIDTH: u16 = 1;
 
 // =============================================================================
 // POWER BAR RENDERING (Entity relationship visualization)
@@ -728,7 +729,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
             // v0.13.1: No right badge for Realm (bar starts at Layer level)
             // Calculate padding for alignment (using display_width for Unicode support)
-            let tree_width = area.width.saturating_sub(4) as usize;
+            let tree_width = area.width.saturating_sub(5) as usize;
             let left_width = display_width(&left_content);
             let stats_width = display_width(&stats_str);
 
@@ -841,7 +842,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     // v0.13.1: Simple color bar (layer color) - starts at Layer level
                     // Calculate padding for alignment
-                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let tree_width = area.width.saturating_sub(5) as usize;
                     let left_width = display_width(&left_content);
                     let stats_width = display_width(&stats_str);
                     let right_side = "│"; // Simple color bar
@@ -1043,7 +1044,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Just a colored │ at the right edge, matching layer color
 
                             // Calculate padding for right-alignment
-                            let tree_width = area.width.saturating_sub(4) as usize;
+                            let tree_width = area.width.saturating_sub(5) as usize;
                             let left_width = display_width(&left_content);
                             let right_side = "│"; // Simple color bar
                             let right_width = 1;
@@ -1207,7 +1208,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let (power_bar, power_color) = render_power_bar(entity_group.relationship_power);
 
                                         // Calculate widths for right-alignment
-                                        let tree_width = area.width.saturating_sub(4) as usize;
+                                        let tree_width = area.width.saturating_sub(5) as usize;
                                         let left_content = format!(
                                             "{}{}{} {} ({})",
                                             cursor_char,
@@ -1552,7 +1553,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let card_str = cardinality_abbrev(&arc_class.cardinality);
 
                     // Calculate padding for alignment (using display_width for Unicode support)
-                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let tree_width = area.width.saturating_sub(5) as usize;
                     let left_width = display_width(&left_content);
                     let flow_width = display_width(&flow_str);
                     let card_width = display_width(card_str);
@@ -1657,7 +1658,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let content_x = inner_area.x + TREE_PADDING_LEFT;
     let content_width = inner_area
         .width
-        .saturating_sub(minimap_width + TREE_PADDING_LEFT);
+        .saturating_sub(minimap_width + TREE_PADDING_LEFT + SCROLLBAR_WIDTH);
 
     // v11.6: Render sticky breadcrumb at top of content area (with padding)
     let breadcrumb_area = Rect::new(content_x, inner_area.y, content_width, inner_area.height);
@@ -1730,11 +1731,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             ScrollbarState::new(total.saturating_sub(effective_visible_height))
                 .position(app.tree_scroll);
 
-        // Place scrollbar between tree content and mini-map separator
+        // Place scrollbar in reserved space between tree content and mini-map separator
         let scrollbar_area = Rect {
-            x: inner_area.x + content_width.saturating_sub(1),
+            x: content_x + content_width,
             y: tree_y,
-            width: 1,
+            width: SCROLLBAR_WIDTH,
             height: tree_height,
         };
         f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);

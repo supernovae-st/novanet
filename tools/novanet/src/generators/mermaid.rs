@@ -20,26 +20,18 @@ use std::path::Path;
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Trait (node_trait) → Mermaid classDef fill + stroke + text color.
-/// Colors sourced from `taxonomy.yaml` traits section.
-/// Trait → Mermaid fill/stroke colors.
-/// v0.12.0: ADR-024 Data Origin rename (invariant→defined, localized→authored, etc.)
-pub const TRAIT_STYLES: &[(&str, &str, &str)] = &[
-    ("defined", "#3b82f6", "#1d4ed8"),
-    ("authored", "#22c55e", "#16a34a"),
-    ("imported", "#8b5cf6", "#7c3aed"),
-    ("generated", "#b58900", "#996f00"), // yellow-orange
-    ("retrieved", "#6c71c4", "#5761b3"), // violet
-];
-
-/// Trait → emoji for node labels.
-/// v0.12.0: ADR-024 Data Origin rename.
-pub const TRAIT_EMOJI: &[(&str, &str)] = &[
-    ("defined", "\u{1F535}"),   // 🔵
-    ("authored", "\u{1F7E2}"),  // 🟢
-    ("imported", "\u{1F7E3}"),  // 🟣
-    ("generated", "\u{1F31F}"), // 🌟
-    ("retrieved", "\u{26AA}"),  // ⚪
+/// Layer → Mermaid classDef fill + stroke + text color.
+/// v0.17.3 (ADR-036): Replaced TRAIT_STYLES - provenance is per-instance, styling is by layer.
+pub const LAYER_STYLES: &[(&str, &str, &str)] = &[
+    ("config", "#64748b", "#475569"),      // slate - configuration
+    ("locale", "#06b6d4", "#0891b2"),      // cyan - locale settings
+    ("geography", "#10b981", "#059669"),   // emerald - geography
+    ("knowledge", "#8b5cf6", "#7c3aed"),   // violet - knowledge atoms
+    ("foundation", "#3b82f6", "#1d4ed8"),  // blue - org foundation
+    ("structure", "#f59e0b", "#d97706"),   // amber - page/block structure
+    ("semantic", "#ec4899", "#db2777"),    // pink - semantic entities
+    ("instruction", "#84cc16", "#65a30d"), // lime - LLM instructions
+    ("output", "#22c55e", "#16a34a"),      // green - generated output
 ];
 
 /// Arc family → Mermaid arrow syntax.
@@ -125,6 +117,23 @@ pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
     key.to_string()
 }
 
+/// Layer key → emoji (from taxonomy.yaml).
+/// v0.17.3 (ADR-036): Added to replace trait_emoji for node labels.
+pub fn layer_emoji(key: &str) -> &'static str {
+    match key {
+        "config" => "\u{2699}\u{fe0f}", // ⚙️
+        "locale" => "\u{1F310}",        // 🌐
+        "geography" => "\u{1F5FA}\u{fe0f}", // 🗺️
+        "knowledge" => "\u{1F4DA}",     // 📚
+        "foundation" => "\u{1F3DB}\u{fe0f}", // 🏛️
+        "structure" => "\u{1F4C4}",     // 📄
+        "semantic" => "\u{1F4A1}",      // 💡
+        "instruction" => "\u{1F4DD}",   // 📝
+        "output" => "\u{2728}",         // ✨
+        _ => "\u{1F4E6}",               // 📦 fallback
+    }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Expanded arc (after multi-source/target expansion) — v10.4: renamed from edge
 // ─────────────────────────────────────────────────────────────────────────────
@@ -169,13 +178,14 @@ pub fn expand_arcs(relations: &[ArcDef]) -> Vec<ExpandedArc> {
 // Shared write helpers (used by both MermaidGenerator and ViewMermaidGenerator)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Write Mermaid `classDef` lines for all traits.
+/// Write Mermaid `classDef` lines for all layers.
+/// v0.17.3 (ADR-036): Changed from trait-based to layer-based styling.
 pub fn write_classdefs(out: &mut String) {
-    writeln!(out, "  %% Trait styling (node_trait)").unwrap();
-    for &(behavior, fill, stroke) in TRAIT_STYLES {
+    writeln!(out, "  %% Layer styling (v0.17.3 ADR-036)").unwrap();
+    for &(layer, fill, stroke) in LAYER_STYLES {
         writeln!(
             out,
-            "  classDef {behavior} fill:{fill},stroke:{stroke},color:#fff"
+            "  classDef {layer} fill:{fill},stroke:{stroke},color:#fff"
         )
         .unwrap();
     }
@@ -219,12 +229,13 @@ pub fn write_arcs_and_styles(out: &mut String, arcs: &[ExpandedArc]) {
 }
 
 /// Write `class` assignments for all nodes.
+/// v0.17.3 (ADR-036): traits removed, using layer for styling instead.
 pub fn write_class_assignments(out: &mut String, nodes: &[&ParsedNode]) {
-    writeln!(out, "  %% Class assignments").unwrap();
+    writeln!(out, "  %% Class assignments (by layer)").unwrap();
     let mut sorted: Vec<&&ParsedNode> = nodes.iter().collect();
     sorted.sort_by_key(|n| &n.def.name);
     for node in sorted {
-        writeln!(out, "  class {} {}", node.def.name, node.def.node_trait).unwrap();
+        writeln!(out, "  class {} {}", node.def.name, node.def.layer).unwrap();
     }
 }
 
@@ -322,8 +333,8 @@ fn render_mermaid(
             writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
 
             for node in node_list {
-                let behavior = node.def.node_trait.to_string();
-                let emoji = trait_emoji(&behavior);
+                // v0.17.3 (ADR-036): traits removed, using layer emoji instead
+                let emoji = layer_emoji(&node.def.layer);
                 writeln!(
                     out,
                     "      {}[\"{} {}\"]",
@@ -453,8 +464,8 @@ mod tests {
     use crate::generators::Generator;
     use crate::generators::test_utils::{make_node, make_rel};
     use crate::parsers::arcs::{Cardinality, NodeRef};
-    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
-    use crate::parsers::yaml_node::NodeTrait;
+    // v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef};
     use serial_test::serial;
 
     fn make_org_doc() -> OrganizingDoc {
@@ -490,20 +501,7 @@ mod tests {
                     }],
                 },
             ],
-            traits: vec![
-                TraitDef {
-                    key: "defined".to_string(),
-                    display_name: "Defined".to_string(),
-                    color: "#3b82f6".to_string(),
-                    llm_context: "Defined.".to_string(),
-                },
-                TraitDef {
-                    key: "authored".to_string(),
-                    display_name: "Authored".to_string(),
-                    color: "#22c55e".to_string(),
-                    llm_context: "Authored.".to_string(),
-                },
-            ],
+            // v0.17.3 (ADR-036): traits removed, provenance is per-instance
             arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
@@ -549,10 +547,11 @@ mod tests {
     #[test]
     fn render_small_mermaid() {
         // v0.13.0 ADR-029: ProjectContent → ProjectNative, HAS_CONTENT → HAS_NATIVE
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
         let nodes = vec![
-            make_node("Locale", "shared", "config", NodeTrait::Defined),
-            make_node("Project", "org", "foundation", NodeTrait::Defined),
-            make_node("ProjectNative", "org", "foundation", NodeTrait::Authored),
+            make_node("Locale", "shared", "config"),
+            make_node("Project", "org", "foundation"),
+            make_node("ProjectNative", "org", "foundation"),
         ];
 
         let rels = vec![
@@ -578,9 +577,9 @@ mod tests {
         assert!(output.contains("NovaNet Graph v0.13.0"));
         assert!(output.contains("3 nodes, 2 arcs"));
 
-        // classDef (v0.12.0: renamed traits)
-        assert!(output.contains("classDef defined fill:#3b82f6,stroke:#1d4ed8,color:#fff"));
-        assert!(output.contains("classDef authored fill:#22c55e,stroke:#16a34a,color:#fff"));
+        // classDef (v0.17.3 ADR-036: layer-based styling)
+        assert!(output.contains("classDef config fill:#64748b,stroke:#475569,color:#fff"));
+        assert!(output.contains("classDef foundation fill:#3b82f6,stroke:#1d4ed8,color:#fff"));
 
         // Subgraphs — Realm order from organizing doc
         assert!(output.contains("SHARED_REALM"));
@@ -596,10 +595,10 @@ mod tests {
         assert!(output.contains("\"Configuration\""));
         assert!(output.contains("\"Foundation\""));
 
-        // Node labels with emoji
-        assert!(output.contains("Locale[\"\u{1F535} Locale\"]"));
-        assert!(output.contains("Project[\"\u{1F535} Project\"]"));
-        assert!(output.contains("ProjectNative[\"\u{1F7E2} ProjectNative\"]"));
+        // Node labels with emoji (v0.17.3: layer emoji instead of trait)
+        assert!(output.contains("Locale[\"\u{2699}\u{fe0f} Locale\"]"));
+        assert!(output.contains("Project[\"\u{1F3DB}\u{fe0f} Project\"]"));
+        assert!(output.contains("ProjectNative[\"\u{1F3DB}\u{fe0f} ProjectNative\"]"));
 
         // Edges
         assert!(output.contains("Project -.->|HAS_NATIVE| ProjectNative"));
@@ -609,17 +608,19 @@ mod tests {
         assert!(output.contains("stroke:#22c55e,stroke-width:2px"));
 
         // Class assignments (v0.12.0: defined, authored)
-        assert!(output.contains("class Locale defined"));
-        assert!(output.contains("class Project defined"));
-        assert!(output.contains("class ProjectNative authored"));
+        // v0.17.3 (ADR-036): classes by layer instead of trait
+        assert!(output.contains("class Locale config"));
+        assert!(output.contains("class Project foundation"));
+        assert!(output.contains("class ProjectNative foundation"));
     }
 
     #[test]
     fn render_edge_families_distinct_arrows() {
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
         let nodes = vec![
-            make_node("A", "shared", "config", NodeTrait::Defined),
-            make_node("B", "shared", "config", NodeTrait::Authored),
-            make_node("C", "shared", "config", NodeTrait::Generated),
+            make_node("A", "shared", "config"),
+            make_node("B", "shared", "config"),
+            make_node("C", "shared", "config"),
         ];
 
         let rels = vec![
@@ -696,12 +697,16 @@ mod tests {
         assert!(output.contains("ORG_output"));
         // v11.4: seo/geo layers removed from org (nodes moved to shared/knowledge)
 
-        // All 5 classDef trait styles (v0.12.0: renamed per ADR-024)
-        assert!(output.contains("classDef defined"));
-        assert!(output.contains("classDef authored"));
-        assert!(output.contains("classDef imported"));
-        assert!(output.contains("classDef generated"));
-        assert!(output.contains("classDef retrieved"));
+        // All 9 classDef layer styles (v0.17.3 ADR-036: layer-based styling)
+        assert!(output.contains("classDef config"));
+        assert!(output.contains("classDef locale"));
+        assert!(output.contains("classDef geography"));
+        assert!(output.contains("classDef knowledge"));
+        assert!(output.contains("classDef foundation"));
+        assert!(output.contains("classDef structure"));
+        assert!(output.contains("classDef semantic"));
+        assert!(output.contains("classDef instruction"));
+        assert!(output.contains("classDef output"));
 
         // Spot checks — some known nodes
         assert!(output.contains("Locale["));
@@ -721,10 +726,10 @@ mod tests {
         assert!(output.contains("stroke:#3b82f6")); // ownership
         assert!(output.contains("stroke:#22c55e")); // localization
 
-        // Class assignments (v0.12.0: defined, authored, generated)
-        assert!(output.contains("class Locale defined"));
-        assert!(output.contains("class Project defined"));
-        assert!(output.contains("class PageNative generated")); // v0.13.0 ADR-029: renamed to PageNative
+        // Class assignments (v0.17.3 ADR-036: by layer instead of trait)
+        assert!(output.contains("class Locale config"));
+        assert!(output.contains("class Project foundation"));
+        assert!(output.contains("class PageNative output")); // v0.13.0 ADR-029: renamed to PageNative
 
         // No v8 terms
         assert!(!output.contains("SCOPE_HIERARCHY"));

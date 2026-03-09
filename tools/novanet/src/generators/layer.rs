@@ -251,7 +251,8 @@ fn render_layers(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::generators::test_utils::make_node_simple as make_node;
+    // v0.17.3: make_node_simple renamed to make_node (no NodeTrait param)
+    use crate::generators::test_utils::make_node;
     use serial_test::serial;
 
     #[test]

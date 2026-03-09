@@ -212,7 +212,8 @@ mod tests {
     // FixEngine Tests (RED Phase: FixEngine doesn't exist yet)
     // ─────────────────────────────────────────────────────────────────────────
 
-    use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef};
+    // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+    use crate::parsers::yaml_node::{NodeDef, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -235,7 +236,7 @@ mod tests {
                 name: "EntityNative".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Authored,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),

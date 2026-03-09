@@ -1,4 +1,6 @@
 //! Stats view — raw numbers for CI/scripts.
+//!
+//! v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance.
 
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
@@ -12,18 +14,9 @@ pub struct BlueprintStats {
     pub arc_classes: usize,
     pub realms: usize,
     pub layers: usize,
-    pub traits: TraitStats,
+    // v0.17.3 (ADR-036): traits removed, provenance is per-instance
     pub arc_families: ArcFamilyStats,
     pub validation: ValidationStats,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TraitStats {
-    pub defined: usize,
-    pub authored: usize,
-    pub imported: usize,
-    pub generated: usize,
-    pub retrieved: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -54,9 +47,8 @@ pub fn render(data: &BlueprintData, format: OutputFormat) -> String {
 
 fn collect_stats(data: &BlueprintData) -> BlueprintStats {
     use crate::parsers::arcs::ArcFamily;
-    use crate::parsers::yaml_node::NodeTrait;
 
-    let by_trait = data.nodes_by_trait();
+    // v0.17.3 (ADR-036): traits removed, provenance is per-instance
     let by_family = data.arcs_by_family();
     let validation = ValidationResult::validate(data);
 
@@ -65,28 +57,6 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
         arc_classes: data.arc_count(),
         realms: data.realm_count(),
         layers: data.layer_count(),
-        traits: TraitStats {
-            defined: by_trait
-                .get(&NodeTrait::Defined)
-                .map(|v| v.len())
-                .unwrap_or(0),
-            authored: by_trait
-                .get(&NodeTrait::Authored)
-                .map(|v| v.len())
-                .unwrap_or(0),
-            imported: by_trait
-                .get(&NodeTrait::Imported)
-                .map(|v| v.len())
-                .unwrap_or(0),
-            generated: by_trait
-                .get(&NodeTrait::Generated)
-                .map(|v| v.len())
-                .unwrap_or(0),
-            retrieved: by_trait
-                .get(&NodeTrait::Retrieved)
-                .map(|v| v.len())
-                .unwrap_or(0),
-        },
         arc_families: ArcFamilyStats {
             ownership: by_family
                 .get(&ArcFamily::Ownership)
@@ -118,6 +88,7 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
 }
 
 fn render_table(stats: &BlueprintStats) -> String {
+    // v0.17.3 (ADR-036): traits section removed, provenance is per-instance
     format!(
         "BLUEPRINT STATS\n\
          ───────────────────────────────────────\n\
@@ -125,14 +96,6 @@ fn render_table(stats: &BlueprintStats) -> String {
          ArcClasses:       {}\n\
          Realms:           {}\n\
          Layers:           {}\n\
-         \n\
-         TRAITS (ADR-024)\n\
-         ───────────────────────────────────────\n\
-         defined:          {}\n\
-         authored:         {}\n\
-         imported:         {}\n\
-         generated:        {}\n\
-         retrieved:        {}\n\
          \n\
          ARC FAMILIES\n\
          ───────────────────────────────────────\n\
@@ -151,11 +114,6 @@ fn render_table(stats: &BlueprintStats) -> String {
         stats.arc_classes,
         stats.realms,
         stats.layers,
-        stats.traits.defined,
-        stats.traits.authored,
-        stats.traits.imported,
-        stats.traits.generated,
-        stats.traits.retrieved,
         stats.arc_families.ownership,
         stats.arc_families.localization,
         stats.arc_families.semantic,
