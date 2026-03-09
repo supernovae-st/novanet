@@ -26,11 +26,11 @@ catalog:
   husky: ^9.1.0
 
   # Types
-  "@types/node": ^25.3.3
+  "@types/node": ^25.3.5
 
   # Linting
-  eslint: ^9.39.3
-  "@eslint/js": ^9.39.3
+  eslint: ^9.39.4
+  "@eslint/js": ^9.39.4
   "@typescript-eslint/eslint-plugin": ^8.56.1
   "@typescript-eslint/parser": ^8.56.1
 
