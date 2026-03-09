@@ -1,19 +1,20 @@
-//! Parse taxonomy.yaml (v9.5 replacement for organizing-principles.yaml).
+//! Parse taxonomy.yaml (v0.17.3 - traits removed).
 //!
 //! Handles:
 //! - `node_realms` with nested layers
-//! - `node_traits` with border styles for visual encoding
 //! - `arc_families` with stroke styles, arrow styles, and default_traversal
 //! - `arc_scopes` and `arc_cardinalities` for arc classification
 //! - `terminal` palette for TUI graceful degradation
-//! - `class_retrieval_defaults` per-trait context assembly settings (v0.12.0, was kind_retrieval_defaults)
+//! - `layer_retrieval_defaults` per-layer context assembly settings (v0.17.3, was class_retrieval_defaults)
+//!
+//! Note: `node_traits` was removed in v0.17.3 (ADR-036). Provenance is now tracked
+//! per-instance via the `provenance` property, not per-class via the `trait` field.
 //!
 //! ## Migration to Individual Files (v0.12.5)
 //!
 //! Use `load_taxonomy_from_files()` to load taxonomy data from individual YAML files:
 //! - `realms/*.yaml` → Realm definitions
 //! - `layers/*.yaml` → Layer definitions (with `realms` field)
-//! - `traits/*.yaml` → Trait definitions
 //! - `arc-families/*.yaml` → Arc family definitions
 //!
 //! The function constructs a `TaxonomyDoc` compatible with existing generators.
@@ -61,15 +62,15 @@ impl Default for TaxonomyIcon {
 // YAML Structs (taxonomy.yaml)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Top-level document for taxonomy.yaml (full format, legacy).
+/// Top-level document for taxonomy.yaml (v0.17.3 - traits removed).
 #[derive(Debug, Deserialize)]
 pub struct TaxonomyDoc {
     pub version: String,
     pub node_realms: Vec<NodeRealmDef>,
-    pub node_traits: Vec<NodeTraitDef>,
-    /// v0.12.0: Per-trait retrieval defaults for context assembly.
-    #[serde(default)]
-    pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
+    // Note: node_traits was removed in v0.17.3 (ADR-036)
+    /// v0.17.3: Per-layer retrieval defaults for context assembly (was class_retrieval_defaults).
+    #[serde(default, alias = "class_retrieval_defaults")]
+    pub layer_retrieval_defaults: Option<HashMap<String, LayerRetrievalDefaults>>,
     pub arc_families: Vec<ArcFamilyDef>,
     #[serde(default)]
     pub arc_scopes: Vec<ArcScopeDef>,
@@ -79,14 +80,14 @@ pub struct TaxonomyDoc {
     pub terminal: Option<TerminalPalette>,
 }
 
-/// Minimal taxonomy.yaml format (v0.12.5+).
+/// Minimal taxonomy.yaml format (v0.17.3 - traits removed).
 ///
 /// Contains only centralized config that isn't per-item:
 /// - arc_scopes, arc_cardinalities (small enums)
 /// - terminal palette (TUI graceful degradation)
-/// - class_retrieval_defaults (context assembly config)
+/// - layer_retrieval_defaults (context assembly config, was class_retrieval_defaults)
 ///
-/// Node realms, traits, and arc families are loaded from individual files.
+/// Node realms and arc families are loaded from individual files.
 #[derive(Debug, Deserialize)]
 pub struct MinimalTaxonomyDoc {
     #[serde(default = "default_version")]
@@ -97,21 +98,21 @@ pub struct MinimalTaxonomyDoc {
     pub arc_cardinalities: Vec<ArcCardinalityDef>,
     #[serde(default)]
     pub terminal: Option<TerminalPalette>,
-    #[serde(default)]
-    pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
+    #[serde(default, alias = "class_retrieval_defaults")]
+    pub layer_retrieval_defaults: Option<HashMap<String, LayerRetrievalDefaults>>,
 }
 
 fn default_version() -> String {
     "0.13.0".to_string()
 }
 
-/// Per-trait retrieval settings for context assembly.
+/// Per-layer retrieval settings for context assembly (v0.17.3: was ClassRetrievalDefaults).
 #[derive(Debug, Clone, Deserialize)]
-pub struct ClassRetrievalDefaults {
+pub struct LayerRetrievalDefaults {
     /// Maximum hops for structural traversal.
     #[serde(default)]
     pub traversal_depth: Option<u8>,
-    /// Default token allocation for this trait type.
+    /// Default token allocation for this layer type.
     #[serde(default)]
     pub context_budget: Option<u32>,
     /// Estimated tokens per instance.
@@ -156,20 +157,8 @@ impl NodeLayerDef {
     }
 }
 
-/// Trait (locale behavior) definition with visual encoding.
-#[derive(Debug, Clone, Deserialize)]
-pub struct NodeTraitDef {
-    pub key: String,
-    pub display_name: String,
-    pub color: String,
-    #[serde(default)]
-    pub border_style: Option<String>,
-    #[serde(default)]
-    pub border_width: Option<u8>,
-    #[serde(default)]
-    pub unicode_border: Option<String>,
-    pub llm_context: String,
-}
+// Note: NodeTraitDef was removed in v0.17.3 (ADR-036)
+// Provenance is now tracked per-instance, not per-class.
 
 /// Arc family definition with visual encoding.
 #[derive(Debug, Clone, Deserialize)]
@@ -241,30 +230,29 @@ pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
 ///
 /// Returns a `TaxonomyDoc` compatible with existing generators.
 pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
-    use super::{arc_family, layer, realm, trait_def};
+    use super::{arc_family, layer, realm};
 
-    // Load individual files
+    // Load individual files (v0.17.3: traits removed)
     let realms = realm::load_all_realms(root)?;
     let layers = layer::load_all_layers(root)?;
-    let traits = trait_def::load_all_traits(root)?;
     let arc_families = arc_family::load_all_arc_families(root)?;
 
     // Load arc_scopes, arc_cardinalities, terminal from taxonomy.yaml
     // (these are small and rarely change, kept centralized for now)
-    // v0.12.5: taxonomy.yaml is now minimal format (MinimalTaxonomyDoc)
+    // v0.17.3: layer_retrieval_defaults replaces class_retrieval_defaults
     let taxonomy_path = crate::config::taxonomy_path(root);
-    let (arc_scopes, arc_cardinalities, terminal, class_retrieval_defaults, version) =
+    let (arc_scopes, arc_cardinalities, terminal, layer_retrieval_defaults, version) =
         if taxonomy_path.exists() {
             let minimal: MinimalTaxonomyDoc = super::utils::load_yaml(&taxonomy_path)?;
             (
                 minimal.arc_scopes,
                 minimal.arc_cardinalities,
                 minimal.terminal,
-                minimal.class_retrieval_defaults,
+                minimal.layer_retrieval_defaults,
                 minimal.version,
             )
         } else {
-            (vec![], vec![], None, None, "0.12.5".to_string())
+            (vec![], vec![], None, None, "0.17.3".to_string())
         };
 
     // Build realm→layers mapping from layer.realms field
@@ -312,19 +300,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
         })
         .collect();
 
-    // Convert traits to NodeTraitDef
-    let node_traits: Vec<NodeTraitDef> = traits
-        .into_iter()
-        .map(|t| NodeTraitDef {
-            key: t.key,
-            display_name: t.display_name,
-            color: t.color,
-            border_style: Some(t.border_style),
-            border_width: Some(t.border_width as u8),
-            unicode_border: t.unicode_border,
-            llm_context: t.llm_context.unwrap_or_default(),
-        })
-        .collect();
+    // Note: trait conversion removed in v0.17.3 (ADR-036)
 
     // Convert arc families to ArcFamilyDef
     let arc_families: Vec<ArcFamilyDef> = arc_families
@@ -363,11 +339,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
             )));
         }
     }
-    if node_traits.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "no traits found in traits/".to_string(),
-        ));
-    }
+    // Note: trait validation removed in v0.17.3 (ADR-036)
     if arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
             "no arc families found in arc-families/".to_string(),
@@ -377,8 +349,8 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
     Ok(TaxonomyDoc {
         version,
         node_realms,
-        node_traits,
-        class_retrieval_defaults,
+        // Note: node_traits removed in v0.17.3 (ADR-036)
+        layer_retrieval_defaults,
         arc_families,
         arc_scopes,
         arc_cardinalities,
@@ -417,16 +389,7 @@ impl TaxonomyDoc {
                         .collect(),
                 })
                 .collect(),
-            traits: self
-                .node_traits
-                .iter()
-                .map(|t| crate::parsers::organizing::TraitDef {
-                    key: t.key.clone(),
-                    display_name: t.display_name.clone(),
-                    color: t.color.clone(),
-                    llm_context: t.llm_context.clone(),
-                })
-                .collect(),
+            // Note: traits removed in v0.17.3 (ADR-036)
             arc_families: self
                 .arc_families
                 .iter()
