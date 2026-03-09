@@ -141,6 +141,14 @@ pub struct App {
     pub json_pretty: bool,
 
     // ==========================================================================
+    // Instance Panel State (v0.17.3)
+    // ==========================================================================
+    /// Whether STANDARD section is collapsed in instance panel (default: false = expanded).
+    pub instance_standard_collapsed: bool,
+    /// Whether SPECIFIC section is collapsed in instance panel (default: false = expanded).
+    pub instance_specific_collapsed: bool,
+
+    // ==========================================================================
     // Render Caches (Performance Optimization)
     // ==========================================================================
     /// Cache for status bar realm mini-bar (avoids Vec allocation per frame).
@@ -204,6 +212,10 @@ impl App {
             focused_property_idx: 0,
             expanded_property: false,
             json_pretty: false,
+
+            // Instance panel state (v0.17.3)
+            instance_standard_collapsed: false, // Expanded by default
+            instance_specific_collapsed: false, // Expanded by default
 
             // Render caches
             mini_bar_cache: RefCell::new(RenderCache::new()),
@@ -1105,14 +1117,27 @@ impl App {
             // v0.17.3: 't' keybinding removed (SourceTab toggle removed)
             // Content panel now shows context-aware content based on tree selection
 
-            // Enter: toggle collapse/expand (Tree), toggle peek (YAML), or expand property (Info)
+            // Enter: toggle collapse/expand (Tree), toggle sections (Content), or expand property (Info)
             KeyCode::Enter => {
                 match self.focus {
                     Focus::Tree => {
                         self.toggle_tree_item();
                     }
                     Focus::Content => {
-                        // v0.13.1: peek mode removed (PROPERTIES panel shows instance data)
+                        // v0.17.3: Toggle instance panel sections collapse/expand
+                        // Cycles: all expanded → STANDARD collapsed → both collapsed → all expanded
+                        if !self.instance_standard_collapsed && !self.instance_specific_collapsed {
+                            // Both expanded → collapse STANDARD
+                            self.instance_standard_collapsed = true;
+                        } else if self.instance_standard_collapsed && !self.instance_specific_collapsed
+                        {
+                            // STANDARD collapsed → collapse both
+                            self.instance_specific_collapsed = true;
+                        } else {
+                            // Any other state → expand both
+                            self.instance_standard_collapsed = false;
+                            self.instance_specific_collapsed = false;
+                        }
                     }
                     Focus::Props => {
                         // Toggle expanded property text (word-wrap on multiple lines)

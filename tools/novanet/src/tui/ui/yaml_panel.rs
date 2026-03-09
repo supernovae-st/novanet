@@ -33,6 +33,36 @@ const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
+// v0.17.3 INSTANCE PANEL STANDARD PROPERTIES (ADR-024)
+// =============================================================================
+
+/// Standard properties that appear at the top of the INSTANCE panel.
+/// These are present on all node types per schema conventions.
+const STANDARD_PROPERTIES: &[&str] = &[
+    "key",
+    "display_name",
+    "description",
+    "created_at",
+    "updated_at",
+    "llm_context",
+];
+
+// =============================================================================
+// v0.17.3 INSTANCE PANEL COLORS (rich YAML-style)
+// =============================================================================
+
+/// YAML key color (cyan)
+const COLOR_YAML_KEY: Color = Color::Rgb(86, 182, 194); // #56B6C2 Cyan
+/// YAML string color (yellow/gold)
+const COLOR_YAML_STRING: Color = Color::Rgb(229, 192, 123); // #E5C07B Yellow
+/// YAML number color (orange)
+const COLOR_YAML_NUMBER: Color = Color::Rgb(209, 154, 102); // #D19A66 Orange
+/// YAML boolean/null color (violet)
+const COLOR_YAML_BOOL: Color = Color::Rgb(198, 120, 221); // #C678DD Violet
+/// Section header color (muted)
+const COLOR_SECTION_HEADER: Color = Color::Rgb(92, 99, 112); // #5C6370 Muted
+
+// =============================================================================
 // v0.13 SEMANTIC COLORS
 // =============================================================================
 
@@ -135,6 +165,8 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
                 &realm,
                 &layer,
                 properties,
+                app.instance_standard_collapsed,
+                app.instance_specific_collapsed,
             );
         }
         ContentPanelMode::SectionInfo { name, description } => {
@@ -242,6 +274,8 @@ fn build_schema_title(
 
 /// Render content for instances - shows properties in YAML-like format.
 /// v0.17.3: Unified panel - symmetric with Schema (shows Neo4j data instead of YAML file).
+/// v0.17.3: Enhanced display with STANDARD/SPECIFIC grouping, word-wrap, multi-line YAML.
+/// v0.17.3: Added collapse/expand support for sections (Enter to toggle).
 #[allow(clippy::too_many_arguments)]
 fn render_instance_info(
     f: &mut Frame,
@@ -253,12 +287,15 @@ fn render_instance_info(
     realm: &str,
     layer: &str,
     properties: &BTreeMap<String, JsonValue>,
+    standard_collapsed: bool,
+    specific_collapsed: bool,
 ) {
     let mut lines: Vec<Line> = Vec::new();
+    let panel_width = area.width.saturating_sub(4) as usize; // Account for borders + padding
 
     // YAML-like header with class info
     lines.push(Line::from(vec![
-        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))), // Comment color
+        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))),
         Span::styled(
             format!("{} instance", class_name),
             Style::default().fg(Color::Rgb(108, 113, 196)),
@@ -273,31 +310,67 @@ fn render_instance_info(
     ]));
     lines.push(Line::from(""));
 
-    // Instance key as first property
-    lines.push(Line::from(vec![
-        Span::styled("key", Style::default().fg(Color::Rgb(166, 226, 46))), // Green key
-        Span::styled(": ", Style::default().fg(Color::White)),
-        Span::styled(
-            format!("\"{}\"", instance_key),
-            Style::default().fg(Color::Rgb(230, 219, 116)), // Yellow string
-        ),
-    ]));
+    // Separate standard and specific properties
+    let mut standard_props: Vec<(&String, &JsonValue)> = Vec::new();
+    let mut specific_props: Vec<(&String, &JsonValue)> = Vec::new();
 
-    // Render properties in YAML format
     for (key, value) in properties.iter() {
-        // Skip 'key' since we already displayed it
-        if key == "key" {
-            continue;
+        if STANDARD_PROPERTIES.contains(&key.as_str()) {
+            standard_props.push((key, value));
+        } else {
+            specific_props.push((key, value));
         }
-        let value_span = format_json_value_as_yaml(value);
-        lines.push(Line::from(vec![
-            Span::styled(key.as_str(), Style::default().fg(Color::Rgb(166, 226, 46))), // Green key
-            Span::styled(": ", Style::default().fg(Color::White)),
-            value_span,
-        ]));
     }
 
-    // If no properties, show a hint
+    // Sort standard props in the order defined in STANDARD_PROPERTIES
+    standard_props.sort_by_key(|(k, _)| {
+        STANDARD_PROPERTIES
+            .iter()
+            .position(|p| p == k)
+            .unwrap_or(usize::MAX)
+    });
+
+    // Count properties for headers
+    let standard_count = standard_props.len();
+    let specific_count = specific_props.len();
+
+    // ─────────── STANDARD (N) ▼/▶ ───────────
+    lines.push(render_section_separator_with_toggle(
+        "STANDARD",
+        standard_count,
+        panel_width,
+        standard_collapsed,
+    ));
+
+    if !standard_collapsed {
+        lines.push(Line::from(""));
+        // Render standard properties
+        for (key, value) in standard_props.iter() {
+            render_property_lines(&mut lines, key, value, panel_width, 0);
+        }
+    }
+
+    // Add empty line before specific if we have specific properties
+    if specific_count > 0 {
+        lines.push(Line::from(""));
+        // ─────────── SPECIFIC (N) ▼/▶ ───────────
+        lines.push(render_section_separator_with_toggle(
+            "SPECIFIC",
+            specific_count,
+            panel_width,
+            specific_collapsed,
+        ));
+
+        if !specific_collapsed {
+            lines.push(Line::from(""));
+            // Render specific properties
+            for (key, value) in specific_props.iter() {
+                render_property_lines(&mut lines, key, value, panel_width, 0);
+            }
+        }
+    }
+
+    // If no properties at all, show a hint
     if properties.is_empty() {
         lines.push(Line::from(""));
         lines.push(Line::from(Span::styled(
@@ -318,37 +391,337 @@ fn render_instance_info(
     f.render_widget(paragraph, area);
 }
 
-/// Format a JSON value as YAML-style colored span.
-fn format_json_value_as_yaml(value: &JsonValue) -> Span<'static> {
+/// Render a section separator line: ─────── LABEL (N) ───────
+/// Note: Used by tests; production code uses render_section_separator_with_toggle.
+#[allow(dead_code)]
+fn render_section_separator(label: &str, count: usize, width: usize) -> Line<'static> {
+    let label_text = format!(" {} ({}) ", label, count);
+    let label_len = label_text.chars().count();
+    let remaining = width.saturating_sub(label_len);
+    let left_dashes = remaining / 2;
+    let right_dashes = remaining - left_dashes;
+
+    let left = "─".repeat(left_dashes);
+    let right = "─".repeat(right_dashes);
+
+    Line::from(vec![
+        Span::styled(left, Style::default().fg(COLOR_SECTION_HEADER)),
+        Span::styled(label_text, Style::default().fg(COLOR_SECTION_HEADER)),
+        Span::styled(right, Style::default().fg(COLOR_SECTION_HEADER)),
+    ])
+}
+
+/// Render a section separator line with collapse/expand toggle indicator.
+/// Shows ▶ when collapsed, ▼ when expanded.
+/// Format: ─────── ▼ LABEL (N) ───────
+fn render_section_separator_with_toggle(
+    label: &str,
+    count: usize,
+    width: usize,
+    collapsed: bool,
+) -> Line<'static> {
+    let toggle_icon = if collapsed { "▶" } else { "▼" };
+    let label_text = format!(" {} {} ({}) ", toggle_icon, label, count);
+    let label_len = label_text.chars().count();
+    let remaining = width.saturating_sub(label_len);
+    let left_dashes = remaining / 2;
+    let right_dashes = remaining - left_dashes;
+
+    let left = "─".repeat(left_dashes);
+    let right = "─".repeat(right_dashes);
+
+    Line::from(vec![
+        Span::styled(left, Style::default().fg(COLOR_SECTION_HEADER)),
+        Span::styled(label_text, Style::default().fg(COLOR_SECTION_HEADER)),
+        Span::styled(right, Style::default().fg(COLOR_SECTION_HEADER)),
+    ])
+}
+
+/// Render a property as one or more lines, handling word-wrap and multi-line YAML.
+fn render_property_lines(
+    lines: &mut Vec<Line<'static>>,
+    key: &str,
+    value: &JsonValue,
+    width: usize,
+    indent: usize,
+) {
+    let indent_str = "  ".repeat(indent);
+
     match value {
-        JsonValue::Null => Span::styled("null", Style::default().fg(Color::Rgb(198, 120, 221))), // Purple
-        JsonValue::Bool(b) => Span::styled(
-            b.to_string(),
-            Style::default().fg(Color::Rgb(198, 120, 221)), // Purple
-        ),
-        JsonValue::Number(n) => Span::styled(
-            n.to_string(),
-            Style::default().fg(Color::Rgb(209, 154, 102)), // Orange
-        ),
+        JsonValue::Null => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                Span::styled(": ", Style::default().fg(Color::White)),
+                Span::styled("null", Style::default().fg(COLOR_YAML_BOOL)),
+            ]));
+        }
+        JsonValue::Bool(b) => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                Span::styled(": ", Style::default().fg(Color::White)),
+                Span::styled(b.to_string(), Style::default().fg(COLOR_YAML_BOOL)),
+            ]));
+        }
+        JsonValue::Number(n) => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                Span::styled(": ", Style::default().fg(Color::White)),
+                Span::styled(n.to_string(), Style::default().fg(COLOR_YAML_NUMBER)),
+            ]));
+        }
         JsonValue::String(s) => {
-            // Truncate long strings (UTF-8 safe using char boundaries)
-            let display = if s.chars().count() > 60 {
-                let truncated: String = s.chars().take(57).collect();
-                format!("\"{}...\"", truncated)
+            // Calculate available width for the string value
+            let key_prefix_len = indent * 2 + key.chars().count() + 2; // indent + key + ": "
+            let available_width = width.saturating_sub(key_prefix_len);
+
+            if s.chars().count() <= available_width && !s.contains('\n') {
+                // Single line string
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(": ", Style::default().fg(Color::White)),
+                    Span::styled(format!("\"{}\"", s), Style::default().fg(COLOR_YAML_STRING)),
+                ]));
             } else {
-                format!("\"{}\"", s)
-            };
-            Span::styled(display, Style::default().fg(Color::Rgb(230, 219, 116))) // Yellow
+                // Multi-line string with word-wrap
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str.clone(), Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(": |", Style::default().fg(Color::White)),
+                ]));
+                // Word-wrap the string content
+                let wrapped = word_wrap(s, width.saturating_sub((indent + 1) * 2));
+                for line in wrapped {
+                    lines.push(Line::from(vec![
+                        Span::styled("  ".repeat(indent + 1), Style::default()),
+                        Span::styled(line, Style::default().fg(COLOR_YAML_STRING)),
+                    ]));
+                }
+            }
         }
         JsonValue::Array(arr) => {
-            let preview = format!("[{} items]", arr.len());
-            Span::styled(preview, Style::default().fg(Color::Rgb(97, 175, 239))) // Blue
+            if arr.is_empty() {
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(": ", Style::default().fg(Color::White)),
+                    Span::styled("[]", Style::default().fg(Color::Rgb(97, 175, 239))),
+                ]));
+            } else {
+                // Array header
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str.clone(), Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(":", Style::default().fg(Color::White)),
+                ]));
+                // Array items
+                for item in arr {
+                    render_array_item_lines(lines, item, width, indent + 1);
+                }
+            }
         }
         JsonValue::Object(obj) => {
-            let preview = format!("{{{} keys}}", obj.len());
-            Span::styled(preview, Style::default().fg(Color::Rgb(97, 175, 239))) // Blue
+            if obj.is_empty() {
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(": ", Style::default().fg(Color::White)),
+                    Span::styled("{}", Style::default().fg(Color::Rgb(97, 175, 239))),
+                ]));
+            } else {
+                // Object header
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                    Span::styled(":", Style::default().fg(Color::White)),
+                ]));
+                // Object properties
+                for (k, v) in obj.iter() {
+                    render_property_lines(lines, k, v, width, indent + 1);
+                }
+            }
         }
     }
+}
+
+/// Render an array item as YAML list item (- value).
+fn render_array_item_lines(
+    lines: &mut Vec<Line<'static>>,
+    value: &JsonValue,
+    width: usize,
+    indent: usize,
+) {
+    let indent_str = "  ".repeat(indent);
+
+    match value {
+        JsonValue::Null => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled("- ", Style::default().fg(Color::White)),
+                Span::styled("null", Style::default().fg(COLOR_YAML_BOOL)),
+            ]));
+        }
+        JsonValue::Bool(b) => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled("- ", Style::default().fg(Color::White)),
+                Span::styled(b.to_string(), Style::default().fg(COLOR_YAML_BOOL)),
+            ]));
+        }
+        JsonValue::Number(n) => {
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled("- ", Style::default().fg(Color::White)),
+                Span::styled(n.to_string(), Style::default().fg(COLOR_YAML_NUMBER)),
+            ]));
+        }
+        JsonValue::String(s) => {
+            let prefix_len = indent * 2 + 2; // indent + "- "
+            let available_width = width.saturating_sub(prefix_len);
+
+            if s.chars().count() <= available_width && !s.contains('\n') {
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled("- ", Style::default().fg(Color::White)),
+                    Span::styled(format!("\"{}\"", s), Style::default().fg(COLOR_YAML_STRING)),
+                ]));
+            } else {
+                // Multi-line string in array
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str.clone(), Style::default()),
+                    Span::styled("- |", Style::default().fg(Color::White)),
+                ]));
+                let wrapped = word_wrap(s, width.saturating_sub((indent + 1) * 2));
+                for line in wrapped {
+                    lines.push(Line::from(vec![
+                        Span::styled("  ".repeat(indent + 1), Style::default()),
+                        Span::styled(line, Style::default().fg(COLOR_YAML_STRING)),
+                    ]));
+                }
+            }
+        }
+        JsonValue::Array(arr) => {
+            // Nested array
+            lines.push(Line::from(vec![
+                Span::styled(indent_str, Style::default()),
+                Span::styled("-", Style::default().fg(Color::White)),
+            ]));
+            for item in arr {
+                render_array_item_lines(lines, item, width, indent + 1);
+            }
+        }
+        JsonValue::Object(obj) => {
+            if obj.is_empty() {
+                lines.push(Line::from(vec![
+                    Span::styled(indent_str, Style::default()),
+                    Span::styled("- ", Style::default().fg(Color::White)),
+                    Span::styled("{}", Style::default().fg(Color::Rgb(97, 175, 239))),
+                ]));
+            } else {
+                // Object in array - first key on same line as dash
+                let mut first = true;
+                for (k, v) in obj.iter() {
+                    if first {
+                        // First key-value on same line as -
+                        match v {
+                            JsonValue::String(s)
+                                if s.chars().count() < 30 && !s.contains('\n') =>
+                            {
+                                lines.push(Line::from(vec![
+                                    Span::styled(indent_str.clone(), Style::default()),
+                                    Span::styled("- ", Style::default().fg(Color::White)),
+                                    Span::styled(k.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                                    Span::styled(": ", Style::default().fg(Color::White)),
+                                    Span::styled(
+                                        format!("\"{}\"", s),
+                                        Style::default().fg(COLOR_YAML_STRING),
+                                    ),
+                                ]));
+                            }
+                            JsonValue::Number(n) => {
+                                lines.push(Line::from(vec![
+                                    Span::styled(indent_str.clone(), Style::default()),
+                                    Span::styled("- ", Style::default().fg(Color::White)),
+                                    Span::styled(k.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                                    Span::styled(": ", Style::default().fg(Color::White)),
+                                    Span::styled(
+                                        n.to_string(),
+                                        Style::default().fg(COLOR_YAML_NUMBER),
+                                    ),
+                                ]));
+                            }
+                            JsonValue::Bool(b) => {
+                                lines.push(Line::from(vec![
+                                    Span::styled(indent_str.clone(), Style::default()),
+                                    Span::styled("- ", Style::default().fg(Color::White)),
+                                    Span::styled(k.to_string(), Style::default().fg(COLOR_YAML_KEY)),
+                                    Span::styled(": ", Style::default().fg(Color::White)),
+                                    Span::styled(
+                                        b.to_string(),
+                                        Style::default().fg(COLOR_YAML_BOOL),
+                                    ),
+                                ]));
+                            }
+                            _ => {
+                                // Complex first value - put on next line
+                                lines.push(Line::from(vec![
+                                    Span::styled(indent_str.clone(), Style::default()),
+                                    Span::styled("-", Style::default().fg(Color::White)),
+                                ]));
+                                render_property_lines(lines, k, v, width, indent + 1);
+                            }
+                        }
+                        first = false;
+                    } else {
+                        render_property_lines(lines, k, v, width, indent + 1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Word-wrap a string at word boundaries.
+fn word_wrap(text: &str, max_width: usize) -> Vec<String> {
+    if max_width == 0 {
+        return vec![text.to_string()];
+    }
+
+    let mut result = Vec::new();
+
+    for paragraph in text.split('\n') {
+        if paragraph.is_empty() {
+            result.push(String::new());
+            continue;
+        }
+
+        let mut current_line = String::new();
+
+        for word in paragraph.split_whitespace() {
+            if current_line.is_empty() {
+                current_line = word.to_string();
+            } else if current_line.chars().count() + 1 + word.chars().count() <= max_width {
+                current_line.push(' ');
+                current_line.push_str(word);
+            } else {
+                result.push(current_line);
+                current_line = word.to_string();
+            }
+        }
+
+        if !current_line.is_empty() {
+            result.push(current_line);
+        }
+    }
+
+    if result.is_empty() {
+        result.push(String::new());
+    }
+
+    result
 }
 
 /// Build title with NEO4J badge for instance panel.
@@ -1297,5 +1670,106 @@ mod tests {
     fn test_cardinality_color_many_to_many() {
         let color = cardinality_color("many_to_many");
         assert_eq!(color, Color::Rgb(249, 115, 22)); // Orange
+    }
+
+    // =========================================================================
+    // v0.17.3 word_wrap tests
+    // =========================================================================
+
+    #[test]
+    fn test_word_wrap_short_text() {
+        let result = word_wrap("hello world", 50);
+        assert_eq!(result, vec!["hello world"]);
+    }
+
+    #[test]
+    fn test_word_wrap_long_text() {
+        let result = word_wrap("the quick brown fox jumps over the lazy dog", 20);
+        assert_eq!(result, vec![
+            "the quick brown fox",
+            "jumps over the lazy",
+            "dog"
+        ]);
+    }
+
+    #[test]
+    fn test_word_wrap_with_newlines() {
+        let result = word_wrap("first line\nsecond line", 50);
+        assert_eq!(result, vec!["first line", "second line"]);
+    }
+
+    #[test]
+    fn test_word_wrap_empty_string() {
+        let result = word_wrap("", 50);
+        assert_eq!(result, vec![""]);
+    }
+
+    #[test]
+    fn test_word_wrap_zero_width() {
+        let result = word_wrap("hello", 0);
+        assert_eq!(result, vec!["hello"]);
+    }
+
+    #[test]
+    fn test_word_wrap_single_long_word() {
+        let result = word_wrap("supercalifragilisticexpialidocious", 10);
+        // Single word longer than width should not break
+        assert_eq!(result, vec!["supercalifragilisticexpialidocious"]);
+    }
+
+    #[test]
+    fn test_word_wrap_utf8() {
+        let result = word_wrap("你好 世界 很高兴见到你", 10);
+        // Should handle UTF-8 correctly
+        assert!(!result.is_empty());
+        // Chars count, not bytes
+        assert!(result.iter().all(|line| line.chars().count() <= 12)); // Allow slight overrun for single word
+    }
+
+    // =========================================================================
+    // v0.17.3 render_section_separator tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_section_separator_format() {
+        let line = render_section_separator("STANDARD", 5, 40);
+        // Should have 3 spans: left dashes, label, right dashes
+        assert_eq!(line.spans.len(), 3);
+        // Middle span should contain the label and count
+        assert!(line.spans[1].content.contains("STANDARD"));
+        assert!(line.spans[1].content.contains("5"));
+    }
+
+    #[test]
+    fn test_render_section_separator_narrow_width() {
+        let line = render_section_separator("TEST", 10, 15);
+        // Should still produce valid output
+        assert_eq!(line.spans.len(), 3);
+    }
+
+    // =========================================================================
+    // v0.17.3 STANDARD_PROPERTIES tests
+    // =========================================================================
+
+    #[test]
+    fn test_standard_properties_contains_key() {
+        assert!(STANDARD_PROPERTIES.contains(&"key"));
+    }
+
+    #[test]
+    fn test_standard_properties_contains_display_name() {
+        assert!(STANDARD_PROPERTIES.contains(&"display_name"));
+    }
+
+    #[test]
+    fn test_standard_properties_contains_timestamps() {
+        assert!(STANDARD_PROPERTIES.contains(&"created_at"));
+        assert!(STANDARD_PROPERTIES.contains(&"updated_at"));
+    }
+
+    #[test]
+    fn test_standard_properties_count() {
+        // 6 standard properties: key, display_name, description, created_at, updated_at, llm_context
+        assert_eq!(STANDARD_PROPERTIES.len(), 6);
     }
 }
