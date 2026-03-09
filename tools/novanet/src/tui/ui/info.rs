@@ -244,10 +244,56 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
-        // v0.17.3: EntityGroup shows entity info (grouped EntityNatives by parent Entity)
-        Some(TreeItem::EntityGroup(_, _, _, group)) => build_entity_group_content(app, group),
+        // v0.17.3: EntityGroup shows parent Entity as INSTANCE panel
+        // Look up Entity instance and class to render with full INSTANCE layout
+        Some(TreeItem::EntityGroup(_, _, _, group)) => {
+            if let Some((entity_realm, entity_layer, entity_class)) = app.tree.find_class("Entity")
+            {
+                if let Some(instances) = app.tree.instances.get("Entity") {
+                    if let Some(entity_instance) =
+                        instances.iter().find(|i| i.key == group.entity_key)
+                    {
+                        return build_instance_content(
+                            app,
+                            entity_realm,
+                            entity_layer,
+                            entity_class,
+                            entity_instance,
+                        );
+                    }
+                }
+            }
+            // Fallback to custom content if lookup fails
+            build_entity_group_content(app, group)
+        }
+        // v0.17.3: EntityNativeItem shows as INSTANCE panel with full layout
+        // Create InstanceInfo from EntityNativeInfo for consistent rendering
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
-            build_entity_native_item_content(realm, layer, class, native)
+            // Compute property stats for consistent INSTANCE panel display
+            let filled = native.properties.len();
+            let total = class.properties.len();
+            let missing_required = class
+                .required_properties
+                .iter()
+                .filter(|k| !native.properties.contains_key(*k))
+                .count();
+
+            // Create an InstanceInfo from EntityNativeInfo for consistent INSTANCE panel
+            let instance = InstanceInfo {
+                key: native.key.clone(),
+                display_name: native.display_name.clone(),
+                class_key: class.key.clone(),
+                properties: native.properties.clone(),
+                outgoing_arcs: vec![], // TODO: Load arcs from Neo4j
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: missing_required,
+                filled_properties: filled,
+                total_properties: total,
+                entity_slug: None, // EntityNative doesn't have entity_slug
+                relationship_power: 0,
+            };
+            build_instance_content(app, realm, layer, class, &instance)
         }
         None => build_empty_content(),
     }
@@ -1944,86 +1990,6 @@ fn build_entity_group_content(
     content.relationships.add_line(Line::from(vec![
         Span::styled("HAS_NATIVE → ", STYLE_DIM),
         Span::styled(format!("{} EntityNatives", group.native_count), STYLE_PRIMARY),
-    ]));
-
-    content
-}
-
-/// Build content for EntityNativeItem (locale-specific content).
-fn build_entity_native_item_content(
-    realm: &crate::tui::data::RealmInfo,
-    layer: &crate::tui::data::LayerInfo,
-    class: &crate::tui::data::ClassInfo,
-    native: &crate::tui::data::EntityNativeInfo,
-) -> UnifiedContent<'static> {
-    let mut content = UnifiedContent::default();
-
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("EntityNative", STYLE_ACCENT));
-    content
-        .identity
-        .add_kv("key", Span::styled(native.key.clone(), STYLE_PRIMARY));
-    content.identity.add_kv(
-        "name",
-        Span::styled(native.display_name.clone(), STYLE_PRIMARY),
-    );
-
-    // LOCATION
-    content.location.add_kv(
-        "realm",
-        Span::styled(realm.display_name.clone(), STYLE_ACCENT),
-    );
-    content.location.add_kv(
-        "layer",
-        Span::styled(layer.display_name.clone(), STYLE_ACCENT),
-    );
-    content.location.add_kv(
-        "class",
-        Span::styled(class.display_name.clone(), STYLE_ACCENT),
-    );
-
-    // METRICS - not applicable
-    content.metrics.add_empty();
-
-    // COVERAGE - not applicable
-    content.coverage.add_empty();
-
-    // PROPERTIES - show context fields first, then all properties from native.properties
-    content.properties.add_line(Line::from(vec![
-        Span::styled("entity: ", STYLE_DIM),
-        Span::styled(native.entity_key.clone(), STYLE_MUTED),
-    ]));
-    content.properties.add_line(Line::from(vec![
-        Span::styled("entity_name: ", STYLE_DIM),
-        Span::styled(native.entity_display_name.clone(), STYLE_MUTED),
-    ]));
-    if let Some(slug) = &native.slug {
-        content.properties.add_line(Line::from(vec![
-            Span::styled("slug: ", STYLE_DIM),
-            Span::styled(slug.clone(), STYLE_MUTED),
-        ]));
-    }
-
-    // v0.17.3: Loop through all properties from EntityNativeInfo.properties
-    // Skip keys already displayed above (entity_key, entity_display_name, slug)
-    let skip_keys = ["key", "display_name", "entity_key", "entity_display_name", "slug"];
-    for (key, value) in &native.properties {
-        if !skip_keys.contains(&key.as_str()) {
-            let value_str = format_json_value(value);
-            content.properties.add_line(Line::from(vec![
-                Span::styled(format!("{}: ", key), STYLE_DIM),
-                Span::styled(value_str, STYLE_MUTED),
-            ]));
-        }
-    }
-
-    // RELATIONSHIPS - parent entity
-    content.relationships.add_line(Line::from(vec![
-        Span::styled("→ ", STYLE_DIM),
-        Span::styled("Entity: ", STYLE_ACCENT),
-        Span::styled(native.entity_display_name.clone(), STYLE_PRIMARY),
     ]));
 
     content
