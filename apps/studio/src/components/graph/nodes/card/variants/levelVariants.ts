@@ -9,7 +9,7 @@
  *
  * 3 Levels:
  * - TAXONOMY (21 nodes): Realm, Layer, Trait, ArcFamily — the classification system
- * - SCHEMA (239 nodes): 61 NodeClass + 178 ArcClass — definitions
+ * - SCHEMA (202 nodes): 57 NodeClass + 145 ArcClass — definitions (v0.18.0)
  * - DATA (∞ instances): Runtime data instances — actual content
  *
  * Visual Encoding Matrix:
@@ -385,7 +385,7 @@ export const TAXONOMY_TYPES = new Set([
   'ArcFamily',
 ]);
 
-/** Schema node types (61 NodeClass + 178 ArcClass) */
+/** Schema node types (57 NodeClass + 145 ArcClass) v0.18.0 */
 export const SCHEMA_TYPES = new Set([
   'NodeClass', 'ArcClass',
   // Additional schema-level labels

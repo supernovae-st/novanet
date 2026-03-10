@@ -1374,8 +1374,8 @@ Error: Token budget exceeded: 150000/100000
 
 This MCP server reads from the same Neo4j instance as NovaNet Studio. Schema:
 
-- **61 NodeClasses** across 2 realms (shared: 40, org: 21)
-- **169 ArcClasses** in 5 families (ownership, localization, semantic, generation, mining)
+- **57 NodeClasses** across 2 realms (shared: 36, org: 21)
+- **145 ArcClasses** in 6 families (ownership, localization, semantic, generation, mining, lifecycle)
 - **200+ Locales** for multi-locale content generation
 
 Key queries for agent bootstrap:

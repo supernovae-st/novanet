@@ -3,7 +3,7 @@
  *
  * Unified type definitions for the NovaNet card system:
  * - Level 1: Taxonomy (21 nodes) - Realm, Layer, Trait, ArcFamily
- * - Level 2: Schema (239 nodes) - 61 NodeClass + 178 ArcClass
+ * - Level 2: Schema (202 nodes) - 57 NodeClass + 145 ArcClass (v0.18.0)
  * - Level 3: Data (∞ instances) - Runtime instances per layer
  *
  * Visual Encoding (ADR-005):
@@ -128,7 +128,7 @@ export interface ArcFamilyTaxonomyData extends TaxonomyNodeData {
 }
 
 // -----------------------------------------------------------------------------
-// Level 2: Schema (239 nodes = 61 NodeClass + 178 ArcClass)
+// Level 2: Schema (202 nodes = 57 NodeClass + 145 ArcClass) v0.18.0
 // -----------------------------------------------------------------------------
 
 export type SchemaVariant = 'nodeClass' | 'arcClass';

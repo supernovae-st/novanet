@@ -14,7 +14,7 @@
  * **Relation Categories:**
  * - Project Root: HAS_PAGE, HAS_BRAND, SUPPORTS_LOCALE
  * - Locale: DEFAULT_LOCALE, FALLBACK_TO, FOR_LOCALE, VARIANT_OF
- * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
+ * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_LEXICON (v0.18.0: HAS_MARKET removed)
  * - Native Content: HAS_NATIVE, NATIVE_OF (v0.13.0 ADR-029)
  * - Page Structure: HAS_BLOCK, OF_TYPE, LINKS_TO, SUBTOPIC_OF
  * - Entity Usage: USES_ENTITY, REFERENCES, SEMANTIC_LINK, BELONGS_TO (v0.16: HAS_KEYWORD removed)
@@ -71,7 +71,7 @@ export const RelationType = {
   HAS_IDENTITY: 'HAS_IDENTITY',     // Locale → LocaleIdentity
   HAS_VOICE: 'HAS_VOICE',           // Locale → LocaleVoice
   HAS_CULTURE: 'HAS_CULTURE',       // Locale → LocaleCulture
-  HAS_MARKET: 'HAS_MARKET',         // Locale → LocaleMarket
+  // v0.18.0: HAS_MARKET removed (market data from external APIs, not static graph)
   HAS_LEXICON: 'HAS_LEXICON',       // Locale → LocaleLexicon
   HAS_EXPRESSION: 'HAS_EXPRESSION', // LocaleLexicon → Expression
   // v7.2.0: Locale Rules
@@ -470,13 +470,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     cardinality: '1:1',
     description: 'Locale has culture (norms, taboos, references)',
   },
-  [RelationType.HAS_MARKET]: {
-    type: RelationType.HAS_MARKET,
-    from: 'Locale',
-    to: 'LocaleMarket',
-    cardinality: '1:1',
-    description: 'Locale has market data (demographics, platforms)',
-  },
+  // v0.18.0: HAS_MARKET removed (market data from external APIs, not static graph)
   [RelationType.HAS_LEXICON]: {
     type: RelationType.HAS_LEXICON,
     from: 'Locale',

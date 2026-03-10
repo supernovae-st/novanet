@@ -194,9 +194,10 @@ export class NovaNetFilter {
    * Typically used with fromLocale().
    * Safe to call multiple times - prevents duplicate relations.
    * v11.5: Updated to match current schema.
+   * v0.18.0: HAS_MARKET removed (market data from external APIs).
    */
   includeKnowledge(): this {
-    const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
+    const knowledgeRelations = ['HAS_CULTURE', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
     // Prevent duplicates if called multiple times
     const hasKnowledge = this.state.includes.some(i => knowledgeRelations.includes(i.relation));
     if (!hasKnowledge) {

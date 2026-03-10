@@ -73,8 +73,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   CULTURE_OF: 'cultureParent',
   HAS_CULTURE_SET: 'cultureSet',
   CULTURE_SET_OF: 'cultureSetParent',
-  HAS_MARKET: 'market',
-  MARKET_OF: 'marketParent',
+  // v0.18.0: HAS_MARKET/MARKET_OF removed (market data from external APIs)
   HAS_AUDIENCE: 'audience',
   AUDIENCE_OF: 'audienceParent',
   // Knowledge containers

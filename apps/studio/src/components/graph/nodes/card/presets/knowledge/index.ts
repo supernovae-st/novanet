@@ -3,11 +3,13 @@
  *
  * Layer color: Purple #8b5cf6
  *
- * Knowledge layer contains:
- * - Containers (6): TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
- * - Atoms (6): Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
- * - SEO (5): SEOKeyword, SEOKeywordMetrics, SEOCluster, SEOPillar, SEOKeywordFormat
+ * Knowledge layer contains (v0.18.0):
+ * - Containers (5): ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+ * - Atoms (5): Expression, Pattern, CultureRef, Taboo, AudienceTrait
+ * - SEO (1): SEOKeyword (metrics stored on node itself)
  * - GEO (2): GEOQuery, GEOAnswer
+ *
+ * v0.18.0: Term/TermSet removed (YAGNI), SEOKeywordMetrics removed (metrics on SEOKeyword)
  *
  * Trait: imported (double borders) for most nodes
  *
@@ -47,11 +49,7 @@ export {
 } from './KnowledgeHelpers';
 
 // Card content components - Atoms
-export {
-  TermCardContent,
-  type TermCardContentProps,
-  type TermNodeData,
-} from './TermCardContent';
+// v0.18.0: TermCardContent removed (Term node type removed in YAGNI cleanup)
 
 export {
   ExpressionCardContent,

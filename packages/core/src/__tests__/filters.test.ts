@@ -165,8 +165,8 @@ describe('NovaNetFilter', () => {
     it('includeKnowledge() adds all knowledge relations', () => {
       const filter = NovaNetFilter.create().fromLocale('fr-FR').includeKnowledge();
       const criteria = filter.getCriteria();
-      // v11.5: Culture, Market, Formatting, Slugification, ExpressionSet
-      const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
+      // v11.5: Culture, Formatting, Slugification, ExpressionSet (v0.18.0: Market removed)
+      const knowledgeRelations = ['HAS_CULTURE', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
       for (const relation of knowledgeRelations) {
         expect(criteria.includes).toContainEqual(
           expect.objectContaining({ relation, direction: 'outgoing' })
@@ -468,9 +468,8 @@ describe('CypherGenerator', () => {
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('MATCH (root:Locale {key: $rootKey})');
-      // v11.5: Culture, Market, Formatting, Slugification, ExpressionSet
+      // v11.5: Culture, Formatting, Slugification, ExpressionSet (v0.18.0: Market removed)
       expect(result.query).toContain('HAS_CULTURE');
-      expect(result.query).toContain('HAS_MARKET');
       expect(result.query).toContain('HAS_FORMATTING');
       expect(result.query).toContain('HAS_SLUGIFICATION');
       expect(result.query).toContain('HAS_EXPRESSIONS');

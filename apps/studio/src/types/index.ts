@@ -39,7 +39,7 @@ export type {
   LocaleIdentity,
   LocaleVoice,
   LocaleCulture,
-  LocaleMarket,
+  // v0.18.0: LocaleMarket removed (market data from external APIs)
   LocaleLexicon,
   Expression,
   SEOKeyword,
