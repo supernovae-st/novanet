@@ -132,11 +132,11 @@ UNWIND [
   {key: 'fr-FR/CTA/001', text: 'Acheter maintenant', context: 'Primary purchase CTA - direct and clear. Most effective for checkout buttons.', usage: 'purchase'},
   {key: 'fr-FR/CTA/002', text: 'Commander', context: 'Professional, trusted order button. Preferred for B2B contexts.', usage: 'purchase'},
   {key: 'fr-FR/CTA/003', text: 'Ajouter au panier', context: 'Standard e-commerce add to cart. Universal and expected.', usage: 'cart'},
-  {key: 'fr-FR/CTA/004', text: 'Profiter de l''offre', context: 'Urgency-driven CTA. Effective for limited-time promotions.', usage: 'urgency'},
+  {key: 'fr-FR/CTA/004', text: 'Profiter de l\'offre', context: 'Urgency-driven CTA. Effective for limited-time promotions.', usage: 'urgency'},
   {key: 'fr-FR/CTA/005', text: 'D\u00e9couvrir', context: 'Soft engagement CTA. Perfect for content discovery or collections.', usage: 'engagement'},
   {key: 'fr-FR/CTA/006', text: 'En savoir plus', context: 'Learn more CTA. Used for additional information or details.', usage: 'engagement'},
   {key: 'fr-FR/CTA/007', text: 'Essayer gratuitement', context: 'Free trial CTA. Trust-building for SaaS or subscription services.', usage: 'trial'},
-  {key: 'fr-FR/CTA/008', text: 'Saisir l''occasion', context: 'Seize the opportunity. Strong urgency CTA for flash sales.', usage: 'urgency'}
+  {key: 'fr-FR/CTA/008', text: 'Saisir l\'occasion', context: 'Seize the opportunity. Strong urgency CTA for flash sales.', usage: 'urgency'}
 ] AS pattern
 MERGE (p:Pattern {key: pattern.key})
 ON CREATE SET
