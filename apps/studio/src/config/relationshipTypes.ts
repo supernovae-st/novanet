@@ -48,12 +48,11 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'SUPPORTS_LOCALE',
     'DEFAULT_LOCALE',
   ],
-  // Knowledge: Locale knowledge graph (14 relations)
+  // Knowledge: Locale knowledge graph (13 relations — v0.18.0: HAS_MARKET removed)
   knowledge: [
     'HAS_IDENTITY',
     'HAS_VOICE',
     'HAS_CULTURE',
-    'HAS_MARKET',
     'HAS_LEXICON',
     'HAS_EXPRESSION',
     'HAS_RULES_ADAPTATION',
@@ -240,12 +239,7 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#c4b5fd',  // violet-300
     category: 'knowledge',
   },
-  HAS_MARKET: {
-    type: 'HAS_MARKET',
-    label: 'Has Market',
-    color: '#ddd6fe',  // violet-200
-    category: 'knowledge',
-  },
+  // v0.18.0: HAS_MARKET removed (market data from external APIs)
   HAS_LEXICON: {
     type: 'HAS_LEXICON',
     label: 'Has Lexicon',

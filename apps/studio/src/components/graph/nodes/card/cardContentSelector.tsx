@@ -11,7 +11,8 @@
  * - Border style → Trait
  * - Icon → Class
  *
- * Coverage: 61 node types across 10 layers (SHARED + ORG realms)
+ * Coverage: 57 node types across 10 layers (SHARED + ORG realms)
+ * v0.18.0: Term/TermSet removed (YAGNI), LocaleMarket removed (external API data)
  */
 
 'use client';
@@ -42,11 +43,10 @@ import { ClassCardContent, type ClassNodeData } from './presets/ClassCardContent
 import { GeographyCardContent, type GeographyNodeData } from './presets/GeographyCardContent';
 
 // Knowledge layer - Containers & Atoms (shared)
+// v0.18.0: Term/TermSet removed (YAGNI cleanup)
 import {
   KnowledgeSetCardContent,
   type KnowledgeSetNodeData,
-  TermCardContent,
-  type TermNodeData,
   ExpressionCardContent,
   type ExpressionNodeData,
   PatternCardContent,
@@ -135,6 +135,7 @@ import {
 // =============================================================================
 
 /** Union of all card content data types */
+// v0.18.0: TermNodeData removed (Term node type removed in YAGNI cleanup)
 export type CardContentData =
   // Fallback
   | StructuralNodeData
@@ -145,7 +146,6 @@ export type CardContentData =
   // Shared realm
   | GeographyNodeData
   | KnowledgeSetNodeData
-  | TermNodeData
   | ExpressionNodeData
   | PatternNodeData
   | CultureRefNodeData
@@ -222,8 +222,9 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   ArcFamily: TaxonomyCardContent as CardContentComponent,
 
   // =========================================================================
-  // SCHEMA LEVEL (M1) - Definitions (61 NodeClass + 178 ArcClass)
+  // SCHEMA LEVEL (M1) - Definitions (57 NodeClass + 145 ArcClass)
   // Elevated visual treatment: 2px border, single glow, interaction-based animation
+  // v0.18.0: Updated counts after YAGNI cleanup
   // =========================================================================
   NodeClass: ClassCardContent as CardContentComponent,
   ArcClass: ClassCardContent as CardContentComponent,
@@ -248,19 +249,18 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   EntityCategory: EntityCategoryCardContent as CardContentComponent,
 
   // =========================================================================
-  // SHARED REALM - Locale layer settings (6 types)
+  // SHARED REALM - Locale layer settings (5 types, v0.18.0: Market removed)
   // =========================================================================
   Culture: LocaleSettingsCardContent as CardContentComponent,
   Style: LocaleSettingsCardContent as CardContentComponent,
   Formatting: LocaleSettingsCardContent as CardContentComponent,
   Adaptation: LocaleSettingsCardContent as CardContentComponent,
   Slugification: LocaleSettingsCardContent as CardContentComponent,
-  Market: LocaleSettingsCardContent as CardContentComponent,
+  // v0.18.0: Market removed (market data from external APIs, not static graph)
 
   // =========================================================================
-  // SHARED REALM - Knowledge layer - Containers (6 types)
+  // SHARED REALM - Knowledge layer - Containers (5 types, v0.18.0: TermSet removed)
   // =========================================================================
-  TermSet: KnowledgeSetCardContent as CardContentComponent,
   ExpressionSet: KnowledgeSetCardContent as CardContentComponent,
   PatternSet: KnowledgeSetCardContent as CardContentComponent,
   CultureSet: KnowledgeSetCardContent as CardContentComponent,
@@ -268,9 +268,8 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   AudienceSet: KnowledgeSetCardContent as CardContentComponent,
 
   // =========================================================================
-  // SHARED REALM - Knowledge layer - Atoms (6 types)
+  // SHARED REALM - Knowledge layer - Atoms (5 types, v0.18.0: Term removed)
   // =========================================================================
-  Term: TermCardContent as CardContentComponent,
   Expression: ExpressionCardContent as CardContentComponent,
   Pattern: PatternCardContent as CardContentComponent,
   CultureRef: CultureRefCardContent as CardContentComponent,
