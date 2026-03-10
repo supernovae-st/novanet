@@ -32,7 +32,7 @@
     "@xyflow/react": "^12.10.1",
     "clsx": "^2.1.1",
     "d3-force": "^3.0.0",
-    "framer-motion": "^12.34.5",
+    "framer-motion": "^12.35.1",
     "geist": "^1.5.1",
     "immer": "^10.1.1",
     "js-yaml": "^4.1.1",
