@@ -132,57 +132,7 @@ export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   'locale': 'Locale',
 };
 
-// =============================================================================
-// TRAIT COLORS (5)
-// =============================================================================
-
-export type TraitKey = 'authored' | 'defined' | 'generated' | 'imported' | 'retrieved';
-
-export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
-  'authored': {
-    color: '#22c55e',
-    bg: 'bg-[#22c55e]/20',
-    text: 'text-[#22c55e]',
-    border: 'border-[#22c55e]/30',
-    bgSolid: 'bg-[#22c55e]',
-  },
-  'defined': {
-    color: '#3b82f6',
-    bg: 'bg-[#3b82f6]/20',
-    text: 'text-[#3b82f6]',
-    border: 'border-[#3b82f6]/30',
-    bgSolid: 'bg-[#3b82f6]',
-  },
-  'generated': {
-    color: '#b58900',
-    bg: 'bg-[#b58900]/20',
-    text: 'text-[#b58900]',
-    border: 'border-[#b58900]/30',
-    bgSolid: 'bg-[#b58900]',
-  },
-  'imported': {
-    color: '#8b5cf6',
-    bg: 'bg-[#8b5cf6]/20',
-    text: 'text-[#8b5cf6]',
-    border: 'border-[#8b5cf6]/30',
-    bgSolid: 'bg-[#8b5cf6]',
-  },
-  'retrieved': {
-    color: '#6c71c4',
-    bg: 'bg-[#6c71c4]/20',
-    text: 'text-[#6c71c4]',
-    border: 'border-[#6c71c4]/30',
-    bgSolid: 'bg-[#6c71c4]',
-  },
-};
-
-export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
-  'authored': 'Authored',
-  'defined': 'Defined',
-  'generated': 'Generated',
-  'imported': 'Imported',
-  'retrieved': 'Retrieved',
-};
+// v0.17.3 (ADR-036): TRAIT COLORS section removed, provenance is per-instance
 
 // =============================================================================
 // ARC FAMILY COLORS (6)
@@ -262,12 +212,7 @@ export function getLayerColor(key: LayerKey): ColorTokens {
   return LAYER_COLORS[key];
 }
 
-/**
- * Get color tokens for a trait
- */
-export function getTraitColor(key: TraitKey): ColorTokens {
-  return TRAIT_COLORS[key];
-}
+// v0.17.3 (ADR-036): getTraitColor removed, provenance is per-instance
 
 /**
  * Get color tokens for an arc family
@@ -278,9 +223,10 @@ export function getArcFamilyColor(key: ArcFamilyKey): ColorTokens {
 
 /**
  * Get raw hex color for any facet type
+ * v0.17.3 (ADR-036): 'trait' case removed, provenance is per-instance
  */
 export function getFacetHex(
-  facetType: 'realm' | 'layer' | 'trait' | 'arcFamily',
+  facetType: 'realm' | 'layer' | 'arcFamily',
   key: string
 ): string {
   switch (facetType) {
@@ -288,8 +234,6 @@ export function getFacetHex(
       return REALM_COLORS[key as RealmKey]?.color ?? '#ffffff';
     case 'layer':
       return LAYER_COLORS[key as LayerKey]?.color ?? '#ffffff';
-    case 'trait':
-      return TRAIT_COLORS[key as TraitKey]?.color ?? '#ffffff';
     case 'arcFamily':
       return ARC_FAMILY_COLORS[key as ArcFamilyKey]?.color ?? '#ffffff';
   }

@@ -134,15 +134,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
         ));
     }
 
-    if !filter.trait_filters.is_empty() {
-        where_clauses.push(
-            "EXISTS { MATCH (c)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
-        );
-        params.push((
-            "traits".to_string(),
-            ParamValue::StringList(filter.trait_filters.clone()),
-        ));
-    }
+    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
 
     if !filter.classes.is_empty() {
         where_clauses.push("c.label IN $classes".to_string());
@@ -210,15 +202,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
         ));
     }
 
-    if !filter.trait_filters.is_empty() {
-        where_clauses.push(
-            "EXISTS { MATCH (c)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
-        );
-        params.push((
-            "traits".to_string(),
-            ParamValue::StringList(filter.trait_filters.clone()),
-        ));
-    }
+    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
 
     if !filter.classes.is_empty() {
         where_clauses.push("c.label IN $classes".to_string());
@@ -288,19 +272,18 @@ mod tests {
 
     #[test]
     fn faceted_query_multiple_facets() {
+        // v0.17.3 (ADR-036): trait_filters removed
         let filter = FacetFilter {
             realms: vec!["shared".to_string()],
             layers: vec!["knowledge".to_string()],
-            trait_filters: vec!["defined".to_string()],
             ..Default::default()
         };
         let stmt = faceted_query(&filter, 100);
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
-        assert!(stmt.cypher.contains("HAS_TRAIT"));
         assert!(stmt.cypher.contains("AND"));
-        // 4 params: realms, layers, traits, limit
-        assert_eq!(stmt.params.len(), 4);
+        // 3 params: realms, layers, limit
+        assert_eq!(stmt.params.len(), 3);
     }
 
     #[test]
@@ -368,20 +351,19 @@ mod tests {
 
     #[test]
     fn faceted_query_all_axes_active() {
+        // v0.17.3 (ADR-036): trait_filters removed
         let filter = FacetFilter {
             realms: vec!["shared".to_string(), "org".to_string()],
             layers: vec!["knowledge".to_string(), "structure".to_string()],
-            trait_filters: vec!["defined".to_string(), "authored".to_string()],
             classes: vec!["Locale".to_string()],
             arc_families: vec!["taxonomy".to_string()],
         };
         let stmt = faceted_query(&filter, 100);
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
-        assert!(stmt.cypher.contains("HAS_TRAIT"));
         assert!(stmt.cypher.contains("c.label IN $classes"));
-        // 5 params: realms, layers, traits, classes, limit
-        assert_eq!(stmt.params.len(), 5);
+        // 4 params: realms, layers, classes, limit
+        assert_eq!(stmt.params.len(), 4);
     }
 
     #[test]

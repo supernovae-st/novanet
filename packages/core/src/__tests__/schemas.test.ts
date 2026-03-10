@@ -171,11 +171,10 @@ describe('Relation Registry', () => {
       expect(RelationType.FALLBACK_TO).toBe('FALLBACK_TO');
       expect(RelationType.FOR_LOCALE).toBe('FOR_LOCALE');
 
-      // Locale Knowledge
+      // Locale Knowledge (v0.18.0: HAS_MARKET removed)
       expect(RelationType.HAS_IDENTITY).toBe('HAS_IDENTITY');
       expect(RelationType.HAS_VOICE).toBe('HAS_VOICE');
       expect(RelationType.HAS_CULTURE).toBe('HAS_CULTURE');
-      expect(RelationType.HAS_MARKET).toBe('HAS_MARKET');
       expect(RelationType.HAS_LEXICON).toBe('HAS_LEXICON');
 
       // v7.0.0 unified relations

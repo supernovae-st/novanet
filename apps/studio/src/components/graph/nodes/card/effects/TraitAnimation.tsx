@@ -24,7 +24,7 @@
 import { memo, type ReactNode } from 'react';
 import { motion, type Variants } from 'motion/react';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { TRAIT_COLORS, type TraitKey } from '@/design/colors/generated';
+import { TRAIT_COLORS, type TraitKey } from '@/design/colors';
 
 // =============================================================================
 // Types

@@ -7,8 +7,8 @@
 
 use crate::db::Db;
 use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality};
-use crate::parsers::taxonomy::{ArcFamilyDef, NodeRealmDef, NodeTraitDef, TaxonomyDoc};
-use crate::parsers::yaml_node::{NodeTrait, ParsedNode};
+use crate::parsers::taxonomy::{ArcFamilyDef, NodeRealmDef, TaxonomyDoc};
+use crate::parsers::yaml_node::ParsedNode;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -133,15 +133,6 @@ impl BlueprintData {
         map
     }
 
-    /// Node classes grouped by trait.
-    pub fn nodes_by_trait(&self) -> HashMap<NodeTrait, Vec<&ParsedNode>> {
-        let mut map: HashMap<NodeTrait, Vec<&ParsedNode>> = HashMap::new();
-        for node in &self.node_classes {
-            map.entry(node.def.node_trait).or_default().push(node);
-        }
-        map
-    }
-
     /// Arc definitions grouped by family.
     pub fn arcs_by_family(&self) -> HashMap<ArcFamily, Vec<&ArcDef>> {
         let mut map: HashMap<ArcFamily, Vec<&ArcDef>> = HashMap::new();
@@ -163,11 +154,6 @@ impl BlueprintData {
     /// Get realm definition by key.
     pub fn get_realm(&self, key: &str) -> Option<&NodeRealmDef> {
         self.taxonomy.node_realms.iter().find(|r| r.key == key)
-    }
-
-    /// Get trait definition by key.
-    pub fn get_trait(&self, key: &str) -> Option<&NodeTraitDef> {
-        self.taxonomy.node_traits.iter().find(|t| t.key == key)
     }
 
     /// Get arc family definition by key.

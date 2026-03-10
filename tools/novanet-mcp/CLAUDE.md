@@ -1025,7 +1025,7 @@ class://Entity
   "layer": "semantic",
   "trait_type": "defined",
   "description": "Core semantic entity",
-  "llm_context": "Entities represent invariant concepts...",
+  "llm_context": "Entities represent defined semantic concepts...",
   "properties": [...],
   "outgoing_arcs": ["HAS_NATIVE", "USES_ENTITY"],
   "incoming_arcs": ["BELONGS_TO"],
@@ -1374,8 +1374,8 @@ Error: Token budget exceeded: 150000/100000
 
 This MCP server reads from the same Neo4j instance as NovaNet Studio. Schema:
 
-- **61 NodeClasses** across 2 realms (shared: 40, org: 21)
-- **169 ArcClasses** in 5 families (ownership, localization, semantic, generation, mining)
+- **57 NodeClasses** across 2 realms (shared: 36, org: 21)
+- **145 ArcClasses** in 6 families (ownership, localization, semantic, generation, mining, lifecycle)
 - **200+ Locales** for multi-locale content generation
 
 Key queries for agent bootstrap:

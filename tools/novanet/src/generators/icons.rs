@@ -229,7 +229,8 @@ mod tests {
 
     #[test]
     fn render_icons_basic() {
-        use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+        use crate::parsers::yaml_node::{NodeDef, ParsedNode};
         use std::path::PathBuf;
 
         let nodes = vec![
@@ -238,7 +239,7 @@ mod tests {
                     name: "TestNode".to_string(),
                     realm: "org".to_string(),
                     layer: "foundation".to_string(),
-                    node_trait: NodeTrait::Defined,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: Some(NodeIcon {
                         web: "rocket".to_string(),
@@ -259,7 +260,7 @@ mod tests {
                     name: "NoIconNode".to_string(),
                     realm: "shared".to_string(),
                     layer: "config".to_string(),
-                    node_trait: NodeTrait::Defined,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: None, // No icon - should use default
                     description: "Test".to_string(),

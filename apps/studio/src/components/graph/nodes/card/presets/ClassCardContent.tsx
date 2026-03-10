@@ -56,7 +56,7 @@ import {
   type LayerKey,
   type TraitKey,
   type ArcFamilyKey,
-} from '@/design/colors/generated';
+} from '@/design/colors';
 import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
 // TaxonomyBadge reserved for future use
 // import { TaxonomyBadge } from '../TaxonomyBadge';

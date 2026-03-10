@@ -129,50 +129,8 @@ export interface LocaleCulture {
   updated_at: Date;
 }
 
-export interface LocaleMarket {
-  // Standard properties (v8.2.0 - no key, linked via HAS_MARKET)
-  display_name: string;      // "French Market"
-  description: string;       // "Market data for fr-FR"
-  llm_context: string;       // "USE: market positioning."
-
-  // Market characteristics
-  population: number;
-  growth_rate: number;
-  median_age: number;
-  age_distribution: Array<{ group: string; percentage: number; notes: string }>;
-  income_levels: Array<{ level: string; percentage: number; threshold: string }>;
-  urban_rural_split: Record<string, number>;
-
-  internet_penetration: number;
-  mobile_penetration: number;
-  mobile_first_users: number;
-  dominant_os: Record<string, number>;
-  ecommerce_adoption: number;
-  ecommerce_revenue: number;
-
-  payment_methods: Array<{ method: string; usage: number; trend: string }>;
-
-  roi_score: number;
-  roi_factors: Record<string, number>;
-
-  social_platforms: Array<{ platform: string; penetration: number; audience: string }>;
-  messaging_apps: Array<{ app: string; penetration: number; use_case: string }>;
-  search_engines: Array<{ engine: string; share: number }>;
-
-  avg_order_value: Record<string, number>;
-  conversion_rate: number;
-  cart_abandonment: number;
-
-  peak_periods: Array<{ name: string; months: string; impact: string }>;
-  low_periods: Array<{ name: string; strategy: string }>;
-  shopping_events: Array<{ event: string; date: string; impact: string }>;
-
-  major_players: Array<{ company: string; share: number; strength: string }>;
-  market_concentration: 'fragmented' | 'moderate' | 'consolidated';
-
-  created_at: Date;
-  updated_at: Date;
-}
+// v0.18.0: LocaleMarket REMOVED — market data should come from external APIs, not static graph nodes
+// See ADR-024: Trait = Data Origin — market data is "retrieved", not "imported"
 
 export interface LocaleLexicon {
   // Standard properties (v8.2.0 - no key, linked via HAS_LEXICON)
@@ -539,12 +497,12 @@ export interface LocaleCultureReferences {
 }
 
 // Export all new types
+// v0.18.0: LocaleMarket removed from union (external API data, not static graph node)
 export type LocaleKnowledgeNode =
   | Locale
   | LocaleIdentity
   | LocaleVoice
   | LocaleCulture
-  | LocaleMarket
   | LocaleLexicon
   | Expression
   | LocaleRulesAdaptation

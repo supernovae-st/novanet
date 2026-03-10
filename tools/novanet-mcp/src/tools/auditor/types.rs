@@ -19,6 +19,8 @@ pub enum AuditTarget {
     Integrity,
     /// Stale generated content or metrics
     Freshness,
+    /// ADR-042: Nodes without created_by provenance
+    Provenance,
     /// All checks combined
     All,
 }
@@ -30,6 +32,7 @@ impl std::fmt::Display for AuditTarget {
             AuditTarget::Orphans => write!(f, "orphans"),
             AuditTarget::Integrity => write!(f, "integrity"),
             AuditTarget::Freshness => write!(f, "freshness"),
+            AuditTarget::Provenance => write!(f, "provenance"),
             AuditTarget::All => write!(f, "all"),
         }
     }

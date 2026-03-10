@@ -245,14 +245,13 @@ export class ViewLoader {
         filter.includeNativeParent();
         break;
 
-      // v11.5: Locale knowledge relations
+      // v11.5: Locale knowledge relations (v0.18.0: HAS_MARKET removed)
       case 'HAS_CULTURE':
-      case 'HAS_MARKET':
       case 'HAS_FORMATTING':
       case 'HAS_SLUGIFICATION':
       case 'HAS_EXPRESSIONS': {
         const criteria = filter.getCriteria();
-        const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
+        const knowledgeRelations = ['HAS_CULTURE', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
         const hasKnowledge = criteria.includes.some(i => knowledgeRelations.includes(i.relation));
         if (!hasKnowledge) {
           filter.includeKnowledge();

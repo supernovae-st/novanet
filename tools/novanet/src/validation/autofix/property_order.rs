@@ -14,6 +14,7 @@ use indexmap::IndexMap;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Canonical order for standard properties.
+/// NOTE: Must match STANDARD_PROPERTY_NAMES in info.rs, clipboard.rs, schema_rules.rs (ADR-035)
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
     "entity_key",
@@ -22,6 +23,9 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];
@@ -103,7 +107,8 @@ impl AutoFix for PropertyOrderFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
+    // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -170,7 +175,7 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node with wrong property order".to_string(),
@@ -274,7 +279,7 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test".to_string(),
@@ -350,7 +355,7 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),
@@ -441,7 +446,8 @@ mod tests {
             prop_assert_eq!(keys1, keys2);
         }
 
-        /// Property: Fix preserves node identity (name, realm, layer, trait)
+        /// Property: Fix preserves node identity (name, realm, layer)
+        /// v0.17.3 (ADR-036): trait removed, provenance is per-instance
         #[test]
         fn prop_preserves_node_identity(order in prop_names_permutation()) {
             let mut node = create_node_with_order(order);
@@ -450,7 +456,6 @@ mod tests {
             let name_before = node.def.name.clone();
             let realm_before = node.realm.clone();
             let layer_before = node.layer.clone();
-            let trait_before = node.def.node_trait;
 
             let issue = SchemaIssue {
                 node_name: "TestNode".into(),
@@ -466,7 +471,6 @@ mod tests {
             prop_assert_eq!(&node.def.name, &name_before);
             prop_assert_eq!(&node.realm, &realm_before);
             prop_assert_eq!(&node.layer, &layer_before);
-            prop_assert_eq!(node.def.node_trait, trait_before);
         }
     }
 }

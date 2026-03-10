@@ -109,7 +109,7 @@ pub enum Error {
 
     /// NodeClass not found in schema
     #[error(
-        "NodeClass '{name}' not found. Use novanet_introspect(target='classes') to list all 61 NodeClasses. Common classes: Entity, Page, Block, Locale."
+        "NodeClass '{name}' not found. Use novanet_introspect(target='classes') to list all 57 NodeClasses. Common classes: Entity, Page, Block, Locale."
     )]
     NodeClassNotFound { name: String },
 

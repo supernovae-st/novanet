@@ -350,10 +350,7 @@ fn node_def_to_yaml(node: &crate::parsers::yaml_node::ParsedNode) -> serde_yaml:
         Value::String("layer".to_string()),
         Value::String(node.def.layer.clone()),
     );
-    node_map.insert(
-        Value::String("trait".to_string()),
-        Value::String(node.def.node_trait.to_string()),
-    );
+    // v0.17.3 (ADR-036): trait removed from schema-level, provenance is per-instance
 
     // Optional knowledge_tier
     if let Some(tier) = node.def.knowledge_tier {
@@ -562,7 +559,7 @@ struct NodeStats {
     total: usize,
     by_realm: HashMap<String, usize>,
     by_layer: HashMap<String, usize>,
-    by_trait: HashMap<String, usize>,
+    // v0.17.3 (ADR-036): by_trait removed, provenance is per-instance
 }
 
 #[derive(Debug, Serialize)]
@@ -582,12 +579,11 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
     // Count nodes by realm, layer, trait
     let mut by_realm: HashMap<String, usize> = HashMap::new();
     let mut by_layer: HashMap<String, usize> = HashMap::new();
-    let mut by_trait: HashMap<String, usize> = HashMap::new();
+    // v0.17.3 (ADR-036): by_trait removed, provenance is per-instance
 
     for node in &nodes {
         *by_realm.entry(node.def.realm.clone()).or_insert(0) += 1;
         *by_layer.entry(node.def.layer.clone()).or_insert(0) += 1;
-        *by_trait.entry(node.def.node_trait.to_string()).or_insert(0) += 1;
     }
 
     // Load all arcs
@@ -604,7 +600,6 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
             total: nodes.len(),
             by_realm,
             by_layer,
-            by_trait,
         },
         arcs: ArcStats {
             total: arcs_doc.arcs.len(),
@@ -637,12 +632,7 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
             for (layer, count) in layers {
                 println!("  {:<15} {}", layer, count);
             }
-            println!("\nBy Trait:");
-            let mut traits: Vec<_> = stats.nodes.by_trait.iter().collect();
-            traits.sort_by_key(|(name, _)| *name);
-            for (trait_name, count) in traits {
-                println!("  {:<15} {}", trait_name, count);
-            }
+            // v0.17.3 (ADR-036): By Trait section removed, provenance is per-instance
 
             println!("\nARC STATISTICS");
             println!("─────────────────────────────────────────────────────");
@@ -796,7 +786,8 @@ mod tests {
     #[test]
     fn test_schema_validate_with_fix_dry_run() {
         use crate::parsers::schema_rules::validate_node;
-        use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+        use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
         use crate::validation::FixEngine;
         use indexmap::IndexMap;
         use std::collections::BTreeMap;
@@ -839,7 +830,7 @@ mod tests {
                 name: "TestFixNode".to_string(),
                 realm: "shared".to_string(),
                 layer: "config".to_string(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed, provenance is per-instance
                 description: "Test node for auto-fix".to_string(),
                 standard_properties: Some(standard_properties),
                 knowledge_tier: None,

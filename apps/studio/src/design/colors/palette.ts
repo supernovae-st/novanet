@@ -18,13 +18,74 @@
 import {
   LAYER_COLORS,
   REALM_COLORS,
-  TRAIT_COLORS,
   ARC_FAMILY_COLORS,
+  type ColorTokens,
   type LayerKey,
   type RealmKey,
-  type TraitKey,
   type ArcFamilyKey,
 } from './generated';
+
+// =============================================================================
+// TRAIT COLORS (v0.17.3 ADR-036: defined locally, not auto-generated)
+// =============================================================================
+// Provenance is per-instance, but UI still needs colors for trait visualization.
+// Colors from taxonomy.yaml terminal palette.
+
+export type TraitKey = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
+
+export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
+  defined: {
+    color: '#3b82f6', // blue-500
+    bg: 'bg-blue-500/20',
+    text: 'text-blue-500',
+    border: 'border-blue-500/30',
+    bgSolid: 'bg-blue-500',
+  },
+  authored: {
+    color: '#22c55e', // green-500
+    bg: 'bg-green-500/20',
+    text: 'text-green-500',
+    border: 'border-green-500/30',
+    bgSolid: 'bg-green-500',
+  },
+  imported: {
+    color: '#8b5cf6', // violet-500
+    bg: 'bg-violet-500/20',
+    text: 'text-violet-500',
+    border: 'border-violet-500/30',
+    bgSolid: 'bg-violet-500',
+  },
+  generated: {
+    color: '#eab308', // yellow-500
+    bg: 'bg-yellow-500/20',
+    text: 'text-yellow-500',
+    border: 'border-yellow-500/30',
+    bgSolid: 'bg-yellow-500',
+  },
+  retrieved: {
+    color: '#6c71c4', // solarized violet
+    bg: 'bg-[#6c71c4]/20',
+    text: 'text-[#6c71c4]',
+    border: 'border-[#6c71c4]/30',
+    bgSolid: 'bg-[#6c71c4]',
+  },
+};
+
+// v0.12.0: renamed per ADR-024 Data Origin
+export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
+  defined: 'Defined',
+  authored: 'Authored',
+  imported: 'Imported',
+  generated: 'Generated',
+  retrieved: 'Retrieved',
+};
+
+/**
+ * Get color tokens for a trait
+ */
+export function getTraitColor(trait: TraitKey | string): ColorTokens {
+  return TRAIT_COLORS[trait as TraitKey] ?? TRAIT_COLORS.defined;
+}
 
 // =============================================================================
 // COLOR TYPES
@@ -525,13 +586,15 @@ export function getArcFamilyParticleColors(family: ArcFamilyKey): ParticleColors
 // RE-EXPORTS for convenience
 // =============================================================================
 
+// Re-exports from generated (realm, layer, arc family)
 export {
   LAYER_COLORS,
   REALM_COLORS,
-  TRAIT_COLORS,
   ARC_FAMILY_COLORS,
   type LayerKey,
   type RealmKey,
-  type TraitKey,
   type ArcFamilyKey,
 } from './generated';
+
+// Re-export trait colors defined locally above (v0.17.3 ADR-036)
+// TraitKey and TRAIT_COLORS already exported at top of file

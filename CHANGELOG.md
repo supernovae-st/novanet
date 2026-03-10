@@ -7,6 +7,38 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-03-10
+
+### Added
+- **Knowledge Atoms Infrastructure** - Complete knowledge container system
+  - 818 containers: AudienceSet (205), CultureSet (205), TabooSet (204), PatternSet (204)
+  - 51 locale-specific atoms: Taboo (20), Pattern (11), CultureRef (12), AudienceTrait (8)
+  - Migrations 082-083 for container and atom creation
+- **or-IN Locale** - Added Odia (India) locale infrastructure
+
+### Changed
+- **Schema Version**: 57 nodes, 145 arc classes (was 131)
+  - Added 14 new arc classes across 6 families
+- **Test Suite**: 1210 tests passing (was 1255)
+  - Updated arc class count assertions (142→145)
+
+### Fixed
+- **Data Integrity** - Resolved orphan EntityNative nodes
+  - Migration 081: Remove orphan legacy expressions
+  - Fixed HAS_NATIVE arc connections for all EntityNatives
+- **Key Normalization** - Standardized entity key format to `entity:{key}`
+
+### Validated
+- **CSR 100%** - Full constraint satisfaction rate
+  - 10,537 constraints checked, 0 violations
+  - 3,076 nodes validated
+  - 7,461 arcs validated
+
+### Statistics
+- **1,210 Rust tests passing** (CLI)
+- **Zero clippy warnings**
+- **14 MCP tools**
+
 ## [0.17.1] - 2026-03-07
 
 ### Changed

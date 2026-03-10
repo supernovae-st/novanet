@@ -19,8 +19,7 @@ pub struct FacetFilter {
     pub realms: Vec<String>,
     #[serde(default)]
     pub layers: Vec<String>,
-    #[serde(default, rename = "traits")]
-    pub trait_filters: Vec<String>,
+    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
     #[serde(default)]
     pub arc_families: Vec<String>,
     #[serde(default)]
@@ -33,24 +32,22 @@ impl FacetFilter {
     /// ```
     /// use novanet::facets::FacetFilter;
     /// let f = FacetFilter::from_cli(
-    ///     Some("shared,org"), Some("knowledge"), None, None, None,
+    ///     Some("shared,org"), Some("knowledge"), None, None,
     /// );
     /// assert_eq!(f.realms, vec!["shared", "org"]);
     /// assert_eq!(f.layers, vec!["knowledge"]);
-    /// assert!(f.trait_filters.is_empty());
     /// ```
     #[must_use]
     pub fn from_cli(
         realm: Option<&str>,
         layer: Option<&str>,
-        trait_filter: Option<&str>,
+        // v0.17.3 (ADR-036): trait_filter param removed
         arc_family: Option<&str>,
         class: Option<&str>,
     ) -> Self {
         Self {
             realms: parse_csv(realm),
             layers: parse_csv(layer),
-            trait_filters: parse_csv(trait_filter),
             arc_families: parse_csv(arc_family),
             classes: parse_csv(class),
         }
@@ -67,18 +64,19 @@ impl FacetFilter {
     pub fn is_empty(&self) -> bool {
         self.realms.is_empty()
             && self.layers.is_empty()
-            && self.trait_filters.is_empty()
+            // v0.17.3 (ADR-036): trait_filters removed
             && self.arc_families.is_empty()
             && self.classes.is_empty()
     }
 
-    /// Count of active facet axes (0–5).
+    /// Count of active facet axes (0–4).
+    /// v0.17.3 (ADR-036): Was 0-5, now 0-4 (trait_filters removed)
     #[must_use]
     pub fn active_count(&self) -> usize {
         [
             !self.realms.is_empty(),
             !self.layers.is_empty(),
-            !self.trait_filters.is_empty(),
+            // v0.17.3 (ADR-036): trait_filters removed
             !self.arc_families.is_empty(),
             !self.classes.is_empty(),
         ]
@@ -132,16 +130,15 @@ mod tests {
 
     #[test]
     fn from_cli_mixed() {
+        // v0.17.3 (ADR-036): trait_filter param removed
         let f = FacetFilter::from_cli(
             Some("shared,org"),
             Some("knowledge"),
-            None,
             None,
             Some("Locale,Expression"),
         );
         assert_eq!(f.realms, vec!["shared", "org"]);
         assert_eq!(f.layers, vec!["knowledge"]);
-        assert!(f.trait_filters.is_empty());
         assert!(f.arc_families.is_empty());
         assert_eq!(f.classes, vec!["Locale", "Expression"]);
         assert!(!f.is_empty());
@@ -150,24 +147,24 @@ mod tests {
 
     #[test]
     fn from_cli_empty_is_empty() {
-        let f = FacetFilter::from_cli(None, None, None, None, None);
+        // v0.17.3 (ADR-036): trait_filter param removed
+        let f = FacetFilter::from_cli(None, None, None, None);
         assert!(f.is_empty());
         assert_eq!(f.active_count(), 0);
     }
 
     #[test]
     fn from_json_full() {
+        // v0.17.3 (ADR-036): traits removed from JSON
         let json = r#"{
             "realms": ["shared"],
             "layers": ["knowledge", "config"],
-            "traits": ["defined"],
             "arc_families": [],
             "classes": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
         assert_eq!(f.realms, vec!["shared"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
-        assert_eq!(f.trait_filters, vec!["defined"]);
         assert!(f.arc_families.is_empty());
         assert!(f.classes.is_empty());
     }
@@ -187,11 +184,10 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
-        // v0.12.0: ADR-024 trait renames (generated unchanged, aggregated→retrieved)
+        // v0.17.3 (ADR-036): trait_filter param removed
         let original = FacetFilter::from_cli(
             Some("shared"),
             Some("knowledge"),
-            Some("generated,retrieved"),
             Some("mining"),
             None,
         );

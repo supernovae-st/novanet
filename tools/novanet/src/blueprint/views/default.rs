@@ -1,11 +1,10 @@
 //! Default blueprint view — rich overview of the schema-graph.
 
 use crate::blueprint::ascii::{
-    self, arc_family_arrow, progress_bar_compact, realm_icon, trait_symbol, truncate,
+    self, arc_family_arrow, progress_bar_compact, realm_icon, truncate,
 };
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
-use crate::parsers::yaml_node::NodeTrait;
 use std::fmt::Write;
 
 /// Render the default overview.
@@ -26,10 +25,6 @@ pub fn render(data: &BlueprintData, validate: bool) -> String {
 
     // Layers
     out.push_str(&render_layers(data));
-    out.push('\n');
-
-    // Traits
-    out.push_str(&render_traits(data));
     out.push('\n');
 
     // Core Flow
@@ -147,73 +142,6 @@ fn render_layers(data: &BlueprintData) -> String {
                 " ".repeat(80 - 52 - layer_def.display_name.len().min(25))
             );
         }
-    }
-
-    out.push_str(
-        "└──────────────────────────────────────────────────────────────────────────────┘",
-    );
-    out
-}
-
-fn render_traits(data: &BlueprintData) -> String {
-    let mut out = String::new();
-    out.push_str(
-        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
-    );
-    out.push_str(
-        "│  TRAITS (how nodes behave with locales)                                      │\n",
-    );
-
-    let by_trait = data.nodes_by_trait();
-
-    let trait_info = [
-        (
-            NodeTrait::Defined,
-            "defined",
-            "Same across all locales",
-            "Entity, Page, Block",
-        ),
-        (
-            NodeTrait::Authored,
-            "authored",
-            "Native content per locale",
-            "EntityNative, ProjectNative",
-        ),
-        (
-            NodeTrait::Imported,
-            "imported",
-            "Locale-specific atoms",
-            "Term, Expression, Taboo",
-        ),
-        (
-            NodeTrait::Generated,
-            "generated",
-            "LLM-generated output",
-            "PageNative, BlockNative",
-        ),
-        (
-            NodeTrait::Retrieved,
-            "retrieved",
-            "Computed metrics",
-            "GEOAnswer, SEOKeywordMetrics",
-        ),
-    ];
-
-    for (trait_enum, key, description, examples) in trait_info {
-        let symbol = trait_symbol(key);
-        let count = by_trait.get(&trait_enum).map(|v| v.len()).unwrap_or(0);
-        let count_str = format!("({})", count);
-        let padding = 80usize.saturating_sub(53).saturating_sub(examples.len());
-        let _ = writeln!(
-            out,
-            "│  {} {:<10} {:<28} {:>4} │ {}{}│",
-            symbol,
-            key,
-            description,
-            count_str,
-            examples,
-            " ".repeat(padding)
-        );
     }
 
     out.push_str(
@@ -362,7 +290,6 @@ mod tests {
         assert!(output.contains("STATS"), "Should have stats section");
         assert!(output.contains("REALMS"), "Should have realms section");
         assert!(output.contains("LAYERS"), "Should have layers section");
-        assert!(output.contains("TRAITS"), "Should have traits section");
         assert!(output.contains("CORE FLOW"), "Should have flow section");
         assert!(output.contains("ARC FAMILIES"), "Should have arc families");
         assert!(output.contains("VALIDATION"), "Should have validation");

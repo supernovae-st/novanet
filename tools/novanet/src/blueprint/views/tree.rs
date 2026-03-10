@@ -1,6 +1,8 @@
 //! Tree view — hierarchical Realm > Layer > Kind.
+//!
+//! v0.17.3 (ADR-036): Trait symbols removed, provenance is per-instance.
 
-use crate::blueprint::ascii::{realm_icon, trait_symbol, truncate};
+use crate::blueprint::ascii::{realm_icon, truncate};
 use crate::blueprint::sources::BlueprintData;
 use std::collections::HashMap;
 
@@ -84,25 +86,19 @@ pub fn render(data: &BlueprintData) -> String {
                 } else {
                     "├── "
                 };
-                let symbol = trait_symbol(&node.def.node_trait.to_string());
-
+                // v0.17.3 (ADR-036): traits removed, provenance is per-instance
                 let description = truncate(&node.def.description, 40);
 
                 out.push_str(&format!(
-                    "{}{}{} {} — {}\n",
-                    child_prefix, node_prefix, symbol, node.def.name, description
+                    "{}{}{} — {}\n",
+                    child_prefix, node_prefix, node.def.name, description
                 ));
             }
         }
         out.push('\n');
     }
 
-    // Legend (v11.8: ADR-024 Data Origin renames)
-    out.push_str(
-        "───────────────────────────────────────────────────────────────────────────────\n",
-    );
-    out.push_str("LEGEND\n");
-    out.push_str("■ defined   □ authored   ◊ imported   ★ generated   ▪ retrieved\n");
+    // v0.17.3 (ADR-036): Legend removed, provenance is per-instance not per-class
 
     out
 }
@@ -121,6 +117,6 @@ mod tests {
         assert!(output.contains("NOVANET TREE"), "Should have header");
         assert!(output.contains("SHARED"), "Should have shared realm");
         assert!(output.contains("ORG"), "Should have org realm");
-        assert!(output.contains("LEGEND"), "Should have legend");
+        // v0.17.3 (ADR-036): Legend removed, provenance is per-instance
     }
 }

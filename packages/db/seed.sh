@@ -5,6 +5,10 @@
 # Usage (from monorepo root):
 #   1. Start Neo4j: pnpm infra:up
 #   2. Run seed:    pnpm infra:seed
+#
+# Environment variables:
+#   SKIP_CONTENT=1  Skip content bootstrap (QR Code AI data)
+#   SKIP_BACKUP=1   Skip pre-seed backup
 
 set -euo pipefail
 
@@ -17,6 +21,8 @@ NEO4J_USER="${NEO4J_USER:-neo4j}"
 NEO4J_PASSWORD="${NEO4J_PASSWORD:-novanetpassword}"
 CONTAINER="${CONTAINER:-novanet-neo4j}"
 SEED_DIR="$(dirname "$0")/seed"
+CONTENT_DIR="$SEED_DIR/content"
+SKIP_CONTENT="${SKIP_CONTENT:-0}"
 
 # Couleurs
 GREEN='\033[0;32m'
@@ -147,6 +153,43 @@ for file in "$SEED_DIR"/*.cypher; do
 done
 
 echo ""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# [4.5/6] Content Bootstrap (optional, skip with SKIP_CONTENT=1)
+# QR Code AI specific data: Entities, Pages, Blocks, SEO keywords
+# ─────────────────────────────────────────────────────────────────────────────
+if [ "$SKIP_CONTENT" = "1" ]; then
+    echo -e "${YELLOW}[4.5/6] Content skippé (SKIP_CONTENT=1)${NC}"
+    echo ""
+elif [ -d "$CONTENT_DIR" ]; then
+    shopt -s nullglob
+    content_files=("$CONTENT_DIR"/*.cypher)
+    shopt -u nullglob
+    if [ ${#content_files[@]} -gt 0 ]; then
+        echo -e "${YELLOW}[4.5/6] Exécution du content bootstrap (${#content_files[@]} fichiers)...${NC}"
+        echo ""
+
+        for file in "${content_files[@]}"; do
+            filename=$(basename "$file")
+            echo -e "  ${YELLOW}→ content/$filename${NC}"
+
+            # Files are mounted at /import/seed/content/ via docker-compose.yml
+            if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename" > /dev/null 2>&1; then
+                echo -e "    ${GREEN}✓ OK${NC}"
+            else
+                echo -e "    ${RED}✗ Erreur${NC}"
+                echo ""
+                echo "Détails de l'erreur:"
+                docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename"
+                exit 1
+            fi
+        done
+        echo ""
+    fi
+else
+    echo -e "${YELLOW}[4.5/6] Pas de content/ trouvé${NC}"
+    echo ""
+fi
 
 # Exécuter les migrations (si présentes)
 MIGRATION_DIR="$(dirname "$0")/migrations"

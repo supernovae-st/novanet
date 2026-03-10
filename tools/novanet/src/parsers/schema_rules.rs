@@ -1,10 +1,11 @@
-//! Schema validation rules for v0.13.1 standardization.
+//! Schema validation rules for v0.18.0 standardization.
 //!
 //! Validates:
-//! - Standard properties presence (key, created_at, updated_at)
+//! - Standard properties presence (key, display_name, description, llm_context, created_by, created_by_meta, created_at, updated_at)
 //! - Composite key denormalization (entity_key, page_key, block_key, locale_key)
-//! - Property ordering (key → *_key → display_name → ...)
+//! - Property ordering (key → *_key → display_name → ... → created_at → updated_at)
 //! - ADR-030/032 compliance: slug derivation, TARGETS arc properties
+//! - ADR-035 compliance: Provenance tracking (created_by, created_by_meta)
 //!
 //! # Usage
 //!
@@ -103,7 +104,7 @@ const ORG_LAYERS: &[&str] = &[
     "output",
 ];
 
-/// Expected order for standard properties.
+/// Expected order for standard properties (ADR-035: Provenance Tracking).
 /// Properties present in the node must appear in this order (others can be interspersed).
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
@@ -113,6 +114,9 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];
@@ -1443,7 +1447,8 @@ mod tests {
     fn denomination_forms_validation_catches_missing_entity() {
         // Unit test: validate_node should emit DENOMINATION_FORMS_REQUIRED for Entity
         // that lacks denomination_forms in its properties.
-        use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef};
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+        use crate::parsers::yaml_node::{NodeDef, PropertyDef};
         use indexmap::IndexMap;
         use std::collections::BTreeMap;
 
@@ -1470,7 +1475,7 @@ mod tests {
                 name: "Entity".into(),
                 realm: "org".into(),
                 layer: "semantic".into(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "An entity".into(),
@@ -2121,7 +2126,8 @@ mod tests {
 
     /// Create a minimal valid node for property testing.
     fn create_valid_proptest_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
-        use crate::parsers::yaml_node::{NodeDef, NodeIcon, NodeTrait, PropertyDef};
+        // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+        use crate::parsers::yaml_node::{NodeDef, NodeIcon, PropertyDef};
         use indexmap::IndexMap;
         use std::collections::BTreeMap;
 
@@ -2144,7 +2150,7 @@ mod tests {
                 name: name.into(),
                 realm: realm.into(),
                 layer: layer.into(),
-                node_trait: NodeTrait::Defined,
+                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: Some(NodeIcon {
                     web: "circle".into(),
@@ -2284,7 +2290,8 @@ mod tests {
             entity_key in prop_slug_key(),
             locale in prop_locale_code()
         ) {
-            use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef, NodeIcon};
+            // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+            use crate::parsers::yaml_node::{NodeDef, PropertyDef, NodeIcon};
             use indexmap::IndexMap;
             use std::collections::BTreeMap;
 
@@ -2310,10 +2317,11 @@ mod tests {
             sp.insert("updated_at".into(), make_prop("datetime"));
             // NOTE: Intentionally missing locale_key and parent_key
 
-            let (realm, layer, trait_val) = match node_name.as_str() {
-                "EntityNative" => ("org", "semantic", NodeTrait::Authored),
-                "PageNative" => ("org", "output", NodeTrait::Generated),
-                "BlockNative" => ("org", "output", NodeTrait::Generated),
+            // v0.17.3 (ADR-036): trait removed, just need realm/layer
+            let (realm, layer) = match node_name.as_str() {
+                "EntityNative" => ("org", "semantic"),
+                "PageNative" => ("org", "output"),
+                "BlockNative" => ("org", "output"),
                 _ => unreachable!(),
             };
 
@@ -2322,7 +2330,7 @@ mod tests {
                     name: node_name.clone(),
                     realm: realm.into(),
                     layer: layer.into(),
-                    node_trait: trait_val,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: Some(NodeIcon { web: "circle".into(), terminal: "●".into() }),
                     description: "Test".into(),
@@ -2356,7 +2364,8 @@ mod tests {
             prop_count in 1usize..5,
             required_indices in proptest::collection::vec(0usize..5, 0..3)
         ) {
-            use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef, NodeIcon};
+            // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+            use crate::parsers::yaml_node::{NodeDef, PropertyDef, NodeIcon};
             use indexmap::IndexMap;
             use std::collections::BTreeMap;
 
@@ -2413,7 +2422,7 @@ mod tests {
                     name: "TestNode".into(),
                     realm: "org".into(),
                     layer: "semantic".into(),
-                    node_trait: NodeTrait::Defined,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: Some(NodeIcon { web: "circle".into(), terminal: "●".into() }),
                     description: "Test node".into(),
@@ -2484,7 +2493,8 @@ mod tests {
         /// Property: key property must always be type string.
         #[test]
         fn prop_key_must_be_string_type(wrong_type in "[a-z]{3,10}".prop_filter("not string", |s| s != "string")) {
-            use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef, NodeIcon};
+            // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+            use crate::parsers::yaml_node::{NodeDef, PropertyDef, NodeIcon};
             use indexmap::IndexMap;
             use std::collections::BTreeMap;
 
@@ -2521,7 +2531,7 @@ mod tests {
                     name: "TestNode".into(),
                     realm: "org".into(),
                     layer: "semantic".into(),
-                    node_trait: NodeTrait::Defined,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: Some(NodeIcon { web: "circle".into(), terminal: "●".into() }),
                     description: "Test node".into(),
@@ -2553,7 +2563,8 @@ mod tests {
         fn prop_timestamps_must_be_datetime(
             wrong_type in "[a-z]{3,10}".prop_filter("not datetime", |s| s != "datetime")
         ) {
-            use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef, NodeIcon};
+            // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
+            use crate::parsers::yaml_node::{NodeDef, PropertyDef, NodeIcon};
             use indexmap::IndexMap;
             use std::collections::BTreeMap;
 
@@ -2590,7 +2601,7 @@ mod tests {
                     name: "TestNode".into(),
                     realm: "org".into(),
                     layer: "semantic".into(),
-                    node_trait: NodeTrait::Defined,
+                    // v0.17.3 (ADR-036): node_trait removed
                     knowledge_tier: None,
                     icon: Some(NodeIcon { web: "circle".into(), terminal: "●".into() }),
                     description: "Test node".into(),

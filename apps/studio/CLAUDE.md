@@ -1,4 +1,4 @@
-# NovaNet Studio (v0.17.2)
+# NovaNet Studio (v0.18.1)
 
 @.claude/rules/novanet-terminology.md
 @.claude/rules/novanet-decisions.md
@@ -9,13 +9,13 @@ Knowledge graph visualization for the NovaNet native content generation engine.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for 61 node classes, 200 locales (~19,000 instances projected)
+**What:** Interactive 2D/3D graph visualization for 57 node classes, 200 locales (~19,000 instances projected)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D), @react-three/fiber (3D)
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
 **AI:** Claude API for natural language → Cypher
-**Version:** v0.17.2 (all packages aligned)
+**Version:** v0.18.1 (all packages aligned)
 
 ---
 

@@ -20,7 +20,8 @@ use super::{
     COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
-    render_empty_state, spinner, trait_icon,
+    render_empty_state, spinner,
+    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::locale_to_flag;
@@ -90,6 +91,7 @@ fn highlight_matches_with_bg(
 
 /// Horizontal padding inside tree panel (left side only, right has minimap).
 const TREE_PADDING_LEFT: u16 = 1;
+const SCROLLBAR_WIDTH: u16 = 1;
 
 // =============================================================================
 // POWER BAR RENDERING (Entity relationship visualization)
@@ -198,9 +200,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 k.display_name.clone()
             };
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: class_label,
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
         }
         Some(TreeItem::EntityCategory(r, l, k, cat)) => {
@@ -215,9 +217,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◫",
@@ -237,9 +239,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "🌐",
@@ -260,9 +262,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◈",
@@ -282,9 +284,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "►",
@@ -347,9 +349,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: trait_icon(&k.trait_name),
+                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
                 label: k.display_name.clone(),
-                color: app.theme.trait_color(&k.trait_name),
+                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
             path.push(BreadcrumbLevel {
                 icon: "◆",
@@ -673,25 +675,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let has_arcs = !app.tree.arc_families.is_empty();
 
-    // Trait filter: only show realms/layers/classes matching the filter
-    let trait_filter = app.trait_filter.as_deref();
-
+    // v0.17.3 (ADR-036): trait filter removed - show all realms
     if !classes_collapsed {
-        // Filter visible realms (skip realms with no matching classes when trait filter active)
-        let visible_realms: Vec<_> = app
-            .tree
-            .realms
-            .iter()
-            .filter(|r| {
-                if let Some(filter) = trait_filter {
-                    r.layers
-                        .iter()
-                        .any(|l| l.classes.iter().any(|k| k.trait_name == filter))
-                } else {
-                    true
-                }
-            })
-            .collect();
+        let visible_realms: Vec<_> = app.tree.realms.iter().collect();
         let realm_count = visible_realms.len();
 
         for (ri, realm) in visible_realms.iter().enumerate() {
@@ -728,7 +714,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
             // v0.13.1: No right badge for Realm (bar starts at Layer level)
             // Calculate padding for alignment (using display_width for Unicode support)
-            let tree_width = area.width.saturating_sub(4) as usize;
+            let tree_width = area.width.saturating_sub(5) as usize;
             let left_width = display_width(&left_content);
             let stats_width = display_width(&stats_str);
 
@@ -776,17 +762,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 let is_data_mode = app.is_graph_mode();
                 let hide_empty = app.hide_empty && is_data_mode;
 
-                // Filter visible layers (hide empty if hide_empty, trait filter if active)
+                // v0.17.3 (ADR-036): trait filter removed
+                // Filter visible layers (hide empty if hide_empty)
                 let visible_layers: Vec<_> = realm
                     .layers
                     .iter()
                     .filter(|l| {
-                        // Trait filter: skip layers with no matching classes
-                        if let Some(filter) = trait_filter {
-                            if !l.classes.iter().any(|k| k.trait_name == filter) {
-                                return false;
-                            }
-                        }
                         // Hide empty filter (Data mode only)
                         if hide_empty {
                             l.classes.iter().map(|k| k.instance_count).sum::<i64>() > 0
@@ -841,7 +822,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     // v0.13.1: Simple color bar (layer color) - starts at Layer level
                     // Calculate padding for alignment
-                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let tree_width = area.width.saturating_sub(5) as usize;
                     let left_width = display_width(&left_content);
                     let stats_width = display_width(&stats_str);
                     let right_side = "│"; // Simple color bar
@@ -900,17 +881,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
+                        // v0.17.3 (ADR-036): trait filter removed
                         // Filter visible classes (hide empty if hide_empty is true)
                         let visible_classes: Vec<_> = layer
                             .classes
                             .iter()
                             .filter(|k| {
-                                // Trait filter: skip classes that don't match
-                                if let Some(filter) = trait_filter {
-                                    if k.trait_name != filter {
-                                        return false;
-                                    }
-                                }
                                 // Hide empty filter (Data mode only)
                                 if hide_empty {
                                     k.instance_count > 0
@@ -1043,7 +1019,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Just a colored │ at the right edge, matching layer color
 
                             // Calculate padding for right-alignment
-                            let tree_width = area.width.saturating_sub(4) as usize;
+                            let tree_width = area.width.saturating_sub(5) as usize;
                             let left_width = display_width(&left_content);
                             let right_side = "│"; // Simple color bar
                             let right_width = 1;
@@ -1207,7 +1183,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let (power_bar, power_color) = render_power_bar(entity_group.relationship_power);
 
                                         // Calculate widths for right-alignment
-                                        let tree_width = area.width.saturating_sub(4) as usize;
+                                        let tree_width = area.width.saturating_sub(5) as usize;
                                         let left_content = format!(
                                             "{}{}{} {} ({})",
                                             cursor_char,
@@ -1552,7 +1528,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let card_str = cardinality_abbrev(&arc_class.cardinality);
 
                     // Calculate padding for alignment (using display_width for Unicode support)
-                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let tree_width = area.width.saturating_sub(5) as usize;
                     let left_width = display_width(&left_content);
                     let flow_width = display_width(&flow_str);
                     let card_width = display_width(card_str);
@@ -1623,24 +1599,16 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "◆ Schema" // Diamond = structure/schema
     };
 
-    // v11.8: Renamed per ADR-024 Data Origin semantics
-    let filter_indicator = match app.trait_filter.as_deref() {
-        Some("defined") => " │ ■ defined",
-        Some("authored") => " │ □ authored",
-        Some("imported") => " │ ◊ imported",
-        Some("generated") => " │ ★ generated",
-        Some("retrieved") => " │ ▪ retrieved",
-        _ => "",
-    };
+    // v0.17.3 (ADR-036): trait filter indicator removed
 
     let hierarchy = app
         .tree
         .hierarchy_position(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
-        format!(" {}{} ", mode_prefix, filter_indicator)
+        format!(" {} ", mode_prefix)
     } else {
-        format!(" {} │ {}{} ", mode_prefix, hierarchy_str, filter_indicator)
+        format!(" {} │ {} ", mode_prefix, hierarchy_str)
     };
 
     // Render block with title
@@ -1657,7 +1625,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let content_x = inner_area.x + TREE_PADDING_LEFT;
     let content_width = inner_area
         .width
-        .saturating_sub(minimap_width + TREE_PADDING_LEFT);
+        .saturating_sub(minimap_width + TREE_PADDING_LEFT + SCROLLBAR_WIDTH);
 
     // v11.6: Render sticky breadcrumb at top of content area (with padding)
     let breadcrumb_area = Rect::new(content_x, inner_area.y, content_width, inner_area.height);
@@ -1730,11 +1698,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             ScrollbarState::new(total.saturating_sub(effective_visible_height))
                 .position(app.tree_scroll);
 
-        // Place scrollbar between tree content and mini-map separator
+        // Place scrollbar in reserved space between tree content and mini-map separator
         let scrollbar_area = Rect {
-            x: inner_area.x + content_width.saturating_sub(1),
+            x: content_x + content_width,
             y: tree_y,
-            width: 1,
+            width: SCROLLBAR_WIDTH,
             height: tree_height,
         };
         f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);

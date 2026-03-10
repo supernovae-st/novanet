@@ -697,36 +697,9 @@ mod tests {
     // ═══════════════════════════════════════════════════════════════════════════
     // NOMENCLATURE DX TESTS (v0.12.0)
     // ═══════════════════════════════════════════════════════════════════════════
-    // These tests validate ADR-023 (Class/Instance), ADR-024 (Data Origin traits),
-    // and ADR-025 (Instruction Layer) terminology is consistent across YAML.
-
-    /// ADR-024: Trait values must be the new "Data Origin" names
-    #[test]
-    #[ignore = "requires private models (brain/)"]
-    fn test_adr024_trait_values_are_data_origin() {
-        use crate::parsers::yaml_node::NodeTrait;
-
-        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
-        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
-
-        // All traits must be one of the valid Data Origin values
-        for node in &data.node_classes {
-            let is_valid = matches!(
-                node.def.node_trait,
-                NodeTrait::Defined
-                    | NodeTrait::Authored
-                    | NodeTrait::Imported
-                    | NodeTrait::Generated
-                    | NodeTrait::Retrieved
-            );
-
-            assert!(
-                is_valid,
-                "Node '{}' has invalid trait '{:?}'. Valid traits: Defined, Authored, Imported, Generated, Retrieved",
-                node.def.name, node.def.node_trait
-            );
-        }
-    }
+    // These tests validate ADR-023 (Class/Instance), ADR-025 (Instruction Layer)
+    // terminology is consistent across YAML.
+    // v0.17.3 (ADR-036): Schema-level trait tests removed, provenance is per-instance
 
     /// ADR-028: Must have exactly 61 node classes (40 shared + 21 org)
     /// v0.12.5: PageStructure/PageInstruction deleted, Country added, Brand Architecture (+4 -1)
@@ -879,65 +852,8 @@ mod tests {
         );
     }
 
-    /// Naming convention: *Native suffix for locale-specific nodes (ADR-029)
-    /// Trait distinguishes between authored (EntityNative, ProjectNative) and generated (PageNative, BlockNative)
-    #[test]
-    #[ignore = "requires private models (brain/)"]
-    fn test_naming_convention_native_suffix() {
-        use crate::parsers::yaml_node::NodeTrait;
-
-        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
-        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
-
-        let native_nodes: Vec<_> = data
-            .node_classes
-            .iter()
-            .filter(|n| n.def.name.ends_with("Native"))
-            .collect();
-
-        assert!(
-            !native_nodes.is_empty(),
-            "Should have *Native nodes (ADR-029)"
-        );
-
-        // EntityNative and ProjectNative should have Authored trait
-        let authored_natives: Vec<_> = native_nodes
-            .iter()
-            .filter(|n| n.def.name == "EntityNative" || n.def.name == "ProjectNative")
-            .collect();
-
-        for node in &authored_natives {
-            assert!(
-                matches!(node.def.node_trait, NodeTrait::Authored),
-                "Node '{}' should have Authored trait, got '{:?}'",
-                node.def.name,
-                node.def.node_trait
-            );
-        }
-
-        // PageNative and BlockNative should have Generated trait
-        let generated_natives: Vec<_> = native_nodes
-            .iter()
-            .filter(|n| n.def.name == "PageNative" || n.def.name == "BlockNative")
-            .collect();
-
-        for node in &generated_natives {
-            assert!(
-                matches!(node.def.node_trait, NodeTrait::Generated),
-                "Node '{}' should have Generated trait, got '{:?}'",
-                node.def.name,
-                node.def.node_trait
-            );
-        }
-
-        // Should have all 4 *Native nodes
-        assert_eq!(
-            native_nodes.len(),
-            4,
-            "Should have 4 *Native nodes (EntityNative, ProjectNative, PageNative, BlockNative), got {}",
-            native_nodes.len()
-        );
-    }
+    // v0.17.3 (ADR-036): test_naming_convention_native_suffix removed
+    // Trait validation no longer relevant - provenance is per-instance, not per-class
 
     /// Layer distribution validation (v0.12.5)
     #[test]

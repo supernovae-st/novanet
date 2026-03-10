@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.17.2 | **Tests**: 1255 passing | **Clippy**: zero warnings
+**Version**: v0.18.0 | **Tests**: 1210 passing | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -34,11 +34,11 @@ novanet <command>    # Run specific command
 ## Schema Stats
 
 - **57 nodes** (36 shared + 21 org)
-- **140 arcs** (6 families)
+- **145 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 - **5 traits** (defined/authored/imported/generated/retrieved)
 
-> v0.17.2: YAGNI cleanup complete, 57 nodes, 140 arcs
+> v0.18.0: Ultra-deep review complete, 57 nodes, 145 arcs, PageNative.slug per ADR-030
 
 ## Tooling
 

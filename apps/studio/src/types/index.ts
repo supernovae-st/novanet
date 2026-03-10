@@ -39,11 +39,11 @@ export type {
   LocaleIdentity,
   LocaleVoice,
   LocaleCulture,
-  LocaleMarket,
+  // v0.18.0: LocaleMarket removed (market data from external APIs)
   LocaleLexicon,
   Expression,
   SEOKeyword,
-  SEOKeywordMetrics,
+  // v0.17.0: SEOKeywordMetrics removed
   // Instructions (v0.12.4: PageInstruction removed per ADR-028)
   BlockInstruction,
   BlockRules,

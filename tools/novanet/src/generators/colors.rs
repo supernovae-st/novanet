@@ -1,10 +1,11 @@
 //! Generate `colors.ts` via MiniJinja template (YAML → TypeScript).
 //!
 //! Reads `taxonomy.yaml` and produces color tokens for:
-//! - Realms (3)
-//! - Layers (9)
-//! - Traits (5)
-//! - ArcFamilies (5)
+//! - Realms (2)
+//! - Layers (10)
+//! - ArcFamilies (6)
+//!
+//! v0.17.3 (ADR-036): Traits removed, provenance is per-instance.
 //!
 //! Output target: `apps/studio/src/design/colors/generated.ts`
 //!
@@ -29,12 +30,13 @@ struct ColorEntry {
 }
 
 /// All color data for the template.
+/// v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 #[derive(Debug, Serialize)]
 struct TemplateData {
     version: String,
     realms: Vec<ColorEntry>,
     layers: Vec<ColorEntry>,
-    traits: Vec<ColorEntry>,
+    // v0.17.3 (ADR-036): traits removed, provenance is per-instance
     arc_families: Vec<ColorEntry>,
 }
 
@@ -112,29 +114,7 @@ export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
 {%- endfor %}
 };
 
-// =============================================================================
-// TRAIT COLORS ({{ traits | length }})
-// =============================================================================
-
-export type TraitKey = {% for t in traits %}'{{ t.key }}'{{ " | " if not loop.last else "" }}{% endfor %};
-
-export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
-{%- for t in traits %}
-  '{{ t.key }}': {
-    color: '{{ t.color }}',
-    bg: 'bg-[{{ t.color }}]/20',
-    text: 'text-[{{ t.color }}]',
-    border: 'border-[{{ t.color }}]/30',
-    bgSolid: 'bg-[{{ t.color }}]',
-  },
-{%- endfor %}
-};
-
-export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
-{%- for t in traits %}
-  '{{ t.key }}': '{{ t.display_name }}',
-{%- endfor %}
-};
+// v0.17.3 (ADR-036): TRAIT COLORS section removed, provenance is per-instance
 
 // =============================================================================
 // ARC FAMILY COLORS ({{ arc_families | length }})
@@ -178,12 +158,7 @@ export function getLayerColor(key: LayerKey): ColorTokens {
   return LAYER_COLORS[key];
 }
 
-/**
- * Get color tokens for a trait
- */
-export function getTraitColor(key: TraitKey): ColorTokens {
-  return TRAIT_COLORS[key];
-}
+// v0.17.3 (ADR-036): getTraitColor removed, provenance is per-instance
 
 /**
  * Get color tokens for an arc family
@@ -194,9 +169,10 @@ export function getArcFamilyColor(key: ArcFamilyKey): ColorTokens {
 
 /**
  * Get raw hex color for any facet type
+ * v0.17.3 (ADR-036): 'trait' case removed, provenance is per-instance
  */
 export function getFacetHex(
-  facetType: 'realm' | 'layer' | 'trait' | 'arcFamily',
+  facetType: 'realm' | 'layer' | 'arcFamily',
   key: string
 ): string {
   switch (facetType) {
@@ -204,8 +180,6 @@ export function getFacetHex(
       return REALM_COLORS[key as RealmKey]?.color ?? '#ffffff';
     case 'layer':
       return LAYER_COLORS[key as LayerKey]?.color ?? '#ffffff';
-    case 'trait':
-      return TRAIT_COLORS[key as TraitKey]?.color ?? '#ffffff';
     case 'arcFamily':
       return ARC_FAMILY_COLORS[key as ArcFamilyKey]?.color ?? '#ffffff';
   }
@@ -258,16 +232,7 @@ fn render_colors(doc: &OrganizingDoc) -> crate::Result<String> {
         })
         .collect();
 
-    // Extract traits
-    let traits: Vec<ColorEntry> = doc
-        .traits
-        .iter()
-        .map(|t| ColorEntry {
-            key: t.key.clone(),
-            color: t.color.clone(),
-            display_name: t.display_name.clone(),
-        })
-        .collect();
+    // v0.17.3 (ADR-036): traits extraction removed, provenance is per-instance
 
     // Extract arc families
     let arc_families: Vec<ColorEntry> = doc
@@ -284,7 +249,6 @@ fn render_colors(doc: &OrganizingDoc) -> crate::Result<String> {
         version: doc.version.clone(),
         realms,
         layers,
-        traits,
         arc_families,
     };
 
@@ -308,7 +272,7 @@ fn render_colors(doc: &OrganizingDoc) -> crate::Result<String> {
             version => data.version,
             realms => data.realms,
             layers => data.layers,
-            traits => data.traits,
+            // v0.17.3 (ADR-036): traits removed, provenance is per-instance
             arc_families => data.arc_families,
         })
         .map_err(|e| crate::NovaNetError::Generator {
@@ -344,12 +308,14 @@ pub fn hex_to_rgb(hex: &str) -> Option<(u8, u8, u8)> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef};
+    // v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
     use serial_test::serial;
 
     fn make_test_principles() -> OrganizingDoc {
+        // v0.17.3 (ADR-036): traits removed, provenance is per-instance
         OrganizingDoc {
-            version: "0.13.0".to_string(),
+            version: "0.17.3".to_string(),
             realms: vec![
                 RealmDef {
                     key: "shared".to_string(),
@@ -380,20 +346,6 @@ mod tests {
                     }],
                 },
             ],
-            traits: vec![
-                TraitDef {
-                    key: "defined".to_string(),
-                    display_name: "Defined".to_string(),
-                    color: "#3b82f6".to_string(),
-                    llm_context: "test".to_string(),
-                },
-                TraitDef {
-                    key: "authored".to_string(),
-                    display_name: "Authored".to_string(),
-                    color: "#22c55e".to_string(),
-                    llm_context: "test".to_string(),
-                },
-            ],
             arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
@@ -410,14 +362,14 @@ mod tests {
         let output = render_colors(&principles).unwrap();
 
         // Header
-        assert!(output.contains("AUTO-GENERATED by novanet v0.13.0"));
+        assert!(output.contains("AUTO-GENERATED by novanet v0.17.3"));
         assert!(output.contains("SINGLE SOURCE OF TRUTH"));
 
-        // Types (v0.12.0: defined + authored)
+        // Types (v0.17.3: traits removed, provenance is per-instance)
         assert!(output.contains("export interface ColorTokens"));
         assert!(output.contains("export type RealmKey = 'shared' | 'org'"));
         assert!(output.contains("export type LayerKey = 'config' | 'foundation'"));
-        assert!(output.contains("export type TraitKey = 'defined' | 'authored'"));
+        // v0.17.3 (ADR-036): TraitKey removed, provenance is per-instance
         assert!(output.contains("export type ArcFamilyKey = 'ownership'"));
     }
 
@@ -458,11 +410,14 @@ mod tests {
 
         assert!(output.contains("export function getRealmColor(key: RealmKey): ColorTokens"));
         assert!(output.contains("export function getLayerColor(key: LayerKey): ColorTokens"));
-        assert!(output.contains("export function getTraitColor(key: TraitKey): ColorTokens"));
+        // v0.17.3 (ADR-036): getTraitColor removed, provenance is per-instance
+        assert!(!output.contains("export function getTraitColor"));
         assert!(
             output.contains("export function getArcFamilyColor(key: ArcFamilyKey): ColorTokens")
         );
         assert!(output.contains("export function getFacetHex"));
+        // v0.17.3 (ADR-036): trait case removed from getFacetHex
+        assert!(!output.contains("case 'trait':"));
     }
 
     #[test]
@@ -521,10 +476,7 @@ mod tests {
             );
         }
 
-        // Should have all 5 traits (v0.12.0: ADR-024 Data Origin rename)
-        for tr in ["defined", "authored", "imported", "generated", "retrieved"] {
-            assert!(output.contains(&format!("'{tr}'")), "missing trait: {tr}");
-        }
+        // v0.17.3 (ADR-036): traits removed from output, provenance is per-instance
 
         // Should have all 5 arc families
         for af in [

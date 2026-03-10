@@ -1009,30 +1009,15 @@ mod tests {
         assert_eq!(layer::color("semantic", mode), Color::Rgb(249, 115, 22));
     }
 
-    #[test]
-    fn test_trait_borders() {
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(traits::border_char("defined"), "─"); // was: invariant
-        assert_eq!(traits::border_char("authored"), "┄"); // was: localized
-        assert_eq!(traits::border_char("generated"), "═");
-        assert_eq!(traits::border_char("retrieved"), "┅"); // was: aggregated
-    }
-
-    #[test]
-    fn test_trait_modifiers() {
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(traits::modifier("defined"), Modifier::BOLD); // was: invariant
-        assert_eq!(traits::modifier("authored"), Modifier::empty()); // was: localized
-    }
+    // v0.17.3 (ADR-036): test_trait_borders and test_trait_modifiers removed
+    // Traits no longer part of schema - provenance is per-instance at runtime
 
     #[test]
     fn test_theme_instance() {
         let theme = Theme::with_mode(ColorMode::TrueColor);
         assert_eq!(theme.realm_color("shared"), Color::Rgb(42, 161, 152));
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("retrieved"), "┅"); // was: aggregated
+        // v0.17.3 (ADR-036): trait_border assertions removed - provenance is per-instance
     }
 
     #[test]
@@ -1202,70 +1187,9 @@ mod tests {
 
     /// Test trait border styles for all 5 traits (ADR-005, updated ADR-024).
     /// Maps CSS border styles to Unicode box-drawing characters:
-    /// v11.8: Renamed per ADR-024 Data Origin semantics
-    /// - defined: solid -> "─" (U+2500 BOX DRAWINGS LIGHT HORIZONTAL)
-    /// - authored: dashed -> "┄" (U+2504 BOX DRAWINGS LIGHT TRIPLE DASH HORIZONTAL)
-    /// - imported: double -> "┈" (U+2508 BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL)
-    /// - generated: dotted -> "═" (U+2550 BOX DRAWINGS DOUBLE HORIZONTAL)
-    /// - retrieved: thin dotted -> "┅" (U+2505 BOX DRAWINGS LIGHT QUADRUPLE DASH VERTICAL)
-    #[test]
-    fn test_trait_border_all_traits() {
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(
-            traits::border_char("defined"),
-            "─",
-            "defined: solid border (was: invariant)"
-        );
-        assert_eq!(
-            traits::border_char("authored"),
-            "┄",
-            "authored: dashed border (was: localized)"
-        );
-        assert_eq!(
-            traits::border_char("imported"),
-            "┈",
-            "imported: double border (was: knowledge)"
-        );
-        assert_eq!(
-            traits::border_char("generated"),
-            "═",
-            "generated: double border"
-        );
-        assert_eq!(
-            traits::border_char("retrieved"),
-            "┅",
-            "retrieved: dotted border (was: aggregated)"
-        );
-    }
-
-    /// Test trait border fallback for unknown traits.
-    #[test]
-    fn test_trait_border_fallback() {
-        // Unknown traits should fallback to defined border (solid)
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(
-            traits::border_char("unknown"),
-            "─",
-            "unknown trait should fallback to defined border"
-        );
-        assert_eq!(
-            traits::border_char(""),
-            "─",
-            "empty trait should fallback to defined border"
-        );
-    }
-
-    /// Test trait border via Theme instance.
-    #[test]
-    fn test_trait_border_via_theme() {
-        let theme = Theme::with_mode(ColorMode::TrueColor);
-        // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(theme.trait_border("defined"), "─"); // was: invariant
-        assert_eq!(theme.trait_border("authored"), "┄"); // was: localized
-        assert_eq!(theme.trait_border("imported"), "┈"); // was: knowledge
-        assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("retrieved"), "┅"); // was: aggregated
-    }
+    // v0.17.3 (ADR-036): trait border tests removed - traits no longer in schema
+    // test_trait_border_all_traits, test_trait_border_fallback, test_trait_border_via_theme removed
+    // Provenance will be per-instance at runtime (seed/nika/mcp)
 
     // =========================================================================
     // Task 2.4: Arc family color resolution tests

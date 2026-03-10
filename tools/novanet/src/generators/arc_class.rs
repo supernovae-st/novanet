@@ -319,6 +319,8 @@ fn generate_arc_schema(
         } else {
             writeln!(out, "  {var}.temperature_threshold = null,").unwrap();
         }
+        // v0.17.3 (ADR-036): Add provenance tracking
+        writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
         writeln!(out, "  {var}.display_name = '{dn}',").unwrap();
@@ -640,7 +642,8 @@ mod tests {
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Page'})"));
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_BLOCK'}), (c:Class {label: 'Block'})"));
 
-        // Timestamps
+        // Timestamps + provenance (v0.17.3 ADR-036)
+        assert!(cypher.contains("created_by = 'seed:schema'"));
         assert!(cypher.contains("created_at = datetime()"));
         assert!(cypher.contains("updated_at = datetime()"));
     }
@@ -732,8 +735,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 140,
-            "expected 140 ArcClass MERGE statements (v0.18.0: 140 arc classes)"
+            ac_merges, 145,
+            "expected 145 ArcClass MERGE statements (v0.18.0: all arc families)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -742,8 +745,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 140,
-            "expected 140 HAS_ARC_CLASS relationships (v0.18.0: 140 arc classes)"
+            has_ac, 145,
+            "expected 145 HAS_ARC_CLASS relationships (v0.18.0: all arc families)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -752,8 +755,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 140,
-            "expected 140 IN_FAMILY relationships (v0.18.0: 140 arc classes)"
+            in_family, 145,
+            "expected 145 IN_FAMILY relationships (v0.18.0: all arc families)"
         );
 
         // Family distribution (non-inverse counts)
@@ -774,10 +777,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.17.0: Total arcs = 131
+        // v0.17.3: Total arcs = 142
         // ownership=78 (incl schema family for meta-arcs)
         // localization=20
-        // semantic=19 (reduced: USES_ENTITY + others archived)
+        // semantic=21 (v0.17.3: +HAS_FEATURE, +FEATURE_OF)
         // generation=12 (PRODUCED, PRODUCED_BY, minus merged arcs)
         // mining=6 (SEO/GEO mining arcs)
         // Note: schema family (OF_CLASS, FROM_CLASS, TO_CLASS) also counted in ownership
@@ -814,8 +817,8 @@ mod tests {
             }
         }
 
-        // v0.18.0: Header reflects count (140 total ArcClass nodes)
-        assert!(cypher.contains("140 ArcClass nodes"));
+        // v0.18.0: Header reflects count (145 total ArcClass nodes)
+        assert!(cypher.contains("145 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

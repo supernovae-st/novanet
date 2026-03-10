@@ -61,7 +61,7 @@ import {
   type LayerKey,
   type TraitKey,
   type ArcFamilyKey,
-} from '@/design/colors/generated';
+} from '@/design/colors';
 import { MotionTechCorners } from '../../effects';
 import {
   AuroraBackground,

@@ -58,11 +58,11 @@ fn render_ownership_flow() -> String {
 
 fn render_localization_flow() -> String {
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  2. LOCALIZATION FLOW — Invariant → Locale-specific content (ADR-029)        │\n\
+     │  2. LOCALIZATION FLOW — Defined → Locale-specific content (ADR-029)           │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  ┌─────────────────────────────────────────────────────────────────────────┐ │\n\
-     │  │ INVARIANT (defined 1×)              *NATIVE (exists per locale)         │ │\n\
+     │  │ DEFINED (created 1×)                *NATIVE (exists per locale)          │ │\n\
      │  ├─────────────────────────────────────────────────────────────────────────┤ │\n\
      │  │                                                                         │ │\n\
      │  │  Entity ─────[HAS_NATIVE]──────►  EntityNative                          │ │\n\

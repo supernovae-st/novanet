@@ -617,7 +617,7 @@ mod tests {
             display_name: "Page".to_string(),
             description: "A page entity".to_string(),
             icon: "📄".to_string(),
-            trait_name: "defined".to_string(),
+            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 10,
             arcs: vec![],
             yaml_path: "models/node-classes/org/structure/page.yaml".to_string(),

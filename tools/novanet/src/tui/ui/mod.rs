@@ -197,27 +197,8 @@ pub(super) fn scroll_indicator(
 // HELPER FUNCTIONS (shared across UI modules)
 // =============================================================================
 
-/// Get icon for a node trait (from visual-encoding.yaml).
-/// v11.8: ADR-024 Data Origin semantics
-///
-/// - defined: ■ (solid square) - structurally fixed definitions
-/// - authored: □ (empty square) - human-authored locale content
-/// - imported: ◊ (diamond) - external authoritative data
-/// - generated: ★ (star) - LLM-generated output
-/// - retrieved: ▪ (small square) - computed/aggregated metrics
-///
-/// Uses icons.rs (generated from visual-encoding.yaml) as source of truth
-pub(super) fn trait_icon(trait_name: &str) -> &'static str {
-    // v11.8: ADR-024 Data Origin semantics
-    match trait_name {
-        "defined" => icons::TRAITS_DEFINED.terminal,
-        "authored" => icons::TRAITS_AUTHORED.terminal,
-        "imported" => icons::TRAITS_IMPORTED.terminal,
-        "generated" => icons::TRAITS_GENERATED.terminal,
-        "retrieved" => icons::TRAITS_RETRIEVED.terminal,
-        _ => "·", // fallback
-    }
-}
+// v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
+// Provenance will be tracked per-instance at runtime (seed/nika/mcp)
 
 // =============================================================================
 // CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)

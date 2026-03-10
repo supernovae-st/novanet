@@ -1,11 +1,12 @@
 //! Shared test utilities for generator tests.
 //!
 //! Provides factory functions for creating test fixtures:
-//! - `make_node` — Create a `ParsedNode` with trait
-//! - `make_node_simple` — Create a `ParsedNode` with Invariant trait
+//! - `make_node` — Create a `ParsedNode` with realm/layer
 //! - `make_node_with_props` — Create a `ParsedNode` with properties
 //! - `make_rel` — Create an `ArcDef` with string source/target
 //! - `make_rel_full` — Create an `ArcDef` with NodeRef and cardinality
+//!
+//! Note: NodeTrait removed in v0.17.3 (ADR-036). Provenance is now per-instance.
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -13,26 +14,27 @@ use std::path::PathBuf;
 use indexmap::IndexMap;
 
 use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality, NodeRef};
-use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
+use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
 
 // =============================================================================
 // NODE FIXTURES
 // =============================================================================
 
-/// Create a `ParsedNode` for testing with explicit trait.
+/// Create a `ParsedNode` for testing.
+///
+/// v0.17.3: NodeTrait removed (ADR-036). Provenance is now per-instance.
 ///
 /// # Example
 /// ```ignore
-/// let node = make_node("Page", "org", "structure", NodeTrait::Defined);
+/// let node = make_node("Page", "org", "structure");
 /// assert_eq!(node.def.name, "Page");
 /// ```
-pub fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
+pub fn make_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
     ParsedNode {
         def: NodeDef {
             name: name.to_string(),
             realm: realm.to_string(),
             layer: layer.to_string(),
-            node_trait: behavior,
             knowledge_tier: None,
             icon: None,
             description: format!("{name} description."),
@@ -50,14 +52,9 @@ pub fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> P
     }
 }
 
-/// Create a `ParsedNode` for testing with default Invariant trait.
-///
-/// Shorthand for `make_node(name, realm, layer, NodeTrait::Defined)`.
-pub fn make_node_simple(name: &str, realm: &str, layer: &str) -> ParsedNode {
-    make_node(name, realm, layer, NodeTrait::Defined)
-}
-
 /// Create a `ParsedNode` for testing with explicit properties.
+///
+/// v0.17.3: NodeTrait removed (ADR-036). Provenance is now per-instance.
 ///
 /// # Arguments
 /// * `props` — Vec of (name, type, required) tuples
@@ -65,7 +62,7 @@ pub fn make_node_simple(name: &str, realm: &str, layer: &str) -> ParsedNode {
 /// # Example
 /// ```ignore
 /// let node = make_node_with_props(
-///     "Page", "org", "structure", NodeTrait::Defined,
+///     "Page", "org", "structure",
 ///     vec![("key", "string", true), ("title", "string", false)]
 /// );
 /// ```
@@ -73,7 +70,6 @@ pub fn make_node_with_props(
     name: &str,
     realm: &str,
     layer: &str,
-    behavior: NodeTrait,
     props: Vec<(&str, &str, bool)>,
 ) -> ParsedNode {
     // Use IndexMap to preserve YAML definition order
@@ -90,7 +86,7 @@ pub fn make_node_with_props(
         );
     }
 
-    let mut node = make_node(name, realm, layer, behavior);
+    let mut node = make_node(name, realm, layer);
     node.def.properties = Some(properties);
     node
 }
@@ -166,26 +162,20 @@ mod tests {
 
     #[test]
     fn test_make_node_basic() {
-        let node = make_node("Page", "org", "structure", NodeTrait::Defined);
+        // v0.17.3: NodeTrait removed (ADR-036)
+        let node = make_node("Page", "org", "structure");
         assert_eq!(node.def.name, "Page");
         assert_eq!(node.realm, "org");
         assert_eq!(node.layer, "structure");
-        assert_eq!(node.def.node_trait, NodeTrait::Defined);
-    }
-
-    #[test]
-    fn test_make_node_simple_defaults_to_defined() {
-        let node = make_node_simple("Term", "shared", "knowledge");
-        assert_eq!(node.def.node_trait, NodeTrait::Defined);
     }
 
     #[test]
     fn test_make_node_with_props() {
+        // v0.17.3: NodeTrait removed (ADR-036)
         let node = make_node_with_props(
             "Entity",
             "org",
             "semantic",
-            NodeTrait::Defined,
             vec![("key", "string", true), ("name", "string", false)],
         );
         let props = node.def.properties.unwrap();

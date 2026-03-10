@@ -22,7 +22,8 @@ use serde_json::Value as JsonValue;
 
 use super::{
     STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY,
-    STYLE_SUCCESS, arc_family_badge_icon, trait_icon, wrap_text,
+    STYLE_SUCCESS, arc_family_badge_icon, wrap_text,
+    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 
 // =============================================================================
@@ -55,6 +56,10 @@ const COLOR_HEADER_STANDARD: Color = Color::Rgb(42, 161, 152);
 /// Specific properties are unique/interesting - vibrant orange conveys "differentiation".
 const COLOR_HEADER_SPECIFIC: Color = Color::Rgb(249, 115, 22);
 
+/// PROVENANCE section header - violet (ADR-042 provenance tracking).
+/// Provenance shows data origin and lifecycle - violet conveys "authority/trust".
+const COLOR_HEADER_PROVENANCE: Color = Color::Rgb(139, 92, 246); // Violet-500
+
 /// Focused property background - subtle highlight for j/k navigation.
 /// Dark blue background that works well with all text colors.
 const COLOR_PROPERTY_FOCUSED_BG: Color = Color::Rgb(30, 50, 80);
@@ -76,11 +81,11 @@ const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 const COLOR_TYPE_OBJECT: Color = Color::Rgb(181, 137, 0);
 
 // =============================================================================
-// v0.13.1 STANDARD PROPERTIES (schema-standard.md)
+// v0.18.0 STANDARD PROPERTIES (schema-standard.md, ADR-035)
 // =============================================================================
 
 /// Standard properties that ALL nodes have (from standard_properties in YAML).
-/// Order: key → *_key (denormalized) → display_name → description → created_at → updated_at
+/// Order: key → *_key → display_name → description → llm_context → created_by → created_by_meta → created_at → updated_at
 const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "key",
     "entity_key",
@@ -89,6 +94,9 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];
@@ -96,6 +104,211 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
 /// Check if a property name is a standard property.
 fn is_standard_property(name: &str) -> bool {
     STANDARD_PROPERTY_NAMES.contains(&name)
+}
+
+// =============================================================================
+// v0.18.0: PROVENANCE HELPERS (ADR-042)
+// =============================================================================
+
+/// Data category derived from created_by source.
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum DataCategory {
+    Schema,     // seed:schema - regenerable from YAML
+    Immutable,  // seed:immutable - static reference data
+    Content,    // content:bootstrap - example entities
+    UserData,   // user:*, nika:*, mcp:* - user-created data
+}
+
+impl DataCategory {
+    /// Parse category from created_by value.
+    fn from_created_by(created_by: &str) -> Self {
+        if created_by.starts_with("seed:schema") {
+            DataCategory::Schema
+        } else if created_by.starts_with("seed:immutable") {
+            DataCategory::Immutable
+        } else if created_by.starts_with("content:") {
+            DataCategory::Content
+        } else {
+            DataCategory::UserData
+        }
+    }
+
+    /// Human-readable category name.
+    fn label(&self) -> &'static str {
+        match self {
+            DataCategory::Schema => "Schema (regenerable from YAML)",
+            DataCategory::Immutable => "Immutable (static reference)",
+            DataCategory::Content => "Content (bootstrap examples)",
+            DataCategory::UserData => "User Data (created at runtime)",
+        }
+    }
+
+    /// Color for the category badge.
+    fn color(&self) -> Color {
+        match self {
+            DataCategory::Schema => Color::Rgb(100, 116, 139),    // Slate-500
+            DataCategory::Immutable => Color::Rgb(34, 197, 94),   // Green-500
+            DataCategory::Content => Color::Rgb(59, 130, 246),    // Blue-500
+            DataCategory::UserData => Color::Rgb(249, 115, 22),   // Orange-500
+        }
+    }
+
+    /// Whether this data survives reseed.
+    fn reseed_safe(&self) -> bool {
+        matches!(self, DataCategory::Schema | DataCategory::Immutable | DataCategory::Content)
+    }
+
+    /// Whether this data needs backup.
+    fn needs_backup(&self) -> bool {
+        matches!(self, DataCategory::UserData)
+    }
+
+    /// Whether this data is editable.
+    fn is_editable(&self) -> bool {
+        matches!(self, DataCategory::UserData)
+    }
+}
+
+/// Parse created_by_meta JSON for generation details.
+#[allow(dead_code)] // verb reserved for future display
+struct GenerationMeta {
+    workflow_id: Option<String>,
+    task_id: Option<String>,
+    verb: Option<String>,
+    provider: Option<String>,
+    model: Option<String>,
+    trace_file: Option<String>,
+    timestamp: Option<String>,
+}
+
+impl GenerationMeta {
+    /// Parse from a JSON value.
+    fn from_json(value: &JsonValue) -> Self {
+        let obj = value.as_object();
+        Self {
+            workflow_id: obj.and_then(|o| o.get("workflow_id")).and_then(|v| v.as_str()).map(String::from),
+            task_id: obj.and_then(|o| o.get("task_id")).and_then(|v| v.as_str()).map(String::from),
+            verb: obj.and_then(|o| o.get("verb")).and_then(|v| v.as_str()).map(String::from),
+            provider: obj.and_then(|o| o.get("provider")).and_then(|v| v.as_str()).map(String::from),
+            model: obj.and_then(|o| o.get("model")).and_then(|v| v.as_str()).map(String::from),
+            trace_file: obj.and_then(|o| o.get("trace_file")).and_then(|v| v.as_str()).map(String::from),
+            timestamp: obj.and_then(|o| o.get("timestamp")).and_then(|v| v.as_str()).map(String::from),
+        }
+    }
+
+    /// Check if this contains Nika generation details.
+    fn is_nika_generated(&self) -> bool {
+        self.workflow_id.is_some() || self.task_id.is_some()
+    }
+}
+
+/// Build provenance section content from created_by and created_by_meta.
+fn build_provenance_section(
+    created_by: Option<&str>,
+    created_by_meta: Option<&JsonValue>,
+) -> SectionContent<'static> {
+    let mut section = SectionContent::default();
+
+    // If no created_by, show unknown provenance
+    let source = match created_by {
+        Some(s) if !s.is_empty() => s,
+        _ => {
+            section.add_line(Line::from(vec![
+                Span::styled("  Source       ", STYLE_DIM),
+                Span::styled("unknown", Style::default().fg(Color::DarkGray)),
+            ]));
+            return section;
+        }
+    };
+
+    let category = DataCategory::from_created_by(source);
+
+    // Source line
+    section.add_line(Line::from(vec![
+        Span::styled("  Source       ", STYLE_DIM),
+        Span::styled(source.to_string(), Style::default().fg(COLOR_HEADER_PROVENANCE)),
+    ]));
+
+    // Category line
+    section.add_line(Line::from(vec![
+        Span::styled("  Category     ", STYLE_DIM),
+        Span::styled(category.label(), Style::default().fg(category.color())),
+    ]));
+
+    // Lifecycle badges line
+    let reseed_badge = if category.reseed_safe() {
+        Span::styled("✓Reseed", Style::default().fg(Color::Rgb(34, 197, 94))) // Green
+    } else {
+        Span::styled("⚠Reseed", Style::default().fg(Color::Rgb(239, 68, 68))) // Red
+    };
+
+    let backup_badge = if category.needs_backup() {
+        Span::styled("●Backup", Style::default().fg(Color::Rgb(249, 115, 22))) // Orange
+    } else {
+        Span::styled("○Backup", Style::default().fg(Color::DarkGray))
+    };
+
+    let edit_badge = if category.is_editable() {
+        Span::styled("✎Edit", Style::default().fg(Color::Rgb(59, 130, 246))) // Blue
+    } else {
+        Span::styled("🔒Edit", Style::default().fg(Color::DarkGray))
+    };
+
+    section.add_line(Line::from(vec![
+        Span::styled("  Lifecycle    ", STYLE_DIM),
+        reseed_badge,
+        Span::styled("  ", Style::default()),
+        backup_badge,
+        Span::styled("  ", Style::default()),
+        edit_badge,
+    ]));
+
+    // If Nika-generated, show generation details
+    if let Some(meta_value) = created_by_meta {
+        let meta = GenerationMeta::from_json(meta_value);
+        if meta.is_nika_generated() {
+            section.add_line(Line::from(Span::styled(
+                "  ─── Generation Details ───",
+                Style::default().fg(COLOR_HEADER_PROVENANCE).add_modifier(Modifier::DIM),
+            )));
+
+            if let Some(ref wf) = meta.workflow_id {
+                let task_str = meta.task_id.as_deref().unwrap_or("");
+                section.add_line(Line::from(vec![
+                    Span::styled("  Workflow     ", STYLE_DIM),
+                    Span::styled(wf.clone(), Style::default().fg(Color::Cyan)),
+                    if !task_str.is_empty() {
+                        Span::styled(format!(" ({})", task_str), Style::default().fg(Color::DarkGray))
+                    } else {
+                        Span::styled("", Style::default())
+                    },
+                ]));
+            }
+
+            if let (Some(provider), Some(model)) = (&meta.provider, &meta.model) {
+                section.add_line(Line::from(vec![
+                    Span::styled("  Provider     ", STYLE_DIM),
+                    Span::styled(format!("{}/{}", provider, model), Style::default().fg(Color::Yellow)),
+                ]));
+            }
+
+            if let Some(ref ts) = meta.timestamp {
+                section.add_line(Line::from(vec![
+                    Span::styled("  Generated    ", STYLE_DIM),
+                    Span::styled(ts.clone(), Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+
+            if let Some(ref trace) = meta.trace_file {
+                section.add_line(Line::from(vec![
+                    Span::styled("  Trace        ", STYLE_DIM),
+                    Span::styled(trace.clone(), Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+        }
+    }
+
+    section
 }
 
 // =============================================================================
@@ -204,9 +417,10 @@ impl<'a> SectionContent<'a> {
     }
 }
 
-/// Unified info content with 6 fixed sections.
+/// Unified info content with 7 fixed sections.
 /// All sections are always present; empty sections show "—".
 /// v0.16.4: Made public for render optimization
+/// v0.18.0: Added PROVENANCE section (ADR-042)
 #[derive(Default)]
 pub struct UnifiedContent<'a> {
     /// IDENTITY: type, category, key, class
@@ -217,6 +431,8 @@ pub struct UnifiedContent<'a> {
     pub metrics: SectionContent<'a>,
     /// COVERAGE: property fill rates, health bars
     pub coverage: SectionContent<'a>,
+    /// PROVENANCE: data origin, category, lifecycle (ADR-042)
+    pub provenance: SectionContent<'a>,
     /// PROPERTIES: property list with values/schema
     pub properties: SectionContent<'a>,
     /// RELATIONSHIPS: arcs, pipeline context
@@ -244,10 +460,56 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
-        // v0.17.3: EntityGroup shows entity info (grouped EntityNatives by parent Entity)
-        Some(TreeItem::EntityGroup(_, _, _, group)) => build_entity_group_content(app, group),
+        // v0.17.3: EntityGroup shows parent Entity as INSTANCE panel
+        // Look up Entity instance and class to render with full INSTANCE layout
+        Some(TreeItem::EntityGroup(_, _, _, group)) => {
+            if let Some((entity_realm, entity_layer, entity_class)) = app.tree.find_class("Entity")
+            {
+                if let Some(instances) = app.tree.instances.get("Entity") {
+                    if let Some(entity_instance) =
+                        instances.iter().find(|i| i.key == group.entity_key)
+                    {
+                        return build_instance_content(
+                            app,
+                            entity_realm,
+                            entity_layer,
+                            entity_class,
+                            entity_instance,
+                        );
+                    }
+                }
+            }
+            // Fallback to custom content if lookup fails
+            build_entity_group_content(app, group)
+        }
+        // v0.17.3: EntityNativeItem shows as INSTANCE panel with full layout
+        // Create InstanceInfo from EntityNativeInfo for consistent rendering
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
-            build_entity_native_item_content(realm, layer, class, native)
+            // Compute property stats for consistent INSTANCE panel display
+            let filled = native.properties.len();
+            let total = class.properties.len();
+            let missing_required = class
+                .required_properties
+                .iter()
+                .filter(|k| !native.properties.contains_key(*k))
+                .count();
+
+            // Create an InstanceInfo from EntityNativeInfo for consistent INSTANCE panel
+            let instance = InstanceInfo {
+                key: native.key.clone(),
+                display_name: native.display_name.clone(),
+                class_key: class.key.clone(),
+                properties: native.properties.clone(),
+                outgoing_arcs: vec![], // TODO: Load arcs from Neo4j
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: missing_required,
+                filled_properties: filled,
+                total_properties: total,
+                entity_slug: None, // EntityNative doesn't have entity_slug
+                relationship_power: 0,
+            };
+            build_instance_content(app, realm, layer, class, &instance)
         }
         None => build_empty_content(),
     }
@@ -549,39 +811,15 @@ fn build_layer_content(
         Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
     );
 
-    // COVERAGE - trait breakdown
+    // COVERAGE - v0.17.3 (ADR-036): trait breakdown removed, showing class count only
     if !layer.classes.is_empty() {
-        let mut trait_counts: std::collections::BTreeMap<String, usize> =
-            std::collections::BTreeMap::new();
-        for class_info in &layer.classes {
-            *trait_counts
-                .entry(class_info.trait_name.clone())
-                .or_insert(0) += 1;
-        }
-
-        let total = layer.classes.len();
-        let bar_width = 12usize;
-        for (trait_name, count) in &trait_counts {
-            let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
-            let filled = (*count * bar_width) / total.max(1);
-            let bar = "█".repeat(filled.max(1));
-            let empty = "░".repeat(bar_width.saturating_sub(filled));
-            let icon = trait_icon(trait_name);
-
-            content.coverage.add_line(Line::from(vec![
-                Span::styled(
-                    format!("{} ", icon),
-                    Style::default().fg(theme.trait_color(trait_name)),
-                ),
-                Span::styled(
-                    format!("{:10} ", trait_name),
-                    Style::default().fg(theme.trait_color(trait_name)),
-                ),
-                Span::styled(bar, Style::default().fg(theme.trait_color(trait_name))),
-                Span::styled(empty, STYLE_DIM),
-                Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-            ]));
-        }
+        content.coverage.add_line(Line::from(vec![
+            Span::styled("◆ ", STYLE_PRIMARY),
+            Span::styled(
+                format!("{} classes", layer.classes.len()),
+                STYLE_PRIMARY,
+            ),
+        ]));
     } else {
         content.coverage.add_empty();
     }
@@ -648,8 +886,8 @@ fn build_layer_content(
     ]));
 
     // Outgoing: HAS_CLASS to each class
+    // v0.17.3 (ADR-036): using layer color instead of trait color
     for class_info in layer.classes.iter().take(4) {
-        let trait_color = theme.trait_color(&class_info.trait_name);
         content.relationships.add_line(Line::from(vec![
             Span::styled(
                 "  → ",
@@ -661,7 +899,7 @@ fn build_layer_content(
             Span::styled(" → ", STYLE_DIM),
             Span::styled(
                 class_info.display_name.clone(),
-                Style::default().fg(trait_color),
+                Style::default().fg(layer_color),
             ),
             Span::styled(" [own]", STYLE_DIM),
         ]));
@@ -688,9 +926,9 @@ fn build_class_content(
     let mode = ColorMode::TrueColor; // v0.13: Use TrueColor for semantic colors
 
     // v0.13: Get semantic colors from colors.generated.rs
+    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
-    let trait_color = colors::traits::color(&class.trait_name, mode);
 
     // IDENTITY - clean explicit key:value format (no inline badges)
     content
@@ -709,7 +947,8 @@ fn build_class_content(
         ),
     );
 
-    // LOCATION (Classification) - explicit key:value format for all 3 axes
+    // LOCATION (Classification) - realm and layer only
+    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);
@@ -719,14 +958,6 @@ fn build_class_content(
         &layer.key,
         layer_color,
     );
-    if !class.trait_name.is_empty() {
-        content.location.add_classification(
-            "trait",
-            trait_icon(&class.trait_name),
-            &class.trait_name,
-            trait_color,
-        );
-    }
 
     // METRICS
     content.metrics.add_kv(
@@ -1268,9 +1499,9 @@ fn build_instance_content(
     let mode = ColorMode::TrueColor; // v0.13: semantic colors
 
     // v0.13: Get semantic colors from colors.generated.rs
+    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
-    let trait_color = colors::traits::color(&class.trait_name, mode);
 
     // IDENTITY - clean explicit key:value format (no inline badges)
     content
@@ -1290,7 +1521,8 @@ fn build_instance_content(
         Span::styled(class.display_name.clone(), Style::default().fg(layer_color)),
     );
 
-    // LOCATION (Classification) - explicit key:value format for all 3 axes
+    // LOCATION (Classification) - realm and layer only
+    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);
@@ -1300,14 +1532,6 @@ fn build_instance_content(
         &layer.key,
         layer_color,
     );
-    if !class.trait_name.is_empty() {
-        content.location.add_classification(
-            "trait",
-            trait_icon(&class.trait_name),
-            &class.trait_name,
-            trait_color,
-        );
-    }
 
     // METRICS - unified with Class view (same labels, same positions)
     content.metrics.add_kv(
@@ -1406,6 +1630,15 @@ fn build_instance_content(
     } else {
         content.coverage.add_empty();
     }
+
+    // PROVENANCE - v0.18.0: ADR-042 data origin and lifecycle tracking
+    // Extract created_by and created_by_meta from instance properties
+    let created_by = instance
+        .properties
+        .get("created_by")
+        .and_then(|v| v.as_str());
+    let created_by_meta = instance.properties.get("created_by_meta");
+    content.provenance = build_provenance_section(created_by, created_by_meta);
 
     // PROPERTIES - v0.13.1: Display ALL properties with STANDARD/SPECIFIC sections
     // Format: `✓* property_name: value` with section headers
@@ -1944,86 +2177,6 @@ fn build_entity_group_content(
     content.relationships.add_line(Line::from(vec![
         Span::styled("HAS_NATIVE → ", STYLE_DIM),
         Span::styled(format!("{} EntityNatives", group.native_count), STYLE_PRIMARY),
-    ]));
-
-    content
-}
-
-/// Build content for EntityNativeItem (locale-specific content).
-fn build_entity_native_item_content(
-    realm: &crate::tui::data::RealmInfo,
-    layer: &crate::tui::data::LayerInfo,
-    class: &crate::tui::data::ClassInfo,
-    native: &crate::tui::data::EntityNativeInfo,
-) -> UnifiedContent<'static> {
-    let mut content = UnifiedContent::default();
-
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("EntityNative", STYLE_ACCENT));
-    content
-        .identity
-        .add_kv("key", Span::styled(native.key.clone(), STYLE_PRIMARY));
-    content.identity.add_kv(
-        "name",
-        Span::styled(native.display_name.clone(), STYLE_PRIMARY),
-    );
-
-    // LOCATION
-    content.location.add_kv(
-        "realm",
-        Span::styled(realm.display_name.clone(), STYLE_ACCENT),
-    );
-    content.location.add_kv(
-        "layer",
-        Span::styled(layer.display_name.clone(), STYLE_ACCENT),
-    );
-    content.location.add_kv(
-        "class",
-        Span::styled(class.display_name.clone(), STYLE_ACCENT),
-    );
-
-    // METRICS - not applicable
-    content.metrics.add_empty();
-
-    // COVERAGE - not applicable
-    content.coverage.add_empty();
-
-    // PROPERTIES - show context fields first, then all properties from native.properties
-    content.properties.add_line(Line::from(vec![
-        Span::styled("entity: ", STYLE_DIM),
-        Span::styled(native.entity_key.clone(), STYLE_MUTED),
-    ]));
-    content.properties.add_line(Line::from(vec![
-        Span::styled("entity_name: ", STYLE_DIM),
-        Span::styled(native.entity_display_name.clone(), STYLE_MUTED),
-    ]));
-    if let Some(slug) = &native.slug {
-        content.properties.add_line(Line::from(vec![
-            Span::styled("slug: ", STYLE_DIM),
-            Span::styled(slug.clone(), STYLE_MUTED),
-        ]));
-    }
-
-    // v0.17.3: Loop through all properties from EntityNativeInfo.properties
-    // Skip keys already displayed above (entity_key, entity_display_name, slug)
-    let skip_keys = ["key", "display_name", "entity_key", "entity_display_name", "slug"];
-    for (key, value) in &native.properties {
-        if !skip_keys.contains(&key.as_str()) {
-            let value_str = format_json_value(value);
-            content.properties.add_line(Line::from(vec![
-                Span::styled(format!("{}: ", key), STYLE_DIM),
-                Span::styled(value_str, STYLE_MUTED),
-            ]));
-        }
-    }
-
-    // RELATIONSHIPS - parent entity
-    content.relationships.add_line(Line::from(vec![
-        Span::styled("→ ", STYLE_DIM),
-        Span::styled("Entity: ", STYLE_ACCENT),
-        Span::styled(native.entity_display_name.clone(), STYLE_PRIMARY),
     ]));
 
     content
@@ -2885,6 +3038,36 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
     }
 
     // ═══════════════════════════════════════════════════════════
+    // ROW 11+: PROVENANCE section (ADR-042)
+    // ═══════════════════════════════════════════════════════════
+    if !content.provenance.is_empty() {
+        // Separator before provenance
+        lines.push(build_separator_row(available_width, main_border_color));
+
+        // Provenance header
+        lines.push(build_content_row(
+            vec![Span::styled(
+                "─── PROVENANCE ───",
+                Style::default()
+                    .fg(COLOR_HEADER_PROVENANCE)
+                    .add_modifier(Modifier::BOLD),
+            )],
+            available_width,
+            main_border_color,
+        ));
+
+        // Provenance content lines
+        for line in &content.provenance.lines {
+            let mut owned_spans: Vec<Span<'static>> = Vec::new();
+            for span in &line.spans {
+                let owned_content: String = span.content.to_string();
+                owned_spans.push(Span::styled(owned_content, span.style));
+            }
+            lines.push(build_content_row(owned_spans, available_width, main_border_color));
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
     // BOTTOM ROW: ╚═══════════════════════════════════════════╝
     // ═══════════════════════════════════════════════════════════
     lines.push(build_bottom_row(available_width, accent_color));
@@ -2930,6 +3113,7 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &App, content: 
             .chain(content.location.lines.iter().cloned())
             .chain(content.metrics.lines.iter().cloned())
             .chain(content.coverage.lines.iter().cloned())
+            .chain(content.provenance.lines.iter().cloned())
             .collect();
 
         let paragraph = Paragraph::new(all_lines);

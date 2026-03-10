@@ -223,7 +223,7 @@ export {
   type LocaleIdentity,
   type LocaleVoice,
   type LocaleCulture,
-  type LocaleMarket,
+  // v0.18.0: LocaleMarket removed (market data from external APIs, not static graph)
   type LocaleLexicon,
   type Expression,
   type LocaleRulesAdaptation,

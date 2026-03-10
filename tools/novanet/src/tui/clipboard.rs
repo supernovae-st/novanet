@@ -74,12 +74,12 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
     let item = app.current_item()?;
     let json = match item {
         TreeItem::Class(realm, layer, class) => {
+            // v0.17.3 (ADR-036): trait removed from clipboard output
             serde_json::json!({
                 "type": "Class",
                 "key": class.key,
                 "realm": realm.key,
                 "layer": layer.key,
-                "trait": class.trait_name,
                 "display_name": class.display_name
             })
         }
@@ -200,7 +200,7 @@ fn get_source_content(app: &App) -> Option<(String, &'static str)> {
 // v0.13.1: get_diagram_content and get_architecture_content removed (panel simplification)
 
 /// Standard properties that ALL nodes have (from standard_properties in YAML).
-/// NOTE: Must match STANDARD_PROPERTY_NAMES in ui/info.rs for consistent ordering.
+/// NOTE: Must match STANDARD_PROPERTY_NAMES in ui/info.rs for consistent ordering (ADR-035).
 const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "key",
     "entity_key",
@@ -209,6 +209,9 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];

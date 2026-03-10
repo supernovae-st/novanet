@@ -193,12 +193,12 @@ fn check_yaml_validity(root: &Path, verbose: bool) -> HealthCheck {
     match crate::parsers::taxonomy::load_taxonomy_from_files(root) {
         Ok(taxonomy) => {
             let total_layers: usize = taxonomy.node_realms.iter().map(|r| r.layers.len()).sum();
+            // v0.17.3 (ADR-036): traits removed, provenance is per-instance
             let msg = if verbose {
                 format!(
-                    "Taxonomy valid ({} realms, {} layers, {} traits)",
+                    "Taxonomy valid ({} realms, {} layers)",
                     taxonomy.node_realms.len(),
-                    total_layers,
-                    taxonomy.node_traits.len()
+                    total_layers
                 )
             } else {
                 "All YAML files valid".into()

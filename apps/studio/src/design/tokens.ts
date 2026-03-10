@@ -941,7 +941,7 @@ export {
   LAYER_COLORS,
   LAYER_DISPLAY_NAMES,
   getLayerColor,
-  // Trait colors
+  // Trait colors (v0.17.3 ADR-036: defined locally in palette.ts)
   TRAIT_COLORS,
   TRAIT_DISPLAY_NAMES,
   getTraitColor,

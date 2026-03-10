@@ -259,6 +259,9 @@ fn needs_slug_source_singleton(props: &serde_json::Map<String, Value>) -> bool {
 // Operation Implementations
 // ═══════════════════════════════════════════════════════════════════════════════
 
+/// Default provenance value for MCP writes (ADR-042)
+const MCP_PROVENANCE: &str = "mcp:novanet_write";
+
 /// Execute upsert_node operation
 async fn execute_upsert_node(
     state: &State,
@@ -268,7 +271,15 @@ async fn execute_upsert_node(
     let start = std::time::Instant::now();
     let key = params.key.as_ref().expect("key validated");
     let class = params.class.as_ref().expect("class validated");
-    let props = params.properties.clone().unwrap_or_default();
+    let mut props = params.properties.clone().unwrap_or_default();
+
+    // ADR-042: Auto-inject created_by provenance if not provided
+    if !props.contains_key("created_by") {
+        props.insert(
+            "created_by".to_string(),
+            serde_json::Value::String(MCP_PROVENANCE.to_string()),
+        );
+    }
 
     // SECURITY: Validate class name before use in Cypher query
     if !crate::validation::is_valid_class_name(class) {
@@ -561,7 +572,13 @@ async fn execute_update_props(
     let start = std::time::Instant::now();
     let key = params.key.as_ref().expect("key validated");
     let class = params.class.as_ref().expect("class validated");
-    let props = params.properties.as_ref().expect("properties validated");
+    let mut props = params.properties.clone().expect("properties validated");
+
+    // ADR-042: Auto-inject updated_by provenance
+    props.insert(
+        "updated_by".to_string(),
+        serde_json::Value::String(MCP_PROVENANCE.to_string()),
+    );
 
     // Verify node exists
     let check_query = format!(
@@ -581,7 +598,7 @@ async fn execute_update_props(
     }
 
     // Check for slug_locked before update
-    validate_slug_not_locked(state, key, props).await?;
+    validate_slug_not_locked(state, key, &props).await?;
 
     // Build SET query
     let props_json = serde_json::to_string(&props)
@@ -933,5 +950,36 @@ mod tests {
             .collect();
         assert_eq!(missing.len(), 1);
         assert_eq!(missing[0], "slug_form");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // ADR-042 Provenance Tests
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_mcp_provenance_constant() {
+        assert_eq!(super::MCP_PROVENANCE, "mcp:novanet_write");
+    }
+
+    #[test]
+    fn test_provenance_format_examples() {
+        // Verify the expected provenance format per ADR-042
+        let valid_formats = [
+            "seed:schema",
+            "seed:immutable",
+            "content:bootstrap",
+            "user:manual",
+            "user:studio",
+            "nika:workflow:abc123",
+            "mcp:novanet_write",
+        ];
+
+        for format in valid_formats {
+            // All valid formats contain a colon separator
+            assert!(format.contains(':'), "Format '{}' should contain ':'", format);
+            // All valid formats have a non-empty source type
+            let parts: Vec<&str> = format.split(':').collect();
+            assert!(!parts[0].is_empty(), "Source type should not be empty");
+        }
     }
 }

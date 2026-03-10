@@ -9,7 +9,6 @@ export {
   type ColorTokens,
   type RealmKey,
   type LayerKey,
-  type TraitKey,
   type ArcFamilyKey,
   // Realm colors
   REALM_COLORS,
@@ -19,10 +18,6 @@ export {
   LAYER_COLORS,
   LAYER_DISPLAY_NAMES,
   getLayerColor,
-  // Trait colors
-  TRAIT_COLORS,
-  TRAIT_DISPLAY_NAMES,
-  getTraitColor,
   // Arc family colors
   ARC_FAMILY_COLORS,
   ARC_FAMILY_DISPLAY_NAMES,
@@ -30,3 +25,11 @@ export {
   // Utility
   getFacetHex,
 } from './generated';
+
+// v0.17.3 (ADR-036): Trait colors defined locally in palette.ts, not auto-generated
+export {
+  type TraitKey,
+  TRAIT_COLORS,
+  TRAIT_DISPLAY_NAMES,
+  getTraitColor,
+} from './palette';
