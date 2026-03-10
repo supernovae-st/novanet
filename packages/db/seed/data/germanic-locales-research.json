@@ -1,0 +1,2550 @@
+{
+  "metadata": {
+    "research_date": "2026-03-10",
+    "language_family": "germanic",
+    "sources": [
+      "Hofstede Insights Cultural Dimensions",
+      "Erin Meyer - The Culture Map",
+      "Richard Lewis - When Cultures Collide",
+      "Edward Hall - High/Low Context Theory",
+      "Local marketing best practices research"
+    ],
+    "locales_covered": 18
+  },
+  "locales": [
+    {
+      "locale": "en-US",
+      "language": "English",
+      "country": "United States",
+      "culture_refs": [
+        {
+          "key": "individualism_achievement",
+          "value": "Individual Achievement",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Self-made success stories, pulling yourself up by your bootstraps",
+          "marketing_angle": "Emphasize personal empowerment and individual control over outcomes",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "optimism_positivity",
+          "value": "Positive Thinking Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Can-do attitude, growth mindset, possibilities over limitations",
+          "marketing_angle": "Lead with benefits and opportunities, minimize problem-dwelling",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "convenience_culture",
+          "value": "Convenience Priority",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Time is money, instant gratification, on-demand everything",
+          "marketing_angle": "Highlight speed, ease of use, time savings prominently",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "super_bowl",
+          "value": "Super Bowl",
+          "type": "event",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Annual cultural phenomenon, advertising showcase",
+          "marketing_angle": "Major marketing moment, sports metaphors resonate",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 2, "day_range": "first_sunday"}
+        },
+        {
+          "key": "black_friday",
+          "value": "Black Friday",
+          "type": "event",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Post-Thanksgiving shopping frenzy, deal culture",
+          "marketing_angle": "Urgency and scarcity messaging highly effective",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 11, "day_range": "fourth_friday"}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "political_divisiveness",
+          "topic": "Partisan Politics",
+          "type": "topic",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Highly polarized political environment; brands face backlash from either side",
+          "alternatives": ["Focus on universal values", "Avoid political stance unless brand-authentic"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "healthcare_claims",
+          "topic": "Unsubstantiated Health Claims",
+          "type": "topic",
+          "severity": "critical",
+          "category": "legal",
+          "reason": "FTC and FDA strictly regulate health-related marketing claims",
+          "alternatives": ["Use FDA-compliant language", "Include proper disclaimers"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "explicit_failure_messaging",
+          "topic": "Negative Framing",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "US audiences prefer positive aspiration over fear-based messaging",
+          "alternatives": ["Lead with benefits", "Focus on gains not losses"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_direct",
+        "hierarchy": "low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "decision_style": "fast",
+        "relationship_building": "task_first",
+        "feedback_style": "explicit",
+        "communication_preferences": {
+          "tone": "enthusiastic",
+          "detail_level": "moderate",
+          "proof_types": ["testimonials", "statistics", "money_back_guarantees"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_get_started",
+          "type": "cta",
+          "template": "Get Started Now",
+          "context": "landing",
+          "element": "cta",
+          "tone": "urgent",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_try_free",
+          "type": "cta",
+          "template": "Try {product} Free",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "variables": {"product": "Product name"}
+        },
+        {
+          "key": "headline_unlock",
+          "type": "headline",
+          "template": "Unlock {benefit} in Minutes",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "en-GB",
+      "language": "English",
+      "country": "United Kingdom",
+      "culture_refs": [
+        {
+          "key": "understatement",
+          "value": "British Understatement",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Not bad (meaning excellent), quite good (meaning very good)",
+          "marketing_angle": "Avoid hyperbole; let quality speak for itself",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "self_deprecation",
+          "value": "Self-Deprecating Humour",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Brands that don't take themselves too seriously",
+          "marketing_angle": "Wit and gentle self-mockery build authenticity",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "queueing_fairness",
+          "value": "Queue Culture",
+          "type": "tradition",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "Fairness, taking turns, orderly process",
+          "marketing_angle": "Emphasize fair dealing and transparent processes",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "class_consciousness",
+          "value": "Class Awareness",
+          "type": "tradition",
+          "importance": "medium",
+          "recognition_level": "widespread",
+          "expression": "Subtle social stratification, accent and education markers",
+          "marketing_angle": "Be aware of class-coded language; aim for accessible sophistication",
+          "safe_for": ["marketing", "advertising"]
+        },
+        {
+          "key": "bank_holidays",
+          "value": "Bank Holidays",
+          "type": "holiday",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "May Day, Spring Bank Holiday, August Bank Holiday",
+          "marketing_angle": "Natural promotional moments for travel and leisure",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "taboos": [
+        {
+          "key": "bragging_boastfulness",
+          "topic": "Overt Self-Promotion",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Seen as gauche and American; modesty is valued",
+          "alternatives": ["Let results speak", "Third-party endorsements", "Understated confidence"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "hyperbole_superlatives",
+          "topic": "Exaggerated Claims",
+          "type": "concept",
+          "severity": "medium",
+          "category": "legal",
+          "reason": "ASA strictly enforces truthful advertising; skeptical audience",
+          "alternatives": ["Factual claims", "Comparative data", "Subtle persuasion"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "monarchy_criticism",
+          "topic": "Direct Royal Criticism",
+          "type": "topic",
+          "severity": "medium",
+          "category": "politics",
+          "reason": "Complex relationship with monarchy; best avoided in commercial contexts",
+          "alternatives": ["Neutral or positive royal references if any"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "medium",
+        "formality": "formal_casual_mix",
+        "context_type": "medium_context",
+        "decision_style": "considered",
+        "relationship_building": "rapport_then_task",
+        "feedback_style": "softened",
+        "communication_preferences": {
+          "tone": "witty",
+          "detail_level": "moderate",
+          "proof_types": ["third_party_reviews", "awards", "case_studies"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_discover",
+          "type": "cta",
+          "template": "Discover More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_find_out",
+          "type": "cta",
+          "template": "Find Out How",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_simply",
+          "type": "headline",
+          "template": "Simply {benefit}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "en-AU",
+      "language": "English",
+      "country": "Australia",
+      "culture_refs": [
+        {
+          "key": "tall_poppy_syndrome",
+          "value": "Tall Poppy Syndrome",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Cutting down those who stand out or show off",
+          "marketing_angle": "Avoid appearing superior; emphasize equality and mateship",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "mateship",
+          "value": "Mateship Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Looking out for your mates, loyalty, helping each other",
+          "marketing_angle": "Peer recommendations and community aspects resonate strongly",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "larrikinism",
+          "value": "Larrikin Spirit",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Playful irreverence, not taking authority too seriously",
+          "marketing_angle": "Humor and irreverence work well; avoid stuffiness",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "outdoor_lifestyle",
+          "value": "Outdoor Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Beach, BBQ, active lifestyle, connection to nature",
+          "marketing_angle": "Lifestyle imagery resonates; health and outdoor activities",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "australia_day",
+          "value": "Australia Day",
+          "type": "holiday",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "National holiday, increasingly contested",
+          "marketing_angle": "Handle sensitively due to Indigenous perspectives",
+          "safe_for": ["marketing"],
+          "caution_for": ["social_media"],
+          "timing": {"month": 1, "day": 26}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "elitism_snobbery",
+          "topic": "Elitist Messaging",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Egalitarian culture rejects perceived snobbery or exclusivity",
+          "alternatives": ["Inclusive language", "Down-to-earth messaging", "Accessible premium"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "indigenous_insensitivity",
+          "topic": "Indigenous Cultural Insensitivity",
+          "type": "topic",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Strong social awareness of Indigenous rights and history",
+          "alternatives": ["Proper acknowledgment", "Cultural consultation", "Avoid appropriation"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "aggressive_sales",
+          "topic": "Hard Sell Tactics",
+          "type": "concept",
+          "severity": "medium",
+          "category": "legal",
+          "reason": "Australians value authenticity and dislike pushy sales",
+          "alternatives": ["Relaxed approach", "Let product speak", "Honest comparison"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "very_low",
+        "formality": "very_informal",
+        "context_type": "low_context",
+        "decision_style": "practical",
+        "relationship_building": "casual_rapport",
+        "feedback_style": "blunt_friendly",
+        "communication_preferences": {
+          "tone": "casual",
+          "detail_level": "concise",
+          "proof_types": ["peer_reviews", "value_for_money", "practical_results"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_give_it_a_go",
+          "type": "cta",
+          "template": "Give It a Go",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_check_it_out",
+          "type": "cta",
+          "template": "Check It Out",
+          "context": "landing",
+          "element": "cta",
+          "tone": "casual",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_no_worries",
+          "type": "headline",
+          "template": "{benefit} — No Worries",
+          "context": "landing",
+          "element": "headline",
+          "tone": "friendly",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "en-CA",
+      "language": "English",
+      "country": "Canada",
+      "culture_refs": [
+        {
+          "key": "multiculturalism",
+          "value": "Multicultural Mosaic",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Celebrating diversity rather than melting pot assimilation",
+          "marketing_angle": "Inclusive imagery and messaging; diverse representation",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "politeness_culture",
+          "value": "Canadian Politeness",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Sorry culture, apologizing frequently, conflict avoidance",
+          "marketing_angle": "Polite tone, avoid aggressive or confrontational messaging",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "bilingual_awareness",
+          "value": "Bilingual Sensitivity",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "French-English duality, official bilingualism",
+          "marketing_angle": "Consider bilingual options; respect linguistic duality",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "hockey_culture",
+          "value": "Hockey Nation",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "National sport, cultural touchstone",
+          "marketing_angle": "Hockey metaphors and references resonate widely",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "canada_day",
+          "value": "Canada Day",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "National celebration, summer festivities",
+          "marketing_angle": "Patriotic promotions, red and white themes",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 7, "day": 1}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "us_canada_conflation",
+          "topic": "Treating Canada as American",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Canadians strongly identify as distinct from Americans",
+          "alternatives": ["Canada-specific content", "Local references", "Avoid US assumptions"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "indigenous_insensitivity_ca",
+          "topic": "Indigenous/First Nations Insensitivity",
+          "type": "topic",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Heightened awareness post-TRC; cultural sensitivity required",
+          "alternatives": ["Land acknowledgments", "Respectful representation", "Community consultation"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "aggressive_nationalism",
+          "topic": "Excessive Nationalism",
+          "type": "concept",
+          "severity": "medium",
+          "category": "politics",
+          "reason": "Quiet patriotism preferred over flag-waving",
+          "alternatives": ["Subtle Canadian pride", "Values-based messaging"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "low",
+        "formality": "polite_informal",
+        "context_type": "low_context",
+        "decision_style": "considered",
+        "relationship_building": "friendly_professional",
+        "feedback_style": "diplomatic",
+        "communication_preferences": {
+          "tone": "warm",
+          "detail_level": "moderate",
+          "proof_types": ["customer_reviews", "value_proposition", "ethical_practices"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_learn_more",
+          "type": "cta",
+          "template": "Learn More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_get_started",
+          "type": "cta",
+          "template": "Get Started",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_better_way",
+          "type": "headline",
+          "template": "A Better Way to {action}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"action": "Key action"}
+        }
+      ]
+    },
+    {
+      "locale": "en-IN",
+      "language": "English",
+      "country": "India",
+      "culture_refs": [
+        {
+          "key": "family_centricity",
+          "value": "Family-Centric Values",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Extended family involvement, family approval matters",
+          "marketing_angle": "Family benefits and multi-generational appeal",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "aspiration_culture",
+          "value": "Aspirational Mobility",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Education as pathway, social mobility, progress narrative",
+          "marketing_angle": "Emphasize growth, advancement, and premium positioning",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "diwali",
+          "value": "Diwali",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Festival of lights, major shopping season",
+          "marketing_angle": "Peak promotional period, gifting themes",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 10, "day_range": "varies"}
+        },
+        {
+          "key": "cricket_passion",
+          "value": "Cricket Culture",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "National obsession, IPL, World Cup fever",
+          "marketing_angle": "Cricket metaphors and celebrity endorsements highly effective",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "value_consciousness",
+          "value": "Value Seeking",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Price comparison, deal hunting, maximum value",
+          "marketing_angle": "Emphasize value proposition, savings, and bundled offers",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "taboos": [
+        {
+          "key": "religious_insensitivity",
+          "topic": "Religious Insensitivity",
+          "type": "topic",
+          "severity": "critical",
+          "category": "religion",
+          "reason": "Multi-religious society; sensitivities around Hindu, Muslim, Sikh, Christian themes",
+          "alternatives": ["Secular messaging", "Inclusive imagery", "Festival-neutral unless specific"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "caste_references",
+          "topic": "Caste System References",
+          "type": "topic",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Legally prohibited discrimination; socially sensitive",
+          "alternatives": ["Avoid any caste-coded language or imagery"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "beef_pork_imagery",
+          "topic": "Beef and Pork in Food Marketing",
+          "type": "imagery",
+          "severity": "high",
+          "category": "religion",
+          "reason": "Beef offensive to Hindus, pork to Muslims",
+          "alternatives": ["Vegetarian options", "Chicken and fish", "Clear labeling"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "decision_style": "consensus_family",
+        "relationship_building": "relationship_first",
+        "feedback_style": "indirect",
+        "communication_preferences": {
+          "tone": "respectful",
+          "detail_level": "detailed",
+          "proof_types": ["celebrity_endorsements", "awards", "technical_specs", "price_value"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_explore_now",
+          "type": "cta",
+          "template": "Explore Now",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_know_more",
+          "type": "cta",
+          "template": "Know More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_transform",
+          "type": "headline",
+          "template": "Transform Your {noun} Today",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"noun": "Area of life"}
+        }
+      ]
+    },
+    {
+      "locale": "en-SG",
+      "language": "English",
+      "country": "Singapore",
+      "culture_refs": [
+        {
+          "key": "kiasu_culture",
+          "value": "Kiasu Mentality",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Fear of missing out, wanting the best deal, competitive",
+          "marketing_angle": "Limited time offers and exclusive access drive action",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "meritocracy",
+          "value": "Meritocratic Values",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Hard work rewarded, education paramount, achievement focus",
+          "marketing_angle": "Quality and credentials matter; emphasize excellence",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "multiracial_harmony",
+          "value": "Racial Harmony",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Chinese, Malay, Indian, Others (CMIO) framework",
+          "marketing_angle": "Diverse representation expected; inclusive imagery",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "efficiency_pragmatism",
+          "value": "Pragmatic Efficiency",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "What works matters most, practical solutions",
+          "marketing_angle": "Focus on practical benefits and proven results",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "national_day",
+          "value": "National Day",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "August 9th, strong patriotic sentiment",
+          "marketing_angle": "Red and white themes, national pride",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 8, "day": 9}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "racial_stereotyping",
+          "topic": "Racial Stereotyping",
+          "type": "concept",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Strict laws against racial incitement; government actively monitors",
+          "alternatives": ["Balanced representation", "Avoid stereotypes", "Cultural sensitivity"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "government_criticism",
+          "topic": "Government Criticism",
+          "type": "topic",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Defamation laws strictly enforced; avoid political commentary",
+          "alternatives": ["Apolitical messaging", "Positive framing"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "religious_commentary",
+          "topic": "Religious Commentary",
+          "type": "topic",
+          "severity": "high",
+          "category": "religion",
+          "reason": "Multi-religious society with strict harmony laws",
+          "alternatives": ["Secular messaging", "Festival-specific only"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "medium_context",
+        "decision_style": "research_heavy",
+        "relationship_building": "trust_then_task",
+        "feedback_style": "diplomatic",
+        "communication_preferences": {
+          "tone": "professional",
+          "detail_level": "detailed",
+          "proof_types": ["credentials", "reviews", "awards", "price_comparison"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_find_out_more",
+          "type": "cta",
+          "template": "Find Out More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_get_quote",
+          "type": "cta",
+          "template": "Get Your Quote",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_smart_choice",
+          "type": "headline",
+          "template": "The Smart Choice for {noun}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"noun": "Target outcome"}
+        }
+      ]
+    },
+    {
+      "locale": "en-ZA",
+      "language": "English",
+      "country": "South Africa",
+      "culture_refs": [
+        {
+          "key": "ubuntu",
+          "value": "Ubuntu Philosophy",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "I am because we are; interconnectedness and community",
+          "marketing_angle": "Community benefits and collective impact resonate",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "rainbow_nation",
+          "value": "Rainbow Nation",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Diversity as strength, post-apartheid unity",
+          "marketing_angle": "Diverse representation essential; unity themes",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "braai_culture",
+          "value": "Braai Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "BBQ as social institution, Heritage Day as National Braai Day",
+          "marketing_angle": "Social gathering and lifestyle imagery",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "rugby_passion",
+          "value": "Rugby Nation",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Springboks as unifying force, World Cup pride",
+          "marketing_angle": "Rugby metaphors, national team associations",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "heritage_day",
+          "value": "Heritage Day",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "September 24, celebrating cultural diversity",
+          "marketing_angle": "Cultural celebration themes, braai marketing",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 9, "day": 24}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "racial_insensitivity",
+          "topic": "Racial Insensitivity",
+          "type": "topic",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Post-apartheid sensitivity; representation and language critical",
+          "alternatives": ["Diverse representation", "Inclusive language", "Avoid stereotypes"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "economic_inequality_exploitation",
+          "topic": "Poverty Exploitation",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "High inequality; avoid exploitative or patronizing messaging",
+          "alternatives": ["Empowerment framing", "Dignity-preserving messaging"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "apartheid_references",
+          "topic": "Casual Apartheid References",
+          "type": "topic",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Traumatic history; references require extreme sensitivity",
+          "alternatives": ["Avoid unless essential and handled with care"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "medium",
+        "formality": "warm_formal",
+        "context_type": "medium_context",
+        "decision_style": "value_conscious",
+        "relationship_building": "relationship_first",
+        "feedback_style": "diplomatic",
+        "communication_preferences": {
+          "tone": "warm",
+          "detail_level": "moderate",
+          "proof_types": ["local_testimonials", "value_proposition", "community_impact"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_discover",
+          "type": "cta",
+          "template": "Discover {product}",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "variables": {"product": "Product name"}
+        },
+        {
+          "key": "cta_start_journey",
+          "type": "cta",
+          "template": "Start Your Journey",
+          "context": "landing",
+          "element": "cta",
+          "tone": "inspiring",
+          "constraints": {"max_chars": 25}
+        },
+        {
+          "key": "headline_together",
+          "type": "headline",
+          "template": "Together, We {action}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "inspiring",
+          "variables": {"action": "Shared goal"}
+        }
+      ]
+    },
+    {
+      "locale": "en-NZ",
+      "language": "English",
+      "country": "New Zealand",
+      "culture_refs": [
+        {
+          "key": "kiwi_humility",
+          "value": "Kiwi Humility",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Tall poppy syndrome even stronger than Australia; modesty valued",
+          "marketing_angle": "Understated excellence, avoid boastfulness",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "maori_integration",
+          "value": "Maori Cultural Integration",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Te Reo, tikanga, Treaty of Waitangi awareness",
+          "marketing_angle": "Bicultural awareness expected; Maori greetings accepted",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "clean_green",
+          "value": "Clean Green Image",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Environmental consciousness, sustainability, nature connection",
+          "marketing_angle": "Sustainability messaging resonates strongly",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "all_blacks",
+          "value": "All Blacks Pride",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Rugby as national identity, haka, team excellence",
+          "marketing_angle": "Excellence and teamwork themes; rugby references",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "waitangi_day",
+          "value": "Waitangi Day",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "February 6, Treaty commemoration, national reflection",
+          "marketing_angle": "Handled sensitively; focus on unity",
+          "safe_for": ["marketing"],
+          "caution_for": ["social_media"],
+          "timing": {"month": 2, "day": 6}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "maori_appropriation",
+          "topic": "Maori Cultural Appropriation",
+          "type": "concept",
+          "severity": "critical",
+          "category": "discrimination",
+          "reason": "Strong legal and cultural protections for Maori intellectual property",
+          "alternatives": ["Proper consultation", "Licensed use", "Avoid unless authentic"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "australia_conflation",
+          "topic": "Australia-NZ Conflation",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Strong national identity distinct from Australia",
+          "alternatives": ["NZ-specific content", "Local references"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "environmental_hypocrisy",
+          "topic": "Greenwashing",
+          "type": "concept",
+          "severity": "high",
+          "category": "legal",
+          "reason": "Strong environmental values; fake green claims backfire",
+          "alternatives": ["Genuine sustainability", "Verified claims", "Transparent practices"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "very_low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "decision_style": "practical",
+        "relationship_building": "casual_friendly",
+        "feedback_style": "honest_kind",
+        "communication_preferences": {
+          "tone": "friendly",
+          "detail_level": "concise",
+          "proof_types": ["local_reviews", "environmental_credentials", "practical_value"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_give_go",
+          "type": "cta",
+          "template": "Give It a Go",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_suss_it_out",
+          "type": "cta",
+          "template": "Suss It Out",
+          "context": "landing",
+          "element": "cta",
+          "tone": "casual",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_sorted",
+          "type": "headline",
+          "template": "Get {noun} Sorted",
+          "context": "landing",
+          "element": "headline",
+          "tone": "casual",
+          "variables": {"noun": "Problem area"}
+        }
+      ]
+    },
+    {
+      "locale": "en-IE",
+      "language": "English",
+      "country": "Ireland",
+      "culture_refs": [
+        {
+          "key": "craic_culture",
+          "value": "Craic Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Fun, good conversation, social enjoyment",
+          "marketing_angle": "Warmth and sociability; avoid sterile messaging",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "storytelling",
+          "value": "Storytelling Tradition",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Narrative heritage, literary culture, gift of the gab",
+          "marketing_angle": "Story-driven content resonates; narrative over bullet points",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "community_locality",
+          "value": "Local Community Focus",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Parish, GAA club, local identity strong",
+          "marketing_angle": "Local references and community connection",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "st_patricks_day",
+          "value": "St. Patrick's Day",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "National celebration, global Irish identity",
+          "marketing_angle": "Major promotional moment; avoid leprechaun cliches",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 3, "day": 17}
+        },
+        {
+          "key": "gaa_sports",
+          "value": "GAA Sports",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Hurling and Gaelic football, county pride",
+          "marketing_angle": "GAA references resonate locally; county rivalries",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "taboos": [
+        {
+          "key": "british_conflation",
+          "topic": "British-Irish Conflation",
+          "type": "concept",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Strong national identity; history of British rule",
+          "alternatives": ["Ireland-specific content", "Avoid UK assumptions"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "troubles_references",
+          "topic": "Northern Ireland Troubles",
+          "type": "topic",
+          "severity": "critical",
+          "category": "politics",
+          "reason": "Sensitive historical and ongoing political situation",
+          "alternatives": ["Avoid entirely in commercial contexts"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "stereotype_leprechauns",
+          "topic": "Irish Stereotypes",
+          "type": "imagery",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Leprechauns, excessive drinking stereotypes offensive",
+          "alternatives": ["Authentic Irish culture", "Modern Ireland"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "low",
+        "formality": "warm_informal",
+        "context_type": "medium_context",
+        "decision_style": "relationship_based",
+        "relationship_building": "rapport_first",
+        "feedback_style": "softened_honest",
+        "communication_preferences": {
+          "tone": "warm",
+          "detail_level": "narrative",
+          "proof_types": ["stories", "local_testimonials", "word_of_mouth"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_find_out",
+          "type": "cta",
+          "template": "Find Out More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_get_started",
+          "type": "cta",
+          "template": "Get Started",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_discover",
+          "type": "headline",
+          "template": "Discover a Better Way to {action}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "friendly",
+          "variables": {"action": "Key action"}
+        }
+      ]
+    },
+    {
+      "locale": "en-PH",
+      "language": "English",
+      "country": "Philippines",
+      "culture_refs": [
+        {
+          "key": "bayanihan",
+          "value": "Bayanihan Spirit",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Community cooperation, helping neighbors, collective effort",
+          "marketing_angle": "Community and family themes resonate strongly",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "pakikisama",
+          "value": "Pakikisama",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Smooth interpersonal relationships, group harmony",
+          "marketing_angle": "Social proof and peer approval important",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "filipino_pride",
+          "value": "Pinoy Pride",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Pride in Filipino achievements globally",
+          "marketing_angle": "Filipino success stories, international recognition",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "fiesta_culture",
+          "value": "Fiesta Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Town fiestas, celebrations, hospitality",
+          "marketing_angle": "Celebration and festive themes work well",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "christmas_season",
+          "value": "Extended Christmas",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Ber months (September-December), longest Christmas season",
+          "marketing_angle": "Christmas marketing starts September",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 9, "duration_months": 4}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "face_losing",
+          "topic": "Causing Loss of Face",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Hiya (shame) culture; public criticism devastating",
+          "alternatives": ["Private feedback", "Face-saving messaging", "Positive framing"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "colonial_insensitivity",
+          "topic": "Colonial History Insensitivity",
+          "type": "topic",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Complex relationship with US and Spanish colonial past",
+          "alternatives": ["Modern Philippines focus", "Local identity"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "class_flaunting",
+          "topic": "Overt Wealth Display",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "High inequality; flaunting wealth seen as insensitive",
+          "alternatives": ["Aspirational but accessible", "Success through hard work"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "respectful",
+        "context_type": "high_context",
+        "decision_style": "family_influenced",
+        "relationship_building": "relationship_first",
+        "feedback_style": "indirect",
+        "communication_preferences": {
+          "tone": "warm",
+          "detail_level": "moderate",
+          "proof_types": ["celebrity_endorsements", "social_proof", "family_testimonials"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_try_now",
+          "type": "cta",
+          "template": "Try It Now",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_learn_more",
+          "type": "cta",
+          "template": "Learn More",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_level_up",
+          "type": "headline",
+          "template": "Level Up Your {noun}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"noun": "Target area"}
+        }
+      ]
+    },
+    {
+      "locale": "de-DE",
+      "language": "German",
+      "country": "Germany",
+      "culture_refs": [
+        {
+          "key": "gruendlichkeit",
+          "value": "Gruendlichkeit (Thoroughness)",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Attention to detail, quality engineering, doing things properly",
+          "marketing_angle": "Detailed specifications, quality certifications, engineering excellence",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "datenschutz",
+          "value": "Datenschutz (Data Protection)",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Privacy paramount, GDPR birthplace, skepticism of data collection",
+          "marketing_angle": "Privacy-first messaging, GDPR compliance prominent",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "mittelstand_pride",
+          "value": "Mittelstand Pride",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Family-owned businesses, hidden champions, long-term thinking",
+          "marketing_angle": "Heritage, expertise, generational knowledge",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "umweltbewusstsein",
+          "value": "Environmental Consciousness",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Green party origins, recycling culture, renewable energy",
+          "marketing_angle": "Sustainability credentials essential; verified claims",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "oktoberfest",
+          "value": "Oktoberfest",
+          "type": "event",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "Bavarian tradition, tourism draw",
+          "marketing_angle": "Regional identity; careful with stereotypes",
+          "safe_for": ["marketing"],
+          "caution_for": ["national campaigns"],
+          "timing": {"month": 9, "duration_weeks": 3}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "nazi_references",
+          "topic": "Nazi Era References",
+          "type": "topic",
+          "severity": "critical",
+          "category": "politics",
+          "reason": "Illegal in many contexts; extreme sensitivity",
+          "alternatives": ["Avoid entirely", "No WWII humor or references"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "hyperbole_claims",
+          "topic": "Unsubstantiated Superlatives",
+          "type": "concept",
+          "severity": "high",
+          "category": "legal",
+          "reason": "German advertising law strictly enforces truthfulness; Wettbewerbszentrale active",
+          "alternatives": ["Factual claims", "Third-party verification", "Specific data"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "aggressive_sales",
+          "topic": "Pushy Sales Tactics",
+          "type": "concept",
+          "severity": "high",
+          "category": "legal",
+          "reason": "Germans value facts over emotion; hard sells backfire",
+          "alternatives": ["Information-rich approach", "Let facts speak", "Respected process"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_direct",
+        "hierarchy": "medium",
+        "formality": "formal",
+        "context_type": "low_context",
+        "decision_style": "systematic",
+        "relationship_building": "task_first",
+        "feedback_style": "explicit",
+        "communication_preferences": {
+          "tone": "professional",
+          "detail_level": "comprehensive",
+          "proof_types": ["technical_specs", "certifications", "test_results", "expert_reviews"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_jetzt_starten",
+          "type": "cta",
+          "template": "Jetzt starten",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_mehr_erfahren",
+          "type": "cta",
+          "template": "Mehr erfahren",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_made_in_germany",
+          "type": "headline",
+          "template": "{product} - Made in Germany",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"product": "Product name"}
+        }
+      ]
+    },
+    {
+      "locale": "de-AT",
+      "language": "German",
+      "country": "Austria",
+      "culture_refs": [
+        {
+          "key": "gemuetlichkeit",
+          "value": "Gemuetlichkeit",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Coziness, comfort, unhurried enjoyment of life",
+          "marketing_angle": "Quality of life, comfort, relaxed excellence",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "kaffeehaus_kultur",
+          "value": "Kaffeehauskultur",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Coffee house tradition, intellectual discourse, taking time",
+          "marketing_angle": "Sophistication, tradition, refined experiences",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "titel_obsession",
+          "value": "Title Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Academic and professional titles highly valued (Herr Magister, Frau Doktor)",
+          "marketing_angle": "Credentials and expertise prominent; respect hierarchy",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "cultural_heritage",
+          "value": "Habsburg Heritage",
+          "type": "history",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "Imperial legacy, classical music, architecture",
+          "marketing_angle": "Tradition and heritage; premium positioning",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "skifahren",
+          "value": "Ski Culture",
+          "type": "sport",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Alpine skiing national passion, winter sports excellence",
+          "marketing_angle": "Winter sports, alpine imagery, outdoor lifestyle",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "taboos": [
+        {
+          "key": "german_conflation",
+          "topic": "German-Austrian Conflation",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Strong Austrian identity distinct from Germany",
+          "alternatives": ["Austria-specific content", "Austrian German language variants"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "nazi_references_at",
+          "topic": "Nazi Era References",
+          "type": "topic",
+          "severity": "critical",
+          "category": "politics",
+          "reason": "Complex history; extreme sensitivity; legal restrictions",
+          "alternatives": ["Avoid entirely"],
+          "legal_requirement": true,
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "informality_excess",
+          "topic": "Excessive Informality",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "More formal than Germany; titles and Sie form expected longer",
+          "alternatives": ["Formal address", "Proper titles", "Gradual relationship building"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "very_formal",
+        "context_type": "medium_context",
+        "decision_style": "considered",
+        "relationship_building": "rapport_then_task",
+        "feedback_style": "diplomatic_direct",
+        "communication_preferences": {
+          "tone": "sophisticated",
+          "detail_level": "comprehensive",
+          "proof_types": ["credentials", "heritage", "quality_certifications", "expert_opinions"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_entdecken",
+          "type": "cta",
+          "template": "Jetzt entdecken",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_mehr_dazu",
+          "type": "cta",
+          "template": "Mehr dazu",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_quality",
+          "type": "headline",
+          "template": "{benefit} in hoechster Qualitaet",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "de-CH",
+      "language": "German",
+      "country": "Switzerland",
+      "culture_refs": [
+        {
+          "key": "precision_quality",
+          "value": "Swiss Precision",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Watches, banking, engineering precision, quality obsession",
+          "marketing_angle": "Premium quality, precision, reliability",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "neutrality",
+          "value": "Political Neutrality",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Non-alignment, diplomatic tradition, balanced perspective",
+          "marketing_angle": "Balanced, trustworthy, neutral positioning",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "direct_democracy",
+          "value": "Direct Democracy",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Referendums, citizen involvement, consensus",
+          "marketing_angle": "Customer voice matters; transparent processes",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "discretion",
+          "value": "Swiss Discretion",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Privacy, confidentiality, understated wealth",
+          "marketing_angle": "Privacy-focused, discreet premium, no flashiness",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "bundesfeier",
+          "value": "Bundesfeier (National Day)",
+          "type": "holiday",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "August 1, modest celebration, community bonfires",
+          "marketing_angle": "Patriotic but understated themes",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 8, "day": 1}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "german_conflation_ch",
+          "topic": "German-Swiss Conflation",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Swiss identity distinct; language differences (Swiss German)",
+          "alternatives": ["Swiss-specific content", "Local language variants"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "flashy_display",
+          "topic": "Ostentatious Displays",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Wealth exists but is kept private; flashiness frowned upon",
+          "alternatives": ["Understated quality", "Quiet luxury", "Functional excellence"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "banking_stereotypes",
+          "topic": "Banking Secrecy Jokes",
+          "type": "topic",
+          "severity": "medium",
+          "category": "politics",
+          "reason": "Sensitive given historical controversies; banking evolved",
+          "alternatives": ["Modern Swiss finance", "Innovation focus"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "low",
+        "formality": "formal",
+        "context_type": "low_context",
+        "decision_style": "consensus_driven",
+        "relationship_building": "trust_through_reliability",
+        "feedback_style": "factual",
+        "communication_preferences": {
+          "tone": "understated",
+          "detail_level": "thorough",
+          "proof_types": ["quality_certifications", "Swiss_made", "precision_metrics", "long_term_reliability"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_mehr_erfahren_ch",
+          "type": "cta",
+          "template": "Meh erfahre",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_jetzt_entdecken",
+          "type": "cta",
+          "template": "Jetzt entdecken",
+          "context": "landing",
+          "element": "cta",
+          "tone": "confident",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_swiss_quality",
+          "type": "headline",
+          "template": "Schweizer Qualitaet fuer {noun}",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"noun": "Target area"}
+        }
+      ]
+    },
+    {
+      "locale": "nl-NL",
+      "language": "Dutch",
+      "country": "Netherlands",
+      "culture_refs": [
+        {
+          "key": "directheid",
+          "value": "Dutch Directness",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Saying what you mean, no hidden meanings, honest feedback",
+          "marketing_angle": "Clear, honest messaging; no excessive persuasion",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "nuchterheid",
+          "value": "Nuchterheid (Sobriety)",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Down-to-earth, practical, anti-pretentiousness",
+          "marketing_angle": "Value and practicality over luxury positioning",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "poldermodel",
+          "value": "Poldermodel (Consensus)",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Collaboration, compromise, stakeholder involvement",
+          "marketing_angle": "Collaborative benefits, win-win propositions",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "fietsencultuur",
+          "value": "Bicycle Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Cycling as lifestyle, infrastructure pride, sustainability",
+          "marketing_angle": "Sustainability, practical solutions, Dutch design",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "koningsdag",
+          "value": "Koningsdag (King's Day)",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "April 27, orange everything, street markets, celebration",
+          "marketing_angle": "Orange themes, celebration, vrijmarkt spirit",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 4, "day": 27}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "pretentiousness",
+          "topic": "Pretentious Messaging",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Doe maar gewoon mentality; showing off rejected",
+          "alternatives": ["Practical value", "No-nonsense tone", "Honest claims"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "excessive_formality",
+          "topic": "Over-Formality",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Egalitarian society; excessive formality seems insincere",
+          "alternatives": ["Friendly professional", "Accessible tone"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "royal_disrespect",
+          "topic": "Royal Family Disrespect",
+          "type": "topic",
+          "severity": "medium",
+          "category": "politics",
+          "reason": "Popular monarchy; affectionate relationship with royals",
+          "alternatives": ["Neutral or positive references"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_direct",
+        "hierarchy": "very_low",
+        "formality": "informal",
+        "context_type": "very_low_context",
+        "decision_style": "pragmatic",
+        "relationship_building": "task_oriented",
+        "feedback_style": "blunt",
+        "communication_preferences": {
+          "tone": "straightforward",
+          "detail_level": "concise",
+          "proof_types": ["value_comparison", "practical_benefits", "user_reviews"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_bekijk_nu",
+          "type": "cta",
+          "template": "Bekijk nu",
+          "context": "landing",
+          "element": "cta",
+          "tone": "direct",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_probeer_gratis",
+          "type": "cta",
+          "template": "Probeer gratis",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_simpel",
+          "type": "headline",
+          "template": "{product} — gewoon goed",
+          "context": "landing",
+          "element": "headline",
+          "tone": "casual",
+          "variables": {"product": "Product name"}
+        }
+      ]
+    },
+    {
+      "locale": "nl-BE",
+      "language": "Dutch",
+      "country": "Belgium (Flanders)",
+      "culture_refs": [
+        {
+          "key": "flemish_identity",
+          "value": "Flemish Identity",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Distinct from both Netherlands and Wallonia; regional pride",
+          "marketing_angle": "Local Flemish references; not Dutch, not French",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "bescheidenheid",
+          "value": "Flemish Modesty",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Less direct than Dutch, more reserved, modest self-presentation",
+          "marketing_angle": "Quality speaks for itself; understated messaging",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "gezelligheid_be",
+          "value": "Gezelligheid",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Cozy togetherness, cafe culture, social warmth",
+          "marketing_angle": "Social and warm imagery; togetherness",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "comic_culture",
+          "value": "Comic Strip Heritage",
+          "type": "entertainment",
+          "importance": "medium",
+          "recognition_level": "universal",
+          "expression": "Tintin, Smurfs, comic murals, BD tradition",
+          "marketing_angle": "Visual storytelling, playful graphics acceptable",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "flemish_holidays",
+          "value": "Flemish Community Day",
+          "type": "holiday",
+          "importance": "medium",
+          "recognition_level": "regional",
+          "expression": "July 11, Battle of the Golden Spurs commemoration",
+          "marketing_angle": "Flemish pride, regional identity",
+          "safe_for": ["marketing"],
+          "timing": {"month": 7, "day": 11}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "dutch_flemish_conflation",
+          "topic": "Dutch-Flemish Conflation",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Flemish is NOT Dutch; language and cultural differences",
+          "alternatives": ["Flemish-specific content", "Belgian Dutch language"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "linguistic_politics",
+          "topic": "Belgian Linguistic Politics",
+          "type": "topic",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Sensitive Flemish-Walloon relations; avoid taking sides",
+          "alternatives": ["Regional focus only", "Avoid national Belgian generalizations"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "dutch_directness_excess",
+          "topic": "Dutch-Style Bluntness",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Flemish communication is softer than Dutch",
+          "alternatives": ["Diplomatic tone", "Less aggressive messaging"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "low",
+        "formality": "moderate",
+        "context_type": "low_context",
+        "decision_style": "careful",
+        "relationship_building": "gradual_trust",
+        "feedback_style": "softened",
+        "communication_preferences": {
+          "tone": "warm_professional",
+          "detail_level": "moderate",
+          "proof_types": ["local_testimonials", "quality_focus", "practical_value"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_ontdek_meer",
+          "type": "cta",
+          "template": "Ontdek meer",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_meer_info",
+          "type": "cta",
+          "template": "Meer info",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_quality_be",
+          "type": "headline",
+          "template": "Kwaliteit die je voelt",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident"
+        }
+      ]
+    },
+    {
+      "locale": "sv-SE",
+      "language": "Swedish",
+      "country": "Sweden",
+      "culture_refs": [
+        {
+          "key": "lagom",
+          "value": "Lagom",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Just right, not too much, not too little, balanced moderation",
+          "marketing_angle": "Balanced solutions, no excess, sustainable choices",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "jantelagen",
+          "value": "Jantelagen (Law of Jante)",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Don't think you're special, collective over individual",
+          "marketing_angle": "Community benefits, avoid elitism, inclusive messaging",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "fika",
+          "value": "Fika Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Coffee break as social institution, work-life balance",
+          "marketing_angle": "Quality of life, social connection, breaks valued",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "sustainability_leader",
+          "value": "Sustainability Leadership",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Environmental consciousness, recycling, green energy",
+          "marketing_angle": "Sustainability essential; verified environmental claims",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "midsommar",
+          "value": "Midsommar",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Summer solstice celebration, maypole, traditional",
+          "marketing_angle": "Summer themes, tradition, togetherness",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 6, "day_range": "third_friday"}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "bragging_elitism",
+          "topic": "Self-Promotion/Elitism",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Jantelagen culture; standing out negatively perceived",
+          "alternatives": ["Understated quality", "Team achievements", "Humble tone"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "aggressive_selling",
+          "topic": "Aggressive Sales",
+          "type": "concept",
+          "severity": "high",
+          "category": "legal",
+          "reason": "Reserved culture; pushy tactics backfire strongly",
+          "alternatives": ["Informative approach", "Let user decide", "Soft CTA"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "gender_stereotypes",
+          "topic": "Gender Stereotyping",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Progressive gender equality; stereotypical imagery rejected",
+          "alternatives": ["Gender-neutral", "Equal representation", "Modern family images"],
+          "context_scope": ["marketing", "advertising", "social_media"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "very_low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "decision_style": "consensus_research",
+        "relationship_building": "task_then_social",
+        "feedback_style": "diplomatic_honest",
+        "communication_preferences": {
+          "tone": "understated",
+          "detail_level": "balanced",
+          "proof_types": ["environmental_certs", "user_reviews", "functional_benefits"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_laes_mer",
+          "type": "cta",
+          "template": "Laes mer",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_kom_igang",
+          "type": "cta",
+          "template": "Kom igang",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_lagom",
+          "type": "headline",
+          "template": "Precis {benefit} — varken mer eller mindre",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "da-DK",
+      "language": "Danish",
+      "country": "Denmark",
+      "culture_refs": [
+        {
+          "key": "hygge",
+          "value": "Hygge",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Cozy contentment, candles, comfort, togetherness",
+          "marketing_angle": "Comfort, warmth, quality experiences over things",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "janteloven_dk",
+          "value": "Janteloven",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Danish origin of Jante Law; collective modesty",
+          "marketing_angle": "Inclusive, not elite, community focus",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "danish_design",
+          "value": "Danish Design",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Minimalism, functionality, aesthetic simplicity",
+          "marketing_angle": "Clean design, functionality, aesthetic quality",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "work_life_balance",
+          "value": "Work-Life Balance",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Leaving work on time, family priority, flexibility",
+          "marketing_angle": "Time-saving, efficiency, life quality",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "sankt_hans",
+          "value": "Sankt Hans Aften",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Midsummer bonfire, June 23, community gathering",
+          "marketing_angle": "Summer, community, tradition",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 6, "day": 23}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "ostentation",
+          "topic": "Showing Off",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Janteloven applies; visible success displays frowned upon",
+          "alternatives": ["Modest positioning", "Quality over status", "Functional benefits"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "formality_excess_dk",
+          "topic": "Excessive Formality",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Very informal society; stiff communication seems fake",
+          "alternatives": ["Casual professional tone", "First-name basis implied"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "swedish_conflation",
+          "topic": "Swedish-Danish Conflation",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Rivalry with Sweden; distinct identity important",
+          "alternatives": ["Denmark-specific content", "Local references"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "very_low",
+        "formality": "very_informal",
+        "context_type": "low_context",
+        "decision_style": "practical",
+        "relationship_building": "informal_professional",
+        "feedback_style": "honest_kind",
+        "communication_preferences": {
+          "tone": "casual",
+          "detail_level": "concise",
+          "proof_types": ["design_quality", "user_reviews", "practical_value"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_laes_mere",
+          "type": "cta",
+          "template": "Laes mere",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_proev_gratis",
+          "type": "cta",
+          "template": "Proev gratis",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_simpelt",
+          "type": "headline",
+          "template": "{product} — simpelt og godt",
+          "context": "landing",
+          "element": "headline",
+          "tone": "casual",
+          "variables": {"product": "Product name"}
+        }
+      ]
+    },
+    {
+      "locale": "no-NO",
+      "language": "Norwegian",
+      "country": "Norway",
+      "culture_refs": [
+        {
+          "key": "friluftsliv",
+          "value": "Friluftsliv",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Outdoor life, nature connection, skiing, hiking",
+          "marketing_angle": "Nature imagery, outdoor lifestyle, sustainability",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "egalitarianism_no",
+          "value": "Norwegian Egalitarianism",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Flat hierarchy, everyone equal, oil wealth shared",
+          "marketing_angle": "Accessible to all, no elitism, democratic design",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "kos",
+          "value": "Kos",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Norwegian coziness, similar to hygge",
+          "marketing_angle": "Comfort, quality time, simple pleasures",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "dugnad",
+          "value": "Dugnad",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Community volunteer work, collective effort",
+          "marketing_angle": "Community involvement, collective good",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "syttende_mai",
+          "value": "17. Mai (Constitution Day)",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "National Day, children's parades, bunads",
+          "marketing_angle": "National pride, celebration, tradition",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 5, "day": 17}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "wealth_display",
+          "topic": "Wealth Display",
+          "type": "concept",
+          "severity": "high",
+          "category": "discrimination",
+          "reason": "Despite oil wealth, showing off strongly rejected",
+          "alternatives": ["Understated quality", "Practical value", "Shared prosperity"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "environmental_hypocrisy_no",
+          "topic": "Environmental Hypocrisy",
+          "type": "concept",
+          "severity": "high",
+          "category": "politics",
+          "reason": "Oil nation with green values; authenticity required",
+          "alternatives": ["Genuine sustainability", "Transparent practices"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "swedish_rivalry",
+          "topic": "Swedish Comparisons",
+          "type": "concept",
+          "severity": "low",
+          "category": "politics",
+          "reason": "Friendly rivalry; avoid making Norway secondary",
+          "alternatives": ["Norway-first positioning"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "very_low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "decision_style": "independent",
+        "relationship_building": "trust_through_honesty",
+        "feedback_style": "honest",
+        "communication_preferences": {
+          "tone": "natural",
+          "detail_level": "balanced",
+          "proof_types": ["environmental_impact", "quality_evidence", "practical_results"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_les_mer",
+          "type": "cta",
+          "template": "Les mer",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_kom_i_gang",
+          "type": "cta",
+          "template": "Kom i gang",
+          "context": "landing",
+          "element": "cta",
+          "tone": "friendly",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_natur",
+          "type": "headline",
+          "template": "{benefit} — naturlig valg",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"benefit": "Key benefit"}
+        }
+      ]
+    },
+    {
+      "locale": "fi-FI",
+      "language": "Finnish",
+      "country": "Finland",
+      "culture_refs": [
+        {
+          "key": "sisu",
+          "value": "Sisu",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Inner strength, resilience, determination in adversity",
+          "marketing_angle": "Reliability, perseverance, trusted performance",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "sauna_culture",
+          "value": "Sauna Culture",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Sauna as social institution, wellness, authenticity",
+          "marketing_angle": "Wellness, authenticity, Finnish heritage",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "silence_value",
+          "value": "Comfortable Silence",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Silence is not awkward; talking only when meaningful",
+          "marketing_angle": "Substance over fluff; less is more",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "education_excellence",
+          "value": "Education Excellence",
+          "type": "tradition",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "PISA rankings, teacher respect, learning culture",
+          "marketing_angle": "Quality, research-backed, expertise",
+          "safe_for": ["marketing", "advertising", "social_media"]
+        },
+        {
+          "key": "juhannus",
+          "value": "Juhannus (Midsummer)",
+          "type": "holiday",
+          "importance": "high",
+          "recognition_level": "universal",
+          "expression": "Midsummer celebration, countryside retreat, bonfires",
+          "marketing_angle": "Summer, nature, traditional celebrations",
+          "safe_for": ["marketing", "advertising", "social_media"],
+          "timing": {"month": 6, "day_range": "third_saturday"}
+        }
+      ],
+      "taboos": [
+        {
+          "key": "small_talk",
+          "topic": "Excessive Small Talk",
+          "type": "concept",
+          "severity": "medium",
+          "category": "discrimination",
+          "reason": "Finns value directness and substance; chattiness seems insincere",
+          "alternatives": ["Get to the point", "Meaningful content", "Substance first"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "exaggeration",
+          "topic": "Exaggerated Claims",
+          "type": "concept",
+          "severity": "high",
+          "category": "legal",
+          "reason": "Highly skeptical audience; overpromising backfires",
+          "alternatives": ["Understated accuracy", "Provable claims", "Let results speak"],
+          "context_scope": ["marketing", "advertising"]
+        },
+        {
+          "key": "swedish_finnish_politics",
+          "topic": "Swedish-Finnish Language Politics",
+          "type": "topic",
+          "severity": "medium",
+          "category": "politics",
+          "reason": "Swedish minority; sensitive linguistic history",
+          "alternatives": ["Finnish-language focus unless targeting Swedish-speakers"],
+          "context_scope": ["marketing", "advertising"]
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_direct",
+        "hierarchy": "very_low",
+        "formality": "informal",
+        "context_type": "very_low_context",
+        "decision_style": "thorough",
+        "relationship_building": "trust_through_reliability",
+        "feedback_style": "blunt_honest",
+        "communication_preferences": {
+          "tone": "understated",
+          "detail_level": "essential_only",
+          "proof_types": ["technical_evidence", "independent_tests", "factual_data"]
+        }
+      },
+      "patterns": [
+        {
+          "key": "cta_lue_lisaa",
+          "type": "cta",
+          "template": "Lue lisaa",
+          "context": "landing",
+          "element": "cta",
+          "tone": "professional",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "cta_kokeile",
+          "type": "cta",
+          "template": "Kokeile",
+          "context": "landing",
+          "element": "cta",
+          "tone": "direct",
+          "constraints": {"max_chars": 20}
+        },
+        {
+          "key": "headline_toimii",
+          "type": "headline",
+          "template": "{product} — toimii",
+          "context": "landing",
+          "element": "headline",
+          "tone": "confident",
+          "variables": {"product": "Product name"}
+        }
+      ]
+    }
+  ]
+}
