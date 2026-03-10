@@ -1,0 +1,1370 @@
+{
+  "metadata": {
+    "generated_at": "2026-03-10",
+    "version": "1.0.0",
+    "locale_groups": ["arabic", "slavic", "turkic", "semitic", "african", "greek"],
+    "total_locales": 15
+  },
+  "locales": {
+    "ar-SA": {
+      "locale": "ar-SA",
+      "name": "Arabic (Saudi Arabia)",
+      "script": "Arabic",
+      "direction": "rtl",
+      "culture_refs": [
+        {
+          "value": "الضيافة (Al-Diyafa - Hospitality)",
+          "importance": "critical",
+          "expression": "Welcoming guests is a sacred duty; generosity reflects family honor",
+          "marketing_angle": "Position product as enhancing ability to serve/welcome others generously"
+        },
+        {
+          "value": "الشرف (Al-Sharaf - Honor)",
+          "importance": "critical",
+          "expression": "Family and tribal honor guide all decisions; reputation is paramount",
+          "marketing_angle": "Frame purchases as enhancing family prestige and social standing"
+        },
+        {
+          "value": "الإيمان (Al-Iman - Faith)",
+          "importance": "critical",
+          "expression": "Islam permeates daily life; five daily prayers structure the day",
+          "marketing_angle": "Align with Islamic values; avoid scheduling during prayer times"
+        },
+        {
+          "value": "الولاء للعائلة (Family Loyalty)",
+          "importance": "high",
+          "expression": "Extended family decisions made collectively; elders consulted",
+          "marketing_angle": "Target family units; show multi-generational appeal"
+        },
+        {
+          "value": "رؤية 2030 (Vision 2030 - Modernization)",
+          "importance": "high",
+          "expression": "National pride in transformation; openness to innovation within Islamic framework",
+          "marketing_angle": "Position as supporting national development goals; tech-forward messaging"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Religious criticism or comparison",
+          "severity": "critical",
+          "reason": "Islam is state religion; blasphemy laws strictly enforced; any perceived disrespect can result in severe legal consequences"
+        },
+        {
+          "topic": "Royal family criticism",
+          "severity": "critical",
+          "reason": "Lese-majeste laws protect royal family; criticism results in imprisonment"
+        },
+        {
+          "topic": "Gender mixing in imagery",
+          "severity": "high",
+          "reason": "Gender segregation is cultural norm; mixed-gender casual imagery inappropriate"
+        },
+        {
+          "topic": "Alcohol, pork, gambling references",
+          "severity": "critical",
+          "reason": "Haram (forbidden) in Islam; illegal in Saudi Arabia"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "very_high",
+        "formality": "very_formal",
+        "context_type": "very_high_context",
+        "religious_sensitivity": "critical",
+        "gender_considerations": "strict_separation",
+        "time_orientation": "polychronic",
+        "decision_style": "consensus_elder_led",
+        "relationship_building": "essential_before_business"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "ابدأ الآن",
+          "transliteration": "Ibda' al-aan",
+          "translation": "Start now",
+          "context": "Direct but respectful call to action; works for tech products"
+        },
+        {
+          "type": "cta_trust",
+          "template": "جرّب مجاناً",
+          "transliteration": "Jarrib majjanan",
+          "translation": "Try for free",
+          "context": "Reduces risk perception; important for new products"
+        },
+        {
+          "type": "cta_exclusive",
+          "template": "احصل على عرضك الحصري",
+          "transliteration": "Ihsal ala ardik al-hasri",
+          "translation": "Get your exclusive offer",
+          "context": "Appeals to status and exclusivity values"
+        }
+      ]
+    },
+    "ar-EG": {
+      "locale": "ar-EG",
+      "name": "Arabic (Egypt)",
+      "script": "Arabic",
+      "direction": "rtl",
+      "culture_refs": [
+        {
+          "value": "ابن البلد (Ibn el-Balad - Authenticity)",
+          "importance": "high",
+          "expression": "Being genuinely Egyptian; street-smart, warm, and unpretentious",
+          "marketing_angle": "Use authentic Egyptian dialect (Masri); avoid overly formal MSA"
+        },
+        {
+          "value": "الفكاهة المصرية (Egyptian Humor)",
+          "importance": "high",
+          "expression": "Egyptians use humor to cope with challenges; witty wordplay valued",
+          "marketing_angle": "Humor in advertising is effective and appreciated; puns work well"
+        },
+        {
+          "value": "الحضارة الفرعونية (Pharaonic Heritage)",
+          "importance": "medium",
+          "expression": "Pride in ancient civilization; 7000 years of history",
+          "marketing_angle": "Heritage references resonate; show respect for Egypt's historical significance"
+        },
+        {
+          "value": "العيلة (El-Aila - Family)",
+          "importance": "high",
+          "expression": "Close-knit family bonds; children highly valued",
+          "marketing_angle": "Family-oriented messaging; multi-generational appeal"
+        },
+        {
+          "value": "الحنين للماضي (Nostalgia)",
+          "importance": "medium",
+          "expression": "Fondness for Egypt's golden era (1950s-60s cinema, music)",
+          "marketing_angle": "Retro aesthetics and nostalgic references can be powerful"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Religious mockery",
+          "severity": "critical",
+          "reason": "Muslim-majority with significant Coptic Christian minority; religious harmony is sensitive"
+        },
+        {
+          "topic": "Political commentary",
+          "severity": "high",
+          "reason": "Political climate is sensitive; avoid references to government or military"
+        },
+        {
+          "topic": "Nile/water scarcity politics",
+          "severity": "medium",
+          "reason": "Ethiopian dam dispute is nationally sensitive topic"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "moderate",
+        "context_type": "high_context",
+        "religious_sensitivity": "high",
+        "gender_considerations": "moderate_flexibility",
+        "time_orientation": "polychronic",
+        "decision_style": "emotional_relationship_based",
+        "humor_receptivity": "very_high"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "جرّب دلوقتي",
+          "transliteration": "Garrab dilwa'ti",
+          "translation": "Try it now (Egyptian dialect)",
+          "context": "Egyptian Arabic (Masri) feels more authentic than MSA"
+        },
+        {
+          "type": "cta_value",
+          "template": "وفّر فلوسك",
+          "transliteration": "Waffar fluusak",
+          "translation": "Save your money",
+          "context": "Economic value messaging resonates strongly"
+        },
+        {
+          "type": "cta_social",
+          "template": "انضم لملايين المصريين",
+          "transliteration": "Indam le-malayeen el-masriyeen",
+          "translation": "Join millions of Egyptians",
+          "context": "Social proof with national identity"
+        }
+      ]
+    },
+    "ar-AE": {
+      "locale": "ar-AE",
+      "name": "Arabic (UAE)",
+      "script": "Arabic",
+      "direction": "rtl",
+      "culture_refs": [
+        {
+          "value": "التسامح (Al-Tasamuh - Tolerance)",
+          "importance": "high",
+          "expression": "UAE positions itself as beacon of tolerance; Year of Tolerance (2019) codified this",
+          "marketing_angle": "Inclusive messaging works; multicultural imagery appropriate"
+        },
+        {
+          "value": "الطموح (Al-Tumuh - Ambition)",
+          "importance": "critical",
+          "expression": "National ethos of achieving the impossible (tallest building, Mars mission)",
+          "marketing_angle": "Innovation and future-forward messaging highly effective"
+        },
+        {
+          "value": "الرفاهية (Al-Rafahiya - Luxury)",
+          "importance": "high",
+          "expression": "Appreciation for premium quality and exclusive experiences",
+          "marketing_angle": "Premium positioning works; quality over price messaging"
+        },
+        {
+          "value": "الهوية الإماراتية (Emirati Identity)",
+          "importance": "high",
+          "expression": "Despite expat majority (85%), Emirati culture and leadership respected",
+          "marketing_angle": "Respect for local traditions while embracing global outlook"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Criticism of leadership or ruling families",
+          "severity": "critical",
+          "reason": "Strict cyber laws; any criticism of government can result in deportation or imprisonment"
+        },
+        {
+          "topic": "LGBTQ+ content",
+          "severity": "critical",
+          "reason": "Illegal under UAE law; cannot be referenced in any marketing"
+        },
+        {
+          "topic": "Regional political conflicts",
+          "severity": "high",
+          "reason": "Avoid Qatar, Iran, or Yemen conflict references"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "formal_but_modern",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "moderate",
+        "gender_considerations": "progressive_for_region",
+        "time_orientation": "mixed",
+        "decision_style": "efficiency_focused",
+        "bilingual_preference": "arabic_english_mixed"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "اكتشف المزيد",
+          "transliteration": "Iktashif al-mazeed",
+          "translation": "Discover more",
+          "context": "Sophisticated, aspirational tone"
+        },
+        {
+          "type": "cta_premium",
+          "template": "احصل على تجربة حصرية",
+          "transliteration": "Ihsal ala tajruba hasriyya",
+          "translation": "Get an exclusive experience",
+          "context": "Luxury/exclusivity positioning"
+        },
+        {
+          "type": "cta_innovation",
+          "template": "كن الأول",
+          "transliteration": "Kun al-awwal",
+          "translation": "Be the first",
+          "context": "Innovation and early-adopter appeal"
+        }
+      ]
+    },
+    "ar-MA": {
+      "locale": "ar-MA",
+      "name": "Arabic (Morocco)",
+      "script": "Arabic",
+      "direction": "rtl",
+      "culture_refs": [
+        {
+          "value": "الصناعة التقليدية (Artisanal Craftsmanship)",
+          "importance": "high",
+          "expression": "Pride in traditional crafts; medina artisans; handmade quality",
+          "marketing_angle": "Authenticity and craftsmanship messaging resonates"
+        },
+        {
+          "value": "التعدد الثقافي (Cultural Diversity)",
+          "importance": "high",
+          "expression": "Arab, Berber (Amazigh), African, and European influences coexist",
+          "marketing_angle": "Acknowledge diverse heritage; Amazigh culture respected"
+        },
+        {
+          "value": "الملكية (Monarchy)",
+          "importance": "high",
+          "expression": "King Mohammed VI highly respected; symbol of stability",
+          "marketing_angle": "Avoid any criticism; royal initiatives can be referenced positively"
+        },
+        {
+          "value": "الانفتاح (Openness)",
+          "importance": "medium",
+          "expression": "Morocco positions as bridge between Africa, Europe, and Arab world",
+          "marketing_angle": "Modern, globally-connected positioning works"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Western Sahara sovereignty",
+          "severity": "critical",
+          "reason": "Highly sensitive territorial dispute; always refer to as part of Morocco"
+        },
+        {
+          "topic": "Monarchy criticism",
+          "severity": "critical",
+          "reason": "Legal consequences for disrespecting the King"
+        },
+        {
+          "topic": "Algeria relations",
+          "severity": "high",
+          "reason": "Closed border and diplomatic tensions; avoid comparative references"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "moderate",
+        "context_type": "high_context",
+        "religious_sensitivity": "moderate",
+        "gender_considerations": "moderate_progressive",
+        "time_orientation": "polychronic",
+        "decision_style": "relationship_based",
+        "language_preference": "darija_french_mix"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "جرب دابا",
+          "transliteration": "Jerreb daba",
+          "translation": "Try now (Moroccan Darija)",
+          "context": "Darija (Moroccan dialect) feels authentic; MSA feels foreign"
+        },
+        {
+          "type": "cta_french_mix",
+          "template": "Inscrivez-vous مجاناً",
+          "transliteration": "Inscrivez-vous majjanan",
+          "translation": "Sign up for free",
+          "context": "French-Arabic code-switching common in urban Morocco"
+        },
+        {
+          "type": "cta_value",
+          "template": "اكتشف العرض ديالنا",
+          "transliteration": "Ktashef al-ard dyalna",
+          "translation": "Discover our offer",
+          "context": "Possessive 'dyalna' is distinctly Moroccan"
+        }
+      ]
+    },
+    "ru-RU": {
+      "locale": "ru-RU",
+      "name": "Russian (Russia)",
+      "script": "Cyrillic",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Душа (Dusha - Soul)",
+          "importance": "high",
+          "expression": "Deep emotional/spiritual dimension to Russian character; soulfulness valued",
+          "marketing_angle": "Emotional depth in messaging; avoid superficial cheerfulness"
+        },
+        {
+          "value": "Коллективизм (Collectivism)",
+          "importance": "high",
+          "expression": "Group identity important; 'we' over 'I'; shared experiences valued",
+          "marketing_angle": "Community and shared benefit messaging; avoid excessive individualism"
+        },
+        {
+          "value": "Стойкость (Stoikost - Resilience)",
+          "importance": "high",
+          "expression": "Endurance through hardship; winter as metaphor; overcoming adversity",
+          "marketing_angle": "Durability and reliability messaging; products that last"
+        },
+        {
+          "value": "Уважение (Uvazhenie - Respect)",
+          "importance": "high",
+          "expression": "Formal respect in professional contexts; hierarchy acknowledged",
+          "marketing_angle": "Professional, respectful tone; use formal 'Вы' (you) address"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Political criticism of leadership",
+          "severity": "critical",
+          "reason": "Current political climate makes any criticism dangerous; foreign brands should stay neutral"
+        },
+        {
+          "topic": "WWII minimization",
+          "severity": "critical",
+          "reason": "Great Patriotic War is sacred; 27 million deaths; Victory Day (May 9) sacrosanct"
+        },
+        {
+          "topic": "Territorial sovereignty questions",
+          "severity": "critical",
+          "reason": "Avoid any references to disputed territories or geopolitical conflicts"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "moderate",
+        "gender_considerations": "traditional_but_evolving",
+        "time_orientation": "long_term",
+        "decision_style": "analytical_skeptical",
+        "trust_building": "slow_but_loyal"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Начать сейчас",
+          "transliteration": "Nachat' seychas",
+          "translation": "Start now",
+          "context": "Direct, no-nonsense call to action"
+        },
+        {
+          "type": "cta_trust",
+          "template": "Попробуйте бесплатно",
+          "transliteration": "Poprobuyte besplatno",
+          "translation": "Try for free",
+          "context": "Formal 'you' (Вы implied); risk-reduction important"
+        },
+        {
+          "type": "cta_quality",
+          "template": "Убедитесь в качестве",
+          "transliteration": "Ubedites' v kachestve",
+          "translation": "See the quality for yourself",
+          "context": "Appeals to skepticism; prove rather than claim"
+        }
+      ]
+    },
+    "uk-UA": {
+      "locale": "uk-UA",
+      "name": "Ukrainian (Ukraine)",
+      "script": "Cyrillic",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Незалежність (Nezalezhnist - Independence)",
+          "importance": "critical",
+          "expression": "National sovereignty and self-determination; especially since 2022",
+          "marketing_angle": "Support for Ukraine; independence and resilience themes powerful"
+        },
+        {
+          "value": "Національна гідність (National Dignity)",
+          "importance": "critical",
+          "expression": "Pride in Ukrainian identity, language, and culture distinct from Russia",
+          "marketing_angle": "MUST use Ukrainian language, not Russian; acknowledge distinct identity"
+        },
+        {
+          "value": "Козацький дух (Cossack Spirit)",
+          "importance": "high",
+          "expression": "Historical warrior tradition; freedom-loving, brave, democratic",
+          "marketing_angle": "Bravery and self-reliance messaging resonates"
+        },
+        {
+          "value": "Вишиванка (Embroidery Heritage)",
+          "importance": "medium",
+          "expression": "Traditional embroidered clothing; cultural symbol of identity",
+          "marketing_angle": "Folk art and traditional motifs appreciated"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Russian language use",
+          "severity": "critical",
+          "reason": "Post-2022, using Russian instead of Ukrainian is deeply offensive; seen as erasure"
+        },
+        {
+          "topic": "Soviet nostalgia",
+          "severity": "critical",
+          "reason": "USSR symbols banned; Soviet era seen as occupation"
+        },
+        {
+          "topic": "Both-sides-ism on conflict",
+          "severity": "critical",
+          "reason": "Any neutrality on Russian invasion seen as complicity"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "moderate",
+        "formality": "moderate",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "moderate",
+        "gender_considerations": "egalitarian",
+        "time_orientation": "present_focused",
+        "decision_style": "pragmatic",
+        "national_solidarity": "extremely_high"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Почати зараз",
+          "transliteration": "Pochaty zaraz",
+          "translation": "Start now",
+          "context": "Clean Ukrainian; avoid Russian cognates where Ukrainian alternatives exist"
+        },
+        {
+          "type": "cta_support",
+          "template": "Приєднуйся до нас",
+          "transliteration": "Pryednuysya do nas",
+          "translation": "Join us",
+          "context": "Community and solidarity messaging"
+        },
+        {
+          "type": "cta_national",
+          "template": "Зроблено в Україні",
+          "transliteration": "Zrobleno v Ukrayini",
+          "translation": "Made in Ukraine",
+          "context": "National pride badge; support local economy"
+        }
+      ]
+    },
+    "pl-PL": {
+      "locale": "pl-PL",
+      "name": "Polish (Poland)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Rodzina (Family)",
+          "importance": "critical",
+          "expression": "Family is central social unit; multi-generational bonds strong",
+          "marketing_angle": "Family-oriented messaging; products that bring family together"
+        },
+        {
+          "value": "Tradycja (Tradition)",
+          "importance": "high",
+          "expression": "Catholic traditions, national holidays, historical commemorations",
+          "marketing_angle": "Respect for tradition; seasonal/holiday marketing important"
+        },
+        {
+          "value": "Honor narodowy (National Honor)",
+          "importance": "high",
+          "expression": "Pride in Polish history, especially WWII resistance and Solidarity movement",
+          "marketing_angle": "Quality and Polish pride; 'Made in Poland' resonates"
+        },
+        {
+          "value": "Gościnność (Hospitality)",
+          "importance": "high",
+          "expression": "Welcoming guests generously; food and drink abundance",
+          "marketing_angle": "Generous offers; hospitality imagery works"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "WWII Polish complicity narratives",
+          "severity": "critical",
+          "reason": "Illegal to suggest Polish nation was complicit in Holocaust; Poland was victim"
+        },
+        {
+          "topic": "German/Russian historical grievances",
+          "severity": "high",
+          "reason": "Sensitive historical wounds; avoid trivializing invasions/occupations"
+        },
+        {
+          "topic": "Anti-Catholic messaging",
+          "severity": "high",
+          "reason": "Catholic Church deeply influential; ~90% identify as Catholic"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "moderate",
+        "formality": "formal_in_business",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "high",
+        "gender_considerations": "traditional_evolving",
+        "time_orientation": "future_focused",
+        "decision_style": "quality_conscious",
+        "price_sensitivity": "value_oriented"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Zacznij teraz",
+          "transliteration": "Zachniy teraz",
+          "translation": "Start now",
+          "context": "Direct and action-oriented"
+        },
+        {
+          "type": "cta_trust",
+          "template": "Wypróbuj za darmo",
+          "transliteration": "Viproobuy za darmo",
+          "translation": "Try for free",
+          "context": "Free trial reduces risk; Poles are value-conscious"
+        },
+        {
+          "type": "cta_quality",
+          "template": "Sprawdź jakość",
+          "transliteration": "Sprawdz yakoshch",
+          "translation": "Check the quality",
+          "context": "Quality assurance messaging resonates"
+        }
+      ]
+    },
+    "cs-CZ": {
+      "locale": "cs-CZ",
+      "name": "Czech (Czechia)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Skepse (Skepticism)",
+          "importance": "high",
+          "expression": "Czechs are naturally skeptical; distrust of grand claims and institutions",
+          "marketing_angle": "Understated claims work better; avoid hyperbole and superlatives"
+        },
+        {
+          "value": "Humor a ironie (Humor and Irony)",
+          "importance": "high",
+          "expression": "Dry, self-deprecating humor; absurdist tradition (Kafka, Hašek)",
+          "marketing_angle": "Clever, witty advertising appreciated; avoid taking yourself too seriously"
+        },
+        {
+          "value": "Kvalita (Quality)",
+          "importance": "high",
+          "expression": "Pride in Czech engineering and craftsmanship (Škoda, Czech glass)",
+          "marketing_angle": "Quality and precision messaging; 'well-made' is valued"
+        },
+        {
+          "value": "Pivní kultura (Beer Culture)",
+          "importance": "medium",
+          "expression": "World's highest beer consumption; beer is cultural institution",
+          "marketing_angle": "Social, pub culture imagery; community gatherings"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Communist era glorification",
+          "severity": "high",
+          "reason": "Negative associations with Soviet occupation; Velvet Revolution pride"
+        },
+        {
+          "topic": "Excessive nationalism",
+          "severity": "medium",
+          "reason": "Czechs are patriotic but uncomfortable with flag-waving nationalism"
+        },
+        {
+          "topic": "Religious proselytizing",
+          "severity": "medium",
+          "reason": "One of world's most secular countries; religious messaging falls flat"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "low",
+        "formality": "informal_preferred",
+        "context_type": "low_context",
+        "religious_sensitivity": "very_low",
+        "gender_considerations": "egalitarian",
+        "time_orientation": "pragmatic",
+        "decision_style": "rational_skeptical",
+        "marketing_receptivity": "skeptical"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Vyzkoušejte zdarma",
+          "transliteration": "Vizkousheyete zdarma",
+          "translation": "Try for free",
+          "context": "Low-commitment CTA suits skeptical audience"
+        },
+        {
+          "type": "cta_understated",
+          "template": "Zjistěte více",
+          "transliteration": "Zyisteyte veetse",
+          "translation": "Find out more",
+          "context": "Non-pushy, informational approach"
+        },
+        {
+          "type": "cta_practical",
+          "template": "Funguje to",
+          "transliteration": "Funguye to",
+          "translation": "It works",
+          "context": "Practical, no-nonsense claim; let product speak"
+        }
+      ]
+    },
+    "tr-TR": {
+      "locale": "tr-TR",
+      "name": "Turkish (Turkey)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Misafirperverlik (Hospitality)",
+          "importance": "critical",
+          "expression": "Guest is sacred; tea offering is ritual; generous hosting expected",
+          "marketing_angle": "Welcoming, generous offers; hospitality imagery powerful"
+        },
+        {
+          "value": "Aile (Family Honor)",
+          "importance": "critical",
+          "expression": "Family reputation paramount; collective family identity",
+          "marketing_angle": "Family-oriented messaging; multi-generational appeal"
+        },
+        {
+          "value": "Atatürk mirası (Atatürk's Legacy)",
+          "importance": "critical",
+          "expression": "Founder Mustafa Kemal Atatürk deeply revered; secularism principle",
+          "marketing_angle": "Modernization messaging works; respect for founder essential"
+        },
+        {
+          "value": "Türk gururu (Turkish Pride)",
+          "importance": "high",
+          "expression": "Pride in Turkish history, culture, and recent economic growth",
+          "marketing_angle": "Local production valued; Turkish brands gaining preference"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Atatürk criticism or disrespect",
+          "severity": "critical",
+          "reason": "Illegal to insult Atatürk's memory; deeply offensive culturally"
+        },
+        {
+          "topic": "Armenian Genocide acknowledgment",
+          "severity": "critical",
+          "reason": "Official Turkish position denies genocide designation; avoid entirely"
+        },
+        {
+          "topic": "Kurdish political issues",
+          "severity": "critical",
+          "reason": "Highly sensitive; PKK designated as terrorist organization"
+        },
+        {
+          "topic": "Cyprus/Greek tensions",
+          "severity": "high",
+          "reason": "Ongoing territorial and political disputes"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "formal_respectful",
+        "context_type": "high_context",
+        "religious_sensitivity": "moderate_varied",
+        "gender_considerations": "varies_by_region",
+        "time_orientation": "relationship_first",
+        "decision_style": "emotional_relational",
+        "brand_loyalty": "high_once_established"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Hemen başla",
+          "transliteration": "Hemen bashla",
+          "translation": "Start right away",
+          "context": "Urgency works in Turkish marketing"
+        },
+        {
+          "type": "cta_trust",
+          "template": "Ücretsiz dene",
+          "transliteration": "Uucretsiz dene",
+          "translation": "Try for free",
+          "context": "Risk reduction important"
+        },
+        {
+          "type": "cta_exclusive",
+          "template": "Fırsatı kaçırma",
+          "transliteration": "Fırsatı kachırma",
+          "translation": "Don't miss the opportunity",
+          "context": "FOMO messaging effective"
+        }
+      ]
+    },
+    "az-AZ": {
+      "locale": "az-AZ",
+      "name": "Azerbaijani (Azerbaijan)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Qonaqpərvərlik (Hospitality)",
+          "importance": "critical",
+          "expression": "Guests are honored; tea ceremony (çay) is essential ritual",
+          "marketing_angle": "Generous, welcoming positioning; hospitality imagery"
+        },
+        {
+          "value": "Milli qürur (National Pride)",
+          "importance": "high",
+          "expression": "Pride in independence from USSR; oil wealth; modern Baku",
+          "marketing_angle": "Modern, progressive Azerbaijan imagery; development narrative"
+        },
+        {
+          "value": "Ailə dəyərləri (Family Values)",
+          "importance": "high",
+          "expression": "Strong family bonds; respect for elders; collective decisions",
+          "marketing_angle": "Family-centered messaging; elder respect"
+        },
+        {
+          "value": "Müasirlik (Modernity)",
+          "importance": "high",
+          "expression": "Baku as modern metropolis; Formula 1; Eurovision host",
+          "marketing_angle": "Modern, innovative positioning alongside tradition"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Armenia/Nagorno-Karabakh",
+          "severity": "critical",
+          "reason": "Recent war (2020); deep animosity; Armenian references strictly avoided"
+        },
+        {
+          "topic": "Territorial integrity questions",
+          "severity": "critical",
+          "reason": "Karabakh is Azerbaijan; any suggestion otherwise unacceptable"
+        },
+        {
+          "topic": "Iranian Azeri politics",
+          "severity": "high",
+          "reason": "Complex relationship with Iran; more Azeris in Iran than Azerbaijan"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "religious_sensitivity": "moderate_secular",
+        "gender_considerations": "traditional_modernizing",
+        "time_orientation": "relationship_based",
+        "decision_style": "consensus_seeking",
+        "language_identity": "strong_turkic"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "İndi başla",
+          "transliteration": "Indi bashla",
+          "translation": "Start now",
+          "context": "Direct, modern CTA"
+        },
+        {
+          "type": "cta_trust",
+          "template": "Pulsuz sına",
+          "transliteration": "Pulsuz sina",
+          "translation": "Try for free",
+          "context": "Risk reduction messaging"
+        },
+        {
+          "type": "cta_modern",
+          "template": "Gələcəyə addım at",
+          "transliteration": "Gelejaye addim at",
+          "translation": "Step into the future",
+          "context": "Modernization/progress narrative"
+        }
+      ]
+    },
+    "he-IL": {
+      "locale": "he-IL",
+      "name": "Hebrew (Israel)",
+      "script": "Hebrew",
+      "direction": "rtl",
+      "culture_refs": [
+        {
+          "value": "חוצפה (Chutzpah - Audacity)",
+          "importance": "high",
+          "expression": "Audacious confidence; challenging authority; entrepreneurial boldness",
+          "marketing_angle": "Bold, innovative claims acceptable; disruption messaging works"
+        },
+        {
+          "value": "סטארט-אפ ניישן (Startup Nation)",
+          "importance": "high",
+          "expression": "Pride in tech innovation; high-tech entrepreneurship",
+          "marketing_angle": "Innovation and tech-forward positioning resonates strongly"
+        },
+        {
+          "value": "משפחתיות (Mishpachtiyut - Family Focus)",
+          "importance": "high",
+          "expression": "Strong family bonds; children highly valued; Friday dinner sacred",
+          "marketing_angle": "Family-oriented messaging; Shabbat timing considerations"
+        },
+        {
+          "value": "ביטחון (Bitachon - Security)",
+          "importance": "high",
+          "expression": "Security consciousness pervasive; resilience valued",
+          "marketing_angle": "Reliability and security messaging resonates"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Palestinian conflict politics",
+          "severity": "critical",
+          "reason": "Highly divisive internally; brands should stay completely neutral"
+        },
+        {
+          "topic": "Holocaust trivialization",
+          "severity": "critical",
+          "reason": "Shoah is sacred memory; never use for marketing analogies"
+        },
+        {
+          "topic": "Shabbat business operations",
+          "severity": "high",
+          "reason": "Friday sunset to Saturday sunset; many don't transact; respect observance"
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_direct",
+        "hierarchy": "low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "religious_sensitivity": "varied_secular_to_orthodox",
+        "gender_considerations": "egalitarian_secular",
+        "time_orientation": "present_urgent",
+        "decision_style": "fast_decisive",
+        "negotiation_style": "assertive"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "התחל עכשיו",
+          "transliteration": "Hatchel achshav",
+          "translation": "Start now",
+          "context": "Direct, no-frills CTA"
+        },
+        {
+          "type": "cta_free",
+          "template": "נסה בחינם",
+          "transliteration": "Nase bechinam",
+          "translation": "Try for free",
+          "context": "Free trial messaging works"
+        },
+        {
+          "type": "cta_innovation",
+          "template": "הצטרף לחדשנות",
+          "transliteration": "Hitztaref lechadshanut",
+          "translation": "Join the innovation",
+          "context": "Startup/innovation culture appeal"
+        }
+      ]
+    },
+    "sw-KE": {
+      "locale": "sw-KE",
+      "name": "Swahili (Kenya)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Harambee (Pulling Together)",
+          "importance": "critical",
+          "expression": "Community self-help; collective effort; national motto",
+          "marketing_angle": "Community benefit messaging; collective improvement themes"
+        },
+        {
+          "value": "Ubuntu/Utu (Humanity)",
+          "importance": "high",
+          "expression": "Shared humanity; interconnectedness; compassion",
+          "marketing_angle": "Humanistic brand values; social responsibility"
+        },
+        {
+          "value": "Entrepreneurship (Hustler Culture)",
+          "importance": "high",
+          "expression": "Self-made success; side hustles; mobile commerce (M-Pesa)",
+          "marketing_angle": "Enable success messaging; mobile-first is essential"
+        },
+        {
+          "value": "Safari/Nature Heritage",
+          "importance": "medium",
+          "expression": "Pride in wildlife and natural beauty; conservation awareness",
+          "marketing_angle": "Nature imagery; environmental consciousness"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Tribal/ethnic politics",
+          "severity": "critical",
+          "reason": "Ethnic tensions can be volatile; 2007 violence memory; avoid tribal references"
+        },
+        {
+          "topic": "Corruption accusations",
+          "severity": "high",
+          "reason": "Sensitive topic; avoid implying corruption in messaging"
+        },
+        {
+          "topic": "Colonial era glorification",
+          "severity": "high",
+          "reason": "British colonial history sensitive; independence hard-won"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate",
+        "hierarchy": "moderate",
+        "formality": "moderate",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "moderate_diverse",
+        "gender_considerations": "evolving_urban_different",
+        "time_orientation": "flexible",
+        "decision_style": "relationship_influenced",
+        "digital_adoption": "high_mobile_first"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Anza sasa",
+          "transliteration": "Anza sasa",
+          "translation": "Start now",
+          "context": "Clean Swahili; English code-switching common"
+        },
+        {
+          "type": "cta_mobile",
+          "template": "Pakia app",
+          "transliteration": "Pakia app",
+          "translation": "Download the app",
+          "context": "Mobile-first Kenya; M-Pesa integration important"
+        },
+        {
+          "type": "cta_community",
+          "template": "Jiunge nasi",
+          "transliteration": "Jee-unge nasi",
+          "translation": "Join us",
+          "context": "Community/collective appeal; Harambee spirit"
+        }
+      ]
+    },
+    "sw-TZ": {
+      "locale": "sw-TZ",
+      "name": "Swahili (Tanzania)",
+      "script": "Latin",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Ujamaa (Familyhood/Socialism)",
+          "importance": "high",
+          "expression": "Nyerere's socialist philosophy; collective welfare; equality",
+          "marketing_angle": "Egalitarian messaging; community benefit over individual gain"
+        },
+        {
+          "value": "Umoja wa Kitaifa (National Unity)",
+          "importance": "high",
+          "expression": "No tribal divisions like neighbors; Swahili unifies; 120+ ethnic groups coexist",
+          "marketing_angle": "Unity messaging; Swahili-first (less English mixing than Kenya)"
+        },
+        {
+          "value": "Kilimanjaro/Serengeti Pride",
+          "importance": "medium",
+          "expression": "Natural wonders; Zanzibar heritage; tourism identity",
+          "marketing_angle": "Natural beauty imagery; heritage pride"
+        },
+        {
+          "value": "Heshima (Respect)",
+          "importance": "high",
+          "expression": "Respect for elders and authority; polite communication norms",
+          "marketing_angle": "Respectful, humble brand voice; avoid aggressive marketing"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Zanzibar independence movements",
+          "severity": "high",
+          "reason": "Zanzibar union with mainland sensitive; separatism taboo"
+        },
+        {
+          "topic": "Religious tensions",
+          "severity": "high",
+          "reason": "Muslim Zanzibar, Christian mainland; religious harmony important"
+        },
+        {
+          "topic": "Criticism of founding father Nyerere",
+          "severity": "medium",
+          "reason": "Mwalimu (Teacher) Nyerere highly respected despite economic failures"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_polite",
+        "hierarchy": "moderate",
+        "formality": "formal",
+        "context_type": "high_context",
+        "religious_sensitivity": "high",
+        "gender_considerations": "traditional",
+        "time_orientation": "relaxed_pole_pole",
+        "decision_style": "consensus",
+        "language_purity": "pure_swahili_preferred"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Anza sasa hivi",
+          "transliteration": "Anza sasa hivi",
+          "translation": "Start right now",
+          "context": "Pure Swahili; avoid English mixing (unlike Kenya)"
+        },
+        {
+          "type": "cta_respectful",
+          "template": "Karibu kujiunga",
+          "transliteration": "Karibu kujiunga",
+          "translation": "Welcome to join",
+          "context": "Invitational, respectful tone"
+        },
+        {
+          "type": "cta_community",
+          "template": "Tuungane pamoja",
+          "transliteration": "Tuu-ngane pamoja",
+          "translation": "Let's unite together",
+          "context": "Ujamaa collective spirit"
+        }
+      ]
+    },
+    "am-ET": {
+      "locale": "am-ET",
+      "name": "Amharic (Ethiopia)",
+      "script": "Ge'ez (Ethiopic)",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "ጥንታዊ ታሪክ (Ancient Heritage)",
+          "importance": "critical",
+          "expression": "3000+ years of history; never colonized; Axumite civilization; Ark of Covenant",
+          "marketing_angle": "Heritage and pride messaging; respect for ancient civilization"
+        },
+        {
+          "value": "ኦርቶዶክስ ክርስትና (Orthodox Christianity)",
+          "importance": "critical",
+          "expression": "Ethiopian Orthodox Church central to identity; fasting periods; unique Christianity",
+          "marketing_angle": "Respect fasting seasons; religious calendar awareness essential"
+        },
+        {
+          "value": "ቡና (Buna - Coffee Culture)",
+          "importance": "high",
+          "expression": "Ethiopia is birthplace of coffee; coffee ceremony is social ritual",
+          "marketing_angle": "Coffee imagery powerful; ceremony as community metaphor"
+        },
+        {
+          "value": "የቤተሰብ ትስስር (Family Bonds)",
+          "importance": "high",
+          "expression": "Extended family central; collective decision-making; elder respect",
+          "marketing_angle": "Family and community messaging; multi-generational appeal"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Colonialism comparisons",
+          "severity": "critical",
+          "reason": "Ethiopia was never colonized (except brief Italian occupation); unique African history"
+        },
+        {
+          "topic": "Religious disrespect",
+          "severity": "critical",
+          "reason": "Orthodox Christianity (45%) and Islam (35%) both sensitive; religious harmony valued"
+        },
+        {
+          "topic": "Ethnic federalism politics",
+          "severity": "critical",
+          "reason": "Recent Tigray conflict; ethnic tensions; avoid regional/ethnic references"
+        },
+        {
+          "topic": "Nile/GERD dam politics",
+          "severity": "high",
+          "reason": "Grand Ethiopian Renaissance Dam is national pride; Egypt disputes sensitive"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "very_formal",
+        "context_type": "very_high_context",
+        "religious_sensitivity": "critical",
+        "gender_considerations": "traditional",
+        "time_orientation": "ethiopian_calendar",
+        "decision_style": "elder_influenced",
+        "unique_calendar": "13_months_different_year"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "አሁን ይጀምሩ",
+          "transliteration": "Ahun yijemru",
+          "translation": "Start now",
+          "context": "Formal 'you' (እርስዎ implied); respectful tone"
+        },
+        {
+          "type": "cta_trust",
+          "template": "በነጻ ይሞክሩ",
+          "transliteration": "Benetsa yimokru",
+          "translation": "Try for free",
+          "context": "Risk reduction important in new markets"
+        },
+        {
+          "type": "cta_heritage",
+          "template": "ኢትዮጵያዊ መፍትሄ",
+          "transliteration": "Ityopyawi meftehe",
+          "translation": "Ethiopian solution",
+          "context": "National pride; local solution positioning"
+        }
+      ],
+      "special_considerations": {
+        "calendar": "Ethiopian calendar (12 months of 30 days + Pagume of 5-6 days); Year is 7-8 years behind Gregorian",
+        "new_year": "Enkutatash on September 11 (or 12 in leap year)",
+        "fasting": "Over 200 fasting days per year for Orthodox; marketing timing important"
+      }
+    },
+    "el-GR": {
+      "locale": "el-GR",
+      "name": "Greek (Greece)",
+      "script": "Greek",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Φιλότιμο (Filotimo - Honor/Dignity)",
+          "importance": "critical",
+          "expression": "Untranslatable virtue combining honor, dignity, pride, and doing the right thing",
+          "marketing_angle": "Quality and integrity messaging; products worthy of philotimo"
+        },
+        {
+          "value": "Φιλοξενία (Filoxenia - Hospitality)",
+          "importance": "high",
+          "expression": "Love of strangers/guests; sacred duty to welcome; generous hosting",
+          "marketing_angle": "Welcoming, generous brand positioning; hospitality imagery"
+        },
+        {
+          "value": "Οικογένεια (Oikogeneia - Family)",
+          "importance": "high",
+          "expression": "Extended family bonds; Sunday family meals; children highly valued",
+          "marketing_angle": "Family-oriented messaging; multi-generational products"
+        },
+        {
+          "value": "Αρχαία κληρονομιά (Ancient Heritage)",
+          "importance": "high",
+          "expression": "Pride in ancient Greek civilization; democracy, philosophy, Olympics origins",
+          "marketing_angle": "Heritage references can work; classical quality associations"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Macedonia naming dispute",
+          "severity": "high",
+          "reason": "North Macedonia naming still sensitive for many; ancient Macedon is Greek"
+        },
+        {
+          "topic": "Turkey/Cyprus conflicts",
+          "severity": "high",
+          "reason": "Historical and ongoing tensions; avoid Turkish comparisons"
+        },
+        {
+          "topic": "Economic crisis mockery",
+          "severity": "high",
+          "reason": "2010s crisis painful; avoid lazy/profligate Greek stereotypes"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct_expressive",
+        "hierarchy": "moderate",
+        "formality": "moderate",
+        "context_type": "moderate_context",
+        "religious_sensitivity": "moderate_orthodox",
+        "gender_considerations": "egalitarian_modern",
+        "time_orientation": "relaxed_mediterranean",
+        "decision_style": "emotional_relational",
+        "skepticism": "high_toward_institutions"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Ξεκινήστε τώρα",
+          "transliteration": "Xekiniste tora",
+          "translation": "Start now",
+          "context": "Polite plural/formal 'you' (εσείς)"
+        },
+        {
+          "type": "cta_free",
+          "template": "Δοκιμάστε δωρεάν",
+          "transliteration": "Dokimaste dorean",
+          "translation": "Try for free",
+          "context": "Free trial appeals to economic sensitivity"
+        },
+        {
+          "type": "cta_quality",
+          "template": "Ποιότητα που αξίζετε",
+          "transliteration": "Piotita pou aksizete",
+          "translation": "Quality you deserve",
+          "context": "Quality and worth messaging; philotimo appeal"
+        }
+      ]
+    },
+    "el-CY": {
+      "locale": "el-CY",
+      "name": "Greek (Cyprus)",
+      "script": "Greek",
+      "direction": "ltr",
+      "culture_refs": [
+        {
+          "value": "Κυπριακή ταυτότητα (Cypriot Identity)",
+          "importance": "high",
+          "expression": "Distinct from Greece; unique Cypriot Greek dialect; island identity",
+          "marketing_angle": "Acknowledge Cypriot distinctiveness; not just 'Greek'"
+        },
+        {
+          "value": "Φιλοξενία (Hospitality)",
+          "importance": "high",
+          "expression": "Mediterranean hospitality; coffee culture; generous hosting",
+          "marketing_angle": "Welcoming, warm brand positioning"
+        },
+        {
+          "value": "Κοινότητα (Community)",
+          "importance": "high",
+          "expression": "Small island; everyone knows everyone; community bonds strong",
+          "marketing_angle": "Community and local connection; word-of-mouth important"
+        },
+        {
+          "value": "Ήλιος και θάλασσα (Sun and Sea)",
+          "importance": "medium",
+          "expression": "Mediterranean lifestyle; beach culture; outdoor living",
+          "marketing_angle": "Lifestyle imagery; outdoor/leisure associations"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Turkish occupation of North Cyprus",
+          "severity": "critical",
+          "reason": "1974 invasion and ongoing division deeply traumatic; Turkish Republic of Northern Cyprus not recognized"
+        },
+        {
+          "topic": "Reunification politics",
+          "severity": "high",
+          "reason": "Complex political issue; avoid taking sides on federation proposals"
+        },
+        {
+          "topic": "Implying Cyprus is part of Greece",
+          "severity": "medium",
+          "reason": "Cyprus is independent republic since 1960; distinct identity important"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "moderate",
+        "formality": "moderate_casual",
+        "context_type": "high_context",
+        "religious_sensitivity": "moderate_orthodox",
+        "gender_considerations": "traditional_modernizing",
+        "time_orientation": "relaxed",
+        "decision_style": "relationship_based",
+        "market_size": "small_tight_knit"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Αρκέψετε τώρα",
+          "transliteration": "Arkepsete tora",
+          "translation": "Start now (Cypriot dialect)",
+          "context": "Cypriot Greek form of 'start'"
+        },
+        {
+          "type": "cta_standard",
+          "template": "Ξεκινήστε τώρα",
+          "transliteration": "Xekiniste tora",
+          "translation": "Start now (Standard Greek)",
+          "context": "Standard Greek also widely understood"
+        },
+        {
+          "type": "cta_local",
+          "template": "Για την Κύπρο",
+          "transliteration": "Gia tin Kypro",
+          "translation": "For Cyprus",
+          "context": "Local/patriotic appeal for Cypriot market"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "locale": "lo-LA",
+  "country": "Laos",
+  "language": "Lao",
+  "expressions": [
+    {
+      "key": "expr-lo-greeting-formal",
+      "text": "ສະບາຍດີ",
+      "romanization": "sabaidee",
+      "english": "Hello / Good day",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "expr-lo-welcome",
+      "text": "ຍິນດີຕ້ອນຮັບ",
+      "romanization": "yindee tonhap",
+      "english": "Welcome",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "expr-lo-thank-you",
+      "text": "ຂອບໃຈ",
+      "romanization": "khop chai",
+      "english": "Thank you",
+      "context": "informal",
+      "register": "casual"
+    },
+    {
+      "key": "expr-lo-thank-you-formal",
+      "text": "ຂອບໃຈຫຼາຍໆ",
+      "romanization": "khop chai lai lai",
+      "english": "Thank you very much",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "expr-lo-cta-try-now",
+      "text": "ລອງເບິ່ງດຽວນີ້",
+      "romanization": "long beung diao nee",
+      "english": "Try it now",
+      "context": "marketing",
+      "register": "casual"
+    },
+    {
+      "key": "expr-lo-cta-start-free",
+      "text": "ເລີ່ມຕົ້ນຟຣີ",
+      "romanization": "leum ton free",
+      "english": "Start free",
+      "context": "marketing",
+      "register": "casual"
+    },
+    {
+      "key": "expr-lo-cta-create",
+      "text": "ສ້າງ QR Code",
+      "romanization": "sang QR Code",
+      "english": "Create QR Code",
+      "context": "marketing",
+      "register": "neutral"
+    },
+    {
+      "key": "expr-lo-easy-to-use",
+      "text": "ໃຊ້ງ່າຍ",
+      "romanization": "sai ngai",
+      "english": "Easy to use",
+      "context": "marketing",
+      "register": "casual"
+    },
+    {
+      "key": "expr-lo-fast-convenient",
+      "text": "ໄວ ແລະ ສະດວກ",
+      "romanization": "vai lae saduak",
+      "english": "Fast and convenient",
+      "context": "marketing",
+      "register": "neutral"
+    },
+    {
+      "key": "expr-lo-professional",
+      "text": "ເປັນມືອາຊີບ",
+      "romanization": "pen mue aseep",
+      "english": "Professional",
+      "context": "formal",
+      "register": "business"
+    },
+    {
+      "key": "expr-lo-trusted",
+      "text": "ເຊື່ອຖືໄດ້",
+      "romanization": "seua thue dai",
+      "english": "Trustworthy / Reliable",
+      "context": "formal",
+      "register": "business"
+    },
+    {
+      "key": "expr-lo-free-forever",
+      "text": "ຟຣີຕະຫຼອດໄປ",
+      "romanization": "free talot pai",
+      "english": "Free forever",
+      "context": "marketing",
+      "register": "casual"
+    },
+    {
+      "key": "expr-lo-contact-us",
+      "text": "ຕິດຕໍ່ພວກເຮົາ",
+      "romanization": "tit to phuak hao",
+      "english": "Contact us",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "expr-lo-learn-more",
+      "text": "ສຶກສາເພີ່ມເຕີມ",
+      "romanization": "suksa pheum tuem",
+      "english": "Learn more",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "expr-lo-success",
+      "text": "ສຳເລັດແລ້ວ",
+      "romanization": "samlet laeo",
+      "english": "Success / Completed",
+      "context": "neutral",
+      "register": "neutral"
+    }
+  ],
+  "culture_refs": [
+    {
+      "name": "Boun Pi Mai Lao",
+      "description": "Lao New Year (April 14-16). Most important holiday with water festivals, temple visits, and family reunions.",
+      "category": "holiday"
+    },
+    {
+      "name": "Boun That Luang",
+      "description": "National religious festival at That Luang stupa in Vientiane (November full moon).",
+      "category": "holiday"
+    },
+    {
+      "name": "Boun Suang Heua",
+      "description": "Boat Racing Festival celebrating end of Buddhist Lent (October).",
+      "category": "holiday"
+    },
+    {
+      "name": "Theravada Buddhism",
+      "description": "95%+ Buddhist population. Buddhism permeates daily life through temple visits and merit-making.",
+      "category": "value"
+    },
+    {
+      "name": "Family and Hierarchy",
+      "description": "Extended family structures with strong respect for elders (phii-nong system).",
+      "category": "value"
+    },
+    {
+      "name": "Boun Ok Phansa",
+      "description": "End of Buddhist Lent with illuminated boat floats (Lai Heua Fai).",
+      "category": "holiday"
+    },
+    {
+      "name": "Bo pen nyang",
+      "description": "Core Lao philosophy emphasizing relaxed attitude and non-confrontation.",
+      "category": "value"
+    },
+    {
+      "name": "Naga",
+      "description": "Mythical serpent central to Lao/Mekong mythology. Protector of Buddhism.",
+      "category": "symbol"
+    }
+  ],
+  "taboos": [
+    {
+      "name": "Buddha Image Disrespect",
+      "description": "Never use Buddha images for commercial purposes. Feet pointed at Buddha images is highly offensive.",
+      "severity": "critical"
+    },
+    {
+      "name": "Head is Sacred",
+      "description": "The head is the highest and most sacred part of the body. Never touch or point at it.",
+      "severity": "high"
+    },
+    {
+      "name": "Feet are Impure",
+      "description": "Feet are the lowest and most impure body part. Never point feet at people or sacred objects.",
+      "severity": "high"
+    },
+    {
+      "name": "Women and Monks",
+      "description": "Women must not touch monks or hand items directly to them.",
+      "severity": "high"
+    },
+    {
+      "name": "Aggressive Marketing",
+      "description": "Lao culture values harmony. Hard-sell tactics and aggressive CTAs feel disrespectful.",
+      "severity": "medium"
+    }
+  ],
+  "patterns": [
+    {
+      "key": "pattern-lo-gentle-cta",
+      "template": "ລອງ{action}ເບິ່ງ",
+      "type": "cta",
+      "context": "button",
+      "tone": "gentle_invitation"
+    },
+    {
+      "key": "pattern-lo-benefit-first",
+      "template": "{benefit}ດ້ວຍ{product}",
+      "type": "value_proposition",
+      "context": "landing",
+      "tone": "helpful"
+    },
+    {
+      "key": "pattern-lo-easy-emphasis",
+      "template": "{action}ງ່າຍໆໃນ{time}",
+      "type": "ease_of_use",
+      "context": "landing",
+      "tone": "reassuring"
+    },
+    {
+      "key": "pattern-lo-free-no-risk",
+      "template": "ຟຣີ, ບໍ່ຕ້ອງ{obstacle}",
+      "type": "barrier_removal",
+      "context": "landing",
+      "tone": "reassuring"
+    },
+    {
+      "key": "pattern-lo-polite-request",
+      "template": "ກະລຸນາ{action}",
+      "type": "instruction",
+      "context": "form",
+      "tone": "polite_formal"
+    },
+    {
+      "key": "pattern-lo-collective-success",
+      "template": "{users}ຄົນໃຊ້ແລ້ວ",
+      "type": "social_proof",
+      "context": "landing",
+      "tone": "social_proof"
+    },
+    {
+      "key": "pattern-lo-merit-giving",
+      "template": "ແບ່ງປັນ{value}ໃຫ້{recipient}",
+      "type": "sharing",
+      "context": "referral",
+      "tone": "generous"
+    },
+    {
+      "key": "pattern-lo-humble-quality",
+      "template": "{product}ຂອງພວກເຮົາ{quality}",
+      "type": "feature",
+      "context": "landing",
+      "tone": "humble_confident"
+    }
+  ],
+  "audience_traits": {
+    "formality": "moderate_formal",
+    "directness": "consultative_deliberate",
+    "decision_making": "family_influenced",
+    "trust_factors": ["government_endorsement", "local_presence", "lao_support"],
+    "communication_channels": ["Facebook", "WhatsApp", "LINE", "SMS"]
+  }
+}

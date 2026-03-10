@@ -1,0 +1,262 @@
+{
+  "locale": "or-IN",
+  "country": "India",
+  "language": "Odia",
+  "region": "Odisha",
+  "expressions": [
+    {
+      "key": "or-in-expr-001",
+      "text": "ନମସ୍କାର",
+      "romanization": "namaskara",
+      "english": "Hello / Greetings",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-002",
+      "text": "ସ୍ଵାଗତ",
+      "romanization": "swagata",
+      "english": "Welcome",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-003",
+      "text": "ଧନ୍ୟବାଦ",
+      "romanization": "dhanyabad",
+      "english": "Thank you",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-004",
+      "text": "ବର୍ତ୍ତମାନ ଚେଷ୍ଟା କରନ୍ତୁ",
+      "romanization": "bartamana cheshta karantu",
+      "english": "Try it now",
+      "context": "marketing",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-005",
+      "text": "ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ",
+      "romanization": "magana arambha karantu",
+      "english": "Start free",
+      "context": "marketing",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-006",
+      "text": "QR କୋଡ ତିଆରି କରନ୍ତୁ",
+      "romanization": "QR code tiari karantu",
+      "english": "Create QR Code",
+      "context": "marketing",
+      "register": "neutral"
+    },
+    {
+      "key": "or-in-expr-007",
+      "text": "ସହଜ ଏବଂ ସୁବିଧାଜନକ",
+      "romanization": "sahaja ebang subidhajanak",
+      "english": "Easy and convenient",
+      "context": "marketing",
+      "register": "neutral"
+    },
+    {
+      "key": "or-in-expr-008",
+      "text": "ଦ୍ରୁତ ଏବଂ ନିର୍ଭରଯୋଗ୍ୟ",
+      "romanization": "druta ebang nirbharyogya",
+      "english": "Fast and reliable",
+      "context": "marketing",
+      "register": "professional"
+    },
+    {
+      "key": "or-in-expr-009",
+      "text": "ବିଶ୍ଵସ୍ତ ସେବା",
+      "romanization": "bishwasta seba",
+      "english": "Trusted service",
+      "context": "formal",
+      "register": "professional"
+    },
+    {
+      "key": "or-in-expr-010",
+      "text": "ଆମ ସହ ଯୋଗ ଦିଅନ୍ତୁ",
+      "romanization": "ama saha joga diantu",
+      "english": "Join us",
+      "context": "marketing",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-011",
+      "text": "ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା",
+      "romanization": "sampurna magana",
+      "english": "Completely free",
+      "context": "marketing",
+      "register": "casual"
+    },
+    {
+      "key": "or-in-expr-012",
+      "text": "ଆଜି ହିଁ ଆରମ୍ଭ କରନ୍ତୁ",
+      "romanization": "aji heen arambha karantu",
+      "english": "Start today",
+      "context": "marketing",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-013",
+      "text": "ଆହୁରି ଜାଣନ୍ତୁ",
+      "romanization": "ahuri janantu",
+      "english": "Learn more",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-014",
+      "text": "ଆମକୁ ସମ୍ପର୍କ କରନ୍ତୁ",
+      "romanization": "amaku samparka karantu",
+      "english": "Contact us",
+      "context": "formal",
+      "register": "polite"
+    },
+    {
+      "key": "or-in-expr-015",
+      "text": "ସଫଳ ହୋଇଗଲା",
+      "romanization": "saphala hoigala",
+      "english": "Success",
+      "context": "neutral",
+      "register": "neutral"
+    }
+  ],
+  "culture_refs": [
+    {
+      "name": "Rath Yatra",
+      "description": "Annual chariot festival in Puri for Lord Jagannath. One of India's largest religious gatherings.",
+      "category": "holiday"
+    },
+    {
+      "name": "Raja Parba",
+      "description": "Three-day festival celebrating womanhood and fertility. Girls swing and enjoy special foods.",
+      "category": "holiday"
+    },
+    {
+      "name": "Durga Puja",
+      "description": "Major festival celebrating goddess Durga. Elaborate pandals and community celebrations.",
+      "category": "holiday"
+    },
+    {
+      "name": "Konark Sun Temple",
+      "description": "UNESCO World Heritage site. Symbol of Odia architectural heritage and pride.",
+      "category": "landmark"
+    },
+    {
+      "name": "Jagannath Culture",
+      "description": "Lord Jagannath worship is central to Odia identity. Prasad sharing and temple traditions.",
+      "category": "value"
+    },
+    {
+      "name": "Odissi Dance",
+      "description": "Classical dance form originating from Odisha. Symbol of cultural heritage.",
+      "category": "art"
+    },
+    {
+      "name": "Cuttack Chandi",
+      "description": "Annual fair during Durga Puja in Cuttack. Major cultural and shopping event.",
+      "category": "tradition"
+    },
+    {
+      "name": "Pakhala Tradition",
+      "description": "Traditional fermented rice dish. Symbol of Odia hospitality and simplicity.",
+      "category": "tradition"
+    }
+  ],
+  "taboos": [
+    {
+      "name": "Religious Disrespect",
+      "description": "Jagannath and Hindu religious imagery must be treated with utmost respect. Never use casually.",
+      "severity": "critical"
+    },
+    {
+      "name": "Left Hand Usage",
+      "description": "Left hand is considered impure. Never show left hand giving or receiving items.",
+      "severity": "high"
+    },
+    {
+      "name": "Feet and Elders",
+      "description": "Showing feet to elders or pointing feet at sacred items is disrespectful.",
+      "severity": "high"
+    },
+    {
+      "name": "Beef References",
+      "description": "Cow is sacred. Never reference beef or cattle slaughter in any context.",
+      "severity": "critical"
+    },
+    {
+      "name": "Caste Discrimination",
+      "description": "Avoid any content that could be seen as promoting caste discrimination.",
+      "severity": "high"
+    }
+  ],
+  "patterns": [
+    {
+      "key": "or-in-pat-001",
+      "template": "ବର୍ତ୍ତମାନ {action} କରନ୍ତୁ",
+      "type": "cta",
+      "context": "button",
+      "tone": "polite_urgent"
+    },
+    {
+      "key": "or-in-pat-002",
+      "template": "{benefit} ପାଇଁ {product}",
+      "type": "value_proposition",
+      "context": "landing",
+      "tone": "helpful"
+    },
+    {
+      "key": "or-in-pat-003",
+      "template": "{time} ରେ {action} କରନ୍ତୁ",
+      "type": "ease_of_use",
+      "context": "landing",
+      "tone": "reassuring"
+    },
+    {
+      "key": "or-in-pat-004",
+      "template": "ମାଗଣା, କୌଣସି {obstacle} ନାହିଁ",
+      "type": "barrier_removal",
+      "context": "landing",
+      "tone": "reassuring"
+    },
+    {
+      "key": "or-in-pat-005",
+      "template": "ଦୟାକରି {action} କରନ୍ତୁ",
+      "type": "instruction",
+      "context": "form",
+      "tone": "polite_formal"
+    },
+    {
+      "key": "or-in-pat-006",
+      "template": "{number}+ ଜଣ ବ୍ୟବହାର କରୁଛନ୍ତି",
+      "type": "social_proof",
+      "context": "landing",
+      "tone": "community"
+    },
+    {
+      "key": "or-in-pat-007",
+      "template": "ଆପଣଙ୍କ {audience} ପାଇଁ",
+      "type": "personalization",
+      "context": "landing",
+      "tone": "respectful"
+    },
+    {
+      "key": "or-in-pat-008",
+      "template": "ବିଶ୍ଵସ୍ତ ଏବଂ ନିରାପଦ {product}",
+      "type": "trust",
+      "context": "landing",
+      "tone": "professional"
+    }
+  ],
+  "audience_traits": {
+    "formality": "formal_respectful",
+    "directness": "polite_indirect",
+    "decision_making": "family_and_community_influenced",
+    "trust_factors": ["local_language", "government_partnership", "testimonials"],
+    "communication_channels": ["WhatsApp", "Facebook", "YouTube", "SMS"]
+  }
+}

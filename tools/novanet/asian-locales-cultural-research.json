@@ -1,0 +1,1197 @@
+{
+  "research_metadata": {
+    "generated": "2026-03-10",
+    "source": "Cross-cultural communication research (Hofstede, Hall, GLOBE), regional marketing studies",
+    "confidence": "high",
+    "note": "Native script patterns verified against standard usage"
+  },
+  "locales": [
+    {
+      "locale": "zh-CN",
+      "region": "Mainland China (Simplified Chinese)",
+      "culture_refs": [
+        {
+          "value": "面子 (Miànzi - Face)",
+          "importance": "critical",
+          "expression": "Social standing and reputation preservation",
+          "marketing_angle": "Position products as status enhancers; emphasize prestige and recognition"
+        },
+        {
+          "value": "关系 (Guānxi - Relationships)",
+          "importance": "high",
+          "expression": "Network-based trust and reciprocal obligations",
+          "marketing_angle": "Use testimonials, referrals, KOL endorsements; build community"
+        },
+        {
+          "value": "和谐 (Héxié - Harmony)",
+          "importance": "high",
+          "expression": "Social cohesion and conflict avoidance",
+          "marketing_angle": "Frame solutions as bringing balance; avoid confrontational messaging"
+        },
+        {
+          "value": "集体主义 (Jítǐ zhǔyì - Collectivism)",
+          "importance": "high",
+          "expression": "Group identity over individual; family and national pride",
+          "marketing_angle": "Emphasize family benefits, national brands, 'Made in China' quality narratives"
+        },
+        {
+          "value": "务实 (Wùshí - Pragmatism)",
+          "importance": "medium",
+          "expression": "Practical results and value-for-money orientation",
+          "marketing_angle": "Show concrete ROI, practical benefits, value propositions"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Political sensitivity (Taiwan, Tibet, Xinjiang)",
+          "severity": "critical",
+          "reason": "Legal restrictions and strong nationalist sentiment; can result in brand boycotts"
+        },
+        {
+          "topic": "Number 4 (四 sì)",
+          "severity": "high",
+          "reason": "Homophone for death (死 sǐ); avoid in pricing, numbering, product names"
+        },
+        {
+          "topic": "Japan-related imagery in nationalist contexts",
+          "severity": "medium",
+          "reason": "Historical tensions; avoid imperial Japanese symbols or insensitive WWII references"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_moderate",
+        "hierarchy": "high",
+        "formality": "formal_business",
+        "context_type": "high_context",
+        "face_saving": "critical",
+        "decision_style": "consensus_with_authority",
+        "trust_building": "relationship_first"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "立即免费试用",
+          "transliteration": "Lìjí miǎnfèi shìyòng",
+          "translation": "Try free now",
+          "context": "SaaS/tech products; emphasizes no-risk trial"
+        },
+        {
+          "type": "cta_primary",
+          "template": "马上开始",
+          "transliteration": "Mǎshàng kāishǐ",
+          "translation": "Start immediately",
+          "context": "General action CTA; urgency without pressure"
+        },
+        {
+          "type": "cta_trust",
+          "template": "已有100万+用户信赖",
+          "transliteration": "Yǐ yǒu 100 wàn+ yònghù xìnlài",
+          "translation": "Trusted by 1M+ users",
+          "context": "Social proof; large numbers resonate strongly"
+        }
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "region": "Taiwan (Traditional Chinese)",
+      "culture_refs": [
+        {
+          "value": "面子 (Miànzi - Face)",
+          "importance": "high",
+          "expression": "Personal dignity and social reputation",
+          "marketing_angle": "Quality and refinement messaging; less about status display than zh-CN"
+        },
+        {
+          "value": "人情味 (Rénqíngwèi - Human touch)",
+          "importance": "high",
+          "expression": "Warmth, empathy, personal connection in service",
+          "marketing_angle": "Customer service excellence; personalized attention; boutique feel"
+        },
+        {
+          "value": "小確幸 (Xiǎo quèxìng - Small certain happiness)",
+          "importance": "medium",
+          "expression": "Appreciating small pleasures in daily life",
+          "marketing_angle": "Lifestyle products; premium everyday items; self-care narratives"
+        },
+        {
+          "value": "自由民主 (Zìyóu mínzhǔ - Freedom and democracy)",
+          "importance": "high",
+          "expression": "Individual choice and democratic values",
+          "marketing_angle": "Emphasize choice, customization, personal expression"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Implying Taiwan is part of China",
+          "severity": "critical",
+          "reason": "Highly sensitive political issue; use 'Taiwan' independently, never 'Taiwan, China'"
+        },
+        {
+          "topic": "CCP symbolism or propaganda aesthetics",
+          "severity": "high",
+          "reason": "Negative associations with authoritarian governance"
+        },
+        {
+          "topic": "Number 4 (四 sì)",
+          "severity": "medium",
+          "reason": "Same death association as zh-CN, though slightly less rigid"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_but_clearer",
+        "hierarchy": "moderate",
+        "formality": "polite_professional",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "individual_with_consensus",
+        "trust_building": "quality_and_reputation"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "立即體驗",
+          "transliteration": "Lìjí tǐyàn",
+          "translation": "Experience now",
+          "context": "Softer than 'try'; emphasizes experience quality"
+        },
+        {
+          "type": "cta_primary",
+          "template": "免費開始使用",
+          "transliteration": "Miǎnfèi kāishǐ shǐyòng",
+          "translation": "Start using for free",
+          "context": "Clear value proposition without hard sell"
+        },
+        {
+          "type": "cta_lifestyle",
+          "template": "讓生活更美好",
+          "transliteration": "Ràng shēnghuó gèng měihǎo",
+          "translation": "Make life more beautiful",
+          "context": "Lifestyle and wellness products"
+        }
+      ]
+    },
+    {
+      "locale": "zh-HK",
+      "region": "Hong Kong (Traditional Chinese, Cantonese influence)",
+      "culture_refs": [
+        {
+          "value": "獅子山精神 (Lion Rock Spirit)",
+          "importance": "high",
+          "expression": "Resilience, hard work, self-made success",
+          "marketing_angle": "Entrepreneurial spirit; self-improvement; professional growth"
+        },
+        {
+          "value": "務實 (Mouh saht - Pragmatism)",
+          "importance": "high",
+          "expression": "Practical efficiency and results-orientation",
+          "marketing_angle": "Time-saving solutions; efficiency gains; ROI clarity"
+        },
+        {
+          "value": "國際化 (Gwok jai fa - Internationalism)",
+          "importance": "high",
+          "expression": "Cosmopolitan identity; East-meets-West sensibility",
+          "marketing_angle": "Global brands with local adaptation; bilingual content"
+        },
+        {
+          "value": "面 (Mín - Face)",
+          "importance": "high",
+          "expression": "Professional reputation and social standing",
+          "marketing_angle": "Premium positioning; luxury associations"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Political stance on democracy/Beijing relations",
+          "severity": "critical",
+          "reason": "Extremely polarized; brands should remain neutral"
+        },
+        {
+          "topic": "Simplified Chinese characters",
+          "severity": "medium",
+          "reason": "Use Traditional Chinese; Simplified associated with mainland influence"
+        },
+        {
+          "topic": "Number 4",
+          "severity": "medium",
+          "reason": "Cantonese 'sei' also sounds like death; avoid in pricing"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct_professional",
+        "hierarchy": "moderate_high",
+        "formality": "business_formal",
+        "context_type": "moderate_high_context",
+        "face_saving": "important",
+        "decision_style": "fast_pragmatic",
+        "trust_building": "track_record_and_efficiency"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "立即開始",
+          "transliteration": "Lahp jīk hōi chí",
+          "translation": "Start now",
+          "context": "Direct action; Hong Kongers appreciate efficiency"
+        },
+        {
+          "type": "cta_business",
+          "template": "提升業務效率",
+          "transliteration": "Tàih sīng yihp mouh haauh leut",
+          "translation": "Boost business efficiency",
+          "context": "B2B products; efficiency-focused"
+        },
+        {
+          "type": "cta_trial",
+          "template": "免費試用14天",
+          "transliteration": "Míhn fai si yuhng 14 tīn",
+          "translation": "Free 14-day trial",
+          "context": "Time-limited offers work well"
+        }
+      ]
+    },
+    {
+      "locale": "ja-JP",
+      "region": "Japan",
+      "culture_refs": [
+        {
+          "value": "和 (Wa - Harmony)",
+          "importance": "critical",
+          "expression": "Group harmony and avoiding conflict; consensus-based decisions",
+          "marketing_angle": "Solutions that integrate smoothly; team benefits; non-disruptive positioning"
+        },
+        {
+          "value": "本音と建前 (Honne to Tatemae)",
+          "importance": "high",
+          "expression": "Private feelings vs. public facade; reading between lines",
+          "marketing_angle": "Subtle messaging; implications over explicit claims; respect privacy"
+        },
+        {
+          "value": "おもてなし (Omotenashi - Hospitality)",
+          "importance": "high",
+          "expression": "Anticipatory service; exceeding expectations without being asked",
+          "marketing_angle": "Premium customer service; attention to detail; surprise and delight"
+        },
+        {
+          "value": "改善 (Kaizen - Continuous improvement)",
+          "importance": "high",
+          "expression": "Incremental betterment; process optimization",
+          "marketing_angle": "Version updates; iterative improvements; long-term partnership"
+        },
+        {
+          "value": "品質 (Hinshitsu - Quality)",
+          "importance": "critical",
+          "expression": "Meticulous attention to quality and craftsmanship",
+          "marketing_angle": "Quality certifications; detailed specifications; Japanese-made associations"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Direct confrontation or criticism",
+          "severity": "critical",
+          "reason": "Destroys wa (harmony); use indirect suggestions or third-party examples"
+        },
+        {
+          "topic": "Number 4 (四 shi) and 9 (九 ku)",
+          "severity": "high",
+          "reason": "4=death (死), 9=suffering (苦); avoid in pricing, packaging quantities"
+        },
+        {
+          "topic": "Overly casual language in business contexts",
+          "severity": "high",
+          "reason": "Keigo (honorific language) expected; casual = disrespectful"
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_indirect",
+        "hierarchy": "very_high",
+        "formality": "very_formal",
+        "context_type": "very_high_context",
+        "face_saving": "critical",
+        "decision_style": "slow_consensus_nemawashi",
+        "trust_building": "long_term_relationship"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "今すぐ始める",
+          "transliteration": "Ima sugu hajimeru",
+          "translation": "Start right now",
+          "context": "Standard action CTA; polite but clear"
+        },
+        {
+          "type": "cta_soft",
+          "template": "無料でお試しください",
+          "transliteration": "Muryō de otameshi kudasai",
+          "translation": "Please try for free",
+          "context": "Polite request form; low pressure"
+        },
+        {
+          "type": "cta_inquiry",
+          "template": "詳しくはこちら",
+          "transliteration": "Kuwashiku wa kochira",
+          "translation": "Details here",
+          "context": "Non-committal; allows exploration before decision"
+        }
+      ]
+    },
+    {
+      "locale": "ko-KR",
+      "region": "South Korea",
+      "culture_refs": [
+        {
+          "value": "빨리빨리 (Ppalli-ppalli - Quick quick)",
+          "importance": "high",
+          "expression": "Speed and urgency culture; fast execution",
+          "marketing_angle": "Fast delivery; instant results; efficiency messaging"
+        },
+        {
+          "value": "눈치 (Nunchi - Social awareness)",
+          "importance": "high",
+          "expression": "Reading the room; understanding unspoken social cues",
+          "marketing_angle": "Intuitive UX; anticipatory features; 'we understand you'"
+        },
+        {
+          "value": "체면 (Chaemyeon - Face)",
+          "importance": "high",
+          "expression": "Social reputation and dignity",
+          "marketing_angle": "Premium positioning; status association; avoid embarrassment"
+        },
+        {
+          "value": "정 (Jeong - Affection/bond)",
+          "importance": "high",
+          "expression": "Deep emotional attachment formed over time",
+          "marketing_angle": "Loyalty programs; community building; long-term relationships"
+        },
+        {
+          "value": "한 (Han - Collective grief/resilience)",
+          "importance": "medium",
+          "expression": "Shared historical suffering transformed into strength",
+          "marketing_angle": "Underdog narratives; overcoming challenges; national pride"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Japan-Korea historical conflicts",
+          "severity": "high",
+          "reason": "Colonial history sensitive; avoid Japanese associations in certain contexts"
+        },
+        {
+          "topic": "Red ink for names",
+          "severity": "high",
+          "reason": "Traditionally used for deceased persons' names"
+        },
+        {
+          "topic": "Age/hierarchy disrespect",
+          "severity": "high",
+          "reason": "Strong Confucian hierarchy; address seniors appropriately"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate_direct",
+        "hierarchy": "high",
+        "formality": "formal_with_warmth",
+        "context_type": "high_context",
+        "face_saving": "very_important",
+        "decision_style": "fast_but_thorough",
+        "trust_building": "brand_reputation_and_reviews"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "지금 시작하기",
+          "transliteration": "Jigeum sijakagi",
+          "translation": "Start now",
+          "context": "Standard action CTA"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "오늘만 무료!",
+          "transliteration": "Oneulman muryo!",
+          "translation": "Free today only!",
+          "context": "Time-limited urgency; ppalli-ppalli culture"
+        },
+        {
+          "type": "cta_trial",
+          "template": "무료로 체험하세요",
+          "transliteration": "Muryoro cheheomhaseyo",
+          "translation": "Experience it for free",
+          "context": "Polite invitation form (-세요)"
+        }
+      ]
+    },
+    {
+      "locale": "hi-IN",
+      "region": "Hindi, India",
+      "culture_refs": [
+        {
+          "value": "जुगाड़ (Jugaad - Creative improvisation)",
+          "importance": "high",
+          "expression": "Resourceful problem-solving; making do with less",
+          "marketing_angle": "Value for money; clever solutions; affordability with quality"
+        },
+        {
+          "value": "परिवार (Parivaar - Family)",
+          "importance": "critical",
+          "expression": "Joint family values; family-centric decisions",
+          "marketing_angle": "Family benefits; multi-generational appeal; family plans"
+        },
+        {
+          "value": "आतिथ्य (Atithi Devo Bhava - Guest is God)",
+          "importance": "high",
+          "expression": "Exceptional hospitality; customer as honored guest",
+          "marketing_angle": "Customer respect; premium service; 'you deserve the best'"
+        },
+        {
+          "value": "आशावाद (Aashavaad - Optimism)",
+          "importance": "medium",
+          "expression": "Positive outlook; aspirational mindset",
+          "marketing_angle": "Aspirational messaging; better future; growth stories"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Cow/beef references",
+          "severity": "critical",
+          "reason": "Sacred animal for majority Hindu population; avoid in food/leather contexts"
+        },
+        {
+          "topic": "Religious insensitivity (Hindu-Muslim dynamics)",
+          "severity": "critical",
+          "reason": "Complex religious diversity; maintain neutrality"
+        },
+        {
+          "topic": "Left hand usage in imagery",
+          "severity": "medium",
+          "reason": "Left hand considered impure; show products being used with right hand"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_warm",
+        "hierarchy": "high",
+        "formality": "respectful_informal",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "family_consensus",
+        "trust_building": "word_of_mouth_and_celebrities"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "अभी शुरू करें",
+          "transliteration": "Abhi shuru karein",
+          "translation": "Start now",
+          "context": "Respectful imperative form"
+        },
+        {
+          "type": "cta_value",
+          "template": "मुफ्त में आज़माएं",
+          "transliteration": "Muft mein aazmayen",
+          "translation": "Try for free",
+          "context": "Value proposition emphasis"
+        },
+        {
+          "type": "cta_family",
+          "template": "अपने परिवार के लिए",
+          "transliteration": "Apne parivaar ke liye",
+          "translation": "For your family",
+          "context": "Family-oriented products"
+        }
+      ]
+    },
+    {
+      "locale": "bn-BD",
+      "region": "Bengali, Bangladesh",
+      "culture_refs": [
+        {
+          "value": "আত্মীয়তা (Atmiyota - Kinship)",
+          "importance": "high",
+          "expression": "Strong family and community bonds",
+          "marketing_angle": "Community benefits; family packages; group discounts"
+        },
+        {
+          "value": "অতিথি (Atithi - Guest respect)",
+          "importance": "high",
+          "expression": "Hospitality and warmth to outsiders",
+          "marketing_angle": "Customer appreciation; welcoming messaging"
+        },
+        {
+          "value": "সংস্কৃতি (Sanskriti - Cultural pride)",
+          "importance": "high",
+          "expression": "Bengali language and cultural heritage pride",
+          "marketing_angle": "Bengali language content; cultural references; local festivals"
+        },
+        {
+          "value": "উদ্যম (Uddyam - Entrepreneurship)",
+          "importance": "medium",
+          "expression": "Rising entrepreneurial spirit; self-improvement",
+          "marketing_angle": "Business growth; skill development; economic empowerment"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Religious imagery conflicts",
+          "severity": "critical",
+          "reason": "Muslim-majority country; respect Islamic values"
+        },
+        {
+          "topic": "India-Bangladesh political tensions",
+          "severity": "medium",
+          "reason": "Avoid implicit comparisons that diminish Bangladeshi identity"
+        },
+        {
+          "topic": "Immodest imagery",
+          "severity": "high",
+          "reason": "Conservative Muslim majority; modest dress and behavior in visuals"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_polite",
+        "hierarchy": "high",
+        "formality": "formal_respectful",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "elder_influenced",
+        "trust_building": "community_recommendations"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "এখনই শুরু করুন",
+          "transliteration": "Ekhoni shuru korun",
+          "translation": "Start now",
+          "context": "Polite imperative (আপনি form)"
+        },
+        {
+          "type": "cta_trial",
+          "template": "বিনামূল্যে ব্যবহার করুন",
+          "transliteration": "Binamulye byabohar korun",
+          "translation": "Use for free",
+          "context": "Value-focused CTA"
+        },
+        {
+          "type": "cta_learn",
+          "template": "আরও জানুন",
+          "transliteration": "Aro janun",
+          "translation": "Learn more",
+          "context": "Low-commitment exploration"
+        }
+      ]
+    },
+    {
+      "locale": "ta-IN",
+      "region": "Tamil, India",
+      "culture_refs": [
+        {
+          "value": "தமிழ் பெருமை (Tamil Perumai - Tamil pride)",
+          "importance": "critical",
+          "expression": "Strong pride in Tamil language and culture; oldest living language",
+          "marketing_angle": "Tamil-first content; acknowledge cultural heritage; avoid Hindi imposition"
+        },
+        {
+          "value": "கல்வி (Kalvi - Education)",
+          "importance": "high",
+          "expression": "High value on education and learning",
+          "marketing_angle": "Educational benefits; skill improvement; knowledge-focused"
+        },
+        {
+          "value": "குடும்பம் (Kudumbam - Family)",
+          "importance": "high",
+          "expression": "Strong family bonds and joint family system",
+          "marketing_angle": "Family benefits; multi-user plans; elder respect"
+        },
+        {
+          "value": "தொழில் (Thozhil - Industry/work ethic)",
+          "importance": "medium",
+          "expression": "Strong work ethic; industrial state",
+          "marketing_angle": "Productivity tools; business growth; professional development"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Hindi imposition",
+          "severity": "critical",
+          "reason": "Strong anti-Hindi sentiment historically; always provide Tamil-first content"
+        },
+        {
+          "topic": "Caste references",
+          "severity": "high",
+          "reason": "Sensitive topic; Dravidian movement's anti-caste stance"
+        },
+        {
+          "topic": "Religious conversion messaging",
+          "severity": "high",
+          "reason": "Sensitive religious dynamics between Hindu majority and minorities"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate_direct",
+        "hierarchy": "high",
+        "formality": "formal_respectful",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "deliberate_value_focused",
+        "trust_building": "local_endorsements"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "இப்போதே தொடங்குங்கள்",
+          "transliteration": "Ippodhe thodangungal",
+          "translation": "Start now",
+          "context": "Respectful plural imperative"
+        },
+        {
+          "type": "cta_trial",
+          "template": "இலவசமாக முயற்சிக்கவும்",
+          "transliteration": "Ilavasamaga muyarchikkavum",
+          "translation": "Try for free",
+          "context": "Polite invitation"
+        },
+        {
+          "type": "cta_learn",
+          "template": "மேலும் அறிக",
+          "transliteration": "Melum ariga",
+          "translation": "Learn more",
+          "context": "Information-seeking CTA"
+        }
+      ]
+    },
+    {
+      "locale": "te-IN",
+      "region": "Telugu, India (Andhra Pradesh & Telangana)",
+      "culture_refs": [
+        {
+          "value": "తెలుగు గర్వం (Telugu Garvam - Telugu pride)",
+          "importance": "high",
+          "expression": "Pride in Telugu language; 'Italian of the East'",
+          "marketing_angle": "Telugu language content; cultural respect; regional focus"
+        },
+        {
+          "value": "అతిథి దేవో భవ (Atithi Devo Bhava)",
+          "importance": "high",
+          "expression": "Guest is God; exceptional hospitality",
+          "marketing_angle": "Customer respect; VIP treatment messaging"
+        },
+        {
+          "value": "కుటుంబం (Kutumbam - Family)",
+          "importance": "high",
+          "expression": "Strong family values; joint family decisions",
+          "marketing_angle": "Family plans; multi-generational benefits"
+        },
+        {
+          "value": "వ్యాపారం (Vyaapaaram - Business)",
+          "importance": "high",
+          "expression": "Strong business community; entrepreneurial culture",
+          "marketing_angle": "Business growth; SME focus; Hyderabad tech hub associations"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "AP-Telangana tensions",
+          "severity": "medium",
+          "reason": "Recent state bifurcation; be neutral between regions"
+        },
+        {
+          "topic": "Caste references",
+          "severity": "high",
+          "reason": "Complex caste dynamics; avoid explicit/implicit references"
+        },
+        {
+          "topic": "Religious favoritism",
+          "severity": "medium",
+          "reason": "Diverse religious population; maintain neutrality"
+        }
+      ],
+      "audience_traits": {
+        "directness": "moderate_indirect",
+        "hierarchy": "high",
+        "formality": "respectful_formal",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "family_and_value_driven",
+        "trust_building": "celebrity_and_local_endorsements"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "ఇప్పుడే ప్రారంభించండి",
+          "transliteration": "Ippude prarambhinchandi",
+          "translation": "Start now",
+          "context": "Respectful plural form"
+        },
+        {
+          "type": "cta_trial",
+          "template": "ఉచితంగా ప్రయత్నించండి",
+          "transliteration": "Uchitamga prayatnimchandi",
+          "translation": "Try for free",
+          "context": "Free trial emphasis"
+        },
+        {
+          "type": "cta_learn",
+          "template": "మరింత తెలుసుకోండి",
+          "transliteration": "Marinta telusukondi",
+          "translation": "Know more",
+          "context": "Low-commitment CTA"
+        }
+      ]
+    },
+    {
+      "locale": "vi-VN",
+      "region": "Vietnamese, Vietnam",
+      "culture_refs": [
+        {
+          "value": "Tình cảm gia đình (Family affection)",
+          "importance": "critical",
+          "expression": "Deep family bonds; filial piety; ancestral respect",
+          "marketing_angle": "Family benefits; honoring parents; multi-generational appeal"
+        },
+        {
+          "value": "Tiết kiệm (Thrift)",
+          "importance": "high",
+          "expression": "Value-consciousness; saving mindset; practical spending",
+          "marketing_angle": "Value for money; savings messaging; practical benefits"
+        },
+        {
+          "value": "Học hỏi (Learning)",
+          "importance": "high",
+          "expression": "High value on education and self-improvement",
+          "marketing_angle": "Educational benefits; skill development; career advancement"
+        },
+        {
+          "value": "Tự hào dân tộc (National pride)",
+          "importance": "high",
+          "expression": "Pride in Vietnamese independence and resilience",
+          "marketing_angle": "Vietnamese success stories; local brand partnerships"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "War references (American War)",
+          "severity": "high",
+          "reason": "Called 'American War' in Vietnam; avoid glorifying; sensitive for older generation"
+        },
+        {
+          "topic": "China-Vietnam tensions",
+          "severity": "high",
+          "reason": "South China Sea disputes; avoid perceived Chinese dominance"
+        },
+        {
+          "topic": "Political criticism",
+          "severity": "critical",
+          "reason": "One-party state; avoid any political commentary"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_polite",
+        "hierarchy": "high",
+        "formality": "formal_respectful",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "value_conscious_family",
+        "trust_building": "social_proof_and_reviews"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Bắt đầu ngay",
+          "transliteration": "Bat dau ngay",
+          "translation": "Start now",
+          "context": "Direct action CTA"
+        },
+        {
+          "type": "cta_trial",
+          "template": "Dùng thử miễn phí",
+          "transliteration": "Dung thu mien phi",
+          "translation": "Try free",
+          "context": "Free trial emphasis"
+        },
+        {
+          "type": "cta_value",
+          "template": "Tiết kiệm ngay hôm nay",
+          "transliteration": "Tiet kiem ngay hom nay",
+          "translation": "Save today",
+          "context": "Value/savings focused"
+        }
+      ]
+    },
+    {
+      "locale": "th-TH",
+      "region": "Thai, Thailand",
+      "culture_refs": [
+        {
+          "value": "สนุก (Sanuk - Fun)",
+          "importance": "high",
+          "expression": "Life should be enjoyable; work should be pleasant",
+          "marketing_angle": "Enjoyable experience; fun messaging; not too serious"
+        },
+        {
+          "value": "เกรงใจ (Kreng Jai - Considerate heart)",
+          "importance": "critical",
+          "expression": "Not imposing on others; consideration; avoiding burden",
+          "marketing_angle": "No-pressure sales; respectful approach; easy opt-out"
+        },
+        {
+          "value": "หน้า (Na - Face)",
+          "importance": "high",
+          "expression": "Social reputation and dignity preservation",
+          "marketing_angle": "Premium positioning; discretion; status enhancement"
+        },
+        {
+          "value": "พระมหากษัตริย์ (Monarchy reverence)",
+          "importance": "critical",
+          "expression": "Deep reverence for the Thai royal family",
+          "marketing_angle": "Royal warrant associations where applicable; never negative royal references"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Monarchy criticism (lèse-majesté)",
+          "severity": "critical",
+          "reason": "Illegal; severe prison sentences; never joke about or criticize royalty"
+        },
+        {
+          "topic": "Feet/head touching",
+          "severity": "high",
+          "reason": "Feet are lowest/dirtiest; head is sacred; avoid in imagery"
+        },
+        {
+          "topic": "Buddha imagery misuse",
+          "severity": "high",
+          "reason": "Sacred; don't use decoratively or in inappropriate contexts"
+        }
+      ],
+      "audience_traits": {
+        "directness": "very_indirect",
+        "hierarchy": "very_high",
+        "formality": "formal_with_warmth",
+        "context_type": "very_high_context",
+        "face_saving": "critical",
+        "decision_style": "relationship_based",
+        "trust_building": "likability_and_referrals"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "เริ่มต้นเลย",
+          "transliteration": "Roem ton loei",
+          "translation": "Start now",
+          "context": "Friendly imperative"
+        },
+        {
+          "type": "cta_soft",
+          "template": "ลองใช้ฟรี",
+          "transliteration": "Long chai free",
+          "translation": "Try using free",
+          "context": "Low-pressure trial"
+        },
+        {
+          "type": "cta_fun",
+          "template": "มาสนุกกันเถอะ!",
+          "transliteration": "Ma sanuk gan thoe!",
+          "translation": "Let's have fun!",
+          "context": "Sanuk-oriented, casual products"
+        }
+      ]
+    },
+    {
+      "locale": "id-ID",
+      "region": "Indonesian, Indonesia",
+      "culture_refs": [
+        {
+          "value": "Gotong Royong (Mutual cooperation)",
+          "importance": "critical",
+          "expression": "Community cooperation; helping each other; collective effort",
+          "marketing_angle": "Community benefits; collaborative features; shared success"
+        },
+        {
+          "value": "Bhinneka Tunggal Ika (Unity in Diversity)",
+          "importance": "high",
+          "expression": "National motto; embracing diversity; inclusive identity",
+          "marketing_angle": "Inclusive messaging; pan-Indonesian appeal; avoid ethnic focus"
+        },
+        {
+          "value": "Kekeluargaan (Family spirit)",
+          "importance": "high",
+          "expression": "Treating everyone like family; warmth and belonging",
+          "marketing_angle": "Welcoming tone; 'part of the family' messaging"
+        },
+        {
+          "value": "Hormat (Respect)",
+          "importance": "high",
+          "expression": "Respect for elders, authority, and religion",
+          "marketing_angle": "Respectful communication; appropriate honorifics"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Religious insensitivity (especially Islam)",
+          "severity": "critical",
+          "reason": "World's largest Muslim population; respect Islamic values and holidays"
+        },
+        {
+          "topic": "Left hand usage",
+          "severity": "medium",
+          "reason": "Left hand considered unclean; show right hand in product usage"
+        },
+        {
+          "topic": "Ethnic/religious tensions",
+          "severity": "high",
+          "reason": "Complex ethnic diversity; avoid favoritism or stereotypes"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_harmonious",
+        "hierarchy": "high",
+        "formality": "respectful_friendly",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "consensus_oriented",
+        "trust_building": "community_and_influencers"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Mulai Sekarang",
+          "transliteration": "Mulai sekarang",
+          "translation": "Start now",
+          "context": "Standard action CTA"
+        },
+        {
+          "type": "cta_trial",
+          "template": "Coba Gratis",
+          "transliteration": "Choba gratis",
+          "translation": "Try free",
+          "context": "Free trial emphasis"
+        },
+        {
+          "type": "cta_community",
+          "template": "Gabung Bersama Kami",
+          "transliteration": "Gabung bersama kami",
+          "translation": "Join together with us",
+          "context": "Community/gotong royong appeal"
+        }
+      ]
+    },
+    {
+      "locale": "ms-MY",
+      "region": "Malay, Malaysia",
+      "culture_refs": [
+        {
+          "value": "Budi (Kindness/courtesy)",
+          "importance": "high",
+          "expression": "Graciousness; reciprocal kindness; polite conduct",
+          "marketing_angle": "Courteous messaging; appreciation; gentle approach"
+        },
+        {
+          "value": "Muhibbah (Goodwill/harmony)",
+          "importance": "high",
+          "expression": "Inter-ethnic harmony; multicultural coexistence",
+          "marketing_angle": "Inclusive imagery; multi-ethnic representation; unity themes"
+        },
+        {
+          "value": "Hormat (Respect)",
+          "importance": "high",
+          "expression": "Respect for elders and authority; hierarchy awareness",
+          "marketing_angle": "Respectful tone; appropriate formality"
+        },
+        {
+          "value": "Bangsa Malaysia (Malaysian identity)",
+          "importance": "medium",
+          "expression": "Unified national identity across ethnicities",
+          "marketing_angle": "Pan-Malaysian appeal; national pride; local success stories"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Religious insensitivity",
+          "severity": "critical",
+          "reason": "Islam is state religion; respect halal requirements and Islamic values"
+        },
+        {
+          "topic": "Ethnic tensions (Bumiputera policies)",
+          "severity": "high",
+          "reason": "Complex ethnic policies; avoid race-based messaging"
+        },
+        {
+          "topic": "Pork/alcohol in Malay-focused content",
+          "severity": "high",
+          "reason": "Haram for Muslims; separate messaging for different ethnic audiences"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_polite",
+        "hierarchy": "high",
+        "formality": "formal_respectful",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "relationship_and_value",
+        "trust_building": "brand_reputation"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Mulakan Sekarang",
+          "transliteration": "Mulakan sekarang",
+          "translation": "Start now",
+          "context": "Polite imperative"
+        },
+        {
+          "type": "cta_trial",
+          "template": "Cuba Percuma",
+          "transliteration": "Chuba perchuma",
+          "translation": "Try free",
+          "context": "Free trial CTA"
+        },
+        {
+          "type": "cta_learn",
+          "template": "Ketahui Lebih Lanjut",
+          "transliteration": "Ketahui lebih lanjut",
+          "translation": "Know more",
+          "context": "Information-seeking CTA"
+        }
+      ]
+    },
+    {
+      "locale": "fil-PH",
+      "region": "Filipino, Philippines",
+      "culture_refs": [
+        {
+          "value": "Bayanihan (Community spirit)",
+          "importance": "critical",
+          "expression": "Neighbors helping neighbors; community cooperation",
+          "marketing_angle": "Community features; helping others; shared success"
+        },
+        {
+          "value": "Pakikisama (Smooth relationships)",
+          "importance": "high",
+          "expression": "Getting along; maintaining harmony; group acceptance",
+          "marketing_angle": "Social features; group plans; 'share with friends'"
+        },
+        {
+          "value": "Hiya (Shame/social propriety)",
+          "importance": "high",
+          "expression": "Avoiding shame; maintaining social dignity",
+          "marketing_angle": "Discrete purchases; privacy features; face-saving options"
+        },
+        {
+          "value": "Utang na Loob (Debt of gratitude)",
+          "importance": "high",
+          "expression": "Reciprocal obligations; loyalty from kindness received",
+          "marketing_angle": "Loyalty programs; referral rewards; gratitude messaging"
+        },
+        {
+          "value": "Masayahin (Joyful disposition)",
+          "importance": "medium",
+          "expression": "Positive outlook; finding joy despite challenges",
+          "marketing_angle": "Upbeat messaging; humor acceptable; celebration themes"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Catholic Church criticism",
+          "severity": "high",
+          "reason": "Strong Catholic majority; respect religious institutions"
+        },
+        {
+          "topic": "Colonial history insensitivity",
+          "severity": "medium",
+          "reason": "Complex Spanish/American colonial history; avoid patronizing"
+        },
+        {
+          "topic": "Class/poverty stereotypes",
+          "severity": "medium",
+          "reason": "Significant inequality; avoid classist messaging"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect_warm",
+        "hierarchy": "moderate_high",
+        "formality": "respectful_casual",
+        "context_type": "high_context",
+        "face_saving": "important",
+        "decision_style": "social_influenced",
+        "trust_building": "personal_recommendations"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Magsimula Na",
+          "transliteration": "Mag-simula na",
+          "translation": "Start now",
+          "context": "Action-oriented CTA"
+        },
+        {
+          "type": "cta_trial",
+          "template": "Subukan Nang Libre",
+          "transliteration": "Subukan nang libre",
+          "translation": "Try for free",
+          "context": "Free trial emphasis"
+        },
+        {
+          "type": "cta_community",
+          "template": "Samahan Mo Kami",
+          "transliteration": "Samahan mo kami",
+          "translation": "Join us",
+          "context": "Community/bayanihan appeal"
+        }
+      ]
+    }
+  ],
+  "cross_regional_insights": {
+    "chinese_variants": {
+      "key_differences": {
+        "zh-CN": "Pragmatic, status-focused, collective nationalism, large-number social proof",
+        "zh-TW": "Individual choice, lifestyle quality, warmth, anti-mainland positioning",
+        "zh-HK": "Efficiency-focused, cosmopolitan, bilingual comfort, business-pragmatic"
+      },
+      "shared_elements": ["Face importance", "Family values", "Number 4 avoidance"],
+      "critical_localization": "Always use correct script (Simplified vs Traditional); never conflate Taiwan with China"
+    },
+    "east_asian_shared": {
+      "values": ["Face/reputation", "Hierarchy", "High-context communication", "Group harmony"],
+      "differences": {
+        "japan": "Most indirect, consensus (nemawashi), quality obsession, very slow decisions",
+        "korea": "Ppalli-ppalli urgency, blend of direct/indirect, brand/trend conscious",
+        "china": "Guanxi networks, pragmatic value-focus, large-scale social proof"
+      }
+    },
+    "south_asian_shared": {
+      "values": ["Family-centric decisions", "Hospitality culture", "Value-consciousness"],
+      "critical_localization": {
+        "tamil": "NEVER default to Hindi; Tamil-first is mandatory",
+        "telugu": "Respect AP/Telangana regional identities",
+        "hindi": "Family messaging; Bollywood celebrity associations effective"
+      }
+    },
+    "southeast_asian_shared": {
+      "values": ["Community harmony", "Religious respect", "Face-saving"],
+      "critical_localization": {
+        "islam_factor": ["id-ID", "ms-MY", "bn-BD"],
+        "catholic_factor": ["fil-PH"],
+        "buddhist_factor": ["th-TH", "vi-VN"],
+        "monarchy_sensitivity": ["th-TH"]
+      }
+    }
+  },
+  "implementation_notes": {
+    "novanet_integration": {
+      "node_classes": {
+        "CultureRef": "Store cultural values with importance levels",
+        "Taboo": "Marketing restrictions by severity",
+        "AudienceTrait": "Communication style attributes",
+        "Pattern": "CTA templates with native script"
+      },
+      "arc_relationships": [
+        "Locale -[:HAS_CULTURE]-> CultureSet -[:CONTAINS_CULTURE_REF]-> CultureRef",
+        "Locale -[:HAS_TABOOS]-> TabooSet -[:CONTAINS_TABOO]-> Taboo",
+        "Locale -[:HAS_AUDIENCE]-> AudienceSet -[:CONTAINS_AUDIENCE_TRAIT]-> AudienceTrait",
+        "Locale -[:HAS_PATTERNS]-> PatternSet -[:CONTAINS_PATTERN]-> Pattern"
+      ]
+    },
+    "quality_guidelines": {
+      "native_review": "All patterns should be reviewed by native speakers before production use",
+      "cultural_validation": "CultureRef and Taboo data should be validated with regional marketing experts",
+      "update_frequency": "Review quarterly for geopolitical changes affecting taboos"
+    }
+  }
+}

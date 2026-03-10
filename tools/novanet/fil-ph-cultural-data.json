@@ -1,0 +1,261 @@
+{
+  "locale": "fil-PH",
+  "country": "Philippines",
+  "language": "Filipino",
+  "expressions": [
+    {
+      "key": "fil-ph-expr-001",
+      "text": "Subukan mo na!",
+      "english": "Try it now!",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "cta"
+    },
+    {
+      "key": "fil-ph-expr-002",
+      "text": "Libre lang!",
+      "english": "It's free!",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "pricing"
+    },
+    {
+      "key": "fil-ph-expr-003",
+      "text": "Mabilis at madali",
+      "english": "Fast and easy",
+      "context": "marketing",
+      "register": "professional",
+      "domain": "value_proposition"
+    },
+    {
+      "key": "fil-ph-expr-004",
+      "text": "Mag-sign up ngayon",
+      "english": "Sign up now",
+      "context": "marketing",
+      "register": "professional",
+      "domain": "cta"
+    },
+    {
+      "key": "fil-ph-expr-005",
+      "text": "I-download na",
+      "english": "Download now",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "cta"
+    },
+    {
+      "key": "fil-ph-expr-006",
+      "text": "Sulit na sulit!",
+      "english": "Totally worth it!",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "value_proposition"
+    },
+    {
+      "key": "fil-ph-expr-007",
+      "text": "Para sa'yo lang",
+      "english": "Just for you",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "personalization"
+    },
+    {
+      "key": "fil-ph-expr-008",
+      "text": "Walang kahirap-hirap",
+      "english": "No hassle / Effortless",
+      "context": "marketing",
+      "register": "professional",
+      "domain": "ease_of_use"
+    },
+    {
+      "key": "fil-ph-expr-009",
+      "text": "Siguradong maaasahan",
+      "english": "Reliably dependable",
+      "context": "formal",
+      "register": "professional",
+      "domain": "trust"
+    },
+    {
+      "key": "fil-ph-expr-010",
+      "text": "Samahan mo kami",
+      "english": "Join us",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "community"
+    },
+    {
+      "key": "fil-ph-expr-011",
+      "text": "Bagong teknolohiya",
+      "english": "New technology",
+      "context": "marketing",
+      "register": "professional",
+      "domain": "innovation"
+    },
+    {
+      "key": "fil-ph-expr-012",
+      "text": "Salamat sa pagtitiwala",
+      "english": "Thank you for trusting us",
+      "context": "formal",
+      "register": "professional",
+      "domain": "gratitude"
+    },
+    {
+      "key": "fil-ph-expr-013",
+      "text": "Mas maganda, mas mura",
+      "english": "Better and cheaper",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "comparison"
+    },
+    {
+      "key": "fil-ph-expr-014",
+      "text": "I-scan mo lang",
+      "english": "Just scan it",
+      "context": "marketing",
+      "register": "casual",
+      "domain": "instruction"
+    },
+    {
+      "key": "fil-ph-expr-015",
+      "text": "Maging isa sa amin",
+      "english": "Become one of us",
+      "context": "marketing",
+      "register": "professional",
+      "domain": "community"
+    }
+  ],
+  "culture_refs": [
+    {
+      "name": "Pasko",
+      "description": "World's longest Christmas season (September-January). Major shopping and family gifting focus.",
+      "category": "holiday"
+    },
+    {
+      "name": "Bayanihan",
+      "description": "Community helping spirit. Traditional practice of community members helping each other.",
+      "category": "value"
+    },
+    {
+      "name": "Utang na loob",
+      "description": "Debt of gratitude. Deep sense of reciprocal obligation.",
+      "category": "value"
+    },
+    {
+      "name": "Undas",
+      "description": "All Saints Day/All Souls Day (November 1-2). Family gathering time to honor deceased relatives.",
+      "category": "holiday"
+    },
+    {
+      "name": "Fiesta culture",
+      "description": "Town festivals with parades, food, and gatherings. Hospitality is paramount.",
+      "category": "tradition"
+    },
+    {
+      "name": "Pakikisama",
+      "description": "Getting along and social harmony. Value of maintaining smooth interpersonal relationships.",
+      "category": "value"
+    },
+    {
+      "name": "OFW culture",
+      "description": "Over 10 million Overseas Filipino Workers. Family separation and remittances are common reality.",
+      "category": "social"
+    },
+    {
+      "name": "Pista ng mga Puso",
+      "description": "Valentine's Day. Extremely popular with mass weddings and elaborate proposals.",
+      "category": "holiday"
+    }
+  ],
+  "taboos": [
+    {
+      "name": "Disrespectful religious imagery",
+      "description": "Philippines is 80%+ Catholic. Avoid using religious symbols in casual or commercial contexts.",
+      "severity": "high"
+    },
+    {
+      "name": "Pointing with index finger",
+      "description": "Pointing at people is rude. Filipinos use lips or chin to point direction.",
+      "severity": "medium"
+    },
+    {
+      "name": "Direct criticism",
+      "description": "Due to hiya (shame) culture, direct criticism is uncomfortable. Public shaming is devastating.",
+      "severity": "high"
+    },
+    {
+      "name": "Political references",
+      "description": "Philippine politics is highly polarized. Avoid any political figures or controversial topics.",
+      "severity": "high"
+    },
+    {
+      "name": "Number 13 and black",
+      "description": "Western superstitions adopted. Black is associated with mourning.",
+      "severity": "low"
+    }
+  ],
+  "patterns": [
+    {
+      "key": "fil-ph-pat-001",
+      "template": "I-{verb} mo na ang {product}!",
+      "type": "cta",
+      "context": "button",
+      "tone": "friendly_urgent"
+    },
+    {
+      "key": "fil-ph-pat-002",
+      "template": "{Adjective} at {Adjective} - {product}",
+      "type": "tagline",
+      "context": "landing",
+      "tone": "professional"
+    },
+    {
+      "key": "fil-ph-pat-003",
+      "template": "Libre ang {feature}, {benefit}!",
+      "type": "cta",
+      "context": "hero",
+      "tone": "excited"
+    },
+    {
+      "key": "fil-ph-pat-004",
+      "template": "Kasama mo ang {number}+ na {users}",
+      "type": "social_proof",
+      "context": "landing",
+      "tone": "community"
+    },
+    {
+      "key": "fil-ph-pat-005",
+      "template": "Para sa {audience}, gawa para sa {value}",
+      "type": "value_proposition",
+      "context": "landing",
+      "tone": "professional"
+    },
+    {
+      "key": "fil-ph-pat-006",
+      "template": "Subukan - {step1}, {step2}, tapos na!",
+      "type": "how_it_works",
+      "context": "landing",
+      "tone": "instructional"
+    },
+    {
+      "key": "fil-ph-pat-007",
+      "template": "May tanong? {action} lang!",
+      "type": "support",
+      "context": "support",
+      "tone": "friendly"
+    },
+    {
+      "key": "fil-ph-pat-008",
+      "template": "Hindi ka mag-iisa - {support_statement}",
+      "type": "reassurance",
+      "context": "support",
+      "tone": "reassuring"
+    }
+  ],
+  "audience_traits": {
+    "formality": "casual_respectful",
+    "directness": "indirect_positive",
+    "decision_making": "social_influenced",
+    "trust_factors": ["social_proof", "local_payment", "local_support"],
+    "communication_channels": ["Facebook", "Messenger", "Viber", "TikTok"]
+  }
+}

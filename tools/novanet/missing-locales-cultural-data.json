@@ -1,0 +1,370 @@
+{
+  "metadata": {
+    "generated_at": "2026-03-10",
+    "version": "1.0.0",
+    "purpose": "Cultural knowledge atoms for fil-PH, lo-LA, or-IN",
+    "source": "Perplexity AI research"
+  },
+  "locales": [
+    {
+      "locale": "fil-PH",
+      "language": "Filipino",
+      "region": "Philippines",
+      "culture_refs": [
+        {
+          "value": "Pakikisama (Harmony)",
+          "importance": "critical",
+          "expression": "Maintaining smooth interpersonal relationships and group harmony is paramount",
+          "marketing_angle": "Position products as enhancing group belonging and social harmony"
+        },
+        {
+          "value": "Hiya (Sense of Shame)",
+          "importance": "critical",
+          "expression": "Deep concern for social acceptance and avoiding embarrassment or losing face",
+          "marketing_angle": "Avoid direct confrontation; use indirect, respectful messaging"
+        },
+        {
+          "value": "Utang na Loob (Debt of Gratitude)",
+          "importance": "high",
+          "expression": "Strong sense of reciprocity and obligation to return favors",
+          "marketing_angle": "Frame loyalty programs as mutual gratitude; emphasize lasting relationships"
+        },
+        {
+          "value": "Bayanihan (Community Spirit)",
+          "importance": "high",
+          "expression": "Community helping each other, especially in times of need",
+          "marketing_angle": "Highlight community benefits and collective success stories"
+        },
+        {
+          "value": "Family-First Values",
+          "importance": "critical",
+          "expression": "Family is the center of Filipino life; decisions consider family impact",
+          "marketing_angle": "Show multi-generational benefits; family testimonials resonate"
+        },
+        {
+          "value": "Respect for Elders (Po/Opo)",
+          "importance": "high",
+          "expression": "Use of honorifics and deference to older or senior individuals",
+          "marketing_angle": "Use respectful language; show deference in formal communications"
+        },
+        {
+          "value": "Hospitality (Mabuhay Spirit)",
+          "importance": "high",
+          "expression": "Welcoming guests warmly is a core cultural value",
+          "marketing_angle": "Position brand as welcoming and inclusive"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Public confrontation",
+          "severity": "high",
+          "reason": "Causes loss of face (hiya) and damages relationships permanently",
+          "alternative": "Use indirect communication, private discussions, or intermediaries"
+        },
+        {
+          "topic": "Refusing hospitality",
+          "severity": "medium",
+          "reason": "Declining food or gifts is seen as rejecting the host's generosity",
+          "alternative": "Accept graciously, even a small portion"
+        },
+        {
+          "topic": "Loud or aggressive behavior",
+          "severity": "high",
+          "reason": "Filipinos avoid raising voices and showing anger publicly",
+          "alternative": "Maintain calm, polite demeanor in all interactions"
+        },
+        {
+          "topic": "Rushing decisions",
+          "severity": "medium",
+          "reason": "Relationships take time to build; hasty decisions are seen as disrespectful",
+          "alternative": "Allow time for relationship building and consensus"
+        },
+        {
+          "topic": "Disrespecting elders",
+          "severity": "critical",
+          "reason": "Age hierarchy is fundamental; ignoring it is deeply offensive",
+          "alternative": "Always greet elders first; use honorific titles"
+        }
+      ],
+      "audience_traits": [
+        {
+          "trait": "Mobile-first consumers",
+          "description": "Philippines has one of highest social media usage rates globally"
+        },
+        {
+          "trait": "OFW influence",
+          "description": "Overseas Filipino Workers shape consumption patterns and aspirations"
+        },
+        {
+          "trait": "Celebrity endorsements",
+          "description": "High trust in celebrity and influencer recommendations"
+        }
+      ],
+      "expressions": [
+        {
+          "text": "Mabuhay!",
+          "register": "formal",
+          "context": "Traditional welcome greeting"
+        },
+        {
+          "text": "Salamat po",
+          "register": "polite",
+          "context": "Thank you (with respect marker)"
+        },
+        {
+          "text": "Diskarte lang",
+          "register": "casual",
+          "context": "Being resourceful and street-smart"
+        }
+      ],
+      "patterns": [
+        {
+          "type": "cta",
+          "template": "Sumali na sa {product} at maranasan ang pagkakaiba!",
+          "translation": "Join {product} and experience the difference!"
+        },
+        {
+          "type": "social_proof",
+          "template": "Pinagkakatiwalaan ng milyun-milyong pamilyang Pilipino",
+          "translation": "Trusted by millions of Filipino families"
+        }
+      ]
+    },
+    {
+      "locale": "lo-LA",
+      "language": "Lao",
+      "region": "Laos",
+      "culture_refs": [
+        {
+          "value": "Theravada Buddhism",
+          "importance": "critical",
+          "expression": "Buddhism permeates daily life; monks and temples hold central reverence",
+          "marketing_angle": "Respect Buddhist values; avoid frivolous or materialistic messaging"
+        },
+        {
+          "value": "Harmony and Non-confrontation",
+          "importance": "critical",
+          "expression": "Preserving face and avoiding conflict is paramount in all interactions",
+          "marketing_angle": "Use soft, harmonious imagery and indirect communication"
+        },
+        {
+          "value": "Sabaidee Spirit",
+          "importance": "high",
+          "expression": "The universal greeting reflects cultural warmth and well-wishing",
+          "marketing_angle": "Incorporate Sabaidee in campaigns for cultural authenticity"
+        },
+        {
+          "value": "Respect for Hierarchy",
+          "importance": "high",
+          "expression": "Age and social status determine appropriate behavior and language",
+          "marketing_angle": "Use formal titles (Than, Nai, Nang) appropriately"
+        },
+        {
+          "value": "Modesty",
+          "importance": "high",
+          "expression": "Physical and behavioral modesty is expected in public",
+          "marketing_angle": "Avoid flashy or ostentatious imagery; promote simplicity"
+        },
+        {
+          "value": "Community Support",
+          "importance": "medium",
+          "expression": "Supporting local businesses and community reflects goodwill",
+          "marketing_angle": "Highlight local partnerships and community benefits"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Touching heads",
+          "severity": "critical",
+          "reason": "The head is considered sacred and the highest part of the body",
+          "alternative": "Never touch anyone's head, even children"
+        },
+        {
+          "topic": "Pointing with feet",
+          "severity": "critical",
+          "reason": "Feet are considered the lowest and dirtiest part of the body",
+          "alternative": "Never point feet at people, Buddha images, or temples"
+        },
+        {
+          "topic": "Public displays of affection",
+          "severity": "high",
+          "reason": "Physical intimacy in public is considered inappropriate",
+          "alternative": "Maintain modest, respectful distance in public"
+        },
+        {
+          "topic": "Raising voice or arguing",
+          "severity": "high",
+          "reason": "Causes loss of face and disrupts harmony",
+          "alternative": "Speak softly and calmly; resolve issues privately"
+        },
+        {
+          "topic": "Disrespecting monks",
+          "severity": "critical",
+          "reason": "Monks are highly revered; women must not touch them",
+          "alternative": "Show utmost respect; women maintain physical distance"
+        },
+        {
+          "topic": "Rushing decisions",
+          "severity": "medium",
+          "reason": "Patience is valued; haste can seem disrespectful",
+          "alternative": "Allow time for consensus and relationship building"
+        }
+      ],
+      "audience_traits": [
+        {
+          "trait": "Mobile penetration growing",
+          "description": "Increasing smartphone adoption, especially among youth"
+        },
+        {
+          "trait": "Traditional values",
+          "description": "Strong adherence to Buddhist and traditional practices"
+        },
+        {
+          "trait": "Face-conscious",
+          "description": "Social standing and reputation highly important"
+        }
+      ],
+      "expressions": [
+        {
+          "text": "ສະບາຍດີ (Sabaidee)",
+          "register": "standard",
+          "context": "Universal greeting meaning well-being"
+        },
+        {
+          "text": "ຂອບໃຈ (Khop jai)",
+          "register": "casual",
+          "context": "Thank you"
+        },
+        {
+          "text": "ຂອບໃຈຈ້າວ (Khop jai jao)",
+          "register": "polite",
+          "context": "Thank you (polite, male speaker)"
+        }
+      ],
+      "patterns": [
+        {
+          "type": "cta",
+          "template": "ເຂົ້າຮ່ວມ {product} ມື້ນີ້",
+          "translation": "Join {product} today"
+        },
+        {
+          "type": "greeting",
+          "template": "ສະບາຍດີ! ຍິນດີຕ້ອນຮັບ",
+          "translation": "Hello! Welcome"
+        }
+      ]
+    },
+    {
+      "locale": "or-IN",
+      "language": "Odia",
+      "region": "Odisha, India",
+      "culture_refs": [
+        {
+          "value": "Lord Jagannath Devotion",
+          "importance": "critical",
+          "expression": "Lord Jagannath holds central significance in Odia life and culture",
+          "marketing_angle": "Respect Jagannath traditions; avoid commercial exploitation of sacred imagery"
+        },
+        {
+          "value": "Temple Heritage",
+          "importance": "high",
+          "expression": "Odisha's temples are central to cultural identity and daily practice",
+          "marketing_angle": "Reference temple heritage respectfully; emphasize spiritual connections"
+        },
+        {
+          "value": "Odissi Classical Arts",
+          "importance": "high",
+          "expression": "Odissi dance originated in temples; represents regional pride",
+          "marketing_angle": "Celebrate classical arts in culturally appropriate ways"
+        },
+        {
+          "value": "ଦୟାକରି (Dayakari - Politeness)",
+          "importance": "high",
+          "expression": "Respect and politeness are fundamental to Odia interactions",
+          "marketing_angle": "Use respectful, courteous language; show patience"
+        },
+        {
+          "value": "Folk Culture Preservation",
+          "importance": "medium",
+          "expression": "Active efforts to preserve indigenous heritage against Western influence",
+          "marketing_angle": "Celebrate traditional practices; avoid undermining local culture"
+        },
+        {
+          "value": "Festival Traditions",
+          "importance": "high",
+          "expression": "Major festivals like Rath Yatra, Nuakhai, Pousa Purnima are central",
+          "marketing_angle": "Align campaigns with festival calendars; respect traditions"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Disrespecting Lord Jagannath",
+          "severity": "critical",
+          "reason": "Jagannath is the heart of Odia identity; any disrespect is deeply offensive",
+          "alternative": "Show utmost reverence; avoid commercial use of sacred imagery"
+        },
+        {
+          "topic": "Temple photography without permission",
+          "severity": "high",
+          "reason": "Sacred spaces require permission and respect",
+          "alternative": "Seek appropriate permissions; be mindful of sacred areas"
+        },
+        {
+          "topic": "Western cultural imposition",
+          "severity": "medium",
+          "reason": "Sensitivity about preserving indigenous culture from external influences",
+          "alternative": "Adapt to local culture; don't impose foreign values"
+        },
+        {
+          "topic": "Impolite language",
+          "severity": "medium",
+          "reason": "Politeness markers are expected in commercial and social interactions",
+          "alternative": "Use respectful phrases like dayakari (please)"
+        }
+      ],
+      "audience_traits": [
+        {
+          "trait": "Regional pride",
+          "description": "Strong identification with Odia heritage and Odisha state"
+        },
+        {
+          "trait": "Festival-oriented",
+          "description": "Consumer behavior strongly tied to festival calendar"
+        },
+        {
+          "trait": "Spiritually connected",
+          "description": "Daily life intertwined with religious practices"
+        }
+      ],
+      "expressions": [
+        {
+          "text": "ନମସ୍କାର (Namaskara)",
+          "register": "formal",
+          "context": "Formal greeting with respect"
+        },
+        {
+          "text": "ଧନ୍ୟବାଦ (Dhanyabad)",
+          "register": "standard",
+          "context": "Thank you"
+        },
+        {
+          "text": "ଜୟ ଜଗନ୍ନାଥ (Jai Jagannath)",
+          "register": "devotional",
+          "context": "Victory to Lord Jagannath - common blessing"
+        }
+      ],
+      "patterns": [
+        {
+          "type": "cta",
+          "template": "ଆଜି {product} ସହ ଯୋଗ ଦିଅନ୍ତୁ",
+          "translation": "Join {product} today"
+        },
+        {
+          "type": "greeting",
+          "template": "ନମସ୍କାର! ସ୍ୱାଗତ",
+          "translation": "Greetings! Welcome"
+        }
+      ]
+    }
+  ]
+}

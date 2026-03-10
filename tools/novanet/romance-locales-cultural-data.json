@@ -1,0 +1,963 @@
+{
+  "metadata": {
+    "research_date": "2026-03-10",
+    "version": "1.0.0",
+    "purpose": "Cultural knowledge atoms for Romance language locales",
+    "sources": [
+      "Hofstede cultural dimensions",
+      "Meyer Culture Map framework",
+      "Local marketing agency best practices",
+      "Native speaker validation patterns"
+    ]
+  },
+  "locales": [
+    {
+      "locale": "fr-FR",
+      "language": "French",
+      "region": "France",
+      "culture_refs": [
+        {
+          "value": "Élégance intellectuelle",
+          "importance": "high",
+          "expression": "French audiences value sophisticated, well-crafted language with literary flair",
+          "marketing_angle": "Use refined vocabulary, avoid oversimplification, intellectual rigor signals quality"
+        },
+        {
+          "value": "Patrimoine et tradition",
+          "importance": "high",
+          "expression": "Deep connection to French heritage, art de vivre, savoir-faire",
+          "marketing_angle": "Reference established expertise, longevity, craftsmanship over novelty"
+        },
+        {
+          "value": "Laïcité",
+          "importance": "medium",
+          "expression": "Strong separation of religion and public life, secularism as national identity",
+          "marketing_angle": "Avoid religious references, focus on universal humanist values"
+        },
+        {
+          "value": "Exception culturelle française",
+          "importance": "medium",
+          "expression": "Pride in French uniqueness, resistance to cultural homogenization",
+          "marketing_angle": "Position as French-adapted, not American import; highlight local relevance"
+        },
+        {
+          "value": "Art de vivre",
+          "importance": "high",
+          "expression": "Quality of life, gastronomy, aesthetics as daily practice",
+          "marketing_angle": "Frame products as enhancing life quality, not just productivity"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Aggressive sales tactics",
+          "severity": "high",
+          "reason": "Perceived as vulgar and American; French prefer subtle persuasion"
+        },
+        {
+          "topic": "Money/wealth display",
+          "severity": "medium",
+          "reason": "Overt wealth talk is considered gauche; focus on value, not price savings"
+        },
+        {
+          "topic": "Simplistic language",
+          "severity": "medium",
+          "reason": "Dumbing down content insults intelligence; maintain linguistic sophistication"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "notes": "Titles matter (Monsieur/Madame), vous by default, build relationship before transaction"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Découvrir notre solution",
+          "context": "Soft discovery verb, not pushy; implies sophistication"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "En savoir plus",
+          "context": "Knowledge-seeking CTA aligns with intellectual values"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Profitez de notre offre",
+          "context": "Benefit framing without aggressive urgency"
+        }
+      ]
+    },
+    {
+      "locale": "fr-CA",
+      "language": "French",
+      "region": "Quebec",
+      "culture_refs": [
+        {
+          "value": "Fierté québécoise",
+          "importance": "high",
+          "expression": "Strong Quebecois identity distinct from both France and English Canada",
+          "marketing_angle": "Use Quebec French vocabulary (not Parisian), acknowledge distinct identity"
+        },
+        {
+          "value": "Survivance culturelle",
+          "importance": "high",
+          "expression": "Pride in maintaining French language in North American context",
+          "marketing_angle": "Support language preservation, avoid anglicisms that feel like erasure"
+        },
+        {
+          "value": "Convivialité nord-américaine",
+          "importance": "medium",
+          "expression": "Warmer, more casual than French formality; North American friendliness",
+          "marketing_angle": "Tu form acceptable faster, casual tone works well"
+        },
+        {
+          "value": "Entrepreneuriat local",
+          "importance": "medium",
+          "expression": "Support for local Quebec businesses, buy local movement strong",
+          "marketing_angle": "Highlight local presence, Quebec-based support"
+        },
+        {
+          "value": "Joie de vivre nordique",
+          "importance": "medium",
+          "expression": "Celebration of Quebec winters, outdoor culture, festivals",
+          "marketing_angle": "Reference local seasons, festivals (St-Jean), outdoor lifestyle"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "France-Quebec comparisons",
+          "severity": "high",
+          "reason": "Implying Quebec French is inferior to Parisian French is deeply offensive"
+        },
+        {
+          "topic": "Parisian French vocabulary",
+          "severity": "medium",
+          "reason": "Using France-specific terms (portable for cellulaire, courriel not e-mail) feels foreign"
+        },
+        {
+          "topic": "Ignoring Bill 101",
+          "severity": "high",
+          "reason": "French-first is law; English-dominant materials signal disrespect"
+        }
+      ],
+      "audience_traits": {
+        "directness": "balanced",
+        "hierarchy": "low",
+        "formality": "informal",
+        "context_type": "low_context",
+        "notes": "More direct than France, tu acceptable earlier, North American efficiency valued"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Essayez gratuitement",
+          "context": "Direct trial offer, North American style"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Voir comment ça marche",
+          "context": "Casual language (ça), demo-focused"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Commencez maintenant",
+          "context": "Action-oriented, less soft than France"
+        }
+      ]
+    },
+    {
+      "locale": "fr-BE",
+      "language": "French",
+      "region": "Belgium (Wallonia/Brussels)",
+      "culture_refs": [
+        {
+          "value": "Compromis belge",
+          "importance": "high",
+          "expression": "Belgian talent for finding middle ground, consensus culture",
+          "marketing_angle": "Avoid absolutist claims, present balanced options"
+        },
+        {
+          "value": "Auto-dérision",
+          "importance": "high",
+          "expression": "Self-deprecating humor, not taking oneself too seriously",
+          "marketing_angle": "Lighter tone acceptable, modest claims over grandiose"
+        },
+        {
+          "value": "Multilinguisme quotidien",
+          "importance": "medium",
+          "expression": "Daily navigation between French, Dutch, German; code-switching normal",
+          "marketing_angle": "Language choice signals identity; provide French-first but acknowledge multilingual context"
+        },
+        {
+          "value": "Qualité de vie discrète",
+          "importance": "medium",
+          "expression": "Belgian comfort culture: beer, chocolate, frites, quiet prosperity",
+          "marketing_angle": "Understated quality over flashy, reliability over innovation hype"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Flamand-Wallon tensions",
+          "severity": "high",
+          "reason": "Linguistic community conflicts are politically sensitive; stay neutral"
+        },
+        {
+          "topic": "French superiority claims",
+          "severity": "medium",
+          "reason": "Belgians are sensitive to being treated as provincial French"
+        },
+        {
+          "topic": "Ignoring Belgian specificity",
+          "severity": "medium",
+          "reason": "Using 'septante' not 'soixante-dix' shows respect for Belgian French"
+        }
+      ],
+      "audience_traits": {
+        "directness": "balanced",
+        "hierarchy": "medium",
+        "formality": "moderate",
+        "context_type": "medium_context",
+        "notes": "Less formal than France, more practical, appreciate efficiency with politeness"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Testez notre solution",
+          "context": "Practical testing language, straightforward"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Découvrez les avantages",
+          "context": "Benefit-focused, not aspirational"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Démarrez votre essai",
+          "context": "Action-focused but not aggressive"
+        }
+      ]
+    },
+    {
+      "locale": "fr-CH",
+      "language": "French",
+      "region": "Switzerland (Romandie)",
+      "culture_refs": [
+        {
+          "value": "Précision suisse",
+          "importance": "high",
+          "expression": "Exactitude, punctuality, quality craftsmanship as core values",
+          "marketing_angle": "Emphasize precision, reliability, exact specifications"
+        },
+        {
+          "value": "Neutralité",
+          "importance": "high",
+          "expression": "Political and ideological neutrality deeply ingrained",
+          "marketing_angle": "Avoid political positioning, present balanced information"
+        },
+        {
+          "value": "Discrétion financière",
+          "importance": "high",
+          "expression": "Privacy around money matters, discretion valued",
+          "marketing_angle": "Subtle value proposition, not price-focused messaging"
+        },
+        {
+          "value": "Fédéralisme cantonal",
+          "importance": "medium",
+          "expression": "Strong local canton identity, decentralized governance",
+          "marketing_angle": "Acknowledge regional diversity, avoid Swiss generalization"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Tax discussions",
+          "severity": "high",
+          "reason": "Financial privacy is sacrosanct; avoid money-related assumptions"
+        },
+        {
+          "topic": "Rushing decisions",
+          "severity": "medium",
+          "reason": "Swiss deliberation valued; avoid urgency pressure tactics"
+        },
+        {
+          "topic": "Franco-centricité",
+          "severity": "medium",
+          "reason": "Swiss French has its own character; not a French colony"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "medium",
+        "formality": "formal",
+        "context_type": "low_context",
+        "notes": "German-influenced directness, precision in communication, punctuality sacred"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Demander une démonstration",
+          "context": "Polite request form, formal process"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Consulter la documentation",
+          "context": "Information-first approach, self-service"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Planifier votre consultation",
+          "context": "Scheduled approach, not impulsive"
+        }
+      ]
+    },
+    {
+      "locale": "es-ES",
+      "language": "Spanish",
+      "region": "Spain",
+      "culture_refs": [
+        {
+          "value": "Orgullo regional",
+          "importance": "high",
+          "expression": "Strong regional identities: Cataluña, País Vasco, Galicia, Andalucía",
+          "marketing_angle": "Avoid Madrid-centric view; acknowledge regional diversity"
+        },
+        {
+          "value": "Vida social intensa",
+          "importance": "high",
+          "expression": "Social life, relationships, family gatherings are central",
+          "marketing_angle": "Frame products as enabling connection, not isolation"
+        },
+        {
+          "value": "Estética del disfrute",
+          "importance": "medium",
+          "expression": "Enjoying life (tapas, sobremesa, siesta culture)",
+          "marketing_angle": "Quality of experience over efficiency metrics"
+        },
+        {
+          "value": "Autenticidad castiza",
+          "importance": "medium",
+          "expression": "Appreciation for authentic Spanish character, traditions",
+          "marketing_angle": "Genuine positioning over manufactured hype"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Regional political conflicts",
+          "severity": "high",
+          "reason": "Catalonia/Basque independence is politically explosive"
+        },
+        {
+          "topic": "Latin American Spanish",
+          "severity": "medium",
+          "reason": "Using ustedes for plural you (instead of vosotros) sounds foreign"
+        },
+        {
+          "topic": "Franco era references",
+          "severity": "high",
+          "reason": "Historical sensitivities around dictatorship period"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "medium",
+        "formality": "moderate",
+        "context_type": "high_context",
+        "notes": "Relationship-first, vosotros for plural, flexible timing expectations"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Descubre cómo funciona",
+          "context": "Discovery verb, informal tú, how-it-works focus"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Solicita más información",
+          "context": "Request framing, polite but direct"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Empieza tu prueba gratuita",
+          "context": "Trial emphasis, personal (tu)"
+        }
+      ]
+    },
+    {
+      "locale": "es-MX",
+      "language": "Spanish",
+      "region": "Mexico",
+      "culture_refs": [
+        {
+          "value": "Orgullo mexicano",
+          "importance": "high",
+          "expression": "Strong national identity, cultural richness, pre-Hispanic heritage",
+          "marketing_angle": "Celebrate Mexican culture, avoid U.S. condescension"
+        },
+        {
+          "value": "Calidez familiar",
+          "importance": "high",
+          "expression": "Family as cornerstone, extended family involvement",
+          "marketing_angle": "Family benefit messaging, collective decision-making"
+        },
+        {
+          "value": "Creatividad y resourcefulness",
+          "importance": "medium",
+          "expression": "Mexican ingenuity ('hacer de tripas corazón'), finding solutions",
+          "marketing_angle": "Adaptability, flexibility, problem-solving features"
+        },
+        {
+          "value": "Respeto y cortesía",
+          "importance": "high",
+          "expression": "Politeness rituals, indirect communication, saving face",
+          "marketing_angle": "Warm tone, avoid confrontational language"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Mexican stereotypes",
+          "severity": "high",
+          "reason": "Sombrero/cactus imagery offensive; modern Mexico is sophisticated"
+        },
+        {
+          "topic": "U.S.-Mexico border politics",
+          "severity": "high",
+          "reason": "Immigration politics extremely sensitive"
+        },
+        {
+          "topic": "Spain-Mexico colonial history",
+          "severity": "medium",
+          "reason": "Colonial references can feel patronizing"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "notes": "Usted default with strangers, diminutives show warmth (ahorita, tantito)"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Conoce nuestra solución",
+          "context": "Conocer (get to know) softer than discover"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Solicita una demostración",
+          "context": "Formal request, demonstrates respect"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Aprovecha esta oportunidad",
+          "context": "Take advantage, opportunity framing"
+        }
+      ]
+    },
+    {
+      "locale": "es-AR",
+      "language": "Spanish",
+      "region": "Argentina",
+      "culture_refs": [
+        {
+          "value": "Pasión rioplatense",
+          "importance": "high",
+          "expression": "Intense emotional expression, passion in everything (fútbol, tango)",
+          "marketing_angle": "Emotional appeals work well, passion language resonates"
+        },
+        {
+          "value": "Cultura psicoanalítica",
+          "importance": "medium",
+          "expression": "Argentina has most psychologists per capita; self-reflection valued",
+          "marketing_angle": "Depth over surface, introspection-friendly messaging"
+        },
+        {
+          "value": "Orgullo porteño",
+          "importance": "high",
+          "expression": "Buenos Aires identity, European heritage pride, cultural sophistication",
+          "marketing_angle": "Sophisticated positioning, cosmopolitan references"
+        },
+        {
+          "value": "Picardía criolla",
+          "importance": "medium",
+          "expression": "Street-smart cleverness, finding angles, informal workarounds",
+          "marketing_angle": "Clever solutions, outsmarting complexity"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Malvinas/Falklands",
+          "severity": "high",
+          "reason": "Deeply patriotic issue; never use 'Falklands' in Argentina"
+        },
+        {
+          "topic": "Economic crisis references",
+          "severity": "medium",
+          "reason": "Repeated economic crises are painful; don't highlight financial instability"
+        },
+        {
+          "topic": "Comparison to other LATAM",
+          "severity": "medium",
+          "reason": "Argentines see themselves as distinct from 'rest of Latin America'"
+        }
+      ],
+      "audience_traits": {
+        "directness": "direct",
+        "hierarchy": "low",
+        "formality": "informal",
+        "context_type": "medium_context",
+        "notes": "Voseo (vos instead of tú), highly expressive, debate culture"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Probá gratis ahora",
+          "context": "Voseo conjugation (probá), direct action"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Mirá cómo funciona",
+          "context": "Casual voseo, demo-focused"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Empezá tu prueba hoy",
+          "context": "Action-oriented voseo"
+        }
+      ]
+    },
+    {
+      "locale": "es-CO",
+      "language": "Spanish",
+      "region": "Colombia",
+      "culture_refs": [
+        {
+          "value": "Amabilidad paisa",
+          "importance": "high",
+          "expression": "Exceptional friendliness, hospitality, warmth in communication",
+          "marketing_angle": "Warm, personal tone; relationship-building language"
+        },
+        {
+          "value": "Emprendimiento pujante",
+          "importance": "high",
+          "expression": "Strong entrepreneurial spirit, resilience, self-improvement drive",
+          "marketing_angle": "Growth mindset messaging, business enablement"
+        },
+        {
+          "value": "Diversidad regional",
+          "importance": "medium",
+          "expression": "Strong regional identities (Costeño, Paisa, Cachaco, Caleño)",
+          "marketing_angle": "Avoid Bogotá-only focus, acknowledge regional diversity"
+        },
+        {
+          "value": "Transformación positiva",
+          "importance": "high",
+          "expression": "Pride in Colombia's transformation narrative, moving beyond past",
+          "marketing_angle": "Future-focused, innovation-ready positioning"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Drug trafficking/cartel references",
+          "severity": "high",
+          "reason": "Narcos-style stereotypes deeply offensive; Colombia has moved on"
+        },
+        {
+          "topic": "Violence/conflict history",
+          "severity": "high",
+          "reason": "Armed conflict is painful history, not marketing material"
+        },
+        {
+          "topic": "Oversimplifying Colombia",
+          "severity": "medium",
+          "reason": "Colombia is highly diverse; avoid coffee/emerald only associations"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "notes": "Usted common even among friends, exceptional politeness norms"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Conozca nuestra solución",
+          "context": "Usted form (conozca), formal and respectful"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Solicite una demostración gratuita",
+          "context": "Formal request, free trial emphasis"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Aproveche esta oportunidad",
+          "context": "Usted form, opportunity framing"
+        }
+      ]
+    },
+    {
+      "locale": "es-CL",
+      "language": "Spanish",
+      "region": "Chile",
+      "culture_refs": [
+        {
+          "value": "Pragmatismo chileno",
+          "importance": "high",
+          "expression": "Practical, business-oriented, less ceremonial than other LATAM",
+          "marketing_angle": "Results-focused messaging, efficiency valued"
+        },
+        {
+          "value": "Emprendimiento tech",
+          "importance": "high",
+          "expression": "Chile as LATAM tech hub (Start-Up Chile), innovation culture",
+          "marketing_angle": "Innovation-friendly, early adopter positioning"
+        },
+        {
+          "value": "Chilenidad distintiva",
+          "importance": "medium",
+          "expression": "Unique Chilean modismos, distinct from Argentine/Mexican Spanish",
+          "marketing_angle": "Use Chilean expressions (cachai, po, al tiro)"
+        },
+        {
+          "value": "Estabilidad valorada",
+          "importance": "medium",
+          "expression": "Appreciation for stability, reliability (post-2019 nuanced)",
+          "marketing_angle": "Trust, reliability, proven solutions"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Pinochet era politics",
+          "severity": "high",
+          "reason": "Still divisive; avoid political references entirely"
+        },
+        {
+          "topic": "Peru/Bolivia border conflicts",
+          "severity": "medium",
+          "reason": "Historical tensions with neighbors are sensitive"
+        },
+        {
+          "topic": "Treating Chile as generic LATAM",
+          "severity": "medium",
+          "reason": "Chileans proud of distinct identity and progress"
+        }
+      ],
+      "audience_traits": {
+        "directness": "balanced",
+        "hierarchy": "medium",
+        "formality": "moderate",
+        "context_type": "medium_context",
+        "notes": "Mix of tú/usted, aspirational middle class, tech-savvy"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Prueba gratis",
+          "context": "Direct, efficient, no fluff"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Conoce los beneficios",
+          "context": "Benefit-focused, practical"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Comienza altiro",
+          "context": "Chilean modismo (al tiro = right away)"
+        }
+      ]
+    },
+    {
+      "locale": "pt-BR",
+      "language": "Portuguese",
+      "region": "Brazil",
+      "culture_refs": [
+        {
+          "value": "Jeitinho brasileiro",
+          "importance": "high",
+          "expression": "Creative problem-solving, flexibility, finding workarounds",
+          "marketing_angle": "Adaptable solutions, flexibility as feature"
+        },
+        {
+          "value": "Calor humano",
+          "importance": "high",
+          "expression": "Warmth, physical closeness, emotional expressiveness",
+          "marketing_angle": "Personal connection emphasis, warm supportive tone"
+        },
+        {
+          "value": "Otimismo resiliente",
+          "importance": "high",
+          "expression": "Optimism despite challenges, 'vai dar tudo certo' mentality",
+          "marketing_angle": "Positive framing, solution over problem"
+        },
+        {
+          "value": "Diversidade continental",
+          "importance": "medium",
+          "expression": "Brazil's continental size = huge regional diversity",
+          "marketing_angle": "Avoid Rio/SP only; acknowledge Northeast, South differences"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Portugal comparison",
+          "severity": "high",
+          "reason": "Brazilian Portuguese is distinct language variant, not dialect"
+        },
+        {
+          "topic": "Crime/violence stereotypes",
+          "severity": "high",
+          "reason": "Favela/crime tourism imagery deeply offensive"
+        },
+        {
+          "topic": "Political polarization",
+          "severity": "high",
+          "reason": "Deep political division; stay completely neutral"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "informal",
+        "context_type": "high_context",
+        "notes": "Você (not tu) in most regions, warmth over efficiency, personal relationship before business"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Experimente grátis",
+          "context": "Soft trial invitation, Brazilian Portuguese"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Saiba mais",
+          "context": "Learn more, knowledge-seeking"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Comece agora mesmo",
+          "context": "'Right now' emphasis, warm urgency"
+        }
+      ]
+    },
+    {
+      "locale": "pt-PT",
+      "language": "Portuguese",
+      "region": "Portugal",
+      "culture_refs": [
+        {
+          "value": "Saudade",
+          "importance": "high",
+          "expression": "Portuguese melancholy, nostalgia for past glories, bittersweet longing",
+          "marketing_angle": "Emotional depth resonates, heritage references work"
+        },
+        {
+          "value": "Desenrascanço",
+          "importance": "high",
+          "expression": "Portuguese resourcefulness, improvising solutions with limited means",
+          "marketing_angle": "Efficiency, doing more with less, practical tools"
+        },
+        {
+          "value": "Humildade europeia",
+          "importance": "medium",
+          "expression": "Modest self-presentation, understatement over boasting",
+          "marketing_angle": "Subtle claims, avoid American-style hype"
+        },
+        {
+          "value": "Herança marítima",
+          "importance": "medium",
+          "expression": "Seafaring heritage, exploration history, global connections",
+          "marketing_angle": "International reach, global connectivity"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Brazilian Portuguese usage",
+          "severity": "high",
+          "reason": "Using Brazilian terms (você instead of tu) signals laziness or ignorance"
+        },
+        {
+          "topic": "Colonial past glorification",
+          "severity": "medium",
+          "reason": "Complex history; avoid both glorification and excessive criticism"
+        },
+        {
+          "topic": "Spain confusion",
+          "severity": "medium",
+          "reason": "Portugal is NOT Spain; distinct language and culture"
+        }
+      ],
+      "audience_traits": {
+        "directness": "balanced",
+        "hierarchy": "medium",
+        "formality": "formal",
+        "context_type": "medium_context",
+        "notes": "Tu conjugation, more formal than Brazil, European business norms"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Experimenta gratuitamente",
+          "context": "Tu form (experimenta), European Portuguese"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Sabe mais",
+          "context": "Tu form, learn more"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Começa hoje",
+          "context": "Tu form, today emphasis"
+        }
+      ]
+    },
+    {
+      "locale": "it-IT",
+      "language": "Italian",
+      "region": "Italy",
+      "culture_refs": [
+        {
+          "value": "Bella figura",
+          "importance": "high",
+          "expression": "Presenting oneself well, aesthetics in everything, style matters",
+          "marketing_angle": "Beautiful design, visual excellence, elegant presentation"
+        },
+        {
+          "value": "Campanilismo",
+          "importance": "high",
+          "expression": "Strong local city/region identity (Milan vs Rome vs Naples)",
+          "marketing_angle": "Avoid North-South stereotypes, acknowledge regional diversity"
+        },
+        {
+          "value": "Qualità artigianale",
+          "importance": "high",
+          "expression": "Artisan quality, Made in Italy pride, craftsmanship",
+          "marketing_angle": "Quality over quantity, attention to detail"
+        },
+        {
+          "value": "Famiglia e relazioni",
+          "importance": "high",
+          "expression": "Family networks, personal relationships in business",
+          "marketing_angle": "Trust-building, relationship-first approach"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "North-South divide stereotypes",
+          "severity": "high",
+          "reason": "Terroni/Polentoni slurs; regional tensions are real and sensitive"
+        },
+        {
+          "topic": "Mafia references",
+          "severity": "high",
+          "reason": "Deeply offensive stereotype, especially to Southerners"
+        },
+        {
+          "topic": "Criticizing Italian systems",
+          "severity": "medium",
+          "reason": "Italians can criticize Italy; foreigners cannot"
+        }
+      ],
+      "audience_traits": {
+        "directness": "indirect",
+        "hierarchy": "high",
+        "formality": "formal",
+        "context_type": "high_context",
+        "notes": "Lei form default, relationships before transactions, flexible timing"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Scopri la soluzione",
+          "context": "Discover, elegant language"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Richiedi informazioni",
+          "context": "Request information, formal"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Prova gratuita",
+          "context": "Free trial, simple"
+        }
+      ]
+    },
+    {
+      "locale": "it-CH",
+      "language": "Italian",
+      "region": "Switzerland (Ticino)",
+      "culture_refs": [
+        {
+          "value": "Svizzera italiana",
+          "importance": "high",
+          "expression": "Distinct Ticinese identity, neither Italian nor German-Swiss",
+          "marketing_angle": "Acknowledge Ticino specificity, not Italy extension"
+        },
+        {
+          "value": "Precisione elvetica",
+          "importance": "high",
+          "expression": "Swiss precision values applied to Italian warmth",
+          "marketing_angle": "Reliability, exactitude, quality assurance"
+        },
+        {
+          "value": "Riservatezza",
+          "importance": "medium",
+          "expression": "More reserved than Italians, Swiss privacy norms",
+          "marketing_angle": "Data privacy emphasis, discretion valued"
+        },
+        {
+          "value": "Qualità di vita alpina",
+          "importance": "medium",
+          "expression": "Alpine lifestyle, nature, outdoor values",
+          "marketing_angle": "Work-life balance, sustainable approaches"
+        }
+      ],
+      "taboos": [
+        {
+          "topic": "Treating Ticino as Italy",
+          "severity": "high",
+          "reason": "Ticinesi are Swiss, not expat Italians"
+        },
+        {
+          "topic": "Aggressive sales",
+          "severity": "medium",
+          "reason": "Swiss reserve means softer approach needed"
+        },
+        {
+          "topic": "Financial prying",
+          "severity": "high",
+          "reason": "Swiss banking discretion culture applies"
+        }
+      ],
+      "audience_traits": {
+        "directness": "balanced",
+        "hierarchy": "medium",
+        "formality": "formal",
+        "context_type": "low_context",
+        "notes": "Swiss Italian formal, Lei default, punctuality expected unlike Italy"
+      },
+      "patterns": [
+        {
+          "type": "cta_primary",
+          "template": "Richieda una consulenza",
+          "context": "Lei form (richieda), consultation focus"
+        },
+        {
+          "type": "cta_secondary",
+          "template": "Consulti la documentazione",
+          "context": "Lei form, documentation access"
+        },
+        {
+          "type": "cta_urgency",
+          "template": "Fissi un appuntamento",
+          "context": "Lei form, appointment scheduling (Swiss style)"
+        }
+      ]
+    }
+  ]
+}
