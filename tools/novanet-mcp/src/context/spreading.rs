@@ -170,7 +170,7 @@ impl SpreadingConfig {
     /// `schema/models/config/spreading-activation.yaml`
     pub fn load_from_yaml(path: &std::path::Path) -> Result<Self, ConfigError> {
         let content = std::fs::read_to_string(path).map_err(ConfigError::IoError)?;
-        serde_yml::from_str(&content).map_err(ConfigError::ParseError)
+        serde_yaml::from_str(&content).map_err(ConfigError::ParseError)
     }
 
     /// Calculate relevance score using exponential decay
@@ -381,7 +381,7 @@ impl SpreadingConfig {
 #[derive(Debug)]
 pub enum ConfigError {
     IoError(std::io::Error),
-    ParseError(serde_yml::Error),
+    ParseError(serde_yaml::Error),
 }
 
 impl std::fmt::Display for ConfigError {
