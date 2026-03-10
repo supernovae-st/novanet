@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.18.0 "Ultra-Deep Review" (PageNative.slug per ADR-030, 57 nodes, 145 arcs)
+**Current Version**: v0.18.2 "Ultra-Deep Review" (PageNative.slug per ADR-030, 57 nodes, 145 arcs)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -81,7 +81,7 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
 - **57 nodes** total: 36 shared + 21 org, **145 arcs** (6 families)
 
-**Architecture (v0.18.0):**
+**Architecture (v0.18.2):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
@@ -92,7 +92,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.18.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 145 arcs.
+v0.18.2: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 145 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
