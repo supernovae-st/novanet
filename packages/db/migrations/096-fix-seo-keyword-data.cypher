@@ -78,8 +78,8 @@ RETURN total,
        with_volume,
        with_difficulty,
        with_intent,
-       round(100.0 * with_locale_key / total) + '%' AS locale_coverage,
-       round(100.0 * with_volume / total) + '%' AS volume_coverage;
+       CASE WHEN total > 0 THEN round(100.0 * with_locale_key / total) + '%' ELSE 'N/A' END AS locale_coverage,
+       CASE WHEN total > 0 THEN round(100.0 * with_volume / total) + '%' ELSE 'N/A' END AS volume_coverage;
 
 // Count keywords needing volume research (volume = 0)
 MATCH (kw:SEOKeyword)

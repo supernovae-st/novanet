@@ -46,7 +46,7 @@ WITH count(*) AS total,
 RETURN total,
        with_locale_property,
        with_locale_arc AS expressions_with_arc,
-       round(100.0 * with_locale_property / total) + '%' AS property_coverage;
+       CASE WHEN total > 0 THEN round(100.0 * with_locale_property / total) + '%' ELSE 'N/A' END AS property_coverage;
 
 // Sample verification
 MATCH (e:Expression)

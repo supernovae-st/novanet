@@ -133,8 +133,8 @@ WITH count(*) AS total,
 RETURN 'Expression Locale' AS check,
        with_locale AS with_locale_property,
        total AS total,
-       round(100.0 * with_locale / total, 1) AS coverage_pct,
-       CASE WHEN with_locale >= total * 0.95 THEN 'PASS' ELSE 'PARTIAL' END AS status;
+       CASE WHEN total > 0 THEN round(100.0 * with_locale / total, 1) ELSE 0 END AS coverage_pct,
+       CASE WHEN total = 0 OR with_locale >= total * 0.95 THEN 'PASS' ELSE 'PARTIAL' END AS status;
 
 // 3.4 Pattern completeness (fr-FR)
 MATCH (p:Pattern)
@@ -160,7 +160,7 @@ CALL {
   // Schema timestamps
   MATCH (n) WHERE n:Schema OR n:Realm OR n:Layer
   WITH count(*) AS total, count(n.updated_at) AS with_ts
-  RETURN CASE WHEN with_ts = total THEN 1.0 ELSE toFloat(with_ts) / total END AS timestamp_rate
+  RETURN CASE WHEN total = 0 THEN 1.0 WHEN with_ts = total THEN 1.0 ELSE toFloat(with_ts) / total END AS timestamp_rate
 }
 CALL {
   // Entity categorization

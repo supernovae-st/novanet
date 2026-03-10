@@ -89,5 +89,5 @@ WITH count(*) AS total,
 RETURN 'Expression Locale Property' AS check,
        with_locale AS complete,
        total AS total,
-       round(100.0 * with_locale / total, 1) AS coverage_pct,
-       CASE WHEN with_locale >= total * 0.95 THEN 'PASS' ELSE 'PARTIAL' END AS status;
+       CASE WHEN total > 0 THEN round(100.0 * with_locale / total, 1) ELSE 0 END AS coverage_pct,
+       CASE WHEN total = 0 OR with_locale >= total * 0.95 THEN 'PASS' ELSE 'PARTIAL' END AS status;
