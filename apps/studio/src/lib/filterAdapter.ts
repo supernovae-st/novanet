@@ -592,7 +592,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🔍',
     shortcut: '6',
     filter: () => NovaNetFilter.create()
-      .byTypes('SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet', 'SEOKeywordFormat', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'),
+      .byTypes('SEOKeyword', 'SEOKeywordSet', 'SEOKeywordFormat', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'), // v0.17.0: SEOKeywordMetrics removed
   },
   {
     id: 'defined-types',

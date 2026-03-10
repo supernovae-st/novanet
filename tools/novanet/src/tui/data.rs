@@ -741,7 +741,7 @@ pub struct LocaleGroup {
 }
 
 /// EntityNative info with parent Entity reference.
-/// Used for displaying natives grouped by locale with invariant name.
+/// Used for displaying natives grouped by locale with defined parent name.
 #[derive(Debug, Clone)]
 pub struct EntityNativeInfo {
     /// EntityNative key (e.g., "qr-code@fr-FR")
@@ -750,7 +750,7 @@ pub struct EntityNativeInfo {
     pub display_name: String,
     /// Parent Entity key (e.g., "qr-code")
     pub entity_key: String,
-    /// Parent Entity display name (invariant, e.g., "QR Code")
+    /// Parent Entity display name (defined, e.g., "QR Code")
     pub entity_display_name: String,
     /// Locale code (e.g., "fr-FR")
     pub locale_code: String,

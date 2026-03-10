@@ -1,20 +1,22 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v0.12.4)
+// NODE TYPE CONFIGURATION (v0.17.0)
 // =============================================================================
-// Visual configuration for all 61 NovaNet node types
+// Visual configuration for all 57 NovaNet node types
 // 10 layers (4 shared + 6 org), 2 realms
 // NodeType, Layer, CLASS_TAXONOMY imported from @novanet/core (Single Source of Truth)
+// v0.17.0: Market, Term, TermSet, SEOKeywordMetrics, AudiencePersona, ChannelSurface removed
+//          ProjectSEOScope, ProjectGEOScope added
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (10 layers, 61 nodes)
+// NODE LAYERS (10 layers, 57 nodes)
 // Derived from CLASS_TAXONOMY — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (61 nodes across 10 layers)
+ * Node layers with their types (57 nodes across 10 layers)
  * Derived from CLASS_TAXONOMY in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(CLASS_TAXONOMY).reduce(
@@ -45,22 +47,16 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (61 nodes)
+ * All node type configurations (57 nodes)
  * Aligned with @novanet/core NODE_TYPES
+ * v0.17.0: Market, Term, TermSet, SEOKeywordMetrics, AudiencePersona, ChannelSurface removed
+ *          ProjectSEOScope, ProjectGEOScope added
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
-  // SHARED REALM — LOCALE LAYER (7 nodes)
+  // SHARED REALM — LOCALE LAYER (5 nodes) — v0.17.0: Market removed
+  // Note: Locale node moved to config layer per schema
   // ==========================================================================
-  Locale: {
-    type: 'Locale',
-    label: 'Locale',
-    icon: 'globe',
-    color: '#10b981',
-    colorClass: 'bg-emerald-500',
-    size: 20,
-    layer: 'locale',
-  },
   Formatting: {
     type: 'Formatting',
     label: 'Formatting',
@@ -106,18 +102,10 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'locale',
   },
-  Market: {
-    type: 'Market',
-    label: 'Market',
-    icon: 'bar-chart-2',
-    color: '#059669',
-    colorClass: 'bg-emerald-600',
-    size: 16,
-    layer: 'locale',
-  },
+  // v0.17.0: Market removed
 
   // ==========================================================================
-  // SHARED REALM — GEOGRAPHY LAYER (6 nodes)
+  // SHARED REALM — GEOGRAPHY LAYER (7 nodes)
   // ==========================================================================
   Continent: {
     type: 'Continent',
@@ -185,7 +173,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SHARED REALM — CONFIG LAYER (1 node) — v11.4: classification nodes
+  // SHARED REALM — CONFIG LAYER (3 nodes) — v0.17.0: Locale, SEOKeywordFormat moved here
   // ==========================================================================
   EntityCategory: {
     type: 'EntityCategory',
@@ -196,19 +184,29 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'config',
   },
+  Locale: {
+    type: 'Locale',
+    label: 'Locale',
+    icon: 'globe',
+    color: '#10b981',
+    colorClass: 'bg-emerald-500',
+    size: 20,
+    layer: 'config',
+  },
+  SEOKeywordFormat: {
+    type: 'SEOKeywordFormat',
+    label: 'SEO Keyword Format',
+    icon: 'component',
+    color: '#64748b',
+    colorClass: 'bg-slate-500',
+    size: 14,
+    layer: 'config',
+  },
 
   // ==========================================================================
-  // SHARED REALM — KNOWLEDGE LAYER (26 nodes) — containers, atoms, SEO/GEO
+  // SHARED REALM — KNOWLEDGE LAYER (21 nodes) — containers, atoms, SEO/GEO
+  // v0.17.0: TermSet, Term removed (denomination_forms covers terminology)
   // ==========================================================================
-  TermSet: {
-    type: 'TermSet',
-    label: 'Term Set',
-    icon: 'book-open',
-    color: '#22c55e',
-    colorClass: 'bg-green-500',
-    size: 10,
-    layer: 'knowledge',
-  },
   ExpressionSet: {
     type: 'ExpressionSet',
     label: 'Expression Set',
@@ -254,15 +252,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 10,
     layer: 'knowledge',
   },
-  Term: {
-    type: 'Term',
-    label: 'Term',
-    icon: 'book',
-    color: '#22c55e',
-    colorClass: 'bg-green-500',
-    size: 8,
-    layer: 'knowledge',
-  },
+  // v0.17.0: Term removed (denomination_forms covers terminology)
   Expression: {
     type: 'Expression',
     label: 'Expression',
@@ -377,7 +367,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — FOUNDATION LAYER (3 nodes)
+  // ORG REALM — FOUNDATION LAYER (8 nodes) — v0.17.0: ProjectSEOScope, ProjectGEOScope added
   // ==========================================================================
   Project: {
     type: 'Project',
@@ -434,6 +424,25 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 18,
     layer: 'foundation',
   },
+  // v0.17.0: ProjectSEOScope, ProjectGEOScope added
+  ProjectSEOScope: {
+    type: 'ProjectSEOScope',
+    label: 'Project SEO Scope',
+    icon: 'search',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 14,
+    layer: 'foundation',
+  },
+  ProjectGEOScope: {
+    type: 'ProjectGEOScope',
+    label: 'Project GEO Scope',
+    icon: 'bot',
+    color: '#6d28d9',
+    colorClass: 'bg-violet-700',
+    size: 14,
+    layer: 'foundation',
+  },
 
   // ==========================================================================
   // ORG REALM — STRUCTURE LAYER (3 nodes)
@@ -467,7 +476,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — SEMANTIC LAYER (4 nodes)
+  // ORG REALM — SEMANTIC LAYER (2 nodes) — v0.17.0: AudiencePersona, ChannelSurface removed
   // ==========================================================================
   Entity: {
     type: 'Entity',
@@ -487,24 +496,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'semantic',
   },
-  AudiencePersona: {
-    type: 'AudiencePersona',
-    label: 'Audience Persona',
-    icon: 'user',
-    color: '#92400e',
-    colorClass: 'bg-amber-800',
-    size: 16,
-    layer: 'semantic',
-  },
-  ChannelSurface: {
-    type: 'ChannelSurface',
-    label: 'Channel Surface',
-    icon: 'radio',
-    color: '#78350f',
-    colorClass: 'bg-amber-900',
-    size: 16,
-    layer: 'semantic',
-  },
+  // v0.17.0: AudiencePersona, ChannelSurface removed
 
   // ==========================================================================
   // ORG REALM — INSTRUCTION LAYER (4 nodes) — v0.12.4: PageStructure, PageInstruction deleted
@@ -547,22 +539,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SHARED REALM — CONFIG LAYER — SEOKeywordFormat (1 node)
-  // v11.5: Classification config node
-  // ==========================================================================
-  SEOKeywordFormat: {
-    type: 'SEOKeywordFormat',
-    label: 'SEO Keyword Format',
-    icon: 'component',
-    color: '#64748b',
-    colorClass: 'bg-slate-500',
-    size: 14,
-    layer: 'config',
-  },
-
-  // ==========================================================================
-  // SHARED REALM — KNOWLEDGE LAYER — SEO nodes (3 nodes)
-  // v11.5: SEOKeyword, SEOKeywordMetrics, SEOKeywordSet
+  // SHARED REALM — KNOWLEDGE LAYER — SEO nodes (2 nodes)
+  // v0.17.0: SEOKeywordMetrics removed (metrics stored directly on SEOKeyword)
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
@@ -573,15 +551,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'knowledge',
   },
-  SEOKeywordMetrics: {
-    type: 'SEOKeywordMetrics',
-    label: 'SEO Metrics',
-    icon: 'bar-chart-2',
-    color: '#a78bfa',
-    colorClass: 'bg-violet-400',
-    size: 10,
-    layer: 'knowledge',
-  },
+  // v0.17.0: SEOKeywordMetrics removed
   SEOKeywordSet: {
     type: 'SEOKeywordSet',
     label: 'SEO Keyword Set',

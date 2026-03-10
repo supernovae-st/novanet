@@ -55,15 +55,21 @@ pub async fn execute(state: &State, params: AuditParams) -> Result<AuditResult> 
             let nodes = count_generated_nodes(state).await.unwrap_or(0);
             (issues, nodes, 0)
         }
+        AuditTarget::Provenance => {
+            let issues = audit_provenance(state, &params.scope, limit).await?;
+            let nodes = count_all_nodes(state).await.unwrap_or(0);
+            (issues, nodes, 0)
+        }
         AuditTarget::All => {
             let mut all_issues = Vec::new();
 
             // Run all audits with proportional limits
-            let per_audit_limit = limit / 4;
+            let per_audit_limit = limit / 5; // Now 5 audit types
             all_issues.extend(audit_coverage(state, &params.scope, per_audit_limit).await?);
             all_issues.extend(audit_orphans(state, &params.scope, per_audit_limit).await?);
             all_issues.extend(audit_integrity(state, &params.scope, per_audit_limit).await?);
             all_issues.extend(audit_freshness(state, &params.scope, per_audit_limit).await?);
+            all_issues.extend(audit_provenance(state, &params.scope, per_audit_limit).await?);
 
             let nodes = count_all_nodes(state).await.unwrap_or(0);
             let arcs = count_arcs(state).await.unwrap_or(0);
@@ -340,6 +346,69 @@ pub async fn audit_integrity(
     Ok(issues)
 }
 
+/// ADR-042: Audit provenance - find nodes without created_by property
+pub async fn audit_provenance(
+    state: &State,
+    scope: &Option<AuditScope>,
+    limit: u32,
+) -> Result<Vec<AuditIssue>> {
+    let mut issues = Vec::new();
+    let mut params = serde_json::Map::new();
+    params.insert("limit".to_string(), serde_json::json!(limit));
+
+    // Query: Find data nodes (non-Schema) without created_by property
+    // Use parameterized class filter if specified
+    let cypher = if let Some(class) = scope.as_ref().and_then(|s| s.class.as_ref()) {
+        params.insert("class_filter".to_string(), serde_json::json!(class));
+        r#"
+        MATCH (n)
+        WHERE labels(n)[0] = $class_filter
+        AND NOT 'Schema' IN labels(n)
+        AND NOT 'Locale' IN labels(n)
+        AND (n.created_by IS NULL OR n.created_by = '')
+        RETURN n.key AS node_key, labels(n)[0] AS node_class
+        LIMIT $limit
+        "#
+        .to_string()
+    } else {
+        r#"
+        MATCH (n)
+        WHERE NOT 'Schema' IN labels(n)
+        AND NOT 'Locale' IN labels(n)
+        AND n.key IS NOT NULL
+        AND (n.created_by IS NULL OR n.created_by = '')
+        RETURN n.key AS node_key, labels(n)[0] AS node_class
+        LIMIT $limit
+        "#
+        .to_string()
+    };
+
+    let rows = state.pool().execute_query(&cypher, Some(params)).await?;
+
+    for row in rows {
+        if let (Some(node_key), Some(node_class)) =
+            (row["node_key"].as_str(), row["node_class"].as_str())
+        {
+            issues.push(
+                AuditIssue::warning(
+                    "provenance",
+                    format!(
+                        "{}:'{}' missing created_by property (ADR-042)",
+                        node_class, node_key
+                    ),
+                )
+                .with_node_key(node_key)
+                .with_details(serde_json::json!({
+                    "expected_format": "source_type:identifier",
+                    "examples": ["seed:schema", "user:studio", "nika:workflow:abc", "mcp:novanet_write"]
+                })),
+            );
+        }
+    }
+
+    Ok(issues)
+}
+
 /// Audit freshness - find stale generated content or metrics
 pub async fn audit_freshness(
     state: &State,
@@ -462,6 +531,10 @@ fn generate_recommendations(issues: &[AuditIssue]) -> Vec<String> {
     let orphan_count = issues.iter().filter(|i| i.category == "orphan").count();
     let integrity_count = issues.iter().filter(|i| i.category == "integrity").count();
     let freshness_count = issues.iter().filter(|i| i.category == "freshness").count();
+    let provenance_count = issues
+        .iter()
+        .filter(|i| i.category == "provenance")
+        .count();
 
     if coverage_count > 0 {
         recs.push(format!(
@@ -481,6 +554,13 @@ fn generate_recommendations(issues: &[AuditIssue]) -> Vec<String> {
         recs.push(format!(
             "Fix {} integrity issues - check for missing parent nodes",
             integrity_count
+        ));
+    }
+
+    if provenance_count > 0 {
+        recs.push(format!(
+            "Add created_by property to {} nodes (ADR-042: format 'source_type:identifier')",
+            provenance_count
         ));
     }
 

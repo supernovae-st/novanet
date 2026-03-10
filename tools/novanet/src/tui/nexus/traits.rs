@@ -71,7 +71,7 @@ fn trait_llm_context(key: &str) -> &str {
             "Human-created once, universal. Structural definitions, configuration, business logic. Examples: Page, Entity, Block."
         }
         "authored" => {
-            "Human-written per locale. Editorial content with invariant parent (e.g., EntityNative -> Entity). Created by humans, not LLM."
+            "Human-written per locale. Editorial content with defined parent (e.g., EntityNative -> Entity). Created by humans, not LLM."
         }
         "imported" => {
             "External data brought in. Native locale knowledge loaded INTO the LLM as context. Exists only where needed (fr-FR may have 20K Terms)."

@@ -1025,7 +1025,7 @@ class://Entity
   "layer": "semantic",
   "trait_type": "defined",
   "description": "Core semantic entity",
-  "llm_context": "Entities represent invariant concepts...",
+  "llm_context": "Entities represent defined semantic concepts...",
   "properties": [...],
   "outgoing_arcs": ["HAS_NATIVE", "USES_ENTITY"],
   "incoming_arcs": ["BELONGS_TO"],

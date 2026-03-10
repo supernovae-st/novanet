@@ -19,7 +19,7 @@ Source -> Translate -> Target        <-- WRONG
 Entity (defined) -> Generate natively -> EntityNative (locale)  <-- RIGHT
 ```
 
-Each locale content is **generated natively** from the invariant Entity, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
+Each locale content is **generated natively** from the defined Entity, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 

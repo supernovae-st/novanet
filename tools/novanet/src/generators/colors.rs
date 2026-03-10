@@ -158,12 +158,7 @@ export function getLayerColor(key: LayerKey): ColorTokens {
   return LAYER_COLORS[key];
 }
 
-/**
- * Get color tokens for a trait
- */
-export function getTraitColor(key: TraitKey): ColorTokens {
-  return TRAIT_COLORS[key];
-}
+// v0.17.3 (ADR-036): getTraitColor removed, provenance is per-instance
 
 /**
  * Get color tokens for an arc family
@@ -174,9 +169,10 @@ export function getArcFamilyColor(key: ArcFamilyKey): ColorTokens {
 
 /**
  * Get raw hex color for any facet type
+ * v0.17.3 (ADR-036): 'trait' case removed, provenance is per-instance
  */
 export function getFacetHex(
-  facetType: 'realm' | 'layer' | 'trait' | 'arcFamily',
+  facetType: 'realm' | 'layer' | 'arcFamily',
   key: string
 ): string {
   switch (facetType) {
@@ -184,8 +180,6 @@ export function getFacetHex(
       return REALM_COLORS[key as RealmKey]?.color ?? '#ffffff';
     case 'layer':
       return LAYER_COLORS[key as LayerKey]?.color ?? '#ffffff';
-    case 'trait':
-      return TRAIT_COLORS[key as TraitKey]?.color ?? '#ffffff';
     case 'arcFamily':
       return ARC_FAMILY_COLORS[key as ArcFamilyKey]?.color ?? '#ffffff';
   }
@@ -417,10 +411,13 @@ mod tests {
         assert!(output.contains("export function getRealmColor(key: RealmKey): ColorTokens"));
         assert!(output.contains("export function getLayerColor(key: LayerKey): ColorTokens"));
         // v0.17.3 (ADR-036): getTraitColor removed, provenance is per-instance
+        assert!(!output.contains("export function getTraitColor"));
         assert!(
             output.contains("export function getArcFamilyColor(key: ArcFamilyKey): ColorTokens")
         );
         assert!(output.contains("export function getFacetHex"));
+        // v0.17.3 (ADR-036): trait case removed from getFacetHex
+        assert!(!output.contains("case 'trait':"));
     }
 
     #[test]

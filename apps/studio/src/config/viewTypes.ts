@@ -230,7 +230,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
     label: 'Metrics',
     icon: 'bar-chart-2',
     description: 'Performance metrics and analytics',
-    applicableTo: ['SEOKeyword', 'SEOKeywordMetrics', 'GEOQuery', 'GEOAnswer'],
+    applicableTo: ['SEOKeyword', 'GEOQuery', 'GEOAnswer'], // v0.17.0: SEOKeywordMetrics removed
     style: 'compact',
     effect: 'chart-rise',
     transitionColor: '#a78bfa', // metrics violet

@@ -43,7 +43,7 @@ export type {
   LocaleLexicon,
   Expression,
   SEOKeyword,
-  SEOKeywordMetrics,
+  // v0.17.0: SEOKeywordMetrics removed
   // Instructions (v0.12.4: PageInstruction removed per ADR-028)
   BlockInstruction,
   BlockRules,

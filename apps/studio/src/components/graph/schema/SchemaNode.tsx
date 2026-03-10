@@ -26,7 +26,7 @@ import {
   REALM_COLORS,
   LAYER_COLORS,
   TRAIT_COLORS,
-} from '@/design/colors/generated';
+} from '@/design/colors';
 
 // =============================================================================
 // Types

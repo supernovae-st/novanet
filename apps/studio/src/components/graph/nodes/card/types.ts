@@ -19,7 +19,7 @@ import type {
   LayerKey,
   TraitKey,
   ArcFamilyKey,
-} from '@/design/colors/generated';
+} from '@/design/colors';
 
 // Re-export for convenience
 export type { RealmKey, LayerKey, TraitKey, ArcFamilyKey };

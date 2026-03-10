@@ -330,6 +330,22 @@ pub fn generate_suggestions(
         }
     }
 
+    // ADR-042: Inform about auto-injected provenance
+    let has_created_by = params
+        .properties
+        .as_ref()
+        .map(|p| p.contains_key("created_by"))
+        .unwrap_or(false);
+    if !has_created_by {
+        suggestions.push(
+            OntologySuggestion::new(
+                "info",
+                "ADR-042: 'created_by' will be auto-set to 'mcp:novanet_write'",
+            )
+            .with_example("Override with created_by: \"nika:workflow:<id>\" or \"user:studio\""),
+        );
+    }
+
     suggestions
 }
 
