@@ -1,0 +1,292 @@
+{
+  "locale": "fr-BE",
+  "locale_name": "Belgian French",
+  "region": "Belgium",
+  "bcp47": "fr-BE",
+  "research_date": "2026-03-10",
+  "confidence": "high",
+
+  "communication_style": {
+    "formality_score": 6,
+    "directness_score": 7,
+    "warmth_level": "warm",
+    "hierarchy_importance": "medium",
+    "individualism_level": "balanced",
+    "humor_style": "self-deprecating",
+    "key_influence": "Germanic pragmatism",
+    "notes": "Belgian French is shaped by trilingual context (FR/NL/DE), EU headquarters presence, and consensus-driven culture. More direct than fr-FR due to Flemish/Dutch influence."
+  },
+
+  "adaptation_rules": {
+    "technical_terms_approach": "hybrid-common",
+    "illustration_density": "medium",
+    "decision_algorithm": "problem-solution",
+    "content_length_preference": "concise",
+    "rhetorical_style": "pragmatic",
+    "notes": "Belgians value practical clarity over rhetorical flourish. Less language purism than France - anglicisms more accepted."
+  },
+
+  "linguistic_distinctions": {
+    "vs_fr_FR": {
+      "directness_delta": "+2",
+      "formality_delta": "-2",
+      "key_differences": [
+        "Numbers: septante (70), nonante (90) vs soixante-dix, quatre-vingt-dix",
+        "Mobile: GSM vs portable",
+        "Meals: dejeuner/diner/souper vs petit-dejeuner/dejeuner/diner",
+        "Communication: More direct, less rhetorical",
+        "Formality: Simpler email closings, faster tu transition",
+        "Business: Flatter hierarchy, consensus-seeking"
+      ],
+      "summary": "Belgian French is more direct and pragmatic than France French, influenced by Germanic neighbors"
+    },
+    "vs_fr_CH": {
+      "formality_delta": "-1",
+      "key_differences": [
+        "Numbers: quatre-vingts (80) NOT huitante as in Swiss",
+        "Precision: More flexible than Swiss precision culture",
+        "Tone: Can be more direct/assertive than neutral Swiss style"
+      ],
+      "summary": "Belgian French shares septante/nonante but uses quatre-vingts; less formal than Swiss"
+    },
+    "vs_fr_CA": {
+      "formality_delta": "+1",
+      "key_differences": [
+        "Anglicisms: Different patterns - BE keeps 'email', CA uses 'courriel'",
+        "Register: More formal than casual Canadian French",
+        "Culture: European context vs North American",
+        "Accent: European French prosody"
+      ],
+      "summary": "Belgian French maintains European formality while Canadian is more casual; opposite anglicism strategies"
+    }
+  },
+
+  "vocabulary": {
+    "numbers": {
+      "70": "septante",
+      "71": "septante et un",
+      "72": "septante-deux",
+      "80": "quatre-vingts",
+      "81": "quatre-vingt-un",
+      "90": "nonante",
+      "91": "nonante et un",
+      "note": "CRITICAL: Use septante/nonante but NOT huitante (that's Swiss only)"
+    },
+    "mandatory_substitutions": [
+      {
+        "fr_FR": "portable",
+        "fr_BE": "GSM",
+        "context": "mobile phone - universal in Belgium"
+      },
+      {
+        "fr_FR": "petit-dejeuner",
+        "fr_BE": "dejeuner",
+        "context": "breakfast"
+      },
+      {
+        "fr_FR": "dejeuner",
+        "fr_BE": "diner",
+        "context": "lunch"
+      },
+      {
+        "fr_FR": "diner",
+        "fr_BE": "souper",
+        "context": "dinner/evening meal"
+      },
+      {
+        "fr_FR": "soixante-dix",
+        "fr_BE": "septante",
+        "context": "number 70"
+      },
+      {
+        "fr_FR": "quatre-vingt-dix",
+        "fr_BE": "nonante",
+        "context": "number 90"
+      }
+    ],
+    "belgicisms": [
+      {
+        "term": "GSM",
+        "meaning": "mobile phone",
+        "usage": "universal",
+        "note": "Acronym for Global System for Mobile - used as noun"
+      },
+      {
+        "term": "souper",
+        "meaning": "dinner (evening meal)",
+        "usage": "universal"
+      },
+      {
+        "term": "kot",
+        "meaning": "student room/accommodation",
+        "usage": "common"
+      },
+      {
+        "term": "drache",
+        "meaning": "heavy rain/downpour",
+        "usage": "informal"
+      },
+      {
+        "term": "brol",
+        "meaning": "mess, stuff, junk",
+        "usage": "informal"
+      },
+      {
+        "term": "tantot",
+        "meaning": "this afternoon / see you later",
+        "usage": "common"
+      },
+      {
+        "term": "aubette",
+        "meaning": "bus shelter",
+        "usage": "common"
+      },
+      {
+        "term": "ring",
+        "meaning": "ring road (Brussels)",
+        "usage": "common"
+      },
+      {
+        "term": "carte-vue",
+        "meaning": "postcard",
+        "usage": "common"
+      },
+      {
+        "term": "sacoche",
+        "meaning": "handbag",
+        "usage": "common"
+      },
+      {
+        "term": "torchon",
+        "meaning": "floor cloth (vs dish cloth in France)",
+        "usage": "common"
+      },
+      {
+        "term": "crolle",
+        "meaning": "curl (hair)",
+        "usage": "regional"
+      },
+      {
+        "term": "couque",
+        "meaning": "sweet bread/brioche",
+        "usage": "common"
+      },
+      {
+        "term": "pistolet",
+        "meaning": "small round bread roll",
+        "usage": "universal"
+      }
+    ]
+  },
+
+  "formatting": {
+    "date": {
+      "format": "DD/MM/YYYY",
+      "separator": "/",
+      "example": "10/03/2026"
+    },
+    "time": {
+      "format": "24h",
+      "separator": "h",
+      "example": "14h30"
+    },
+    "numbers": {
+      "decimal_separator": ",",
+      "thousands_separator": " ",
+      "example": "1 234,56"
+    },
+    "currency": {
+      "code": "EUR",
+      "symbol": "€",
+      "position": "after",
+      "example": "99,99 €"
+    },
+    "phone": {
+      "country_code": "+32",
+      "format": "+32 X XXX XX XX",
+      "note": "GSM numbers start with 04XX"
+    }
+  },
+
+  "cultural_context": {
+    "eu_headquarters": true,
+    "languages": ["French", "Dutch", "German"],
+    "business_culture": "consensus-driven",
+    "key_values": [
+      "Belgian compromise (pragmatic negotiation)",
+      "Self-deprecation (belgitude)",
+      "Quality over quantity",
+      "Work-life balance",
+      "Social welfare consciousness"
+    ],
+    "taboos": [
+      "Confusing Belgium with the Netherlands",
+      "Language politics (FR vs NL tensions)",
+      "Assuming all Belgians speak both languages"
+    ],
+    "strengths": [
+      "EU institutional expertise",
+      "International business hub",
+      "Chocolate, beer, waffles culture",
+      "Comics and art heritage"
+    ]
+  },
+
+  "seo_content_guidelines": {
+    "title_style": {
+      "approach": "Direct, benefit-focused",
+      "length": "50-60 characters",
+      "tone": "Professional but approachable"
+    },
+    "meta_description": {
+      "approach": "Problem-solution format",
+      "length": "150-160 characters",
+      "include_cta": true
+    },
+    "body_content": {
+      "tone": "Warm but efficient",
+      "structure": "Problem > Solution > Benefits",
+      "paragraph_length": "Short to medium (3-5 sentences)",
+      "use_belgicisms": true
+    },
+    "cta_guidelines": {
+      "tone": "Clear and practical, not pushy",
+      "examples": [
+        "Decouvrez comment...",
+        "Creez votre code QR maintenant",
+        "Essayez gratuitement"
+      ]
+    },
+    "avoid": [
+      "Excessive rhetorical flourishes",
+      "France-specific cultural references (SNCF, Academie Francaise)",
+      "soixante-dix/quatre-vingt-dix numbers",
+      "Using 'portable' for mobile phone",
+      "Overly formal closings",
+      "Assuming Paris-centric viewpoint"
+    ],
+    "embrace": [
+      "Belgicisms for authenticity (GSM, septante, nonante)",
+      "EU/international context",
+      "Practical value propositions",
+      "Warm but efficient tone",
+      "Self-deprecating humor where appropriate",
+      "References to Belgian brands/culture when relevant"
+    ]
+  },
+
+  "quality_markers": {
+    "must_check": [
+      "All instances of 70/90 use septante/nonante",
+      "Mobile phone references use GSM",
+      "Meal times use Belgian terminology",
+      "No France-specific cultural assumptions"
+    ],
+    "authenticity_signals": [
+      "Correct number system",
+      "Appropriate formality level",
+      "Belgian vocabulary where applicable",
+      "EU-aware content"
+    ]
+  }
+}
