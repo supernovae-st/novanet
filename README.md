@@ -7,7 +7,7 @@
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet/actions)
-[![Tests](https://img.shields.io/badge/tests-1255_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Tests](https://img.shields.io/badge/tests-1249_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -36,7 +36,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 59 node types, 136 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 57 node types, 145 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -144,11 +144,11 @@ novanet/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.17.1` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.17.1` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.17.1` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.17.1` | Rust CLI + TUI for schema generation, validation, queries |
-| **tools/novanet-mcp** | `0.17.1` | MCP Server for AI agent integration (14 tools) |
+| **@novanet/core** | `0.17.2` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.17.2` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.17.2` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.17.2` | Rust CLI + TUI for schema generation, validation, queries |
+| **tools/novanet-mcp** | `0.17.2` | MCP Server for AI agent integration (14 tools) |
 
 ---
 
@@ -255,7 +255,7 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │ ...            │  │   [BlockNative]                  │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Graph  │  59 nodes  │  136 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Graph  │  57 nodes  │  145 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
