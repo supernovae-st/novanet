@@ -29,6 +29,30 @@ ON MATCH SET
   l.text_direction = "ltr",
   l.updated_at = datetime();
 
+MERGE (l:Locale {key: "am-ET"})
+ON CREATE SET
+  l.display_name = "Amharic (Ethiopia)",
+  l.description = "Amharic locale for ኢትዮጵያ market",
+  l.llm_context = "USE: for Amharic content targeting ኢትዮጵያ. TRIGGERS: am-ET, አማርኛ, ኢትዮጵያ.",
+  l.language_code = "am",
+  l.country_code = "ET",
+  l.name_native = "አማርኛ (ኢትዮጵያ)",
+  l.is_primary = true,
+  l.region = "africa",
+  l.language_family = "semitic",
+  l.script = "ethiopic",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "Amharic (Ethiopia)",
+  l.region = "africa",
+  l.language_family = "semitic",
+  l.script = "ethiopic",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
 MERGE (l:Locale {key: "ar-AE"})
 ON CREATE SET
   l.display_name = "Arabic (UAE)",
