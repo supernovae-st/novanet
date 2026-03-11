@@ -75,11 +75,27 @@ pub async fn create_archive(
 /// Extract a tar.gz archive to the brain directory
 ///
 /// This will overwrite existing files in the destination.
+///
+/// # Security
+///
+/// This function validates that all extracted paths stay within `brain_dir`
+/// to prevent path traversal attacks (e.g., `../../../etc/passwd`).
 #[instrument(skip_all)]
 pub async fn extract_archive(backup_path: &Path, brain_dir: &Path) -> Result<()> {
     let file = File::open(backup_path)?;
     let decoder = GzDecoder::new(file);
     let mut archive = Archive::new(decoder);
+
+    // Canonicalize the target directory for secure path comparison
+    // Create it first if it doesn't exist
+    std::fs::create_dir_all(brain_dir)?;
+    let canonical_brain_dir = brain_dir.canonicalize().map_err(|e| {
+        BackupError::IoError(format!(
+            "Failed to canonicalize brain directory {}: {}",
+            brain_dir.display(),
+            e
+        ))
+    })?;
 
     for entry in archive.entries()? {
         let mut entry = entry?;
@@ -92,11 +108,45 @@ pub async fn extract_archive(backup_path: &Path, brain_dir: &Path) -> Result<()>
 
         // Remove "brain/" prefix and extract to destination
         let relative_path = path.strip_prefix("brain").unwrap_or(&path);
+
+        // Security check: ensure no path traversal components
+        for component in relative_path.components() {
+            if let std::path::Component::ParentDir = component {
+                return Err(BackupError::PathTraversal(format!(
+                    "Archive contains path traversal attempt: {}",
+                    path.display()
+                ))
+                .into());
+            }
+        }
+
         let dest_path = brain_dir.join(relative_path);
 
         // Create parent directories if needed
         if let Some(parent) = dest_path.parent() {
             std::fs::create_dir_all(parent)?;
+        }
+
+        // Security check: verify the final path is within brain_dir
+        // We canonicalize after creating parent dirs to handle new paths
+        let canonical_dest = if dest_path.exists() {
+            dest_path.canonicalize()?
+        } else {
+            // For new files, canonicalize the parent and append the filename
+            if let (Some(parent), Some(file_name)) = (dest_path.parent(), dest_path.file_name()) {
+                parent.canonicalize()?.join(file_name)
+            } else {
+                dest_path.clone()
+            }
+        };
+
+        if !canonical_dest.starts_with(&canonical_brain_dir) {
+            return Err(BackupError::PathTraversal(format!(
+                "Archive entry would extract outside target directory: {} -> {}",
+                path.display(),
+                canonical_dest.display()
+            ))
+            .into());
         }
 
         // Extract the file
