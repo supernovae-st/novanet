@@ -33,19 +33,52 @@ const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
-// v0.17.3 INSTANCE PANEL STANDARD PROPERTIES (ADR-024)
+// v0.19.0 STANDARD PROPERTIES (ADR-035)
+// =============================================================================
+//
+// First 5 properties aligned between DATA and SCHEMA nodes:
+//
+// DATA NODES (8 props):     SCHEMA NODES (5 props):
+// 1. key                    1. key
+// 2. display_name           2. display_name
+// 3. content                3. description
+// 4. llm_context   ← SAME   4. llm_context   ← SAME
+// 5. node_class    ← SAME   5. node_class    ← SAME
+// 6. provenance             (color, icon = class-specific)
+// 7. created_at
+// 8. updated_at
+//
+// CASE CONVENTION for node_class:
+//   • lowercase = SCHEMA/META node (realm, layer, class, arc_class)
+//   • PascalCase = DATA node (Entity, Page, Block, etc.)
+//
 // =============================================================================
 
-/// Standard properties that appear at the top of the INSTANCE panel.
-/// These are present on all node types per schema conventions.
-/// v0.17.3: Reordered for readability - key/display_name first, timestamps last.
+/// Standard properties for DATA nodes (57 classes: Entity, Page, Block, etc.)
+/// These 8 properties appear at the top of the INSTANCE panel.
+/// node_class values are PascalCase (e.g., "Entity", "Page") = DATA node
 const STANDARD_PROPERTIES: &[&str] = &[
     "key",
     "display_name",
-    "description",
-    "llm_context",
+    "content",      // v0.19.0: replaces "description" for Data nodes
+    "llm_context",  // Position 4 - aligned with Schema nodes
+    "node_class",   // v0.19.0: PascalCase = DATA node (Entity, Page, Block...)
+    "provenance",   // v0.19.0: new - {source: "seed"|"nika"|"mcp", ...metadata}
     "created_at",
     "updated_at",
+];
+
+/// Standard properties for SCHEMA nodes (Realm, Layer, Class, ArcClass).
+/// These 5 properties are aligned with Data nodes (positions 1-5).
+/// node_class values are lowercase (e.g., "realm", "layer") = SCHEMA/META node
+/// Note: color, icon are class-specific, not standard properties.
+#[allow(dead_code)] // TODO(v0.19): Use in schema node rendering
+const SCHEMA_PROPERTIES: &[&str] = &[
+    "key",
+    "display_name",
+    "description",  // Schema nodes keep "description" (not "content")
+    "llm_context",  // Position 4 - aligned with Data nodes
+    "node_class",   // v0.19.0: lowercase = SCHEMA node (realm, layer, class, arc_class)
 ];
 
 /// Timestamp property names for human-readable formatting.
@@ -1895,8 +1928,9 @@ mod tests {
 
     #[test]
     fn test_standard_properties_count() {
-        // 6 standard properties: key, display_name, description, created_at, updated_at, llm_context
-        assert_eq!(STANDARD_PROPERTIES.len(), 6);
+        // v0.19.0: 8 standard properties for DATA nodes (ADR-035)
+        // key, display_name, content, llm_context, node_class, provenance, created_at, updated_at
+        assert_eq!(STANDARD_PROPERTIES.len(), 8);
     }
 
     // =========================================================================

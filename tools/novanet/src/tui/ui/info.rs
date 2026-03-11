@@ -2507,28 +2507,37 @@ fn render_scrollable_section_box(
 
 // =============================================================================
 // v0.16.4 WOW EFFECT COLORS - GALAXY THEME
+// NOTE: These are temporarily unused after v0.18.3 4-panel refactor.
+// Will be revisited when identity_panel visual design is finalized.
 // =============================================================================
 
 /// Nova cyan/teal - primary accent for selection
+#[allow(dead_code)]
 const COLOR_NOVA_CYAN: Color = Color::Rgb(34, 211, 238); // #22d3ee
 
 /// Nova purple/violet - secondary accent
+#[allow(dead_code)]
 const COLOR_NOVA_PURPLE: Color = Color::Rgb(168, 85, 247); // #a855f7
 
 /// Nova gold/amber - metrics accent
+#[allow(dead_code)]
 const COLOR_NOVA_GOLD: Color = Color::Rgb(251, 191, 36); // #fbbf24
 
 /// Nova pink - coverage accent
+#[allow(dead_code)]
 const COLOR_NOVA_PINK: Color = Color::Rgb(236, 72, 153); // #ec4899
 
 /// Border dim color
+#[allow(dead_code)]
 const COLOR_BORDER_DIM: Color = Color::Rgb(71, 85, 105); // slate-600
 
 // =============================================================================
 // TYPE STYLING
+// NOTE: Temporarily unused after v0.18.3 4-panel refactor.
 // =============================================================================
 
 /// Get icon, label and accent color for node type
+#[allow(dead_code)]
 fn get_type_style(type_name: &str) -> (&'static str, &'static str, Color) {
     match type_name.to_lowercase().as_str() {
         "realm" => ("◉", "REALM", COLOR_NOVA_CYAN),
@@ -2547,9 +2556,11 @@ fn get_type_style(type_name: &str) -> (&'static str, &'static str, Color) {
 
 // =============================================================================
 // ASCII ART BUILDERS - RESPONSIVE
+// NOTE: Temporarily unused after v0.18.3 4-panel refactor.
 // =============================================================================
 
 /// Build the title banner row: ╔═══════ ◆ CLASS ◆ ═══════╗
+#[allow(dead_code)]
 fn build_title_row(label: &str, icon: &str, width: usize, color: Color) -> Line<'static> {
     if width < 10 {
         return Line::from(Span::styled(
@@ -2577,6 +2588,7 @@ fn build_title_row(label: &str, icon: &str, width: usize, color: Color) -> Line<
 }
 
 /// Build a separator row: ╠═══════════════════════════════╣
+#[allow(dead_code)]
 fn build_separator_row(width: usize, color: Color) -> Line<'static> {
     if width < 4 {
         return Line::from(Span::styled("═".repeat(width), Style::default().fg(color)));
@@ -2590,6 +2602,7 @@ fn build_separator_row(width: usize, color: Color) -> Line<'static> {
 }
 
 /// Build the bottom row: ╚═══════════════════════════════╝
+#[allow(dead_code)]
 fn build_bottom_row(width: usize, color: Color) -> Line<'static> {
     if width < 4 {
         return Line::from(Span::styled("═".repeat(width), Style::default().fg(color)));
@@ -2603,6 +2616,7 @@ fn build_bottom_row(width: usize, color: Color) -> Line<'static> {
 }
 
 /// Build a content row with side borders: ║  content  ║
+#[allow(dead_code)]
 fn build_content_row(
     spans: Vec<Span<'static>>,
     width: usize,
@@ -2624,6 +2638,7 @@ fn build_content_row(
 }
 
 /// Build location badges row: │ ◎ org │ ◎ config │ ■ defined │
+#[allow(dead_code)]
 fn build_location_badges(
     realm: Option<(&str, &str, Color)>, // (icon, name, color)
     layer: Option<(&str, &str, Color)>,
@@ -2722,6 +2737,7 @@ fn build_location_badges(
 }
 
 /// Build metrics cards row: ┌────────┐ ┌────────┐ ┌────────┐
+#[allow(dead_code)]
 fn build_metric_cards(
     metrics: Vec<(&str, String, Color)>, // (label, value, color)
     width: usize,
@@ -2815,6 +2831,8 @@ fn build_metric_cards(
 
 /// Render the consolidated HEADER box with WOW horizontal layout.
 /// v0.16.4: Mix of style A (big title) + C (card metrics)
+/// NOTE: Temporarily unused after v0.18.3 4-panel refactor.
+#[allow(dead_code)]
 fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state: BoxVisualState) {
     let (border_color, _title_style) = box_styles(state);
 
@@ -3098,6 +3116,9 @@ fn detail_box_state(
 /// v0.16.3: This now only renders the HEADER section (Identity, Location, Metrics, Coverage).
 /// Properties are rendered separately by `render_props_panel`.
 /// v0.16.4: Accepts pre-built content to avoid double-building.
+/// NOTE: Temporarily unused after v0.18.3 4-panel refactor.
+/// Replaced by `render_identity_panel` in both wide and narrow layouts.
+#[allow(dead_code)]
 pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &App, content: &UnifiedContent) {
     // v0.16.3: Content panel is [2], this is just the header info
     let panel_focused = app.focus == Focus::Content;

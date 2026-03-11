@@ -4,6 +4,7 @@
 //! v0.13.1: Architecture panel removed (panel simplification).
 
 mod graph;
+mod identity_panel;
 mod info;
 mod overlays;
 mod status;
@@ -11,7 +12,8 @@ mod tree;
 mod yaml_panel;
 
 pub use graph::render_graph_panel;
-pub use info::{build_unified_content, render_props_panel, render_unified_info_panel};
+pub use identity_panel::render_identity_panel;
+pub use info::{build_unified_content, render_props_panel};
 pub use status::render_status;
 pub use tree::render_tree;
 pub use yaml_panel::render_content_panel;
@@ -82,22 +84,24 @@ const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
 // -----------------------------------------------------------------------------
 
 // =============================================================================
-// LAYOUT CONSTANTS
+// LAYOUT CONSTANTS (v0.18.3: New 4-panel layout)
 // =============================================================================
 
 /// Wide layout column percentages: Tree | Center | Right
-/// v0.17.3: Reduced tree from 35% to 28% - keep display compact
-const LAYOUT_TREE_PCT: u16 = 28;
-const LAYOUT_CENTER_PCT: u16 = 38;
-const LAYOUT_RIGHT_PCT: u16 = 34;
+const LAYOUT_TREE_PCT: u16 = 25;
+const LAYOUT_CENTER_PCT: u16 = 40;
+const LAYOUT_RIGHT_PCT: u16 = 35;
 
-/// Center column split: Header | YAML
-const LAYOUT_HEADER_PCT: u16 = 25;
-const LAYOUT_YAML_PCT: u16 = 75;
+/// Center column split: Identity+Provenance (top) | Data Viewer (bottom)
+const LAYOUT_IDENTITY_PCT: u16 = 30;
+const LAYOUT_DATA_VIEWER_PCT: u16 = 70;
 
-/// Right column split: Props | Arcs
-const LAYOUT_PROPS_PCT: u16 = 42;
-const LAYOUT_ARCS_PCT: u16 = 58;
+/// Right column split: Properties+Stats (top) | Arcs (bottom)
+const LAYOUT_PROPS_STATS_PCT: u16 = 50;
+const LAYOUT_ARCS_PCT: u16 = 50;
+
+// NOTE: Legacy LAYOUT_HEADER_PCT, LAYOUT_YAML_PCT, LAYOUT_PROPS_PCT removed in v0.18.3
+// They were replaced by LAYOUT_IDENTITY_PCT, LAYOUT_DATA_VIEWER_PCT, LAYOUT_PROPS_STATS_PCT
 
 /// Narrow layout: Tree panel percentage (compact sidebar).
 const LAYOUT_NARROW_TREE_PCT: u16 = 35;
@@ -612,9 +616,10 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree [1] | Center (Header+YAML [2]) | Right (Props [3] + Arcs [4]).
+/// Wide layout: Tree [1] | Center (Identity+DataViewer [2]) | Right (Props+Stats [3] + Arcs [4]).
+/// v0.18.3: Refactored for new 4-panel layout with clear separation.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
-    // v0.16.4: Build unified content ONCE (was built twice before)
+    // v0.16.4: Build unified content ONCE
     let content = build_unified_content(app);
 
     // 3-column horizontal layout: Tree | Center | Right
@@ -630,29 +635,29 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     // LEFT: Tree [1]
     render_tree(f, h_chunks[0], app);
 
-    // CENTER: Header (top) + YAML [2] (bottom)
+    // CENTER: Identity+Provenance (top) + Data Viewer (bottom)
     let center_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(LAYOUT_HEADER_PCT),
-            Constraint::Percentage(LAYOUT_YAML_PCT),
+            Constraint::Percentage(LAYOUT_IDENTITY_PCT),
+            Constraint::Percentage(LAYOUT_DATA_VIEWER_PCT),
         ])
         .split(h_chunks[1]);
 
-    render_unified_info_panel(f, center_chunks[0], app, &content); // Header box
-    render_content_panel(f, center_chunks[1], app); // Content [2]
+    render_identity_panel(f, center_chunks[0], app); // Identity+Provenance
+    render_content_panel(f, center_chunks[1], app);  // Data Viewer [2]
 
-    // RIGHT: Props [3] (top) + Arcs [4] (bottom)
+    // RIGHT: Props+Stats (top) + Arcs (bottom)
     let right_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(LAYOUT_PROPS_PCT),
+            Constraint::Percentage(LAYOUT_PROPS_STATS_PCT),
             Constraint::Percentage(LAYOUT_ARCS_PCT),
         ])
         .split(h_chunks[2]);
 
-    render_props_panel(f, right_chunks[0], app, &content); // Props [3]
-    render_graph_panel(f, right_chunks[1], app); // Arcs [4]
+    render_props_panel(f, right_chunks[0], app, &content); // Props+Stats [3]
+    render_graph_panel(f, right_chunks[1], app);           // Arcs [4]
 
     // v0.17.3: Capture panel rects for mouse hit-testing
     app.panel_rects.tree = Some(h_chunks[0]);
@@ -661,10 +666,10 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     app.panel_rects.arcs = Some(right_chunks[1]);
 }
 
-/// Narrow layout: Tree [1] | Stacked (Header+YAML [2], Props [3], Arcs [4]).
-/// v0.16.3: Updated for 4-panel layout on smaller screens.
+/// Narrow layout: Tree [1] | Stacked (Identity, DataViewer [2], Props+Stats [3], Arcs [4]).
+/// v0.18.3: Updated for 4-panel layout on smaller screens.
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
-    // v0.16.4: Build unified content ONCE (was built twice before)
+    // v0.16.4: Build unified content ONCE
     let content = build_unified_content(app);
 
     let h_chunks = Layout::default()
@@ -677,21 +682,21 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
 
     render_tree(f, h_chunks[0], app);
 
-    // Stack Header+YAML, Props, Arcs vertically
+    // Stack Identity, DataViewer, Props+Stats, Arcs vertically
     let v_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(15), // Header
-            Constraint::Percentage(30), // YAML [2]
-            Constraint::Percentage(30), // Props [3]
+            Constraint::Percentage(15), // Identity+Provenance
+            Constraint::Percentage(30), // Data Viewer [2]
+            Constraint::Percentage(30), // Props+Stats [3]
             Constraint::Percentage(25), // Arcs [4]
         ])
         .split(h_chunks[1]);
 
-    render_unified_info_panel(f, v_chunks[0], app, &content); // Header
-    render_content_panel(f, v_chunks[1], app); // Content [2]
-    render_props_panel(f, v_chunks[2], app, &content); // Props [3]
-    render_graph_panel(f, v_chunks[3], app); // Arcs [4]
+    render_identity_panel(f, v_chunks[0], app);        // Identity
+    render_content_panel(f, v_chunks[1], app);         // Data Viewer [2]
+    render_props_panel(f, v_chunks[2], app, &content); // Props+Stats [3]
+    render_graph_panel(f, v_chunks[3], app);           // Arcs [4]
 
     // v0.17.3: Capture panel rects for mouse hit-testing
     app.panel_rects.tree = Some(h_chunks[0]);
