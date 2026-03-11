@@ -3096,18 +3096,17 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
 }
 
 /// Compute visual state for a box in the Detail panel.
-/// Info panel contains: HEADER, PROPERTIES (v0.13: ARCS moved to dedicated panel).
+/// v0.18.3: Simplified to use only panel_focused (Focus enum is source of truth).
+/// Old selected_box parameter is deprecated and ignored.
 fn detail_box_state(
     panel_focused: bool,
-    selected_box: InfoBox,
-    this_box: InfoBox,
+    _selected_box: InfoBox,
+    _this_box: InfoBox,
 ) -> BoxVisualState {
-    if !panel_focused {
-        BoxVisualState::Unfocused
-    } else if selected_box == this_box {
+    if panel_focused {
         BoxVisualState::Selected
     } else {
-        BoxVisualState::Focused
+        BoxVisualState::Unfocused
     }
 }
 
