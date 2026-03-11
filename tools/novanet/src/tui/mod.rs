@@ -27,6 +27,7 @@ pub mod theme;
 mod ui;
 pub mod unicode;
 pub mod unified_types;
+pub mod widgets;
 mod yaml;
 
 #[cfg(test)]
