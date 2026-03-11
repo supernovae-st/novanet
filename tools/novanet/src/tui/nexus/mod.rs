@@ -1,6 +1,6 @@
 //! Nexus Mode - Gamified learning hub for NovaNet taxonomy.
 //!
-//! Nexus Mode provides 10 tabs organized in 3 sections:
+//! Nexus Mode provides 9 tabs organized in 3 sections:
 //!
 //! ## LEARN (Beginner-friendly)
 //! - [I] Intro: Big Picture introduction (what is NovaNet?)
@@ -8,17 +8,16 @@
 //! - [U] Tutorial: 5-step guided learning journey
 //!
 //! ## EXPLORE (Schema exploration)
-//! - [T] Traits: 5-trait constellation (defined, authored, imported, generated, retrieved)
 //! - [L] Layers: 2-realm split view (Shared 4 layers | Org 6 layers)
 //! - [A] Arcs: Arc families and scope visualization
+//! - [A] Arch: Architecture Decision Records browser
 //!
 //! ## PRACTICE (Interactive)
 //! - [P] Pipeline: Animated generation flow (not translation)
 //! - [Q] Quiz: Interactive taxonomy quiz
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
-//! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v0.12.5: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org).
+//! v0.19.0: Traits removed (ADR-024 simplified). 57 nodes, 10 layers.
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arch;
@@ -31,7 +30,6 @@ pub mod persistence;
 pub mod pipeline;
 pub mod quiz;
 pub mod stats;
-pub mod traits;
 pub mod tutorial;
 pub mod views;
 
@@ -48,10 +46,7 @@ use crate::tui::app::App;
 use crate::tui::clipboard;
 use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
-// Re-export TraitStats and CodeExample for external use
-pub use traits::{CodeExample, TraitStats, trait_code_examples};
-
-// Re-export new tab types
+// Re-export tab types
 pub use glossary::GlossaryState;
 pub use stats::StatsState;
 pub use tutorial::TutorialState;
@@ -63,15 +58,12 @@ pub use tutorial::TutorialState;
 /// Educational tips shown at the bottom of Nexus mode.
 /// Rotates through concepts about NovaNet's architecture.
 pub const TIPS: &[&str] = &[
-    "Imported is INPUT (savoir) - Authored is OUTPUT (generated)",
-    "Layers define WHAT a node does, Traits define HOW it behaves with locale",
     "Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
     "Generation, NOT translation: Imported + Structure -> Native content",
     "Shared realm is READ-ONLY - all business content lives in Org",
-    "Quick jump: gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
-    "Imported nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
     "Arc families: ownership, localization, semantic, generation, mining",
-    "defined = structure (solid border), authored = output (dashed border)",
+    "Layers define WHAT a node does (config, foundation, structure, etc.)",
+    "2 realms: Shared (36 nodes) + Org (21 nodes) = 57 total",
     "Press 'n' to see the next tip!",
 ];
 
@@ -89,8 +81,6 @@ pub enum NexusTab {
     Tutorial,
 
     // === EXPLORE Section (Schema exploration) ===
-    /// Traits constellation (5 traits with detail panel)
-    Traits,
     /// Layers split view (Shared | Org)
     Layers,
     /// Arc families and scope
@@ -105,7 +95,7 @@ pub enum NexusTab {
     Quiz,
     /// Dynamic learning statistics (sparklines, gauges, achievements)
     Stats,
-    // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+    // NOTE: Traits removed v0.19.0 (ADR-024 simplified)
 }
 
 /// Nexus tree sections with emojis.
@@ -140,12 +130,7 @@ impl NexusSection {
     pub fn tabs(&self) -> &'static [NexusTab] {
         match self {
             NexusSection::Learn => &[NexusTab::Intro, NexusTab::Glossary, NexusTab::Tutorial],
-            NexusSection::Explore => &[
-                NexusTab::Traits,
-                NexusTab::Layers,
-                NexusTab::Arcs,
-                NexusTab::Arch,
-            ],
+            NexusSection::Explore => &[NexusTab::Layers, NexusTab::Arcs, NexusTab::Arch],
             NexusSection::Practice => &[NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Stats],
         }
     }
@@ -188,7 +173,6 @@ impl NexusTab {
             NexusTab::Glossary => 'g',
             NexusTab::Tutorial => 'u',
             // EXPLORE section
-            NexusTab::Traits => 't',
             NexusTab::Layers => 'l',
             NexusTab::Arcs => 'a',
             NexusTab::Arch => 'A',
@@ -205,7 +189,6 @@ impl NexusTab {
             NexusTab::Intro => "Intro",
             NexusTab::Glossary => "Glossary",
             NexusTab::Tutorial => "Tutorial",
-            NexusTab::Traits => "Traits",
             NexusTab::Layers => "Layers",
             NexusTab::Arcs => "Arcs",
             NexusTab::Arch => "Arch",
@@ -223,7 +206,6 @@ impl NexusTab {
             NexusTab::Glossary => "📚",
             NexusTab::Tutorial => "🎓",
             // EXPLORE section
-            NexusTab::Traits => "🏷️",
             NexusTab::Layers => "📊",
             NexusTab::Arcs => "🔗",
             NexusTab::Arch => "🏛️",
@@ -242,7 +224,6 @@ impl NexusTab {
             NexusTab::Glossary,
             NexusTab::Tutorial,
             // EXPLORE
-            NexusTab::Traits,
             NexusTab::Layers,
             NexusTab::Arcs,
             NexusTab::Arch,
@@ -258,25 +239,23 @@ impl NexusTab {
         match self {
             NexusTab::Intro => NexusTab::Glossary,
             NexusTab::Glossary => NexusTab::Tutorial,
-            NexusTab::Tutorial => NexusTab::Traits,
-            NexusTab::Traits => NexusTab::Layers,
+            NexusTab::Tutorial => NexusTab::Layers, // Traits removed v0.19.0
             NexusTab::Layers => NexusTab::Arcs,
             NexusTab::Arcs => NexusTab::Arch,
             NexusTab::Arch => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
             NexusTab::Quiz => NexusTab::Stats,
-            NexusTab::Stats => NexusTab::Intro, // Wrap to start (Views removed v0.12.5)
+            NexusTab::Stats => NexusTab::Intro, // Wrap to start
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            NexusTab::Intro => NexusTab::Stats, // Wrap to end (Views removed v0.12.5)
+            NexusTab::Intro => NexusTab::Stats, // Wrap to end
             NexusTab::Glossary => NexusTab::Intro,
             NexusTab::Tutorial => NexusTab::Glossary,
-            NexusTab::Traits => NexusTab::Tutorial,
-            NexusTab::Layers => NexusTab::Traits,
+            NexusTab::Layers => NexusTab::Tutorial, // Traits removed v0.19.0
             NexusTab::Arcs => NexusTab::Layers,
             NexusTab::Arch => NexusTab::Arcs,
             NexusTab::Pipeline => NexusTab::Arch,
@@ -289,23 +268,20 @@ impl NexusTab {
     pub fn section(&self) -> NexusSection {
         match self {
             NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => NexusSection::Learn,
-            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => {
-                NexusSection::Explore
-            }
+            NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => NexusSection::Explore,
             NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats => NexusSection::Practice,
         }
     }
 
     /// Get index within section (0-based).
     /// Learn: Intro=0, Glossary=1, Tutorial=2
-    /// Explore: Traits=0, Layers=1, Arcs=2, Arch=3
+    /// Explore: Layers=0, Arcs=1, Arch=2
     /// Practice: Pipeline=0, Quiz=1, Stats=2
     pub fn index_in_section(&self) -> usize {
         match self {
-            NexusTab::Intro | NexusTab::Traits | NexusTab::Pipeline => 0,
-            NexusTab::Glossary | NexusTab::Layers | NexusTab::Quiz => 1,
-            NexusTab::Tutorial | NexusTab::Arcs | NexusTab::Stats => 2,
-            NexusTab::Arch => 3,
+            NexusTab::Intro | NexusTab::Layers | NexusTab::Pipeline => 0,
+            NexusTab::Glossary | NexusTab::Arcs | NexusTab::Quiz => 1,
+            NexusTab::Tutorial | NexusTab::Arch | NexusTab::Stats => 2,
         }
     }
 
@@ -319,23 +295,19 @@ impl NexusTab {
                     (NexusTab::Tutorial, "Start Tutorial journey"),
                 ],
                 NexusTab::Glossary => vec![
-                    (NexusTab::Traits, "See Traits constellation"),
+                    (NexusTab::Layers, "See Layer organization"),
                     (NexusTab::Quiz, "Test your knowledge"),
                 ],
                 NexusTab::Tutorial => vec![
                     (NexusTab::Pipeline, "See generation Pipeline"),
                     (NexusTab::Quiz, "Practice with Quiz"),
                 ],
-                NexusTab::Traits => vec![
-                    (NexusTab::Layers, "See Layer organization"),
-                    (NexusTab::Pipeline, "See data flow"),
-                ],
                 NexusTab::Layers => vec![
                     (NexusTab::Arcs, "See Arc families"),
                     (NexusTab::Stats, "See Stats"),
                 ],
                 NexusTab::Arcs => vec![
-                    (NexusTab::Traits, "Back to Traits"),
+                    (NexusTab::Layers, "See Layer organization"),
                     (NexusTab::Stats, "See Stats"),
                 ],
                 NexusTab::Arch => vec![
@@ -343,7 +315,7 @@ impl NexusTab {
                     (NexusTab::Layers, "See Layer organization"),
                 ],
                 NexusTab::Pipeline => vec![
-                    (NexusTab::Traits, "Understand Traits"),
+                    (NexusTab::Layers, "Understand Layers"),
                     (NexusTab::Quiz, "Test your knowledge"),
                 ],
                 NexusTab::Quiz => vec![
@@ -361,23 +333,19 @@ impl NexusTab {
                     (NexusTab::Tutorial, "Commencer le Tutoriel"),
                 ],
                 NexusTab::Glossary => vec![
-                    (NexusTab::Traits, "Voir les Traits"),
+                    (NexusTab::Layers, "Voir les Couches"),
                     (NexusTab::Quiz, "Tester vos connaissances"),
                 ],
                 NexusTab::Tutorial => vec![
                     (NexusTab::Pipeline, "Voir le Pipeline"),
                     (NexusTab::Quiz, "Pratiquer avec le Quiz"),
                 ],
-                NexusTab::Traits => vec![
-                    (NexusTab::Layers, "Voir les Couches"),
-                    (NexusTab::Pipeline, "Voir le flux"),
-                ],
                 NexusTab::Layers => vec![
                     (NexusTab::Arcs, "Voir les Arcs"),
                     (NexusTab::Stats, "Voir Stats"),
                 ],
                 NexusTab::Arcs => vec![
-                    (NexusTab::Traits, "Retour aux Traits"),
+                    (NexusTab::Layers, "Voir les Couches"),
                     (NexusTab::Stats, "Voir Stats"),
                 ],
                 NexusTab::Arch => vec![
@@ -385,7 +353,7 @@ impl NexusTab {
                     (NexusTab::Layers, "Voir les Couches"),
                 ],
                 NexusTab::Pipeline => vec![
-                    (NexusTab::Traits, "Comprendre les Traits"),
+                    (NexusTab::Layers, "Comprendre les Couches"),
                     (NexusTab::Quiz, "Tester vos connaissances"),
                 ],
                 NexusTab::Quiz => vec![
@@ -466,10 +434,6 @@ pub struct NexusState {
 
     // === EXPLORE Section State ===
 
-    // === Traits tab state ===
-    /// Cursor position in traits constellation (0-4 for 5 traits).
-    pub trait_cursor: usize,
-
     // === Layers tab state ===
     /// Cursor position in layers list.
     pub layer_cursor: usize,
@@ -513,7 +477,7 @@ pub struct NexusState {
     pub drill_cursor: usize,
 
     // === Quick jump state ===
-    /// Pending 'g' key for quick jump sequences (gd, ga, gi, gg, gr).
+    /// Pending 'g' key for quick jump sequences (e.g., go to specific tabs).
     pub pending_g: bool,
 
     // === Tips state ===
@@ -560,7 +524,6 @@ impl NexusState {
             glossary: glossary::GlossaryState::new(),
             tutorial: tutorial::TutorialState::new(),
             // EXPLORE section
-            trait_cursor: 0,
             layer_cursor: 0,
             layer_realm: 0,
             arc_cursor: 0,
@@ -694,19 +657,12 @@ impl NexusState {
 
     /// Handle key input in Nexus mode. Returns true if state changed.
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
-        // Handle pending 'g' state for quick jump shortcuts (gd, ga, gi, gg, gr)
-        // v11.8: Traits renamed per ADR-024 (data origin: defined/authored/imported/generated/retrieved)
+        // Handle pending 'g' state for quick jump shortcuts
         if self.pending_g {
             self.pending_g = false; // Clear pending state
             return match key.code {
-                KeyCode::Char('d') => self.jump_to_trait(0), // defined
-                KeyCode::Char('a') => self.jump_to_trait(1), // authored
-                KeyCode::Char('i') => self.jump_to_trait(2), // imported
-                KeyCode::Char('g') => self.jump_to_trait(3), // generated
-                KeyCode::Char('r') => self.jump_to_trait(4), // retrieved
                 KeyCode::Char('0') => {
                     // g0 = go to top (reset cursors)
-                    self.trait_cursor = 0;
                     self.layer_cursor = 0;
                     self.arc_cursor = 0;
                     self.pipeline_stage = 0;
@@ -917,17 +873,6 @@ impl NexusState {
                 self.tutorial.get_yank_text()
             }
             // EXPLORE section
-            NexusTab::Traits => {
-                // v11.8: ADR-024 Data Origin semantics (5 traits)
-                let traits = [
-                    "defined",  // was: invariant
-                    "authored", // was: localized
-                    "imported", // was: knowledge
-                    "generated",
-                    "retrieved", // was: aggregated
-                ];
-                traits.get(self.trait_cursor).map(|s| s.to_string())
-            }
             NexusTab::Layers => {
                 // Yank the current layer key
                 let layers = if self.layer_realm == 0 {
@@ -1000,20 +945,10 @@ impl NexusState {
         }
     }
 
-    /// Jump to a specific trait in the Traits tab.
-    /// Used by quick jump shortcuts (gd, ga, gi, gg, gr).
-    fn jump_to_trait(&mut self, trait_index: usize) -> bool {
-        self.tab = NexusTab::Traits;
-        self.trait_cursor = trait_index.min(4); // Clamp to 0-4
-        self.reset_drill();
-        self.sync_tree_to_tab();
-        true
-    }
-
     /// Navigate to next section (LEARN → EXPLORE → PRACTICE → LEARN).
     fn next_section(&mut self) -> bool {
         let target_tab = match self.tab.section() {
-            NexusSection::Learn => NexusTab::Traits,     // → EXPLORE
+            NexusSection::Learn => NexusTab::Layers,     // → EXPLORE
             NexusSection::Explore => NexusTab::Pipeline, // → PRACTICE
             NexusSection::Practice => NexusTab::Intro,   // → LEARN (wrap)
         };
@@ -1028,7 +963,7 @@ impl NexusState {
         let target_tab = match self.tab.section() {
             NexusSection::Learn => NexusTab::Pipeline, // ← PRACTICE (wrap)
             NexusSection::Explore => NexusTab::Intro,  // ← LEARN
-            NexusSection::Practice => NexusTab::Traits, // ← EXPLORE
+            NexusSection::Practice => NexusTab::Layers, // ← EXPLORE
         };
         self.tab = target_tab;
         self.reset_drill();
@@ -1075,23 +1010,6 @@ impl NexusState {
                 true
             }
             // EXPLORE section
-            NexusTab::Traits => {
-                if self.drill_depth == 0 {
-                    // In constellation, cycle through 5 traits
-                    self.trait_cursor = if self.trait_cursor == 0 {
-                        4 // Wrap to last
-                    } else {
-                        self.trait_cursor - 1
-                    };
-                    true
-                } else {
-                    // In drill-down list
-                    if self.drill_cursor > 0 {
-                        self.drill_cursor -= 1;
-                    }
-                    true
-                }
-            }
             NexusTab::Layers => {
                 if self.layer_cursor > 0 {
                     self.layer_cursor -= 1;
@@ -1159,17 +1077,6 @@ impl NexusState {
                 true
             }
             // EXPLORE section
-            NexusTab::Traits => {
-                if self.drill_depth == 0 {
-                    // In constellation, cycle through 5 traits
-                    self.trait_cursor = (self.trait_cursor + 1) % 5;
-                    true
-                } else {
-                    // In drill-down list (no max check yet, will be bounded by render)
-                    self.drill_cursor += 1;
-                    true
-                }
-            }
             NexusTab::Layers => {
                 // Bound by number of layers in current realm
                 // v11.5: shared: 4 layers (0-3), org: 6 layers (0-5)
@@ -1329,7 +1236,7 @@ impl NexusState {
                 true
             }
             // EXPLORE section
-            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs => {
+            NexusTab::Layers | NexusTab::Arcs => {
                 if self.drill_depth < 2 {
                     self.drill_depth += 1;
                     self.drill_cursor = 0;
@@ -1370,26 +1277,9 @@ impl NexusState {
         }
     }
 
-    /// Get a flattened list of all classes for the currently selected trait.
-    /// Returns tuples of (layer_key, class_key) for easy rendering.
-    pub fn get_trait_classes(&self, trait_stats: &[traits::TraitStats]) -> Vec<(String, String)> {
-        if let Some(stat) = trait_stats.get(self.trait_cursor) {
-            stat.classes_by_layer
-                .iter()
-                .flat_map(|(layer_key, classes)| {
-                    classes
-                        .iter()
-                        .map(|class_key| (layer_key.clone(), class_key.clone()))
-                })
-                .collect()
-        } else {
-            Vec::new()
-        }
-    }
-
     /// Get breadcrumb for current Nexus mode state.
     /// Returns path like "Nexus > LEARN > Intro > Page 1"
-    pub fn breadcrumb(&self, trait_stats: &[traits::TraitStats]) -> String {
+    pub fn breadcrumb(&self) -> String {
         let section = self.tab.section().label().to_uppercase();
         let tab_name = self.tab.label();
         match self.tab {
@@ -1429,22 +1319,6 @@ impl NexusState {
                 }
             }
             // EXPLORE section
-            NexusTab::Traits => {
-                let trait_name = traits::TRAIT_ORDER.get(self.trait_cursor).unwrap_or(&"");
-                if self.drill_depth == 0 {
-                    format!("Nexus > {} > {} > {}", section, tab_name, trait_name)
-                } else {
-                    let classes = self.get_trait_classes(trait_stats);
-                    if let Some((layer, class)) = classes.get(self.drill_cursor) {
-                        format!(
-                            "Nexus > {} > {} > {} > {} ({})",
-                            section, tab_name, trait_name, class, layer
-                        )
-                    } else {
-                        format!("Nexus > {} > {} > {}", section, tab_name, trait_name)
-                    }
-                }
-            }
             NexusTab::Layers => {
                 let realm = if self.layer_realm == 0 {
                     "Shared"
@@ -1531,13 +1405,6 @@ impl NexusState {
             NexusTab::Intro => vec![("←/→", "page"), ("Enter", "next"), ("y", "copy")],
             NexusTab::Glossary => vec![("↑/↓", "nav"), ("Enter", "expand"), ("y", "copy")],
             NexusTab::Tutorial => vec![("↑/↓", "task"), ("Enter", "done"), ("r", "reset")],
-            NexusTab::Traits => {
-                if self.drill_depth > 0 {
-                    vec![("↑/↓", "nav"), ("Enter", "select"), ("Esc", "back")]
-                } else {
-                    vec![("↑/↓", "trait"), ("Enter", "drill"), ("y", "copy")]
-                }
-            }
             NexusTab::Layers => vec![("←/→", "realm"), ("↑/↓", "layer"), ("y", "copy")],
             NexusTab::Arcs => vec![("↑/↓", "family"), ("Enter", "detail"), ("y", "copy")],
             NexusTab::Arch => vec![("↑/↓", "adr"), ("Enter", "detail"), ("y", "copy")],
@@ -1704,7 +1571,6 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Glossary => glossary::render_glossary_tab(f, app, content_chunks[0]),
         NexusTab::Tutorial => tutorial::render_tutorial_tab(f, app, content_chunks[0]),
         // EXPLORE section
-        NexusTab::Traits => traits::render_traits_tab(f, app, content_chunks[0]),
         NexusTab::Layers => layers::render_layers_tab(f, app, content_chunks[0]),
         NexusTab::Arcs => arcs::render_arcs_tab(f, app, content_chunks[0]),
         NexusTab::Arch => arch::render_arch_tab(f, app, content_chunks[0]),
@@ -1765,7 +1631,6 @@ mod tests {
     fn test_guide_state_new() {
         let state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
-        assert_eq!(state.trait_cursor, 0);
         assert!(!state.pending_g);
         assert_eq!(state.tip_index, 0);
         assert_eq!(state.intro_page, 0);
@@ -1781,19 +1646,21 @@ mod tests {
     fn test_current_tip() {
         let state = NexusState::new();
         let tip = state.current_tip();
-        assert_eq!(tip, TIPS[0]);
+        let tips = i18n::tips(state.locale);
+        assert_eq!(tip, tips[0]);
     }
 
     #[test]
     fn test_next_tip_cycles() {
         let mut state = NexusState::new();
+        let tips = i18n::tips(state.locale);
         assert_eq!(state.tip_index, 0);
 
         state.next_tip();
         assert_eq!(state.tip_index, 1);
 
         // Cycle through all tips
-        for _ in 0..TIPS.len() {
+        for _ in 0..tips.len() {
             state.next_tip();
         }
         // Should wrap around
@@ -1815,69 +1682,8 @@ mod tests {
     }
 
     #[test]
-    fn test_quick_jump_gd() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Layers; // Start on different tab
-        state.trait_cursor = 3;
-
-        // Press 'g' then 'd' for defined (v11.8: was invariant)
-        state.handle_key(key_event(KeyCode::Char('g')));
-        assert!(state.has_pending_g());
-
-        state.handle_key(key_event(KeyCode::Char('d')));
-        assert!(!state.has_pending_g());
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 0); // defined = index 0
-    }
-
-    #[test]
-    fn test_quick_jump_ga() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('a')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 1); // authored = index 1
-    }
-
-    #[test]
-    fn test_quick_jump_gi() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('i')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 2); // imported = index 2
-    }
-
-    #[test]
-    fn test_quick_jump_gg() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('g')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 3); // generated = index 3
-    }
-
-    #[test]
-    fn test_quick_jump_gr() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('r')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 4); // retrieved = index 4 (v11.8: was aggregated)
-    }
-
-    #[test]
     fn test_quick_jump_g0() {
         let mut state = NexusState::new();
-        state.trait_cursor = 3;
         state.layer_cursor = 2;
         state.arc_cursor = 1;
 
@@ -1885,7 +1691,6 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char('g')));
         state.handle_key(key_event(KeyCode::Char('0')));
 
-        assert_eq!(state.trait_cursor, 0);
         assert_eq!(state.layer_cursor, 0);
         assert_eq!(state.arc_cursor, 0);
     }
@@ -1918,15 +1723,12 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle through all 11 tabs (v0.12.3: added Arch)
+        // Cycle through all 9 tabs (v0.19.0: Traits removed)
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Glossary);
 
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Tutorial);
-
-        state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Layers);
@@ -1935,7 +1737,7 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Arcs);
 
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
+        assert_eq!(state.tab, NexusTab::Arch);
 
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Pipeline);
@@ -1946,7 +1748,6 @@ mod tests {
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Stats);
 
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Intro); // Wraps around (Stats is last)
     }
@@ -1954,33 +1755,30 @@ mod tests {
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 10); // v0.12.5: 10 tabs (Views removed, now NavMode::Views)
+        assert_eq!(all.len(), 9); // v0.19.0: 9 tabs (Traits removed)
         // LEARN section
         assert_eq!(all[0], NexusTab::Intro);
         assert_eq!(all[1], NexusTab::Glossary);
         assert_eq!(all[2], NexusTab::Tutorial);
         // EXPLORE section
-        assert_eq!(all[3], NexusTab::Traits);
-        assert_eq!(all[4], NexusTab::Layers);
-        assert_eq!(all[5], NexusTab::Arcs);
-        assert_eq!(all[6], NexusTab::Arch); // v0.12.3: Arch added
+        assert_eq!(all[3], NexusTab::Layers);
+        assert_eq!(all[4], NexusTab::Arcs);
+        assert_eq!(all[5], NexusTab::Arch);
         // PRACTICE section
-        assert_eq!(all[7], NexusTab::Pipeline);
-        assert_eq!(all[8], NexusTab::Quiz);
-        assert_eq!(all[9], NexusTab::Stats);
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+        assert_eq!(all[6], NexusTab::Pipeline);
+        assert_eq!(all[7], NexusTab::Quiz);
+        assert_eq!(all[8], NexusTab::Stats);
     }
 
     #[test]
     fn test_guide_tab_shortcuts() {
-        // v11.7: letter-based shortcuts
-        // v0.12.5: 10 tabs (Views removed, now NavMode::Views)
+        // v0.19.0: 9 tabs (Traits removed)
         assert_eq!(NexusTab::Intro.shortcut(), 'i');
         assert_eq!(NexusTab::Glossary.shortcut(), 'g');
         assert_eq!(NexusTab::Tutorial.shortcut(), 'u');
-        assert_eq!(NexusTab::Traits.shortcut(), 't');
         assert_eq!(NexusTab::Layers.shortcut(), 'l');
         assert_eq!(NexusTab::Arcs.shortcut(), 'a');
+        assert_eq!(NexusTab::Arch.shortcut(), 'A'); // Uppercase A to avoid conflict with Arcs
         assert_eq!(NexusTab::Pipeline.shortcut(), 'p');
         assert_eq!(NexusTab::Quiz.shortcut(), 'q');
         assert_eq!(NexusTab::Stats.shortcut(), 's');
@@ -1988,13 +1786,13 @@ mod tests {
 
     #[test]
     fn test_guide_tab_labels() {
-        // v0.12.5: 10 tabs with labels (Views removed, now NavMode::Views)
+        // v0.19.0: 9 tabs (Traits removed)
         assert_eq!(NexusTab::Intro.label(), "Intro");
         assert_eq!(NexusTab::Glossary.label(), "Glossary");
         assert_eq!(NexusTab::Tutorial.label(), "Tutorial");
-        assert_eq!(NexusTab::Traits.label(), "Traits");
         assert_eq!(NexusTab::Layers.label(), "Layers");
         assert_eq!(NexusTab::Arcs.label(), "Arcs");
+        assert_eq!(NexusTab::Arch.label(), "Arch");
         assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
         assert_eq!(NexusTab::Quiz.label(), "Quiz");
         assert_eq!(NexusTab::Stats.label(), "Stats");
@@ -2029,15 +1827,12 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Navigate forward through all 10 tabs (v0.12.5: Views removed)
+        // Navigate forward through all 9 tabs (v0.19.0: Traits removed)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Glossary);
 
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Tutorial);
-
-        state.handle_key(key_event(KeyCode::Char(']')));
-        assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Layers);
@@ -2046,7 +1841,7 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Arcs);
 
         state.handle_key(key_event(KeyCode::Char(']')));
-        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
+        assert_eq!(state.tab, NexusTab::Arch);
 
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Pipeline);
@@ -2057,7 +1852,7 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Stats);
 
-        // Wrap around (Stats is last, Views removed v0.12.5)
+        // Wrap around (Stats is last)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Intro);
     }
@@ -2093,9 +1888,9 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle backward through all 10 tabs (v0.12.5: Views removed)
+        // Cycle backward through all 9 tabs (v0.19.0: Traits removed)
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Stats); // Wraps to end (Views removed v0.12.5)
+        assert_eq!(state.tab, NexusTab::Stats); // Wraps to end
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Quiz);
@@ -2104,16 +1899,13 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Pipeline);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
+        assert_eq!(state.tab, NexusTab::Arch);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Arcs);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Layers);
-
-        state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Tutorial);
@@ -2146,13 +1938,13 @@ mod tests {
         // L (Shift+L) to next section
         let changed = state.handle_key(key_event(KeyCode::Char('L')));
         assert!(changed);
-        assert_eq!(state.tab, NexusTab::Traits); // EXPLORE section
+        assert_eq!(state.tab, NexusTab::Layers); // EXPLORE section (v0.19.0: first tab)
     }
 
     #[test]
     fn test_section_prev() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Start in EXPLORE section
+        state.tab = NexusTab::Layers; // Start in EXPLORE section
 
         // H (Shift+H) to prev section
         let changed = state.handle_key(key_event(KeyCode::Char('H')));
@@ -2166,7 +1958,7 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Intro); // LEARN
 
         state.handle_key(key_event(KeyCode::Char('L'))); // → EXPLORE
-        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.tab, NexusTab::Layers);
 
         state.handle_key(key_event(KeyCode::Char('L'))); // → PRACTICE
         assert_eq!(state.tab, NexusTab::Pipeline);
@@ -2184,7 +1976,7 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Pipeline);
 
         state.handle_key(key_event(KeyCode::Char('H'))); // ← EXPLORE
-        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.tab, NexusTab::Layers);
 
         state.handle_key(key_event(KeyCode::Char('H'))); // ← LEARN
         assert_eq!(state.tab, NexusTab::Intro);
@@ -2193,7 +1985,7 @@ mod tests {
     #[test]
     fn test_section_navigation_resets_drill() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
+        state.tab = NexusTab::Layers;
         state.drill_depth = 2;
         state.drill_cursor = 5;
 
@@ -2208,12 +2000,11 @@ mod tests {
         assert_eq!(NexusTab::Intro.section(), NexusSection::Learn);
         assert_eq!(NexusTab::Glossary.section(), NexusSection::Learn);
         assert_eq!(NexusTab::Tutorial.section(), NexusSection::Learn);
-        // EXPLORE section
-        assert_eq!(NexusTab::Traits.section(), NexusSection::Explore);
+        // EXPLORE section (v0.19.0: Traits removed)
         assert_eq!(NexusTab::Layers.section(), NexusSection::Explore);
         assert_eq!(NexusTab::Arcs.section(), NexusSection::Explore);
         assert_eq!(NexusTab::Arch.section(), NexusSection::Explore);
-        // PRACTICE section (v0.12.5: Views removed, now NavMode::Views)
+        // PRACTICE section
         assert_eq!(NexusTab::Pipeline.section(), NexusSection::Practice);
         assert_eq!(NexusTab::Quiz.section(), NexusSection::Practice);
         assert_eq!(NexusTab::Stats.section(), NexusSection::Practice);
@@ -2225,11 +2016,10 @@ mod tests {
         assert_eq!(NexusTab::Intro.index_in_section(), 0);
         assert_eq!(NexusTab::Glossary.index_in_section(), 1);
         assert_eq!(NexusTab::Tutorial.index_in_section(), 2);
-        // Explore section: Traits=0, Layers=1, Arcs=2, Arch=3
-        assert_eq!(NexusTab::Traits.index_in_section(), 0);
-        assert_eq!(NexusTab::Layers.index_in_section(), 1);
-        assert_eq!(NexusTab::Arcs.index_in_section(), 2);
-        assert_eq!(NexusTab::Arch.index_in_section(), 3);
+        // Explore section: Layers=0, Arcs=1, Arch=2 (v0.19.0: Traits removed)
+        assert_eq!(NexusTab::Layers.index_in_section(), 0);
+        assert_eq!(NexusTab::Arcs.index_in_section(), 1);
+        assert_eq!(NexusTab::Arch.index_in_section(), 2);
         // Practice section: Pipeline=0, Quiz=1, Stats=2
         assert_eq!(NexusTab::Pipeline.index_in_section(), 0);
         assert_eq!(NexusTab::Quiz.index_in_section(), 1);
@@ -2243,7 +2033,7 @@ mod tests {
     #[test]
     fn test_drill_down_enter_key() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Use Traits tab for drill-down test
+        state.tab = NexusTab::Layers; // Use Layers tab for drill-down test
         assert_eq!(state.drill_depth, 0);
 
         // Enter to drill down
@@ -2256,7 +2046,7 @@ mod tests {
     #[test]
     fn test_drill_down_max_depth() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Use Traits tab for drill-down test
+        state.tab = NexusTab::Layers; // Use Layers tab for drill-down test
         state.drill_depth = 2;
 
         // Already at max depth, should not drill further
@@ -2268,7 +2058,7 @@ mod tests {
     #[test]
     fn test_drill_up_escape_key() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Use Traits tab for drill-down test
+        state.tab = NexusTab::Layers; // Use Layers tab for drill-down test
         state.drill_depth = 2;
         state.drill_cursor = 5;
 
@@ -2282,7 +2072,7 @@ mod tests {
     #[test]
     fn test_drill_up_at_zero() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Use Traits tab for drill-down test
+        state.tab = NexusTab::Layers; // Use Layers tab for drill-down test
         assert_eq!(state.drill_depth, 0);
 
         // Already at depth 0, should not change
@@ -2294,7 +2084,7 @@ mod tests {
     #[test]
     fn test_drill_down_with_l_key() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Not Layers
+        state.tab = NexusTab::Arcs; // Not Layers (use Arcs tab)
         assert_eq!(state.drill_depth, 0);
 
         // 'l' should drill down (except in Layers tab)
@@ -2306,7 +2096,7 @@ mod tests {
     #[test]
     fn test_drill_up_with_h_key() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Not Layers
+        state.tab = NexusTab::Arcs; // Not Layers (use Arcs tab)
         state.drill_depth = 1;
 
         // 'h' should drill up (except in Layers tab)
@@ -2318,7 +2108,7 @@ mod tests {
     #[test]
     fn test_drill_right_left_keys() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
+        state.tab = NexusTab::Arcs;
         assert_eq!(state.drill_depth, 0);
 
         // Right arrow to drill down
@@ -2341,83 +2131,6 @@ mod tests {
         state.reset_drill();
 
         assert_eq!(state.drill_depth, 0);
-        assert_eq!(state.drill_cursor, 0);
-    }
-
-    // ==========================================================================
-    // NAVIGATION: TRAITS TAB
-    // ==========================================================================
-
-    #[test]
-    fn test_traits_navigate_down() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        assert_eq!(state.trait_cursor, 0);
-
-        // Navigate down with 'j'
-        state.handle_key(key_event(KeyCode::Char('j')));
-        assert_eq!(state.trait_cursor, 1);
-
-        // Navigate down with Down arrow
-        state.handle_key(key_event(KeyCode::Down));
-        assert_eq!(state.trait_cursor, 2);
-    }
-
-    #[test]
-    fn test_traits_navigate_up() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.trait_cursor = 3;
-
-        // Navigate up with 'k'
-        state.handle_key(key_event(KeyCode::Char('k')));
-        assert_eq!(state.trait_cursor, 2);
-
-        // Navigate up with Up arrow
-        state.handle_key(key_event(KeyCode::Up));
-        assert_eq!(state.trait_cursor, 1);
-    }
-
-    #[test]
-    fn test_traits_cursor_wraps_around() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.trait_cursor = 4; // Last trait (index 0-4)
-
-        // Navigate down should wrap to 0
-        state.handle_key(key_event(KeyCode::Char('j')));
-        assert_eq!(state.trait_cursor, 0);
-
-        // Navigate up should wrap to 4
-        state.handle_key(key_event(KeyCode::Char('k')));
-        assert_eq!(state.trait_cursor, 4);
-    }
-
-    #[test]
-    fn test_traits_drilled_navigation() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.drill_depth = 1;
-        state.drill_cursor = 5;
-
-        // Navigate up in drill mode
-        state.handle_key(key_event(KeyCode::Char('k')));
-        assert_eq!(state.drill_cursor, 4);
-
-        // Navigate down in drill mode
-        state.handle_key(key_event(KeyCode::Char('j')));
-        assert_eq!(state.drill_cursor, 5);
-    }
-
-    #[test]
-    fn test_traits_drilled_cursor_stops_at_zero() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.drill_depth = 1;
-        state.drill_cursor = 0;
-
-        // Navigate up at 0 should stay at 0
-        state.handle_key(key_event(KeyCode::Char('k')));
         assert_eq!(state.drill_cursor, 0);
     }
 
@@ -2625,11 +2338,11 @@ mod tests {
     }
 
     #[test]
-    fn test_space_triggers_drill_on_traits() {
+    fn test_space_triggers_drill_on_layers() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
+        state.tab = NexusTab::Layers;
 
-        // Space triggers drill_down on Traits tab (same as Enter)
+        // Space triggers drill_down on Layers tab (same as Enter)
         let changed = state.handle_key(key_event(KeyCode::Char(' ')));
         assert!(changed); // Space is now handled, triggers drill_down
     }
@@ -2672,22 +2385,10 @@ mod tests {
     #[test]
     fn test_breadcrumb_intro() {
         let state = NexusState::new();
-        let trait_stats = Vec::new();
 
         // v11.7: default is Intro, breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
+        let breadcrumb = state.breadcrumb();
         assert!(breadcrumb.starts_with("Nexus > LEARN > Intro"));
-    }
-
-    #[test]
-    fn test_breadcrumb_traits_overview() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        let trait_stats = Vec::new();
-
-        // v11.7: breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.starts_with("Nexus > EXPLORE > Traits > "));
     }
 
     #[test]
@@ -2695,10 +2396,9 @@ mod tests {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 0;
-        let trait_stats = Vec::new();
 
         // v11.7: breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
+        let breadcrumb = state.breadcrumb();
         assert!(breadcrumb.contains("Nexus > EXPLORE > Layers > Shared"));
     }
 
@@ -2707,10 +2407,9 @@ mod tests {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 1;
-        let trait_stats = Vec::new();
 
         // v11.7: breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
+        let breadcrumb = state.breadcrumb();
         assert!(breadcrumb.contains("Nexus > EXPLORE > Layers > Org"));
     }
 
@@ -2719,10 +2418,9 @@ mod tests {
         let mut state = NexusState::new();
         state.tab = NexusTab::Arcs;
         state.arc_cursor = 0;
-        let trait_stats = Vec::new();
 
         // v11.7: breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
+        let breadcrumb = state.breadcrumb();
         assert!(breadcrumb.contains("Nexus > EXPLORE > Arcs > ownership"));
     }
 
@@ -2731,10 +2429,9 @@ mod tests {
         let mut state = NexusState::new();
         state.tab = NexusTab::Pipeline;
         state.pipeline_stage = 0;
-        let trait_stats = Vec::new();
 
         // v11.7: breadcrumb includes section
-        let breadcrumb = state.breadcrumb(&trait_stats);
+        let breadcrumb = state.breadcrumb();
         assert!(breadcrumb.contains("Nexus > PRACTICE > Pipeline > Knowledge"));
     }
 
@@ -2758,7 +2455,6 @@ mod tests {
     fn test_default_impl() {
         let state = NexusState::default();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
-        assert_eq!(state.trait_cursor, 0);
         assert_eq!(state.drill_depth, 0);
         assert_eq!(state.intro_page, 0);
     }
@@ -2770,65 +2466,19 @@ mod tests {
     }
 
     #[test]
-    fn test_jump_to_trait_clamps() {
-        let mut state = NexusState::new();
-
-        // jump_to_trait clamps to 0-4
-        state.jump_to_trait(100);
-        assert_eq!(state.trait_cursor, 4);
-    }
-
-    #[test]
-    fn test_get_trait_classes_empty_stats() {
-        let state = NexusState::new();
-        let empty_stats: Vec<traits::TraitStats> = Vec::new();
-
-        let classes = state.get_trait_classes(&empty_stats);
-        assert!(classes.is_empty());
-    }
-
-    #[test]
     fn test_current_tip_fallback() {
         let mut state = NexusState::new();
+        let tips = i18n::tips(state.locale);
         state.tip_index = usize::MAX; // Invalid index
 
         // Should fallback to first tip
         let tip = state.current_tip();
-        assert_eq!(tip, TIPS[0]);
+        assert_eq!(tip, tips[0]);
     }
 
     // ==========================================================================
     // YANK (CLIPBOARD) FUNCTIONALITY
     // ==========================================================================
-
-    #[test]
-    fn test_get_current_yank_text_traits() {
-        let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-
-        // v11.8: ADR-024 Data Origin semantics
-        state.trait_cursor = 0;
-        assert_eq!(state.get_current_yank_text(), Some("defined".to_string())); // was: invariant
-
-        state.trait_cursor = 1;
-        assert_eq!(state.get_current_yank_text(), Some("authored".to_string())); // was: localized
-
-        state.trait_cursor = 2;
-        assert_eq!(state.get_current_yank_text(), Some("imported".to_string())); // was: knowledge
-
-        state.trait_cursor = 3;
-        assert_eq!(state.get_current_yank_text(), Some("generated".to_string()));
-
-        state.trait_cursor = 4;
-        assert_eq!(
-            state.get_current_yank_text(),
-            Some("retrieved".to_string()) // was: aggregated
-        );
-
-        // Index 5 now returns None
-        state.trait_cursor = 5;
-        assert_eq!(state.get_current_yank_text(), None);
-    }
 
     #[test]
     fn test_get_current_yank_text_layers_shared() {
@@ -2910,8 +2560,8 @@ mod tests {
     #[test]
     fn test_get_current_yank_text_out_of_bounds() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.trait_cursor = 100; // Out of bounds
+        state.tab = NexusTab::Layers;
+        state.layer_cursor = 100; // Out of bounds
 
         // Should return None for invalid cursor
         assert_eq!(state.get_current_yank_text(), None);
@@ -2946,8 +2596,8 @@ mod tests {
     #[test]
     fn test_y_key_triggers_yank() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits;
-        state.trait_cursor = 0;
+        state.tab = NexusTab::Layers;
+        state.layer_cursor = 0;
 
         // y key should trigger yank (may fail in CI without clipboard, but state should change)
         // Note: This will return true if clipboard works, or if error message is set
@@ -3022,7 +2672,7 @@ mod tests {
     #[test]
     fn test_c_key_only_works_in_tutorial() {
         let mut state = NexusState::new();
-        state.tab = NexusTab::Traits; // Not Tutorial
+        state.tab = NexusTab::Stats; // Not Tutorial
 
         let changed = state.handle_key(key_event(KeyCode::Char('c')));
         assert!(!changed); // Should not handle in non-Tutorial tab

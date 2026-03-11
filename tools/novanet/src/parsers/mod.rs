@@ -30,7 +30,7 @@
 pub mod arc_family;
 pub mod layer;
 pub mod realm;
-pub mod trait_def;
+// v0.19.0: trait_def removed (traits deprecated per ADR-024)
 
 // Core schema parsers
 pub mod arcs;

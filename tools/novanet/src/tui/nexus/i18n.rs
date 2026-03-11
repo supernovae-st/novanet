@@ -106,30 +106,25 @@ pub fn tab_views(locale: NexusLocale) -> &'static str {
 // =============================================================================
 
 /// Educational tips shown at the bottom of Nexus mode.
+/// v0.19.0: Traits removed - tips simplified to 7 items.
 pub fn tips(locale: NexusLocale) -> &'static [&'static str] {
     match locale {
         NexusLocale::En => &[
-            "Imported is INPUT (savoir) - Authored is OUTPUT (generated)",
-            "Layers define WHAT a node does, Traits define HOW it behaves with locale",
             "*Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
             "Generation, NOT translation: Imported + Structure -> Native content",
             "Shared realm is READ-ONLY - all business content lives in Org",
-            "Quick jump: gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
-            "Imported nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
             "Arc families: ownership, localization, semantic, generation, mining",
-            "Defined = structure (solid border), Authored = output (dashed border)",
+            "Layers define WHAT a node does (config, foundation, structure, etc.)",
+            "2 realms: Shared (36 nodes) + Org (21 nodes) = 57 total",
             "Press 'n' to see the next tip!",
         ],
         NexusLocale::Fr => &[
-            "Imported = INPUT (savoir) - Authored = OUTPUT (généré)",
-            "Les Layers définissent CE QUE fait un nœud, les Traits définissent COMMENT il se comporte avec la locale",
-            "*Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
+            "*Native ont des parents définis (Entity→EntityNative, Page→PageNative)",
             "Génération, PAS traduction : Imported + Structure -> Contenu natif",
             "Le realm Shared est en LECTURE SEULE - tout le contenu métier vit dans Org",
-            "Saut rapide : gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
-            "Les nœuds Imported n'existent QUE là où ils sont nécessaires (fr-FR: 20K Terms, sw-KE: 500)",
             "Familles d'arcs : ownership, localization, semantic, generation, mining",
-            "Defined = structure (bordure pleine), Authored = sortie (bordure pointillée)",
+            "Les Layers définissent CE QUE fait un nœud (config, foundation, structure, etc.)",
+            "2 realms : Shared (36 nœuds) + Org (21 nœuds) = 57 au total",
             "Appuyez sur 'n' pour voir le prochain conseil !",
         ],
     }
