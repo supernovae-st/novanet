@@ -26,18 +26,18 @@ pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
     match format {
         OutputFormat::Cypher => {
             output::print_output(&output::format_cypher(&stmt));
-        }
+        },
         OutputFormat::Table => {
             let rows = db.execute_statement(&stmt).await?;
             let overlay_rows = extract_overlay_rows(&rows);
             output::print_output(&output::format_overlay_table(&overlay_rows));
             eprintln!("{} row(s)", overlay_rows.len());
-        }
+        },
         OutputFormat::Json => {
             let rows = db.execute_statement(&stmt).await?;
             let overlay_rows = extract_overlay_rows(&rows);
             output::print_output(&output::format_json(&overlay_rows));
-        }
+        },
     }
     Ok(())
 }
@@ -63,18 +63,18 @@ async fn dispatch(
     match format {
         OutputFormat::Cypher => {
             output::print_output(&output::format_cypher(stmt));
-        }
+        },
         OutputFormat::Table => {
             let rows = db.execute_statement(stmt).await?;
             let node_rows = extractor(&rows);
             output::print_output(&output::format_table(&node_rows));
             eprintln!("{} row(s)", node_rows.len());
-        }
+        },
         OutputFormat::Json => {
             let rows = db.execute_statement(stmt).await?;
             let node_rows = extractor(&rows);
             output::print_output(&output::format_json(&node_rows));
-        }
+        },
     }
     Ok(())
 }

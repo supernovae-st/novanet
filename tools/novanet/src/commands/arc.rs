@@ -106,13 +106,13 @@ pub async fn run_create(
         })? {
         Some(_row) => {
             info!(from = %from_key, to = %to_key, rel_type = %rel_type, "created relationship");
-        }
+        },
         None => {
             return Err(crate::NovaNetError::Validation(format!(
                 "could not create relationship: one or both nodes not found \
                  (from='{from_key}', to='{to_key}')"
             )));
-        }
+        },
     }
 
     Ok(())

@@ -165,10 +165,10 @@ impl Db {
                         .map(|s| neo4rs::BoltType::from(s.as_str()))
                         .collect();
                     q = q.param(name.as_str(), bolt_list);
-                }
+                },
                 crate::cypher::ParamValue::Int(n) => {
                     q = q.param(name.as_str(), *n);
-                }
+                },
             }
         }
         let mut result = self

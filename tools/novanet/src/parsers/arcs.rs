@@ -304,7 +304,7 @@ impl ArcClassDef {
                     })
                     .collect();
                 if names.is_empty() { None } else { Some(names) }
-            }
+            },
             // Map: {segment: {type: string, ...}}
             serde_yaml::Value::Mapping(m) => {
                 let names: Vec<String> = m
@@ -312,7 +312,7 @@ impl ArcClassDef {
                     .filter_map(|k| k.as_str().map(|s| s.to_string()))
                     .collect();
                 if names.is_empty() { None } else { Some(names) }
-            }
+            },
             _ => None,
         })
     }
@@ -378,13 +378,13 @@ impl ArcClassDef {
                                     description,
                                     default,
                                 })
-                            }
+                            },
                             _ => None,
                         }
                     })
                     .collect();
                 if defs.is_empty() { None } else { Some(defs) }
-            }
+            },
             // Map format: {segment: {type: string, ...}}
             serde_yaml::Value::Mapping(m) => {
                 let defs: Vec<ArcPropertyDef> = m
@@ -442,7 +442,7 @@ impl ArcClassDef {
                     })
                     .collect();
                 if defs.is_empty() { None } else { Some(defs) }
-            }
+            },
             _ => None,
         })
     }
@@ -514,7 +514,7 @@ pub fn load_arc_classes_from_files(root: &Path) -> crate::Result<ArcsDocument> {
             match super::utils::load_yaml::<ArcClassYaml>(&path) {
                 Ok(yaml) => {
                     arcs.push(yaml.arc.to_arc_def());
-                }
+                },
                 Err(e) => {
                     // Try to get more detailed error info
                     let content = std::fs::read_to_string(&path).unwrap_or_default();
@@ -537,12 +537,12 @@ pub fn load_arc_classes_from_files(root: &Path) -> crate::Result<ArcsDocument> {
                                     eprintln!("  -> Missing 'cardinality' field");
                                 }
                             }
-                        }
+                        },
                         Err(_) => {
                             eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
-                        }
+                        },
                     }
-                }
+                },
             }
         }
     }
@@ -949,7 +949,7 @@ fn parse_has_audience_file() {
         Err(e) => {
             eprintln!("Error: {}", e);
             panic!("Failed to parse: {}", e);
-        }
+        },
     }
 }
 

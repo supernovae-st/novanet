@@ -38,33 +38,33 @@ fn get_tree_content(app: &App) -> Option<(String, &'static str)> {
         TreeItem::Layer(realm, layer) => format!("{}/{}", realm.key, layer.key),
         TreeItem::Class(realm, layer, class) => {
             format!("{}/{}/{}", realm.key, layer.key, class.key)
-        }
+        },
         TreeItem::Instance(realm, layer, class, instance) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, instance.key)
-        }
+        },
         TreeItem::ArcFamily(family) => format!("arcs/{}", family.key),
         TreeItem::ArcClass(family, arc) => format!("arcs/{}/{}", family.key, arc.key),
         TreeItem::ClassesSection => "classes".to_string(),
         TreeItem::ArcsSection => "arcs".to_string(),
         TreeItem::EntityCategory(realm, layer, class, cat) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, cat.key)
-        }
+        },
         TreeItem::LocaleGroup(realm, layer, class, group) => {
             format!(
                 "{}/{}/{}/{}",
                 realm.key, layer.key, class.key, group.locale_code
             )
-        }
+        },
         // v0.17.3: EntityGroup path
         TreeItem::EntityGroup(realm, layer, class, group) => {
             format!(
                 "{}/{}/{}/{}",
                 realm.key, layer.key, class.key, group.entity_key
             )
-        }
+        },
         TreeItem::EntityNativeItem(realm, layer, class, native) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, native.key)
-        }
+        },
     };
     Some((path, "path"))
 }
@@ -82,7 +82,7 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
                 "layer": layer.key,
                 "display_name": class.display_name
             })
-        }
+        },
         TreeItem::ArcClass(family, arc) => {
             serde_json::json!({
                 "type": "ArcClass",
@@ -92,14 +92,14 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
                 "target": arc.to_class,
                 "cardinality": arc.cardinality
             })
-        }
+        },
         TreeItem::Realm(realm) => {
             serde_json::json!({
                 "type": "Realm",
                 "key": realm.key,
                 "display_name": realm.display_name
             })
-        }
+        },
         TreeItem::Layer(realm, layer) => {
             serde_json::json!({
                 "type": "Layer",
@@ -107,7 +107,7 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
                 "realm": realm.key,
                 "display_name": layer.display_name
             })
-        }
+        },
         TreeItem::Instance(realm, layer, class, instance) => {
             serde_json::json!({
                 "type": "Instance",
@@ -116,7 +116,7 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
                 "realm": realm.key,
                 "layer": layer.key
             })
-        }
+        },
         _ => return None,
     };
     Some((
@@ -146,7 +146,7 @@ fn get_properties_content(app: &App) -> Option<(String, &'static str)> {
                 serde_json::to_string_pretty(&props).unwrap_or_default(),
                 "JSON schema",
             ))
-        }
+        },
         TreeItem::Instance(_, _, _, instance) => {
             // Instance properties is BTreeMap<String, JsonValue> - already typed
             let props: serde_json::Map<String, serde_json::Value> = instance
@@ -158,7 +158,7 @@ fn get_properties_content(app: &App) -> Option<(String, &'static str)> {
                 serde_json::to_string_pretty(&props).unwrap_or_default(),
                 "JSON",
             ))
-        }
+        },
         _ => None,
     }
 }
@@ -260,7 +260,7 @@ pub fn get_focused_property(app: &App) -> Option<(String, String)> {
                     None
                 }
             }
-        }
+        },
         TreeItem::Instance(_, _, class, instance) => {
             // For Instance: actual property values
             // Order: standard → specific → extra (instance-only)
@@ -317,7 +317,7 @@ pub fn get_focused_property(app: &App) -> Option<(String, String)> {
                     None
                 }
             }
-        }
+        },
         _ => None,
     }
 }

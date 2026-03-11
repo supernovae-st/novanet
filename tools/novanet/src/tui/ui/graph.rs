@@ -712,12 +712,12 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         let hint = match app.current_item() {
             Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => {
                 "\u{25b8} Expand a section to explore"
-            }
+            },
             Some(TreeItem::ArcFamily(_)) => "\u{25b8} Select an Arc to see endpoints",
             Some(TreeItem::ArcClass(_, _)) => "\u{25b8} Loading arc details...",
             Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
                 "\u{25b8} Select a Node Class to see arc relationships"
-            }
+            },
             _ => "\u{25b8} Select a Node Class or Arc to see details",
         };
         lines.push(Line::from(Span::styled(hint, STYLE_DIM)));

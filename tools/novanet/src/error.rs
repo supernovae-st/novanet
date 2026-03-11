@@ -67,7 +67,7 @@ impl ErrorHint for NovaNetError {
                 } else {
                     Some("Check Neo4j status: novanet doctor")
                 }
-            }
+            },
             NovaNetError::Query { query, source } => {
                 let msg = source.to_string().to_lowercase();
                 if msg.contains("syntax") {
@@ -79,7 +79,7 @@ impl ErrorHint for NovaNetError {
                 } else {
                     None
                 }
-            }
+            },
             NovaNetError::UnknownClass(label) => {
                 if label
                     .chars()
@@ -91,13 +91,13 @@ impl ErrorHint for NovaNetError {
                 } else {
                     Some("Run 'novanet schema validate' to check class definitions.")
                 }
-            }
+            },
             NovaNetError::SchemaIntegrity(_) => {
                 Some("Run 'novanet schema generate' to regenerate artifacts.")
-            }
+            },
             NovaNetError::Schema { .. } => {
                 Some("Check YAML syntax. Run 'novanet schema validate --verbose' for details.")
-            }
+            },
             NovaNetError::Validation(msg) => {
                 if msg.contains("password") {
                     Some("Set NEO4J_PASSWORD env var or run: novanet init")
@@ -106,7 +106,7 @@ impl ErrorHint for NovaNetError {
                 } else {
                     None
                 }
-            }
+            },
             NovaNetError::Generator { generator, .. } => Some(match generator.as_str() {
                 "mermaid" => "Check view definitions in models/views/.",
                 "cypher" => "Validate YAML with 'novanet schema validate'.",
@@ -117,13 +117,13 @@ impl ErrorHint for NovaNetError {
                 match kind {
                     std::io::ErrorKind::NotFound => {
                         Some("File or directory not found. Check --root path.")
-                    }
+                    },
                     std::io::ErrorKind::PermissionDenied => {
                         Some("Permission denied. Check file permissions.")
-                    }
+                    },
                     _ => None,
                 }
-            }
+            },
         }
     }
 }

@@ -249,7 +249,7 @@ mod tests {
                 let locale_key = &props["locale_key"];
                 assert_eq!(locale_key.prop_type, "string");
                 assert_eq!(locale_key.required, Some(true));
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -283,7 +283,7 @@ mod tests {
                 let locale_key = &props["locale_key"];
                 assert_eq!(locale_key.prop_type, "string");
                 assert_eq!(locale_key.required, Some(true));
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -317,7 +317,7 @@ mod tests {
                 let locale_key = &props["locale_key"];
                 assert_eq!(locale_key.prop_type, "string");
                 assert_eq!(locale_key.required, Some(true));
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -385,7 +385,7 @@ mod tests {
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("already present") || reason.contains("Denormalized"));
-            }
+            },
             _ => panic!("Expected Skipped for existing denorm keys"),
         }
     }
@@ -438,7 +438,7 @@ mod tests {
                     reason.contains("not a composite key node")
                         || reason.contains("No denormalized")
                 );
-            }
+            },
             _ => panic!("Expected Skipped for non-composite key node"),
         }
     }

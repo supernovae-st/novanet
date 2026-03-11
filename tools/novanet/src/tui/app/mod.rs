@@ -285,29 +285,29 @@ impl App {
                 self.pending.arcs = Some(key);
                 // Load Class validation (Neo4j vs YAML)
                 self.load_validated_class_properties(&properties);
-            }
+            },
             TreeItemData::ArcClass { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
                 self.pending.arc_class = Some(key);
-            }
+            },
             TreeItemData::Realm { key } => {
                 let path = format!("packages/core/models/realms/{}.yaml", key);
                 self.load_yaml_cached(&path);
                 self.pending.realm = Some(key);
-            }
+            },
             TreeItemData::Layer { key } => {
                 let path = format!("packages/core/models/layers/{}.yaml", key);
                 self.load_yaml_cached(&path);
                 self.pending.layer = Some(key);
-            }
+            },
             TreeItemData::ArcFamily { key } => {
                 let path = format!("packages/core/models/arc-families/{}.yaml", key);
                 self.load_yaml_cached(&path);
-            }
+            },
             TreeItemData::Section => {
                 // v0.12.5: Show _index.yaml (complete schema overview) instead of taxonomy.yaml
                 self.load_yaml_cached("packages/core/models/_index.yaml");
-            }
+            },
             TreeItemData::Instance {
                 class_yaml_path,
                 class_properties,
@@ -323,12 +323,12 @@ impl App {
                     self.yaml.content.clear();
                     self.yaml.line_count = 0;
                 }
-            }
+            },
             TreeItemData::None => {
                 self.yaml.path.clear();
                 self.yaml.content.clear();
                 self.yaml.line_count = 0;
-            }
+            },
         }
     }
 
@@ -379,7 +379,7 @@ impl App {
                     ),
                     key: arc.key.clone(),
                 }
-            }
+            },
             Some(TreeItem::Realm(realm)) => TreeItemData::Realm {
                 key: realm.key.clone(),
             },
@@ -400,7 +400,7 @@ impl App {
                     class_properties: class_info.properties.clone(),
                     properties: instance.properties.clone(),
                 }
-            }
+            },
             // EntityCategory is a grouper (THING, ACTION, etc.) - show as Section
             // v0.17.3: Categories don't have YAML schema, they are navigational groupers
             Some(TreeItem::EntityCategory(_, _, _, _)) => TreeItemData::Section,
@@ -433,7 +433,7 @@ impl App {
                 }
                 // Fallback: show helpful message if Entity lookup fails
                 TreeItemData::None
-            }
+            },
             // EntityNativeItem shows as Instance (same data structure)
             // v0.17.3: Now includes full properties for INSTANCE panel display
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
@@ -446,7 +446,7 @@ impl App {
                     class_properties: class_info.properties.clone(),
                     properties: native.properties.clone(),
                 }
-            }
+            },
             None => TreeItemData::None,
         }
     }
@@ -824,34 +824,34 @@ impl App {
                                 self.load_yaml_for_current();
                                 return true;
                             }
-                        }
+                        },
                         Panel::Identity => {
                             // v0.18.3: Identity panel - no scroll (static content)
-                        }
+                        },
                         Panel::Content => {
                             if self.yaml.scroll > 0 {
                                 self.yaml.scroll =
                                     self.yaml.scroll.saturating_sub(MOUSE_SCROLL_LINES);
                                 return true;
                             }
-                        }
+                        },
                         Panel::Props => {
                             if self.props_scroll > 0 {
                                 self.props_scroll =
                                     self.props_scroll.saturating_sub(MOUSE_SCROLL_LINES);
                                 return true;
                             }
-                        }
+                        },
                         Panel::Arcs => {
                             if self.arcs_scroll > 0 {
                                 self.arcs_scroll =
                                     self.arcs_scroll.saturating_sub(MOUSE_SCROLL_LINES);
                                 return true;
                             }
-                        }
+                        },
                     }
                 }
-            }
+            },
             MouseEventKind::ScrollDown => {
                 if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
                     match panel {
@@ -864,10 +864,10 @@ impl App {
                                 self.load_yaml_for_current();
                                 return true;
                             }
-                        }
+                        },
                         Panel::Identity => {
                             // v0.18.3: Identity panel - no scroll (static content)
-                        }
+                        },
                         Panel::Content => {
                             let max_scroll =
                                 self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -876,7 +876,7 @@ impl App {
                                     (self.yaml.scroll + MOUSE_SCROLL_LINES).min(max_scroll);
                                 return true;
                             }
-                        }
+                        },
                         Panel::Props => {
                             let max_scroll =
                                 self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
@@ -885,7 +885,7 @@ impl App {
                                     (self.props_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
                                 return true;
                             }
-                        }
+                        },
                         Panel::Arcs => {
                             let max_scroll =
                                 self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
@@ -894,10 +894,10 @@ impl App {
                                     (self.arcs_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
                                 return true;
                             }
-                        }
+                        },
                     }
                 }
-            }
+            },
             // Click to focus: change panel focus when clicking
             MouseEventKind::Down(MouseButton::Left) => {
                 if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
@@ -907,9 +907,9 @@ impl App {
                         return true;
                     }
                 }
-            }
+            },
             // Ignore other mouse events (right-click, middle-click, drags, etc.)
-            _ => {}
+            _ => {},
         }
         false
     }
@@ -949,23 +949,23 @@ impl App {
                 KeyCode::Char('n') => {
                     self.next_search_result();
                     return true;
-                }
+                },
                 KeyCode::Char('p') => {
                     self.prev_search_result();
                     return true;
-                }
+                },
                 // Ctrl+Up/Down: vertical panel switching (Identity↔Content, Props↔Arcs)
                 KeyCode::Up => {
                     self.focus = self.focus.up();
                     self.set_status(self.focus.name());
                     return true;
-                }
+                },
                 KeyCode::Down => {
                     self.focus = self.focus.down();
                     self.set_status(self.focus.name());
                     return true;
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
 
@@ -980,13 +980,13 @@ impl App {
             KeyCode::Char('?') => {
                 self.overlays.help_active = true;
                 true
-            }
+            },
 
             // Open search (/ = vim-style search)
             KeyCode::Char('/') => {
                 self.search.active = true;
                 true
-            }
+            },
 
             // v0.17.3 (ADR-036): 'f' trait filter keybinding removed
 
@@ -994,7 +994,7 @@ impl App {
             KeyCode::F(1) => {
                 self.overlays.legend_active = true;
                 true
-            }
+            },
 
             // Open recent items popup (` = backtick)
             KeyCode::Char('`') => {
@@ -1003,7 +1003,7 @@ impl App {
                     self.overlays.recent_items_cursor = 0;
                 }
                 true
-            }
+            },
 
             // Mode switching: 1-3 global (1=Graph, 2=Views, 3=Nexus)
             KeyCode::Char('1') => {
@@ -1015,7 +1015,7 @@ impl App {
                     self.load_yaml_for_current();
                 }
                 true
-            }
+            },
             KeyCode::Char('2') => {
                 // Switch to Views mode (Schema views explorer)
                 if self.mode != NavMode::Views {
@@ -1024,7 +1024,7 @@ impl App {
                     self.restore_mode_cursor(NavMode::Views);
                 }
                 true
-            }
+            },
             KeyCode::Char('3') => {
                 // Switch to Nexus mode (hub for Quiz, Stats, Help)
                 if self.mode != NavMode::Nexus {
@@ -1033,7 +1033,7 @@ impl App {
                     self.restore_mode_cursor(NavMode::Nexus);
                 }
                 true
-            }
+            },
 
             // Panel navigation: Tab cycles through 5 panels (v0.18.3)
             // Tree [1] → Identity [2] → Content [3] → Props [4] → Arcs [5]
@@ -1041,24 +1041,24 @@ impl App {
                 self.focus = self.focus.next();
                 self.set_status(self.focus.name());
                 true
-            }
+            },
             KeyCode::BackTab => {
                 self.focus = self.focus.prev();
                 self.set_status(self.focus.name());
                 true
-            }
+            },
             KeyCode::Left => {
                 // Left arrow: spatial navigation left (v0.18.3)
                 self.focus = self.focus.left();
                 self.set_status(self.focus.name());
                 true
-            }
+            },
             KeyCode::Right => {
                 // Right arrow: spatial navigation right (v0.18.3)
                 self.focus = self.focus.right();
                 self.set_status(self.focus.name());
                 true
-            }
+            },
             // NOTE: Up/Down arrows handled below for in-panel navigation (cursor/scroll)
             // Left/Right = panel switching, Up/Down/j/k = in-panel (vim/lazygit pattern)
 
@@ -1070,18 +1070,19 @@ impl App {
                 match self.focus {
                     Focus::Tree => {
                         self.toggle_tree_item();
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no action on Enter yet
                         // Future: could toggle between expanded/collapsed view
-                    }
+                    },
                     Focus::Content => {
                         // v0.17.3: Toggle instance panel sections collapse/expand
                         // Cycles: all expanded → STANDARD collapsed → both collapsed → all expanded
                         if !self.instance_standard_collapsed && !self.instance_specific_collapsed {
                             // Both expanded → collapse STANDARD
                             self.instance_standard_collapsed = true;
-                        } else if self.instance_standard_collapsed && !self.instance_specific_collapsed
+                        } else if self.instance_standard_collapsed
+                            && !self.instance_specific_collapsed
                         {
                             // STANDARD collapsed → collapse both
                             self.instance_specific_collapsed = true;
@@ -1090,17 +1091,17 @@ impl App {
                             self.instance_standard_collapsed = false;
                             self.instance_specific_collapsed = false;
                         }
-                    }
+                    },
                     Focus::Props => {
                         // Toggle expanded property text (word-wrap on multiple lines)
                         self.expanded_property = !self.expanded_property;
-                    }
+                    },
                     Focus::Arcs => {
                         // No-op for Arcs focus (future: could navigate to selected arc)
-                    }
+                    },
                 }
                 true
-            }
+            },
 
             // h/l: Panel navigation OR tree toggle (v0.18.3)
             // When in Tree: toggle collapse/expand (existing behavior)
@@ -1113,7 +1114,7 @@ impl App {
                     self.set_status(self.focus.name());
                 }
                 true
-            }
+            },
             KeyCode::Char('l') => {
                 if self.focus == Focus::Tree {
                     self.toggle_tree_item();
@@ -1122,24 +1123,24 @@ impl App {
                     self.set_status(self.focus.name());
                 }
                 true
-            }
+            },
             // Space: toggle collapse/expand (Tree only)
             KeyCode::Char(' ') => {
                 if self.focus == Focus::Tree {
                     self.toggle_tree_item();
                 }
                 true
-            }
+            },
             KeyCode::Char('H') => {
                 self.tree.collapse_all();
                 self.tree_cursor = 0;
                 self.tree_scroll = 0;
                 true
-            }
+            },
             KeyCode::Char('L') => {
                 self.tree.expand_all();
                 true
-            }
+            },
 
             // Expand/Collapse subtree under cursor (e/c)
             KeyCode::Char('e') | KeyCode::Char('E') if key.modifiers.is_empty() => {
@@ -1154,7 +1155,7 @@ impl App {
                     }
                 }
                 true
-            }
+            },
             KeyCode::Char('c') => {
                 // c = Collapse subtree under cursor (Tree) OR copy property value (Info/Properties)
                 if self.focus == Focus::Tree {
@@ -1170,7 +1171,7 @@ impl App {
                     self.copy_focused_property();
                 }
                 true
-            }
+            },
 
             // Toggle hide empty (0) - only in Data mode
             KeyCode::Char('0') => {
@@ -1186,7 +1187,7 @@ impl App {
                     self.tree_scroll = 0;
                 }
                 true
-            }
+            },
 
             // Jump to first/last (vim-style: g/G)
             KeyCode::Char('g') => {
@@ -1196,22 +1197,22 @@ impl App {
                         self.tree_scroll = 0;
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         self.yaml.scroll = 0;
-                    }
+                    },
                     Focus::Props => {
                         self.props_scroll = 0;
-                    }
+                    },
                     Focus::Arcs => {
                         self.arcs_scroll = 0;
-                    }
+                    },
                 }
                 true
-            }
+            },
             KeyCode::Char('G') => {
                 match self.focus {
                     Focus::Tree => {
@@ -1220,25 +1221,25 @@ impl App {
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = max_scroll;
-                    }
+                    },
                     Focus::Props => {
                         let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         self.props_scroll = max_scroll;
-                    }
+                    },
                     Focus::Arcs => {
                         let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         self.arcs_scroll = max_scroll;
-                    }
+                    },
                 }
                 true
-            }
+            },
 
             // Navigation: ↑/k scroll up, ↓/j scroll down (in focused panel)
             KeyCode::Up | KeyCode::Char('k') => {
@@ -1249,15 +1250,15 @@ impl App {
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
                         }
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         if self.yaml.scroll > 0 {
                             self.yaml.scroll -= 1;
                         }
-                    }
+                    },
                     Focus::Props => {
                         // Navigate properties with j/k
                         if self.schema_overlay.matched_properties.is_some()
@@ -1268,15 +1269,15 @@ impl App {
                         } else if self.props_scroll > 0 {
                             self.props_scroll -= 1;
                         }
-                    }
+                    },
                     Focus::Arcs => {
                         if self.arcs_scroll > 0 {
                             self.arcs_scroll -= 1;
                         }
-                    }
+                    },
                 }
                 true
-            }
+            },
             KeyCode::Down | KeyCode::Char('j') => {
                 match self.focus {
                     Focus::Tree => {
@@ -1286,16 +1287,16 @@ impl App {
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
                         }
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         if self.yaml.scroll < max_scroll {
                             self.yaml.scroll += 1;
                         }
-                    }
+                    },
                     Focus::Props => {
                         // Navigate properties with j/k
                         if let Some(matched) = &self.schema_overlay.matched_properties {
@@ -1311,16 +1312,16 @@ impl App {
                                 self.props_scroll += 1;
                             }
                         }
-                    }
+                    },
                     Focus::Arcs => {
                         let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         if self.arcs_scroll < max_scroll {
                             self.arcs_scroll += 1;
                         }
-                    }
+                    },
                 }
                 true
-            }
+            },
 
             // Page scroll: d/u vim-style
             KeyCode::Char('d') => {
@@ -1330,48 +1331,48 @@ impl App {
                         self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    }
+                    },
                     Focus::Props => {
                         let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         self.props_scroll =
                             (self.props_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    }
+                    },
                     Focus::Arcs => {
                         let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         self.arcs_scroll = (self.arcs_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    }
+                    },
                 }
                 true
-            }
+            },
             KeyCode::Char('u') => {
                 match self.focus {
                     Focus::Tree => {
                         self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                    }
+                    },
                     Focus::Identity => {
                         // v0.18.3: Identity panel - no scroll (static content)
-                    }
+                    },
                     Focus::Content => {
                         self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    }
+                    },
                     Focus::Props => {
                         self.props_scroll = self.props_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    }
+                    },
                     Focus::Arcs => {
                         self.arcs_scroll = self.arcs_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    }
+                    },
                 }
                 true
-            }
+            },
 
             // 'r' key: Jump to ADR if architecture diagram exists, else refresh
             KeyCode::Char('r') => {
@@ -1393,19 +1394,19 @@ impl App {
                 self.pending_refresh = true;
                 self.set_status("Refreshing...");
                 true
-            }
+            },
 
             // Yank (smart copy based on selected box)
             KeyCode::Char('y') => {
                 self.yank_selected_box();
                 true
-            }
+            },
 
             // Yank JSON properties (Y) - legacy, kept for compatibility
             KeyCode::Char('Y') => {
                 self.yank_current_json();
                 true
-            }
+            },
 
             // Jump to parent [p]
             KeyCode::Char('p') => {
@@ -1419,7 +1420,7 @@ impl App {
                     self.set_status("↑ Parent");
                 }
                 true
-            }
+            },
 
             // Toggle schema overlay (s) - only in Data mode
             KeyCode::Char('s') => {
@@ -1434,7 +1435,7 @@ impl App {
                     });
                 }
                 true
-            }
+            },
 
             // Toggle JSON pretty-print (J) - only when viewing properties
             KeyCode::Char('J') => {
@@ -1445,7 +1446,7 @@ impl App {
                     "JSON compact mode"
                 });
                 true
-            }
+            },
 
             // Property focus navigation (+/-) - Feature 3: Truncate Intelligent
             // Navigate focused property in schema overlay
@@ -1458,14 +1459,14 @@ impl App {
                     }
                 }
                 true
-            }
+            },
             KeyCode::Char('-') | KeyCode::Char('_') => {
                 if self.is_graph_mode() && self.schema_overlay.enabled {
                     self.focused_property_idx = self.focused_property_idx.saturating_sub(1);
                     self.expanded_property = false; // Collapse when changing property
                 }
                 true
-            }
+            },
 
             // Navigation history: back (Ctrl+o)
             KeyCode::Char('o')
@@ -1475,7 +1476,7 @@ impl App {
             {
                 self.nav_back();
                 true
-            }
+            },
 
             // Navigation history: forward (Ctrl+i)
             KeyCode::Char('i')
@@ -1485,7 +1486,7 @@ impl App {
             {
                 self.nav_forward();
                 true
-            }
+            },
 
             // Esc: exit filtered mode
             KeyCode::Esc => {
@@ -1494,13 +1495,13 @@ impl App {
                     return true;
                 }
                 false
-            }
+            },
 
             // Open YAML in external editor (O = shift+o)
             KeyCode::Char('O') => {
                 self.open_yaml_in_editor();
                 true
-            }
+            },
 
             _ => false,
         }
@@ -1513,13 +1514,13 @@ impl App {
             KeyCode::Esc => {
                 self.close_search();
                 true
-            }
+            },
 
             // Select result
             KeyCode::Enter => {
                 self.select_search_result();
                 true
-            }
+            },
 
             // Navigate results (arrow keys and vim j/k)
             KeyCode::Up | KeyCode::Char('k') => {
@@ -1527,14 +1528,14 @@ impl App {
                     self.search.cursor -= 1;
                 }
                 true
-            }
+            },
             KeyCode::Down | KeyCode::Char('j') => {
                 let max = self.search.results.len().saturating_sub(1);
                 if self.search.cursor < max {
                     self.search.cursor += 1;
                 }
                 true
-            }
+            },
 
             // Type character (j/k are handled above for navigation)
             // Security: Limit search query length to prevent memory exhaustion
@@ -1545,14 +1546,14 @@ impl App {
                     self.update_search();
                 }
                 true
-            }
+            },
 
             // Delete character
             KeyCode::Backspace => {
                 self.search.query.pop();
                 self.update_search();
                 true
-            }
+            },
 
             _ => false,
         }
@@ -1565,13 +1566,13 @@ impl App {
             KeyCode::Esc | KeyCode::Char('`') => {
                 self.overlays.recent_items_active = false;
                 true
-            }
+            },
 
             // Select and jump to item
             KeyCode::Enter => {
                 self.select_recent_item();
                 true
-            }
+            },
 
             // Navigate up (arrows, vim j/k)
             KeyCode::Up | KeyCode::Char('k') => {
@@ -1579,7 +1580,7 @@ impl App {
                     self.overlays.recent_items_cursor -= 1;
                 }
                 true
-            }
+            },
 
             // Navigate down
             KeyCode::Down | KeyCode::Char('j') => {
@@ -1588,7 +1589,7 @@ impl App {
                     self.overlays.recent_items_cursor += 1;
                 }
                 true
-            }
+            },
 
             _ => true, // Consume all other keys while popup is open
         }
@@ -1700,18 +1701,15 @@ impl App {
             });
 
         // Launch editor in background
-        match std::process::Command::new(&editor)
-            .arg(&full_path)
-            .spawn()
-        {
+        match std::process::Command::new(&editor).arg(&full_path).spawn() {
             Ok(_) => {
                 self.set_status(&format!("Opened in {}", editor));
                 true
-            }
+            },
             Err(e) => {
                 self.set_status_error(&format!("Failed to open editor: {}", e));
                 false
-            }
+            },
         }
     }
 
@@ -1796,14 +1794,14 @@ impl App {
             Some(TreeItem::Instance(_, _, _, inst)) => {
                 // Serialize instance properties to JSON
                 serde_json::to_string_pretty(&inst.properties).ok()
-            }
+            },
             Some(TreeItem::Class(_, _, class_info)) => {
                 // For Class, show properties schema
                 Some(format!(
                     "{{\"properties\": {:?}, \"required\": {:?}}}",
                     class_info.properties, class_info.required_properties
                 ))
-            }
+            },
             _ => None,
         };
         if let Some(json) = json {
@@ -1832,10 +1830,10 @@ impl App {
                         content.clone()
                     };
                     self.set_status(&format!("✓ {} copied: {}", format_name, preview));
-                }
+                },
                 Err(e) => {
                     self.set_status(&format!("✗ Copy failed: {}", e));
-                }
+                },
             }
         } else {
             self.set_status("Nothing to copy");
@@ -1857,10 +1855,10 @@ impl App {
             match copy_to_clipboard(&value) {
                 Ok(()) => {
                     self.set_status(&format!("✓ Copied: {} = {}", key, preview));
-                }
+                },
                 Err(e) => {
                     self.set_status(&format!("✗ Copy failed: {}", e));
-                }
+                },
             }
         } else {
             self.set_status("No property selected");
@@ -1965,7 +1963,7 @@ impl App {
             Some(TreeItem::Realm(r)) => r.display_name.clone(),
             Some(TreeItem::Layer(r, l)) => {
                 format!("{} → {}", r.display_name, l.display_name)
-            }
+            },
             Some(TreeItem::Class(r, l, k)) => {
                 // v0.17.3 (ADR-036): trait removed from breadcrumb display
                 if self.is_graph_mode() && k.instance_count > 0 {
@@ -1979,42 +1977,42 @@ impl App {
                         r.display_name, l.display_name, k.display_name
                     )
                 }
-            }
+            },
             Some(TreeItem::Instance(r, l, k, inst)) => {
                 format!(
                     "{} → {} → {} → {}",
                     r.display_name, l.display_name, k.display_name, inst.display_name
                 )
-            }
+            },
             Some(TreeItem::EntityCategory(r, l, k, cat)) => {
                 format!(
                     "{} → {} → {} → {}",
                     r.display_name, l.display_name, k.display_name, cat.display_name
                 )
-            }
+            },
             Some(TreeItem::LocaleGroup(r, l, k, group)) => {
                 format!(
                     "{} → {} → {} → {} {}",
                     r.display_name, l.display_name, k.display_name, group.flag, group.locale_name
                 )
-            }
+            },
             // v0.17.3: EntityGroup breadcrumb shows entity name
             Some(TreeItem::EntityGroup(r, l, k, group)) => {
                 format!(
                     "{} → {} → {} → {}",
                     r.display_name, l.display_name, k.display_name, group.entity_display_name
                 )
-            }
+            },
             Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
             Some(TreeItem::ArcClass(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
-            }
+            },
             Some(TreeItem::EntityNativeItem(r, l, k, native)) => {
                 format!(
                     "{} → {} → {} → {}",
                     r.display_name, l.display_name, k.display_name, native.display_name
                 )
-            }
+            },
             None => "NovaNet".to_string(),
         }
     }
@@ -2060,11 +2058,10 @@ impl App {
     fn toggle_tree_item(&mut self) {
         let data_mode = self.is_graph_mode();
 
-        if let Some(key) =
-            self.tree
-                .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
+        if let Some(key) = self
+            .tree
+            .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
         {
-
             // Handle Class toggle in Data mode
             if let Some(class_key) = key.strip_prefix("class:") {
                 if data_mode {
@@ -2157,9 +2154,9 @@ impl App {
         // Check if current item is an Instance
         // v0.17.3: Pass hide_empty to match render_tree filtering
         // Clone properties to avoid borrow conflict
-        let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) =
-            self.tree
-                .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
+        let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) = self
+            .tree
+            .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         {
             Some(instance.properties.clone())
         } else {
@@ -2340,7 +2337,7 @@ impl App {
             None => {
                 tracing::warn!(path = %self.yaml.path, "YAML not in cache for Class validation");
                 return;
-            }
+            },
         };
 
         // Parse schema from cached YAML content

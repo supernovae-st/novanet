@@ -90,7 +90,7 @@ fn derive_visibility(realm: &str, layer: &str, class_name: &str) -> &'static str
         "Entity" | "EntityNative" => return "publishable",
         // SEO/GEO data is publishable (v11.4: GEOMetrics removed)
         "GEOQuery" | "GEOAnswer" | "SEOKeyword" | "SEOKeywordMetrics" => return "publishable",
-        _ => {}
+        _ => {},
     }
 
     // Layer rules (priority 2)
@@ -659,7 +659,10 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 0, "expected 0 EXHIBITS relationships (v0.17.3: trait removed)");
+        assert_eq!(
+            exhibits, 0,
+            "expected 0 EXHIBITS relationships (v0.17.3: trait removed)"
+        );
 
         // Spot checks — specific Classes (v11.8: c_ prefix, :Schema:Class)
         assert!(cypher.contains("c_Project:Schema:Class {label: 'Project'}"));
@@ -677,15 +680,16 @@ mod tests {
         assert!(cypher.contains("(c:Class {label: 'Page'}), (r:Realm {key: 'org'})"));
 
         // v0.17.3: No trait references
-        assert!(!cypher.contains(".trait ="), "No trait property (v0.17.3: removed)");
+        assert!(
+            !cypher.contains(".trait ="),
+            "No trait property (v0.17.3: removed)"
+        );
 
         // All context_budget values are valid (v0.17.3: no 'minimal' since that was for retrieved trait)
         for line in cypher.lines() {
             if line.contains("context_budget") && line.contains('=') {
                 assert!(
-                    line.contains("'high'")
-                        || line.contains("'medium'")
-                        || line.contains("'low'"),
+                    line.contains("'high'") || line.contains("'medium'") || line.contains("'low'"),
                     "invalid context_budget: {line}"
                 );
             }

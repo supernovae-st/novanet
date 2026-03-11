@@ -185,12 +185,8 @@ mod tests {
     #[test]
     fn roundtrip_json() {
         // v0.17.3 (ADR-036): trait_filter param removed
-        let original = FacetFilter::from_cli(
-            Some("shared"),
-            Some("knowledge"),
-            Some("mining"),
-            None,
-        );
+        let original =
+            FacetFilter::from_cli(Some("shared"), Some("knowledge"), Some("mining"), None);
         let json = serde_json::to_string(&original).unwrap();
         let parsed = FacetFilter::from_json(&json).unwrap();
         assert_eq!(original, parsed);

@@ -62,7 +62,7 @@ ORDER BY l.key";
     match format {
         OutputFormat::Cypher => {
             crate::output::print_output(cypher);
-        }
+        },
         OutputFormat::Table => {
             let rows = db.execute(cypher).await?;
             let locale_rows = extract_locale_rows(&rows);
@@ -71,12 +71,12 @@ ORDER BY l.key";
                 .to_string();
             crate::output::print_output(&table);
             eprintln!("{} locale(s)", locale_rows.len());
-        }
+        },
         OutputFormat::Json => {
             let rows = db.execute(cypher).await?;
             let locale_rows = extract_locale_rows(&rows);
             crate::output::print_output(&crate::output::format_json(&locale_rows));
-        }
+        },
     }
 
     Ok(())
@@ -422,7 +422,7 @@ fn infer_language_family(language_code: &str) -> String {
         // Slavic languages
         "ru" | "uk" | "pl" | "cs" | "sk" | "bg" | "hr" | "sr" | "sl" | "mk" | "bs" | "be" => {
             "slavic"
-        }
+        },
         // Sino-Tibetan
         "zh" | "my" => "sino_tibetan",
         // Semitic

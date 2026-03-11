@@ -41,7 +41,7 @@ impl LoadedViews {
             Err(e) => {
                 eprintln!("Warning: Failed to load views.yaml: {e}");
                 Self::default()
-            }
+            },
         }
     }
 

@@ -162,7 +162,7 @@ async fn run_app(
             eprintln!("   • Check connection: \x1b[36mcargo run -- blueprint\x1b[0m\n");
 
             return Err(e);
-        }
+        },
     };
     let root_str = root_path.display().to_string();
     let mut app = App::new(tree, root_str);
@@ -233,21 +233,21 @@ async fn run_app(
                                     if !keys.is_empty() {
                                         app.pending.instance_arcs = Some((k.clone(), keys));
                                     }
-                                }
+                                },
                                 Some(Err(e)) => {
                                     app.set_status_error(&format!("Load instances: {}", e));
-                                }
-                                None => {}
+                                },
+                                None => {},
                             }
                         }
                         match arcs_result {
                             Some(Ok(arcs)) => {
                                 app.set_class_arcs(arcs);
-                            }
+                            },
                             Some(Err(e)) => {
                                 app.set_status_error(&format!("Load arcs: {}", e));
-                            }
-                            None => {}
+                            },
+                            None => {},
                         }
                     }
 
@@ -257,8 +257,8 @@ async fn run_app(
                         match TaxonomyTree::load_arc_class_details(db, &arc_key).await {
                             Ok(details) if app.navigation_generation == nav_gen => {
                                 app.set_arc_class_details(details);
-                            }
-                            Ok(_) => {} // Stale result, discard
+                            },
+                            Ok(_) => {}, // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load arc: {}", e)),
                         }
                     }
@@ -267,8 +267,8 @@ async fn run_app(
                         match TaxonomyTree::load_realm_details(db, &realm_key).await {
                             Ok(details) if app.navigation_generation == nav_gen => {
                                 app.set_realm_details(details);
-                            }
-                            Ok(_) => {} // Stale result, discard
+                            },
+                            Ok(_) => {}, // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load realm: {}", e)),
                         }
                     }
@@ -277,8 +277,8 @@ async fn run_app(
                         match TaxonomyTree::load_layer_details(db, &layer_key).await {
                             Ok(details) if app.navigation_generation == nav_gen => {
                                 app.set_layer_details(details);
-                            }
-                            Ok(_) => {} // Stale result, discard
+                            },
+                            Ok(_) => {}, // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load layer: {}", e)),
                         }
                     }
@@ -293,12 +293,13 @@ async fn run_app(
                                 } else {
                                     // Auto-trigger loading of first category's instances
                                     if let Some(first_cat) = categories.first() {
-                                        app.pending.category_instances = Some(first_cat.key.clone());
+                                        app.pending.category_instances =
+                                            Some(first_cat.key.clone());
                                     }
                                 }
                                 app.tree.entity_categories = categories;
-                            }
-                            Ok(_) => {} // Stale result, discard
+                            },
+                            Ok(_) => {}, // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load categories: {}", e)),
                         }
                     }
@@ -317,11 +318,11 @@ async fn run_app(
                                         break;
                                     }
                                 }
-                            }
-                            Ok(_) => {} // Stale result, discard
+                            },
+                            Ok(_) => {}, // Stale result, discard
                             Err(e) => {
                                 app.set_status_error(&format!("Load category instances: {}", e))
-                            }
+                            },
                         }
                     }
 
@@ -338,13 +339,11 @@ async fn run_app(
                                 }
                                 app.tree.entity_native_groups = groups;
                                 app.tree.entity_native_by_entity = natives;
-                            }
+                            },
                             Ok(_) => {
                                 // Stale result, discard
-                            }
-                            Err(e) => {
-                                app.set_status_error(&format!("Load entity natives: {}", e))
-                            }
+                            },
+                            Err(e) => app.set_status_error(&format!("Load entity natives: {}", e)),
                         }
                     }
 
@@ -352,21 +351,21 @@ async fn run_app(
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
                 }
-            }
+            },
             Ok(Some(Ok(Event::Resize(_, _)))) => {
                 // Re-render on resize
                 terminal
                     .draw(|f| ui::render(f, &mut app))
                     .map_err(crate::NovaNetError::Io)?;
-            }
+            },
             Ok(Some(Err(e))) => {
                 // Log terminal event errors but don't crash - terminal corruption shouldn't stop TUI
                 tracing::warn!("Event stream error: {}", e);
-            }
+            },
             Ok(None) => {
                 // Stream ended
                 break;
-            }
+            },
             Err(_) => {
                 // Timeout - increment tick for animations
                 app.tick = app.tick.wrapping_add(1);
@@ -381,13 +380,13 @@ async fn run_app(
                     match TaxonomyTree::load_instance_arcs(db, &class_key, keys).await {
                         Ok(arcs) if app.navigation_generation == nav_gen => {
                             app.tree.update_instance_arcs(&class_key, arcs);
-                        }
+                        },
                         Ok(_) => {
                             // Stale result - user navigated away, discard
-                        }
+                        },
                         Err(e) => {
                             app.set_status_error(&format!("Load arcs: {}", e));
-                        }
+                        },
                     }
                 }
 
@@ -397,7 +396,7 @@ async fn run_app(
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
                 }
-            }
+            },
             Ok(Some(Ok(Event::Mouse(event)))) => {
                 // Handle mouse scroll on panels
                 if app.handle_mouse(event) {
@@ -405,10 +404,10 @@ async fn run_app(
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
                 }
-            }
+            },
             _ => {
                 // Ignore other events (focus, paste, resize handled by terminal)
-            }
+            },
         }
     }
 

@@ -128,7 +128,7 @@ mod tests {
                 // Verify description was added
                 assert!(!node.def.description.is_empty());
                 assert!(!node.def.description.is_empty());
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -178,7 +178,7 @@ mod tests {
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("already has") || reason.contains("present"));
-            }
+            },
             _ => panic!("Expected Skipped for existing description"),
         }
     }

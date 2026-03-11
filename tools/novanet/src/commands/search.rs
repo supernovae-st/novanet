@@ -95,7 +95,7 @@ pub async fn run_search(
                 display = display.replace("$class", &format!("'{}'", k.replace('\'', "\\'")));
             }
             output::print_output(&display);
-        }
+        },
         OutputFormat::Table | OutputFormat::Json => {
             let rows = if let Some(k) = kind {
                 db.execute_with_params(
@@ -127,7 +127,7 @@ pub async fn run_search(
                     );
                     db.execute_with_params(&simple_cypher, [("query", query)])
                         .await?
-                }
+                },
             };
 
             let node_rows: Vec<NodeRow> = rows
@@ -144,13 +144,13 @@ pub async fn run_search(
                 OutputFormat::Table => {
                     output::print_output(&output::format_table(&node_rows));
                     eprintln!("{} result(s)", node_rows.len());
-                }
+                },
                 OutputFormat::Json => {
                     output::print_output(&output::format_json(&node_rows));
-                }
+                },
                 OutputFormat::Cypher => unreachable!(),
             }
-        }
+        },
     }
 
     Ok(())

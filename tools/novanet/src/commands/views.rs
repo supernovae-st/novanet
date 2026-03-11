@@ -165,18 +165,18 @@ pub fn views_validate(root: &Path, verbose: bool) -> Result<()> {
                     "Views mismatch between Rust and TypeScript".to_string(),
                 ))
             }
-        }
+        },
         Ok(output) => {
             let stderr = String::from_utf8_lossy(&output.stderr);
             eprintln!("⚠  TypeScript export failed: {}", stderr.trim());
             eprintln!("   Rust export works. Cross-validation pending.");
             Ok(())
-        }
+        },
         Err(e) => {
             eprintln!("⚠  Could not run node: {}", e);
             eprintln!("   Rust export works. Cross-validation pending.");
             Ok(())
-        }
+        },
     }
 }
 

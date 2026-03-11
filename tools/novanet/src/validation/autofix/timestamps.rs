@@ -173,7 +173,7 @@ mod tests {
                 let updated_at = &props["updated_at"];
                 assert_eq!(updated_at.prop_type, "datetime");
                 assert_eq!(updated_at.required, Some(true));
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -241,7 +241,7 @@ mod tests {
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("already present"));
-            }
+            },
             _ => panic!("Expected Skipped for existing timestamps"),
         }
     }
@@ -309,7 +309,7 @@ mod tests {
                 let updated_at = &props["updated_at"];
                 assert_eq!(updated_at.prop_type, "datetime");
                 assert_eq!(updated_at.required, Some(true));
-            }
+            },
             _ => panic!("Expected Modified"),
         }
     }

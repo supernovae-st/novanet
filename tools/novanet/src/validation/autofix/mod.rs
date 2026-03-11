@@ -184,7 +184,7 @@ mod tests {
             FixAction::Modified { changes: c } => {
                 assert_eq!(c.len(), 1);
                 assert_eq!(c[0].field, "test_field");
-            }
+            },
             _ => panic!("Expected Modified variant"),
         }
     }
@@ -198,7 +198,7 @@ mod tests {
         match action {
             FixAction::Skipped { reason } => {
                 assert_eq!(reason, "not applicable");
-            }
+            },
             _ => panic!("Expected Skipped variant"),
         }
     }
@@ -300,7 +300,7 @@ mod tests {
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("No fixer available"));
-            }
+            },
             _ => panic!("Expected Skipped when no fixer matches"),
         }
     }

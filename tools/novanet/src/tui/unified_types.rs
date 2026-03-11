@@ -76,7 +76,7 @@ impl NodeId {
                 } else {
                     None
                 }
-            }
+            },
             "class" => Some(Self::Class(parts[1].to_string())),
             "instance" => {
                 let sub: Vec<&str> = parts[1].splitn(2, ':').collect();
@@ -88,7 +88,7 @@ impl NodeId {
                 } else {
                     None
                 }
-            }
+            },
             "arcfamily" => Some(Self::ArcFamily(parts[1].to_string())),
             "arcclass" => Some(Self::ArcClass(parts[1].to_string())),
             _ => None,

@@ -60,12 +60,12 @@ pub async fn run_init(
             Ok(()) => {
                 eprintln!("  Connected successfully");
                 true
-            }
+            },
             Err(e) => {
                 eprintln!("  Warning: Connection failed: {}", e);
                 eprintln!("  Configuration will be saved anyway.");
                 false
-            }
+            },
         }
     } else {
         eprintln!();

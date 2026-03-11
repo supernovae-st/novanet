@@ -667,7 +667,7 @@ impl NexusState {
                     self.arc_cursor = 0;
                     self.pipeline_stage = 0;
                     true
-                }
+                },
                 KeyCode::Esc => true, // Cancel pending g
                 _ => false,           // Invalid sequence, ignore
             };
@@ -678,7 +678,7 @@ impl NexusState {
             KeyCode::Char('g') => {
                 self.pending_g = true;
                 true
-            }
+            },
 
             // Tab switching with [ ] brackets (vim-style)
             KeyCode::Char('[') => {
@@ -686,13 +686,13 @@ impl NexusState {
                 self.reset_drill();
                 self.sync_tree_to_tab();
                 true
-            }
+            },
             KeyCode::Char(']') => {
                 self.tab = self.tab.next();
                 self.reset_drill();
                 self.sync_tree_to_tab();
                 true
-            }
+            },
 
             // Tab cycling with Tab key
             KeyCode::Tab => {
@@ -700,13 +700,13 @@ impl NexusState {
                 self.reset_drill();
                 self.sync_tree_to_tab();
                 true
-            }
+            },
             KeyCode::BackTab => {
                 self.tab = self.tab.prev();
                 self.reset_drill();
                 self.sync_tree_to_tab();
                 true
-            }
+            },
 
             // Section navigation with H/L (Shift + h/l)
             KeyCode::Char('H') => self.prev_section(),
@@ -744,20 +744,20 @@ impl NexusState {
                             self.quiz.submit_answer(quiz::QUESTIONS);
                         }
                         true
-                    }
+                    },
                     NexusTab::Pipeline => {
                         self.pipeline_animating = !self.pipeline_animating;
                         true
-                    }
+                    },
                     NexusTab::Tutorial => {
                         // Toggle current task completion and save
                         self.tutorial.toggle_task(0); // First task of current step
                         self.save_tutorial_progress();
                         true
-                    }
+                    },
                     _ => self.drill_down(),
                 }
-            }
+            },
 
             // Escape for drill-up (also clears pending_g, exits review mode)
             KeyCode::Esc => {
@@ -769,7 +769,7 @@ impl NexusState {
                 }
                 // NOTE: Views Escape handler removed, now separate NavMode::Views (v0.12.5)
                 self.drill_up()
-            }
+            },
 
             // 'c' to mark tutorial step as complete
             KeyCode::Char('c') => {
@@ -780,13 +780,13 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
 
             // 'n' to cycle to next tip
             KeyCode::Char('n') => {
                 self.next_tip();
                 true
-            }
+            },
 
             // 'r' to restart quiz (when in Quiz tab)
             KeyCode::Char('r') => {
@@ -798,7 +798,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
 
             // 'w' to enter review mode (review wrong answers after quiz completion)
             KeyCode::Char('w') => {
@@ -809,7 +809,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
 
             // 'y' to yank (copy) current selection to clipboard
             KeyCode::Char('y') => self.yank_current(),
@@ -824,7 +824,7 @@ impl NexusState {
                 ));
                 self.clipboard_message_time = Some(Instant::now());
                 true
-            }
+            },
 
             _ => false,
         }
@@ -839,12 +839,12 @@ impl NexusState {
                     self.clipboard_message = Some(format!("Copied: {}", text));
                     self.clipboard_message_time = Some(Instant::now());
                     true
-                }
+                },
                 Err(e) => {
                     self.clipboard_message = Some(format!("Error: {}", e));
                     self.clipboard_message_time = Some(Instant::now());
                     true
-                }
+                },
             }
         } else {
             false
@@ -863,15 +863,15 @@ impl NexusState {
                     "Classification Axes",
                 ];
                 titles.get(self.intro_page).map(|s| s.to_string())
-            }
+            },
             NexusTab::Glossary => {
                 // Yank the current concept name
                 self.glossary.get_yank_text()
-            }
+            },
             NexusTab::Tutorial => {
                 // Yank the current step title
                 self.tutorial.get_yank_text()
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 // Yank the current layer key
@@ -890,7 +890,7 @@ impl NexusState {
                     ]
                 };
                 layers.get(self.layer_cursor).map(|s| s.to_string())
-            }
+            },
             NexusTab::Arcs => {
                 // Yank the current arc family
                 let families = [
@@ -901,11 +901,11 @@ impl NexusState {
                     "mining",
                 ];
                 families.get(self.arc_cursor).map(|s| s.to_string())
-            }
+            },
             NexusTab::Arch => {
                 // Yank the current ADR ID
                 Some("ADR Browser - see .claude/rules/novanet-decisions.md".to_string())
-            }
+            },
             // PRACTICE section
             NexusTab::Pipeline => {
                 // Yank the current pipeline stage
@@ -918,20 +918,20 @@ impl NexusState {
                     "Output",
                 ];
                 stages.get(self.pipeline_stage).map(|s| s.to_string())
-            }
+            },
             NexusTab::Quiz => {
                 // Yank the current question text
                 quiz::QUESTIONS
                     .get(self.quiz.current_question)
                     .map(|q| q.question.to_string())
-            }
+            },
             NexusTab::Stats => {
                 // Yank stats summary
                 Some(format!(
                     "Quiz score: {}%",
                     self.stats.score_history.last().unwrap_or(&0)
                 ))
-            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            }, // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1000,15 +1000,15 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Glossary => {
                 self.glossary.navigate_up();
                 true
-            }
+            },
             NexusTab::Tutorial => {
                 self.tutorial.navigate_up();
                 true
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 if self.layer_cursor > 0 {
@@ -1017,7 +1017,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Arcs => {
                 if self.arc_cursor > 0 {
                     self.arc_cursor -= 1;
@@ -1025,11 +1025,11 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Arch => {
                 // ADR navigation handled by arch module
                 false
-            }
+            },
             // PRACTICE section
             NexusTab::Pipeline => {
                 if self.pipeline_stage > 0 {
@@ -1038,7 +1038,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Quiz => {
                 if self.quiz.review_mode {
                     // In review mode, navigate between wrong answers
@@ -1047,11 +1047,11 @@ impl NexusState {
                     self.quiz.select_up();
                 }
                 true
-            }
+            },
             NexusTab::Stats => {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
-            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            }, // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1067,15 +1067,15 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Glossary => {
                 self.glossary.navigate_down();
                 true
-            }
+            },
             NexusTab::Tutorial => {
                 self.tutorial.navigate_down();
                 true
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 // Bound by number of layers in current realm
@@ -1087,7 +1087,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Arcs => {
                 // 5 arc families
                 if self.arc_cursor < 4 {
@@ -1096,11 +1096,11 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Arch => {
                 // ADR navigation handled by arch module
                 false
-            }
+            },
             // PRACTICE section
             NexusTab::Pipeline => {
                 // 6 pipeline stages (0-5)
@@ -1110,7 +1110,7 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Quiz => {
                 if self.quiz.review_mode {
                     // In review mode, navigate between wrong answers
@@ -1120,11 +1120,11 @@ impl NexusState {
                     self.quiz.select_down(question);
                 }
                 true
-            }
+            },
             NexusTab::Stats => {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
-            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            }, // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1140,17 +1140,17 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Glossary => {
                 // Previous category
                 self.glossary.prev_category();
                 true
-            }
+            },
             NexusTab::Tutorial => {
                 // Previous step
                 self.tutorial.prev_step();
                 true
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 // Switch to Shared realm (0)
@@ -1161,12 +1161,12 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             // NOTE: Views navigate_left removed, now separate NavMode::Views (v0.12.5)
             _ => {
                 // Drill up as alternative to Escape
                 self.drill_up()
-            }
+            },
         }
     }
 
@@ -1182,17 +1182,17 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Glossary => {
                 // Next category
                 self.glossary.next_category();
                 true
-            }
+            },
             NexusTab::Tutorial => {
                 // Next step
                 self.tutorial.next_step();
                 true
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 // Switch to Org realm (1)
@@ -1203,12 +1203,12 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             // NOTE: Views navigate_right removed, now separate NavMode::Views (v0.12.5)
             _ => {
                 // Drill down as alternative to Enter
                 self.drill_down()
-            }
+            },
         }
     }
 
@@ -1224,17 +1224,17 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Glossary => {
                 // Glossary - expand category or select concept
                 self.glossary.toggle_expand();
                 true
-            }
+            },
             NexusTab::Tutorial => {
                 // Tutorial - next step
                 self.tutorial.next_step();
                 true
-            }
+            },
             // EXPLORE section
             NexusTab::Layers | NexusTab::Arcs => {
                 if self.drill_depth < 2 {
@@ -1244,25 +1244,25 @@ impl NexusState {
                 } else {
                     false
                 }
-            }
+            },
             NexusTab::Arch => {
                 // ADR drill-down handled by arch module
                 false
-            }
+            },
             // PRACTICE section
             NexusTab::Pipeline => {
                 // Pipeline doesn't have drill-down, toggle animation instead
                 self.pipeline_animating = !self.pipeline_animating;
                 true
-            }
+            },
             NexusTab::Quiz => {
                 // Quiz doesn't have drill-down
                 false
-            }
+            },
             NexusTab::Stats => {
                 // Stats doesn't have drill-down
                 false
-            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            }, // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1291,7 +1291,7 @@ impl NexusState {
                     "Nexus > {} > {} > Page {}/{}",
                     section, tab_name, page, total
                 )
-            }
+            },
             NexusTab::Glossary => {
                 if self.glossary.search_active {
                     format!(
@@ -1305,7 +1305,7 @@ impl NexusState {
                 } else {
                     format!("Nexus > {} > {}", section, tab_name)
                 }
-            }
+            },
             NexusTab::Tutorial => {
                 let step = self.tutorial.current_step + 1;
                 let total = tutorial::TUTORIAL_STEPS;
@@ -1317,7 +1317,7 @@ impl NexusState {
                         section, tab_name, step, total
                     )
                 }
-            }
+            },
             // EXPLORE section
             NexusTab::Layers => {
                 let realm = if self.layer_realm == 0 {
@@ -1326,7 +1326,7 @@ impl NexusState {
                     "Org"
                 };
                 format!("Nexus > {} > {} > {}", section, tab_name, realm)
-            }
+            },
             NexusTab::Arcs => {
                 let families = [
                     "ownership",
@@ -1337,10 +1337,10 @@ impl NexusState {
                 ];
                 let family = families.get(self.arc_cursor).unwrap_or(&"");
                 format!("Nexus > {} > {} > {}", section, tab_name, family)
-            }
+            },
             NexusTab::Arch => {
                 format!("Nexus > {} > {} > ADR Browser", section, tab_name)
-            }
+            },
             // PRACTICE section
             NexusTab::Pipeline => {
                 let stages = [
@@ -1353,7 +1353,7 @@ impl NexusState {
                 ];
                 let stage = stages.get(self.pipeline_stage).unwrap_or(&"");
                 format!("Nexus > {} > {} > {}", section, tab_name, stage)
-            }
+            },
             NexusTab::Quiz => {
                 let total = quiz::QUESTIONS.len();
                 if self.quiz.complete {
@@ -1370,10 +1370,10 @@ impl NexusState {
                         total
                     )
                 }
-            }
+            },
             NexusTab::Stats => {
                 format!("Nexus > {} > {}", section, tab_name)
-            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            }, // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1415,7 +1415,7 @@ impl NexusState {
                 } else {
                     vec![("↑/↓", "option"), ("Enter", "submit"), ("←/→", "hint")]
                 }
-            }
+            },
             NexusTab::Stats => vec![("↑/↓", "scroll"), ("y", "copy")],
             // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }

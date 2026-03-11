@@ -9,8 +9,8 @@ use ratatui::layout::Rect;
 use rustc_hash::FxHashMap;
 use serde_json::Value as JsonValue;
 
-use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use crate::tui::data::{ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails};
+use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 
 // =============================================================================
 // NAVIGATION ENUMS
@@ -69,7 +69,7 @@ impl NavMode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree,     // [1] Left panel - tree navigation
+    Tree, // [1] Left panel - tree navigation
     Identity, // [2] Center top - identity & provenance (NEW in v0.18.3)
     Content,  // [3] Center bottom - data viewer
     Props,    // [4] Right top - properties
@@ -114,18 +114,18 @@ impl Focus {
     /// Spatial navigation: move up.
     pub fn up(self) -> Self {
         match self {
-            Focus::Content => Focus::Identity,  // Center bottom → top
-            Focus::Arcs => Focus::Props,        // Right bottom → top
-            other => other,                     // No change
+            Focus::Content => Focus::Identity, // Center bottom → top
+            Focus::Arcs => Focus::Props,       // Right bottom → top
+            other => other,                    // No change
         }
     }
 
     /// Spatial navigation: move down.
     pub fn down(self) -> Self {
         match self {
-            Focus::Identity => Focus::Content,  // Center top → bottom
-            Focus::Props => Focus::Arcs,        // Right top → bottom
-            other => other,                     // No change
+            Focus::Identity => Focus::Content, // Center top → bottom
+            Focus::Props => Focus::Arcs,       // Right top → bottom
+            other => other,                    // No change
         }
     }
 
@@ -135,14 +135,14 @@ impl Focus {
             Focus::Identity | Focus::Content => Focus::Tree,
             Focus::Props => Focus::Identity,
             Focus::Arcs => Focus::Content,
-            Focus::Tree => Focus::Tree,  // Already leftmost
+            Focus::Tree => Focus::Tree, // Already leftmost
         }
     }
 
     /// Spatial navigation: move right.
     pub fn right(self) -> Self {
         match self {
-            Focus::Tree => Focus::Identity,     // Go to center top by default
+            Focus::Tree => Focus::Identity, // Go to center top by default
             Focus::Identity => Focus::Props,
             Focus::Content => Focus::Arcs,
             Focus::Props | Focus::Arcs => self, // Already rightmost
@@ -681,18 +681,18 @@ mod tests {
     fn test_focus_spatial_up() {
         assert_eq!(Focus::Content.up(), Focus::Identity);
         assert_eq!(Focus::Arcs.up(), Focus::Props);
-        assert_eq!(Focus::Tree.up(), Focus::Tree);     // No change
+        assert_eq!(Focus::Tree.up(), Focus::Tree); // No change
         assert_eq!(Focus::Identity.up(), Focus::Identity); // Already top
-        assert_eq!(Focus::Props.up(), Focus::Props);   // Already top
+        assert_eq!(Focus::Props.up(), Focus::Props); // Already top
     }
 
     #[test]
     fn test_focus_spatial_down() {
         assert_eq!(Focus::Identity.down(), Focus::Content);
         assert_eq!(Focus::Props.down(), Focus::Arcs);
-        assert_eq!(Focus::Tree.down(), Focus::Tree);   // No change
+        assert_eq!(Focus::Tree.down(), Focus::Tree); // No change
         assert_eq!(Focus::Content.down(), Focus::Content); // Already bottom
-        assert_eq!(Focus::Arcs.down(), Focus::Arcs);   // Already bottom
+        assert_eq!(Focus::Arcs.down(), Focus::Arcs); // Already bottom
     }
 
     #[test]
@@ -701,7 +701,7 @@ mod tests {
         assert_eq!(Focus::Content.left(), Focus::Tree);
         assert_eq!(Focus::Props.left(), Focus::Identity);
         assert_eq!(Focus::Arcs.left(), Focus::Content);
-        assert_eq!(Focus::Tree.left(), Focus::Tree);   // Already leftmost
+        assert_eq!(Focus::Tree.left(), Focus::Tree); // Already leftmost
     }
 
     #[test]
@@ -709,8 +709,8 @@ mod tests {
         assert_eq!(Focus::Tree.right(), Focus::Identity);
         assert_eq!(Focus::Identity.right(), Focus::Props);
         assert_eq!(Focus::Content.right(), Focus::Arcs);
-        assert_eq!(Focus::Props.right(), Focus::Props);   // Already rightmost
-        assert_eq!(Focus::Arcs.right(), Focus::Arcs);     // Already rightmost
+        assert_eq!(Focus::Props.right(), Focus::Props); // Already rightmost
+        assert_eq!(Focus::Arcs.right(), Focus::Arcs); // Already rightmost
     }
 
     #[test]
@@ -862,8 +862,8 @@ mod tests {
         // v0.18.3: 5-panel layout with identity
         let rects = PanelRects {
             tree: Some(Rect::new(0, 0, 30, 20)),
-            identity: Some(Rect::new(30, 0, 40, 10)),  // Center top
-            content: Some(Rect::new(30, 10, 40, 10)),  // Center bottom
+            identity: Some(Rect::new(30, 0, 40, 10)), // Center top
+            content: Some(Rect::new(30, 10, 40, 10)), // Center bottom
             props: Some(Rect::new(70, 0, 30, 10)),
             arcs: Some(Rect::new(70, 10, 30, 10)),
         };

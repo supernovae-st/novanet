@@ -314,18 +314,18 @@ impl TutorialProgress {
             match days_diff {
                 0 => {
                     // Same day - streak doesn't change (already played today)
-                }
+                },
                 1 => {
                     // Consecutive day - increment streak!
                     self.current_streak += 1;
                     if self.current_streak > self.best_streak {
                         self.best_streak = self.current_streak;
                     }
-                }
+                },
                 _ => {
                     // Streak broken - reset to 1 (today counts)
                     self.current_streak = 1;
-                }
+                },
             }
         } else {
             // First quiz ever - start streak at 1

@@ -1172,7 +1172,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         let progress_text = match locale {
             NexusLocale::En => {
                 format!("Achievements: {}/{}", achievement_count, total_achievements)
-            }
+            },
             NexusLocale::Fr => format!("Succès: {}/{}", achievement_count, total_achievements),
         };
         result_lines.push(Line::from(Span::styled(

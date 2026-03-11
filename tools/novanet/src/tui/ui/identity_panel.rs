@@ -3,11 +3,11 @@
 //! v0.18.3: New panel showing node identity and provenance info.
 //! Combines what was scattered across Header and Info panels.
 
+use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph};
-use ratatui::Frame;
 
 use crate::tui::app::{App, Focus};
 use crate::tui::data::TreeItem;
@@ -45,7 +45,9 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     Span::styled("Key: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         class_info.key.clone(),
-                        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Cyan)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -54,10 +56,16 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                 ]),
                 Line::from(vec![
                     Span::styled("Realm: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(realm.display_name.clone(), Style::default().fg(Color::Green)),
+                    Span::styled(
+                        realm.display_name.clone(),
+                        Style::default().fg(Color::Green),
+                    ),
                     Span::styled(" -> ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Layer: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(layer.display_name.clone(), Style::default().fg(Color::Yellow)),
+                    Span::styled(
+                        layer.display_name.clone(),
+                        Style::default().fg(Color::Yellow),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Description: ", Style::default().fg(Color::DarkGray)),
@@ -67,14 +75,16 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::Instance(_, _, class_info, instance)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Key: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         instance.key.clone(),
-                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -83,21 +93,26 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                 ]),
                 Line::from(vec![
                     Span::styled("Class: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(class_info.display_name.clone(), Style::default().fg(Color::Cyan)),
+                    Span::styled(
+                        class_info.display_name.clone(),
+                        Style::default().fg(Color::Cyan),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Provenance: ", Style::default().fg(Color::DarkGray)),
                     Span::styled("seed", Style::default().fg(Color::Magenta)), // TODO: dynamic
                 ]),
             ]
-        }
+        },
         Some(TreeItem::EntityNativeItem(_, _, class_info, native)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Key: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         native.key.clone(),
-                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -106,25 +121,36 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                 ]),
                 Line::from(vec![
                     Span::styled("Class: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(class_info.display_name.clone(), Style::default().fg(Color::Cyan)),
+                    Span::styled(
+                        class_info.display_name.clone(),
+                        Style::default().fg(Color::Cyan),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Entity: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(native.entity_display_name.clone(), Style::default().fg(Color::Green)),
+                    Span::styled(
+                        native.entity_display_name.clone(),
+                        Style::default().fg(Color::Green),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Locale: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(native.locale_code.clone(), Style::default().fg(Color::Magenta)),
+                    Span::styled(
+                        native.locale_code.clone(),
+                        Style::default().fg(Color::Magenta),
+                    ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::Realm(realm)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Realm: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         realm.display_name.clone(),
-                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -132,29 +158,36 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     Span::raw(realm.key.clone()),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::Layer(realm, layer)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Layer: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         layer.display_name.clone(),
-                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
                     Span::styled("Realm: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(realm.display_name.clone(), Style::default().fg(Color::Green)),
+                    Span::styled(
+                        realm.display_name.clone(),
+                        Style::default().fg(Color::Green),
+                    ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::ArcFamily(family)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Arc Family: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         family.display_name.clone(),
-                        Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Magenta)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -162,35 +195,48 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     Span::raw(family.key.clone()),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::ArcClass(family, arc_class)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Arc: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         arc_class.display_name.clone(),
-                        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Cyan)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
                     Span::styled("Family: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(family.display_name.clone(), Style::default().fg(Color::Magenta)),
+                    Span::styled(
+                        family.display_name.clone(),
+                        Style::default().fg(Color::Magenta),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Pattern: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(arc_class.from_class.clone(), Style::default().fg(Color::Green)),
+                    Span::styled(
+                        arc_class.from_class.clone(),
+                        Style::default().fg(Color::Green),
+                    ),
                     Span::styled(" -> ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(arc_class.to_class.clone(), Style::default().fg(Color::Yellow)),
+                    Span::styled(
+                        arc_class.to_class.clone(),
+                        Style::default().fg(Color::Yellow),
+                    ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::ClassesSection) => {
             vec![
                 Line::from(vec![
                     Span::styled("Section: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         "Node Classes",
-                        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Cyan)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -201,14 +247,16 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::ArcsSection) => {
             vec![
                 Line::from(vec![
                     Span::styled("Section: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         "Arc Classes",
-                        Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Magenta)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
@@ -219,62 +267,77 @@ fn build_identity_content(app: &App) -> Vec<Line<'static>> {
                     ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::EntityCategory(_, _, class_info, category)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Category: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         category.display_name.clone(),
-                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
                     Span::styled("Class: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(class_info.display_name.clone(), Style::default().fg(Color::Cyan)),
+                    Span::styled(
+                        class_info.display_name.clone(),
+                        Style::default().fg(Color::Cyan),
+                    ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::LocaleGroup(_, _, class_info, group)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Locale: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         format!("{} {}", group.flag, group.locale_name),
-                        Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Magenta)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
                     Span::styled("Class: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(class_info.display_name.clone(), Style::default().fg(Color::Cyan)),
+                    Span::styled(
+                        class_info.display_name.clone(),
+                        Style::default().fg(Color::Cyan),
+                    ),
                 ]),
             ]
-        }
+        },
         Some(TreeItem::EntityGroup(_, _, class_info, group)) => {
             vec![
                 Line::from(vec![
                     Span::styled("Entity Group: ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         group.entity_display_name.clone(),
-                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD),
                     ),
                 ]),
                 Line::from(vec![
                     Span::styled("Class: ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(class_info.display_name.clone(), Style::default().fg(Color::Cyan)),
+                    Span::styled(
+                        class_info.display_name.clone(),
+                        Style::default().fg(Color::Cyan),
+                    ),
                 ]),
                 Line::from(vec![
                     Span::styled("Entity Key: ", Style::default().fg(Color::DarkGray)),
                     Span::raw(group.entity_key.clone()),
                 ]),
             ]
-        }
+        },
         _ => {
             vec![Line::from(Span::styled(
                 "Select an item to see identity",
                 Style::default().fg(Color::DarkGray),
             ))]
-        }
+        },
     }
 }
 

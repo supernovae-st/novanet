@@ -555,7 +555,7 @@ pub fn entity_validate(root: &Path, project: &str) -> Result<Vec<EntityValidatio
                         errors: Vec::new(),
                         warnings,
                     });
-                }
+                },
                 Err(e) => {
                     results.push(EntityValidationResult {
                         phase: phase_data.phase,
@@ -564,7 +564,7 @@ pub fn entity_validate(root: &Path, project: &str) -> Result<Vec<EntityValidatio
                         errors: vec![e.to_string()],
                         warnings: Vec::new(),
                     });
-                }
+                },
             }
         }
     }

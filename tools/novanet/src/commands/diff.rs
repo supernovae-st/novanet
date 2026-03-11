@@ -147,10 +147,7 @@ pub fn diff_node_classes(
     let mut diffs = Vec::new();
 
     // Build sets for comparison
-    let yaml_names: BTreeSet<&str> = yaml_nodes
-        .iter()
-        .map(|(n, _, _, _)| n.as_str())
-        .collect();
+    let yaml_names: BTreeSet<&str> = yaml_nodes.iter().map(|(n, _, _, _)| n.as_str()).collect();
     let neo4j_names: BTreeSet<&str> = neo4j_nodes.iter().map(|n| n.name.as_str()).collect();
 
     // Find added (in YAML, not in Neo4j)

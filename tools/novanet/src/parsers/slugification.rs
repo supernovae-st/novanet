@@ -182,7 +182,7 @@ impl SlugRule {
             "transform" => "transformed to ASCII equivalents (ß→ss, ü→ue)",
             "script_specific" => {
                 "handled per-script (Arabic removes tashkeel, Thai converts numerals)"
-            }
+            },
             _ => &self.diacritics,
         };
 
@@ -662,7 +662,7 @@ fn get_locale_display_name(locale: &str) -> String {
                 return format!("{} ({})", parts[0].to_uppercase(), parts[1]);
             }
             locale
-        }
+        },
     };
 
     display.to_string()
@@ -723,7 +723,7 @@ pub fn load_all_slugifications(ath_path: &Path) -> Result<Vec<Slugification>> {
                 Ok(s) => slugifications.push(s),
                 Err(e) => {
                     eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
-                }
+                },
             }
         }
     }

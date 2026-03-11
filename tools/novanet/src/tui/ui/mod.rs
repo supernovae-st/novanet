@@ -645,7 +645,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[1]);
 
     render_identity_panel(f, center_chunks[0], app); // Identity+Provenance
-    render_content_panel(f, center_chunks[1], app);  // Data Viewer [2]
+    render_content_panel(f, center_chunks[1], app); // Data Viewer [2]
 
     // RIGHT: Props+Stats (top) + Arcs (bottom)
     let right_chunks = Layout::default()
@@ -657,7 +657,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[2]);
 
     render_props_panel(f, right_chunks[0], app, &content); // Props+Stats [3]
-    render_graph_panel(f, right_chunks[1], app);           // Arcs [4]
+    render_graph_panel(f, right_chunks[1], app); // Arcs [4]
 
     // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
@@ -694,10 +694,10 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(h_chunks[1]);
 
-    render_identity_panel(f, v_chunks[0], app);        // Identity
-    render_content_panel(f, v_chunks[1], app);         // Data Viewer [2]
+    render_identity_panel(f, v_chunks[0], app); // Identity
+    render_content_panel(f, v_chunks[1], app); // Data Viewer [2]
     render_props_panel(f, v_chunks[2], app, &content); // Props+Stats [3]
-    render_graph_panel(f, v_chunks[3], app);           // Arcs [4]
+    render_graph_panel(f, v_chunks[3], app); // Arcs [4]
 
     // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
@@ -789,29 +789,29 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
             let (icon, name) = match item {
                 Some(crate::tui::data::TreeItem::ClassesSection) => {
                     ("≡", "Node Classes".to_string())
-                }
+                },
                 Some(crate::tui::data::TreeItem::ArcsSection) => ("⇄", "Arcs".to_string()),
                 Some(crate::tui::data::TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Layer(_, l)) => ("▸", l.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Class(_, _, k)) => ("◆", k.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Instance(_, _, _, i)) => {
                     ("•", i.display_name.clone())
-                }
+                },
                 Some(crate::tui::data::TreeItem::ArcFamily(f)) => ("↔", f.display_name.clone()),
                 Some(crate::tui::data::TreeItem::ArcClass(_, ak)) => ("→", ak.display_name.clone()),
                 Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
                     ("◫", cat.display_name.clone())
-                }
+                },
                 Some(crate::tui::data::TreeItem::LocaleGroup(_, _, _, group)) => {
                     ("🌐", format!("{} {}", group.flag, group.locale_name))
-                }
+                },
                 // v0.17.3: EntityGroup history item
                 Some(crate::tui::data::TreeItem::EntityGroup(_, _, _, group)) => {
                     ("◈", group.entity_display_name.clone())
-                }
+                },
                 Some(crate::tui::data::TreeItem::EntityNativeItem(_, _, _, native)) => {
                     ("◆", native.display_name.clone())
-                }
+                },
                 None => ("?", format!("(cursor {})", cursor)),
             };
 

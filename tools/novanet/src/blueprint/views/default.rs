@@ -1,8 +1,6 @@
 //! Default blueprint view — rich overview of the schema-graph.
 
-use crate::blueprint::ascii::{
-    self, arc_family_arrow, progress_bar_compact, realm_icon, truncate,
-};
+use crate::blueprint::ascii::{self, arc_family_arrow, progress_bar_compact, realm_icon, truncate};
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
 use std::fmt::Write;

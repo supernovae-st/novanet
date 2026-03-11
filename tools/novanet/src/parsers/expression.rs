@@ -218,7 +218,7 @@ pub fn load_all_expressions(ath_path: &Path) -> Result<Vec<ExpressionData>> {
                 Err(e) => {
                     eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
                     None
-                }
+                },
             }
         })
         .collect();

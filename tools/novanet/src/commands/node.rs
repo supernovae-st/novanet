@@ -169,12 +169,12 @@ pub async fn run_edit(db: &Db, key: &str, set_json: &str) -> crate::Result<()> {
                 )
             })?;
             info!(key = %edited_key, "updated node");
-        }
+        },
         None => {
             return Err(crate::NovaNetError::Validation(format!(
                 "node with key '{key}' not found"
             )));
-        }
+        },
     }
 
     Ok(())

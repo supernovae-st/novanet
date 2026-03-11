@@ -106,10 +106,10 @@ pub async fn run_doctor(
                 } else {
                     eprintln!("  \x1b[33m⚠\x1b[0m Schema still has issues after regeneration");
                 }
-            }
+            },
             Err(e) => {
                 eprintln!("  \x1b[31m✗\x1b[0m Failed to regenerate schema: {}", e);
-            }
+            },
         }
     }
 
@@ -204,7 +204,7 @@ fn check_yaml_validity(root: &Path, verbose: bool) -> HealthCheck {
                 "All YAML files valid".into()
             };
             HealthCheck::ok("YAML Validity", msg)
-        }
+        },
         Err(e) => HealthCheck::error("YAML Validity", format!("Parse error: {}", e)),
     }
 }
@@ -245,7 +245,7 @@ fn check_schema_sync(root: &Path, verbose: bool) -> HealthCheck {
                 };
                 HealthCheck::error("Schema Sync", msg)
             }
-        }
+        },
         Err(e) => HealthCheck::error("Schema Sync", format!("Validation failed: {}", e)),
     }
 }

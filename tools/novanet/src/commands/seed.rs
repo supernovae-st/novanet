@@ -29,8 +29,8 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use tracing::{info, instrument, warn};
 
-use crate::error::NovaNetError;
 use crate::Result;
+use crate::error::NovaNetError;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CONSTANTS
@@ -51,16 +51,16 @@ const SECRET_PATTERNS: &[&str] = &[
     r"(?i)(api[_-]?key|apikey)\s*[:=]",
     r"(?i)(password|passwd|pwd)\s*[:=]",
     r"(?i)(secret|token)\s*[:=]",
-    r"sk-[a-zA-Z0-9]{20,}",           // OpenAI
-    r"sk-ant-[a-zA-Z0-9-]{20,}",      // Anthropic
-    r"ghp_[a-zA-Z0-9]{36}",           // GitHub PAT
-    r"gho_[a-zA-Z0-9]{36}",           // GitHub OAuth
-    r"xoxb-[a-zA-Z0-9-]{24,}",        // Slack Bot Token
-    r"xoxp-[a-zA-Z0-9-]{24,}",        // Slack User Token
-    r"AKIA[0-9A-Z]{16}",              // AWS Access Key ID
-    r"AIza[0-9A-Za-z_-]{35}",         // Google API Key
+    r"sk-[a-zA-Z0-9]{20,}",                         // OpenAI
+    r"sk-ant-[a-zA-Z0-9-]{20,}",                    // Anthropic
+    r"ghp_[a-zA-Z0-9]{36}",                         // GitHub PAT
+    r"gho_[a-zA-Z0-9]{36}",                         // GitHub OAuth
+    r"xoxb-[a-zA-Z0-9-]{24,}",                      // Slack Bot Token
+    r"xoxp-[a-zA-Z0-9-]{24,}",                      // Slack User Token
+    r"AKIA[0-9A-Z]{16}",                            // AWS Access Key ID
+    r"AIza[0-9A-Za-z_-]{35}",                       // Google API Key
     r"-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----", // Private keys
-    r"Bearer\s+[a-zA-Z0-9_-]{20,}",   // Bearer tokens
+    r"Bearer\s+[a-zA-Z0-9_-]{20,}",                 // Bearer tokens
 ];
 
 /// Maximum YAML file size (1 MB) — prevents DoS via large files.
@@ -288,7 +288,7 @@ where
                     )));
                 }
                 std::thread::sleep(std::time::Duration::from_millis(50));
-            }
+            },
             Err(e) => return Err(NovaNetError::Io(e)),
         }
     }
@@ -313,13 +313,19 @@ pub fn atomic_write(path: &Path, content: &str) -> Result<()> {
 
 /// Validate path is within allowed directory.
 pub fn validate_path(path: &Path, allowed_root: &Path) -> Result<PathBuf> {
-    let canonical = path
-        .canonicalize()
-        .map_err(|e| NovaNetError::Io(std::io::Error::new(e.kind(), format!("Cannot canonicalize path: {:?}", path))))?;
+    let canonical = path.canonicalize().map_err(|e| {
+        NovaNetError::Io(std::io::Error::new(
+            e.kind(),
+            format!("Cannot canonicalize path: {:?}", path),
+        ))
+    })?;
 
-    let root_canonical = allowed_root
-        .canonicalize()
-        .map_err(|e| NovaNetError::Io(std::io::Error::new(e.kind(), format!("Cannot canonicalize root: {:?}", allowed_root))))?;
+    let root_canonical = allowed_root.canonicalize().map_err(|e| {
+        NovaNetError::Io(std::io::Error::new(
+            e.kind(),
+            format!("Cannot canonicalize root: {:?}", allowed_root),
+        ))
+    })?;
 
     if canonical.starts_with(&root_canonical) {
         Ok(canonical)
@@ -346,7 +352,9 @@ pub fn safe_read_yaml(file_path: &Path, allowed_root: &Path) -> Result<String> {
     if metadata.len() > MAX_YAML_FILE_SIZE {
         return Err(NovaNetError::Validation(format!(
             "File {:?} exceeds maximum size ({} bytes > {} bytes)",
-            file_path, metadata.len(), MAX_YAML_FILE_SIZE
+            file_path,
+            metadata.len(),
+            MAX_YAML_FILE_SIZE
         )));
     }
 
@@ -426,7 +434,10 @@ pub fn generate_entity_native_cypher(native: &EntityNativeData, locale: &str) ->
     // Denomination forms as JSON
     if !native.denomination_forms.is_empty() {
         let forms_json = serde_json::to_string(&native.denomination_forms).unwrap_or_default();
-        props.push(format!("denomination_forms: '{}'", cypher_escape(&forms_json)));
+        props.push(format!(
+            "denomination_forms: '{}'",
+            cypher_escape(&forms_json)
+        ));
     }
 
     // Timestamps (with validation to prevent injection)
@@ -525,19 +536,22 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                 for locale_file in fs::read_dir(&entity_natives_dir)? {
                     let locale_file = locale_file?;
                     let file_path = locale_file.path();
-                    if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
+                    if file_path
+                        .extension()
+                        .is_some_and(|e| e == "yaml" || e == "yml")
+                    {
                         // SECURITY: Use safe_read_yaml with path validation + size limits
                         let content = match safe_read_yaml(&file_path, &data_dir) {
                             Ok(c) => c,
                             Err(e) => {
                                 warn!("⚠️ Skipping {:?}: {}", file_path, e);
                                 continue;
-                            }
+                            },
                         };
 
                         // Parse YAML
-                        let data: EntityNativeDataFile = serde_yaml::from_str(&content)
-                            .map_err(|e| NovaNetError::Schema {
+                        let data: EntityNativeDataFile =
+                            serde_yaml::from_str(&content).map_err(|e| NovaNetError::Schema {
                                 path: file_path.display().to_string(),
                                 source: e,
                             })?;
@@ -550,13 +564,19 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                         }
 
                         // Generate Cypher
-                        let buffer = cypher_buffer.entry("030-entity-natives".to_string()).or_default();
+                        let buffer = cypher_buffer
+                            .entry("030-entity-natives".to_string())
+                            .or_default();
                         for native in &data.natives {
                             buffer.push(generate_entity_native_cypher(native, &data.locale));
                             generated_count += 1;
                         }
 
-                        info!("✓ Processed {:?} ({} natives)", file_path.file_name().unwrap_or_default(), data.natives.len());
+                        info!(
+                            "✓ Processed {:?} ({} natives)",
+                            file_path.file_name().unwrap_or_default(),
+                            data.natives.len()
+                        );
                     }
                 }
             }
@@ -576,14 +596,17 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
             for phase_file in fs::read_dir(&project_path)? {
                 let phase_file = phase_file?;
                 let file_path = phase_file.path();
-                if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
+                if file_path
+                    .extension()
+                    .is_some_and(|e| e == "yaml" || e == "yml")
+                {
                     // SECURITY: Use safe_read_yaml with path validation + size limits
                     let content = match safe_read_yaml(&file_path, &data_dir) {
                         Ok(c) => c,
                         Err(e) => {
                             warn!("⚠️ Skipping {:?}: {}", file_path, e);
                             continue;
-                        }
+                        },
                     };
 
                     // Parse YAML (try as EntityDataFile)
@@ -602,7 +625,11 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                             generated_count += 1;
                         }
 
-                        info!("✓ Processed {:?} ({} entities)", file_path.file_name().unwrap_or_default(), data.entities.len());
+                        info!(
+                            "✓ Processed {:?} ({} entities)",
+                            file_path.file_name().unwrap_or_default(),
+                            data.entities.len()
+                        );
                     }
                 }
             }
@@ -623,7 +650,11 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                 statements.join("\n\n")
             );
             atomic_write(&output_path, &content)?;
-            println!("✓ Wrote {:?} ({} statements)", output_path, statements.len());
+            println!(
+                "✓ Wrote {:?} ({} statements)",
+                output_path,
+                statements.len()
+            );
         }
     }
 
@@ -653,12 +684,10 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
     let manifest_path = data_dir.join("_index.yaml");
     if manifest_path.exists() {
         match safe_read_yaml(&manifest_path, &data_dir) {
-            Ok(content) => {
-                match serde_yaml::from_str::<DataManifest>(&content) {
-                    Ok(_manifest) => info!("✓ Manifest valid"),
-                    Err(e) => errors.push(format!("_index.yaml: {}", e)),
-                }
-            }
+            Ok(content) => match serde_yaml::from_str::<DataManifest>(&content) {
+                Ok(_manifest) => info!("✓ Manifest valid"),
+                Err(e) => errors.push(format!("_index.yaml: {}", e)),
+            },
             Err(e) => errors.push(format!("_index.yaml: {}", e)),
         }
         file_count += 1;
@@ -681,7 +710,10 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
                 for locale_file in fs::read_dir(&entity_natives_dir)? {
                     let locale_file = locale_file?;
                     let file_path = locale_file.path();
-                    if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
+                    if file_path
+                        .extension()
+                        .is_some_and(|e| e == "yaml" || e == "yml")
+                    {
                         file_count += 1;
 
                         // SECURITY: Use safe_read_yaml with path validation + size limits
@@ -690,7 +722,7 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
                             Err(e) => {
                                 errors.push(format!("{:?}: {}", file_path, e));
                                 continue;
-                            }
+                            },
                         };
 
                         // Parse and validate
@@ -714,7 +746,7 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
                                         ));
                                     }
                                 }
-                            }
+                            },
                             Err(e) => errors.push(format!("{:?}: {}", file_path, e)),
                         }
                     }
@@ -787,14 +819,17 @@ pub async fn diff(
                 for locale_file in fs::read_dir(&entity_natives_dir)? {
                     let locale_file = locale_file?;
                     let file_path = locale_file.path();
-                    if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
+                    if file_path
+                        .extension()
+                        .is_some_and(|e| e == "yaml" || e == "yml")
+                    {
                         // SECURITY: Use safe_read_yaml with path validation + size limits
                         let content = match safe_read_yaml(&file_path, &data_dir) {
                             Ok(c) => c,
                             Err(e) => {
                                 warn!("⚠️ Skipping {:?}: {}", file_path, e);
                                 continue;
-                            }
+                            },
                         };
                         if let Ok(data) = serde_yaml::from_str::<EntityNativeDataFile>(&content) {
                             // SECURITY: Validate class name before storing
@@ -829,12 +864,13 @@ pub async fn diff(
 
         // Query Neo4j (class name is now validated as safe PascalCase)
         let query = format!("MATCH (n:{}) RETURN n.key AS key", class);
-        let mut result = pool.execute(neo4rs::query(&query)).await.map_err(|e| {
-            NovaNetError::Query {
-                query: query.clone(),
-                source: e,
-            }
-        })?;
+        let mut result =
+            pool.execute(neo4rs::query(&query))
+                .await
+                .map_err(|e| NovaNetError::Query {
+                    query: query.clone(),
+                    source: e,
+                })?;
 
         let mut neo4j_keys: Vec<String> = Vec::new();
         while let Some(row) = result.next().await.map_err(|e| NovaNetError::Query {
@@ -960,13 +996,11 @@ mod tests {
             key: "qr-code@fr-FR".to_string(),
             display_name: "Code QR".to_string(),
             description: "Un code QR".to_string(),
-            denomination_forms: vec![
-                DenominationForm {
-                    form_type: "text".to_string(),
-                    value: "code QR".to_string(),
-                    priority: 1,
-                },
-            ],
+            denomination_forms: vec![DenominationForm {
+                form_type: "text".to_string(),
+                value: "code QR".to_string(),
+                priority: 1,
+            }],
             created_at: None,
             updated_at: None,
         };

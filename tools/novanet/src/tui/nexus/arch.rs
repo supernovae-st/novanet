@@ -215,7 +215,7 @@ fn render_adr_details(f: &mut Frame, adrs: &[AdrEntry], selected_idx: usize, are
                 .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
             f.render_widget(Paragraph::new("No ADR selected").block(block), area);
             return;
-        }
+        },
     };
 
     let color = category_color(&adr.category);
@@ -325,21 +325,21 @@ pub fn handle_arch_key(app: &mut App, key: crossterm::event::KeyEvent) -> bool {
                 app.nexus.arch_adr_index -= 1;
             }
             true
-        }
+        },
         KeyCode::Down | KeyCode::Char('j') => {
             if app.nexus.arch_adr_index < max_idx {
                 app.nexus.arch_adr_index += 1;
             }
             true
-        }
+        },
         KeyCode::Home | KeyCode::Char('g') => {
             app.nexus.arch_adr_index = 0;
             true
-        }
+        },
         KeyCode::End | KeyCode::Char('G') => {
             app.nexus.arch_adr_index = max_idx;
             true
-        }
+        },
         _ => false,
     }
 }

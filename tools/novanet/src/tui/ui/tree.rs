@@ -17,10 +17,23 @@ use ratatui::widgets::{
 use rustc_hash::FxHashSet;
 
 use super::{
-    COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE,
-    COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
-    STYLE_PRIMARY, STYLE_UNFOCUSED, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
-    render_empty_state, spinner,
+    COLOR_ACTIVE_CLASS_BG,
+    COLOR_ARC_FAMILY,
+    COLOR_DESC_TEXT,
+    COLOR_HIGHLIGHT_BG,
+    COLOR_INSTANCE,
+    COLOR_MUTED_TEXT,
+    COLOR_UNFOCUSED_BORDER,
+    EmptyStateClass,
+    STYLE_DIM,
+    STYLE_HIGHLIGHT,
+    STYLE_PRIMARY,
+    STYLE_UNFOCUSED,
+    cardinality_abbrev,
+    layer_badge_icon,
+    realm_badge_icon,
+    render_empty_state,
+    spinner,
     // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 use crate::tui::app::{App, Focus};
@@ -101,9 +114,9 @@ const SCROLLBAR_WIDTH: u16 = 1;
 const POWER_BAR_WIDTH: usize = 10;
 
 /// Power bar color thresholds (Tailwind colors)
-const COLOR_POWER_HIGH: Color = Color::Rgb(34, 197, 94);   // green-500 (≥80%)
-const COLOR_POWER_MED: Color = Color::Rgb(249, 115, 22);   // orange-500 (50-79%)
-const COLOR_POWER_LOW: Color = Color::Rgb(239, 68, 68);    // red-500 (<50%)
+const COLOR_POWER_HIGH: Color = Color::Rgb(34, 197, 94); // green-500 (≥80%)
+const COLOR_POWER_MED: Color = Color::Rgb(249, 115, 22); // orange-500 (50-79%)
+const COLOR_POWER_LOW: Color = Color::Rgb(239, 68, 68); // red-500 (<50%)
 
 /// Pre-computed power bar strings (v0.17.3: zero-allocation optimization)
 /// Index 0 = 0% filled, Index 10 = 100% filled
@@ -170,7 +183,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: r.display_name.clone(),
                 color: hex_to_color(&r.color),
             });
-        }
+        },
         Some(TreeItem::Layer(r, l)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -182,7 +195,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: l.display_name.clone(),
                 color: hex_to_color(&l.color),
             });
-        }
+        },
         Some(TreeItem::Class(r, l, k)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -204,7 +217,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: class_label,
                 color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
             });
-        }
+        },
         Some(TreeItem::EntityCategory(r, l, k, cat)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -226,7 +239,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: cat.display_name.clone(),
                 color: Color::Gray,
             });
-        }
+        },
         Some(TreeItem::LocaleGroup(r, l, k, group)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -245,10 +258,13 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
             });
             path.push(BreadcrumbLevel {
                 icon: "🌐",
-                label: format!("{} {} ({})", group.flag, group.locale_code, group.locale_name),
+                label: format!(
+                    "{} {} ({})",
+                    group.flag, group.locale_code, group.locale_name
+                ),
                 color: Color::Cyan,
             });
-        }
+        },
         // v0.17.3: EntityGroup breadcrumb (entity-grouped EntityNatives)
         Some(TreeItem::EntityGroup(r, l, k, group)) => {
             path.push(BreadcrumbLevel {
@@ -271,7 +287,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: group.entity_display_name.clone(),
                 color: Color::Yellow,
             });
-        }
+        },
         Some(TreeItem::Instance(r, l, k, inst)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -293,7 +309,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: inst.display_name.clone(),
                 color: COLOR_INSTANCE,
             });
-        }
+        },
         Some(TreeItem::ArcFamily(f)) => {
             path.push(BreadcrumbLevel {
                 icon: "⊶",
@@ -305,7 +321,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: f.display_name.clone(),
                 color: Color::Magenta,
             });
-        }
+        },
         Some(TreeItem::ArcClass(f, ak)) => {
             path.push(BreadcrumbLevel {
                 icon: "⊶",
@@ -322,21 +338,21 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: ak.display_name.clone(),
                 color: Color::White,
             });
-        }
+        },
         Some(TreeItem::ClassesSection) => {
             path.push(BreadcrumbLevel {
                 icon: "◈",
                 label: "Node Classes".to_string(),
                 color: Color::Cyan,
             });
-        }
+        },
         Some(TreeItem::ArcsSection) => {
             path.push(BreadcrumbLevel {
                 icon: "⊶",
                 label: "Arcs".to_string(),
                 color: Color::Magenta,
             });
-        }
+        },
         Some(TreeItem::EntityNativeItem(r, l, k, native)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -358,8 +374,8 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: native.display_name.clone(),
                 color: COLOR_INSTANCE,
             });
-        }
-        None => {}
+        },
+        None => {},
     }
 
     path
@@ -971,7 +987,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     (text, text_color, cnt_str, cnt_color)
                                 } else {
                                     // Meta mode: just name
-                                    (class_info.display_name.clone(), Color::White, String::new(), Color::White)
+                                    (
+                                        class_info.display_name.clone(),
+                                        Color::White,
+                                        String::new(),
+                                        Color::White,
+                                    )
                                 };
 
                             let prefix = format!(
@@ -1102,7 +1123,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let is_cursor = idx == app.tree_cursor;
 
                                         // Pillar entities get ★ icon, others get ○
-                                        let is_pillar = instance.properties.get("is_pillar")
+                                        let is_pillar = instance
+                                            .properties
+                                            .get("is_pillar")
                                             .and_then(|v| v.as_bool())
                                             .unwrap_or(false);
                                         let icon = if is_pillar { "★" } else { "○" };
@@ -1149,18 +1172,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         }
                                         idx += 1;
                                     }
-                                } else if class_info.key == "EntityNative" && !app.tree.entity_native_groups.is_empty() {
+                                } else if class_info.key == "EntityNative"
+                                    && !app.tree.entity_native_groups.is_empty()
+                                {
                                     // EntityNative class: group by parent Entity
                                     // v0.17.3: Show entity groups with power bar and expandable natives
                                     use unicode_width::UnicodeWidthStr;
 
                                     let group_count = app.tree.entity_native_groups.len();
-                                    for (gi, entity_group) in app.tree.entity_native_groups.iter().enumerate() {
+                                    for (gi, entity_group) in
+                                        app.tree.entity_native_groups.iter().enumerate()
+                                    {
                                         let group_is_last = gi == group_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
                                         // Expand/collapse state for this entity group
-                                        let group_key = format!("entity_group:{}", entity_group.entity_key);
+                                        let group_key =
+                                            format!("entity_group:{}", entity_group.entity_key);
                                         let is_collapsed = app.tree.is_collapsed(&group_key);
                                         let expand_icon = if is_collapsed { "▶" } else { "▼" };
 
@@ -1180,7 +1208,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         );
 
                                         // Format: ▼ qr-code (5)      ▰▰▰▰▰▰▱▱ (power bar right-aligned)
-                                        let (power_bar, power_color) = render_power_bar(entity_group.relationship_power);
+                                        let (power_bar, power_color) =
+                                            render_power_bar(entity_group.relationship_power);
 
                                         // Calculate widths for right-alignment
                                         let tree_width = area.width.saturating_sub(5) as usize;
@@ -1192,9 +1221,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             entity_group.entity_key,
                                             entity_group.native_count,
                                         );
-                                        let left_width = UnicodeWidthStr::width(left_content.as_str());
+                                        let left_width =
+                                            UnicodeWidthStr::width(left_content.as_str());
                                         let power_bar_width = UnicodeWidthStr::width(power_bar);
-                                        let padding_width = tree_width.saturating_sub(left_width + power_bar_width + 1);
+                                        let padding_width = tree_width
+                                            .saturating_sub(left_width + power_bar_width + 1);
 
                                         if is_cursor && focused {
                                             all_lines.push(Line::from(Span::styled(
@@ -1214,7 +1245,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Style::default().fg(layer_color),
                                                 ),
                                                 Span::styled(
-                                                    format!("{} {} ({})", expand_icon, entity_group.entity_key, entity_group.native_count),
+                                                    format!(
+                                                        "{} {} ({})",
+                                                        expand_icon,
+                                                        entity_group.entity_key,
+                                                        entity_group.native_count
+                                                    ),
                                                     style,
                                                 ),
                                                 Span::styled(
@@ -1232,39 +1268,57 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                                         // Render EntityNatives for this entity when expanded
                                         if !is_collapsed {
-                                            if let Some(natives) = app.tree.entity_native_by_entity.get(&entity_group.entity_key) {
+                                            if let Some(natives) = app
+                                                .tree
+                                                .entity_native_by_entity
+                                                .get(&entity_group.entity_key)
+                                            {
                                                 // v0.17.3: Format with locale flags: "🇫🇷 fr-FR - Display Name    /slug"
                                                 // Pre-compute left parts and find max width for slug alignment
-                                                let native_parts: Vec<_> = natives.iter().map(|native| {
-                                                    // Use locale_code for flag
-                                                    let flag = locale_to_flag(&native.locale_code);
-                                                    let left = format!(
-                                                        "{} {} - {}",
-                                                        flag,
-                                                        native.locale_code,
-                                                        native.display_name
-                                                    );
-                                                    (left, native.slug.as_deref())
-                                                }).collect();
+                                                let native_parts: Vec<_> = natives
+                                                    .iter()
+                                                    .map(|native| {
+                                                        // Use locale_code for flag
+                                                        let flag =
+                                                            locale_to_flag(&native.locale_code);
+                                                        let left = format!(
+                                                            "{} {} - {}",
+                                                            flag,
+                                                            native.locale_code,
+                                                            native.display_name
+                                                        );
+                                                        (left, native.slug.as_deref())
+                                                    })
+                                                    .collect();
 
                                                 let native_count_inner = native_parts.len();
-                                                for (ni, (left_part, slug_opt)) in native_parts.iter().enumerate() {
-                                                    let native_is_last = ni == native_count_inner - 1;
+                                                for (ni, (left_part, slug_opt)) in
+                                                    native_parts.iter().enumerate()
+                                                {
+                                                    let native_is_last =
+                                                        ni == native_count_inner - 1;
                                                     let is_native_cursor = idx == app.tree_cursor;
 
-                                                    let native_style = if is_native_cursor && focused {
-                                                        Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
-                                                    } else {
-                                                        Style::default().fg(COLOR_ENTITY_TEXT)
-                                                    };
+                                                    let native_style =
+                                                        if is_native_cursor && focused {
+                                                            Style::default()
+                                                                .bg(COLOR_HIGHLIGHT_BG)
+                                                                .fg(Color::White)
+                                                        } else {
+                                                            Style::default().fg(COLOR_ENTITY_TEXT)
+                                                        };
 
-                                                    let slug_style = if is_native_cursor && focused {
-                                                        Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                    let slug_style = if is_native_cursor && focused
+                                                    {
+                                                        Style::default()
+                                                            .bg(COLOR_HIGHLIGHT_BG)
+                                                            .fg(Color::White)
                                                     } else {
                                                         Style::default().fg(COLOR_ENTITY_SLUG)
                                                     };
 
-                                                    let native_cursor = if is_native_cursor { ">" } else { " " };
+                                                    let native_cursor =
+                                                        if is_native_cursor { ">" } else { " " };
                                                     let native_tree_prefix = format!(
                                                         "{}{}{}{}{}",
                                                         cont(realm_is_last),
@@ -1281,11 +1335,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     };
 
                                                     // Calculate padding for right-alignment of slug
-                                                    let prefix_len = 1 + UnicodeWidthStr::width(native_tree_prefix.as_str()); // cursor + prefix
-                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
-                                                    let slug_width = UnicodeWidthStr::width(slug_display.as_str());
-                                                    let total_content = prefix_len + left_width + slug_width;
-                                                    let padding_width = tree_width.saturating_sub(total_content + 1);
+                                                    let prefix_len = 1 + UnicodeWidthStr::width(
+                                                        native_tree_prefix.as_str(),
+                                                    ); // cursor + prefix
+                                                    let left_width =
+                                                        UnicodeWidthStr::width(left_part.as_str());
+                                                    let slug_width = UnicodeWidthStr::width(
+                                                        slug_display.as_str(),
+                                                    );
+                                                    let total_content =
+                                                        prefix_len + left_width + slug_width;
+                                                    let padding_width = tree_width
+                                                        .saturating_sub(total_content + 1);
 
                                                     if is_native_cursor && focused {
                                                         all_lines.push(Line::from(Span::styled(
@@ -1301,7 +1362,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                         )));
                                                     } else {
                                                         let spans = vec![
-                                                            Span::styled(native_cursor, Style::default()),
+                                                            Span::styled(
+                                                                native_cursor,
+                                                                Style::default(),
+                                                            ),
                                                             Span::styled(
                                                                 native_tree_prefix.clone(),
                                                                 Style::default().fg(layer_color),
@@ -1601,9 +1665,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     // v0.17.3 (ADR-036): trait filter indicator removed
 
-    let hierarchy = app
-        .tree
-        .hierarchy_position(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
+    let hierarchy =
+        app.tree
+            .hierarchy_position(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
         format!(" {} ", mode_prefix)

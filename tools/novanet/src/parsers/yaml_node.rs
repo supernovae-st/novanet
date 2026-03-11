@@ -107,7 +107,6 @@ pub struct NodeDef {
     pub layer: String,
 
     // Note: `trait` was removed in v0.17.3 (ADR-036). Provenance is tracked per-instance.
-
     /// v10 knowledge tier — optional, only for knowledge layer nodes.
     /// Groups locale knowledge: technical, style, semantic.
     #[serde(default)]
@@ -428,8 +427,7 @@ node:
     #[test]
     fn knowledge_tier_optional() {
         // Non-knowledge nodes don't have knowledge_tier
-        let yaml =
-            "node:\n  name: Project\n  realm: org\n  layer: foundation\n  description: d";
+        let yaml = "node:\n  name: Project\n  realm: org\n  layer: foundation\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.knowledge_tier, None);
     }

@@ -34,7 +34,7 @@ impl CypherStatement {
                         .map(|s| format!("'{}'", s.replace('\'', "\\'")))
                         .collect();
                     format!("[{}]", items.join(", "))
-                }
+                },
                 ParamValue::Int(n) => n.to_string(),
             };
             output = output.replace(&placeholder, &replacement);

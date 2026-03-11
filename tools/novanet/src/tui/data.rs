@@ -79,7 +79,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
                 .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
                 .collect();
             JsonValue::Object(obj)
-        }
+        },
         // For complex types (Node, Relationship, etc.), show a simplified representation
         BoltType::Node(n) => {
             let mut obj = serde_json::Map::new();
@@ -97,7 +97,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
                 obj.insert(k.value.clone(), bolt_to_json(v));
             }
             JsonValue::Object(obj)
-        }
+        },
         BoltType::Relation(r) => {
             let mut obj = serde_json::Map::new();
             obj.insert(
@@ -109,7 +109,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
                 JsonValue::String(r.typ.value.clone()),
             );
             JsonValue::Object(obj)
-        }
+        },
         // DateTime and other complex types - extract what we can
         BoltType::DateTime(_)
         | BoltType::LocalDateTime(_)
@@ -126,7 +126,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
             // Clean up debug output: extract useful info
             let debug = format!("{:?}", bolt);
             JsonValue::String(clean_bolt_debug(&debug))
-        }
+        },
     }
 }
 
@@ -782,11 +782,7 @@ pub struct EntityNativeGroup {
 /// and converts it to regional indicator symbols.
 pub fn locale_to_flag(locale: &str) -> String {
     // Extract country code (e.g., "fr-FR" → "FR", "es-MX" → "MX")
-    let country = locale
-        .split('-')
-        .nth(1)
-        .unwrap_or(locale)
-        .to_uppercase();
+    let country = locale.split('-').nth(1).unwrap_or(locale).to_uppercase();
 
     if country.len() != 2 {
         return "🏳️".to_string(); // Fallback for invalid codes
@@ -2171,8 +2167,7 @@ ORDER BY locale_code
 
         let rows = db.execute(cypher).await?;
         let mut locale_groups = Vec::with_capacity(rows.len());
-        let mut natives_by_locale: FxHashMap<String, Vec<EntityNativeInfo>> =
-            FxHashMap::default();
+        let mut natives_by_locale: FxHashMap<String, Vec<EntityNativeInfo>> = FxHashMap::default();
 
         for row in rows {
             let locale_code: String = row.get("locale_code").unwrap_or_default();
@@ -2223,7 +2218,10 @@ ORDER BY locale_code
     /// Each native includes locale_code and relationship_power for display.
     pub async fn load_entity_natives_by_entity(
         db: &Db,
-    ) -> crate::Result<(Vec<EntityNativeGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
+    ) -> crate::Result<(
+        Vec<EntityNativeGroup>,
+        FxHashMap<String, Vec<EntityNativeInfo>>,
+    )> {
         // Query EntityNatives grouped by parent Entity
         // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
         // v0.17.3: Also load all properties for INSTANCE panel display
@@ -2251,8 +2249,7 @@ ORDER BY entity_key
 
         let rows = db.execute(cypher).await?;
         let mut entity_groups = Vec::with_capacity(rows.len());
-        let mut natives_by_entity: FxHashMap<String, Vec<EntityNativeInfo>> =
-            FxHashMap::default();
+        let mut natives_by_entity: FxHashMap<String, Vec<EntityNativeInfo>> = FxHashMap::default();
 
         for row in rows {
             let entity_key: String = row.get("entity_key").unwrap_or_default();
@@ -2666,10 +2663,13 @@ ORDER BY entity_key
                                         for group in &self.entity_native_groups {
                                             count += 1; // EntityGroup node
                                             // If entity group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!("entity_group:{}", group.entity_key))
-                                            {
-                                                if let Some(natives) =
-                                                    self.entity_native_by_entity.get(&group.entity_key)
+                                            if !self.is_collapsed(&format!(
+                                                "entity_group:{}",
+                                                group.entity_key
+                                            )) {
+                                                if let Some(natives) = self
+                                                    .entity_native_by_entity
+                                                    .get(&group.entity_key)
                                                 {
                                                     count += natives.len();
                                                 }
@@ -2793,16 +2793,22 @@ ORDER BY entity_key
                                             }
                                             idx += 1;
                                             // If entity group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!("entity_group:{}", group.entity_key))
-                                            {
-                                                if let Some(natives) =
-                                                    self.entity_native_by_entity.get(&group.entity_key)
+                                            if !self.is_collapsed(&format!(
+                                                "entity_group:{}",
+                                                group.entity_key
+                                            )) {
+                                                if let Some(natives) = self
+                                                    .entity_native_by_entity
+                                                    .get(&group.entity_key)
                                                 {
                                                     for native in natives {
                                                         if idx == cursor {
-                                                            return Some(TreeItem::EntityNativeItem(
-                                                                realm, layer, class_info, native,
-                                                            ));
+                                                            return Some(
+                                                                TreeItem::EntityNativeItem(
+                                                                    realm, layer, class_info,
+                                                                    native,
+                                                                ),
+                                                            );
                                                         }
                                                         idx += 1;
                                                     }
@@ -2988,15 +2994,15 @@ ORDER BY entity_key
             // Note: Legacy, kept for backwards compatibility
             Some(TreeItem::LocaleGroup(_, _, _, group)) => {
                 Some(format!("locale:{}", group.locale_code))
-            }
+            },
             // v0.17.3: EntityGroup can be collapsed to hide its EntityNativeItems
             Some(TreeItem::EntityGroup(_, _, _, group)) => {
                 Some(format!("entity_group:{}", group.entity_key))
-            }
+            },
             // Entity instances can be collapsed to hide EntityNatives
             Some(TreeItem::Instance(_, _, class_info, instance)) if class_info.key == "Entity" => {
                 Some(format!("entity:{}", instance.key))
-            }
+            },
             // Other leaf nodes can't be collapsed
             Some(TreeItem::ArcClass(_, _))
             | Some(TreeItem::Instance(_, _, _, _))
@@ -3035,28 +3041,28 @@ ORDER BY entity_key
             // Class's parent is its Layer
             Some(TreeItem::Class(realm, layer, _)) => {
                 self.find_layer_cursor(&realm.key, &layer.key)
-            }
+            },
 
             // EntityCategory's parent is its Class (Entity)
             Some(TreeItem::EntityCategory(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            }
+            },
 
             // LocaleGroup's parent is its Class (EntityNative)
             // Note: Legacy, kept for backwards compatibility
             Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            }
+            },
             // v0.17.3: EntityGroup's parent is its Class (EntityNative)
             Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            }
+            },
 
             // Instance's parent is its Class
             // v0.16.4: Entity instances now go directly to Entity class (no categories)
             Some(TreeItem::Instance(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            }
+            },
 
             // ArcFamily's parent is ArcsSection
             Some(TreeItem::ArcFamily(_)) => self.find_arcs_section_cursor(),
@@ -3067,7 +3073,7 @@ ORDER BY entity_key
             // EntityNativeItem's parent is its Class (EntityNative)
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            }
+            },
         }
     }
 
@@ -3165,13 +3171,19 @@ ORDER BY entity_key
                                     // EntityNative: count groups + expanded natives
                                     for group in &self.entity_native_groups {
                                         idx += 1; // The group itself
-                                        if !self.is_collapsed(&format!("entity_group:{}", group.entity_key)) {
-                                            if let Some(natives) = self.entity_native_by_entity.get(&group.entity_key) {
+                                        if !self.is_collapsed(&format!(
+                                            "entity_group:{}",
+                                            group.entity_key
+                                        )) {
+                                            if let Some(natives) =
+                                                self.entity_native_by_entity.get(&group.entity_key)
+                                            {
                                                 idx += natives.len();
                                             }
                                         }
                                     }
-                                } else if let Some(instances) = self.instances.get(&class_info.key) {
+                                } else if let Some(instances) = self.instances.get(&class_info.key)
+                                {
                                     idx += instances.len();
                                 }
                             }
@@ -3285,10 +3297,7 @@ ORDER BY entity_key
     /// Count all Entity instances.
     /// v0.17.3: Entity uses flat instances (same as regular classes)
     pub fn entity_instance_count(&self) -> usize {
-        self.instances
-            .get("Entity")
-            .map(|v| v.len())
-            .unwrap_or(0)
+        self.instances.get("Entity").map(|v| v.len()).unwrap_or(0)
     }
 
     /// Get a flat iterator over all Entity instances.
@@ -3375,7 +3384,7 @@ ORDER BY entity_key
         match item {
             None | Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => {
                 HierarchyPosition::default()
-            }
+            },
             Some(TreeItem::Realm(realm)) => {
                 let realm_idx = self
                     .realms
@@ -3387,7 +3396,7 @@ ORDER BY entity_key
                     realm: Some((realm_idx, total_realms)),
                     ..Default::default()
                 }
-            }
+            },
             Some(TreeItem::Layer(realm, layer)) => {
                 let realm_idx = self
                     .realms
@@ -3406,7 +3415,7 @@ ORDER BY entity_key
                     layer: Some((layer_idx, realm.layers.len())),
                     ..Default::default()
                 }
-            }
+            },
             Some(TreeItem::Class(realm, layer, class_info)) => {
                 let realm_idx = self
                     .realms
@@ -3432,7 +3441,7 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
-            }
+            },
             Some(TreeItem::Instance(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
@@ -3476,7 +3485,7 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     instance: Some((loaded_count.min(INSTANCE_LIMIT), total_instances)),
                 }
-            }
+            },
             Some(TreeItem::EntityCategory(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
@@ -3502,7 +3511,7 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
-            }
+            },
             Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
@@ -3528,7 +3537,7 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
-            }
+            },
             // v0.17.3: EntityGroup hierarchy position (same as LocaleGroup)
             Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
                 let realm_idx = self
@@ -3555,11 +3564,11 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
-            }
+            },
             Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcClass(_, _)) => {
                 // Arcs section - no realm/layer/class hierarchy
                 HierarchyPosition::default()
-            }
+            },
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
@@ -3592,7 +3601,7 @@ ORDER BY entity_key
                     class: Some((class_idx, layer.classes.len())),
                     instance: Some((loaded_count.min(INSTANCE_LIMIT), loaded_count)),
                 }
-            }
+            },
         }
     }
 }
@@ -3619,12 +3628,7 @@ pub enum TreeItem<'a> {
     ),
     // Data view: Locale groups (between Class and instances for EntityNative only)
     // Note: Legacy, kept for backwards compatibility but not used in v0.17.3+
-    LocaleGroup(
-        &'a RealmInfo,
-        &'a LayerInfo,
-        &'a ClassInfo,
-        &'a LocaleGroup,
-    ),
+    LocaleGroup(&'a RealmInfo, &'a LayerInfo, &'a ClassInfo, &'a LocaleGroup),
     // Data view: Entity groups (between Class and instances for EntityNative only)
     // v0.17.3: Groups EntityNatives by parent Entity
     EntityGroup(
@@ -4415,10 +4419,10 @@ mod tests {
                 // Should return some data (at least empty vec with count)
                 // total is usize, always non-negative
                 assert_eq!(instances.len(), total, "Instance count should match");
-            }
+            },
             Err(e) => {
                 panic!("load_instances failed: {}", e);
-            }
+            },
         }
     }
 
@@ -4438,10 +4442,10 @@ mod tests {
                 // Even if empty, the call should succeed
                 // (len() is usize, always >= 0, so just verify call succeeded)
                 let _ = arcs_data.outgoing.len();
-            }
+            },
             Err(e) => {
                 panic!("load_class_arcs failed: {}", e);
-            }
+            },
         }
     }
 

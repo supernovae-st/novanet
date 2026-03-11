@@ -481,7 +481,7 @@ pub fn load_all_formattings(ath_path: &Path) -> Result<Vec<Formatting>> {
                 Err(e) => {
                     eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
                     None
-                }
+                },
             }
         })
         .collect();
@@ -644,8 +644,8 @@ fn parse_number_section(content: &str) -> NumberFormatting {
             "positive_sign" => number.positive_sign = clean_value(value),
             "grouping_pattern" => {
                 number.grouping_pattern = value.parse().unwrap_or(3);
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 
@@ -679,7 +679,7 @@ fn parse_date_section(content: &str) -> DateFormatting {
             "long_pattern" => date.long_pattern = clean_value(value),
             "full_pattern" => date.full_pattern = Some(clean_value(value)),
             "date_separator" => date.date_separator = clean_value(value),
-            _ => {}
+            _ => {},
         }
     }
 
@@ -726,14 +726,14 @@ fn parse_time_section(content: &str) -> TimeFormatting {
                 if v != "N/A" && !v.is_empty() {
                     time.am_indicator = Some(v);
                 }
-            }
+            },
             "pm_indicator" => {
                 let v = clean_value(value);
                 if v != "N/A" && !v.is_empty() {
                     time.pm_indicator = Some(v);
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 
@@ -772,7 +772,7 @@ fn parse_currency_section(content: &str) -> CurrencyFormatting {
                     "after".to_string()
                 };
                 currency.space_between = v.contains("space");
-            }
+            },
             "decimal_places" => {
                 currency.decimal_places = value
                     .chars()
@@ -780,9 +780,9 @@ fn parse_currency_section(content: &str) -> CurrencyFormatting {
                     .collect::<String>()
                     .parse()
                     .unwrap_or(2);
-            }
+            },
             "subunit" => currency.subunit = Some(clean_value(value)),
-            _ => {}
+            _ => {},
         }
     }
 
@@ -815,7 +815,7 @@ fn parse_phone_section(content: &str) -> PhoneFormatting {
                     .map(|s| s.trim().to_string())
                     .filter(|s| !s.is_empty())
                     .collect();
-            }
+            },
             "digit_count" => {
                 phone.digit_count = value
                     .chars()
@@ -823,8 +823,8 @@ fn parse_phone_section(content: &str) -> PhoneFormatting {
                     .collect::<String>()
                     .parse()
                     .unwrap_or(10);
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 
@@ -859,9 +859,9 @@ fn parse_address_section(content: &str) -> AddressFormatting {
                 } else {
                     "after_city".to_string()
                 };
-            }
+            },
             "city_format" => address.city_format = Some(clean_value(value)),
-            _ => {}
+            _ => {},
         }
     }
 

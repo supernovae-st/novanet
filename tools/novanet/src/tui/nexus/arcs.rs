@@ -84,18 +84,18 @@ fn arc_family_description(key: &str) -> &str {
     match key {
         "ownership" => {
             "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Org HAS_PAGE."
-        }
+        },
         "localization" => {
             "Locale-specific content. Links defined to authored nodes like Entity HAS_NATIVE EntityNative."
-        }
+        },
         "semantic" => {
             "Semantic relationships. Content uses imported atoms like Block USES_TERM, USES_EXPRESSION."
-        }
+        },
         "generation" => "LLM generation flow. GENERATES, PRODUCES arcs tracking what creates what.",
         "mining" => "Data extraction and derivation. EXTRACTS, DERIVES arcs for computed content.",
         "schema" => {
             "Meta-schema relationships. OF_CLASS, FROM_CLASS, TO_CLASS for graph structure."
-        }
+        },
         _ => "Unknown arc family.",
     }
 }

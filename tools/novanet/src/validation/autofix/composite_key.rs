@@ -106,7 +106,7 @@ impl CompositeKeyFixer {
                 return Ok(FixAction::Skipped {
                     reason: format!("No prefix defined for node type: {}", node_name),
                 });
-            }
+            },
         };
 
         // Get mutable reference to standard_properties
@@ -301,7 +301,7 @@ mod tests {
                     .unwrap();
 
                 assert_eq!(pattern, "^entity:[^@]+@[a-z]{2}-[A-Z]{2}$");
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -337,7 +337,7 @@ mod tests {
                     .unwrap();
 
                 assert_eq!(pattern, "^page:[^@]+@[a-z]{2}-[A-Z]{2}$");
-            }
+            },
             _ => panic!("Expected Modified for PageNative"),
         }
     }
@@ -360,7 +360,7 @@ mod tests {
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("No pattern defined"));
-            }
+            },
             _ => panic!("Expected Skipped for non-composite node"),
         }
     }
@@ -404,7 +404,7 @@ mod tests {
 
                 // Second example should be corrected: "entity:pricing" → "entity:pricing@en-US"
                 assert_eq!(examples[1].as_str().unwrap(), "entity:pricing@en-US");
-            }
+            },
             _ => panic!("Expected Modified for invalid examples"),
         }
     }

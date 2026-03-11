@@ -243,7 +243,7 @@ pub fn load_all_markets(ath_path: &Path) -> Result<Vec<MarketData>> {
                 Err(e) => {
                     eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
                     None
-                }
+                },
             }
         })
         .collect();

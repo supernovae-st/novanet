@@ -257,7 +257,7 @@ pub fn load_all_cultures(ath_path: &Path) -> Result<Vec<CultureData>> {
                 Err(e) => {
                     eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
                     None
-                }
+                },
             }
         })
         .collect();

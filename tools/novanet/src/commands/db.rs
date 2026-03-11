@@ -338,7 +338,7 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                 }
                 // Preserve the newline for readability
                 current.push('\n');
-            }
+            },
             // String literal (single or double quotes): consume until closing quote
             // Handles both doubled quotes ('') and backslash escapes (\')
             '\'' | '"' => {
@@ -352,7 +352,7 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                             if let Some(escaped) = chars.next() {
                                 current.push(escaped);
                             }
-                        }
+                        },
                         // Quote char: check for doubled quote escape
                         Some(c) if c == quote => {
                             current.push(c);
@@ -362,12 +362,12 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                             } else {
                                 break;
                             }
-                        }
+                        },
                         Some(c) => current.push(c),
                         None => break, // unterminated string
                     }
                 }
-            }
+            },
             // Statement delimiter
             ';' => {
                 let trimmed = current.trim().to_string();
@@ -375,7 +375,7 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                     statements.push(trimmed);
                 }
                 current.clear();
-            }
+            },
             // Regular character
             _ => current.push(ch),
         }

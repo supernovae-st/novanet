@@ -255,7 +255,7 @@ fn yaml_to_schema_property(name: String, prop: YamlProperty, is_standard: bool) 
             // Format as JSON array
             let items: Vec<String> = seq.into_iter().map(|v| format!("{:?}", v)).collect();
             format!("[{}]", items.join(", "))
-        }
+        },
         serde_yaml::Value::Mapping(map) => {
             // Format as JSON object (simplified)
             let items: Vec<String> = map
@@ -263,7 +263,7 @@ fn yaml_to_schema_property(name: String, prop: YamlProperty, is_standard: bool) 
                 .map(|(k, v)| format!("{:?}: {:?}", k, v))
                 .collect();
             format!("{{{}}}", items.join(", "))
-        }
+        },
         serde_yaml::Value::Null => "null".to_string(),
         serde_yaml::Value::Tagged(t) => format!("{:?}", t.value),
     });
@@ -318,11 +318,11 @@ fn json_value_to_string(value: &JsonValue) -> String {
         JsonValue::Array(arr) => {
             // Compact array representation
             serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string())
-        }
+        },
         JsonValue::Object(obj) => {
             // Compact object representation
             serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string())
-        }
+        },
     }
 }
 

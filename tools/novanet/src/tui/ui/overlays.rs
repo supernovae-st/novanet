@@ -566,10 +566,16 @@ pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
         Some(TreeItem::ArcClass(_, ek)) => ("    ", ek.display_name.clone()),
         Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone()),
         Some(TreeItem::EntityCategory(_, _, _, cat)) => ("      ", cat.display_name.clone()),
-        Some(TreeItem::LocaleGroup(_, _, _, group)) => ("      ", format!("{} {}", group.flag, group.locale_name)),
+        Some(TreeItem::LocaleGroup(_, _, _, group)) => {
+            ("      ", format!("{} {}", group.flag, group.locale_name))
+        },
         // v0.17.3: EntityGroup display
-        Some(TreeItem::EntityGroup(_, _, _, group)) => ("      ", group.entity_display_name.clone()),
-        Some(TreeItem::EntityNativeItem(_, _, _, native)) => ("        ", native.display_name.clone()),
+        Some(TreeItem::EntityGroup(_, _, _, group)) => {
+            ("      ", group.entity_display_name.clone())
+        },
+        Some(TreeItem::EntityNativeItem(_, _, _, native)) => {
+            ("        ", native.display_name.clone())
+        },
         None => ("?", "Unknown".to_string()),
     }
 }

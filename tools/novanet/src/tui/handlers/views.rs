@@ -47,11 +47,11 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
             KeyCode::Char('d') => {
                 app.nexus.views.scroll_down(10);
                 return KeyResult::Handled;
-            }
+            },
             KeyCode::Char('u') => {
                 app.nexus.views.scroll_up(10);
                 return KeyResult::Handled;
-            }
+            },
             _ => return KeyResult::FallThrough,
         }
     }
@@ -72,32 +72,32 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
         KeyCode::Tab => {
             app.nexus.views.next_section();
             KeyResult::Handled
-        }
+        },
 
         // Page scroll in Cypher section
         KeyCode::PageDown => {
             app.nexus.views.scroll_down(10);
             KeyResult::Handled
-        }
+        },
         KeyCode::PageUp => {
             app.nexus.views.scroll_up(10);
             KeyResult::Handled
-        }
+        },
         // Navigation: j/k/↑/↓
         KeyCode::Down | KeyCode::Char('j') => {
             app.nexus.views.navigate_down(&app.loaded_views);
             KeyResult::Handled
-        }
+        },
         KeyCode::Up | KeyCode::Char('k') => {
             app.nexus.views.navigate_up(&app.loaded_views);
             KeyResult::Handled
-        }
+        },
 
         // Toggle concept panel
         KeyCode::Char('?') => {
             app.nexus.views.show_concept = !app.nexus.views.show_concept;
             KeyResult::Handled
-        }
+        },
 
         // Escape: exit concept panel if showing, otherwise fall through
         KeyCode::Esc => {
@@ -107,7 +107,7 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
             } else {
                 KeyResult::FallThrough
             }
-        }
+        },
 
         // Copy current view cypher to clipboard (y key)
         KeyCode::Char('y') => {
@@ -122,7 +122,7 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
             }
             app.set_status("No cypher to copy");
             KeyResult::Handled
-        }
+        },
 
         // Enter: copy Cypher and show Studio link
         KeyCode::Enter => {
@@ -140,7 +140,7 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
                             } else {
                                 app.set_status(&format!("Cypher copied! Open Studio: {}", url));
                             }
-                        }
+                        },
                         Err(e) => app.set_status(&format!("Clipboard error: {}", e)),
                     }
                 } else {
@@ -148,7 +148,7 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 }
             }
             KeyResult::Handled
-        }
+        },
 
         // Open view in Studio (browser)
         KeyCode::Char('o') => {
@@ -168,7 +168,7 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 }
             }
             KeyResult::Handled
-        }
+        },
 
         // Everything else falls through to global handlers
         _ => KeyResult::FallThrough,

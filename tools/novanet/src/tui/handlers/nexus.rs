@@ -33,19 +33,19 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
         KeyCode::Char('?') => {
             app.overlays.help_active = true;
             KeyResult::Handled
-        }
+        },
 
         // Search overlay
         KeyCode::Char('/') | KeyCode::Char('f') => {
             app.search.active = true;
             KeyResult::Handled
-        }
+        },
 
         // Legend overlay
         KeyCode::F(1) => {
             app.overlays.legend_active = true;
             KeyResult::Handled
-        }
+        },
 
         // Tree navigation (v0.13.0)
         KeyCode::Char('j') | KeyCode::Down => {
@@ -70,7 +70,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 app.nexus.tree_cursor = 0;
             }
             KeyResult::Handled
-        }
+        },
 
         KeyCode::Char('k') | KeyCode::Up => {
             // Move cursor up in tree
@@ -90,7 +90,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 }
             }
             KeyResult::Handled
-        }
+        },
 
         KeyCode::Char('h') | KeyCode::Left => {
             // Collapse current section
@@ -98,14 +98,14 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
             app.nexus.tree_expanded[sec_idx] = false;
             app.nexus.tree_cursor = 0;
             KeyResult::Handled
-        }
+        },
 
         KeyCode::Char('l') | KeyCode::Right => {
             // Expand current section
             let sec_idx = app.nexus.tree_section as usize;
             app.nexus.tree_expanded[sec_idx] = true;
             KeyResult::Handled
-        }
+        },
 
         KeyCode::Enter => {
             // In Arch tab, Enter jumps to related class in Graph mode
@@ -140,7 +140,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 }
             }
             KeyResult::Handled
-        }
+        },
 
         // Mode switching keys fall through to global handlers
         KeyCode::Char('1')
@@ -156,7 +156,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
             } else {
                 KeyResult::FallThrough
             }
-        }
+        },
     }
 }
 

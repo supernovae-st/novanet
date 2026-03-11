@@ -38,6 +38,11 @@ chrono = "0.4"                # Timestamp for generated file headers
 
 # Output
 tabled = "0.17"
+colored = "2"                 # Terminal colorization for backup CLI
+
+# Compression/Archives
+flate2 = "1"                  # gzip compression for backup archives
+tar = "0.4"                   # tar archive creation
 
 # Search
 nucleo-matcher = "0.3"        # Low-level fuzzy matcher (TUI search overlay)

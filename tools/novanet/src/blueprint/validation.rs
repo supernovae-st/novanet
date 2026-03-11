@@ -409,7 +409,7 @@ impl ValidationResult {
                             arc.arc_type, source_realms, target_realms
                         ));
                     }
-                }
+                },
                 "cross_realm" => {
                     if !is_cross_realm {
                         scope_errors.push(format!(
@@ -417,13 +417,13 @@ impl ValidationResult {
                             arc.arc_type, source_realms, target_realms
                         ));
                     }
-                }
+                },
                 other => {
                     scope_errors.push(format!(
                         "{}: unknown scope value '{}' (expected intra_realm or cross_realm)",
                         arc.arc_type, other
                     ));
-                }
+                },
             }
         }
 

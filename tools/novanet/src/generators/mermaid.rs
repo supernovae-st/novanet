@@ -121,16 +121,16 @@ pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
 /// v0.17.3 (ADR-036): Added to replace trait_emoji for node labels.
 pub fn layer_emoji(key: &str) -> &'static str {
     match key {
-        "config" => "\u{2699}\u{fe0f}", // ⚙️
-        "locale" => "\u{1F310}",        // 🌐
-        "geography" => "\u{1F5FA}\u{fe0f}", // 🗺️
-        "knowledge" => "\u{1F4DA}",     // 📚
+        "config" => "\u{2699}\u{fe0f}",      // ⚙️
+        "locale" => "\u{1F310}",             // 🌐
+        "geography" => "\u{1F5FA}\u{fe0f}",  // 🗺️
+        "knowledge" => "\u{1F4DA}",          // 📚
         "foundation" => "\u{1F3DB}\u{fe0f}", // 🏛️
-        "structure" => "\u{1F4C4}",     // 📄
-        "semantic" => "\u{1F4A1}",      // 💡
-        "instruction" => "\u{1F4DD}",   // 📝
-        "output" => "\u{2728}",         // ✨
-        _ => "\u{1F4E6}",               // 📦 fallback
+        "structure" => "\u{1F4C4}",          // 📄
+        "semantic" => "\u{1F4A1}",           // 💡
+        "instruction" => "\u{1F4DD}",        // 📝
+        "output" => "\u{2728}",              // ✨
+        _ => "\u{1F4E6}",                    // 📦 fallback
     }
 }
 
