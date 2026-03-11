@@ -77,11 +77,6 @@ impl BackupService {
     /// Returns the path to the created backup file.
     #[instrument(skip_all)]
     pub async fn create(&self, description: Option<String>) -> Result<PathBuf> {
-        // Verify brain directory exists
-        if !self.brain_dir.exists() {
-            return Err(BackupError::BrainNotFound(self.brain_dir.clone()));
-        }
-
         // Ensure backup directory exists
         std::fs::create_dir_all(&self.backup_dir)?;
 
@@ -90,8 +85,19 @@ impl BackupService {
         let filename = format!("novanet-backup-{}.tar.gz", timestamp);
         let backup_path = self.backup_dir.join(&filename);
 
-        // Create the archive
-        create_archive(&self.brain_dir, &backup_path, description).await?;
+        // Create the archive - handles brain_dir validation atomically
+        // If brain_dir doesn't exist, create_archive returns an I/O error
+        create_archive(&self.brain_dir, &backup_path, description)
+            .await
+            .map_err(|e| {
+                // Convert NotFound to BrainNotFound for better error context
+                if let BackupError::Io(ref io_err) = e {
+                    if io_err.kind() == std::io::ErrorKind::NotFound {
+                        return BackupError::BrainNotFound(self.brain_dir.clone());
+                    }
+                }
+                e
+            })?;
 
         Ok(backup_path)
     }
@@ -169,15 +175,22 @@ impl BackupService {
     pub async fn restore(&self, filename: &str) -> Result<()> {
         let backup_path = self.backup_dir.join(filename);
 
-        if !backup_path.exists() {
-            return Err(BackupError::BackupNotFound(filename.to_string()));
-        }
-
         // Ensure brain directory exists
         std::fs::create_dir_all(&self.brain_dir)?;
 
-        // Extract the archive
-        extract_archive(&backup_path, &self.brain_dir).await?;
+        // Extract the archive - handles backup existence check atomically
+        // If backup doesn't exist, extract_archive returns an I/O error
+        extract_archive(&backup_path, &self.brain_dir)
+            .await
+            .map_err(|e| {
+                // Convert NotFound to BackupNotFound for better error context
+                if let BackupError::Io(ref io_err) = e {
+                    if io_err.kind() == std::io::ErrorKind::NotFound {
+                        return BackupError::BackupNotFound(filename.to_string());
+                    }
+                }
+                e
+            })?;
 
         Ok(())
     }
@@ -211,11 +224,16 @@ impl BackupService {
     pub fn read_manifest(&self, filename: &str) -> Result<BackupManifest> {
         let backup_path = self.backup_dir.join(filename);
 
-        if !backup_path.exists() {
-            return Err(BackupError::BackupNotFound(filename.to_string()));
-        }
-
-        read_manifest_from_archive(&backup_path)
+        // Read manifest atomically - if file doesn't exist, read returns NotFound
+        read_manifest_from_archive(&backup_path).map_err(|e| {
+            // Convert NotFound to BackupNotFound for better error context
+            if let BackupError::Io(ref io_err) = e {
+                if io_err.kind() == std::io::ErrorKind::NotFound {
+                    return BackupError::BackupNotFound(filename.to_string());
+                }
+            }
+            e
+        })
     }
 
     /// Verify a backup's integrity by checking checksums
