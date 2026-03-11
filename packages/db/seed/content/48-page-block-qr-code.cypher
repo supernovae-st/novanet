@@ -16,7 +16,7 @@
 MERGE (p:Page {key: 'page:qr-code'})
 ON CREATE SET
   p.display_name = 'QR Code Generator',
-  p.description = 'Create custom QR codes for any purpose - free online QR code generator',
+  p.content = 'Create custom QR codes for any purpose - free online QR code generator',
   p.llm_context = 'USE: as the main landing page for QR code creation. TRIGGERS: homepage, main page, generator page, create qr. NOT: for specific QR code types (use subpages). RELATES: Entity:qr-code (represents), Block:head-seo-meta (contains).',
   p.node_class = 'Page',
   p.created_by = 'seed:content',
@@ -37,7 +37,7 @@ MERGE (p)-[:REPRESENTS]->(e);
 MERGE (b:Block {key: 'block:qr-code:head-seo-meta:1'})
 ON CREATE SET
   b.display_name = 'QR Code SEO Meta',
-  b.description = 'SEO metadata block for QR code page - contains meta title, description, and keywords',
+  b.content = 'SEO metadata block for QR code page - contains meta title, description, and keywords',
   b.llm_context = 'USE: for meta title, description, keywords in HTML head. TRIGGERS: seo, meta, head, title tag, meta description. NOT: for visible page content (use content blocks). RELATES: Page:qr-code (belongs to), BlockType:head-seo-meta (type).',
   b.anchor_id = 'head-seo-meta',
   b.node_class = 'Block',

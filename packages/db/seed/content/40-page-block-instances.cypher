@@ -19,7 +19,7 @@ MERGE (p:Page {key: 'page:qr-code-landing'})
 ON CREATE SET
   p.slug = 'qr-code',
   p.display_name = 'QR Code Landing Page',
-  p.description = 'Main landing page for QR Code AI - explains what QR codes are and how to create them.',
+  p.content = 'Main landing page for QR Code AI - explains what QR codes are and how to create them.',
   p.llm_context = 'USE: For generating the main QR Code landing page. TRIGGERS: qr code, landing, home. NOT: specific use cases or advanced features.',
   p.node_class = 'Page',
   p.created_by = 'seed:content',
@@ -44,7 +44,7 @@ MERGE (b1:Block {key: 'block:qr-code-hero'})
 ON CREATE SET
   b1.display_name = 'QR Code Hero',
   b1.anchor_id = 'hero',
-  b1.description = 'Hero section introducing QR codes with a CTA to the generator.',
+  b1.content = 'Hero section introducing QR codes with a CTA to the generator.',
   b1.llm_context = 'USE: For hero section generation. Include: headline, subheadline, CTA button.',
   b1.block_type = 'hero',
   b1.node_class = 'Block',
@@ -60,7 +60,7 @@ MERGE (b2:Block {key: 'block:qr-code-what-is'})
 ON CREATE SET
   b2.display_name = 'What is a QR Code',
   b2.anchor_id = 'what-is-qr-code',
-  b2.description = 'Educational section explaining what QR codes are.',
+  b2.content = 'Educational section explaining what QR codes are.',
   b2.llm_context = 'USE: For educational content. Explain QR code basics, history, how they work.',
   b2.block_type = 'content',
   b2.node_class = 'Block',
@@ -76,7 +76,7 @@ MERGE (b3:Block {key: 'block:qr-code-use-cases'})
 ON CREATE SET
   b3.display_name = 'QR Code Use Cases',
   b3.anchor_id = 'use-cases',
-  b3.description = 'Grid showcasing different QR code use cases.',
+  b3.content = 'Grid showcasing different QR code use cases.',
   b3.llm_context = 'USE: For use case showcase. Include: business, marketing, events, personal.',
   b3.block_type = 'grid',
   b3.node_class = 'Block',
@@ -92,7 +92,7 @@ MERGE (b4:Block {key: 'block:qr-code-cta'})
 ON CREATE SET
   b4.display_name = 'Create QR Code CTA',
   b4.anchor_id = 'create-cta',
-  b4.description = 'Call-to-action to start creating QR codes.',
+  b4.content = 'Call-to-action to start creating QR codes.',
   b4.llm_context = 'USE: For final CTA. Strong conversion-focused copy.',
   b4.block_type = 'cta',
   b4.node_class = 'Block',

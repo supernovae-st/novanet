@@ -12,7 +12,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Maintaining smooth interpersonal relationships and group harmony is paramount',
     cr.marketing_angle = 'Position products as enhancing group belonging and social harmony',
     cr.display_name = 'Pakikisama (Harmony)',
-    cr.description = 'Maintaining smooth interpersonal relationships and group harmony is paramount',
+    cr.content = 'Maintaining smooth interpersonal relationships and group harmony is paramount',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -26,7 +26,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Deep concern for social acceptance and avoiding embarrassment or losing face',
     cr.marketing_angle = 'Avoid direct confrontation; use indirect, respectful messaging',
     cr.display_name = 'Hiya (Sense of Shame)',
-    cr.description = 'Deep concern for social acceptance and avoiding embarrassment or losing face',
+    cr.content = 'Deep concern for social acceptance and avoiding embarrassment or losing face',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -40,7 +40,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Strong sense of reciprocity and obligation to return favors',
     cr.marketing_angle = 'Frame loyalty programs as mutual gratitude; emphasize lasting relationships',
     cr.display_name = 'Utang na Loob (Debt of Gratitude)',
-    cr.description = 'Strong sense of reciprocity and obligation to return favors',
+    cr.content = 'Strong sense of reciprocity and obligation to return favors',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -54,7 +54,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Community helping each other, especially in times of need',
     cr.marketing_angle = 'Highlight community benefits and collective success stories',
     cr.display_name = 'Bayanihan (Community Spirit)',
-    cr.description = 'Community helping each other, especially in times of need',
+    cr.content = 'Community helping each other, especially in times of need',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -68,7 +68,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Family is the center of Filipino life; decisions consider family impact',
     cr.marketing_angle = 'Show multi-generational benefits; family testimonials resonate',
     cr.display_name = 'Family-First Values',
-    cr.description = 'Family is the center of Filipino life; decisions consider family impact',
+    cr.content = 'Family is the center of Filipino life; decisions consider family impact',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -82,7 +82,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Use of honorifics and deference to older or senior individuals',
     cr.marketing_angle = 'Use respectful language; show deference in formal communications',
     cr.display_name = 'Respect for Elders (Po/Opo)',
-    cr.description = 'Use of honorifics and deference to older or senior individuals',
+    cr.content = 'Use of honorifics and deference to older or senior individuals',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -96,7 +96,7 @@ SET cr.locale = 'fil-PH',
     cr.expression = 'Welcoming guests warmly is a core cultural value',
     cr.marketing_angle = 'Position brand as welcoming and inclusive',
     cr.display_name = 'Hospitality (Mabuhay Spirit)',
-    cr.description = 'Welcoming guests warmly is a core cultural value',
+    cr.content = 'Welcoming guests warmly is a core cultural value',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -110,7 +110,7 @@ SET t.locale = 'fil-PH',
     t.reason = 'Causes loss of face (hiya) and damages relationships permanently',
     t.alternative = 'Use indirect communication, private discussions, or intermediaries',
     t.display_name = 'Public confrontation',
-    t.description = 'Causes loss of face (hiya) and damages relationships permanently',
+    t.content = 'Causes loss of face (hiya) and damages relationships permanently',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -124,7 +124,7 @@ SET t.locale = 'fil-PH',
     t.reason = 'Declining food or gifts is seen as rejecting the host\'s generosity',
     t.alternative = 'Accept graciously, even a small portion',
     t.display_name = 'Refusing hospitality',
-    t.description = 'Declining food or gifts is seen as rejecting the host\'s generosity',
+    t.content = 'Declining food or gifts is seen as rejecting the host\'s generosity',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -138,7 +138,7 @@ SET t.locale = 'fil-PH',
     t.reason = 'Filipinos avoid raising voices and showing anger publicly',
     t.alternative = 'Maintain calm, polite demeanor in all interactions',
     t.display_name = 'Loud or aggressive behavior',
-    t.description = 'Filipinos avoid raising voices and showing anger publicly',
+    t.content = 'Filipinos avoid raising voices and showing anger publicly',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -152,7 +152,7 @@ SET t.locale = 'fil-PH',
     t.reason = 'Relationships take time to build; hasty decisions are seen as disrespectful',
     t.alternative = 'Allow time for relationship building and consensus',
     t.display_name = 'Rushing decisions',
-    t.description = 'Relationships take time to build; hasty decisions are seen as disrespectful',
+    t.content = 'Relationships take time to build; hasty decisions are seen as disrespectful',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -166,7 +166,7 @@ SET t.locale = 'fil-PH',
     t.reason = 'Age hierarchy is fundamental; ignoring it is deeply offensive',
     t.alternative = 'Always greet elders first; use honorific titles',
     t.display_name = 'Disrespecting elders',
-    t.description = 'Age hierarchy is fundamental; ignoring it is deeply offensive',
+    t.content = 'Age hierarchy is fundamental; ignoring it is deeply offensive',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -176,7 +176,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (at:AudienceTrait {key: 'mobile-first-consumers@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'Mobile-first consumers',
-    at.description = 'Philippines has one of highest social media usage rates globally',
+    at.content = 'Philippines has one of highest social media usage rates globally',
     at.display_name = 'Mobile-first consumers',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -187,7 +187,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'ofw-influence@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'OFW influence',
-    at.description = 'Overseas Filipino Workers shape consumption patterns and aspirations',
+    at.content = 'Overseas Filipino Workers shape consumption patterns and aspirations',
     at.display_name = 'OFW influence',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -198,7 +198,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'celebrity-endorsements@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'Celebrity endorsements',
-    at.description = 'High trust in celebrity and influencer recommendations',
+    at.content = 'High trust in celebrity and influencer recommendations',
     at.display_name = 'Celebrity endorsements',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -212,7 +212,7 @@ SET e.locale = 'fil-PH',
     e.register = 'formal',
     e.context = 'Traditional welcome greeting',
     e.display_name = 'Mabuhay!',
-    e.description = 'Traditional welcome greeting',
+    e.content = 'Traditional welcome greeting',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -225,7 +225,7 @@ SET e.locale = 'fil-PH',
     e.register = 'polite',
     e.context = 'Thank you (with respect marker)',
     e.display_name = 'Salamat po',
-    e.description = 'Thank you (with respect marker)',
+    e.content = 'Thank you (with respect marker)',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -238,7 +238,7 @@ SET e.locale = 'fil-PH',
     e.register = 'casual',
     e.context = 'Being resourceful and street-smart',
     e.display_name = 'Diskarte lang',
-    e.description = 'Being resourceful and street-smart',
+    e.content = 'Being resourceful and street-smart',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -251,7 +251,7 @@ SET p.locale = 'fil-PH',
     p.type = 'cta',
     p.translation = 'Join {product} and experience the difference!',
     p.display_name = 'cta pattern',
-    p.description = 'Join {product} and experience the difference!',
+    p.content = 'Join {product} and experience the difference!',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p
@@ -264,7 +264,7 @@ SET p.locale = 'fil-PH',
     p.type = 'social_proof',
     p.translation = 'Trusted by millions of Filipino families',
     p.display_name = 'social_proof pattern',
-    p.description = 'Trusted by millions of Filipino families',
+    p.content = 'Trusted by millions of Filipino families',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p
@@ -280,7 +280,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'Buddhism permeates daily life; monks and temples hold central reverence',
     cr.marketing_angle = 'Respect Buddhist values; avoid frivolous or materialistic messaging',
     cr.display_name = 'Theravada Buddhism',
-    cr.description = 'Buddhism permeates daily life; monks and temples hold central reverence',
+    cr.content = 'Buddhism permeates daily life; monks and temples hold central reverence',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -294,7 +294,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'Preserving face and avoiding conflict is paramount in all interactions',
     cr.marketing_angle = 'Use soft, harmonious imagery and indirect communication',
     cr.display_name = 'Harmony and Non-confrontation',
-    cr.description = 'Preserving face and avoiding conflict is paramount in all interactions',
+    cr.content = 'Preserving face and avoiding conflict is paramount in all interactions',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -308,7 +308,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'The universal greeting reflects cultural warmth and well-wishing',
     cr.marketing_angle = 'Incorporate Sabaidee in campaigns for cultural authenticity',
     cr.display_name = 'Sabaidee Spirit',
-    cr.description = 'The universal greeting reflects cultural warmth and well-wishing',
+    cr.content = 'The universal greeting reflects cultural warmth and well-wishing',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -322,7 +322,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'Age and social status determine appropriate behavior and language',
     cr.marketing_angle = 'Use formal titles (Than, Nai, Nang) appropriately',
     cr.display_name = 'Respect for Hierarchy',
-    cr.description = 'Age and social status determine appropriate behavior and language',
+    cr.content = 'Age and social status determine appropriate behavior and language',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -336,7 +336,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'Physical and behavioral modesty is expected in public',
     cr.marketing_angle = 'Avoid flashy or ostentatious imagery; promote simplicity',
     cr.display_name = 'Modesty',
-    cr.description = 'Physical and behavioral modesty is expected in public',
+    cr.content = 'Physical and behavioral modesty is expected in public',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -350,7 +350,7 @@ SET cr.locale = 'lo-LA',
     cr.expression = 'Supporting local businesses and community reflects goodwill',
     cr.marketing_angle = 'Highlight local partnerships and community benefits',
     cr.display_name = 'Community Support',
-    cr.description = 'Supporting local businesses and community reflects goodwill',
+    cr.content = 'Supporting local businesses and community reflects goodwill',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -364,7 +364,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'The head is considered sacred and the highest part of the body',
     t.alternative = 'Never touch anyone\'s head, even children',
     t.display_name = 'Touching heads',
-    t.description = 'The head is considered sacred and the highest part of the body',
+    t.content = 'The head is considered sacred and the highest part of the body',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -378,7 +378,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'Feet are considered the lowest and dirtiest part of the body',
     t.alternative = 'Never point feet at people, Buddha images, or temples',
     t.display_name = 'Pointing with feet',
-    t.description = 'Feet are considered the lowest and dirtiest part of the body',
+    t.content = 'Feet are considered the lowest and dirtiest part of the body',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -392,7 +392,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'Physical intimacy in public is considered inappropriate',
     t.alternative = 'Maintain modest, respectful distance in public',
     t.display_name = 'Public displays of affection',
-    t.description = 'Physical intimacy in public is considered inappropriate',
+    t.content = 'Physical intimacy in public is considered inappropriate',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -406,7 +406,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'Causes loss of face and disrupts harmony',
     t.alternative = 'Speak softly and calmly; resolve issues privately',
     t.display_name = 'Raising voice or arguing',
-    t.description = 'Causes loss of face and disrupts harmony',
+    t.content = 'Causes loss of face and disrupts harmony',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -420,7 +420,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'Monks are highly revered; women must not touch them',
     t.alternative = 'Show utmost respect; women maintain physical distance',
     t.display_name = 'Disrespecting monks',
-    t.description = 'Monks are highly revered; women must not touch them',
+    t.content = 'Monks are highly revered; women must not touch them',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -434,7 +434,7 @@ SET t.locale = 'lo-LA',
     t.reason = 'Patience is valued; haste can seem disrespectful',
     t.alternative = 'Allow time for consensus and relationship building',
     t.display_name = 'Rushing decisions',
-    t.description = 'Patience is valued; haste can seem disrespectful',
+    t.content = 'Patience is valued; haste can seem disrespectful',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -444,7 +444,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (at:AudienceTrait {key: 'mobile-penetration-growing@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Mobile penetration growing',
-    at.description = 'Increasing smartphone adoption, especially among youth',
+    at.content = 'Increasing smartphone adoption, especially among youth',
     at.display_name = 'Mobile penetration growing',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -455,7 +455,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'traditional-values@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Traditional values',
-    at.description = 'Strong adherence to Buddhist and traditional practices',
+    at.content = 'Strong adherence to Buddhist and traditional practices',
     at.display_name = 'Traditional values',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -466,7 +466,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'face-conscious@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Face-conscious',
-    at.description = 'Social standing and reputation highly important',
+    at.content = 'Social standing and reputation highly important',
     at.display_name = 'Face-conscious',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -480,7 +480,7 @@ SET e.locale = 'lo-LA',
     e.register = 'standard',
     e.context = 'Universal greeting meaning well-being',
     e.display_name = 'ສະບາຍດີ (Sabaidee)',
-    e.description = 'Universal greeting meaning well-being',
+    e.content = 'Universal greeting meaning well-being',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -493,7 +493,7 @@ SET e.locale = 'lo-LA',
     e.register = 'casual',
     e.context = 'Thank you',
     e.display_name = 'ຂອບໃຈ (Khop jai)',
-    e.description = 'Thank you',
+    e.content = 'Thank you',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -506,7 +506,7 @@ SET e.locale = 'lo-LA',
     e.register = 'polite',
     e.context = 'Thank you (polite, male speaker)',
     e.display_name = 'ຂອບໃຈຈ້າວ (Khop jai jao)',
-    e.description = 'Thank you (polite, male speaker)',
+    e.content = 'Thank you (polite, male speaker)',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -519,7 +519,7 @@ SET p.locale = 'lo-LA',
     p.type = 'cta',
     p.translation = 'Join {product} today',
     p.display_name = 'cta pattern',
-    p.description = 'Join {product} today',
+    p.content = 'Join {product} today',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p
@@ -532,7 +532,7 @@ SET p.locale = 'lo-LA',
     p.type = 'greeting',
     p.translation = 'Hello! Welcome',
     p.display_name = 'greeting pattern',
-    p.description = 'Hello! Welcome',
+    p.content = 'Hello! Welcome',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p
@@ -548,7 +548,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Lord Jagannath holds central significance in Odia life and culture',
     cr.marketing_angle = 'Respect Jagannath traditions; avoid commercial exploitation of sacred imagery',
     cr.display_name = 'Lord Jagannath Devotion',
-    cr.description = 'Lord Jagannath holds central significance in Odia life and culture',
+    cr.content = 'Lord Jagannath holds central significance in Odia life and culture',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -562,7 +562,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Odisha\'s temples are central to cultural identity and daily practice',
     cr.marketing_angle = 'Reference temple heritage respectfully; emphasize spiritual connections',
     cr.display_name = 'Temple Heritage',
-    cr.description = 'Odisha\'s temples are central to cultural identity and daily practice',
+    cr.content = 'Odisha\'s temples are central to cultural identity and daily practice',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -576,7 +576,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Odissi dance originated in temples; represents regional pride',
     cr.marketing_angle = 'Celebrate classical arts in culturally appropriate ways',
     cr.display_name = 'Odissi Classical Arts',
-    cr.description = 'Odissi dance originated in temples; represents regional pride',
+    cr.content = 'Odissi dance originated in temples; represents regional pride',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -590,7 +590,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Respect and politeness are fundamental to Odia interactions',
     cr.marketing_angle = 'Use respectful, courteous language; show patience',
     cr.display_name = 'ଦୟାକରି (Dayakari - Politeness)',
-    cr.description = 'Respect and politeness are fundamental to Odia interactions',
+    cr.content = 'Respect and politeness are fundamental to Odia interactions',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -604,7 +604,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Active efforts to preserve indigenous heritage against Western influence',
     cr.marketing_angle = 'Celebrate traditional practices; avoid undermining local culture',
     cr.display_name = 'Folk Culture Preservation',
-    cr.description = 'Active efforts to preserve indigenous heritage against Western influence',
+    cr.content = 'Active efforts to preserve indigenous heritage against Western influence',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -618,7 +618,7 @@ SET cr.locale = 'or-IN',
     cr.expression = 'Major festivals like Rath Yatra, Nuakhai, Pousa Purnima are central',
     cr.marketing_angle = 'Align campaigns with festival calendars; respect traditions',
     cr.display_name = 'Festival Traditions',
-    cr.description = 'Major festivals like Rath Yatra, Nuakhai, Pousa Purnima are central',
+    cr.content = 'Major festivals like Rath Yatra, Nuakhai, Pousa Purnima are central',
     cr.created_at = datetime(),
     cr.updated_at = datetime()
 WITH cr
@@ -632,7 +632,7 @@ SET t.locale = 'or-IN',
     t.reason = 'Jagannath is the heart of Odia identity; any disrespect is deeply offensive',
     t.alternative = 'Show utmost reverence; avoid commercial use of sacred imagery',
     t.display_name = 'Disrespecting Lord Jagannath',
-    t.description = 'Jagannath is the heart of Odia identity; any disrespect is deeply offensive',
+    t.content = 'Jagannath is the heart of Odia identity; any disrespect is deeply offensive',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -646,7 +646,7 @@ SET t.locale = 'or-IN',
     t.reason = 'Sacred spaces require permission and respect',
     t.alternative = 'Seek appropriate permissions; be mindful of sacred areas',
     t.display_name = 'Temple photography without permission',
-    t.description = 'Sacred spaces require permission and respect',
+    t.content = 'Sacred spaces require permission and respect',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -660,7 +660,7 @@ SET t.locale = 'or-IN',
     t.reason = 'Sensitivity about preserving indigenous culture from external influences',
     t.alternative = 'Adapt to local culture; don\'t impose foreign values',
     t.display_name = 'Western cultural imposition',
-    t.description = 'Sensitivity about preserving indigenous culture from external influences',
+    t.content = 'Sensitivity about preserving indigenous culture from external influences',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -674,7 +674,7 @@ SET t.locale = 'or-IN',
     t.reason = 'Politeness markers are expected in commercial and social interactions',
     t.alternative = 'Use respectful phrases like dayakari (please)',
     t.display_name = 'Impolite language',
-    t.description = 'Politeness markers are expected in commercial and social interactions',
+    t.content = 'Politeness markers are expected in commercial and social interactions',
     t.created_at = datetime(),
     t.updated_at = datetime()
 WITH t
@@ -684,7 +684,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (at:AudienceTrait {key: 'regional-pride@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Regional pride',
-    at.description = 'Strong identification with Odia heritage and Odisha state',
+    at.content = 'Strong identification with Odia heritage and Odisha state',
     at.display_name = 'Regional pride',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -695,7 +695,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'festival-oriented@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Festival-oriented',
-    at.description = 'Consumer behavior strongly tied to festival calendar',
+    at.content = 'Consumer behavior strongly tied to festival calendar',
     at.display_name = 'Festival-oriented',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -706,7 +706,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 MERGE (at:AudienceTrait {key: 'spiritually-connected@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Spiritually connected',
-    at.description = 'Daily life intertwined with religious practices',
+    at.content = 'Daily life intertwined with religious practices',
     at.display_name = 'Spiritually connected',
     at.created_at = datetime(),
     at.updated_at = datetime()
@@ -720,7 +720,7 @@ SET e.locale = 'or-IN',
     e.register = 'formal',
     e.context = 'Formal greeting with respect',
     e.display_name = 'ନମସ୍କାର (Namaskara)',
-    e.description = 'Formal greeting with respect',
+    e.content = 'Formal greeting with respect',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -733,7 +733,7 @@ SET e.locale = 'or-IN',
     e.register = 'standard',
     e.context = 'Thank you',
     e.display_name = 'ଧନ୍ୟବାଦ (Dhanyabad)',
-    e.description = 'Thank you',
+    e.content = 'Thank you',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -746,7 +746,7 @@ SET e.locale = 'or-IN',
     e.register = 'devotional',
     e.context = 'Victory to Lord Jagannath - common blessing',
     e.display_name = 'ଜୟ ଜଗନ୍ନାଥ (Jai Jagannath)',
-    e.description = 'Victory to Lord Jagannath - common blessing',
+    e.content = 'Victory to Lord Jagannath - common blessing',
     e.created_at = datetime(),
     e.updated_at = datetime()
 WITH e
@@ -759,7 +759,7 @@ SET p.locale = 'or-IN',
     p.type = 'cta',
     p.translation = 'Join {product} today',
     p.display_name = 'cta pattern',
-    p.description = 'Join {product} today',
+    p.content = 'Join {product} today',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p
@@ -772,7 +772,7 @@ SET p.locale = 'or-IN',
     p.type = 'greeting',
     p.translation = 'Greetings! Welcome',
     p.display_name = 'greeting pattern',
-    p.description = 'Greetings! Welcome',
+    p.content = 'Greetings! Welcome',
     p.created_at = datetime(),
     p.updated_at = datetime()
 WITH p

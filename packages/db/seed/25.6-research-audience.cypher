@@ -9,7 +9,7 @@
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-US'})
 SET a.display_name = 'directness',
     a.locale = 'en-US',
-    a.description = 'very_direct',
+    a.content = 'very_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -23,7 +23,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-US'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-US',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -37,7 +37,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-US'})
 SET a.display_name = 'formality',
     a.locale = 'en-US',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -51,7 +51,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-US'})
 SET a.display_name = 'context type',
     a.locale = 'en-US',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -65,7 +65,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-US'})
 SET a.display_name = 'decision style',
     a.locale = 'en-US',
-    a.description = 'fast',
+    a.content = 'fast',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -79,7 +79,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-US'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-US',
-    a.description = 'task_first',
+    a.content = 'task_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -93,7 +93,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-US'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-US',
-    a.description = 'explicit',
+    a.content = 'explicit',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -107,7 +107,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-US'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-US',
-    a.description = '{"tone":"enthusiastic","detail_level":"moderate","proof_types":["testimonials","statistics","money_back_guarantees"]}',
+    a.content = '{"tone":"enthusiastic","detail_level":"moderate","proof_types":["testimonials","statistics","money_back_guarantees"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -122,7 +122,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-GB'})
 SET a.display_name = 'directness',
     a.locale = 'en-GB',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -136,7 +136,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-GB'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-GB',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -150,7 +150,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-GB'})
 SET a.display_name = 'formality',
     a.locale = 'en-GB',
-    a.description = 'formal_casual_mix',
+    a.content = 'formal_casual_mix',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -164,7 +164,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-GB'})
 SET a.display_name = 'context type',
     a.locale = 'en-GB',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -178,7 +178,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-GB'})
 SET a.display_name = 'decision style',
     a.locale = 'en-GB',
-    a.description = 'considered',
+    a.content = 'considered',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -192,7 +192,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-GB'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-GB',
-    a.description = 'rapport_then_task',
+    a.content = 'rapport_then_task',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -206,7 +206,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-GB'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-GB',
-    a.description = 'softened',
+    a.content = 'softened',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -220,7 +220,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-GB'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-GB',
-    a.description = '{"tone":"witty","detail_level":"moderate","proof_types":["third_party_reviews","awards","case_studies"]}',
+    a.content = '{"tone":"witty","detail_level":"moderate","proof_types":["third_party_reviews","awards","case_studies"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -235,7 +235,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-AU'})
 SET a.display_name = 'directness',
     a.locale = 'en-AU',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -249,7 +249,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-AU'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-AU',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -263,7 +263,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-AU'})
 SET a.display_name = 'formality',
     a.locale = 'en-AU',
-    a.description = 'very_informal',
+    a.content = 'very_informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -277,7 +277,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-AU'})
 SET a.display_name = 'context type',
     a.locale = 'en-AU',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -291,7 +291,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-AU'})
 SET a.display_name = 'decision style',
     a.locale = 'en-AU',
-    a.description = 'practical',
+    a.content = 'practical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -305,7 +305,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-AU'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-AU',
-    a.description = 'casual_rapport',
+    a.content = 'casual_rapport',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -319,7 +319,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-AU'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-AU',
-    a.description = 'blunt_friendly',
+    a.content = 'blunt_friendly',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -333,7 +333,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-AU'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-AU',
-    a.description = '{"tone":"casual","detail_level":"concise","proof_types":["peer_reviews","value_for_money","practical_results"]}',
+    a.content = '{"tone":"casual","detail_level":"concise","proof_types":["peer_reviews","value_for_money","practical_results"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -348,7 +348,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-CA'})
 SET a.display_name = 'directness',
     a.locale = 'en-CA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -362,7 +362,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-CA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-CA',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -376,7 +376,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-CA'})
 SET a.display_name = 'formality',
     a.locale = 'en-CA',
-    a.description = 'polite_informal',
+    a.content = 'polite_informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -390,7 +390,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-CA'})
 SET a.display_name = 'context type',
     a.locale = 'en-CA',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -404,7 +404,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-CA'})
 SET a.display_name = 'decision style',
     a.locale = 'en-CA',
-    a.description = 'considered',
+    a.content = 'considered',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -418,7 +418,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-CA'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-CA',
-    a.description = 'friendly_professional',
+    a.content = 'friendly_professional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -432,7 +432,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-CA'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-CA',
-    a.description = 'diplomatic',
+    a.content = 'diplomatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -446,7 +446,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-CA'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-CA',
-    a.description = '{"tone":"warm","detail_level":"moderate","proof_types":["customer_reviews","value_proposition","ethical_practices"]}',
+    a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["customer_reviews","value_proposition","ethical_practices"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -461,7 +461,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-IN'})
 SET a.display_name = 'directness',
     a.locale = 'en-IN',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -475,7 +475,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-IN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -489,7 +489,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-IN'})
 SET a.display_name = 'formality',
     a.locale = 'en-IN',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -503,7 +503,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IN'})
 SET a.display_name = 'context type',
     a.locale = 'en-IN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -517,7 +517,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'en-IN',
-    a.description = 'consensus_family',
+    a.content = 'consensus_family',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -531,7 +531,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IN'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-IN',
-    a.description = 'relationship_first',
+    a.content = 'relationship_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -545,7 +545,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IN'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-IN',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -559,7 +559,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IN'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-IN',
-    a.description = '{"tone":"respectful","detail_level":"detailed","proof_types":["celebrity_endorsements","awards","technical_specs","price_value"]}',
+    a.content = '{"tone":"respectful","detail_level":"detailed","proof_types":["celebrity_endorsements","awards","technical_specs","price_value"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -574,7 +574,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-SG'})
 SET a.display_name = 'directness',
     a.locale = 'en-SG',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -588,7 +588,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-SG'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-SG',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -602,7 +602,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-SG'})
 SET a.display_name = 'formality',
     a.locale = 'en-SG',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -616,7 +616,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-SG'})
 SET a.display_name = 'context type',
     a.locale = 'en-SG',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -630,7 +630,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-SG'})
 SET a.display_name = 'decision style',
     a.locale = 'en-SG',
-    a.description = 'research_heavy',
+    a.content = 'research_heavy',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -644,7 +644,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-SG'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-SG',
-    a.description = 'trust_then_task',
+    a.content = 'trust_then_task',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -658,7 +658,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-SG'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-SG',
-    a.description = 'diplomatic',
+    a.content = 'diplomatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -672,7 +672,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-SG'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-SG',
-    a.description = '{"tone":"professional","detail_level":"detailed","proof_types":["credentials","reviews","awards","price_comparison"]}',
+    a.content = '{"tone":"professional","detail_level":"detailed","proof_types":["credentials","reviews","awards","price_comparison"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -687,7 +687,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-ZA'})
 SET a.display_name = 'directness',
     a.locale = 'en-ZA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -701,7 +701,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-ZA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-ZA',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -715,7 +715,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-ZA'})
 SET a.display_name = 'formality',
     a.locale = 'en-ZA',
-    a.description = 'warm_formal',
+    a.content = 'warm_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -729,7 +729,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-ZA'})
 SET a.display_name = 'context type',
     a.locale = 'en-ZA',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -743,7 +743,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-ZA'})
 SET a.display_name = 'decision style',
     a.locale = 'en-ZA',
-    a.description = 'value_conscious',
+    a.content = 'value_conscious',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -757,7 +757,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-ZA'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-ZA',
-    a.description = 'relationship_first',
+    a.content = 'relationship_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -771,7 +771,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-ZA'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-ZA',
-    a.description = 'diplomatic',
+    a.content = 'diplomatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -785,7 +785,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-ZA'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-ZA',
-    a.description = '{"tone":"warm","detail_level":"moderate","proof_types":["local_testimonials","value_proposition","community_impact"]}',
+    a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["local_testimonials","value_proposition","community_impact"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -800,7 +800,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-NZ'})
 SET a.display_name = 'directness',
     a.locale = 'en-NZ',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -814,7 +814,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-NZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-NZ',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -828,7 +828,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-NZ'})
 SET a.display_name = 'formality',
     a.locale = 'en-NZ',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -842,7 +842,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-NZ'})
 SET a.display_name = 'context type',
     a.locale = 'en-NZ',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -856,7 +856,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-NZ'})
 SET a.display_name = 'decision style',
     a.locale = 'en-NZ',
-    a.description = 'practical',
+    a.content = 'practical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -870,7 +870,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-NZ'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-NZ',
-    a.description = 'casual_friendly',
+    a.content = 'casual_friendly',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -884,7 +884,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-NZ'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-NZ',
-    a.description = 'honest_kind',
+    a.content = 'honest_kind',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -898,7 +898,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-NZ'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-NZ',
-    a.description = '{"tone":"friendly","detail_level":"concise","proof_types":["local_reviews","environmental_credentials","practical_value"]}',
+    a.content = '{"tone":"friendly","detail_level":"concise","proof_types":["local_reviews","environmental_credentials","practical_value"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -913,7 +913,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-IE'})
 SET a.display_name = 'directness',
     a.locale = 'en-IE',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -927,7 +927,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-IE',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -941,7 +941,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-IE'})
 SET a.display_name = 'formality',
     a.locale = 'en-IE',
-    a.description = 'warm_informal',
+    a.content = 'warm_informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -955,7 +955,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IE'})
 SET a.display_name = 'context type',
     a.locale = 'en-IE',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -969,7 +969,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IE'})
 SET a.display_name = 'decision style',
     a.locale = 'en-IE',
-    a.description = 'relationship_based',
+    a.content = 'relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -983,7 +983,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IE'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-IE',
-    a.description = 'rapport_first',
+    a.content = 'rapport_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -997,7 +997,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IE'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-IE',
-    a.description = 'softened_honest',
+    a.content = 'softened_honest',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1011,7 +1011,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-IE',
-    a.description = '{"tone":"warm","detail_level":"narrative","proof_types":["stories","local_testimonials","word_of_mouth"]}',
+    a.content = '{"tone":"warm","detail_level":"narrative","proof_types":["stories","local_testimonials","word_of_mouth"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1026,7 +1026,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-PH'})
 SET a.display_name = 'directness',
     a.locale = 'en-PH',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1040,7 +1040,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-PH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-PH',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1054,7 +1054,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-PH'})
 SET a.display_name = 'formality',
     a.locale = 'en-PH',
-    a.description = 'respectful',
+    a.content = 'respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1068,7 +1068,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-PH'})
 SET a.display_name = 'context type',
     a.locale = 'en-PH',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1082,7 +1082,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-PH'})
 SET a.display_name = 'decision style',
     a.locale = 'en-PH',
-    a.description = 'family_influenced',
+    a.content = 'family_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1096,7 +1096,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-PH'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-PH',
-    a.description = 'relationship_first',
+    a.content = 'relationship_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1110,7 +1110,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-PH'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-PH',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1124,7 +1124,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-PH'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-PH',
-    a.description = '{"tone":"warm","detail_level":"moderate","proof_types":["celebrity_endorsements","social_proof","family_testimonials"]}',
+    a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["celebrity_endorsements","social_proof","family_testimonials"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1139,7 +1139,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-DE'})
 SET a.display_name = 'directness',
     a.locale = 'de-DE',
-    a.description = 'very_direct',
+    a.content = 'very_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1153,7 +1153,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-DE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-DE',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1167,7 +1167,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-DE'})
 SET a.display_name = 'formality',
     a.locale = 'de-DE',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1181,7 +1181,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-DE'})
 SET a.display_name = 'context type',
     a.locale = 'de-DE',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1195,7 +1195,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-DE'})
 SET a.display_name = 'decision style',
     a.locale = 'de-DE',
-    a.description = 'systematic',
+    a.content = 'systematic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1209,7 +1209,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-DE'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-DE',
-    a.description = 'task_first',
+    a.content = 'task_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1223,7 +1223,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-DE'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-DE',
-    a.description = 'explicit',
+    a.content = 'explicit',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1237,7 +1237,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-DE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-DE',
-    a.description = '{"tone":"professional","detail_level":"comprehensive","proof_types":["technical_specs","certifications","test_results","expert_reviews"]}',
+    a.content = '{"tone":"professional","detail_level":"comprehensive","proof_types":["technical_specs","certifications","test_results","expert_reviews"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1252,7 +1252,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-AT'})
 SET a.display_name = 'directness',
     a.locale = 'de-AT',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1266,7 +1266,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-AT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-AT',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1280,7 +1280,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-AT'})
 SET a.display_name = 'formality',
     a.locale = 'de-AT',
-    a.description = 'very_formal',
+    a.content = 'very_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1294,7 +1294,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-AT'})
 SET a.display_name = 'context type',
     a.locale = 'de-AT',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1308,7 +1308,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-AT'})
 SET a.display_name = 'decision style',
     a.locale = 'de-AT',
-    a.description = 'considered',
+    a.content = 'considered',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1322,7 +1322,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-AT'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-AT',
-    a.description = 'rapport_then_task',
+    a.content = 'rapport_then_task',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1336,7 +1336,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-AT'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-AT',
-    a.description = 'diplomatic_direct',
+    a.content = 'diplomatic_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1350,7 +1350,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-AT'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-AT',
-    a.description = '{"tone":"sophisticated","detail_level":"comprehensive","proof_types":["credentials","heritage","quality_certifications","expert_opinions"]}',
+    a.content = '{"tone":"sophisticated","detail_level":"comprehensive","proof_types":["credentials","heritage","quality_certifications","expert_opinions"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1365,7 +1365,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-CH'})
 SET a.display_name = 'directness',
     a.locale = 'de-CH',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1379,7 +1379,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-CH',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1393,7 +1393,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-CH'})
 SET a.display_name = 'formality',
     a.locale = 'de-CH',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1407,7 +1407,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-CH'})
 SET a.display_name = 'context type',
     a.locale = 'de-CH',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1421,7 +1421,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-CH'})
 SET a.display_name = 'decision style',
     a.locale = 'de-CH',
-    a.description = 'consensus_driven',
+    a.content = 'consensus_driven',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1435,7 +1435,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-CH'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-CH',
-    a.description = 'trust_through_reliability',
+    a.content = 'trust_through_reliability',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1449,7 +1449,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-CH'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-CH',
-    a.description = 'factual',
+    a.content = 'factual',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1463,7 +1463,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-CH'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-CH',
-    a.description = '{"tone":"understated","detail_level":"thorough","proof_types":["quality_certifications","Swiss_made","precision_metrics","long_term_reliability"]}',
+    a.content = '{"tone":"understated","detail_level":"thorough","proof_types":["quality_certifications","Swiss_made","precision_metrics","long_term_reliability"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1478,7 +1478,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@nl-NL'})
 SET a.display_name = 'directness',
     a.locale = 'nl-NL',
-    a.description = 'very_direct',
+    a.content = 'very_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1492,7 +1492,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-NL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'nl-NL',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1506,7 +1506,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@nl-NL'})
 SET a.display_name = 'formality',
     a.locale = 'nl-NL',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1520,7 +1520,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-NL'})
 SET a.display_name = 'context type',
     a.locale = 'nl-NL',
-    a.description = 'very_low_context',
+    a.content = 'very_low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1534,7 +1534,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-NL'})
 SET a.display_name = 'decision style',
     a.locale = 'nl-NL',
-    a.description = 'pragmatic',
+    a.content = 'pragmatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1548,7 +1548,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-NL'})
 SET a.display_name = 'relationship building',
     a.locale = 'nl-NL',
-    a.description = 'task_oriented',
+    a.content = 'task_oriented',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1562,7 +1562,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-NL'})
 SET a.display_name = 'feedback style',
     a.locale = 'nl-NL',
-    a.description = 'blunt',
+    a.content = 'blunt',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1576,7 +1576,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-NL'})
 SET a.display_name = 'communication preferences',
     a.locale = 'nl-NL',
-    a.description = '{"tone":"straightforward","detail_level":"concise","proof_types":["value_comparison","practical_benefits","user_reviews"]}',
+    a.content = '{"tone":"straightforward","detail_level":"concise","proof_types":["value_comparison","practical_benefits","user_reviews"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1591,7 +1591,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@nl-BE'})
 SET a.display_name = 'directness',
     a.locale = 'nl-BE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1605,7 +1605,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-BE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'nl-BE',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1619,7 +1619,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@nl-BE'})
 SET a.display_name = 'formality',
     a.locale = 'nl-BE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1633,7 +1633,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-BE'})
 SET a.display_name = 'context type',
     a.locale = 'nl-BE',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1647,7 +1647,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-BE'})
 SET a.display_name = 'decision style',
     a.locale = 'nl-BE',
-    a.description = 'careful',
+    a.content = 'careful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1661,7 +1661,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-BE'})
 SET a.display_name = 'relationship building',
     a.locale = 'nl-BE',
-    a.description = 'gradual_trust',
+    a.content = 'gradual_trust',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1675,7 +1675,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-BE'})
 SET a.display_name = 'feedback style',
     a.locale = 'nl-BE',
-    a.description = 'softened',
+    a.content = 'softened',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1689,7 +1689,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-BE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'nl-BE',
-    a.description = '{"tone":"warm_professional","detail_level":"moderate","proof_types":["local_testimonials","quality_focus","practical_value"]}',
+    a.content = '{"tone":"warm_professional","detail_level":"moderate","proof_types":["local_testimonials","quality_focus","practical_value"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1704,7 +1704,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sv-SE'})
 SET a.display_name = 'directness',
     a.locale = 'sv-SE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1718,7 +1718,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sv-SE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sv-SE',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1732,7 +1732,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sv-SE'})
 SET a.display_name = 'formality',
     a.locale = 'sv-SE',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1746,7 +1746,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sv-SE'})
 SET a.display_name = 'context type',
     a.locale = 'sv-SE',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1760,7 +1760,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sv-SE'})
 SET a.display_name = 'decision style',
     a.locale = 'sv-SE',
-    a.description = 'consensus_research',
+    a.content = 'consensus_research',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1774,7 +1774,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@sv-SE'})
 SET a.display_name = 'relationship building',
     a.locale = 'sv-SE',
-    a.description = 'task_then_social',
+    a.content = 'task_then_social',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1788,7 +1788,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@sv-SE'})
 SET a.display_name = 'feedback style',
     a.locale = 'sv-SE',
-    a.description = 'diplomatic_honest',
+    a.content = 'diplomatic_honest',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1802,7 +1802,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@sv-SE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'sv-SE',
-    a.description = '{"tone":"understated","detail_level":"balanced","proof_types":["environmental_certs","user_reviews","functional_benefits"]}',
+    a.content = '{"tone":"understated","detail_level":"balanced","proof_types":["environmental_certs","user_reviews","functional_benefits"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1817,7 +1817,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@da-DK'})
 SET a.display_name = 'directness',
     a.locale = 'da-DK',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1831,7 +1831,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@da-DK'})
 SET a.display_name = 'hierarchy',
     a.locale = 'da-DK',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1845,7 +1845,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@da-DK'})
 SET a.display_name = 'formality',
     a.locale = 'da-DK',
-    a.description = 'very_informal',
+    a.content = 'very_informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1859,7 +1859,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@da-DK'})
 SET a.display_name = 'context type',
     a.locale = 'da-DK',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1873,7 +1873,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@da-DK'})
 SET a.display_name = 'decision style',
     a.locale = 'da-DK',
-    a.description = 'practical',
+    a.content = 'practical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1887,7 +1887,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@da-DK'})
 SET a.display_name = 'relationship building',
     a.locale = 'da-DK',
-    a.description = 'informal_professional',
+    a.content = 'informal_professional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1901,7 +1901,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@da-DK'})
 SET a.display_name = 'feedback style',
     a.locale = 'da-DK',
-    a.description = 'honest_kind',
+    a.content = 'honest_kind',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1915,7 +1915,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@da-DK'})
 SET a.display_name = 'communication preferences',
     a.locale = 'da-DK',
-    a.description = '{"tone":"casual","detail_level":"concise","proof_types":["design_quality","user_reviews","practical_value"]}',
+    a.content = '{"tone":"casual","detail_level":"concise","proof_types":["design_quality","user_reviews","practical_value"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1930,7 +1930,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@no-NO'})
 SET a.display_name = 'directness',
     a.locale = 'no-NO',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1944,7 +1944,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@no-NO'})
 SET a.display_name = 'hierarchy',
     a.locale = 'no-NO',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1958,7 +1958,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@no-NO'})
 SET a.display_name = 'formality',
     a.locale = 'no-NO',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1972,7 +1972,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@no-NO'})
 SET a.display_name = 'context type',
     a.locale = 'no-NO',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -1986,7 +1986,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@no-NO'})
 SET a.display_name = 'decision style',
     a.locale = 'no-NO',
-    a.description = 'independent',
+    a.content = 'independent',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2000,7 +2000,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@no-NO'})
 SET a.display_name = 'relationship building',
     a.locale = 'no-NO',
-    a.description = 'trust_through_honesty',
+    a.content = 'trust_through_honesty',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2014,7 +2014,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@no-NO'})
 SET a.display_name = 'feedback style',
     a.locale = 'no-NO',
-    a.description = 'honest',
+    a.content = 'honest',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2028,7 +2028,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@no-NO'})
 SET a.display_name = 'communication preferences',
     a.locale = 'no-NO',
-    a.description = '{"tone":"natural","detail_level":"balanced","proof_types":["environmental_impact","quality_evidence","practical_results"]}',
+    a.content = '{"tone":"natural","detail_level":"balanced","proof_types":["environmental_impact","quality_evidence","practical_results"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2043,7 +2043,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fi-FI'})
 SET a.display_name = 'directness',
     a.locale = 'fi-FI',
-    a.description = 'very_direct',
+    a.content = 'very_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2057,7 +2057,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fi-FI'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fi-FI',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2071,7 +2071,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fi-FI'})
 SET a.display_name = 'formality',
     a.locale = 'fi-FI',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2085,7 +2085,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fi-FI'})
 SET a.display_name = 'context type',
     a.locale = 'fi-FI',
-    a.description = 'very_low_context',
+    a.content = 'very_low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2099,7 +2099,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@fi-FI'})
 SET a.display_name = 'decision style',
     a.locale = 'fi-FI',
-    a.description = 'thorough',
+    a.content = 'thorough',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2113,7 +2113,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@fi-FI'})
 SET a.display_name = 'relationship building',
     a.locale = 'fi-FI',
-    a.description = 'trust_through_reliability',
+    a.content = 'trust_through_reliability',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2127,7 +2127,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@fi-FI'})
 SET a.display_name = 'feedback style',
     a.locale = 'fi-FI',
-    a.description = 'blunt_honest',
+    a.content = 'blunt_honest',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2141,7 +2141,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@fi-FI'})
 SET a.display_name = 'communication preferences',
     a.locale = 'fi-FI',
-    a.description = '{"tone":"understated","detail_level":"essential_only","proof_types":["technical_evidence","independent_tests","factual_data"]}',
+    a.content = '{"tone":"understated","detail_level":"essential_only","proof_types":["technical_evidence","independent_tests","factual_data"]}',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2156,7 +2156,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-CN'})
 SET a.display_name = 'directness',
     a.locale = 'zh-CN',
-    a.description = 'indirect_moderate',
+    a.content = 'indirect_moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2170,7 +2170,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-CN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-CN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2184,7 +2184,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-CN'})
 SET a.display_name = 'formality',
     a.locale = 'zh-CN',
-    a.description = 'formal_business',
+    a.content = 'formal_business',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2198,7 +2198,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-CN'})
 SET a.display_name = 'context type',
     a.locale = 'zh-CN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2212,7 +2212,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-CN'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-CN',
-    a.description = 'critical',
+    a.content = 'critical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2226,7 +2226,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-CN'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-CN',
-    a.description = 'consensus_with_authority',
+    a.content = 'consensus_with_authority',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2240,7 +2240,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-CN'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-CN',
-    a.description = 'relationship_first',
+    a.content = 'relationship_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2255,7 +2255,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-TW'})
 SET a.display_name = 'directness',
     a.locale = 'zh-TW',
-    a.description = 'indirect_but_clearer',
+    a.content = 'indirect_but_clearer',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2269,7 +2269,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-TW'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-TW',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2283,7 +2283,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-TW'})
 SET a.display_name = 'formality',
     a.locale = 'zh-TW',
-    a.description = 'polite_professional',
+    a.content = 'polite_professional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2297,7 +2297,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-TW'})
 SET a.display_name = 'context type',
     a.locale = 'zh-TW',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2311,7 +2311,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-TW'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-TW',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2325,7 +2325,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-TW'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-TW',
-    a.description = 'individual_with_consensus',
+    a.content = 'individual_with_consensus',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2339,7 +2339,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-TW'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-TW',
-    a.description = 'quality_and_reputation',
+    a.content = 'quality_and_reputation',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2354,7 +2354,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-HK'})
 SET a.display_name = 'directness',
     a.locale = 'zh-HK',
-    a.description = 'direct_professional',
+    a.content = 'direct_professional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2368,7 +2368,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-HK'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-HK',
-    a.description = 'moderate_high',
+    a.content = 'moderate_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2382,7 +2382,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-HK'})
 SET a.display_name = 'formality',
     a.locale = 'zh-HK',
-    a.description = 'business_formal',
+    a.content = 'business_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2396,7 +2396,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-HK'})
 SET a.display_name = 'context type',
     a.locale = 'zh-HK',
-    a.description = 'moderate_high_context',
+    a.content = 'moderate_high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2410,7 +2410,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-HK'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-HK',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2424,7 +2424,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-HK'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-HK',
-    a.description = 'fast_pragmatic',
+    a.content = 'fast_pragmatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2438,7 +2438,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-HK'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-HK',
-    a.description = 'track_record_and_efficiency',
+    a.content = 'track_record_and_efficiency',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2453,7 +2453,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ja-JP'})
 SET a.display_name = 'directness',
     a.locale = 'ja-JP',
-    a.description = 'very_indirect',
+    a.content = 'very_indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2467,7 +2467,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ja-JP'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ja-JP',
-    a.description = 'very_high',
+    a.content = 'very_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2481,7 +2481,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ja-JP'})
 SET a.display_name = 'formality',
     a.locale = 'ja-JP',
-    a.description = 'very_formal',
+    a.content = 'very_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2495,7 +2495,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ja-JP'})
 SET a.display_name = 'context type',
     a.locale = 'ja-JP',
-    a.description = 'very_high_context',
+    a.content = 'very_high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2509,7 +2509,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ja-JP'})
 SET a.display_name = 'face saving',
     a.locale = 'ja-JP',
-    a.description = 'critical',
+    a.content = 'critical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2523,7 +2523,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ja-JP'})
 SET a.display_name = 'decision style',
     a.locale = 'ja-JP',
-    a.description = 'slow_consensus_nemawashi',
+    a.content = 'slow_consensus_nemawashi',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2537,7 +2537,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ja-JP'})
 SET a.display_name = 'trust building',
     a.locale = 'ja-JP',
-    a.description = 'long_term_relationship',
+    a.content = 'long_term_relationship',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2552,7 +2552,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ko-KR'})
 SET a.display_name = 'directness',
     a.locale = 'ko-KR',
-    a.description = 'moderate_direct',
+    a.content = 'moderate_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2566,7 +2566,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ko-KR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ko-KR',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2580,7 +2580,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ko-KR'})
 SET a.display_name = 'formality',
     a.locale = 'ko-KR',
-    a.description = 'formal_with_warmth',
+    a.content = 'formal_with_warmth',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2594,7 +2594,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ko-KR'})
 SET a.display_name = 'context type',
     a.locale = 'ko-KR',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2608,7 +2608,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ko-KR'})
 SET a.display_name = 'face saving',
     a.locale = 'ko-KR',
-    a.description = 'very_important',
+    a.content = 'very_important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2622,7 +2622,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ko-KR'})
 SET a.display_name = 'decision style',
     a.locale = 'ko-KR',
-    a.description = 'fast_but_thorough',
+    a.content = 'fast_but_thorough',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2636,7 +2636,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ko-KR'})
 SET a.display_name = 'trust building',
     a.locale = 'ko-KR',
-    a.description = 'brand_reputation_and_reviews',
+    a.content = 'brand_reputation_and_reviews',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2651,7 +2651,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@hi-IN'})
 SET a.display_name = 'directness',
     a.locale = 'hi-IN',
-    a.description = 'indirect_warm',
+    a.content = 'indirect_warm',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2665,7 +2665,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@hi-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'hi-IN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2679,7 +2679,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@hi-IN'})
 SET a.display_name = 'formality',
     a.locale = 'hi-IN',
-    a.description = 'respectful_informal',
+    a.content = 'respectful_informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2693,7 +2693,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@hi-IN'})
 SET a.display_name = 'context type',
     a.locale = 'hi-IN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2707,7 +2707,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@hi-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'hi-IN',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2721,7 +2721,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@hi-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'hi-IN',
-    a.description = 'family_consensus',
+    a.content = 'family_consensus',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2735,7 +2735,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@hi-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'hi-IN',
-    a.description = 'word_of_mouth_and_celebrities',
+    a.content = 'word_of_mouth_and_celebrities',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2750,7 +2750,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@bn-BD'})
 SET a.display_name = 'directness',
     a.locale = 'bn-BD',
-    a.description = 'indirect_polite',
+    a.content = 'indirect_polite',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2764,7 +2764,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@bn-BD'})
 SET a.display_name = 'hierarchy',
     a.locale = 'bn-BD',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2778,7 +2778,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@bn-BD'})
 SET a.display_name = 'formality',
     a.locale = 'bn-BD',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2792,7 +2792,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@bn-BD'})
 SET a.display_name = 'context type',
     a.locale = 'bn-BD',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2806,7 +2806,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@bn-BD'})
 SET a.display_name = 'face saving',
     a.locale = 'bn-BD',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2820,7 +2820,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@bn-BD'})
 SET a.display_name = 'decision style',
     a.locale = 'bn-BD',
-    a.description = 'elder_influenced',
+    a.content = 'elder_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2834,7 +2834,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@bn-BD'})
 SET a.display_name = 'trust building',
     a.locale = 'bn-BD',
-    a.description = 'community_recommendations',
+    a.content = 'community_recommendations',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2849,7 +2849,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ta-IN'})
 SET a.display_name = 'directness',
     a.locale = 'ta-IN',
-    a.description = 'moderate_direct',
+    a.content = 'moderate_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2863,7 +2863,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ta-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ta-IN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2877,7 +2877,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ta-IN'})
 SET a.display_name = 'formality',
     a.locale = 'ta-IN',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2891,7 +2891,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ta-IN'})
 SET a.display_name = 'context type',
     a.locale = 'ta-IN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2905,7 +2905,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ta-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'ta-IN',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2919,7 +2919,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ta-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'ta-IN',
-    a.description = 'deliberate_value_focused',
+    a.content = 'deliberate_value_focused',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2933,7 +2933,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ta-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'ta-IN',
-    a.description = 'local_endorsements',
+    a.content = 'local_endorsements',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2948,7 +2948,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@te-IN'})
 SET a.display_name = 'directness',
     a.locale = 'te-IN',
-    a.description = 'moderate_indirect',
+    a.content = 'moderate_indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2962,7 +2962,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@te-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'te-IN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2976,7 +2976,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@te-IN'})
 SET a.display_name = 'formality',
     a.locale = 'te-IN',
-    a.description = 'respectful_formal',
+    a.content = 'respectful_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -2990,7 +2990,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@te-IN'})
 SET a.display_name = 'context type',
     a.locale = 'te-IN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3004,7 +3004,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@te-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'te-IN',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3018,7 +3018,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@te-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'te-IN',
-    a.description = 'family_and_value_driven',
+    a.content = 'family_and_value_driven',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3032,7 +3032,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@te-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'te-IN',
-    a.description = 'celebrity_and_local_endorsements',
+    a.content = 'celebrity_and_local_endorsements',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3047,7 +3047,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@vi-VN'})
 SET a.display_name = 'directness',
     a.locale = 'vi-VN',
-    a.description = 'indirect_polite',
+    a.content = 'indirect_polite',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3061,7 +3061,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@vi-VN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'vi-VN',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3075,7 +3075,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@vi-VN'})
 SET a.display_name = 'formality',
     a.locale = 'vi-VN',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3089,7 +3089,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@vi-VN'})
 SET a.display_name = 'context type',
     a.locale = 'vi-VN',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3103,7 +3103,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@vi-VN'})
 SET a.display_name = 'face saving',
     a.locale = 'vi-VN',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3117,7 +3117,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@vi-VN'})
 SET a.display_name = 'decision style',
     a.locale = 'vi-VN',
-    a.description = 'value_conscious_family',
+    a.content = 'value_conscious_family',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3131,7 +3131,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@vi-VN'})
 SET a.display_name = 'trust building',
     a.locale = 'vi-VN',
-    a.description = 'social_proof_and_reviews',
+    a.content = 'social_proof_and_reviews',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3146,7 +3146,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@th-TH'})
 SET a.display_name = 'directness',
     a.locale = 'th-TH',
-    a.description = 'very_indirect',
+    a.content = 'very_indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3160,7 +3160,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@th-TH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'th-TH',
-    a.description = 'very_high',
+    a.content = 'very_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3174,7 +3174,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@th-TH'})
 SET a.display_name = 'formality',
     a.locale = 'th-TH',
-    a.description = 'formal_with_warmth',
+    a.content = 'formal_with_warmth',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3188,7 +3188,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@th-TH'})
 SET a.display_name = 'context type',
     a.locale = 'th-TH',
-    a.description = 'very_high_context',
+    a.content = 'very_high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3202,7 +3202,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@th-TH'})
 SET a.display_name = 'face saving',
     a.locale = 'th-TH',
-    a.description = 'critical',
+    a.content = 'critical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3216,7 +3216,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@th-TH'})
 SET a.display_name = 'decision style',
     a.locale = 'th-TH',
-    a.description = 'relationship_based',
+    a.content = 'relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3230,7 +3230,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@th-TH'})
 SET a.display_name = 'trust building',
     a.locale = 'th-TH',
-    a.description = 'likability_and_referrals',
+    a.content = 'likability_and_referrals',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3245,7 +3245,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@id-ID'})
 SET a.display_name = 'directness',
     a.locale = 'id-ID',
-    a.description = 'indirect_harmonious',
+    a.content = 'indirect_harmonious',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3259,7 +3259,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@id-ID'})
 SET a.display_name = 'hierarchy',
     a.locale = 'id-ID',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3273,7 +3273,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@id-ID'})
 SET a.display_name = 'formality',
     a.locale = 'id-ID',
-    a.description = 'respectful_friendly',
+    a.content = 'respectful_friendly',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3287,7 +3287,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@id-ID'})
 SET a.display_name = 'context type',
     a.locale = 'id-ID',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3301,7 +3301,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@id-ID'})
 SET a.display_name = 'face saving',
     a.locale = 'id-ID',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3315,7 +3315,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@id-ID'})
 SET a.display_name = 'decision style',
     a.locale = 'id-ID',
-    a.description = 'consensus_oriented',
+    a.content = 'consensus_oriented',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3329,7 +3329,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@id-ID'})
 SET a.display_name = 'trust building',
     a.locale = 'id-ID',
-    a.description = 'community_and_influencers',
+    a.content = 'community_and_influencers',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3344,7 +3344,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ms-MY'})
 SET a.display_name = 'directness',
     a.locale = 'ms-MY',
-    a.description = 'indirect_polite',
+    a.content = 'indirect_polite',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3358,7 +3358,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ms-MY'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ms-MY',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3372,7 +3372,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ms-MY'})
 SET a.display_name = 'formality',
     a.locale = 'ms-MY',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3386,7 +3386,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ms-MY'})
 SET a.display_name = 'context type',
     a.locale = 'ms-MY',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3400,7 +3400,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ms-MY'})
 SET a.display_name = 'face saving',
     a.locale = 'ms-MY',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3414,7 +3414,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ms-MY'})
 SET a.display_name = 'decision style',
     a.locale = 'ms-MY',
-    a.description = 'relationship_and_value',
+    a.content = 'relationship_and_value',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3428,7 +3428,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ms-MY'})
 SET a.display_name = 'trust building',
     a.locale = 'ms-MY',
-    a.description = 'brand_reputation',
+    a.content = 'brand_reputation',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3443,7 +3443,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fil-PH'})
 SET a.display_name = 'directness',
     a.locale = 'fil-PH',
-    a.description = 'indirect_warm',
+    a.content = 'indirect_warm',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3457,7 +3457,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fil-PH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fil-PH',
-    a.description = 'moderate_high',
+    a.content = 'moderate_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3471,7 +3471,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fil-PH'})
 SET a.display_name = 'formality',
     a.locale = 'fil-PH',
-    a.description = 'respectful_casual',
+    a.content = 'respectful_casual',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3485,7 +3485,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fil-PH'})
 SET a.display_name = 'context type',
     a.locale = 'fil-PH',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3499,7 +3499,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@fil-PH'})
 SET a.display_name = 'face saving',
     a.locale = 'fil-PH',
-    a.description = 'important',
+    a.content = 'important',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3513,7 +3513,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@fil-PH'})
 SET a.display_name = 'decision style',
     a.locale = 'fil-PH',
-    a.description = 'social_influenced',
+    a.content = 'social_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3527,7 +3527,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@fil-PH'})
 SET a.display_name = 'trust building',
     a.locale = 'fil-PH',
-    a.description = 'personal_recommendations',
+    a.content = 'personal_recommendations',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3542,7 +3542,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-SA'})
 SET a.display_name = 'directness',
     a.locale = 'ar-SA',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3556,7 +3556,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-SA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-SA',
-    a.description = 'very_high',
+    a.content = 'very_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3570,7 +3570,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-SA'})
 SET a.display_name = 'formality',
     a.locale = 'ar-SA',
-    a.description = 'very_formal',
+    a.content = 'very_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3584,7 +3584,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-SA'})
 SET a.display_name = 'context type',
     a.locale = 'ar-SA',
-    a.description = 'very_high_context',
+    a.content = 'very_high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3598,7 +3598,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-SA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-SA',
-    a.description = 'critical',
+    a.content = 'critical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3612,7 +3612,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-SA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-SA',
-    a.description = 'strict_separation',
+    a.content = 'strict_separation',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3626,7 +3626,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-SA'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-SA',
-    a.description = 'polychronic',
+    a.content = 'polychronic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3640,7 +3640,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-SA'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-SA',
-    a.description = 'consensus_elder_led',
+    a.content = 'consensus_elder_led',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3654,7 +3654,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@ar-SA'})
 SET a.display_name = 'relationship building',
     a.locale = 'ar-SA',
-    a.description = 'essential_before_business',
+    a.content = 'essential_before_business',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3669,7 +3669,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-EG'})
 SET a.display_name = 'directness',
     a.locale = 'ar-EG',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3683,7 +3683,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-EG'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-EG',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3697,7 +3697,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-EG'})
 SET a.display_name = 'formality',
     a.locale = 'ar-EG',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3711,7 +3711,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-EG'})
 SET a.display_name = 'context type',
     a.locale = 'ar-EG',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3725,7 +3725,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-EG'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-EG',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3739,7 +3739,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-EG'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-EG',
-    a.description = 'moderate_flexibility',
+    a.content = 'moderate_flexibility',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3753,7 +3753,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-EG'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-EG',
-    a.description = 'polychronic',
+    a.content = 'polychronic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3767,7 +3767,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-EG'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-EG',
-    a.description = 'emotional_relationship_based',
+    a.content = 'emotional_relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3781,7 +3781,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:humor-receptivity@ar-EG'})
 SET a.display_name = 'humor receptivity',
     a.locale = 'ar-EG',
-    a.description = 'very_high',
+    a.content = 'very_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3796,7 +3796,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-AE'})
 SET a.display_name = 'directness',
     a.locale = 'ar-AE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3810,7 +3810,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-AE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-AE',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3824,7 +3824,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-AE'})
 SET a.display_name = 'formality',
     a.locale = 'ar-AE',
-    a.description = 'formal_but_modern',
+    a.content = 'formal_but_modern',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3838,7 +3838,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-AE'})
 SET a.display_name = 'context type',
     a.locale = 'ar-AE',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3852,7 +3852,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-AE'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-AE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3866,7 +3866,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-AE'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-AE',
-    a.description = 'progressive_for_region',
+    a.content = 'progressive_for_region',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3880,7 +3880,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-AE'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-AE',
-    a.description = 'mixed',
+    a.content = 'mixed',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3894,7 +3894,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-AE'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-AE',
-    a.description = 'efficiency_focused',
+    a.content = 'efficiency_focused',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3908,7 +3908,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:bilingual-preference@ar-AE'})
 SET a.display_name = 'bilingual preference',
     a.locale = 'ar-AE',
-    a.description = 'arabic_english_mixed',
+    a.content = 'arabic_english_mixed',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3923,7 +3923,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-MA'})
 SET a.display_name = 'directness',
     a.locale = 'ar-MA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3937,7 +3937,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-MA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-MA',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3951,7 +3951,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-MA'})
 SET a.display_name = 'formality',
     a.locale = 'ar-MA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3965,7 +3965,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-MA'})
 SET a.display_name = 'context type',
     a.locale = 'ar-MA',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3979,7 +3979,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-MA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-MA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -3993,7 +3993,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-MA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-MA',
-    a.description = 'moderate_progressive',
+    a.content = 'moderate_progressive',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4007,7 +4007,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-MA'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-MA',
-    a.description = 'polychronic',
+    a.content = 'polychronic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4021,7 +4021,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-MA'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-MA',
-    a.description = 'relationship_based',
+    a.content = 'relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4035,7 +4035,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:language-preference@ar-MA'})
 SET a.display_name = 'language preference',
     a.locale = 'ar-MA',
-    a.description = 'darija_french_mix',
+    a.content = 'darija_french_mix',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4050,7 +4050,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ru-RU'})
 SET a.display_name = 'directness',
     a.locale = 'ru-RU',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4064,7 +4064,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ru-RU'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ru-RU',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4078,7 +4078,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ru-RU'})
 SET a.display_name = 'formality',
     a.locale = 'ru-RU',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4092,7 +4092,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ru-RU'})
 SET a.display_name = 'context type',
     a.locale = 'ru-RU',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4106,7 +4106,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ru-RU'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ru-RU',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4120,7 +4120,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ru-RU'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ru-RU',
-    a.description = 'traditional_but_evolving',
+    a.content = 'traditional_but_evolving',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4134,7 +4134,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ru-RU'})
 SET a.display_name = 'time orientation',
     a.locale = 'ru-RU',
-    a.description = 'long_term',
+    a.content = 'long_term',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4148,7 +4148,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ru-RU'})
 SET a.display_name = 'decision style',
     a.locale = 'ru-RU',
-    a.description = 'analytical_skeptical',
+    a.content = 'analytical_skeptical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4162,7 +4162,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ru-RU'})
 SET a.display_name = 'trust building',
     a.locale = 'ru-RU',
-    a.description = 'slow_but_loyal',
+    a.content = 'slow_but_loyal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4177,7 +4177,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@uk-UA'})
 SET a.display_name = 'directness',
     a.locale = 'uk-UA',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4191,7 +4191,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@uk-UA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'uk-UA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4205,7 +4205,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@uk-UA'})
 SET a.display_name = 'formality',
     a.locale = 'uk-UA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4219,7 +4219,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@uk-UA'})
 SET a.display_name = 'context type',
     a.locale = 'uk-UA',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4233,7 +4233,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@uk-UA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'uk-UA',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4247,7 +4247,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@uk-UA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'uk-UA',
-    a.description = 'egalitarian',
+    a.content = 'egalitarian',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4261,7 +4261,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@uk-UA'})
 SET a.display_name = 'time orientation',
     a.locale = 'uk-UA',
-    a.description = 'present_focused',
+    a.content = 'present_focused',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4275,7 +4275,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@uk-UA'})
 SET a.display_name = 'decision style',
     a.locale = 'uk-UA',
-    a.description = 'pragmatic',
+    a.content = 'pragmatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4289,7 +4289,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:national-solidarity@uk-UA'})
 SET a.display_name = 'national solidarity',
     a.locale = 'uk-UA',
-    a.description = 'extremely_high',
+    a.content = 'extremely_high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4304,7 +4304,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pl-PL'})
 SET a.display_name = 'directness',
     a.locale = 'pl-PL',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4318,7 +4318,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pl-PL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pl-PL',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4332,7 +4332,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pl-PL'})
 SET a.display_name = 'formality',
     a.locale = 'pl-PL',
-    a.description = 'formal_in_business',
+    a.content = 'formal_in_business',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4346,7 +4346,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pl-PL'})
 SET a.display_name = 'context type',
     a.locale = 'pl-PL',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4360,7 +4360,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@pl-PL'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'pl-PL',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4374,7 +4374,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@pl-PL'})
 SET a.display_name = 'gender considerations',
     a.locale = 'pl-PL',
-    a.description = 'traditional_evolving',
+    a.content = 'traditional_evolving',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4388,7 +4388,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@pl-PL'})
 SET a.display_name = 'time orientation',
     a.locale = 'pl-PL',
-    a.description = 'future_focused',
+    a.content = 'future_focused',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4402,7 +4402,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@pl-PL'})
 SET a.display_name = 'decision style',
     a.locale = 'pl-PL',
-    a.description = 'quality_conscious',
+    a.content = 'quality_conscious',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4416,7 +4416,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:price-sensitivity@pl-PL'})
 SET a.display_name = 'price sensitivity',
     a.locale = 'pl-PL',
-    a.description = 'value_oriented',
+    a.content = 'value_oriented',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4431,7 +4431,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@cs-CZ'})
 SET a.display_name = 'directness',
     a.locale = 'cs-CZ',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4445,7 +4445,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@cs-CZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'cs-CZ',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4459,7 +4459,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@cs-CZ'})
 SET a.display_name = 'formality',
     a.locale = 'cs-CZ',
-    a.description = 'informal_preferred',
+    a.content = 'informal_preferred',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4473,7 +4473,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@cs-CZ'})
 SET a.display_name = 'context type',
     a.locale = 'cs-CZ',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4487,7 +4487,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@cs-CZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'cs-CZ',
-    a.description = 'very_low',
+    a.content = 'very_low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4501,7 +4501,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@cs-CZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'cs-CZ',
-    a.description = 'egalitarian',
+    a.content = 'egalitarian',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4515,7 +4515,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@cs-CZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'cs-CZ',
-    a.description = 'pragmatic',
+    a.content = 'pragmatic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4529,7 +4529,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@cs-CZ'})
 SET a.display_name = 'decision style',
     a.locale = 'cs-CZ',
-    a.description = 'rational_skeptical',
+    a.content = 'rational_skeptical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4543,7 +4543,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:marketing-receptivity@cs-CZ'})
 SET a.display_name = 'marketing receptivity',
     a.locale = 'cs-CZ',
-    a.description = 'skeptical',
+    a.content = 'skeptical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4558,7 +4558,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@tr-TR'})
 SET a.display_name = 'directness',
     a.locale = 'tr-TR',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4572,7 +4572,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@tr-TR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'tr-TR',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4586,7 +4586,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@tr-TR'})
 SET a.display_name = 'formality',
     a.locale = 'tr-TR',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4600,7 +4600,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@tr-TR'})
 SET a.display_name = 'context type',
     a.locale = 'tr-TR',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4614,7 +4614,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@tr-TR'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'tr-TR',
-    a.description = 'moderate_varied',
+    a.content = 'moderate_varied',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4628,7 +4628,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@tr-TR'})
 SET a.display_name = 'gender considerations',
     a.locale = 'tr-TR',
-    a.description = 'varies_by_region',
+    a.content = 'varies_by_region',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4642,7 +4642,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@tr-TR'})
 SET a.display_name = 'time orientation',
     a.locale = 'tr-TR',
-    a.description = 'relationship_first',
+    a.content = 'relationship_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4656,7 +4656,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@tr-TR'})
 SET a.display_name = 'decision style',
     a.locale = 'tr-TR',
-    a.description = 'emotional_relational',
+    a.content = 'emotional_relational',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4670,7 +4670,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:brand-loyalty@tr-TR'})
 SET a.display_name = 'brand loyalty',
     a.locale = 'tr-TR',
-    a.description = 'high_once_established',
+    a.content = 'high_once_established',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4685,7 +4685,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@az-AZ'})
 SET a.display_name = 'directness',
     a.locale = 'az-AZ',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4699,7 +4699,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@az-AZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'az-AZ',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4713,7 +4713,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@az-AZ'})
 SET a.display_name = 'formality',
     a.locale = 'az-AZ',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4727,7 +4727,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@az-AZ'})
 SET a.display_name = 'context type',
     a.locale = 'az-AZ',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4741,7 +4741,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@az-AZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'az-AZ',
-    a.description = 'moderate_secular',
+    a.content = 'moderate_secular',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4755,7 +4755,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@az-AZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'az-AZ',
-    a.description = 'traditional_modernizing',
+    a.content = 'traditional_modernizing',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4769,7 +4769,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@az-AZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'az-AZ',
-    a.description = 'relationship_based',
+    a.content = 'relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4783,7 +4783,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@az-AZ'})
 SET a.display_name = 'decision style',
     a.locale = 'az-AZ',
-    a.description = 'consensus_seeking',
+    a.content = 'consensus_seeking',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4797,7 +4797,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:language-identity@az-AZ'})
 SET a.display_name = 'language identity',
     a.locale = 'az-AZ',
-    a.description = 'strong_turkic',
+    a.content = 'strong_turkic',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4812,7 +4812,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@he-IL'})
 SET a.display_name = 'directness',
     a.locale = 'he-IL',
-    a.description = 'very_direct',
+    a.content = 'very_direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4826,7 +4826,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@he-IL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'he-IL',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4840,7 +4840,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@he-IL'})
 SET a.display_name = 'formality',
     a.locale = 'he-IL',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4854,7 +4854,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@he-IL'})
 SET a.display_name = 'context type',
     a.locale = 'he-IL',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4868,7 +4868,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@he-IL'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'he-IL',
-    a.description = 'varied_secular_to_orthodox',
+    a.content = 'varied_secular_to_orthodox',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4882,7 +4882,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@he-IL'})
 SET a.display_name = 'gender considerations',
     a.locale = 'he-IL',
-    a.description = 'egalitarian_secular',
+    a.content = 'egalitarian_secular',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4896,7 +4896,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@he-IL'})
 SET a.display_name = 'time orientation',
     a.locale = 'he-IL',
-    a.description = 'present_urgent',
+    a.content = 'present_urgent',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4910,7 +4910,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@he-IL'})
 SET a.display_name = 'decision style',
     a.locale = 'he-IL',
-    a.description = 'fast_decisive',
+    a.content = 'fast_decisive',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4924,7 +4924,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:negotiation-style@he-IL'})
 SET a.display_name = 'negotiation style',
     a.locale = 'he-IL',
-    a.description = 'assertive',
+    a.content = 'assertive',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4939,7 +4939,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sw-KE'})
 SET a.display_name = 'directness',
     a.locale = 'sw-KE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4953,7 +4953,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-KE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sw-KE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4967,7 +4967,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sw-KE'})
 SET a.display_name = 'formality',
     a.locale = 'sw-KE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4981,7 +4981,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-KE'})
 SET a.display_name = 'context type',
     a.locale = 'sw-KE',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -4995,7 +4995,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-KE'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'sw-KE',
-    a.description = 'moderate_diverse',
+    a.content = 'moderate_diverse',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5009,7 +5009,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-KE'})
 SET a.display_name = 'gender considerations',
     a.locale = 'sw-KE',
-    a.description = 'evolving_urban_different',
+    a.content = 'evolving_urban_different',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5023,7 +5023,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-KE'})
 SET a.display_name = 'time orientation',
     a.locale = 'sw-KE',
-    a.description = 'flexible',
+    a.content = 'flexible',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5037,7 +5037,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-KE'})
 SET a.display_name = 'decision style',
     a.locale = 'sw-KE',
-    a.description = 'relationship_influenced',
+    a.content = 'relationship_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5051,7 +5051,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:digital-adoption@sw-KE'})
 SET a.display_name = 'digital adoption',
     a.locale = 'sw-KE',
-    a.description = 'high_mobile_first',
+    a.content = 'high_mobile_first',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5066,7 +5066,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sw-TZ'})
 SET a.display_name = 'directness',
     a.locale = 'sw-TZ',
-    a.description = 'indirect_polite',
+    a.content = 'indirect_polite',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5080,7 +5080,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-TZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sw-TZ',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5094,7 +5094,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sw-TZ'})
 SET a.display_name = 'formality',
     a.locale = 'sw-TZ',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5108,7 +5108,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-TZ'})
 SET a.display_name = 'context type',
     a.locale = 'sw-TZ',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5122,7 +5122,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-TZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'sw-TZ',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5136,7 +5136,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-TZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'sw-TZ',
-    a.description = 'traditional',
+    a.content = 'traditional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5150,7 +5150,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-TZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'sw-TZ',
-    a.description = 'relaxed_pole_pole',
+    a.content = 'relaxed_pole_pole',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5164,7 +5164,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-TZ'})
 SET a.display_name = 'decision style',
     a.locale = 'sw-TZ',
-    a.description = 'consensus',
+    a.content = 'consensus',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5178,7 +5178,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:language-purity@sw-TZ'})
 SET a.display_name = 'language purity',
     a.locale = 'sw-TZ',
-    a.description = 'pure_swahili_preferred',
+    a.content = 'pure_swahili_preferred',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5193,7 +5193,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@am-ET'})
 SET a.display_name = 'directness',
     a.locale = 'am-ET',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5207,7 +5207,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@am-ET'})
 SET a.display_name = 'hierarchy',
     a.locale = 'am-ET',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5221,7 +5221,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@am-ET'})
 SET a.display_name = 'formality',
     a.locale = 'am-ET',
-    a.description = 'very_formal',
+    a.content = 'very_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5235,7 +5235,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@am-ET'})
 SET a.display_name = 'context type',
     a.locale = 'am-ET',
-    a.description = 'very_high_context',
+    a.content = 'very_high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5249,7 +5249,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@am-ET'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'am-ET',
-    a.description = 'critical',
+    a.content = 'critical',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5263,7 +5263,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@am-ET'})
 SET a.display_name = 'gender considerations',
     a.locale = 'am-ET',
-    a.description = 'traditional',
+    a.content = 'traditional',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5277,7 +5277,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@am-ET'})
 SET a.display_name = 'time orientation',
     a.locale = 'am-ET',
-    a.description = 'ethiopian_calendar',
+    a.content = 'ethiopian_calendar',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5291,7 +5291,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@am-ET'})
 SET a.display_name = 'decision style',
     a.locale = 'am-ET',
-    a.description = 'elder_influenced',
+    a.content = 'elder_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5305,7 +5305,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:unique-calendar@am-ET'})
 SET a.display_name = 'unique calendar',
     a.locale = 'am-ET',
-    a.description = '13_months_different_year',
+    a.content = '13_months_different_year',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5320,7 +5320,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@el-GR'})
 SET a.display_name = 'directness',
     a.locale = 'el-GR',
-    a.description = 'direct_expressive',
+    a.content = 'direct_expressive',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5334,7 +5334,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-GR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'el-GR',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5348,7 +5348,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@el-GR'})
 SET a.display_name = 'formality',
     a.locale = 'el-GR',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5362,7 +5362,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@el-GR'})
 SET a.display_name = 'context type',
     a.locale = 'el-GR',
-    a.description = 'moderate_context',
+    a.content = 'moderate_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5376,7 +5376,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-GR'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'el-GR',
-    a.description = 'moderate_orthodox',
+    a.content = 'moderate_orthodox',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5390,7 +5390,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-GR'})
 SET a.display_name = 'gender considerations',
     a.locale = 'el-GR',
-    a.description = 'egalitarian_modern',
+    a.content = 'egalitarian_modern',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5404,7 +5404,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-GR'})
 SET a.display_name = 'time orientation',
     a.locale = 'el-GR',
-    a.description = 'relaxed_mediterranean',
+    a.content = 'relaxed_mediterranean',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5418,7 +5418,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-GR'})
 SET a.display_name = 'decision style',
     a.locale = 'el-GR',
-    a.description = 'emotional_relational',
+    a.content = 'emotional_relational',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5432,7 +5432,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:skepticism@el-GR'})
 SET a.display_name = 'skepticism',
     a.locale = 'el-GR',
-    a.description = 'high_toward_institutions',
+    a.content = 'high_toward_institutions',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5447,7 +5447,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@el-CY'})
 SET a.display_name = 'directness',
     a.locale = 'el-CY',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5461,7 +5461,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-CY'})
 SET a.display_name = 'hierarchy',
     a.locale = 'el-CY',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5475,7 +5475,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@el-CY'})
 SET a.display_name = 'formality',
     a.locale = 'el-CY',
-    a.description = 'moderate_casual',
+    a.content = 'moderate_casual',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5489,7 +5489,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@el-CY'})
 SET a.display_name = 'context type',
     a.locale = 'el-CY',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5503,7 +5503,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-CY'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'el-CY',
-    a.description = 'moderate_orthodox',
+    a.content = 'moderate_orthodox',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5517,7 +5517,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-CY'})
 SET a.display_name = 'gender considerations',
     a.locale = 'el-CY',
-    a.description = 'traditional_modernizing',
+    a.content = 'traditional_modernizing',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5531,7 +5531,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-CY'})
 SET a.display_name = 'time orientation',
     a.locale = 'el-CY',
-    a.description = 'relaxed',
+    a.content = 'relaxed',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5545,7 +5545,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-CY'})
 SET a.display_name = 'decision style',
     a.locale = 'el-CY',
-    a.description = 'relationship_based',
+    a.content = 'relationship_based',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5559,7 +5559,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:market-size@el-CY'})
 SET a.display_name = 'market size',
     a.locale = 'el-CY',
-    a.description = 'small_tight_knit',
+    a.content = 'small_tight_knit',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5574,7 +5574,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-FR'})
 SET a.display_name = 'directness',
     a.locale = 'fr-FR',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5588,7 +5588,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-FR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-FR',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5602,7 +5602,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-FR'})
 SET a.display_name = 'formality',
     a.locale = 'fr-FR',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5616,7 +5616,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-FR'})
 SET a.display_name = 'context type',
     a.locale = 'fr-FR',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5630,7 +5630,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-FR'})
 SET a.display_name = 'notes',
     a.locale = 'fr-FR',
-    a.description = 'Titles matter (Monsieur/Madame), vous by default, build relationship before transaction',
+    a.content = 'Titles matter (Monsieur/Madame), vous by default, build relationship before transaction',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5645,7 +5645,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CA'})
 SET a.display_name = 'directness',
     a.locale = 'fr-CA',
-    a.description = 'balanced',
+    a.content = 'balanced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5659,7 +5659,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-CA',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5673,7 +5673,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CA'})
 SET a.display_name = 'formality',
     a.locale = 'fr-CA',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5687,7 +5687,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CA'})
 SET a.display_name = 'context type',
     a.locale = 'fr-CA',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5701,7 +5701,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CA'})
 SET a.display_name = 'notes',
     a.locale = 'fr-CA',
-    a.description = 'More direct than France, tu acceptable earlier, North American efficiency valued',
+    a.content = 'More direct than France, tu acceptable earlier, North American efficiency valued',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5716,7 +5716,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-BE'})
 SET a.display_name = 'directness',
     a.locale = 'fr-BE',
-    a.description = 'balanced',
+    a.content = 'balanced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5730,7 +5730,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-BE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-BE',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5744,7 +5744,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-BE'})
 SET a.display_name = 'formality',
     a.locale = 'fr-BE',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5758,7 +5758,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-BE'})
 SET a.display_name = 'context type',
     a.locale = 'fr-BE',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5772,7 +5772,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-BE'})
 SET a.display_name = 'notes',
     a.locale = 'fr-BE',
-    a.description = 'Less formal than France, more practical, appreciate efficiency with politeness',
+    a.content = 'Less formal than France, more practical, appreciate efficiency with politeness',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5787,7 +5787,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CH'})
 SET a.display_name = 'directness',
     a.locale = 'fr-CH',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5801,7 +5801,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-CH',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5815,7 +5815,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CH'})
 SET a.display_name = 'formality',
     a.locale = 'fr-CH',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5829,7 +5829,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CH'})
 SET a.display_name = 'context type',
     a.locale = 'fr-CH',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5843,7 +5843,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CH'})
 SET a.display_name = 'notes',
     a.locale = 'fr-CH',
-    a.description = 'German-influenced directness, precision in communication, punctuality sacred',
+    a.content = 'German-influenced directness, precision in communication, punctuality sacred',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5858,7 +5858,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-ES'})
 SET a.display_name = 'directness',
     a.locale = 'es-ES',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5872,7 +5872,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-ES'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-ES',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5886,7 +5886,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-ES'})
 SET a.display_name = 'formality',
     a.locale = 'es-ES',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5900,7 +5900,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-ES'})
 SET a.display_name = 'context type',
     a.locale = 'es-ES',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5914,7 +5914,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-ES'})
 SET a.display_name = 'notes',
     a.locale = 'es-ES',
-    a.description = 'Relationship-first, vosotros for plural, flexible timing expectations',
+    a.content = 'Relationship-first, vosotros for plural, flexible timing expectations',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5929,7 +5929,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-MX'})
 SET a.display_name = 'directness',
     a.locale = 'es-MX',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5943,7 +5943,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-MX'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-MX',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5957,7 +5957,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-MX'})
 SET a.display_name = 'formality',
     a.locale = 'es-MX',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5971,7 +5971,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-MX'})
 SET a.display_name = 'context type',
     a.locale = 'es-MX',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -5985,7 +5985,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-MX'})
 SET a.display_name = 'notes',
     a.locale = 'es-MX',
-    a.description = 'Usted default with strangers, diminutives show warmth (ahorita, tantito)',
+    a.content = 'Usted default with strangers, diminutives show warmth (ahorita, tantito)',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6000,7 +6000,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-AR'})
 SET a.display_name = 'directness',
     a.locale = 'es-AR',
-    a.description = 'direct',
+    a.content = 'direct',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6014,7 +6014,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-AR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-AR',
-    a.description = 'low',
+    a.content = 'low',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6028,7 +6028,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-AR'})
 SET a.display_name = 'formality',
     a.locale = 'es-AR',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6042,7 +6042,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-AR'})
 SET a.display_name = 'context type',
     a.locale = 'es-AR',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6056,7 +6056,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-AR'})
 SET a.display_name = 'notes',
     a.locale = 'es-AR',
-    a.description = 'Voseo (vos instead of tú), highly expressive, debate culture',
+    a.content = 'Voseo (vos instead of tú), highly expressive, debate culture',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6071,7 +6071,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-CO'})
 SET a.display_name = 'directness',
     a.locale = 'es-CO',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6085,7 +6085,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CO'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-CO',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6099,7 +6099,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-CO'})
 SET a.display_name = 'formality',
     a.locale = 'es-CO',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6113,7 +6113,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CO'})
 SET a.display_name = 'context type',
     a.locale = 'es-CO',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6127,7 +6127,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-CO'})
 SET a.display_name = 'notes',
     a.locale = 'es-CO',
-    a.description = 'Usted common even among friends, exceptional politeness norms',
+    a.content = 'Usted common even among friends, exceptional politeness norms',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6142,7 +6142,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-CL'})
 SET a.display_name = 'directness',
     a.locale = 'es-CL',
-    a.description = 'balanced',
+    a.content = 'balanced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6156,7 +6156,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-CL',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6170,7 +6170,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-CL'})
 SET a.display_name = 'formality',
     a.locale = 'es-CL',
-    a.description = 'moderate',
+    a.content = 'moderate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6184,7 +6184,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CL'})
 SET a.display_name = 'context type',
     a.locale = 'es-CL',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6198,7 +6198,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-CL'})
 SET a.display_name = 'notes',
     a.locale = 'es-CL',
-    a.description = 'Mix of tú/usted, aspirational middle class, tech-savvy',
+    a.content = 'Mix of tú/usted, aspirational middle class, tech-savvy',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6213,7 +6213,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pt-BR'})
 SET a.display_name = 'directness',
     a.locale = 'pt-BR',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6227,7 +6227,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-BR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pt-BR',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6241,7 +6241,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pt-BR'})
 SET a.display_name = 'formality',
     a.locale = 'pt-BR',
-    a.description = 'informal',
+    a.content = 'informal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6255,7 +6255,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-BR'})
 SET a.display_name = 'context type',
     a.locale = 'pt-BR',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6269,7 +6269,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@pt-BR'})
 SET a.display_name = 'notes',
     a.locale = 'pt-BR',
-    a.description = 'Você (not tu) in most regions, warmth over efficiency, personal relationship before business',
+    a.content = 'Você (not tu) in most regions, warmth over efficiency, personal relationship before business',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6284,7 +6284,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pt-PT'})
 SET a.display_name = 'directness',
     a.locale = 'pt-PT',
-    a.description = 'balanced',
+    a.content = 'balanced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6298,7 +6298,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-PT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pt-PT',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6312,7 +6312,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pt-PT'})
 SET a.display_name = 'formality',
     a.locale = 'pt-PT',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6326,7 +6326,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-PT'})
 SET a.display_name = 'context type',
     a.locale = 'pt-PT',
-    a.description = 'medium_context',
+    a.content = 'medium_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6340,7 +6340,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@pt-PT'})
 SET a.display_name = 'notes',
     a.locale = 'pt-PT',
-    a.description = 'Tu conjugation, more formal than Brazil, European business norms',
+    a.content = 'Tu conjugation, more formal than Brazil, European business norms',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6355,7 +6355,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@it-IT'})
 SET a.display_name = 'directness',
     a.locale = 'it-IT',
-    a.description = 'indirect',
+    a.content = 'indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6369,7 +6369,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-IT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'it-IT',
-    a.description = 'high',
+    a.content = 'high',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6383,7 +6383,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@it-IT'})
 SET a.display_name = 'formality',
     a.locale = 'it-IT',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6397,7 +6397,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@it-IT'})
 SET a.display_name = 'context type',
     a.locale = 'it-IT',
-    a.description = 'high_context',
+    a.content = 'high_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6411,7 +6411,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@it-IT'})
 SET a.display_name = 'notes',
     a.locale = 'it-IT',
-    a.description = 'Lei form default, relationships before transactions, flexible timing',
+    a.content = 'Lei form default, relationships before transactions, flexible timing',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6426,7 +6426,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@it-CH'})
 SET a.display_name = 'directness',
     a.locale = 'it-CH',
-    a.description = 'balanced',
+    a.content = 'balanced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6440,7 +6440,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'it-CH',
-    a.description = 'medium',
+    a.content = 'medium',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6454,7 +6454,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@it-CH'})
 SET a.display_name = 'formality',
     a.locale = 'it-CH',
-    a.description = 'formal',
+    a.content = 'formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6468,7 +6468,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@it-CH'})
 SET a.display_name = 'context type',
     a.locale = 'it-CH',
-    a.description = 'low_context',
+    a.content = 'low_context',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,
@@ -6482,7 +6482,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@it-CH'})
 SET a.display_name = 'notes',
     a.locale = 'it-CH',
-    a.description = 'Swiss Italian formal, Lei default, punctuality expected unlike Italy',
+    a.content = 'Swiss Italian formal, Lei default, punctuality expected unlike Italy',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.85,

@@ -255,7 +255,7 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 MERGE (c:CultureRef {key: 'culture-ref:pasko@fil-PH'})
 SET c.display_name = 'Pasko',
     c.locale = 'fil-PH',
-    c.description = 'World\'s longest Christmas season (September-January). Major shopping and family gifting focus.',
+    c.content = 'World\'s longest Christmas season (September-January). Major shopping and family gifting focus.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -269,7 +269,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:bayanihan@fil-PH'})
 SET c.display_name = 'Bayanihan',
     c.locale = 'fil-PH',
-    c.description = 'Community helping spirit. Traditional practice of community members helping each other.',
+    c.content = 'Community helping spirit. Traditional practice of community members helping each other.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -283,7 +283,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:utang-na-loob@fil-PH'})
 SET c.display_name = 'Utang na loob',
     c.locale = 'fil-PH',
-    c.description = 'Debt of gratitude. Deep sense of reciprocal obligation.',
+    c.content = 'Debt of gratitude. Deep sense of reciprocal obligation.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -297,7 +297,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:undas@fil-PH'})
 SET c.display_name = 'Undas',
     c.locale = 'fil-PH',
-    c.description = 'All Saints Day/All Souls Day (November 1-2). Family gathering time to honor deceased relatives.',
+    c.content = 'All Saints Day/All Souls Day (November 1-2). Family gathering time to honor deceased relatives.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -311,7 +311,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:fiesta-culture@fil-PH'})
 SET c.display_name = 'Fiesta culture',
     c.locale = 'fil-PH',
-    c.description = 'Town festivals with parades, food, and gatherings. Hospitality is paramount.',
+    c.content = 'Town festivals with parades, food, and gatherings. Hospitality is paramount.',
     c.category = 'tradition',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -325,7 +325,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:pakikisama@fil-PH'})
 SET c.display_name = 'Pakikisama',
     c.locale = 'fil-PH',
-    c.description = 'Getting along and social harmony. Value of maintaining smooth interpersonal relationships.',
+    c.content = 'Getting along and social harmony. Value of maintaining smooth interpersonal relationships.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -339,7 +339,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:ofw-culture@fil-PH'})
 SET c.display_name = 'OFW culture',
     c.locale = 'fil-PH',
-    c.description = 'Over 10 million Overseas Filipino Workers. Family separation and remittances are common reality.',
+    c.content = 'Over 10 million Overseas Filipino Workers. Family separation and remittances are common reality.',
     c.category = 'social',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -353,7 +353,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:pista-ng-mga-puso@fil-PH'})
 SET c.display_name = 'Pista ng mga Puso',
     c.locale = 'fil-PH',
-    c.description = 'Valentine\'s Day. Extremely popular with mass weddings and elaborate proposals.',
+    c.content = 'Valentine\'s Day. Extremely popular with mass weddings and elaborate proposals.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -368,7 +368,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (t:Taboo {key: 'taboo:disrespectful-religious-imagery@fil-PH'})
 SET t.display_name = 'Disrespectful religious imagery',
     t.locale = 'fil-PH',
-    t.description = 'Philippines is 80%+ Catholic. Avoid using religious symbols in casual or commercial contexts.',
+    t.content = 'Philippines is 80%+ Catholic. Avoid using religious symbols in casual or commercial contexts.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -382,7 +382,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:pointing-with-index-finger@fil-PH'})
 SET t.display_name = 'Pointing with index finger',
     t.locale = 'fil-PH',
-    t.description = 'Pointing at people is rude. Filipinos use lips or chin to point direction.',
+    t.content = 'Pointing at people is rude. Filipinos use lips or chin to point direction.',
     t.severity = 'medium',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -396,7 +396,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:direct-criticism@fil-PH'})
 SET t.display_name = 'Direct criticism',
     t.locale = 'fil-PH',
-    t.description = 'Due to hiya (shame) culture, direct criticism is uncomfortable. Public shaming is devastating.',
+    t.content = 'Due to hiya (shame) culture, direct criticism is uncomfortable. Public shaming is devastating.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -410,7 +410,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:political-references@fil-PH'})
 SET t.display_name = 'Political references',
     t.locale = 'fil-PH',
-    t.description = 'Philippine politics is highly polarized. Avoid any political figures or controversial topics.',
+    t.content = 'Philippine politics is highly polarized. Avoid any political figures or controversial topics.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -424,7 +424,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:number-13-and-black@fil-PH'})
 SET t.display_name = 'Number 13 and black',
     t.locale = 'fil-PH',
-    t.description = 'Western superstitions adopted. Black is associated with mourning.',
+    t.content = 'Western superstitions adopted. Black is associated with mourning.',
     t.severity = 'low',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -568,7 +568,7 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 MERGE (a:AudienceTrait {key: 'audience-trait:formality@fil-PH'})
 SET a.display_name = 'formality',
     a.locale = 'fil-PH',
-    a.description = 'casual_respectful',
+    a.content = 'casual_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -582,7 +582,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:directness@fil-PH'})
 SET a.display_name = 'directness',
     a.locale = 'fil-PH',
-    a.description = 'indirect_positive',
+    a.content = 'indirect_positive',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -596,7 +596,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@fil-PH'})
 SET a.display_name = 'decision_making',
     a.locale = 'fil-PH',
-    a.description = 'social_influenced',
+    a.content = 'social_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -610,7 +610,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-social-proof@fil-PH'})
 SET a.display_name = 'social_proof',
     a.locale = 'fil-PH',
-    a.description = 'Trust factor: social_proof',
+    a.content = 'Trust factor: social_proof',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -624,7 +624,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-payment@fil-PH'})
 SET a.display_name = 'local_payment',
     a.locale = 'fil-PH',
-    a.description = 'Trust factor: local_payment',
+    a.content = 'Trust factor: local_payment',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -638,7 +638,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-support@fil-PH'})
 SET a.display_name = 'local_support',
     a.locale = 'fil-PH',
-    a.description = 'Trust factor: local_support',
+    a.content = 'Trust factor: local_support',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -652,7 +652,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@fil-PH'})
 SET a.display_name = 'Facebook',
     a.locale = 'fil-PH',
-    a.description = 'Preferred communication channel: Facebook',
+    a.content = 'Preferred communication channel: Facebook',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -666,7 +666,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-messenger@fil-PH'})
 SET a.display_name = 'Messenger',
     a.locale = 'fil-PH',
-    a.description = 'Preferred communication channel: Messenger',
+    a.content = 'Preferred communication channel: Messenger',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -680,7 +680,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-viber@fil-PH'})
 SET a.display_name = 'Viber',
     a.locale = 'fil-PH',
-    a.description = 'Preferred communication channel: Viber',
+    a.content = 'Preferred communication channel: Viber',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -694,7 +694,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-tiktok@fil-PH'})
 SET a.display_name = 'TikTok',
     a.locale = 'fil-PH',
-    a.description = 'Preferred communication channel: TikTok',
+    a.content = 'Preferred communication channel: TikTok',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -954,7 +954,7 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 MERGE (c:CultureRef {key: 'culture-ref:boun-pi-mai-lao@lo-LA'})
 SET c.display_name = 'Boun Pi Mai Lao',
     c.locale = 'lo-LA',
-    c.description = 'Lao New Year (April 14-16). Most important holiday with water festivals, temple visits, and family reunions.',
+    c.content = 'Lao New Year (April 14-16). Most important holiday with water festivals, temple visits, and family reunions.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -968,7 +968,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:boun-that-luang@lo-LA'})
 SET c.display_name = 'Boun That Luang',
     c.locale = 'lo-LA',
-    c.description = 'National religious festival at That Luang stupa in Vientiane (November full moon).',
+    c.content = 'National religious festival at That Luang stupa in Vientiane (November full moon).',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -982,7 +982,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:boun-suang-heua@lo-LA'})
 SET c.display_name = 'Boun Suang Heua',
     c.locale = 'lo-LA',
-    c.description = 'Boat Racing Festival celebrating end of Buddhist Lent (October).',
+    c.content = 'Boat Racing Festival celebrating end of Buddhist Lent (October).',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -996,7 +996,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:theravada-buddhism@lo-LA'})
 SET c.display_name = 'Theravada Buddhism',
     c.locale = 'lo-LA',
-    c.description = '95%+ Buddhist population. Buddhism permeates daily life through temple visits and merit-making.',
+    c.content = '95%+ Buddhist population. Buddhism permeates daily life through temple visits and merit-making.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1010,7 +1010,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:family-and-hierarchy@lo-LA'})
 SET c.display_name = 'Family and Hierarchy',
     c.locale = 'lo-LA',
-    c.description = 'Extended family structures with strong respect for elders (phii-nong system).',
+    c.content = 'Extended family structures with strong respect for elders (phii-nong system).',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1024,7 +1024,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:boun-ok-phansa@lo-LA'})
 SET c.display_name = 'Boun Ok Phansa',
     c.locale = 'lo-LA',
-    c.description = 'End of Buddhist Lent with illuminated boat floats (Lai Heua Fai).',
+    c.content = 'End of Buddhist Lent with illuminated boat floats (Lai Heua Fai).',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1038,7 +1038,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:bo-pen-nyang@lo-LA'})
 SET c.display_name = 'Bo pen nyang',
     c.locale = 'lo-LA',
-    c.description = 'Core Lao philosophy emphasizing relaxed attitude and non-confrontation.',
+    c.content = 'Core Lao philosophy emphasizing relaxed attitude and non-confrontation.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1052,7 +1052,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:naga@lo-LA'})
 SET c.display_name = 'Naga',
     c.locale = 'lo-LA',
-    c.description = 'Mythical serpent central to Lao/Mekong mythology. Protector of Buddhism.',
+    c.content = 'Mythical serpent central to Lao/Mekong mythology. Protector of Buddhism.',
     c.category = 'symbol',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1067,7 +1067,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (t:Taboo {key: 'taboo:buddha-image-disrespect@lo-LA'})
 SET t.display_name = 'Buddha Image Disrespect',
     t.locale = 'lo-LA',
-    t.description = 'Never use Buddha images for commercial purposes. Feet pointed at Buddha images is highly offensive.',
+    t.content = 'Never use Buddha images for commercial purposes. Feet pointed at Buddha images is highly offensive.',
     t.severity = 'critical',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1081,7 +1081,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:head-is-sacred@lo-LA'})
 SET t.display_name = 'Head is Sacred',
     t.locale = 'lo-LA',
-    t.description = 'The head is the highest and most sacred part of the body. Never touch or point at it.',
+    t.content = 'The head is the highest and most sacred part of the body. Never touch or point at it.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1095,7 +1095,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:feet-are-impure@lo-LA'})
 SET t.display_name = 'Feet are Impure',
     t.locale = 'lo-LA',
-    t.description = 'Feet are the lowest and most impure body part. Never point feet at people or sacred objects.',
+    t.content = 'Feet are the lowest and most impure body part. Never point feet at people or sacred objects.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1109,7 +1109,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:women-and-monks@lo-LA'})
 SET t.display_name = 'Women and Monks',
     t.locale = 'lo-LA',
-    t.description = 'Women must not touch monks or hand items directly to them.',
+    t.content = 'Women must not touch monks or hand items directly to them.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1123,7 +1123,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:aggressive-marketing@lo-LA'})
 SET t.display_name = 'Aggressive Marketing',
     t.locale = 'lo-LA',
-    t.description = 'Lao culture values harmony. Hard-sell tactics and aggressive CTAs feel disrespectful.',
+    t.content = 'Lao culture values harmony. Hard-sell tactics and aggressive CTAs feel disrespectful.',
     t.severity = 'medium',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1267,7 +1267,7 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 MERGE (a:AudienceTrait {key: 'audience-trait:formality@lo-LA'})
 SET a.display_name = 'formality',
     a.locale = 'lo-LA',
-    a.description = 'moderate_formal',
+    a.content = 'moderate_formal',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1281,7 +1281,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:directness@lo-LA'})
 SET a.display_name = 'directness',
     a.locale = 'lo-LA',
-    a.description = 'consultative_deliberate',
+    a.content = 'consultative_deliberate',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1295,7 +1295,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@lo-LA'})
 SET a.display_name = 'decision_making',
     a.locale = 'lo-LA',
-    a.description = 'family_influenced',
+    a.content = 'family_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1309,7 +1309,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-government-endorsement@lo-LA'})
 SET a.display_name = 'government_endorsement',
     a.locale = 'lo-LA',
-    a.description = 'Trust factor: government_endorsement',
+    a.content = 'Trust factor: government_endorsement',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1323,7 +1323,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-presence@lo-LA'})
 SET a.display_name = 'local_presence',
     a.locale = 'lo-LA',
-    a.description = 'Trust factor: local_presence',
+    a.content = 'Trust factor: local_presence',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1337,7 +1337,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-lao-support@lo-LA'})
 SET a.display_name = 'lao_support',
     a.locale = 'lo-LA',
-    a.description = 'Trust factor: lao_support',
+    a.content = 'Trust factor: lao_support',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1351,7 +1351,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@lo-LA'})
 SET a.display_name = 'Facebook',
     a.locale = 'lo-LA',
-    a.description = 'Preferred communication channel: Facebook',
+    a.content = 'Preferred communication channel: Facebook',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1365,7 +1365,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@lo-LA'})
 SET a.display_name = 'WhatsApp',
     a.locale = 'lo-LA',
-    a.description = 'Preferred communication channel: WhatsApp',
+    a.content = 'Preferred communication channel: WhatsApp',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1379,7 +1379,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-line@lo-LA'})
 SET a.display_name = 'LINE',
     a.locale = 'lo-LA',
-    a.description = 'Preferred communication channel: LINE',
+    a.content = 'Preferred communication channel: LINE',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1393,7 +1393,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-sms@lo-LA'})
 SET a.display_name = 'SMS',
     a.locale = 'lo-LA',
-    a.description = 'Preferred communication channel: SMS',
+    a.content = 'Preferred communication channel: SMS',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1653,7 +1653,7 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 MERGE (c:CultureRef {key: 'culture-ref:rath-yatra@or-IN'})
 SET c.display_name = 'Rath Yatra',
     c.locale = 'or-IN',
-    c.description = 'Annual chariot festival in Puri for Lord Jagannath. One of India\'s largest religious gatherings.',
+    c.content = 'Annual chariot festival in Puri for Lord Jagannath. One of India\'s largest religious gatherings.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1667,7 +1667,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:raja-parba@or-IN'})
 SET c.display_name = 'Raja Parba',
     c.locale = 'or-IN',
-    c.description = 'Three-day festival celebrating womanhood and fertility. Girls swing and enjoy special foods.',
+    c.content = 'Three-day festival celebrating womanhood and fertility. Girls swing and enjoy special foods.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1681,7 +1681,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:durga-puja@or-IN'})
 SET c.display_name = 'Durga Puja',
     c.locale = 'or-IN',
-    c.description = 'Major festival celebrating goddess Durga. Elaborate pandals and community celebrations.',
+    c.content = 'Major festival celebrating goddess Durga. Elaborate pandals and community celebrations.',
     c.category = 'holiday',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1695,7 +1695,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:konark-sun-temple@or-IN'})
 SET c.display_name = 'Konark Sun Temple',
     c.locale = 'or-IN',
-    c.description = 'UNESCO World Heritage site. Symbol of Odia architectural heritage and pride.',
+    c.content = 'UNESCO World Heritage site. Symbol of Odia architectural heritage and pride.',
     c.category = 'landmark',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1709,7 +1709,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:jagannath-culture@or-IN'})
 SET c.display_name = 'Jagannath Culture',
     c.locale = 'or-IN',
-    c.description = 'Lord Jagannath worship is central to Odia identity. Prasad sharing and temple traditions.',
+    c.content = 'Lord Jagannath worship is central to Odia identity. Prasad sharing and temple traditions.',
     c.category = 'value',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1723,7 +1723,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:odissi-dance@or-IN'})
 SET c.display_name = 'Odissi Dance',
     c.locale = 'or-IN',
-    c.description = 'Classical dance form originating from Odisha. Symbol of cultural heritage.',
+    c.content = 'Classical dance form originating from Odisha. Symbol of cultural heritage.',
     c.category = 'art',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1737,7 +1737,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:cuttack-chandi@or-IN'})
 SET c.display_name = 'Cuttack Chandi',
     c.locale = 'or-IN',
-    c.description = 'Annual fair during Durga Puja in Cuttack. Major cultural and shopping event.',
+    c.content = 'Annual fair during Durga Puja in Cuttack. Major cultural and shopping event.',
     c.category = 'tradition',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1751,7 +1751,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (c:CultureRef {key: 'culture-ref:pakhala-tradition@or-IN'})
 SET c.display_name = 'Pakhala Tradition',
     c.locale = 'or-IN',
-    c.description = 'Traditional fermented rice dish. Symbol of Odia hospitality and simplicity.',
+    c.content = 'Traditional fermented rice dish. Symbol of Odia hospitality and simplicity.',
     c.category = 'tradition',
     c.provenance = 'perplexity-research',
     c.confidence = 0.90,
@@ -1766,7 +1766,7 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 MERGE (t:Taboo {key: 'taboo:religious-disrespect@or-IN'})
 SET t.display_name = 'Religious Disrespect',
     t.locale = 'or-IN',
-    t.description = 'Jagannath and Hindu religious imagery must be treated with utmost respect. Never use casually.',
+    t.content = 'Jagannath and Hindu religious imagery must be treated with utmost respect. Never use casually.',
     t.severity = 'critical',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1780,7 +1780,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:left-hand-usage@or-IN'})
 SET t.display_name = 'Left Hand Usage',
     t.locale = 'or-IN',
-    t.description = 'Left hand is considered impure. Never show left hand giving or receiving items.',
+    t.content = 'Left hand is considered impure. Never show left hand giving or receiving items.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1794,7 +1794,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:feet-and-elders@or-IN'})
 SET t.display_name = 'Feet and Elders',
     t.locale = 'or-IN',
-    t.description = 'Showing feet to elders or pointing feet at sacred items is disrespectful.',
+    t.content = 'Showing feet to elders or pointing feet at sacred items is disrespectful.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1808,7 +1808,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:beef-references@or-IN'})
 SET t.display_name = 'Beef References',
     t.locale = 'or-IN',
-    t.description = 'Cow is sacred. Never reference beef or cattle slaughter in any context.',
+    t.content = 'Cow is sacred. Never reference beef or cattle slaughter in any context.',
     t.severity = 'critical',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1822,7 +1822,7 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@or-IN'})
 SET t.display_name = 'Caste Discrimination',
     t.locale = 'or-IN',
-    t.description = 'Avoid any content that could be seen as promoting caste discrimination.',
+    t.content = 'Avoid any content that could be seen as promoting caste discrimination.',
     t.severity = 'high',
     t.provenance = 'perplexity-research',
     t.confidence = 0.90,
@@ -1966,7 +1966,7 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 MERGE (a:AudienceTrait {key: 'audience-trait:formality@or-IN'})
 SET a.display_name = 'formality',
     a.locale = 'or-IN',
-    a.description = 'formal_respectful',
+    a.content = 'formal_respectful',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1980,7 +1980,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:directness@or-IN'})
 SET a.display_name = 'directness',
     a.locale = 'or-IN',
-    a.description = 'polite_indirect',
+    a.content = 'polite_indirect',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -1994,7 +1994,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@or-IN'})
 SET a.display_name = 'decision_making',
     a.locale = 'or-IN',
-    a.description = 'family_and_community_influenced',
+    a.content = 'family_and_community_influenced',
     a.category = 'communication',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2008,7 +2008,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-language@or-IN'})
 SET a.display_name = 'local_language',
     a.locale = 'or-IN',
-    a.description = 'Trust factor: local_language',
+    a.content = 'Trust factor: local_language',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2022,7 +2022,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-government-partnership@or-IN'})
 SET a.display_name = 'government_partnership',
     a.locale = 'or-IN',
-    a.description = 'Trust factor: government_partnership',
+    a.content = 'Trust factor: government_partnership',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2036,7 +2036,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:trust-testimonials@or-IN'})
 SET a.display_name = 'testimonials',
     a.locale = 'or-IN',
-    a.description = 'Trust factor: testimonials',
+    a.content = 'Trust factor: testimonials',
     a.category = 'trust',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2050,7 +2050,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@or-IN'})
 SET a.display_name = 'WhatsApp',
     a.locale = 'or-IN',
-    a.description = 'Preferred communication channel: WhatsApp',
+    a.content = 'Preferred communication channel: WhatsApp',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2064,7 +2064,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@or-IN'})
 SET a.display_name = 'Facebook',
     a.locale = 'or-IN',
-    a.description = 'Preferred communication channel: Facebook',
+    a.content = 'Preferred communication channel: Facebook',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2078,7 +2078,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-youtube@or-IN'})
 SET a.display_name = 'YouTube',
     a.locale = 'or-IN',
-    a.description = 'Preferred communication channel: YouTube',
+    a.content = 'Preferred communication channel: YouTube',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,
@@ -2092,7 +2092,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 MERGE (a:AudienceTrait {key: 'audience-trait:channel-sms@or-IN'})
 SET a.display_name = 'SMS',
     a.locale = 'or-IN',
-    a.description = 'Preferred communication channel: SMS',
+    a.content = 'Preferred communication channel: SMS',
     a.category = 'channel',
     a.provenance = 'perplexity-research',
     a.confidence = 0.90,

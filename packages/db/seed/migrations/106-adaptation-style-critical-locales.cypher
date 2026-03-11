@@ -10,7 +10,7 @@
 // --- fr-FR (France) ---
 MERGE (a:Adaptation {key: 'fr-FR'})
 SET a.display_name = 'French (France) Adaptation',
-    a.description = 'Content adaptation rules for France French - prioritizes linguistic elegance and precision',
+    a.content = 'Content adaptation rules for France French - prioritizes linguistic elegance and precision',
     a.llm_context = 'USE: when generating content for France audience. TRIGGERS: fr-FR, France, French metropolitan. NOT: for Belgian/Swiss/Canadian French. RELATES: Locale fr-FR, Style fr-FR.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'medium',
@@ -22,7 +22,7 @@ SET a.display_name = 'French (France) Adaptation',
 
 MERGE (s:Style {key: 'fr-FR'})
 SET s.display_name = 'French (France) Style',
-    s.description = 'Communication style for France - formal, indirect, intellectual',
+    s.content = 'Communication style for France - formal, indirect, intellectual',
     s.llm_context = 'USE: when setting tone for France audience. TRIGGERS: fr-FR, France, formality. NOT: for Belgian warmth or Canadian casualness. RELATES: Locale fr-FR, Adaptation fr-FR.',
     s.formality_score = 75,
     s.default_formality = 'formal',
@@ -43,7 +43,7 @@ SET s.display_name = 'French (France) Style',
 // --- fr-BE (Belgium) ---
 MERGE (a:Adaptation {key: 'fr-BE'})
 SET a.display_name = 'Belgian French Adaptation',
-    a.description = 'Content adaptation rules for Belgian French - pragmatic, Germanic-influenced directness',
+    a.content = 'Content adaptation rules for Belgian French - pragmatic, Germanic-influenced directness',
     a.llm_context = 'USE: when generating content for Belgium Francophone audience. TRIGGERS: fr-BE, Belgium, Wallonia, Brussels. NOT: for France or Swiss French. RELATES: Locale fr-BE, Style fr-BE.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'medium',
@@ -55,7 +55,7 @@ SET a.display_name = 'Belgian French Adaptation',
 
 MERGE (s:Style {key: 'fr-BE'})
 SET s.display_name = 'Belgian French Style',
-    s.description = 'Communication style for Belgium - warm, pragmatic, consensus-driven',
+    s.content = 'Communication style for Belgium - warm, pragmatic, consensus-driven',
     s.llm_context = 'USE: when setting tone for Belgium Francophone audience. TRIGGERS: fr-BE, Belgium, Brussels, Wallonia. NOT: for France formality. RELATES: Locale fr-BE, Adaptation fr-BE.',
     s.formality_score = 60,
     s.default_formality = 'mixed',
@@ -76,7 +76,7 @@ SET s.display_name = 'Belgian French Style',
 // --- fr-CH (Switzerland) ---
 MERGE (a:Adaptation {key: 'fr-CH'})
 SET a.display_name = 'Swiss French Adaptation',
-    a.description = 'Content adaptation rules for Swiss French - precision-oriented, neutral, methodical',
+    a.content = 'Content adaptation rules for Swiss French - precision-oriented, neutral, methodical',
     a.llm_context = 'USE: when generating content for Swiss Romandie audience. TRIGGERS: fr-CH, Switzerland, Romandie, Geneva, Lausanne. NOT: for France or Belgian French. RELATES: Locale fr-CH, Style fr-CH.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'low',
@@ -88,7 +88,7 @@ SET a.display_name = 'Swiss French Adaptation',
 
 MERGE (s:Style {key: 'fr-CH'})
 SET s.display_name = 'Swiss French Style',
-    s.description = 'Communication style for Swiss Romandie - formal, direct, precision-focused',
+    s.content = 'Communication style for Swiss Romandie - formal, direct, precision-focused',
     s.llm_context = 'USE: when setting tone for Swiss Romandie audience. TRIGGERS: fr-CH, Switzerland, Geneva, Lausanne. NOT: for France indirectness or Belgian warmth. RELATES: Locale fr-CH, Adaptation fr-CH.',
     s.formality_score = 72,
     s.default_formality = 'formal',
@@ -109,7 +109,7 @@ SET s.display_name = 'Swiss French Style',
 // --- fr-CA (Canada/Quebec) ---
 MERGE (a:Adaptation {key: 'fr-CA'})
 SET a.display_name = 'Canadian French Adaptation',
-    a.description = 'Content adaptation rules for Quebec French - North American casual, language-preservation conscious',
+    a.content = 'Content adaptation rules for Quebec French - North American casual, language-preservation conscious',
     a.llm_context = 'USE: when generating content for Quebec audience. TRIGGERS: fr-CA, Quebec, Canada French. NOT: for France or European French. RELATES: Locale fr-CA, Style fr-CA.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'high',
@@ -121,7 +121,7 @@ SET a.display_name = 'Canadian French Adaptation',
 
 MERGE (s:Style {key: 'fr-CA'})
 SET s.display_name = 'Canadian French Style',
-    s.description = 'Communication style for Quebec - casual, warm, North American directness',
+    s.content = 'Communication style for Quebec - casual, warm, North American directness',
     s.llm_context = 'USE: when setting tone for Quebec audience. TRIGGERS: fr-CA, Quebec, Montreal. NOT: for France formality. RELATES: Locale fr-CA, Adaptation fr-CA.',
     s.formality_score = 45,
     s.default_formality = 'casual',
@@ -142,7 +142,7 @@ SET s.display_name = 'Canadian French Style',
 // --- fr-LU (Luxembourg) ---
 MERGE (a:Adaptation {key: 'fr-LU'})
 SET a.display_name = 'Luxembourg French Adaptation',
-    a.description = 'Content adaptation rules for Luxembourg French - trilingual context, EU/banking focus',
+    a.content = 'Content adaptation rules for Luxembourg French - trilingual context, EU/banking focus',
     a.llm_context = 'USE: when generating content for Luxembourg Francophone audience. TRIGGERS: fr-LU, Luxembourg. NOT: for France or Belgian French. RELATES: Locale fr-LU, Style fr-LU.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'low',
@@ -154,7 +154,7 @@ SET a.display_name = 'Luxembourg French Adaptation',
 
 MERGE (s:Style {key: 'fr-LU'})
 SET s.display_name = 'Luxembourg French Style',
-    s.description = 'Communication style for Luxembourg - international, multilingual, banking-influenced',
+    s.content = 'Communication style for Luxembourg - international, multilingual, banking-influenced',
     s.llm_context = 'USE: when setting tone for Luxembourg audience. TRIGGERS: fr-LU, Luxembourg, Grand Duchy. NOT: for purely Belgian or French context. RELATES: Locale fr-LU, Adaptation fr-LU.',
     s.formality_score = 68,
     s.default_formality = 'formal',
@@ -179,7 +179,7 @@ SET s.display_name = 'Luxembourg French Style',
 // --- es-ES (Spain) ---
 MERGE (a:Adaptation {key: 'es-ES'})
 SET a.display_name = 'Spanish (Spain) Adaptation',
-    a.description = 'Content adaptation rules for Spain Spanish - regional pride, vosotros form, Mediterranean warmth',
+    a.content = 'Content adaptation rules for Spain Spanish - regional pride, vosotros form, Mediterranean warmth',
     a.llm_context = 'USE: when generating content for Spain audience. TRIGGERS: es-ES, Spain, Iberian. NOT: for Latin American Spanish. RELATES: Locale es-ES, Style es-ES.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'high',
@@ -191,7 +191,7 @@ SET a.display_name = 'Spanish (Spain) Adaptation',
 
 MERGE (s:Style {key: 'es-ES'})
 SET s.display_name = 'Spanish (Spain) Style',
-    s.description = 'Communication style for Spain - warm, indirect, relationship-focused',
+    s.content = 'Communication style for Spain - warm, indirect, relationship-focused',
     s.llm_context = 'USE: when setting tone for Spain audience. TRIGGERS: es-ES, Spain. NOT: for Latin American directness variations. RELATES: Locale es-ES, Adaptation es-ES.',
     s.formality_score = 55,
     s.default_formality = 'mixed',
@@ -212,7 +212,7 @@ SET s.display_name = 'Spanish (Spain) Style',
 // --- es-MX (Mexico) ---
 MERGE (a:Adaptation {key: 'es-MX'})
 SET a.display_name = 'Mexican Spanish Adaptation',
-    a.description = 'Content adaptation rules for Mexican Spanish - respectful, family-focused, diminutives',
+    a.content = 'Content adaptation rules for Mexican Spanish - respectful, family-focused, diminutives',
     a.llm_context = 'USE: when generating content for Mexico audience. TRIGGERS: es-MX, Mexico. NOT: for Spain or South American Spanish. RELATES: Locale es-MX, Style es-MX.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'high',
@@ -224,7 +224,7 @@ SET a.display_name = 'Mexican Spanish Adaptation',
 
 MERGE (s:Style {key: 'es-MX'})
 SET s.display_name = 'Mexican Spanish Style',
-    s.description = 'Communication style for Mexico - formal, warm, family-oriented',
+    s.content = 'Communication style for Mexico - formal, warm, family-oriented',
     s.llm_context = 'USE: when setting tone for Mexico audience. TRIGGERS: es-MX, Mexico. NOT: for Spain vosotros or Argentine voseo. RELATES: Locale es-MX, Adaptation es-MX.',
     s.formality_score = 68,
     s.default_formality = 'formal',
@@ -245,7 +245,7 @@ SET s.display_name = 'Mexican Spanish Style',
 // --- es-AR (Argentina) ---
 MERGE (a:Adaptation {key: 'es-AR'})
 SET a.display_name = 'Argentine Spanish Adaptation',
-    a.description = 'Content adaptation rules for Argentine Spanish - voseo, passionate, European-influenced',
+    a.content = 'Content adaptation rules for Argentine Spanish - voseo, passionate, European-influenced',
     a.llm_context = 'USE: when generating content for Argentina audience. TRIGGERS: es-AR, Argentina, Buenos Aires. NOT: for other Latin American or Spain Spanish. RELATES: Locale es-AR, Style es-AR.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'medium',
@@ -257,7 +257,7 @@ SET a.display_name = 'Argentine Spanish Adaptation',
 
 MERGE (s:Style {key: 'es-AR'})
 SET s.display_name = 'Argentine Spanish Style',
-    s.description = 'Communication style for Argentina - direct, passionate, debate-friendly',
+    s.content = 'Communication style for Argentina - direct, passionate, debate-friendly',
     s.llm_context = 'USE: when setting tone for Argentina audience. TRIGGERS: es-AR, Argentina, Buenos Aires. NOT: for other LATAM formality norms. RELATES: Locale es-AR, Adaptation es-AR.',
     s.formality_score = 40,
     s.default_formality = 'casual',
@@ -278,7 +278,7 @@ SET s.display_name = 'Argentine Spanish Style',
 // --- es-CO (Colombia) ---
 MERGE (a:Adaptation {key: 'es-CO'})
 SET a.display_name = 'Colombian Spanish Adaptation',
-    a.description = 'Content adaptation rules for Colombian Spanish - exceptionally polite, warm, entrepreneurial',
+    a.content = 'Content adaptation rules for Colombian Spanish - exceptionally polite, warm, entrepreneurial',
     a.llm_context = 'USE: when generating content for Colombia audience. TRIGGERS: es-CO, Colombia. NOT: for other Latin American Spanish. RELATES: Locale es-CO, Style es-CO.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'high',
@@ -290,7 +290,7 @@ SET a.display_name = 'Colombian Spanish Adaptation',
 
 MERGE (s:Style {key: 'es-CO'})
 SET s.display_name = 'Colombian Spanish Style',
-    s.description = 'Communication style for Colombia - highly formal, exceptionally warm, future-focused',
+    s.content = 'Communication style for Colombia - highly formal, exceptionally warm, future-focused',
     s.llm_context = 'USE: when setting tone for Colombia audience. TRIGGERS: es-CO, Colombia. NOT: for Argentine informality. RELATES: Locale es-CO, Adaptation es-CO.',
     s.formality_score = 72,
     s.default_formality = 'formal',
@@ -311,7 +311,7 @@ SET s.display_name = 'Colombian Spanish Style',
 // --- es-CL (Chile) ---
 MERGE (a:Adaptation {key: 'es-CL'})
 SET a.display_name = 'Chilean Spanish Adaptation',
-    a.description = 'Content adaptation rules for Chilean Spanish - pragmatic, tech-forward, unique modismos',
+    a.content = 'Content adaptation rules for Chilean Spanish - pragmatic, tech-forward, unique modismos',
     a.llm_context = 'USE: when generating content for Chile audience. TRIGGERS: es-CL, Chile. NOT: for other Latin American Spanish. RELATES: Locale es-CL, Style es-CL.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'medium',
@@ -323,7 +323,7 @@ SET a.display_name = 'Chilean Spanish Adaptation',
 
 MERGE (s:Style {key: 'es-CL'})
 SET s.display_name = 'Chilean Spanish Style',
-    s.description = 'Communication style for Chile - pragmatic, tech-savvy, results-oriented',
+    s.content = 'Communication style for Chile - pragmatic, tech-savvy, results-oriented',
     s.llm_context = 'USE: when setting tone for Chile audience. TRIGGERS: es-CL, Chile. NOT: for Colombian formality or Argentine passion. RELATES: Locale es-CL, Adaptation es-CL.',
     s.formality_score = 52,
     s.default_formality = 'mixed',
@@ -348,7 +348,7 @@ SET s.display_name = 'Chilean Spanish Style',
 // --- pt-BR (Brazil) ---
 MERGE (a:Adaptation {key: 'pt-BR'})
 SET a.display_name = 'Brazilian Portuguese Adaptation',
-    a.description = 'Content adaptation rules for Brazilian Portuguese - warm, optimistic, creative problem-solving',
+    a.content = 'Content adaptation rules for Brazilian Portuguese - warm, optimistic, creative problem-solving',
     a.llm_context = 'USE: when generating content for Brazil audience. TRIGGERS: pt-BR, Brazil. NOT: for Portugal Portuguese. RELATES: Locale pt-BR, Style pt-BR.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'high',
@@ -360,7 +360,7 @@ SET a.display_name = 'Brazilian Portuguese Adaptation',
 
 MERGE (s:Style {key: 'pt-BR'})
 SET s.display_name = 'Brazilian Portuguese Style',
-    s.description = 'Communication style for Brazil - warm, optimistic, relationship-focused',
+    s.content = 'Communication style for Brazil - warm, optimistic, relationship-focused',
     s.llm_context = 'USE: when setting tone for Brazil audience. TRIGGERS: pt-BR, Brazil. NOT: for Portugal formality. RELATES: Locale pt-BR, Adaptation pt-BR.',
     s.formality_score = 42,
     s.default_formality = 'casual',
@@ -381,7 +381,7 @@ SET s.display_name = 'Brazilian Portuguese Style',
 // --- pt-PT (Portugal) ---
 MERGE (a:Adaptation {key: 'pt-PT'})
 SET a.display_name = 'European Portuguese Adaptation',
-    a.description = 'Content adaptation rules for Portugal Portuguese - modest, saudade-inflected, resourceful',
+    a.content = 'Content adaptation rules for Portugal Portuguese - modest, saudade-inflected, resourceful',
     a.llm_context = 'USE: when generating content for Portugal audience. TRIGGERS: pt-PT, Portugal. NOT: for Brazilian Portuguese. RELATES: Locale pt-PT, Style pt-PT.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'medium',
@@ -393,7 +393,7 @@ SET a.display_name = 'European Portuguese Adaptation',
 
 MERGE (s:Style {key: 'pt-PT'})
 SET s.display_name = 'European Portuguese Style',
-    s.description = 'Communication style for Portugal - formal, modest, heritage-conscious',
+    s.content = 'Communication style for Portugal - formal, modest, heritage-conscious',
     s.llm_context = 'USE: when setting tone for Portugal audience. TRIGGERS: pt-PT, Portugal. NOT: for Brazilian warmth. RELATES: Locale pt-PT, Adaptation pt-PT.',
     s.formality_score = 62,
     s.default_formality = 'formal',
@@ -418,7 +418,7 @@ SET s.display_name = 'European Portuguese Style',
 // --- en-US (United States) ---
 MERGE (a:Adaptation {key: 'en-US'})
 SET a.display_name = 'American English Adaptation',
-    a.description = 'Content adaptation rules for American English - direct, optimistic, action-oriented',
+    a.content = 'Content adaptation rules for American English - direct, optimistic, action-oriented',
     a.llm_context = 'USE: when generating content for US audience. TRIGGERS: en-US, United States, American. NOT: for British or Australian English. RELATES: Locale en-US, Style en-US.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'medium',
@@ -430,7 +430,7 @@ SET a.display_name = 'American English Adaptation',
 
 MERGE (s:Style {key: 'en-US'})
 SET s.display_name = 'American English Style',
-    s.description = 'Communication style for US - direct, optimistic, action-oriented',
+    s.content = 'Communication style for US - direct, optimistic, action-oriented',
     s.llm_context = 'USE: when setting tone for US audience. TRIGGERS: en-US, United States. NOT: for British understatement. RELATES: Locale en-US, Adaptation en-US.',
     s.formality_score = 35,
     s.default_formality = 'casual',
@@ -451,7 +451,7 @@ SET s.display_name = 'American English Style',
 // --- en-GB (United Kingdom) ---
 MERGE (a:Adaptation {key: 'en-GB'})
 SET a.display_name = 'British English Adaptation',
-    a.description = 'Content adaptation rules for British English - understated, class-conscious, tradition-aware',
+    a.content = 'Content adaptation rules for British English - understated, class-conscious, tradition-aware',
     a.llm_context = 'USE: when generating content for UK audience. TRIGGERS: en-GB, United Kingdom, British. NOT: for American or Australian English. RELATES: Locale en-GB, Style en-GB.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'medium',
@@ -463,7 +463,7 @@ SET a.display_name = 'British English Adaptation',
 
 MERGE (s:Style {key: 'en-GB'})
 SET s.display_name = 'British English Style',
-    s.description = 'Communication style for UK - understated, indirect, tradition-aware',
+    s.content = 'Communication style for UK - understated, indirect, tradition-aware',
     s.llm_context = 'USE: when setting tone for UK audience. TRIGGERS: en-GB, United Kingdom, British. NOT: for American directness. RELATES: Locale en-GB, Adaptation en-GB.',
     s.formality_score = 58,
     s.default_formality = 'mixed',
@@ -484,7 +484,7 @@ SET s.display_name = 'British English Style',
 // --- en-AU (Australia) ---
 MERGE (a:Adaptation {key: 'en-AU'})
 SET a.display_name = 'Australian English Adaptation',
-    a.description = 'Content adaptation rules for Australian English - egalitarian, laid-back, anti-pretension',
+    a.content = 'Content adaptation rules for Australian English - egalitarian, laid-back, anti-pretension',
     a.llm_context = 'USE: when generating content for Australia audience. TRIGGERS: en-AU, Australia, Australian. NOT: for British or American English. RELATES: Locale en-AU, Style en-AU.',
     a.technical_terms_approach = 'english_accepted',
     a.illustration_density = 'medium',
@@ -496,7 +496,7 @@ SET a.display_name = 'Australian English Adaptation',
 
 MERGE (s:Style {key: 'en-AU'})
 SET s.display_name = 'Australian English Style',
-    s.description = 'Communication style for Australia - casual, egalitarian, authentic',
+    s.content = 'Communication style for Australia - casual, egalitarian, authentic',
     s.llm_context = 'USE: when setting tone for Australia audience. TRIGGERS: en-AU, Australia. NOT: for British formality or American enthusiasm. RELATES: Locale en-AU, Adaptation en-AU.',
     s.formality_score = 30,
     s.default_formality = 'casual',
@@ -521,7 +521,7 @@ SET s.display_name = 'Australian English Style',
 // --- de-DE (Germany) ---
 MERGE (a:Adaptation {key: 'de-DE'})
 SET a.display_name = 'German (Germany) Adaptation',
-    a.description = 'Content adaptation rules for Germany German - direct, precise, quality-focused',
+    a.content = 'Content adaptation rules for Germany German - direct, precise, quality-focused',
     a.llm_context = 'USE: when generating content for Germany audience. TRIGGERS: de-DE, Germany, German. NOT: for Swiss or Austrian German. RELATES: Locale de-DE, Style de-DE.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'low',
@@ -533,7 +533,7 @@ SET a.display_name = 'German (Germany) Adaptation',
 
 MERGE (s:Style {key: 'de-DE'})
 SET s.display_name = 'German (Germany) Style',
-    s.description = 'Communication style for Germany - direct, precise, formal',
+    s.content = 'Communication style for Germany - direct, precise, formal',
     s.llm_context = 'USE: when setting tone for Germany audience. TRIGGERS: de-DE, Germany. NOT: for Swiss neutrality or Austrian warmth. RELATES: Locale de-DE, Adaptation de-DE.',
     s.formality_score = 75,
     s.default_formality = 'formal',
@@ -554,7 +554,7 @@ SET s.display_name = 'German (Germany) Style',
 // --- de-CH (Switzerland) ---
 MERGE (a:Adaptation {key: 'de-CH'})
 SET a.display_name = 'Swiss German Adaptation',
-    a.description = 'Content adaptation rules for Swiss German - precise, neutral, consensus-driven',
+    a.content = 'Content adaptation rules for Swiss German - precise, neutral, consensus-driven',
     a.llm_context = 'USE: when generating content for German-speaking Switzerland. TRIGGERS: de-CH, Switzerland, Swiss German. NOT: for Germany or Austrian German. RELATES: Locale de-CH, Style de-CH.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'low',
@@ -566,7 +566,7 @@ SET a.display_name = 'Swiss German Adaptation',
 
 MERGE (s:Style {key: 'de-CH'})
 SET s.display_name = 'Swiss German Style',
-    s.description = 'Communication style for German Switzerland - formal, precise, consensus-driven',
+    s.content = 'Communication style for German Switzerland - formal, precise, consensus-driven',
     s.llm_context = 'USE: when setting tone for Swiss German audience. TRIGGERS: de-CH, Switzerland. NOT: for German directness. RELATES: Locale de-CH, Adaptation de-CH.',
     s.formality_score = 72,
     s.default_formality = 'formal',
@@ -587,7 +587,7 @@ SET s.display_name = 'Swiss German Style',
 // --- de-AT (Austria) ---
 MERGE (a:Adaptation {key: 'de-AT'})
 SET a.display_name = 'Austrian German Adaptation',
-    a.description = 'Content adaptation rules for Austrian German - formal, traditional, gemütlich',
+    a.content = 'Content adaptation rules for Austrian German - formal, traditional, gemütlich',
     a.llm_context = 'USE: when generating content for Austria audience. TRIGGERS: de-AT, Austria, Austrian. NOT: for Germany or Swiss German. RELATES: Locale de-AT, Style de-AT.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'medium',
@@ -599,7 +599,7 @@ SET a.display_name = 'Austrian German Adaptation',
 
 MERGE (s:Style {key: 'de-AT'})
 SET s.display_name = 'Austrian German Style',
-    s.description = 'Communication style for Austria - formal, warm, tradition-conscious',
+    s.content = 'Communication style for Austria - formal, warm, tradition-conscious',
     s.llm_context = 'USE: when setting tone for Austria audience. TRIGGERS: de-AT, Austria. NOT: for German directness or Swiss neutrality. RELATES: Locale de-AT, Adaptation de-AT.',
     s.formality_score = 70,
     s.default_formality = 'formal',
@@ -624,7 +624,7 @@ SET s.display_name = 'Austrian German Style',
 // --- it-IT (Italy) ---
 MERGE (a:Adaptation {key: 'it-IT'})
 SET a.display_name = 'Italian (Italy) Adaptation',
-    a.description = 'Content adaptation rules for Italy Italian - bella figura, relationship-focused, regional pride',
+    a.content = 'Content adaptation rules for Italy Italian - bella figura, relationship-focused, regional pride',
     a.llm_context = 'USE: when generating content for Italy audience. TRIGGERS: it-IT, Italy, Italian. NOT: for Swiss Italian. RELATES: Locale it-IT, Style it-IT.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'high',
@@ -636,7 +636,7 @@ SET a.display_name = 'Italian (Italy) Adaptation',
 
 MERGE (s:Style {key: 'it-IT'})
 SET s.display_name = 'Italian (Italy) Style',
-    s.description = 'Communication style for Italy - formal, aesthetic, relationship-focused',
+    s.content = 'Communication style for Italy - formal, aesthetic, relationship-focused',
     s.llm_context = 'USE: when setting tone for Italy audience. TRIGGERS: it-IT, Italy. NOT: for Swiss Italian reserve. RELATES: Locale it-IT, Adaptation it-IT.',
     s.formality_score = 65,
     s.default_formality = 'formal',
@@ -657,7 +657,7 @@ SET s.display_name = 'Italian (Italy) Style',
 // --- it-CH (Swiss Italian/Ticino) ---
 MERGE (a:Adaptation {key: 'it-CH'})
 SET a.display_name = 'Swiss Italian Adaptation',
-    a.description = 'Content adaptation rules for Ticino Italian - Swiss precision meets Italian warmth',
+    a.content = 'Content adaptation rules for Ticino Italian - Swiss precision meets Italian warmth',
     a.llm_context = 'USE: when generating content for Ticino/Swiss Italian audience. TRIGGERS: it-CH, Ticino, Swiss Italian. NOT: for Italy Italian. RELATES: Locale it-CH, Style it-CH.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'low',
@@ -669,7 +669,7 @@ SET a.display_name = 'Swiss Italian Adaptation',
 
 MERGE (s:Style {key: 'it-CH'})
 SET s.display_name = 'Swiss Italian Style',
-    s.description = 'Communication style for Ticino - formal, precise, reserved warmth',
+    s.content = 'Communication style for Ticino - formal, precise, reserved warmth',
     s.llm_context = 'USE: when setting tone for Ticino audience. TRIGGERS: it-CH, Ticino. NOT: for Italian expressiveness. RELATES: Locale it-CH, Adaptation it-CH.',
     s.formality_score = 70,
     s.default_formality = 'formal',
@@ -694,7 +694,7 @@ SET s.display_name = 'Swiss Italian Style',
 // --- ar-SA (Saudi Arabia) ---
 MERGE (a:Adaptation {key: 'ar-SA'})
 SET a.display_name = 'Saudi Arabic Adaptation',
-    a.description = 'Content adaptation rules for Saudi Arabia - formal, Islamic-conscious, hierarchical',
+    a.content = 'Content adaptation rules for Saudi Arabia - formal, Islamic-conscious, hierarchical',
     a.llm_context = 'USE: when generating content for Saudi Arabia audience. TRIGGERS: ar-SA, Saudi Arabia, Gulf Arabic. NOT: for Egyptian or Levantine Arabic. RELATES: Locale ar-SA, Style ar-SA.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'low',
@@ -706,7 +706,7 @@ SET a.display_name = 'Saudi Arabic Adaptation',
 
 MERGE (s:Style {key: 'ar-SA'})
 SET s.display_name = 'Saudi Arabic Style',
-    s.description = 'Communication style for Saudi Arabia - formal, respectful, hierarchical',
+    s.content = 'Communication style for Saudi Arabia - formal, respectful, hierarchical',
     s.llm_context = 'USE: when setting tone for Saudi audience. TRIGGERS: ar-SA, Saudi Arabia. NOT: for Egyptian informality. RELATES: Locale ar-SA, Adaptation ar-SA.',
     s.formality_score = 80,
     s.default_formality = 'formal',
@@ -727,7 +727,7 @@ SET s.display_name = 'Saudi Arabic Style',
 // --- ar-EG (Egypt) ---
 MERGE (a:Adaptation {key: 'ar-EG'})
 SET a.display_name = 'Egyptian Arabic Adaptation',
-    a.description = 'Content adaptation rules for Egyptian Arabic - warm, humorous, culturally rich',
+    a.content = 'Content adaptation rules for Egyptian Arabic - warm, humorous, culturally rich',
     a.llm_context = 'USE: when generating content for Egypt audience. TRIGGERS: ar-EG, Egypt, Egyptian Arabic. NOT: for Gulf or Levantine Arabic. RELATES: Locale ar-EG, Style ar-EG.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'high',
@@ -739,7 +739,7 @@ SET a.display_name = 'Egyptian Arabic Adaptation',
 
 MERGE (s:Style {key: 'ar-EG'})
 SET s.display_name = 'Egyptian Arabic Style',
-    s.description = 'Communication style for Egypt - warm, humorous, relationship-focused',
+    s.content = 'Communication style for Egypt - warm, humorous, relationship-focused',
     s.llm_context = 'USE: when setting tone for Egypt audience. TRIGGERS: ar-EG, Egypt. NOT: for Gulf formality. RELATES: Locale ar-EG, Adaptation ar-EG.',
     s.formality_score = 55,
     s.default_formality = 'mixed',
@@ -764,7 +764,7 @@ SET s.display_name = 'Egyptian Arabic Style',
 // --- zh-CN (Mainland China) ---
 MERGE (a:Adaptation {key: 'zh-CN'})
 SET a.display_name = 'Simplified Chinese Adaptation',
-    a.description = 'Content adaptation rules for Mainland China - collective harmony, face-conscious, government-aware',
+    a.content = 'Content adaptation rules for Mainland China - collective harmony, face-conscious, government-aware',
     a.llm_context = 'USE: when generating content for Mainland China audience. TRIGGERS: zh-CN, China, Simplified Chinese. NOT: for Taiwan or Hong Kong. RELATES: Locale zh-CN, Style zh-CN.',
     a.technical_terms_approach = 'local_only',
     a.illustration_density = 'medium',
@@ -776,7 +776,7 @@ SET a.display_name = 'Simplified Chinese Adaptation',
 
 MERGE (s:Style {key: 'zh-CN'})
 SET s.display_name = 'Simplified Chinese Style',
-    s.description = 'Communication style for Mainland China - formal, collective, harmony-focused',
+    s.content = 'Communication style for Mainland China - formal, collective, harmony-focused',
     s.llm_context = 'USE: when setting tone for Mainland China audience. TRIGGERS: zh-CN, China. NOT: for Taiwan individualism. RELATES: Locale zh-CN, Adaptation zh-CN.',
     s.formality_score = 70,
     s.default_formality = 'formal',
@@ -797,7 +797,7 @@ SET s.display_name = 'Simplified Chinese Style',
 // --- zh-TW (Taiwan) ---
 MERGE (a:Adaptation {key: 'zh-TW'})
 SET a.display_name = 'Traditional Chinese (Taiwan) Adaptation',
-    a.description = 'Content adaptation rules for Taiwan - democratic values, individualistic, tech-forward',
+    a.content = 'Content adaptation rules for Taiwan - democratic values, individualistic, tech-forward',
     a.llm_context = 'USE: when generating content for Taiwan audience. TRIGGERS: zh-TW, Taiwan, Traditional Chinese. NOT: for Mainland China. RELATES: Locale zh-TW, Style zh-TW.',
     a.technical_terms_approach = 'mixed',
     a.illustration_density = 'medium',
@@ -809,7 +809,7 @@ SET a.display_name = 'Traditional Chinese (Taiwan) Adaptation',
 
 MERGE (s:Style {key: 'zh-TW'})
 SET s.display_name = 'Traditional Chinese (Taiwan) Style',
-    s.description = 'Communication style for Taiwan - moderate, individualistic, tech-forward',
+    s.content = 'Communication style for Taiwan - moderate, individualistic, tech-forward',
     s.llm_context = 'USE: when setting tone for Taiwan audience. TRIGGERS: zh-TW, Taiwan. NOT: for Mainland collectivism. RELATES: Locale zh-TW, Adaptation zh-TW.',
     s.formality_score = 55,
     s.default_formality = 'mixed',

@@ -15,7 +15,7 @@
 MERGE (bt:BlockType {key: 'head-seo-meta'})
 ON CREATE SET
   bt.display_name = 'SEO Metadata',
-  bt.description = 'SEO metadata block - MUST be first block (order=0) of every page. Contains URL slug, meta title, meta description.',
+  bt.content = 'SEO metadata block - MUST be first block (order=0) of every page. Contains URL slug, meta title, meta description.',
   bt.category = 'header',
   bt.structure = 'schemas/head-seo-meta.json',
   bt.created_at = datetime(),

@@ -17,7 +17,7 @@
 // Standard keywords (direct product/feature terms)
 MERGE (f:SEOKeywordFormat {key: 'standard'})
 SET f.display_name = 'Standard',
-    f.description = 'Direct product or feature keywords without modifiers',
+    f.content = 'Direct product or feature keywords without modifiers',
     f.pattern = '^[a-z0-9\\-]+$',
     f.content_type = 'landing_page',
     f.examples = ['qr code generator', 'wifi qr code', 'barcode scanner'],
@@ -27,7 +27,7 @@ SET f.display_name = 'Standard',
 // Question keywords (informational intent)
 MERGE (f:SEOKeywordFormat {key: 'question'})
 SET f.display_name = 'Question',
-    f.description = 'Question-format keywords indicating informational search intent',
+    f.content = 'Question-format keywords indicating informational search intent',
     f.pattern = '^(how|what|why|when|where|can|does|is|are|which)\\s',
     f.content_type = 'faq',
     f.examples = ['how to create qr code', 'what is a dynamic qr code', 'how to scan qr code'],
@@ -37,7 +37,7 @@ SET f.display_name = 'Question',
 // Comparison keywords (vs, versus, alternative)
 MERGE (f:SEOKeywordFormat {key: 'comparison'})
 SET f.display_name = 'Comparison',
-    f.description = 'Comparison keywords for competitive or feature comparison content',
+    f.content = 'Comparison keywords for competitive or feature comparison content',
     f.pattern = '(vs|versus|alternative|compared|better|difference)',
     f.content_type = 'comparison',
     f.examples = ['qr code vs barcode', 'dynamic vs static qr code', 'qrcode ai alternative'],
@@ -47,7 +47,7 @@ SET f.display_name = 'Comparison',
 // Preposition keywords (for, with, in, on)
 MERGE (f:SEOKeywordFormat {key: 'preposition'})
 SET f.display_name = 'Preposition',
-    f.description = 'Keywords with prepositions indicating specific use-cases',
+    f.content = 'Keywords with prepositions indicating specific use-cases',
     f.pattern = '\\s(for|with|in|on|to|at)\\s',
     f.content_type = 'use_case',
     f.examples = ['qr code for restaurant', 'qr code for business card', 'qr code with logo'],
@@ -57,7 +57,7 @@ SET f.display_name = 'Preposition',
 // Long-tail keywords (3+ words, specific intent)
 MERGE (f:SEOKeywordFormat {key: 'long_tail'})
 SET f.display_name = 'Long Tail',
-    f.description = 'Multi-word keywords with specific, niche intent',
+    f.content = 'Multi-word keywords with specific, niche intent',
     f.pattern = '^([a-z]+\\s){3,}',
     f.content_type = 'niche',
     f.examples = ['free wifi qr code generator no signup', 'custom qr code generator with logo free', 'dynamic qr code tracking analytics'],
@@ -67,7 +67,7 @@ SET f.display_name = 'Long Tail',
 // Brand keywords (include brand names)
 MERGE (f:SEOKeywordFormat {key: 'brand'})
 SET f.display_name = 'Brand',
-    f.description = 'Keywords containing brand names (ours or competitors)',
+    f.content = 'Keywords containing brand names (ours or competitors)',
     f.pattern = '(qrcode ai|qr monkey|beaconstac|flowcode|bitly)',
     f.content_type = 'branded',
     f.examples = ['qrcode ai generator', 'qr monkey alternative', 'bitly vs qrcode ai'],
@@ -77,7 +77,7 @@ SET f.display_name = 'Brand',
 // Local keywords (geographic modifiers)
 MERGE (f:SEOKeywordFormat {key: 'local'})
 SET f.display_name = 'Local',
-    f.description = 'Keywords with geographic modifiers for local SEO',
+    f.content = 'Keywords with geographic modifiers for local SEO',
     f.pattern = '(paris|london|new york|tokyo|berlin|france|usa|uk|deutschland)',
     f.content_type = 'local',
     f.examples = ['qr code generator france', 'menu qr code paris', 'qr code scanner uk'],
