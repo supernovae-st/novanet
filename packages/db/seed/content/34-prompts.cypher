@@ -7,8 +7,8 @@
 //   - Block.instructions -> BlockInstruction
 //   - BlockType.rules -> BlockRules
 //
-// v0.12.0 STANDARD PROPERTIES (Instruction nodes):
-//   display_name, description, llm_context,
+// v0.19.0 STANDARD PROPERTIES (Instruction nodes):
+//   display_name, content, llm_context,
 //   prompt/rules (content), version, active, created_at, updated_at
 //
 // VERSIONING:
@@ -27,7 +27,7 @@
 //
 // PROPERTY ORDER:
 //   1. IDENTIFICATION     -> display_name
-//   2. DOCUMENTATION      -> description, llm_context
+//   2. DOCUMENTATION      -> content, llm_context
 //   3. PROMPT-SPECIFIC    -> prompt, version, active
 //   4. TIMESTAMPS         -> created_at, updated_at
 //
@@ -39,7 +39,7 @@ CREATE (p)-[:HAS_INSTRUCTION]->(pi:PageInstruction {
   // 1. IDENTIFICATION
   display_name: p.display_name + " Instruction v1.0",
   // 2. DOCUMENTATION
-  description: "Orchestration instructions for " + p.display_name,
+  content: "Orchestration instructions for " + p.display_name,
   llm_context: "USE: page generation orchestration. TRIGGERS: " + p.key + ", page instruction. NOT: individual block instructions.",
   // 3. PROMPT-SPECIFIC
   prompt: p.instructions,
@@ -59,7 +59,7 @@ CREATE (p)-[:HAS_INSTRUCTION]->(pi:PageInstruction {
 //
 // PROPERTY ORDER:
 //   1. IDENTIFICATION     -> display_name
-//   2. DOCUMENTATION      -> description, llm_context
+//   2. DOCUMENTATION      -> content, llm_context
 //   3. PROMPT-SPECIFIC    -> prompt, version, active
 //   4. TIMESTAMPS         -> created_at, updated_at
 //
@@ -71,7 +71,7 @@ CREATE (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction {
   // 1. IDENTIFICATION
   display_name: b.display_name + " Instruction v1.0",
   // 2. DOCUMENTATION
-  description: "Generation instructions for " + b.display_name,
+  content: "Generation instructions for " + b.display_name,
   llm_context: "USE: block content generation. TRIGGERS: " + b.key + ", block instruction. NOT: other blocks or page orchestration.",
   // 3. PROMPT-SPECIFIC
   prompt: b.instructions,
@@ -91,7 +91,7 @@ CREATE (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction {
 //
 // PROPERTY ORDER:
 //   1. IDENTIFICATION     -> display_name
-//   2. DOCUMENTATION      -> description, llm_context
+//   2. DOCUMENTATION      -> content, llm_context
 //   3. RULES-SPECIFIC     -> rules, version, active
 //   4. TIMESTAMPS         -> created_at, updated_at
 //
@@ -103,7 +103,7 @@ CREATE (bt)-[:HAS_RULES]->(br:BlockRules {
   // 1. IDENTIFICATION
   display_name: bt.display_name + " Rules v1.0",
   // 2. DOCUMENTATION
-  description: "Generation rules for " + bt.display_name,
+  content: "Generation rules for " + bt.display_name,
   llm_context: "USE: block type rule validation. TRIGGERS: " + bt.key + ", block rules, template rules. NOT: specific block prompts.",
   // 3. RULES-SPECIFIC
   rules: bt.rules,

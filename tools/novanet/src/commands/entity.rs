@@ -300,7 +300,7 @@ fn generate_entity_cypher(entity: &EntityDef, project: &str) -> String {
         escape_cypher(&entity.display_name)
     ));
     cypher.push_str(&format!(
-        "  e.description = \"{}\",\n",
+        "  e.content = \"{}\",\n",
         escape_cypher(&entity.description)
     ));
     cypher.push_str(&format!("  e.type = \"{}\",\n", entity.entity_type));

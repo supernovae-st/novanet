@@ -533,7 +533,7 @@ fn generate_cypher(locales: &[ParsedLocale], primary_map: &HashMap<String, Strin
             escape_cypher(&locale.display_name)
         ));
         cypher.push_str(&format!(
-            "  l.description = \"{}\",\n",
+            "  l.content = \"{}\",\n",
             escape_cypher(&locale.description)
         ));
         cypher.push_str(&format!(
