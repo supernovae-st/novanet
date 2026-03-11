@@ -300,6 +300,15 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
+    // v0.18.3: Add focus indicator for debugging panel navigation
+    if app.mode == NavMode::Graph {
+        spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+        spans.push(Span::styled(
+            format!("[{}]", app.focus.name()),
+            Style::default().fg(Color::Cyan),
+        ));
+    }
+
     // 3. BREADCRUMB (context-aware)
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
     if app.mode == NavMode::Nexus {
