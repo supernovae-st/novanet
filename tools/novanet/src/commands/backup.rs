@@ -9,7 +9,7 @@ use clap::{Parser, Subcommand};
 use colored::Colorize;
 use tracing::instrument;
 
-use crate::core::backup::{BackupError, BackupService};
+use crate::core::backup::{format_size, BackupError, BackupService};
 use crate::error::Result;
 
 // ============================================================================
@@ -122,11 +122,17 @@ async fn run_create(args: CreateArgs) -> Result<()> {
     println!("{}", "Creating backup...".cyan());
 
     match service.create(args.description).await {
-        Ok(info) => {
+        Ok(path) => {
             println!("{} {}", "✓".green(), "Backup created successfully".green());
-            println!("  {} {}", "File:".dimmed(), info.filename);
-            println!("  {} {}", "Size:".dimmed(), format_size(info.size));
-            println!("  {} {}", "Path:".dimmed(), info.path.display());
+            let filename = path.file_name()
+                .map(|n| n.to_string_lossy().to_string())
+                .unwrap_or_else(|| "unknown".to_string());
+            let size = std::fs::metadata(&path)
+                .map(|m| m.len())
+                .unwrap_or(0);
+            println!("  {} {}", "File:".dimmed(), filename);
+            println!("  {} {}", "Size:".dimmed(), format_size(size));
+            println!("  {} {}", "Path:".dimmed(), path.display());
             Ok(())
         },
         Err(e) => {
@@ -272,13 +278,13 @@ async fn run_prune(args: PruneArgs) -> Result<()> {
                 println!("{} {}", "✓".green(), "No backups to prune".green());
             } else if args.dry_run {
                 println!("{} Would delete {} backup(s):", "→".cyan(), deleted.len());
-                for filename in &deleted {
-                    println!("  {} {}", "•".yellow(), filename);
+                for path in &deleted {
+                    println!("  {} {}", "•".yellow(), path.display());
                 }
             } else {
                 println!("{} Deleted {} backup(s):", "✓".green(), deleted.len());
-                for filename in &deleted {
-                    println!("  {} {}", "•".dimmed(), filename);
+                for path in &deleted {
+                    println!("  {} {}", "•".dimmed(), path.display());
                 }
             }
             Ok(())
@@ -312,7 +318,7 @@ fn create_service(
         (None, Some(brain)) => {
             let backup = dirs::home_dir()
                 .ok_or_else(|| {
-                    crate::error::NovaNetError::Config("Cannot determine home directory".into())
+                    crate::error::NovaNetError::Validation("Cannot determine home directory".into())
                 })?
                 .join(".novanet")
                 .join("backups");
@@ -322,22 +328,6 @@ fn create_service(
     }
 }
 
-/// Format file size in human-readable format
-fn format_size(bytes: u64) -> String {
-    const KB: u64 = 1024;
-    const MB: u64 = KB * 1024;
-    const GB: u64 = MB * 1024;
-
-    if bytes >= GB {
-        format!("{:.2} GB", bytes as f64 / GB as f64)
-    } else if bytes >= MB {
-        format!("{:.2} MB", bytes as f64 / MB as f64)
-    } else if bytes >= KB {
-        format!("{:.2} KB", bytes as f64 / KB as f64)
-    } else {
-        format!("{} bytes", bytes)
-    }
-}
 
 /// Map BackupError to NovaNetError
 fn map_backup_error(e: BackupError) -> crate::error::NovaNetError {
@@ -354,16 +344,6 @@ fn map_backup_error(e: BackupError) -> crate::error::NovaNetError {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_format_size() {
-        assert_eq!(format_size(0), "0 bytes");
-        assert_eq!(format_size(512), "512 bytes");
-        assert_eq!(format_size(1024), "1.00 KB");
-        assert_eq!(format_size(1536), "1.50 KB");
-        assert_eq!(format_size(1024 * 1024), "1.00 MB");
-        assert_eq!(format_size(1024 * 1024 * 1024), "1.00 GB");
-    }
 
     #[test]
     fn test_backup_args_parsing() {
