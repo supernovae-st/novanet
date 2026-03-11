@@ -6,6 +6,7 @@
 pub mod blueprint;
 pub mod commands;
 pub mod config;
+pub mod core;
 pub mod cypher;
 pub mod db;
 pub mod error;
