@@ -36,9 +36,8 @@ novanet <command>    # Run specific command
 - **57 nodes** (36 shared + 21 org)
 - **145 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
-- **5 traits** (defined/authored/imported/generated/retrieved)
 
-> v0.18.2: Ultra-deep review complete, 57 nodes, 145 arcs, PageNative.slug per ADR-030
+> v0.19.0: Traits removed from schema (ADR-024 deprecated). Provenance now tracked per-instance.
 
 ## Tooling
 
@@ -279,7 +278,7 @@ src/
   db.rs           Neo4j connection pool (neo4rs::Graph + Arc)
   error.rs        NovaNetError enum (thiserror) + Result type alias
   cypher.rs       CypherStatement builder (data/meta/overlay/query/search)
-  facets.rs       FacetFilter (Realm/Layer/Trait/ArcFamily/Class) + JSON serde
+  facets.rs       FacetFilter (Realm/Layer/ArcFamily/Class) + JSON serde
   output.rs       OutputFormat (Table/Json/Cypher) + rendering helpers
   commands/
     mod.rs        Module registry
@@ -332,7 +331,7 @@ src/
   - See ADR-021 in `.claude/rules/novanet-decisions.md`
 - **Icons source of truth (v11.5)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
-  - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
+  - Categories: realms, layers, arc_families, states, navigation, quality, modes
   - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)
   - Rust compile-time: `tools/novanet/src/tui/icons.rs` (generated constants)
   - Runtime fallback: `Theme::with_root()` loads from YAML with graceful defaults
@@ -387,7 +386,7 @@ match result {
 **Property-based tests** verify:
 - **Correctness**: Required elements always added
 - **Idempotence**: Applying fix twice = applying once
-- **Identity preservation**: Node metadata (name, realm, layer, trait) unchanged
+- **Identity preservation**: Node metadata (name, realm, layer) unchanged
 - **Property preservation**: Existing properties intact
 
 **Coverage**: 52 tests (24 unit + 24 property-based + 4 integration)
@@ -444,8 +443,7 @@ and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript),
 It does NOT depend on any npm packages at build time.
 
 **v11.0 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
-- Colors (realms, layers, traits, arc families)
-- Border styles (traits: solid/dashed/dotted/double/none)
+- Colors (realms, layers, arc families)
 - Stroke styles (arc families: solid/dashed)
 - Unicode characters (box drawing for TUI)
 

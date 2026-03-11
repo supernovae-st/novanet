@@ -4,13 +4,13 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
-## [0.17.2] - 2026-03-07
+## [0.19.0] - 2026-03-11
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  🧠 NOVANET v0.17.2 — KEY NORMALIZATION                                       ║
+║  🧠 NOVANET v0.19.0 — TRAITS DEPRECATED                                       ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
-║  🔑 ADR-036 v2  │  📦 Migrations 048-050  │  📊 CSR 99.99%  │  ✅ Unified @  ║
+║  ADR-024 Deprecated  │  3→2 Classification Axes  │  Provenance Per-Instance  ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
@@ -18,33 +18,34 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 | Feature | Status | Impact |
 |---------|--------|--------|
-| **🔑 ADR-036 v0.17.1** | ✅ Complete | Unified @ = localized content convention |
-| **📦 Migrations 048-050** | ✅ Applied | 17,378 keys normalized |
-| **📊 CSR 99.99%** | ✅ Achieved | 78,415/78,424 constraints satisfied |
-| **✅ FOR_LOCALE Arcs** | ✅ Created | All knowledge atoms linked to locales |
+| **ADR-024 Deprecated** | ✅ Complete | Traits removed from schema |
+| **Node Classification** | ✅ Simplified | 3 axes → 2 axes (Realm + Layer only) |
+| **Provenance** | ✅ Moved | Now tracked per-instance on nodes that need it |
+| **Documentation** | ✅ Updated | All CLAUDE.md and rules files updated |
 
-### 🔑 Key Normalization (ADR-036 v0.17.1)
+### Removed
 
-Unified convention: `@` = localized content (locale specifier, always last)
+- **Traits System** — Schema-level trait classification removed
+  - Deleted 5 trait YAML files from `models/traits/`
+  - Removed `trait_def.rs` parser module
+  - Removed TUI Nexus Traits tab and `traits.rs` module
+  - Provenance now tracked per-instance on nodes that need it
 
-| Pattern | Example | Count |
-|---------|---------|-------|
-| `term:slug@locale` | `term:bounce-rate@en-US` | 35 |
-| `expression:slug@locale` | `expression:affirmation-0@fr-FR` | 17,343 |
-| `entity-native:slug@locale` | `entity-native:qr-code@fr-FR` | 21 |
-| `page-native:slug@locale` | `page-native:create-qr-code@es-MX` | 6 |
+### Changed
 
-### Added
-
-- **Migration 048** — Normalize Term keys (`term:locale:slug` → `term:slug@locale`)
-- **Migration 049** — Normalize Expression keys (`locale/cat/n` → `expression:slug@locale`)
-- **Migration 050** — Create FOR_LOCALE arcs for all knowledge atoms
-- **Locales am-ET, or-IN** — Added Amharic (Ethiopia) and Odia (India)
+- **Node Classification** — Reduced from 3 axes to 2 axes
+  - Realm (WHERE?) + Layer (WHAT?) remain
+  - Trait (HOW?) axis removed - no longer a schema-level classification
+- **Documentation** — Updated all CLAUDE.md files and rules
+  - adr-quick-reference.md: Marked ADR-024 as deprecated
+  - novanet-terminology.md: Updated to v0.19.0
+  - schema-standard.md: Updated BLOC 1 to remove trait field
 
 ### Fixed
 
-- **Duplicate cleanup** — Removed 17,073 old pattern nodes after reseed
-- **FOR_LOCALE coverage** — All Terms and Expressions now linked to Locale nodes
+- **Nexus Tests** — Fixed 4 failing tests after trait removal
+  - Updated shortcut tests (Arch 'r' → 'A')
+  - Updated tip tests to use `i18n::tips()` correctly
 
 ### 📊 Statistics
 

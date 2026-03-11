@@ -66,7 +66,6 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 │  NodeClass:                                                                 │
 │    WHERE?  NodeRealm  (shared / org)                                        │
 │    WHAT?   NodeLayer  (10 layers: 4 shared + 6 org)                         │
-│    HOW?    NodeTrait  (defined / authored / imported / generated / retrieved) │
 │                                                                             │
 │  ArcClass:                                                                  │
 │    SCOPE   ArcScope       (intra_realm / cross_realm)                       │
@@ -97,7 +96,7 @@ v0.18.2: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 1
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
 - `terminal`: Unicode symbol for TUI
-Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
+Categories: realms, layers, arc_families, states, navigation, quality, modes.
 
 **Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -262,7 +261,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher is the single sour
 │  SCHEMA VIEW QUERIES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  CLASSES_QUERY: MATCH (c:Class) RETURN c.name, c.realm, c.layer, c.trait   │
+│  CLASSES_QUERY: MATCH (c:Class) RETURN c.name, c.realm, c.layer            │
 │  ARCS_QUERY:    MATCH (a:ArcClass) RETURN a.name, a.family, a.scope, ...   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -525,11 +524,11 @@ pnpm dev    # → http://localhost:3000
 1. **Read this file** — Understand the generation philosophy (not translation)
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
 3. **Read `models/_index.yaml`** — Complete schema overview with all 57 nodes
-4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
+4. **Study `taxonomy.yaml`** — Realm/Layer definitions with visual encoding
 5. **Check ADRs** — Use `/adr <number>` command for quick lookup (full ADRs in parent `supernovae-agi` workspace)
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
 
-**Key concepts progression**: Realm → Layer → Trait → Class → Arc → ArcFamily
+**Key concepts progression**: Realm → Layer → Class → Arc → ArcFamily
 
 ---
 
@@ -632,10 +631,9 @@ node:
   name: Term
   realm: shared               # Source of truth (must match path)
   layer: knowledge            # v11.5: 10 layers (4 shared + 6 org)
-  trait: imported             # v11.8: defined/authored/imported/generated/retrieved
   description: "..."
   properties:
     # ...
 ```
 
-> **v11.8 Changes**: "Kind" → "Class", "Meta" eliminated. Trait redefined as "Data Origin" (ADR-024).
+> **v0.19.0 Changes**: Traits removed from schema (ADR-024 deprecated). Provenance now tracked per-instance.

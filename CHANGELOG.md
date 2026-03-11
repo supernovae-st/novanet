@@ -7,6 +7,36 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-03-11
+
+### Removed
+- **Traits System (ADR-024 Deprecated)** - Schema-level trait classification removed
+  - Deleted 5 trait YAML files from `models/traits/` (defined, authored, imported, generated, retrieved)
+  - Removed `trait_def.rs` parser module
+  - Removed TUI Nexus Traits tab and `traits.rs` module
+  - Provenance now tracked per-instance on nodes that need it
+
+### Changed
+- **Node Classification** - Reduced from 3 axes to 2 axes
+  - Realm (WHERE?) + Layer (WHAT?) remain
+  - Trait (HOW?) axis removed - no longer a schema-level classification
+- **Documentation** - Updated all CLAUDE.md files and rules
+  - adr-quick-reference.md: Marked ADR-024 as deprecated
+  - novanet-terminology.md: Updated to v0.19.0, removed trait references
+  - schema-standard.md: Updated BLOC 1 to remove trait field
+  - novanet.md rules: Updated version and deprecation notices
+- **TUI i18n Tips** - Reduced from 10 to 7 tips (removed trait-related tips)
+
+### Fixed
+- **Nexus Tests** - Fixed 4 failing tests after trait removal
+  - Updated shortcut tests (Arch 'r' → 'A')
+  - Updated tip tests to use `i18n::tips()` correctly
+
+### Statistics
+- **1,202 Rust tests passing** (was 1,206 - removed 4 trait-related tests)
+- **Zero clippy warnings**
+- **14 MCP tools** (unchanged)
+
 ## [0.18.0] - 2026-03-10
 
 ### Added

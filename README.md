@@ -118,7 +118,7 @@ novanet/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── taxonomy.yaml  # 2 realms (shared 4 + org 6), 10 layers, 5 traits
+│   │   │   ├── taxonomy.yaml  # 2 realms (shared 4 + org 6), 10 layers
 │   │   │   ├── node-classes/    # node definitions by realm/layer
 │   │   │   └── arc-classes/     # arc definitions by family
 │   │   └── src/               # TypeScript implementation
@@ -226,9 +226,9 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 
 **v11.5 changes:** Locale definition moved to shared/config. SEO/GEO nodes consolidated to shared/knowledge.
 
-Each node type has a **Trait** (defined / authored / imported / generated / retrieved) and arcs are classified by **ArcFamily**.
+Arcs are classified by **ArcFamily** (ownership, localization, semantic, generation, mining, schema).
 
-> **v0.17.2 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
+> **v0.19.0**: Traits removed from schema (ADR-024 deprecated). Provenance is now tracked per-instance on nodes that need it.
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 
