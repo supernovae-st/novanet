@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // 48-page-block-qr-code.cypher — Page and Block parents for QR Code
 // v0.18.0 - Creates parent nodes BEFORE their *Native children
+// v0.19.0 - Standard properties: node_class + created_by (ADR-042)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // IMPORTANT: This file MUST run BEFORE:
@@ -17,7 +18,9 @@ ON CREATE SET
   p.display_name = 'QR Code Generator',
   p.description = 'Create custom QR codes for any purpose - free online QR code generator',
   p.llm_context = 'USE: as the main landing page for QR code creation. TRIGGERS: homepage, main page, generator page, create qr. NOT: for specific QR code types (use subpages). RELATES: Entity:qr-code (represents), Block:head-seo-meta (contains).',
-  p.created_by = 'content:bootstrap',
+  p.node_class = 'Page',
+  p.created_by = 'seed:content',
+  p.created_by_file = '48-page-block-qr-code.cypher',
   p.created_at = datetime(),
   p.updated_at = datetime()
 ON MATCH SET
@@ -37,7 +40,9 @@ ON CREATE SET
   b.description = 'SEO metadata block for QR code page - contains meta title, description, and keywords',
   b.llm_context = 'USE: for meta title, description, keywords in HTML head. TRIGGERS: seo, meta, head, title tag, meta description. NOT: for visible page content (use content blocks). RELATES: Page:qr-code (belongs to), BlockType:head-seo-meta (type).',
   b.anchor_id = 'head-seo-meta',
-  b.created_by = 'content:bootstrap',
+  b.node_class = 'Block',
+  b.created_by = 'seed:content',
+  b.created_by_file = '48-page-block-qr-code.cypher',
   b.created_at = datetime(),
   b.updated_at = datetime()
 ON MATCH SET

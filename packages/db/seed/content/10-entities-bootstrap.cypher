@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // 10-entities-bootstrap.cypher
 // Bootstrap 9 pillar Entity nodes for QR Code AI
+// v0.19.0 - Standard properties: node_class + created_by (ADR-042)
 // v0.17.3 - Remove content.features (use HAS_FEATURE arcs instead)
 // NOTE: Features are expressed via HAS_FEATURE arcs to Entity (category: feature) nodes
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -17,8 +18,10 @@ SET e.display_name = 'QR Code',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing QR codes, 2D barcodes, mobile scanning, or QR code technology fundamentals on QR Code AI.","triggers":["qr code","qr","barcode","scan","matrix code","quick response","2d barcode","scannable"],"not_for":["Specific QR code types (use dynamic-qr-code, static-qr-code)","1D barcodes (use barcode entity)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -33,8 +36,10 @@ SET e.display_name = 'Custom QR Code',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing QR code customization, branding, colors, logos, or visual design on QR Code AI.","triggers":["custom","personalized","branded","logo","colors","design","style","brand"],"not_for":["AI-generated artistic QR codes (use qr-code-art)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -49,8 +54,10 @@ SET e.display_name = 'QR Code Art',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing AI-generated QR codes, artistic QR codes, or generative AI for QR design on QR Code AI.","triggers":["art","artistic","AI","generative","creative","beautiful","image","stable diffusion"],"not_for":["Simple color/logo customization (use custom-qr-code)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -65,8 +72,10 @@ SET e.display_name = 'Dynamic QR Code',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing editable QR codes, trackable QR codes, or QR codes with analytics on QR Code AI.","triggers":["dynamic","editable","changeable","trackable","analytics","statistics","update URL"],"not_for":["Permanent/fixed QR codes (use static-qr-code)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -81,8 +90,10 @@ SET e.display_name = 'Static QR Code',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing permanent QR codes, free QR codes, or QR codes without tracking on QR Code AI.","triggers":["static","permanent","fixed","free","simple","basic","no tracking"],"not_for":["Editable/trackable QR codes (use dynamic-qr-code)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -97,8 +108,10 @@ SET e.display_name = 'Smart Link',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing URL shortening, link management, conditional routing, or link analytics on QR Code AI.","triggers":["smart link","short URL","link","routing","redirect","device detection","geo-targeting"],"not_for":["QR codes themselves (use qr-code)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -113,8 +126,10 @@ SET e.display_name = 'Landing Page',
     e.schema_org_type = 'WebPage',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing QR code destinations, mobile pages, or page builders on QR Code AI.","triggers":["landing page","destination","mobile page","page builder","no-code","conversion"],"not_for":["General website pages"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -129,8 +144,10 @@ SET e.display_name = 'Barcode',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing 1D barcodes, product codes, or traditional barcode formats on QR Code AI.","triggers":["barcode","EAN","UPC","Code 128","Code 39","1D","linear","product code"],"not_for":["2D codes like QR codes (use qr-code)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -145,8 +162,10 @@ SET e.display_name = 'QR Code Generator',
     e.schema_org_type = 'SoftwareApplication',
     e.workflow_id = 'bootstrap',
     e.llm_context = '{"use":"When discussing QR code creation tools, making QR codes, or the generator application on QR Code AI.","triggers":["generator","create","make","tool","app","free","online","generate"],"not_for":["QR code concepts (use qr-code entity)"]}',
-    e.created_by = 'content:bootstrap',
-    e.created_at = datetime(),
+    e.node_class = 'Entity',
+    e.created_by = 'seed:content',
+    e.created_by_file = '10-entities-bootstrap.cypher',
+    e.created_at = coalesce(e.created_at, datetime()),
     e.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════

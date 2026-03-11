@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // 51-seokeywords-en-us.cypher — SEOKeyword nodes for en-US locale
 // v0.17.3 - Updated with Ahrefs data (2026-03-08)
+// v0.19.0 - Standard properties: node_class + created_by (ADR-042)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // Key format: seo:{slug}@{locale} (ADR-029)
@@ -31,7 +32,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -58,7 +61,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -85,7 +90,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -111,7 +118,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -136,7 +145,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -161,7 +172,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -186,7 +199,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -211,7 +226,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -236,7 +253,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -261,7 +280,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -286,7 +307,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -311,7 +334,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -336,7 +361,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -361,7 +388,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -386,7 +415,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -411,7 +442,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -436,7 +469,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -461,7 +496,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -488,7 +525,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -508,7 +547,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -528,7 +569,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -548,7 +591,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -568,7 +613,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -588,7 +635,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -608,7 +657,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -628,7 +679,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -648,7 +701,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -668,7 +723,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -688,7 +745,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -708,7 +767,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -728,7 +789,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -748,7 +811,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -768,7 +833,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -788,7 +855,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -808,7 +877,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -828,7 +899,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -848,7 +921,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -868,7 +943,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -888,7 +965,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -908,7 +987,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -928,7 +1009,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -948,7 +1031,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -968,7 +1053,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -988,7 +1075,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1008,7 +1097,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1028,7 +1119,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1048,7 +1141,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1068,7 +1163,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1088,7 +1185,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1108,7 +1207,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1128,7 +1229,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1148,7 +1251,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1168,7 +1273,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1188,7 +1295,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1208,7 +1317,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1228,7 +1339,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1248,7 +1361,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1268,7 +1383,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1288,7 +1405,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1308,7 +1427,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1328,7 +1449,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1348,7 +1471,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1368,7 +1493,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1388,7 +1515,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1408,7 +1537,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1428,7 +1559,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1448,7 +1581,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
@@ -1468,7 +1603,9 @@ ON CREATE SET
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
-  kw.created_by = 'seed:imported',
+  kw.node_class = 'SEOKeyword',
+  kw.created_by = 'seed:content',
+  kw.created_by_file = '51-seokeywords-en-us.cypher',
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET

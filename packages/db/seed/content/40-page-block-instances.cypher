@@ -6,6 +6,7 @@
 // Required for novanet_generate MCP tool to work
 //
 // v0.14.0 - ADR-029 *Native Pattern, ADR-030 Slug Ownership
+// v0.19.0 - Standard properties: node_class + created_by (ADR-042)
 //
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -20,7 +21,9 @@ ON CREATE SET
   p.display_name = 'QR Code Landing Page',
   p.description = 'Main landing page for QR Code AI - explains what QR codes are and how to create them.',
   p.llm_context = 'USE: For generating the main QR Code landing page. TRIGGERS: qr code, landing, home. NOT: specific use cases or advanced features.',
-  p.created_by = 'content:bootstrap',
+  p.node_class = 'Page',
+  p.created_by = 'seed:content',
+  p.created_by_file = '40-page-block-instances.cypher',
   p.created_at = datetime(),
   p.updated_at = datetime()
 ON MATCH SET
@@ -44,7 +47,9 @@ ON CREATE SET
   b1.description = 'Hero section introducing QR codes with a CTA to the generator.',
   b1.llm_context = 'USE: For hero section generation. Include: headline, subheadline, CTA button.',
   b1.block_type = 'hero',
-  b1.created_by = 'content:bootstrap',
+  b1.node_class = 'Block',
+  b1.created_by = 'seed:content',
+  b1.created_by_file = '40-page-block-instances.cypher',
   b1.created_at = datetime(),
   b1.updated_at = datetime()
 ON MATCH SET
@@ -58,7 +63,9 @@ ON CREATE SET
   b2.description = 'Educational section explaining what QR codes are.',
   b2.llm_context = 'USE: For educational content. Explain QR code basics, history, how they work.',
   b2.block_type = 'content',
-  b2.created_by = 'content:bootstrap',
+  b2.node_class = 'Block',
+  b2.created_by = 'seed:content',
+  b2.created_by_file = '40-page-block-instances.cypher',
   b2.created_at = datetime(),
   b2.updated_at = datetime()
 ON MATCH SET
@@ -72,7 +79,9 @@ ON CREATE SET
   b3.description = 'Grid showcasing different QR code use cases.',
   b3.llm_context = 'USE: For use case showcase. Include: business, marketing, events, personal.',
   b3.block_type = 'grid',
-  b3.created_by = 'content:bootstrap',
+  b3.node_class = 'Block',
+  b3.created_by = 'seed:content',
+  b3.created_by_file = '40-page-block-instances.cypher',
   b3.created_at = datetime(),
   b3.updated_at = datetime()
 ON MATCH SET
@@ -86,7 +95,9 @@ ON CREATE SET
   b4.description = 'Call-to-action to start creating QR codes.',
   b4.llm_context = 'USE: For final CTA. Strong conversion-focused copy.',
   b4.block_type = 'cta',
-  b4.created_by = 'content:bootstrap',
+  b4.node_class = 'Block',
+  b4.created_by = 'seed:content',
+  b4.created_by_file = '40-page-block-instances.cypher',
   b4.created_at = datetime(),
   b4.updated_at = datetime()
 ON MATCH SET
