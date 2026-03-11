@@ -26,6 +26,7 @@ ON CREATE SET
   ac_ASSEMBLES.arc_property_info = '[{name: \'order\', type: \'int\', required: true}]',
   ac_ASSEMBLES.cypher_pattern = '(PageNative)-[:ASSEMBLES]->(BlockNative)',
   ac_ASSEMBLES.temperature_threshold = null,
+  ac_ASSEMBLES.node_class = 'arc_class',
   ac_ASSEMBLES.created_by = 'seed:schema',
   ac_ASSEMBLES.created_at = datetime()
 ON MATCH SET
@@ -40,6 +41,7 @@ ON MATCH SET
   ac_ASSEMBLES.arc_property_info = '[{name: \'order\', type: \'int\', required: true}]',
   ac_ASSEMBLES.cypher_pattern = '(PageNative)-[:ASSEMBLES]->(BlockNative)',
   ac_ASSEMBLES.temperature_threshold = null,
+  ac_ASSEMBLES.node_class = 'arc_class',
   ac_ASSEMBLES.updated_at = datetime();
 
 MERGE (ac_BUNDLES:Schema:ArcClass {key: 'BUNDLES'})
@@ -55,6 +57,7 @@ ON CREATE SET
   ac_BUNDLES.arc_property_info = '[{name: \'checksum\', type: \'string\', required: false}, {name: \'position\', type: \'string\', required: false}]',
   ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageNative, BlockNative)',
   ac_BUNDLES.temperature_threshold = null,
+  ac_BUNDLES.node_class = 'arc_class',
   ac_BUNDLES.created_by = 'seed:schema',
   ac_BUNDLES.created_at = datetime()
 ON MATCH SET
@@ -69,6 +72,7 @@ ON MATCH SET
   ac_BUNDLES.arc_property_info = '[{name: \'checksum\', type: \'string\', required: false}, {name: \'position\', type: \'string\', required: false}]',
   ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageNative, BlockNative)',
   ac_BUNDLES.temperature_threshold = null,
+  ac_BUNDLES.node_class = 'arc_class',
   ac_BUNDLES.updated_at = datetime();
 
 MERGE (ac_COMPILED_FROM:Schema:ArcClass {key: 'COMPILED_FROM'})
@@ -84,6 +88,7 @@ ON CREATE SET
   ac_COMPILED_FROM.arc_property_info = null,
   ac_COMPILED_FROM.cypher_pattern = '(PromptArtifact)-[:COMPILED_FROM]->(BlockInstruction)',
   ac_COMPILED_FROM.temperature_threshold = null,
+  ac_COMPILED_FROM.node_class = 'arc_class',
   ac_COMPILED_FROM.created_by = 'seed:schema',
   ac_COMPILED_FROM.created_at = datetime()
 ON MATCH SET
@@ -98,6 +103,7 @@ ON MATCH SET
   ac_COMPILED_FROM.arc_property_info = null,
   ac_COMPILED_FROM.cypher_pattern = '(PromptArtifact)-[:COMPILED_FROM]->(BlockInstruction)',
   ac_COMPILED_FROM.temperature_threshold = null,
+  ac_COMPILED_FROM.node_class = 'arc_class',
   ac_COMPILED_FROM.updated_at = datetime();
 
 // DERIVED_SLUG_FROM (ADR-030)
@@ -114,6 +120,7 @@ ON CREATE SET
   ac_DERIVED_SLUG_FROM.arc_property_info = '[{name: \'derivation_score\', type: \'float\', required: true}, {name: \'alternatives_considered\', type: \'array\', required: false}, {name: \'brand_invariant\', type: \'boolean\', required: false, default: \'false\'}, {name: \'derivation_rationale\', type: \'string\', required: false}, {name: \'derivation_timestamp\', type: \'datetime\', required: false}, {name: \'no_repetition_applied\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_DERIVED_SLUG_FROM.cypher_pattern = '(BlockNative)-[:DERIVED_SLUG_FROM]->(EntityNative)',
   ac_DERIVED_SLUG_FROM.temperature_threshold = null,
+  ac_DERIVED_SLUG_FROM.node_class = 'arc_class',
   ac_DERIVED_SLUG_FROM.created_by = 'seed:schema',
   ac_DERIVED_SLUG_FROM.created_at = datetime()
 ON MATCH SET
@@ -128,6 +135,7 @@ ON MATCH SET
   ac_DERIVED_SLUG_FROM.arc_property_info = '[{name: \'derivation_score\', type: \'float\', required: true}, {name: \'alternatives_considered\', type: \'array\', required: false}, {name: \'brand_invariant\', type: \'boolean\', required: false, default: \'false\'}, {name: \'derivation_rationale\', type: \'string\', required: false}, {name: \'derivation_timestamp\', type: \'datetime\', required: false}, {name: \'no_repetition_applied\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_DERIVED_SLUG_FROM.cypher_pattern = '(BlockNative)-[:DERIVED_SLUG_FROM]->(EntityNative)',
   ac_DERIVED_SLUG_FROM.temperature_threshold = null,
+  ac_DERIVED_SLUG_FROM.node_class = 'arc_class',
   ac_DERIVED_SLUG_FROM.updated_at = datetime();
 
 MERGE (ac_GENERATED:Schema:ArcClass {key: 'GENERATED'})
@@ -143,6 +151,7 @@ ON CREATE SET
   ac_GENERATED.arc_property_info = '[{name: \'generated_at\', type: \'datetime\', required: true}]',
   ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageNative, BlockNative)',
   ac_GENERATED.temperature_threshold = null,
+  ac_GENERATED.node_class = 'arc_class',
   ac_GENERATED.created_by = 'seed:schema',
   ac_GENERATED.created_at = datetime()
 ON MATCH SET
@@ -157,6 +166,7 @@ ON MATCH SET
   ac_GENERATED.arc_property_info = '[{name: \'generated_at\', type: \'datetime\', required: true}]',
   ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageNative, BlockNative)',
   ac_GENERATED.temperature_threshold = null,
+  ac_GENERATED.node_class = 'arc_class',
   ac_GENERATED.updated_at = datetime();
 
 MERGE (ac_GENERATED_FROM:Schema:ArcClass {key: 'GENERATED_FROM'})
@@ -172,6 +182,7 @@ ON CREATE SET
   ac_GENERATED_FROM.arc_property_info = null,
   ac_GENERATED_FROM.cypher_pattern = '(BlockNative)-[:GENERATED_FROM]->(BlockType)',
   ac_GENERATED_FROM.temperature_threshold = null,
+  ac_GENERATED_FROM.node_class = 'arc_class',
   ac_GENERATED_FROM.created_by = 'seed:schema',
   ac_GENERATED_FROM.created_at = datetime()
 ON MATCH SET
@@ -186,6 +197,7 @@ ON MATCH SET
   ac_GENERATED_FROM.arc_property_info = null,
   ac_GENERATED_FROM.cypher_pattern = '(BlockNative)-[:GENERATED_FROM]->(BlockType)',
   ac_GENERATED_FROM.temperature_threshold = null,
+  ac_GENERATED_FROM.node_class = 'arc_class',
   ac_GENERATED_FROM.updated_at = datetime();
 
 MERGE (ac_INCLUDES_ENTITY:Schema:ArcClass {key: 'INCLUDES_ENTITY'})
@@ -201,6 +213,7 @@ ON CREATE SET
   ac_INCLUDES_ENTITY.arc_property_info = '[{name: \'weight\', type: \'string\', required: false}]',
   ac_INCLUDES_ENTITY.cypher_pattern = '(PromptArtifact)-[:INCLUDES_ENTITY]->(Entity)',
   ac_INCLUDES_ENTITY.temperature_threshold = null,
+  ac_INCLUDES_ENTITY.node_class = 'arc_class',
   ac_INCLUDES_ENTITY.created_by = 'seed:schema',
   ac_INCLUDES_ENTITY.created_at = datetime()
 ON MATCH SET
@@ -215,6 +228,7 @@ ON MATCH SET
   ac_INCLUDES_ENTITY.arc_property_info = '[{name: \'weight\', type: \'string\', required: false}]',
   ac_INCLUDES_ENTITY.cypher_pattern = '(PromptArtifact)-[:INCLUDES_ENTITY]->(Entity)',
   ac_INCLUDES_ENTITY.temperature_threshold = null,
+  ac_INCLUDES_ENTITY.node_class = 'arc_class',
   ac_INCLUDES_ENTITY.updated_at = datetime();
 
 MERGE (ac_INCLUDES_STYLE:Schema:ArcClass {key: 'INCLUDES_STYLE'})
@@ -230,6 +244,7 @@ ON CREATE SET
   ac_INCLUDES_STYLE.arc_property_info = null,
   ac_INCLUDES_STYLE.cypher_pattern = '(BlockInstruction)-[:INCLUDES_STYLE]->(Style)',
   ac_INCLUDES_STYLE.temperature_threshold = null,
+  ac_INCLUDES_STYLE.node_class = 'arc_class',
   ac_INCLUDES_STYLE.created_by = 'seed:schema',
   ac_INCLUDES_STYLE.created_at = datetime()
 ON MATCH SET
@@ -244,6 +259,7 @@ ON MATCH SET
   ac_INCLUDES_STYLE.arc_property_info = null,
   ac_INCLUDES_STYLE.cypher_pattern = '(BlockInstruction)-[:INCLUDES_STYLE]->(Style)',
   ac_INCLUDES_STYLE.temperature_threshold = null,
+  ac_INCLUDES_STYLE.node_class = 'arc_class',
   ac_INCLUDES_STYLE.updated_at = datetime();
 
 MERGE (ac_INFLUENCED_BY:Schema:ArcClass {key: 'INFLUENCED_BY'})
@@ -259,6 +275,7 @@ ON CREATE SET
   ac_INFLUENCED_BY.arc_property_info = '[{name: \'entity_version\', type: \'string\', required: false}, {name: \'weight\', type: \'string\', required: false}]',
   ac_INFLUENCED_BY.cypher_pattern = '(BlockNative)-[:INFLUENCED_BY]->(EntityNative)',
   ac_INFLUENCED_BY.temperature_threshold = null,
+  ac_INFLUENCED_BY.node_class = 'arc_class',
   ac_INFLUENCED_BY.created_by = 'seed:schema',
   ac_INFLUENCED_BY.created_at = datetime()
 ON MATCH SET
@@ -273,6 +290,7 @@ ON MATCH SET
   ac_INFLUENCED_BY.arc_property_info = '[{name: \'entity_version\', type: \'string\', required: false}, {name: \'weight\', type: \'string\', required: false}]',
   ac_INFLUENCED_BY.cypher_pattern = '(BlockNative)-[:INFLUENCED_BY]->(EntityNative)',
   ac_INFLUENCED_BY.temperature_threshold = null,
+  ac_INFLUENCED_BY.node_class = 'arc_class',
   ac_INFLUENCED_BY.updated_at = datetime();
 
 MERGE (ac_PREVIOUS_VERSION:Schema:ArcClass {key: 'PREVIOUS_VERSION'})
@@ -288,6 +306,7 @@ ON CREATE SET
   ac_PREVIOUS_VERSION.arc_property_info = null,
   ac_PREVIOUS_VERSION.cypher_pattern = '(BlockNative, PageNative, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockNative, PageNative, OutputArtifact)',
   ac_PREVIOUS_VERSION.temperature_threshold = null,
+  ac_PREVIOUS_VERSION.node_class = 'arc_class',
   ac_PREVIOUS_VERSION.created_by = 'seed:schema',
   ac_PREVIOUS_VERSION.created_at = datetime()
 ON MATCH SET
@@ -302,6 +321,7 @@ ON MATCH SET
   ac_PREVIOUS_VERSION.arc_property_info = null,
   ac_PREVIOUS_VERSION.cypher_pattern = '(BlockNative, PageNative, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockNative, PageNative, OutputArtifact)',
   ac_PREVIOUS_VERSION.temperature_threshold = null,
+  ac_PREVIOUS_VERSION.node_class = 'arc_class',
   ac_PREVIOUS_VERSION.updated_at = datetime();
 
 MERGE (ac_PRODUCED:Schema:ArcClass {key: 'PRODUCED'})
@@ -317,6 +337,7 @@ ON CREATE SET
   ac_PRODUCED.arc_property_info = '[{name: \'generation_timestamp\', type: \'datetime\', required: true}, {name: \'model_version\', type: \'string\', required: false}, {name: \'token_usage\', type: \'integer\', required: false}]',
   ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockNative, PageNative)',
   ac_PRODUCED.temperature_threshold = null,
+  ac_PRODUCED.node_class = 'arc_class',
   ac_PRODUCED.created_by = 'seed:schema',
   ac_PRODUCED.created_at = datetime()
 ON MATCH SET
@@ -331,6 +352,7 @@ ON MATCH SET
   ac_PRODUCED.arc_property_info = '[{name: \'generation_timestamp\', type: \'datetime\', required: true}, {name: \'model_version\', type: \'string\', required: false}, {name: \'token_usage\', type: \'integer\', required: false}]',
   ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockNative, PageNative)',
   ac_PRODUCED.temperature_threshold = null,
+  ac_PRODUCED.node_class = 'arc_class',
   ac_PRODUCED.updated_at = datetime();
 
 MERGE (ac_PRODUCED_BY:Schema:ArcClass {key: 'PRODUCED_BY'})
@@ -346,6 +368,7 @@ ON CREATE SET
   ac_PRODUCED_BY.arc_property_info = '[{name: \'generation_timestamp\', type: \'datetime\', required: true}, {name: \'model_version\', type: \'string\', required: false}, {name: \'token_usage\', type: \'integer\', required: false}]',
   ac_PRODUCED_BY.cypher_pattern = '(BlockNative, PageNative)-[:PRODUCED_BY]->(PromptArtifact)',
   ac_PRODUCED_BY.temperature_threshold = null,
+  ac_PRODUCED_BY.node_class = 'arc_class',
   ac_PRODUCED_BY.created_by = 'seed:schema',
   ac_PRODUCED_BY.created_at = datetime()
 ON MATCH SET
@@ -360,6 +383,7 @@ ON MATCH SET
   ac_PRODUCED_BY.arc_property_info = '[{name: \'generation_timestamp\', type: \'datetime\', required: true}, {name: \'model_version\', type: \'string\', required: false}, {name: \'token_usage\', type: \'integer\', required: false}]',
   ac_PRODUCED_BY.cypher_pattern = '(BlockNative, PageNative)-[:PRODUCED_BY]->(PromptArtifact)',
   ac_PRODUCED_BY.temperature_threshold = null,
+  ac_PRODUCED_BY.node_class = 'arc_class',
   ac_PRODUCED_BY.updated_at = datetime();
 
 MERGE (ac_FALLBACK_TO:Schema:ArcClass {key: 'FALLBACK_TO'})
@@ -375,6 +399,7 @@ ON CREATE SET
   ac_FALLBACK_TO.arc_property_info = null,
   ac_FALLBACK_TO.cypher_pattern = '(Locale)-[:FALLBACK_TO]->(Locale)',
   ac_FALLBACK_TO.temperature_threshold = null,
+  ac_FALLBACK_TO.node_class = 'arc_class',
   ac_FALLBACK_TO.created_by = 'seed:schema',
   ac_FALLBACK_TO.created_at = datetime()
 ON MATCH SET
@@ -389,6 +414,7 @@ ON MATCH SET
   ac_FALLBACK_TO.arc_property_info = null,
   ac_FALLBACK_TO.cypher_pattern = '(Locale)-[:FALLBACK_TO]->(Locale)',
   ac_FALLBACK_TO.temperature_threshold = null,
+  ac_FALLBACK_TO.node_class = 'arc_class',
   ac_FALLBACK_TO.updated_at = datetime();
 
 MERGE (ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'})
@@ -404,6 +430,7 @@ ON CREATE SET
   ac_FOR_LOCALE.arc_property_info = null,
   ac_FOR_LOCALE.cypher_pattern = '(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
+  ac_FOR_LOCALE.node_class = 'arc_class',
   ac_FOR_LOCALE.created_by = 'seed:schema',
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -418,6 +445,7 @@ ON MATCH SET
   ac_FOR_LOCALE.arc_property_info = null,
   ac_FOR_LOCALE.cypher_pattern = '(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
+  ac_FOR_LOCALE.node_class = 'arc_class',
   ac_FOR_LOCALE.updated_at = datetime();
 
 MERGE (ac_HAS_INCOME_LEVEL:Schema:ArcClass {key: 'HAS_INCOME_LEVEL'})
@@ -433,6 +461,7 @@ ON CREATE SET
   ac_HAS_INCOME_LEVEL.arc_property_info = null,
   ac_HAS_INCOME_LEVEL.cypher_pattern = '(Locale)-[:HAS_INCOME_LEVEL]->(IncomeGroup)',
   ac_HAS_INCOME_LEVEL.temperature_threshold = null,
+  ac_HAS_INCOME_LEVEL.node_class = 'arc_class',
   ac_HAS_INCOME_LEVEL.created_by = 'seed:schema',
   ac_HAS_INCOME_LEVEL.created_at = datetime()
 ON MATCH SET
@@ -447,6 +476,7 @@ ON MATCH SET
   ac_HAS_INCOME_LEVEL.arc_property_info = null,
   ac_HAS_INCOME_LEVEL.cypher_pattern = '(Locale)-[:HAS_INCOME_LEVEL]->(IncomeGroup)',
   ac_HAS_INCOME_LEVEL.temperature_threshold = null,
+  ac_HAS_INCOME_LEVEL.node_class = 'arc_class',
   ac_HAS_INCOME_LEVEL.updated_at = datetime();
 
 MERGE (ac_HAS_LENDING_TYPE:Schema:ArcClass {key: 'HAS_LENDING_TYPE'})
@@ -462,6 +492,7 @@ ON CREATE SET
   ac_HAS_LENDING_TYPE.arc_property_info = null,
   ac_HAS_LENDING_TYPE.cypher_pattern = '(Locale)-[:HAS_LENDING_TYPE]->(LendingCategory)',
   ac_HAS_LENDING_TYPE.temperature_threshold = null,
+  ac_HAS_LENDING_TYPE.node_class = 'arc_class',
   ac_HAS_LENDING_TYPE.created_by = 'seed:schema',
   ac_HAS_LENDING_TYPE.created_at = datetime()
 ON MATCH SET
@@ -476,6 +507,7 @@ ON MATCH SET
   ac_HAS_LENDING_TYPE.arc_property_info = null,
   ac_HAS_LENDING_TYPE.cypher_pattern = '(Locale)-[:HAS_LENDING_TYPE]->(LendingCategory)',
   ac_HAS_LENDING_TYPE.temperature_threshold = null,
+  ac_HAS_LENDING_TYPE.node_class = 'arc_class',
   ac_HAS_LENDING_TYPE.updated_at = datetime();
 
 MERGE (ac_HAS_LOCALE:Schema:ArcClass {key: 'HAS_LOCALE'})
@@ -491,6 +523,7 @@ ON CREATE SET
   ac_HAS_LOCALE.arc_property_info = null,
   ac_HAS_LOCALE.cypher_pattern = '(Country, CulturalSubRealm, EconomicRegion, GeoRegion, GeoSubRegion)-[:HAS_LOCALE]->(Locale)',
   ac_HAS_LOCALE.temperature_threshold = null,
+  ac_HAS_LOCALE.node_class = 'arc_class',
   ac_HAS_LOCALE.created_by = 'seed:schema',
   ac_HAS_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -505,6 +538,7 @@ ON MATCH SET
   ac_HAS_LOCALE.arc_property_info = null,
   ac_HAS_LOCALE.cypher_pattern = '(Country, CulturalSubRealm, EconomicRegion, GeoRegion, GeoSubRegion)-[:HAS_LOCALE]->(Locale)',
   ac_HAS_LOCALE.temperature_threshold = null,
+  ac_HAS_LOCALE.node_class = 'arc_class',
   ac_HAS_LOCALE.updated_at = datetime();
 
 MERGE (ac_HAS_LOCALE_VARIANT:Schema:ArcClass {key: 'HAS_LOCALE_VARIANT'})
@@ -520,6 +554,7 @@ ON CREATE SET
   ac_HAS_LOCALE_VARIANT.arc_property_info = null,
   ac_HAS_LOCALE_VARIANT.cypher_pattern = '(Locale)-[:HAS_LOCALE_VARIANT]->(Locale)',
   ac_HAS_LOCALE_VARIANT.temperature_threshold = null,
+  ac_HAS_LOCALE_VARIANT.node_class = 'arc_class',
   ac_HAS_LOCALE_VARIANT.created_by = 'seed:schema',
   ac_HAS_LOCALE_VARIANT.created_at = datetime()
 ON MATCH SET
@@ -534,6 +569,7 @@ ON MATCH SET
   ac_HAS_LOCALE_VARIANT.arc_property_info = null,
   ac_HAS_LOCALE_VARIANT.cypher_pattern = '(Locale)-[:HAS_LOCALE_VARIANT]->(Locale)',
   ac_HAS_LOCALE_VARIANT.temperature_threshold = null,
+  ac_HAS_LOCALE_VARIANT.node_class = 'arc_class',
   ac_HAS_LOCALE_VARIANT.updated_at = datetime();
 
 MERGE (ac_HAS_POPULATION:Schema:ArcClass {key: 'HAS_POPULATION'})
@@ -549,6 +585,7 @@ ON CREATE SET
   ac_HAS_POPULATION.arc_property_info = '[{name: \'percentage\', type: \'float\', required: true}, {name: \'is_majority\', type: \'boolean\', required: false}]',
   ac_HAS_POPULATION.cypher_pattern = '(Locale)-[:HAS_POPULATION]->(PopulationSubCluster)',
   ac_HAS_POPULATION.temperature_threshold = null,
+  ac_HAS_POPULATION.node_class = 'arc_class',
   ac_HAS_POPULATION.created_by = 'seed:schema',
   ac_HAS_POPULATION.created_at = datetime()
 ON MATCH SET
@@ -563,6 +600,7 @@ ON MATCH SET
   ac_HAS_POPULATION.arc_property_info = '[{name: \'percentage\', type: \'float\', required: true}, {name: \'is_majority\', type: \'boolean\', required: false}]',
   ac_HAS_POPULATION.cypher_pattern = '(Locale)-[:HAS_POPULATION]->(PopulationSubCluster)',
   ac_HAS_POPULATION.temperature_threshold = null,
+  ac_HAS_POPULATION.node_class = 'arc_class',
   ac_HAS_POPULATION.updated_at = datetime();
 
 MERGE (ac_HAS_PRIMARY_POPULATION:Schema:ArcClass {key: 'HAS_PRIMARY_POPULATION'})
@@ -578,6 +616,7 @@ ON CREATE SET
   ac_HAS_PRIMARY_POPULATION.arc_property_info = null,
   ac_HAS_PRIMARY_POPULATION.cypher_pattern = '(Locale)-[:HAS_PRIMARY_POPULATION]->(PopulationCluster)',
   ac_HAS_PRIMARY_POPULATION.temperature_threshold = null,
+  ac_HAS_PRIMARY_POPULATION.node_class = 'arc_class',
   ac_HAS_PRIMARY_POPULATION.created_by = 'seed:schema',
   ac_HAS_PRIMARY_POPULATION.created_at = datetime()
 ON MATCH SET
@@ -592,6 +631,7 @@ ON MATCH SET
   ac_HAS_PRIMARY_POPULATION.arc_property_info = null,
   ac_HAS_PRIMARY_POPULATION.cypher_pattern = '(Locale)-[:HAS_PRIMARY_POPULATION]->(PopulationCluster)',
   ac_HAS_PRIMARY_POPULATION.temperature_threshold = null,
+  ac_HAS_PRIMARY_POPULATION.node_class = 'arc_class',
   ac_HAS_PRIMARY_POPULATION.updated_at = datetime();
 
 MERGE (ac_INCOME_CLASSIFIES:Schema:ArcClass {key: 'INCOME_CLASSIFIES'})
@@ -607,6 +647,7 @@ ON CREATE SET
   ac_INCOME_CLASSIFIES.arc_property_info = null,
   ac_INCOME_CLASSIFIES.cypher_pattern = '(IncomeGroup)-[:INCOME_CLASSIFIES]->(Locale)',
   ac_INCOME_CLASSIFIES.temperature_threshold = null,
+  ac_INCOME_CLASSIFIES.node_class = 'arc_class',
   ac_INCOME_CLASSIFIES.created_by = 'seed:schema',
   ac_INCOME_CLASSIFIES.created_at = datetime()
 ON MATCH SET
@@ -621,6 +662,7 @@ ON MATCH SET
   ac_INCOME_CLASSIFIES.arc_property_info = null,
   ac_INCOME_CLASSIFIES.cypher_pattern = '(IncomeGroup)-[:INCOME_CLASSIFIES]->(Locale)',
   ac_INCOME_CLASSIFIES.temperature_threshold = null,
+  ac_INCOME_CLASSIFIES.node_class = 'arc_class',
   ac_INCOME_CLASSIFIES.updated_at = datetime();
 
 MERGE (ac_IN_COUNTRY:Schema:ArcClass {key: 'IN_COUNTRY'})
@@ -636,6 +678,7 @@ ON CREATE SET
   ac_IN_COUNTRY.arc_property_info = null,
   ac_IN_COUNTRY.cypher_pattern = '(Locale)-[:IN_COUNTRY]->(Country)',
   ac_IN_COUNTRY.temperature_threshold = null,
+  ac_IN_COUNTRY.node_class = 'arc_class',
   ac_IN_COUNTRY.created_by = 'seed:schema',
   ac_IN_COUNTRY.created_at = datetime()
 ON MATCH SET
@@ -650,6 +693,7 @@ ON MATCH SET
   ac_IN_COUNTRY.arc_property_info = null,
   ac_IN_COUNTRY.cypher_pattern = '(Locale)-[:IN_COUNTRY]->(Country)',
   ac_IN_COUNTRY.temperature_threshold = null,
+  ac_IN_COUNTRY.node_class = 'arc_class',
   ac_IN_COUNTRY.updated_at = datetime();
 
 MERGE (ac_IN_CULTURAL_SUBREALM:Schema:ArcClass {key: 'IN_CULTURAL_SUBREALM'})
@@ -665,6 +709,7 @@ ON CREATE SET
   ac_IN_CULTURAL_SUBREALM.arc_property_info = null,
   ac_IN_CULTURAL_SUBREALM.cypher_pattern = '(Locale)-[:IN_CULTURAL_SUBREALM]->(CulturalSubRealm)',
   ac_IN_CULTURAL_SUBREALM.temperature_threshold = null,
+  ac_IN_CULTURAL_SUBREALM.node_class = 'arc_class',
   ac_IN_CULTURAL_SUBREALM.created_by = 'seed:schema',
   ac_IN_CULTURAL_SUBREALM.created_at = datetime()
 ON MATCH SET
@@ -679,6 +724,7 @@ ON MATCH SET
   ac_IN_CULTURAL_SUBREALM.arc_property_info = null,
   ac_IN_CULTURAL_SUBREALM.cypher_pattern = '(Locale)-[:IN_CULTURAL_SUBREALM]->(CulturalSubRealm)',
   ac_IN_CULTURAL_SUBREALM.temperature_threshold = null,
+  ac_IN_CULTURAL_SUBREALM.node_class = 'arc_class',
   ac_IN_CULTURAL_SUBREALM.updated_at = datetime();
 
 MERGE (ac_IN_ECONOMIC_REGION:Schema:ArcClass {key: 'IN_ECONOMIC_REGION'})
@@ -694,6 +740,7 @@ ON CREATE SET
   ac_IN_ECONOMIC_REGION.arc_property_info = null,
   ac_IN_ECONOMIC_REGION.cypher_pattern = '(Locale)-[:IN_ECONOMIC_REGION]->(EconomicRegion)',
   ac_IN_ECONOMIC_REGION.temperature_threshold = null,
+  ac_IN_ECONOMIC_REGION.node_class = 'arc_class',
   ac_IN_ECONOMIC_REGION.created_by = 'seed:schema',
   ac_IN_ECONOMIC_REGION.created_at = datetime()
 ON MATCH SET
@@ -708,6 +755,7 @@ ON MATCH SET
   ac_IN_ECONOMIC_REGION.arc_property_info = null,
   ac_IN_ECONOMIC_REGION.cypher_pattern = '(Locale)-[:IN_ECONOMIC_REGION]->(EconomicRegion)',
   ac_IN_ECONOMIC_REGION.temperature_threshold = null,
+  ac_IN_ECONOMIC_REGION.node_class = 'arc_class',
   ac_IN_ECONOMIC_REGION.updated_at = datetime();
 
 MERGE (ac_IN_SUBREGION:Schema:ArcClass {key: 'IN_SUBREGION'})
@@ -723,6 +771,7 @@ ON CREATE SET
   ac_IN_SUBREGION.arc_property_info = null,
   ac_IN_SUBREGION.cypher_pattern = '(Locale)-[:IN_SUBREGION]->(GeoRegion, GeoSubRegion)',
   ac_IN_SUBREGION.temperature_threshold = null,
+  ac_IN_SUBREGION.node_class = 'arc_class',
   ac_IN_SUBREGION.created_by = 'seed:schema',
   ac_IN_SUBREGION.created_at = datetime()
 ON MATCH SET
@@ -737,6 +786,7 @@ ON MATCH SET
   ac_IN_SUBREGION.arc_property_info = null,
   ac_IN_SUBREGION.cypher_pattern = '(Locale)-[:IN_SUBREGION]->(GeoRegion, GeoSubRegion)',
   ac_IN_SUBREGION.temperature_threshold = null,
+  ac_IN_SUBREGION.node_class = 'arc_class',
   ac_IN_SUBREGION.updated_at = datetime();
 
 MERGE (ac_LENDING_CLASSIFIES:Schema:ArcClass {key: 'LENDING_CLASSIFIES'})
@@ -752,6 +802,7 @@ ON CREATE SET
   ac_LENDING_CLASSIFIES.arc_property_info = null,
   ac_LENDING_CLASSIFIES.cypher_pattern = '(LendingCategory)-[:LENDING_CLASSIFIES]->(Locale)',
   ac_LENDING_CLASSIFIES.temperature_threshold = null,
+  ac_LENDING_CLASSIFIES.node_class = 'arc_class',
   ac_LENDING_CLASSIFIES.created_by = 'seed:schema',
   ac_LENDING_CLASSIFIES.created_at = datetime()
 ON MATCH SET
@@ -766,6 +817,7 @@ ON MATCH SET
   ac_LENDING_CLASSIFIES.arc_property_info = null,
   ac_LENDING_CLASSIFIES.cypher_pattern = '(LendingCategory)-[:LENDING_CLASSIFIES]->(Locale)',
   ac_LENDING_CLASSIFIES.temperature_threshold = null,
+  ac_LENDING_CLASSIFIES.node_class = 'arc_class',
   ac_LENDING_CLASSIFIES.updated_at = datetime();
 
 MERGE (ac_LOCALE_OF:Schema:ArcClass {key: 'LOCALE_OF'})
@@ -781,6 +833,7 @@ ON CREATE SET
   ac_LOCALE_OF.arc_property_info = null,
   ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)',
   ac_LOCALE_OF.temperature_threshold = null,
+  ac_LOCALE_OF.node_class = 'arc_class',
   ac_LOCALE_OF.created_by = 'seed:schema',
   ac_LOCALE_OF.created_at = datetime()
 ON MATCH SET
@@ -795,6 +848,7 @@ ON MATCH SET
   ac_LOCALE_OF.arc_property_info = null,
   ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)',
   ac_LOCALE_OF.temperature_threshold = null,
+  ac_LOCALE_OF.node_class = 'arc_class',
   ac_LOCALE_OF.updated_at = datetime();
 
 MERGE (ac_LOCALE_VARIANT_OF:Schema:ArcClass {key: 'LOCALE_VARIANT_OF'})
@@ -810,6 +864,7 @@ ON CREATE SET
   ac_LOCALE_VARIANT_OF.arc_property_info = null,
   ac_LOCALE_VARIANT_OF.cypher_pattern = '(Locale)-[:LOCALE_VARIANT_OF]->(Locale)',
   ac_LOCALE_VARIANT_OF.temperature_threshold = null,
+  ac_LOCALE_VARIANT_OF.node_class = 'arc_class',
   ac_LOCALE_VARIANT_OF.created_by = 'seed:schema',
   ac_LOCALE_VARIANT_OF.created_at = datetime()
 ON MATCH SET
@@ -824,6 +879,7 @@ ON MATCH SET
   ac_LOCALE_VARIANT_OF.arc_property_info = null,
   ac_LOCALE_VARIANT_OF.cypher_pattern = '(Locale)-[:LOCALE_VARIANT_OF]->(Locale)',
   ac_LOCALE_VARIANT_OF.temperature_threshold = null,
+  ac_LOCALE_VARIANT_OF.node_class = 'arc_class',
   ac_LOCALE_VARIANT_OF.updated_at = datetime();
 
 MERGE (ac_POPULATION_OF:Schema:ArcClass {key: 'POPULATION_OF'})
@@ -839,6 +895,7 @@ ON CREATE SET
   ac_POPULATION_OF.arc_property_info = '[{name: \'percentage\', type: \'float\', required: true}, {name: \'is_majority\', type: \'boolean\', required: false}]',
   ac_POPULATION_OF.cypher_pattern = '(PopulationSubCluster)-[:POPULATION_OF]->(Locale)',
   ac_POPULATION_OF.temperature_threshold = null,
+  ac_POPULATION_OF.node_class = 'arc_class',
   ac_POPULATION_OF.created_by = 'seed:schema',
   ac_POPULATION_OF.created_at = datetime()
 ON MATCH SET
@@ -853,6 +910,7 @@ ON MATCH SET
   ac_POPULATION_OF.arc_property_info = '[{name: \'percentage\', type: \'float\', required: true}, {name: \'is_majority\', type: \'boolean\', required: false}]',
   ac_POPULATION_OF.cypher_pattern = '(PopulationSubCluster)-[:POPULATION_OF]->(Locale)',
   ac_POPULATION_OF.temperature_threshold = null,
+  ac_POPULATION_OF.node_class = 'arc_class',
   ac_POPULATION_OF.updated_at = datetime();
 
 MERGE (ac_PRIMARY_FOR:Schema:ArcClass {key: 'PRIMARY_FOR'})
@@ -868,6 +926,7 @@ ON CREATE SET
   ac_PRIMARY_FOR.arc_property_info = null,
   ac_PRIMARY_FOR.cypher_pattern = '(PopulationCluster)-[:PRIMARY_FOR]->(Locale)',
   ac_PRIMARY_FOR.temperature_threshold = null,
+  ac_PRIMARY_FOR.node_class = 'arc_class',
   ac_PRIMARY_FOR.created_by = 'seed:schema',
   ac_PRIMARY_FOR.created_at = datetime()
 ON MATCH SET
@@ -882,6 +941,7 @@ ON MATCH SET
   ac_PRIMARY_FOR.arc_property_info = null,
   ac_PRIMARY_FOR.cypher_pattern = '(PopulationCluster)-[:PRIMARY_FOR]->(Locale)',
   ac_PRIMARY_FOR.temperature_threshold = null,
+  ac_PRIMARY_FOR.node_class = 'arc_class',
   ac_PRIMARY_FOR.updated_at = datetime();
 
 MERGE (ac_SPEAKS_BRANCH:Schema:ArcClass {key: 'SPEAKS_BRANCH'})
@@ -897,6 +957,7 @@ ON CREATE SET
   ac_SPEAKS_BRANCH.arc_property_info = null,
   ac_SPEAKS_BRANCH.cypher_pattern = '(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)',
   ac_SPEAKS_BRANCH.temperature_threshold = null,
+  ac_SPEAKS_BRANCH.node_class = 'arc_class',
   ac_SPEAKS_BRANCH.created_by = 'seed:schema',
   ac_SPEAKS_BRANCH.created_at = datetime()
 ON MATCH SET
@@ -911,6 +972,7 @@ ON MATCH SET
   ac_SPEAKS_BRANCH.arc_property_info = null,
   ac_SPEAKS_BRANCH.cypher_pattern = '(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)',
   ac_SPEAKS_BRANCH.temperature_threshold = null,
+  ac_SPEAKS_BRANCH.node_class = 'arc_class',
   ac_SPEAKS_BRANCH.updated_at = datetime();
 
 MERGE (ac_SPOKEN_BY:Schema:ArcClass {key: 'SPOKEN_BY'})
@@ -926,6 +988,7 @@ ON CREATE SET
   ac_SPOKEN_BY.arc_property_info = null,
   ac_SPOKEN_BY.cypher_pattern = '(LanguageBranch)-[:SPOKEN_BY]->(Locale)',
   ac_SPOKEN_BY.temperature_threshold = null,
+  ac_SPOKEN_BY.node_class = 'arc_class',
   ac_SPOKEN_BY.created_by = 'seed:schema',
   ac_SPOKEN_BY.created_at = datetime()
 ON MATCH SET
@@ -940,6 +1003,7 @@ ON MATCH SET
   ac_SPOKEN_BY.arc_property_info = null,
   ac_SPOKEN_BY.cypher_pattern = '(LanguageBranch)-[:SPOKEN_BY]->(Locale)',
   ac_SPOKEN_BY.temperature_threshold = null,
+  ac_SPOKEN_BY.node_class = 'arc_class',
   ac_SPOKEN_BY.updated_at = datetime();
 
 MERGE (ac_ENTITY_TARGETED_BY:Schema:ArcClass {key: 'ENTITY_TARGETED_BY'})
@@ -955,6 +1019,7 @@ ON CREATE SET
   ac_ENTITY_TARGETED_BY.arc_property_info = null,
   ac_ENTITY_TARGETED_BY.cypher_pattern = '(Entity)-[:ENTITY_TARGETED_BY]->(SEOKeyword)',
   ac_ENTITY_TARGETED_BY.temperature_threshold = 0.5,
+  ac_ENTITY_TARGETED_BY.node_class = 'arc_class',
   ac_ENTITY_TARGETED_BY.created_by = 'seed:schema',
   ac_ENTITY_TARGETED_BY.created_at = datetime()
 ON MATCH SET
@@ -969,6 +1034,7 @@ ON MATCH SET
   ac_ENTITY_TARGETED_BY.arc_property_info = null,
   ac_ENTITY_TARGETED_BY.cypher_pattern = '(Entity)-[:ENTITY_TARGETED_BY]->(SEOKeyword)',
   ac_ENTITY_TARGETED_BY.temperature_threshold = 0.5,
+  ac_ENTITY_TARGETED_BY.node_class = 'arc_class',
   ac_ENTITY_TARGETED_BY.updated_at = datetime();
 
 MERGE (ac_GEO_TARGETED_BY:Schema:ArcClass {key: 'GEO_TARGETED_BY'})
@@ -984,6 +1050,7 @@ ON CREATE SET
   ac_GEO_TARGETED_BY.arc_property_info = null,
   ac_GEO_TARGETED_BY.cypher_pattern = '(GEOQuery)-[:GEO_TARGETED_BY]->(Page, Block)',
   ac_GEO_TARGETED_BY.temperature_threshold = null,
+  ac_GEO_TARGETED_BY.node_class = 'arc_class',
   ac_GEO_TARGETED_BY.created_by = 'seed:schema',
   ac_GEO_TARGETED_BY.created_at = datetime()
 ON MATCH SET
@@ -998,6 +1065,7 @@ ON MATCH SET
   ac_GEO_TARGETED_BY.arc_property_info = null,
   ac_GEO_TARGETED_BY.cypher_pattern = '(GEOQuery)-[:GEO_TARGETED_BY]->(Page, Block)',
   ac_GEO_TARGETED_BY.temperature_threshold = null,
+  ac_GEO_TARGETED_BY.node_class = 'arc_class',
   ac_GEO_TARGETED_BY.updated_at = datetime();
 
 MERGE (ac_KEYWORD_TARGETED_BY:Schema:ArcClass {key: 'KEYWORD_TARGETED_BY'})
@@ -1013,6 +1081,7 @@ ON CREATE SET
   ac_KEYWORD_TARGETED_BY.arc_property_info = null,
   ac_KEYWORD_TARGETED_BY.cypher_pattern = '(SEOKeyword)-[:KEYWORD_TARGETED_BY]->(Page, Block)',
   ac_KEYWORD_TARGETED_BY.temperature_threshold = null,
+  ac_KEYWORD_TARGETED_BY.node_class = 'arc_class',
   ac_KEYWORD_TARGETED_BY.created_by = 'seed:schema',
   ac_KEYWORD_TARGETED_BY.created_at = datetime()
 ON MATCH SET
@@ -1027,6 +1096,7 @@ ON MATCH SET
   ac_KEYWORD_TARGETED_BY.arc_property_info = null,
   ac_KEYWORD_TARGETED_BY.cypher_pattern = '(SEOKeyword)-[:KEYWORD_TARGETED_BY]->(Page, Block)',
   ac_KEYWORD_TARGETED_BY.temperature_threshold = null,
+  ac_KEYWORD_TARGETED_BY.node_class = 'arc_class',
   ac_KEYWORD_TARGETED_BY.updated_at = datetime();
 
 MERGE (ac_QUERY_TRACKED_BY:Schema:ArcClass {key: 'QUERY_TRACKED_BY'})
@@ -1042,6 +1112,7 @@ ON CREATE SET
   ac_QUERY_TRACKED_BY.arc_property_info = null,
   ac_QUERY_TRACKED_BY.cypher_pattern = '(GEOQuery)-[:QUERY_TRACKED_BY]->(EntityNative, Page, Block)',
   ac_QUERY_TRACKED_BY.temperature_threshold = null,
+  ac_QUERY_TRACKED_BY.node_class = 'arc_class',
   ac_QUERY_TRACKED_BY.created_by = 'seed:schema',
   ac_QUERY_TRACKED_BY.created_at = datetime()
 ON MATCH SET
@@ -1056,6 +1127,7 @@ ON MATCH SET
   ac_QUERY_TRACKED_BY.arc_property_info = null,
   ac_QUERY_TRACKED_BY.cypher_pattern = '(GEOQuery)-[:QUERY_TRACKED_BY]->(EntityNative, Page, Block)',
   ac_QUERY_TRACKED_BY.temperature_threshold = null,
+  ac_QUERY_TRACKED_BY.node_class = 'arc_class',
   ac_QUERY_TRACKED_BY.updated_at = datetime();
 
 MERGE (ac_TARGETS_ENTITY:Schema:ArcClass {key: 'TARGETS_ENTITY'})
@@ -1071,6 +1143,7 @@ ON CREATE SET
   ac_TARGETS_ENTITY.arc_property_info = '[{name: \'relevance\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TARGETS_ENTITY.cypher_pattern = '(SEOKeyword)-[:TARGETS_ENTITY]->(Entity)',
   ac_TARGETS_ENTITY.temperature_threshold = 0.6,
+  ac_TARGETS_ENTITY.node_class = 'arc_class',
   ac_TARGETS_ENTITY.created_by = 'seed:schema',
   ac_TARGETS_ENTITY.created_at = datetime()
 ON MATCH SET
@@ -1085,6 +1158,7 @@ ON MATCH SET
   ac_TARGETS_ENTITY.arc_property_info = '[{name: \'relevance\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TARGETS_ENTITY.cypher_pattern = '(SEOKeyword)-[:TARGETS_ENTITY]->(Entity)',
   ac_TARGETS_ENTITY.temperature_threshold = 0.6,
+  ac_TARGETS_ENTITY.node_class = 'arc_class',
   ac_TARGETS_ENTITY.updated_at = datetime();
 
 MERGE (ac_TARGETS_KEYWORD:Schema:ArcClass {key: 'TARGETS_KEYWORD'})
@@ -1100,6 +1174,7 @@ ON CREATE SET
   ac_TARGETS_KEYWORD.arc_property_info = '[{name: \'priority\', type: \'string\', required: true, enum: [\'primary\', \'secondary\', \'tertiary\']}, {name: \'curator\', type: \'string\', required: false, enum: [\'human\', \'ai-suggested\', \'auto-derived\']}, {name: \'is_slug_source\', type: \'boolean\', required: false, default: \'false\'}, {name: \'strategy\', type: \'string\', required: false, enum: [\'main_keyword\', \'long_tail\', \'semantic_variant\', \'featured_snippet\', \'voice_search\']}, {name: \'target_position\', type: \'integer\', required: false}, {name: \'targeted_at\', type: \'datetime\', required: false}, {name: \'weight\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TARGETS_KEYWORD.cypher_pattern = '(EntityNative, Page, Block)-[:TARGETS_KEYWORD]->(SEOKeyword)',
   ac_TARGETS_KEYWORD.temperature_threshold = 0.6,
+  ac_TARGETS_KEYWORD.node_class = 'arc_class',
   ac_TARGETS_KEYWORD.created_by = 'seed:schema',
   ac_TARGETS_KEYWORD.created_at = datetime()
 ON MATCH SET
@@ -1114,6 +1189,7 @@ ON MATCH SET
   ac_TARGETS_KEYWORD.arc_property_info = '[{name: \'priority\', type: \'string\', required: true, enum: [\'primary\', \'secondary\', \'tertiary\']}, {name: \'curator\', type: \'string\', required: false, enum: [\'human\', \'ai-suggested\', \'auto-derived\']}, {name: \'is_slug_source\', type: \'boolean\', required: false, default: \'false\'}, {name: \'strategy\', type: \'string\', required: false, enum: [\'main_keyword\', \'long_tail\', \'semantic_variant\', \'featured_snippet\', \'voice_search\']}, {name: \'target_position\', type: \'integer\', required: false}, {name: \'targeted_at\', type: \'datetime\', required: false}, {name: \'weight\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TARGETS_KEYWORD.cypher_pattern = '(EntityNative, Page, Block)-[:TARGETS_KEYWORD]->(SEOKeyword)',
   ac_TARGETS_KEYWORD.temperature_threshold = 0.6,
+  ac_TARGETS_KEYWORD.node_class = 'arc_class',
   ac_TARGETS_KEYWORD.updated_at = datetime();
 
 MERGE (ac_TRACKS_QUERY:Schema:ArcClass {key: 'TRACKS_QUERY'})
@@ -1129,6 +1205,7 @@ ON CREATE SET
   ac_TRACKS_QUERY.arc_property_info = '[{name: \'priority\', type: \'string\', required: true, enum: [\'primary\', \'secondary\', \'tertiary\']}, {name: \'alert_threshold\', type: \'float\', required: false}, {name: \'curator\', type: \'string\', required: false, enum: [\'human\', \'ai-suggested\', \'auto-derived\']}, {name: \'target_engines\', type: \'string[]\', required: false}, {name: \'tracked_at\', type: \'datetime\', required: false}, {name: \'visibility_goal\', type: \'float\', required: false}, {name: \'weight\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TRACKS_QUERY.cypher_pattern = '(EntityNative, Page, Block)-[:TRACKS_QUERY]->(GEOQuery)',
   ac_TRACKS_QUERY.temperature_threshold = 0.6,
+  ac_TRACKS_QUERY.node_class = 'arc_class',
   ac_TRACKS_QUERY.created_by = 'seed:schema',
   ac_TRACKS_QUERY.created_at = datetime()
 ON MATCH SET
@@ -1143,6 +1220,7 @@ ON MATCH SET
   ac_TRACKS_QUERY.arc_property_info = '[{name: \'priority\', type: \'string\', required: true, enum: [\'primary\', \'secondary\', \'tertiary\']}, {name: \'alert_threshold\', type: \'float\', required: false}, {name: \'curator\', type: \'string\', required: false, enum: [\'human\', \'ai-suggested\', \'auto-derived\']}, {name: \'target_engines\', type: \'string[]\', required: false}, {name: \'tracked_at\', type: \'datetime\', required: false}, {name: \'visibility_goal\', type: \'float\', required: false}, {name: \'weight\', type: \'float\', required: false, default: \'Null\'}]',
   ac_TRACKS_QUERY.cypher_pattern = '(EntityNative, Page, Block)-[:TRACKS_QUERY]->(GEOQuery)',
   ac_TRACKS_QUERY.temperature_threshold = 0.6,
+  ac_TRACKS_QUERY.node_class = 'arc_class',
   ac_TRACKS_QUERY.updated_at = datetime();
 
 MERGE (ac_ACCEPTS_BLOCK_TYPE:Schema:ArcClass {key: 'ACCEPTS_BLOCK_TYPE'})
@@ -1158,6 +1236,7 @@ ON CREATE SET
   ac_ACCEPTS_BLOCK_TYPE.arc_property_info = null,
   ac_ACCEPTS_BLOCK_TYPE.cypher_pattern = '(ContentSlot)-[:ACCEPTS_BLOCK_TYPE]->(BlockType)',
   ac_ACCEPTS_BLOCK_TYPE.temperature_threshold = null,
+  ac_ACCEPTS_BLOCK_TYPE.node_class = 'arc_class',
   ac_ACCEPTS_BLOCK_TYPE.created_by = 'seed:schema',
   ac_ACCEPTS_BLOCK_TYPE.created_at = datetime()
 ON MATCH SET
@@ -1172,6 +1251,7 @@ ON MATCH SET
   ac_ACCEPTS_BLOCK_TYPE.arc_property_info = null,
   ac_ACCEPTS_BLOCK_TYPE.cypher_pattern = '(ContentSlot)-[:ACCEPTS_BLOCK_TYPE]->(BlockType)',
   ac_ACCEPTS_BLOCK_TYPE.temperature_threshold = null,
+  ac_ACCEPTS_BLOCK_TYPE.node_class = 'arc_class',
   ac_ACCEPTS_BLOCK_TYPE.updated_at = datetime();
 
 MERGE (ac_ADAPTATION_OF:Schema:ArcClass {key: 'ADAPTATION_OF'})
@@ -1187,6 +1267,7 @@ ON CREATE SET
   ac_ADAPTATION_OF.arc_property_info = null,
   ac_ADAPTATION_OF.cypher_pattern = '(Adaptation)-[:ADAPTATION_OF]->(Locale)',
   ac_ADAPTATION_OF.temperature_threshold = null,
+  ac_ADAPTATION_OF.node_class = 'arc_class',
   ac_ADAPTATION_OF.created_by = 'seed:schema',
   ac_ADAPTATION_OF.created_at = datetime()
 ON MATCH SET
@@ -1201,6 +1282,7 @@ ON MATCH SET
   ac_ADAPTATION_OF.arc_property_info = null,
   ac_ADAPTATION_OF.cypher_pattern = '(Adaptation)-[:ADAPTATION_OF]->(Locale)',
   ac_ADAPTATION_OF.temperature_threshold = null,
+  ac_ADAPTATION_OF.node_class = 'arc_class',
   ac_ADAPTATION_OF.updated_at = datetime();
 
 MERGE (ac_AUDIENCE_OF:Schema:ArcClass {key: 'AUDIENCE_OF'})
@@ -1216,6 +1298,7 @@ ON CREATE SET
   ac_AUDIENCE_OF.arc_property_info = '[{name: \'segment\', type: \'string\', required: true}]',
   ac_AUDIENCE_OF.cypher_pattern = '(AudienceSet)-[:AUDIENCE_OF]->(Locale)',
   ac_AUDIENCE_OF.temperature_threshold = null,
+  ac_AUDIENCE_OF.node_class = 'arc_class',
   ac_AUDIENCE_OF.created_by = 'seed:schema',
   ac_AUDIENCE_OF.created_at = datetime()
 ON MATCH SET
@@ -1230,6 +1313,7 @@ ON MATCH SET
   ac_AUDIENCE_OF.arc_property_info = '[{name: \'segment\', type: \'string\', required: true}]',
   ac_AUDIENCE_OF.cypher_pattern = '(AudienceSet)-[:AUDIENCE_OF]->(Locale)',
   ac_AUDIENCE_OF.temperature_threshold = null,
+  ac_AUDIENCE_OF.node_class = 'arc_class',
   ac_AUDIENCE_OF.updated_at = datetime();
 
 MERGE (ac_BELONGS_TO_ORG:Schema:ArcClass {key: 'BELONGS_TO_ORG'})
@@ -1245,6 +1329,7 @@ ON CREATE SET
   ac_BELONGS_TO_ORG.arc_property_info = null,
   ac_BELONGS_TO_ORG.cypher_pattern = '(Project)-[:BELONGS_TO_ORG]->(OrgConfig)',
   ac_BELONGS_TO_ORG.temperature_threshold = null,
+  ac_BELONGS_TO_ORG.node_class = 'arc_class',
   ac_BELONGS_TO_ORG.created_by = 'seed:schema',
   ac_BELONGS_TO_ORG.created_at = datetime()
 ON MATCH SET
@@ -1259,6 +1344,7 @@ ON MATCH SET
   ac_BELONGS_TO_ORG.arc_property_info = null,
   ac_BELONGS_TO_ORG.cypher_pattern = '(Project)-[:BELONGS_TO_ORG]->(OrgConfig)',
   ac_BELONGS_TO_ORG.temperature_threshold = null,
+  ac_BELONGS_TO_ORG.node_class = 'arc_class',
   ac_BELONGS_TO_ORG.updated_at = datetime();
 
 // BELONGS_TO_PROJECT_NATIVE (ADR-029)
@@ -1275,6 +1361,7 @@ ON CREATE SET
   ac_BELONGS_TO_PROJECT_NATIVE.arc_property_info = null,
   ac_BELONGS_TO_PROJECT_NATIVE.cypher_pattern = '(PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)',
   ac_BELONGS_TO_PROJECT_NATIVE.temperature_threshold = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.node_class = 'arc_class',
   ac_BELONGS_TO_PROJECT_NATIVE.created_by = 'seed:schema',
   ac_BELONGS_TO_PROJECT_NATIVE.created_at = datetime()
 ON MATCH SET
@@ -1289,6 +1376,7 @@ ON MATCH SET
   ac_BELONGS_TO_PROJECT_NATIVE.arc_property_info = null,
   ac_BELONGS_TO_PROJECT_NATIVE.cypher_pattern = '(PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)',
   ac_BELONGS_TO_PROJECT_NATIVE.temperature_threshold = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.node_class = 'arc_class',
   ac_BELONGS_TO_PROJECT_NATIVE.updated_at = datetime();
 
 MERGE (ac_BLOCK_OF:Schema:ArcClass {key: 'BLOCK_OF'})
@@ -1304,6 +1392,7 @@ ON CREATE SET
   ac_BLOCK_OF.arc_property_info = '[{name: \'order\', type: \'integer\', required: true}]',
   ac_BLOCK_OF.cypher_pattern = '(Block)-[:BLOCK_OF]->(Page)',
   ac_BLOCK_OF.temperature_threshold = null,
+  ac_BLOCK_OF.node_class = 'arc_class',
   ac_BLOCK_OF.created_by = 'seed:schema',
   ac_BLOCK_OF.created_at = datetime()
 ON MATCH SET
@@ -1318,6 +1407,7 @@ ON MATCH SET
   ac_BLOCK_OF.arc_property_info = '[{name: \'order\', type: \'integer\', required: true}]',
   ac_BLOCK_OF.cypher_pattern = '(Block)-[:BLOCK_OF]->(Page)',
   ac_BLOCK_OF.temperature_threshold = null,
+  ac_BLOCK_OF.node_class = 'arc_class',
   ac_BLOCK_OF.updated_at = datetime();
 
 MERGE (ac_BRANCH_OF:Schema:ArcClass {key: 'BRANCH_OF'})
@@ -1333,6 +1423,7 @@ ON CREATE SET
   ac_BRANCH_OF.arc_property_info = null,
   ac_BRANCH_OF.cypher_pattern = '(LanguageBranch)-[:BRANCH_OF]->(LanguageFamily)',
   ac_BRANCH_OF.temperature_threshold = null,
+  ac_BRANCH_OF.node_class = 'arc_class',
   ac_BRANCH_OF.created_by = 'seed:schema',
   ac_BRANCH_OF.created_at = datetime()
 ON MATCH SET
@@ -1347,6 +1438,7 @@ ON MATCH SET
   ac_BRANCH_OF.arc_property_info = null,
   ac_BRANCH_OF.cypher_pattern = '(LanguageBranch)-[:BRANCH_OF]->(LanguageFamily)',
   ac_BRANCH_OF.temperature_threshold = null,
+  ac_BRANCH_OF.node_class = 'arc_class',
   ac_BRANCH_OF.updated_at = datetime();
 
 MERGE (ac_BRAND_OF:Schema:ArcClass {key: 'BRAND_OF'})
@@ -1362,6 +1454,7 @@ ON CREATE SET
   ac_BRAND_OF.arc_property_info = null,
   ac_BRAND_OF.cypher_pattern = '(Brand)-[:BRAND_OF]->(Project)',
   ac_BRAND_OF.temperature_threshold = null,
+  ac_BRAND_OF.node_class = 'arc_class',
   ac_BRAND_OF.created_by = 'seed:schema',
   ac_BRAND_OF.created_at = datetime()
 ON MATCH SET
@@ -1376,6 +1469,7 @@ ON MATCH SET
   ac_BRAND_OF.arc_property_info = null,
   ac_BRAND_OF.cypher_pattern = '(Brand)-[:BRAND_OF]->(Project)',
   ac_BRAND_OF.temperature_threshold = null,
+  ac_BRAND_OF.node_class = 'arc_class',
   ac_BRAND_OF.updated_at = datetime();
 
 MERGE (ac_CHILD_OF:Schema:ArcClass {key: 'CHILD_OF'})
@@ -1391,6 +1485,7 @@ ON CREATE SET
   ac_CHILD_OF.arc_property_info = null,
   ac_CHILD_OF.cypher_pattern = '(Entity)-[:CHILD_OF]->(Entity)',
   ac_CHILD_OF.temperature_threshold = null,
+  ac_CHILD_OF.node_class = 'arc_class',
   ac_CHILD_OF.created_by = 'seed:schema',
   ac_CHILD_OF.created_at = datetime()
 ON MATCH SET
@@ -1405,6 +1500,7 @@ ON MATCH SET
   ac_CHILD_OF.arc_property_info = null,
   ac_CHILD_OF.cypher_pattern = '(Entity)-[:CHILD_OF]->(Entity)',
   ac_CHILD_OF.temperature_threshold = null,
+  ac_CHILD_OF.node_class = 'arc_class',
   ac_CHILD_OF.updated_at = datetime();
 
 // CLUSTER_OF (ADR-031)
@@ -1421,6 +1517,7 @@ ON CREATE SET
   ac_CLUSTER_OF.arc_property_info = null,
   ac_CLUSTER_OF.cypher_pattern = '(PopulationSubCluster)-[:CLUSTER_OF]->(PopulationCluster)',
   ac_CLUSTER_OF.temperature_threshold = null,
+  ac_CLUSTER_OF.node_class = 'arc_class',
   ac_CLUSTER_OF.created_by = 'seed:schema',
   ac_CLUSTER_OF.created_at = datetime()
 ON MATCH SET
@@ -1435,6 +1532,7 @@ ON MATCH SET
   ac_CLUSTER_OF.arc_property_info = null,
   ac_CLUSTER_OF.cypher_pattern = '(PopulationSubCluster)-[:CLUSTER_OF]->(PopulationCluster)',
   ac_CLUSTER_OF.temperature_threshold = null,
+  ac_CLUSTER_OF.node_class = 'arc_class',
   ac_CLUSTER_OF.updated_at = datetime();
 
 MERGE (ac_CONTAINS_AUDIENCE_TRAIT:Schema:ArcClass {key: 'CONTAINS_AUDIENCE_TRAIT'})
@@ -1450,6 +1548,7 @@ ON CREATE SET
   ac_CONTAINS_AUDIENCE_TRAIT.arc_property_info = null,
   ac_CONTAINS_AUDIENCE_TRAIT.cypher_pattern = '(AudienceSet)-[:CONTAINS_AUDIENCE_TRAIT]->(AudienceTrait)',
   ac_CONTAINS_AUDIENCE_TRAIT.temperature_threshold = null,
+  ac_CONTAINS_AUDIENCE_TRAIT.node_class = 'arc_class',
   ac_CONTAINS_AUDIENCE_TRAIT.created_by = 'seed:schema',
   ac_CONTAINS_AUDIENCE_TRAIT.created_at = datetime()
 ON MATCH SET
@@ -1464,6 +1563,7 @@ ON MATCH SET
   ac_CONTAINS_AUDIENCE_TRAIT.arc_property_info = null,
   ac_CONTAINS_AUDIENCE_TRAIT.cypher_pattern = '(AudienceSet)-[:CONTAINS_AUDIENCE_TRAIT]->(AudienceTrait)',
   ac_CONTAINS_AUDIENCE_TRAIT.temperature_threshold = null,
+  ac_CONTAINS_AUDIENCE_TRAIT.node_class = 'arc_class',
   ac_CONTAINS_AUDIENCE_TRAIT.updated_at = datetime();
 
 MERGE (ac_CONTAINS_CULTURE_REF:Schema:ArcClass {key: 'CONTAINS_CULTURE_REF'})
@@ -1479,6 +1579,7 @@ ON CREATE SET
   ac_CONTAINS_CULTURE_REF.arc_property_info = null,
   ac_CONTAINS_CULTURE_REF.cypher_pattern = '(CultureSet)-[:CONTAINS_CULTURE_REF]->(CultureRef)',
   ac_CONTAINS_CULTURE_REF.temperature_threshold = null,
+  ac_CONTAINS_CULTURE_REF.node_class = 'arc_class',
   ac_CONTAINS_CULTURE_REF.created_by = 'seed:schema',
   ac_CONTAINS_CULTURE_REF.created_at = datetime()
 ON MATCH SET
@@ -1493,6 +1594,7 @@ ON MATCH SET
   ac_CONTAINS_CULTURE_REF.arc_property_info = null,
   ac_CONTAINS_CULTURE_REF.cypher_pattern = '(CultureSet)-[:CONTAINS_CULTURE_REF]->(CultureRef)',
   ac_CONTAINS_CULTURE_REF.temperature_threshold = null,
+  ac_CONTAINS_CULTURE_REF.node_class = 'arc_class',
   ac_CONTAINS_CULTURE_REF.updated_at = datetime();
 
 MERGE (ac_CONTAINS_EXPRESSION:Schema:ArcClass {key: 'CONTAINS_EXPRESSION'})
@@ -1508,6 +1610,7 @@ ON CREATE SET
   ac_CONTAINS_EXPRESSION.arc_property_info = null,
   ac_CONTAINS_EXPRESSION.cypher_pattern = '(ExpressionSet)-[:CONTAINS_EXPRESSION]->(Expression)',
   ac_CONTAINS_EXPRESSION.temperature_threshold = null,
+  ac_CONTAINS_EXPRESSION.node_class = 'arc_class',
   ac_CONTAINS_EXPRESSION.created_by = 'seed:schema',
   ac_CONTAINS_EXPRESSION.created_at = datetime()
 ON MATCH SET
@@ -1522,6 +1625,7 @@ ON MATCH SET
   ac_CONTAINS_EXPRESSION.arc_property_info = null,
   ac_CONTAINS_EXPRESSION.cypher_pattern = '(ExpressionSet)-[:CONTAINS_EXPRESSION]->(Expression)',
   ac_CONTAINS_EXPRESSION.temperature_threshold = null,
+  ac_CONTAINS_EXPRESSION.node_class = 'arc_class',
   ac_CONTAINS_EXPRESSION.updated_at = datetime();
 
 MERGE (ac_CONTAINS_GEO_QUERY:Schema:ArcClass {key: 'CONTAINS_GEO_QUERY'})
@@ -1537,6 +1641,7 @@ ON CREATE SET
   ac_CONTAINS_GEO_QUERY.arc_property_info = null,
   ac_CONTAINS_GEO_QUERY.cypher_pattern = '(GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)',
   ac_CONTAINS_GEO_QUERY.temperature_threshold = null,
+  ac_CONTAINS_GEO_QUERY.node_class = 'arc_class',
   ac_CONTAINS_GEO_QUERY.created_by = 'seed:schema',
   ac_CONTAINS_GEO_QUERY.created_at = datetime()
 ON MATCH SET
@@ -1551,6 +1656,7 @@ ON MATCH SET
   ac_CONTAINS_GEO_QUERY.arc_property_info = null,
   ac_CONTAINS_GEO_QUERY.cypher_pattern = '(GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)',
   ac_CONTAINS_GEO_QUERY.temperature_threshold = null,
+  ac_CONTAINS_GEO_QUERY.node_class = 'arc_class',
   ac_CONTAINS_GEO_QUERY.updated_at = datetime();
 
 MERGE (ac_CONTAINS_PATTERN:Schema:ArcClass {key: 'CONTAINS_PATTERN'})
@@ -1566,6 +1672,7 @@ ON CREATE SET
   ac_CONTAINS_PATTERN.arc_property_info = null,
   ac_CONTAINS_PATTERN.cypher_pattern = '(PatternSet)-[:CONTAINS_PATTERN]->(Pattern)',
   ac_CONTAINS_PATTERN.temperature_threshold = null,
+  ac_CONTAINS_PATTERN.node_class = 'arc_class',
   ac_CONTAINS_PATTERN.created_by = 'seed:schema',
   ac_CONTAINS_PATTERN.created_at = datetime()
 ON MATCH SET
@@ -1580,6 +1687,7 @@ ON MATCH SET
   ac_CONTAINS_PATTERN.arc_property_info = null,
   ac_CONTAINS_PATTERN.cypher_pattern = '(PatternSet)-[:CONTAINS_PATTERN]->(Pattern)',
   ac_CONTAINS_PATTERN.temperature_threshold = null,
+  ac_CONTAINS_PATTERN.node_class = 'arc_class',
   ac_CONTAINS_PATTERN.updated_at = datetime();
 
 // CONTAINS_SEO_KEYWORD (ADR-031)
@@ -1596,6 +1704,7 @@ ON CREATE SET
   ac_CONTAINS_SEO_KEYWORD.arc_property_info = null,
   ac_CONTAINS_SEO_KEYWORD.cypher_pattern = '(SEOKeywordSet)-[:CONTAINS_SEO_KEYWORD]->(SEOKeyword)',
   ac_CONTAINS_SEO_KEYWORD.temperature_threshold = null,
+  ac_CONTAINS_SEO_KEYWORD.node_class = 'arc_class',
   ac_CONTAINS_SEO_KEYWORD.created_by = 'seed:schema',
   ac_CONTAINS_SEO_KEYWORD.created_at = datetime()
 ON MATCH SET
@@ -1610,6 +1719,7 @@ ON MATCH SET
   ac_CONTAINS_SEO_KEYWORD.arc_property_info = null,
   ac_CONTAINS_SEO_KEYWORD.cypher_pattern = '(SEOKeywordSet)-[:CONTAINS_SEO_KEYWORD]->(SEOKeyword)',
   ac_CONTAINS_SEO_KEYWORD.temperature_threshold = null,
+  ac_CONTAINS_SEO_KEYWORD.node_class = 'arc_class',
   ac_CONTAINS_SEO_KEYWORD.updated_at = datetime();
 
 MERGE (ac_CONTAINS_TABOO:Schema:ArcClass {key: 'CONTAINS_TABOO'})
@@ -1625,6 +1735,7 @@ ON CREATE SET
   ac_CONTAINS_TABOO.arc_property_info = null,
   ac_CONTAINS_TABOO.cypher_pattern = '(TabooSet)-[:CONTAINS_TABOO]->(Taboo)',
   ac_CONTAINS_TABOO.temperature_threshold = null,
+  ac_CONTAINS_TABOO.node_class = 'arc_class',
   ac_CONTAINS_TABOO.created_by = 'seed:schema',
   ac_CONTAINS_TABOO.created_at = datetime()
 ON MATCH SET
@@ -1639,6 +1750,7 @@ ON MATCH SET
   ac_CONTAINS_TABOO.arc_property_info = null,
   ac_CONTAINS_TABOO.cypher_pattern = '(TabooSet)-[:CONTAINS_TABOO]->(Taboo)',
   ac_CONTAINS_TABOO.temperature_threshold = null,
+  ac_CONTAINS_TABOO.node_class = 'arc_class',
   ac_CONTAINS_TABOO.updated_at = datetime();
 
 MERGE (ac_CULTURE_OF:Schema:ArcClass {key: 'CULTURE_OF'})
@@ -1654,6 +1766,7 @@ ON CREATE SET
   ac_CULTURE_OF.arc_property_info = null,
   ac_CULTURE_OF.cypher_pattern = '(Culture)-[:CULTURE_OF]->(Locale)',
   ac_CULTURE_OF.temperature_threshold = null,
+  ac_CULTURE_OF.node_class = 'arc_class',
   ac_CULTURE_OF.created_by = 'seed:schema',
   ac_CULTURE_OF.created_at = datetime()
 ON MATCH SET
@@ -1668,6 +1781,7 @@ ON MATCH SET
   ac_CULTURE_OF.arc_property_info = null,
   ac_CULTURE_OF.cypher_pattern = '(Culture)-[:CULTURE_OF]->(Locale)',
   ac_CULTURE_OF.temperature_threshold = null,
+  ac_CULTURE_OF.node_class = 'arc_class',
   ac_CULTURE_OF.updated_at = datetime();
 
 MERGE (ac_CULTURE_SET_OF:Schema:ArcClass {key: 'CULTURE_SET_OF'})
@@ -1683,6 +1797,7 @@ ON CREATE SET
   ac_CULTURE_SET_OF.arc_property_info = '[{name: \'type\', type: \'string\', required: true}]',
   ac_CULTURE_SET_OF.cypher_pattern = '(CultureSet)-[:CULTURE_SET_OF]->(Locale)',
   ac_CULTURE_SET_OF.temperature_threshold = null,
+  ac_CULTURE_SET_OF.node_class = 'arc_class',
   ac_CULTURE_SET_OF.created_by = 'seed:schema',
   ac_CULTURE_SET_OF.created_at = datetime()
 ON MATCH SET
@@ -1697,6 +1812,7 @@ ON MATCH SET
   ac_CULTURE_SET_OF.arc_property_info = '[{name: \'type\', type: \'string\', required: true}]',
   ac_CULTURE_SET_OF.cypher_pattern = '(CultureSet)-[:CULTURE_SET_OF]->(Locale)',
   ac_CULTURE_SET_OF.temperature_threshold = null,
+  ac_CULTURE_SET_OF.node_class = 'arc_class',
   ac_CULTURE_SET_OF.updated_at = datetime();
 
 MERGE (ac_DEFAULT_LOCALE:Schema:ArcClass {key: 'DEFAULT_LOCALE'})
@@ -1712,6 +1828,7 @@ ON CREATE SET
   ac_DEFAULT_LOCALE.arc_property_info = null,
   ac_DEFAULT_LOCALE.cypher_pattern = '(Project)-[:DEFAULT_LOCALE]->(Locale)',
   ac_DEFAULT_LOCALE.temperature_threshold = null,
+  ac_DEFAULT_LOCALE.node_class = 'arc_class',
   ac_DEFAULT_LOCALE.created_by = 'seed:schema',
   ac_DEFAULT_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -1726,6 +1843,7 @@ ON MATCH SET
   ac_DEFAULT_LOCALE.arc_property_info = null,
   ac_DEFAULT_LOCALE.cypher_pattern = '(Project)-[:DEFAULT_LOCALE]->(Locale)',
   ac_DEFAULT_LOCALE.temperature_threshold = null,
+  ac_DEFAULT_LOCALE.node_class = 'arc_class',
   ac_DEFAULT_LOCALE.updated_at = datetime();
 
 MERGE (ac_DESIGN_OF:Schema:ArcClass {key: 'DESIGN_OF'})
@@ -1741,6 +1859,7 @@ ON CREATE SET
   ac_DESIGN_OF.arc_property_info = null,
   ac_DESIGN_OF.cypher_pattern = '(BrandDesign)-[:DESIGN_OF]->(Brand)',
   ac_DESIGN_OF.temperature_threshold = null,
+  ac_DESIGN_OF.node_class = 'arc_class',
   ac_DESIGN_OF.created_by = 'seed:schema',
   ac_DESIGN_OF.created_at = datetime()
 ON MATCH SET
@@ -1755,6 +1874,7 @@ ON MATCH SET
   ac_DESIGN_OF.arc_property_info = null,
   ac_DESIGN_OF.cypher_pattern = '(BrandDesign)-[:DESIGN_OF]->(Brand)',
   ac_DESIGN_OF.temperature_threshold = null,
+  ac_DESIGN_OF.node_class = 'arc_class',
   ac_DESIGN_OF.updated_at = datetime();
 
 MERGE (ac_ENTITY_OF:Schema:ArcClass {key: 'ENTITY_OF'})
@@ -1770,6 +1890,7 @@ ON CREATE SET
   ac_ENTITY_OF.arc_property_info = null,
   ac_ENTITY_OF.cypher_pattern = '(Entity)-[:ENTITY_OF]->(Project)',
   ac_ENTITY_OF.temperature_threshold = null,
+  ac_ENTITY_OF.node_class = 'arc_class',
   ac_ENTITY_OF.created_by = 'seed:schema',
   ac_ENTITY_OF.created_at = datetime()
 ON MATCH SET
@@ -1784,6 +1905,7 @@ ON MATCH SET
   ac_ENTITY_OF.arc_property_info = null,
   ac_ENTITY_OF.cypher_pattern = '(Entity)-[:ENTITY_OF]->(Project)',
   ac_ENTITY_OF.temperature_threshold = null,
+  ac_ENTITY_OF.node_class = 'arc_class',
   ac_ENTITY_OF.updated_at = datetime();
 
 MERGE (ac_EXPRESSIONS_OF:Schema:ArcClass {key: 'EXPRESSIONS_OF'})
@@ -1799,6 +1921,7 @@ ON CREATE SET
   ac_EXPRESSIONS_OF.arc_property_info = null,
   ac_EXPRESSIONS_OF.cypher_pattern = '(ExpressionSet)-[:EXPRESSIONS_OF]->(Locale)',
   ac_EXPRESSIONS_OF.temperature_threshold = null,
+  ac_EXPRESSIONS_OF.node_class = 'arc_class',
   ac_EXPRESSIONS_OF.created_by = 'seed:schema',
   ac_EXPRESSIONS_OF.created_at = datetime()
 ON MATCH SET
@@ -1813,6 +1936,7 @@ ON MATCH SET
   ac_EXPRESSIONS_OF.arc_property_info = null,
   ac_EXPRESSIONS_OF.cypher_pattern = '(ExpressionSet)-[:EXPRESSIONS_OF]->(Locale)',
   ac_EXPRESSIONS_OF.temperature_threshold = null,
+  ac_EXPRESSIONS_OF.node_class = 'arc_class',
   ac_EXPRESSIONS_OF.updated_at = datetime();
 
 MERGE (ac_FORMATTING_OF:Schema:ArcClass {key: 'FORMATTING_OF'})
@@ -1828,6 +1952,7 @@ ON CREATE SET
   ac_FORMATTING_OF.arc_property_info = null,
   ac_FORMATTING_OF.cypher_pattern = '(Formatting)-[:FORMATTING_OF]->(Locale)',
   ac_FORMATTING_OF.temperature_threshold = null,
+  ac_FORMATTING_OF.node_class = 'arc_class',
   ac_FORMATTING_OF.created_by = 'seed:schema',
   ac_FORMATTING_OF.created_at = datetime()
 ON MATCH SET
@@ -1842,6 +1967,7 @@ ON MATCH SET
   ac_FORMATTING_OF.arc_property_info = null,
   ac_FORMATTING_OF.cypher_pattern = '(Formatting)-[:FORMATTING_OF]->(Locale)',
   ac_FORMATTING_OF.temperature_threshold = null,
+  ac_FORMATTING_OF.node_class = 'arc_class',
   ac_FORMATTING_OF.updated_at = datetime();
 
 MERGE (ac_GEO_QUERIES_OF:Schema:ArcClass {key: 'GEO_QUERIES_OF'})
@@ -1857,6 +1983,7 @@ ON CREATE SET
   ac_GEO_QUERIES_OF.arc_property_info = null,
   ac_GEO_QUERIES_OF.cypher_pattern = '(GEOQuerySet)-[:GEO_QUERIES_OF]->(Locale)',
   ac_GEO_QUERIES_OF.temperature_threshold = null,
+  ac_GEO_QUERIES_OF.node_class = 'arc_class',
   ac_GEO_QUERIES_OF.created_by = 'seed:schema',
   ac_GEO_QUERIES_OF.created_at = datetime()
 ON MATCH SET
@@ -1871,6 +1998,7 @@ ON MATCH SET
   ac_GEO_QUERIES_OF.arc_property_info = null,
   ac_GEO_QUERIES_OF.cypher_pattern = '(GEOQuerySet)-[:GEO_QUERIES_OF]->(Locale)',
   ac_GEO_QUERIES_OF.temperature_threshold = null,
+  ac_GEO_QUERIES_OF.node_class = 'arc_class',
   ac_GEO_QUERIES_OF.updated_at = datetime();
 
 MERGE (ac_GEO_SCOPE_OF:Schema:ArcClass {key: 'GEO_SCOPE_OF'})
@@ -1886,6 +2014,7 @@ ON CREATE SET
   ac_GEO_SCOPE_OF.arc_property_info = null,
   ac_GEO_SCOPE_OF.cypher_pattern = '(ProjectGEOScope)-[:GEO_SCOPE_OF]->(Project)',
   ac_GEO_SCOPE_OF.temperature_threshold = null,
+  ac_GEO_SCOPE_OF.node_class = 'arc_class',
   ac_GEO_SCOPE_OF.created_by = 'seed:schema',
   ac_GEO_SCOPE_OF.created_at = datetime()
 ON MATCH SET
@@ -1900,6 +2029,7 @@ ON MATCH SET
   ac_GEO_SCOPE_OF.arc_property_info = null,
   ac_GEO_SCOPE_OF.cypher_pattern = '(ProjectGEOScope)-[:GEO_SCOPE_OF]->(Project)',
   ac_GEO_SCOPE_OF.temperature_threshold = null,
+  ac_GEO_SCOPE_OF.node_class = 'arc_class',
   ac_GEO_SCOPE_OF.updated_at = datetime();
 
 MERGE (ac_HAS_ADAPTATION:Schema:ArcClass {key: 'HAS_ADAPTATION'})
@@ -1915,6 +2045,7 @@ ON CREATE SET
   ac_HAS_ADAPTATION.arc_property_info = null,
   ac_HAS_ADAPTATION.cypher_pattern = '(Locale)-[:HAS_ADAPTATION]->(Adaptation)',
   ac_HAS_ADAPTATION.temperature_threshold = null,
+  ac_HAS_ADAPTATION.node_class = 'arc_class',
   ac_HAS_ADAPTATION.created_by = 'seed:schema',
   ac_HAS_ADAPTATION.created_at = datetime()
 ON MATCH SET
@@ -1929,6 +2060,7 @@ ON MATCH SET
   ac_HAS_ADAPTATION.arc_property_info = null,
   ac_HAS_ADAPTATION.cypher_pattern = '(Locale)-[:HAS_ADAPTATION]->(Adaptation)',
   ac_HAS_ADAPTATION.temperature_threshold = null,
+  ac_HAS_ADAPTATION.node_class = 'arc_class',
   ac_HAS_ADAPTATION.updated_at = datetime();
 
 MERGE (ac_HAS_AUDIENCE:Schema:ArcClass {key: 'HAS_AUDIENCE'})
@@ -1944,6 +2076,7 @@ ON CREATE SET
   ac_HAS_AUDIENCE.arc_property_info = '[{name: \'segment\', type: \'string\', required: true}]',
   ac_HAS_AUDIENCE.cypher_pattern = '(Locale)-[:HAS_AUDIENCE]->(AudienceSet)',
   ac_HAS_AUDIENCE.temperature_threshold = null,
+  ac_HAS_AUDIENCE.node_class = 'arc_class',
   ac_HAS_AUDIENCE.created_by = 'seed:schema',
   ac_HAS_AUDIENCE.created_at = datetime()
 ON MATCH SET
@@ -1958,6 +2091,7 @@ ON MATCH SET
   ac_HAS_AUDIENCE.arc_property_info = '[{name: \'segment\', type: \'string\', required: true}]',
   ac_HAS_AUDIENCE.cypher_pattern = '(Locale)-[:HAS_AUDIENCE]->(AudienceSet)',
   ac_HAS_AUDIENCE.temperature_threshold = null,
+  ac_HAS_AUDIENCE.node_class = 'arc_class',
   ac_HAS_AUDIENCE.updated_at = datetime();
 
 MERGE (ac_HAS_BLOCK:Schema:ArcClass {key: 'HAS_BLOCK'})
@@ -1973,6 +2107,7 @@ ON CREATE SET
   ac_HAS_BLOCK.arc_property_info = '[{name: \'order\', type: \'integer\', required: true}]',
   ac_HAS_BLOCK.cypher_pattern = '(Page)-[:HAS_BLOCK]->(Block)',
   ac_HAS_BLOCK.temperature_threshold = null,
+  ac_HAS_BLOCK.node_class = 'arc_class',
   ac_HAS_BLOCK.created_by = 'seed:schema',
   ac_HAS_BLOCK.created_at = datetime()
 ON MATCH SET
@@ -1987,6 +2122,7 @@ ON MATCH SET
   ac_HAS_BLOCK.arc_property_info = '[{name: \'order\', type: \'integer\', required: true}]',
   ac_HAS_BLOCK.cypher_pattern = '(Page)-[:HAS_BLOCK]->(Block)',
   ac_HAS_BLOCK.temperature_threshold = null,
+  ac_HAS_BLOCK.node_class = 'arc_class',
   ac_HAS_BLOCK.updated_at = datetime();
 
 MERGE (ac_HAS_BRANCH:Schema:ArcClass {key: 'HAS_BRANCH'})
@@ -2002,6 +2138,7 @@ ON CREATE SET
   ac_HAS_BRANCH.arc_property_info = null,
   ac_HAS_BRANCH.cypher_pattern = '(LanguageFamily)-[:HAS_BRANCH]->(LanguageBranch)',
   ac_HAS_BRANCH.temperature_threshold = null,
+  ac_HAS_BRANCH.node_class = 'arc_class',
   ac_HAS_BRANCH.created_by = 'seed:schema',
   ac_HAS_BRANCH.created_at = datetime()
 ON MATCH SET
@@ -2016,6 +2153,7 @@ ON MATCH SET
   ac_HAS_BRANCH.arc_property_info = null,
   ac_HAS_BRANCH.cypher_pattern = '(LanguageFamily)-[:HAS_BRANCH]->(LanguageBranch)',
   ac_HAS_BRANCH.temperature_threshold = null,
+  ac_HAS_BRANCH.node_class = 'arc_class',
   ac_HAS_BRANCH.updated_at = datetime();
 
 MERGE (ac_HAS_BRAND:Schema:ArcClass {key: 'HAS_BRAND'})
@@ -2031,6 +2169,7 @@ ON CREATE SET
   ac_HAS_BRAND.arc_property_info = null,
   ac_HAS_BRAND.cypher_pattern = '(Project)-[:HAS_BRAND]->(Brand)',
   ac_HAS_BRAND.temperature_threshold = null,
+  ac_HAS_BRAND.node_class = 'arc_class',
   ac_HAS_BRAND.created_by = 'seed:schema',
   ac_HAS_BRAND.created_at = datetime()
 ON MATCH SET
@@ -2045,6 +2184,7 @@ ON MATCH SET
   ac_HAS_BRAND.arc_property_info = null,
   ac_HAS_BRAND.cypher_pattern = '(Project)-[:HAS_BRAND]->(Brand)',
   ac_HAS_BRAND.temperature_threshold = null,
+  ac_HAS_BRAND.node_class = 'arc_class',
   ac_HAS_BRAND.updated_at = datetime();
 
 MERGE (ac_HAS_CHILD:Schema:ArcClass {key: 'HAS_CHILD'})
@@ -2060,6 +2200,7 @@ ON CREATE SET
   ac_HAS_CHILD.arc_property_info = '[{name: \'position\', type: \'int\', required: true}, {name: \'visibility\', type: \'string\', required: true, enum: [\'public\', \'draft\', \'internal\']}, {name: \'featured\', type: \'boolean\', required: false}]',
   ac_HAS_CHILD.cypher_pattern = '(Entity)-[:HAS_CHILD]->(Entity)',
   ac_HAS_CHILD.temperature_threshold = null,
+  ac_HAS_CHILD.node_class = 'arc_class',
   ac_HAS_CHILD.created_by = 'seed:schema',
   ac_HAS_CHILD.created_at = datetime()
 ON MATCH SET
@@ -2074,6 +2215,7 @@ ON MATCH SET
   ac_HAS_CHILD.arc_property_info = '[{name: \'position\', type: \'int\', required: true}, {name: \'visibility\', type: \'string\', required: true, enum: [\'public\', \'draft\', \'internal\']}, {name: \'featured\', type: \'boolean\', required: false}]',
   ac_HAS_CHILD.cypher_pattern = '(Entity)-[:HAS_CHILD]->(Entity)',
   ac_HAS_CHILD.temperature_threshold = null,
+  ac_HAS_CHILD.node_class = 'arc_class',
   ac_HAS_CHILD.updated_at = datetime();
 
 MERGE (ac_HAS_CULTURE:Schema:ArcClass {key: 'HAS_CULTURE'})
@@ -2089,6 +2231,7 @@ ON CREATE SET
   ac_HAS_CULTURE.arc_property_info = null,
   ac_HAS_CULTURE.cypher_pattern = '(Locale)-[:HAS_CULTURE]->(Culture)',
   ac_HAS_CULTURE.temperature_threshold = null,
+  ac_HAS_CULTURE.node_class = 'arc_class',
   ac_HAS_CULTURE.created_by = 'seed:schema',
   ac_HAS_CULTURE.created_at = datetime()
 ON MATCH SET
@@ -2103,6 +2246,7 @@ ON MATCH SET
   ac_HAS_CULTURE.arc_property_info = null,
   ac_HAS_CULTURE.cypher_pattern = '(Locale)-[:HAS_CULTURE]->(Culture)',
   ac_HAS_CULTURE.temperature_threshold = null,
+  ac_HAS_CULTURE.node_class = 'arc_class',
   ac_HAS_CULTURE.updated_at = datetime();
 
 MERGE (ac_HAS_CULTURE_SET:Schema:ArcClass {key: 'HAS_CULTURE_SET'})
@@ -2118,6 +2262,7 @@ ON CREATE SET
   ac_HAS_CULTURE_SET.arc_property_info = '[{name: \'type\', type: \'string\', required: true}]',
   ac_HAS_CULTURE_SET.cypher_pattern = '(Locale)-[:HAS_CULTURE_SET]->(CultureSet)',
   ac_HAS_CULTURE_SET.temperature_threshold = null,
+  ac_HAS_CULTURE_SET.node_class = 'arc_class',
   ac_HAS_CULTURE_SET.created_by = 'seed:schema',
   ac_HAS_CULTURE_SET.created_at = datetime()
 ON MATCH SET
@@ -2132,6 +2277,7 @@ ON MATCH SET
   ac_HAS_CULTURE_SET.arc_property_info = '[{name: \'type\', type: \'string\', required: true}]',
   ac_HAS_CULTURE_SET.cypher_pattern = '(Locale)-[:HAS_CULTURE_SET]->(CultureSet)',
   ac_HAS_CULTURE_SET.temperature_threshold = null,
+  ac_HAS_CULTURE_SET.node_class = 'arc_class',
   ac_HAS_CULTURE_SET.updated_at = datetime();
 
 MERGE (ac_HAS_DESIGN:Schema:ArcClass {key: 'HAS_DESIGN'})
@@ -2147,6 +2293,7 @@ ON CREATE SET
   ac_HAS_DESIGN.arc_property_info = null,
   ac_HAS_DESIGN.cypher_pattern = '(Brand)-[:HAS_DESIGN]->(BrandDesign)',
   ac_HAS_DESIGN.temperature_threshold = null,
+  ac_HAS_DESIGN.node_class = 'arc_class',
   ac_HAS_DESIGN.created_by = 'seed:schema',
   ac_HAS_DESIGN.created_at = datetime()
 ON MATCH SET
@@ -2161,6 +2308,7 @@ ON MATCH SET
   ac_HAS_DESIGN.arc_property_info = null,
   ac_HAS_DESIGN.cypher_pattern = '(Brand)-[:HAS_DESIGN]->(BrandDesign)',
   ac_HAS_DESIGN.temperature_threshold = null,
+  ac_HAS_DESIGN.node_class = 'arc_class',
   ac_HAS_DESIGN.updated_at = datetime();
 
 MERGE (ac_HAS_ENTITY:Schema:ArcClass {key: 'HAS_ENTITY'})
@@ -2176,6 +2324,7 @@ ON CREATE SET
   ac_HAS_ENTITY.arc_property_info = null,
   ac_HAS_ENTITY.cypher_pattern = '(Project)-[:HAS_ENTITY]->(Entity)',
   ac_HAS_ENTITY.temperature_threshold = null,
+  ac_HAS_ENTITY.node_class = 'arc_class',
   ac_HAS_ENTITY.created_by = 'seed:schema',
   ac_HAS_ENTITY.created_at = datetime()
 ON MATCH SET
@@ -2190,6 +2339,7 @@ ON MATCH SET
   ac_HAS_ENTITY.arc_property_info = null,
   ac_HAS_ENTITY.cypher_pattern = '(Project)-[:HAS_ENTITY]->(Entity)',
   ac_HAS_ENTITY.temperature_threshold = null,
+  ac_HAS_ENTITY.node_class = 'arc_class',
   ac_HAS_ENTITY.updated_at = datetime();
 
 MERGE (ac_HAS_EXPRESSIONS:Schema:ArcClass {key: 'HAS_EXPRESSIONS'})
@@ -2205,6 +2355,7 @@ ON CREATE SET
   ac_HAS_EXPRESSIONS.arc_property_info = null,
   ac_HAS_EXPRESSIONS.cypher_pattern = '(Locale)-[:HAS_EXPRESSIONS]->(ExpressionSet)',
   ac_HAS_EXPRESSIONS.temperature_threshold = null,
+  ac_HAS_EXPRESSIONS.node_class = 'arc_class',
   ac_HAS_EXPRESSIONS.created_by = 'seed:schema',
   ac_HAS_EXPRESSIONS.created_at = datetime()
 ON MATCH SET
@@ -2219,6 +2370,7 @@ ON MATCH SET
   ac_HAS_EXPRESSIONS.arc_property_info = null,
   ac_HAS_EXPRESSIONS.cypher_pattern = '(Locale)-[:HAS_EXPRESSIONS]->(ExpressionSet)',
   ac_HAS_EXPRESSIONS.temperature_threshold = null,
+  ac_HAS_EXPRESSIONS.node_class = 'arc_class',
   ac_HAS_EXPRESSIONS.updated_at = datetime();
 
 MERGE (ac_HAS_FORMAT:Schema:ArcClass {key: 'HAS_FORMAT'})
@@ -2234,6 +2386,7 @@ ON CREATE SET
   ac_HAS_FORMAT.arc_property_info = null,
   ac_HAS_FORMAT.cypher_pattern = '(SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat)',
   ac_HAS_FORMAT.temperature_threshold = null,
+  ac_HAS_FORMAT.node_class = 'arc_class',
   ac_HAS_FORMAT.created_by = 'seed:schema',
   ac_HAS_FORMAT.created_at = datetime()
 ON MATCH SET
@@ -2248,6 +2401,7 @@ ON MATCH SET
   ac_HAS_FORMAT.arc_property_info = null,
   ac_HAS_FORMAT.cypher_pattern = '(SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat)',
   ac_HAS_FORMAT.temperature_threshold = null,
+  ac_HAS_FORMAT.node_class = 'arc_class',
   ac_HAS_FORMAT.updated_at = datetime();
 
 MERGE (ac_HAS_FORMATTING:Schema:ArcClass {key: 'HAS_FORMATTING'})
@@ -2263,6 +2417,7 @@ ON CREATE SET
   ac_HAS_FORMATTING.arc_property_info = null,
   ac_HAS_FORMATTING.cypher_pattern = '(Locale)-[:HAS_FORMATTING]->(Formatting)',
   ac_HAS_FORMATTING.temperature_threshold = null,
+  ac_HAS_FORMATTING.node_class = 'arc_class',
   ac_HAS_FORMATTING.created_by = 'seed:schema',
   ac_HAS_FORMATTING.created_at = datetime()
 ON MATCH SET
@@ -2277,6 +2432,7 @@ ON MATCH SET
   ac_HAS_FORMATTING.arc_property_info = null,
   ac_HAS_FORMATTING.cypher_pattern = '(Locale)-[:HAS_FORMATTING]->(Formatting)',
   ac_HAS_FORMATTING.temperature_threshold = null,
+  ac_HAS_FORMATTING.node_class = 'arc_class',
   ac_HAS_FORMATTING.updated_at = datetime();
 
 MERGE (ac_HAS_GEO_ANSWERS:Schema:ArcClass {key: 'HAS_GEO_ANSWERS'})
@@ -2292,6 +2448,7 @@ ON CREATE SET
   ac_HAS_GEO_ANSWERS.arc_property_info = null,
   ac_HAS_GEO_ANSWERS.cypher_pattern = '(GEOQuery)-[:HAS_GEO_ANSWERS]->(GEOAnswer)',
   ac_HAS_GEO_ANSWERS.temperature_threshold = null,
+  ac_HAS_GEO_ANSWERS.node_class = 'arc_class',
   ac_HAS_GEO_ANSWERS.created_by = 'seed:schema',
   ac_HAS_GEO_ANSWERS.created_at = datetime()
 ON MATCH SET
@@ -2306,6 +2463,7 @@ ON MATCH SET
   ac_HAS_GEO_ANSWERS.arc_property_info = null,
   ac_HAS_GEO_ANSWERS.cypher_pattern = '(GEOQuery)-[:HAS_GEO_ANSWERS]->(GEOAnswer)',
   ac_HAS_GEO_ANSWERS.temperature_threshold = null,
+  ac_HAS_GEO_ANSWERS.node_class = 'arc_class',
   ac_HAS_GEO_ANSWERS.updated_at = datetime();
 
 MERGE (ac_HAS_GEO_QUERIES:Schema:ArcClass {key: 'HAS_GEO_QUERIES'})
@@ -2321,6 +2479,7 @@ ON CREATE SET
   ac_HAS_GEO_QUERIES.arc_property_info = null,
   ac_HAS_GEO_QUERIES.cypher_pattern = '(Locale)-[:HAS_GEO_QUERIES]->(GEOQuerySet)',
   ac_HAS_GEO_QUERIES.temperature_threshold = null,
+  ac_HAS_GEO_QUERIES.node_class = 'arc_class',
   ac_HAS_GEO_QUERIES.created_by = 'seed:schema',
   ac_HAS_GEO_QUERIES.created_at = datetime()
 ON MATCH SET
@@ -2335,6 +2494,7 @@ ON MATCH SET
   ac_HAS_GEO_QUERIES.arc_property_info = null,
   ac_HAS_GEO_QUERIES.cypher_pattern = '(Locale)-[:HAS_GEO_QUERIES]->(GEOQuerySet)',
   ac_HAS_GEO_QUERIES.temperature_threshold = null,
+  ac_HAS_GEO_QUERIES.node_class = 'arc_class',
   ac_HAS_GEO_QUERIES.updated_at = datetime();
 
 MERGE (ac_HAS_GEO_SCOPE:Schema:ArcClass {key: 'HAS_GEO_SCOPE'})
@@ -2350,6 +2510,7 @@ ON CREATE SET
   ac_HAS_GEO_SCOPE.arc_property_info = null,
   ac_HAS_GEO_SCOPE.cypher_pattern = '(Project)-[:HAS_GEO_SCOPE]->(ProjectGEOScope)',
   ac_HAS_GEO_SCOPE.temperature_threshold = null,
+  ac_HAS_GEO_SCOPE.node_class = 'arc_class',
   ac_HAS_GEO_SCOPE.created_by = 'seed:schema',
   ac_HAS_GEO_SCOPE.created_at = datetime()
 ON MATCH SET
@@ -2364,6 +2525,7 @@ ON MATCH SET
   ac_HAS_GEO_SCOPE.arc_property_info = null,
   ac_HAS_GEO_SCOPE.cypher_pattern = '(Project)-[:HAS_GEO_SCOPE]->(ProjectGEOScope)',
   ac_HAS_GEO_SCOPE.temperature_threshold = null,
+  ac_HAS_GEO_SCOPE.node_class = 'arc_class',
   ac_HAS_GEO_SCOPE.updated_at = datetime();
 
 MERGE (ac_HAS_INSTRUCTION:Schema:ArcClass {key: 'HAS_INSTRUCTION'})
@@ -2379,6 +2541,7 @@ ON CREATE SET
   ac_HAS_INSTRUCTION.arc_property_info = '[{name: \'position\', type: \'integer\', required: false}]',
   ac_HAS_INSTRUCTION.cypher_pattern = '(Page, Block)-[:HAS_INSTRUCTION]->(BlockInstruction)',
   ac_HAS_INSTRUCTION.temperature_threshold = null,
+  ac_HAS_INSTRUCTION.node_class = 'arc_class',
   ac_HAS_INSTRUCTION.created_by = 'seed:schema',
   ac_HAS_INSTRUCTION.created_at = datetime()
 ON MATCH SET
@@ -2393,6 +2556,7 @@ ON MATCH SET
   ac_HAS_INSTRUCTION.arc_property_info = '[{name: \'position\', type: \'integer\', required: false}]',
   ac_HAS_INSTRUCTION.cypher_pattern = '(Page, Block)-[:HAS_INSTRUCTION]->(BlockInstruction)',
   ac_HAS_INSTRUCTION.temperature_threshold = null,
+  ac_HAS_INSTRUCTION.node_class = 'arc_class',
   ac_HAS_INSTRUCTION.updated_at = datetime();
 
 // HAS_NATIVE (ADR-029)
@@ -2409,6 +2573,7 @@ ON CREATE SET
   ac_HAS_NATIVE.arc_property_info = null,
   ac_HAS_NATIVE.cypher_pattern = '(Entity, Project, Page, Block)-[:HAS_NATIVE]->(EntityNative, ProjectNative, PageNative, BlockNative)',
   ac_HAS_NATIVE.temperature_threshold = null,
+  ac_HAS_NATIVE.node_class = 'arc_class',
   ac_HAS_NATIVE.created_by = 'seed:schema',
   ac_HAS_NATIVE.created_at = datetime()
 ON MATCH SET
@@ -2423,6 +2588,7 @@ ON MATCH SET
   ac_HAS_NATIVE.arc_property_info = null,
   ac_HAS_NATIVE.cypher_pattern = '(Entity, Project, Page, Block)-[:HAS_NATIVE]->(EntityNative, ProjectNative, PageNative, BlockNative)',
   ac_HAS_NATIVE.temperature_threshold = null,
+  ac_HAS_NATIVE.node_class = 'arc_class',
   ac_HAS_NATIVE.updated_at = datetime();
 
 MERGE (ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'})
@@ -2438,6 +2604,7 @@ ON CREATE SET
   ac_HAS_PAGE.arc_property_info = null,
   ac_HAS_PAGE.cypher_pattern = '(Project)-[:HAS_PAGE]->(Page)',
   ac_HAS_PAGE.temperature_threshold = null,
+  ac_HAS_PAGE.node_class = 'arc_class',
   ac_HAS_PAGE.created_by = 'seed:schema',
   ac_HAS_PAGE.created_at = datetime()
 ON MATCH SET
@@ -2452,6 +2619,7 @@ ON MATCH SET
   ac_HAS_PAGE.arc_property_info = null,
   ac_HAS_PAGE.cypher_pattern = '(Project)-[:HAS_PAGE]->(Page)',
   ac_HAS_PAGE.temperature_threshold = null,
+  ac_HAS_PAGE.node_class = 'arc_class',
   ac_HAS_PAGE.updated_at = datetime();
 
 MERGE (ac_HAS_PATTERNS:Schema:ArcClass {key: 'HAS_PATTERNS'})
@@ -2467,6 +2635,7 @@ ON CREATE SET
   ac_HAS_PATTERNS.arc_property_info = '[{name: \'usage\', type: \'string\', required: true}]',
   ac_HAS_PATTERNS.cypher_pattern = '(Locale)-[:HAS_PATTERNS]->(PatternSet)',
   ac_HAS_PATTERNS.temperature_threshold = null,
+  ac_HAS_PATTERNS.node_class = 'arc_class',
   ac_HAS_PATTERNS.created_by = 'seed:schema',
   ac_HAS_PATTERNS.created_at = datetime()
 ON MATCH SET
@@ -2481,6 +2650,7 @@ ON MATCH SET
   ac_HAS_PATTERNS.arc_property_info = '[{name: \'usage\', type: \'string\', required: true}]',
   ac_HAS_PATTERNS.cypher_pattern = '(Locale)-[:HAS_PATTERNS]->(PatternSet)',
   ac_HAS_PATTERNS.temperature_threshold = null,
+  ac_HAS_PATTERNS.node_class = 'arc_class',
   ac_HAS_PATTERNS.updated_at = datetime();
 
 MERGE (ac_HAS_PRINCIPLES:Schema:ArcClass {key: 'HAS_PRINCIPLES'})
@@ -2496,6 +2666,7 @@ ON CREATE SET
   ac_HAS_PRINCIPLES.arc_property_info = null,
   ac_HAS_PRINCIPLES.cypher_pattern = '(Brand)-[:HAS_PRINCIPLES]->(BrandPrinciples)',
   ac_HAS_PRINCIPLES.temperature_threshold = null,
+  ac_HAS_PRINCIPLES.node_class = 'arc_class',
   ac_HAS_PRINCIPLES.created_by = 'seed:schema',
   ac_HAS_PRINCIPLES.created_at = datetime()
 ON MATCH SET
@@ -2510,6 +2681,7 @@ ON MATCH SET
   ac_HAS_PRINCIPLES.arc_property_info = null,
   ac_HAS_PRINCIPLES.cypher_pattern = '(Brand)-[:HAS_PRINCIPLES]->(BrandPrinciples)',
   ac_HAS_PRINCIPLES.temperature_threshold = null,
+  ac_HAS_PRINCIPLES.node_class = 'arc_class',
   ac_HAS_PRINCIPLES.updated_at = datetime();
 
 MERGE (ac_HAS_PROJECT:Schema:ArcClass {key: 'HAS_PROJECT'})
@@ -2525,6 +2697,7 @@ ON CREATE SET
   ac_HAS_PROJECT.arc_property_info = null,
   ac_HAS_PROJECT.cypher_pattern = '(OrgConfig)-[:HAS_PROJECT]->(Project)',
   ac_HAS_PROJECT.temperature_threshold = null,
+  ac_HAS_PROJECT.node_class = 'arc_class',
   ac_HAS_PROJECT.created_by = 'seed:schema',
   ac_HAS_PROJECT.created_at = datetime()
 ON MATCH SET
@@ -2539,6 +2712,7 @@ ON MATCH SET
   ac_HAS_PROJECT.arc_property_info = null,
   ac_HAS_PROJECT.cypher_pattern = '(OrgConfig)-[:HAS_PROJECT]->(Project)',
   ac_HAS_PROJECT.temperature_threshold = null,
+  ac_HAS_PROJECT.node_class = 'arc_class',
   ac_HAS_PROJECT.updated_at = datetime();
 
 MERGE (ac_HAS_PROMPT_STYLE:Schema:ArcClass {key: 'HAS_PROMPT_STYLE'})
@@ -2554,6 +2728,7 @@ ON CREATE SET
   ac_HAS_PROMPT_STYLE.arc_property_info = null,
   ac_HAS_PROMPT_STYLE.cypher_pattern = '(Brand)-[:HAS_PROMPT_STYLE]->(PromptStyle)',
   ac_HAS_PROMPT_STYLE.temperature_threshold = null,
+  ac_HAS_PROMPT_STYLE.node_class = 'arc_class',
   ac_HAS_PROMPT_STYLE.created_by = 'seed:schema',
   ac_HAS_PROMPT_STYLE.created_at = datetime()
 ON MATCH SET
@@ -2568,6 +2743,7 @@ ON MATCH SET
   ac_HAS_PROMPT_STYLE.arc_property_info = null,
   ac_HAS_PROMPT_STYLE.cypher_pattern = '(Brand)-[:HAS_PROMPT_STYLE]->(PromptStyle)',
   ac_HAS_PROMPT_STYLE.temperature_threshold = null,
+  ac_HAS_PROMPT_STYLE.node_class = 'arc_class',
   ac_HAS_PROMPT_STYLE.updated_at = datetime();
 
 MERGE (ac_HAS_REGION:Schema:ArcClass {key: 'HAS_REGION'})
@@ -2583,6 +2759,7 @@ ON CREATE SET
   ac_HAS_REGION.arc_property_info = null,
   ac_HAS_REGION.cypher_pattern = '(Continent)-[:HAS_REGION]->(GeoRegion)',
   ac_HAS_REGION.temperature_threshold = null,
+  ac_HAS_REGION.node_class = 'arc_class',
   ac_HAS_REGION.created_by = 'seed:schema',
   ac_HAS_REGION.created_at = datetime()
 ON MATCH SET
@@ -2597,6 +2774,7 @@ ON MATCH SET
   ac_HAS_REGION.arc_property_info = null,
   ac_HAS_REGION.cypher_pattern = '(Continent)-[:HAS_REGION]->(GeoRegion)',
   ac_HAS_REGION.temperature_threshold = null,
+  ac_HAS_REGION.node_class = 'arc_class',
   ac_HAS_REGION.updated_at = datetime();
 
 MERGE (ac_HAS_RULES:Schema:ArcClass {key: 'HAS_RULES'})
@@ -2612,6 +2790,7 @@ ON CREATE SET
   ac_HAS_RULES.arc_property_info = null,
   ac_HAS_RULES.cypher_pattern = '(BlockType)-[:HAS_RULES]->(BlockRules)',
   ac_HAS_RULES.temperature_threshold = null,
+  ac_HAS_RULES.node_class = 'arc_class',
   ac_HAS_RULES.created_by = 'seed:schema',
   ac_HAS_RULES.created_at = datetime()
 ON MATCH SET
@@ -2626,6 +2805,7 @@ ON MATCH SET
   ac_HAS_RULES.arc_property_info = null,
   ac_HAS_RULES.cypher_pattern = '(BlockType)-[:HAS_RULES]->(BlockRules)',
   ac_HAS_RULES.temperature_threshold = null,
+  ac_HAS_RULES.node_class = 'arc_class',
   ac_HAS_RULES.updated_at = datetime();
 
 // HAS_SEO_KEYWORDS (ADR-031)
@@ -2642,6 +2822,7 @@ ON CREATE SET
   ac_HAS_SEO_KEYWORDS.arc_property_info = null,
   ac_HAS_SEO_KEYWORDS.cypher_pattern = '(Locale)-[:HAS_SEO_KEYWORDS]->(SEOKeywordSet)',
   ac_HAS_SEO_KEYWORDS.temperature_threshold = null,
+  ac_HAS_SEO_KEYWORDS.node_class = 'arc_class',
   ac_HAS_SEO_KEYWORDS.created_by = 'seed:schema',
   ac_HAS_SEO_KEYWORDS.created_at = datetime()
 ON MATCH SET
@@ -2656,6 +2837,7 @@ ON MATCH SET
   ac_HAS_SEO_KEYWORDS.arc_property_info = null,
   ac_HAS_SEO_KEYWORDS.cypher_pattern = '(Locale)-[:HAS_SEO_KEYWORDS]->(SEOKeywordSet)',
   ac_HAS_SEO_KEYWORDS.temperature_threshold = null,
+  ac_HAS_SEO_KEYWORDS.node_class = 'arc_class',
   ac_HAS_SEO_KEYWORDS.updated_at = datetime();
 
 // HAS_SEO_SCOPE (ADR-031)
@@ -2672,6 +2854,7 @@ ON CREATE SET
   ac_HAS_SEO_SCOPE.arc_property_info = null,
   ac_HAS_SEO_SCOPE.cypher_pattern = '(Project)-[:HAS_SEO_SCOPE]->(ProjectSEOScope)',
   ac_HAS_SEO_SCOPE.temperature_threshold = null,
+  ac_HAS_SEO_SCOPE.node_class = 'arc_class',
   ac_HAS_SEO_SCOPE.created_by = 'seed:schema',
   ac_HAS_SEO_SCOPE.created_at = datetime()
 ON MATCH SET
@@ -2686,6 +2869,7 @@ ON MATCH SET
   ac_HAS_SEO_SCOPE.arc_property_info = null,
   ac_HAS_SEO_SCOPE.cypher_pattern = '(Project)-[:HAS_SEO_SCOPE]->(ProjectSEOScope)',
   ac_HAS_SEO_SCOPE.temperature_threshold = null,
+  ac_HAS_SEO_SCOPE.node_class = 'arc_class',
   ac_HAS_SEO_SCOPE.updated_at = datetime();
 
 MERGE (ac_HAS_SLOT:Schema:ArcClass {key: 'HAS_SLOT'})
@@ -2701,6 +2885,7 @@ ON CREATE SET
   ac_HAS_SLOT.arc_property_info = '[{name: \'position_override\', type: \'string\', required: false}]',
   ac_HAS_SLOT.cypher_pattern = '(Page)-[:HAS_SLOT]->(ContentSlot)',
   ac_HAS_SLOT.temperature_threshold = null,
+  ac_HAS_SLOT.node_class = 'arc_class',
   ac_HAS_SLOT.created_by = 'seed:schema',
   ac_HAS_SLOT.created_at = datetime()
 ON MATCH SET
@@ -2715,6 +2900,7 @@ ON MATCH SET
   ac_HAS_SLOT.arc_property_info = '[{name: \'position_override\', type: \'string\', required: false}]',
   ac_HAS_SLOT.cypher_pattern = '(Page)-[:HAS_SLOT]->(ContentSlot)',
   ac_HAS_SLOT.temperature_threshold = null,
+  ac_HAS_SLOT.node_class = 'arc_class',
   ac_HAS_SLOT.updated_at = datetime();
 
 // HAS_SLUGIFICATION (ADR-030)
@@ -2731,6 +2917,7 @@ ON CREATE SET
   ac_HAS_SLUGIFICATION.arc_property_info = null,
   ac_HAS_SLUGIFICATION.cypher_pattern = '(Locale)-[:HAS_SLUGIFICATION]->(Slugification)',
   ac_HAS_SLUGIFICATION.temperature_threshold = null,
+  ac_HAS_SLUGIFICATION.node_class = 'arc_class',
   ac_HAS_SLUGIFICATION.created_by = 'seed:schema',
   ac_HAS_SLUGIFICATION.created_at = datetime()
 ON MATCH SET
@@ -2745,6 +2932,7 @@ ON MATCH SET
   ac_HAS_SLUGIFICATION.arc_property_info = null,
   ac_HAS_SLUGIFICATION.cypher_pattern = '(Locale)-[:HAS_SLUGIFICATION]->(Slugification)',
   ac_HAS_SLUGIFICATION.temperature_threshold = null,
+  ac_HAS_SLUGIFICATION.node_class = 'arc_class',
   ac_HAS_SLUGIFICATION.updated_at = datetime();
 
 MERGE (ac_HAS_STYLE:Schema:ArcClass {key: 'HAS_STYLE'})
@@ -2760,6 +2948,7 @@ ON CREATE SET
   ac_HAS_STYLE.arc_property_info = null,
   ac_HAS_STYLE.cypher_pattern = '(Locale)-[:HAS_STYLE]->(Style)',
   ac_HAS_STYLE.temperature_threshold = null,
+  ac_HAS_STYLE.node_class = 'arc_class',
   ac_HAS_STYLE.created_by = 'seed:schema',
   ac_HAS_STYLE.created_at = datetime()
 ON MATCH SET
@@ -2774,6 +2963,7 @@ ON MATCH SET
   ac_HAS_STYLE.arc_property_info = null,
   ac_HAS_STYLE.cypher_pattern = '(Locale)-[:HAS_STYLE]->(Style)',
   ac_HAS_STYLE.temperature_threshold = null,
+  ac_HAS_STYLE.node_class = 'arc_class',
   ac_HAS_STYLE.updated_at = datetime();
 
 // HAS_SUBCLUSTER (ADR-031)
@@ -2790,6 +2980,7 @@ ON CREATE SET
   ac_HAS_SUBCLUSTER.arc_property_info = null,
   ac_HAS_SUBCLUSTER.cypher_pattern = '(PopulationCluster)-[:HAS_SUBCLUSTER]->(PopulationSubCluster)',
   ac_HAS_SUBCLUSTER.temperature_threshold = null,
+  ac_HAS_SUBCLUSTER.node_class = 'arc_class',
   ac_HAS_SUBCLUSTER.created_by = 'seed:schema',
   ac_HAS_SUBCLUSTER.created_at = datetime()
 ON MATCH SET
@@ -2804,6 +2995,7 @@ ON MATCH SET
   ac_HAS_SUBCLUSTER.arc_property_info = null,
   ac_HAS_SUBCLUSTER.cypher_pattern = '(PopulationCluster)-[:HAS_SUBCLUSTER]->(PopulationSubCluster)',
   ac_HAS_SUBCLUSTER.temperature_threshold = null,
+  ac_HAS_SUBCLUSTER.node_class = 'arc_class',
   ac_HAS_SUBCLUSTER.updated_at = datetime();
 
 MERGE (ac_HAS_SUBREALM:Schema:ArcClass {key: 'HAS_SUBREALM'})
@@ -2819,6 +3011,7 @@ ON CREATE SET
   ac_HAS_SUBREALM.arc_property_info = null,
   ac_HAS_SUBREALM.cypher_pattern = '(CulturalRealm)-[:HAS_SUBREALM]->(CulturalSubRealm)',
   ac_HAS_SUBREALM.temperature_threshold = null,
+  ac_HAS_SUBREALM.node_class = 'arc_class',
   ac_HAS_SUBREALM.created_by = 'seed:schema',
   ac_HAS_SUBREALM.created_at = datetime()
 ON MATCH SET
@@ -2833,6 +3026,7 @@ ON MATCH SET
   ac_HAS_SUBREALM.arc_property_info = null,
   ac_HAS_SUBREALM.cypher_pattern = '(CulturalRealm)-[:HAS_SUBREALM]->(CulturalSubRealm)',
   ac_HAS_SUBREALM.temperature_threshold = null,
+  ac_HAS_SUBREALM.node_class = 'arc_class',
   ac_HAS_SUBREALM.updated_at = datetime();
 
 MERGE (ac_HAS_SUBREGION:Schema:ArcClass {key: 'HAS_SUBREGION'})
@@ -2848,6 +3042,7 @@ ON CREATE SET
   ac_HAS_SUBREGION.arc_property_info = null,
   ac_HAS_SUBREGION.cypher_pattern = '(GeoRegion)-[:HAS_SUBREGION]->(GeoSubRegion)',
   ac_HAS_SUBREGION.temperature_threshold = null,
+  ac_HAS_SUBREGION.node_class = 'arc_class',
   ac_HAS_SUBREGION.created_by = 'seed:schema',
   ac_HAS_SUBREGION.created_at = datetime()
 ON MATCH SET
@@ -2862,6 +3057,7 @@ ON MATCH SET
   ac_HAS_SUBREGION.arc_property_info = null,
   ac_HAS_SUBREGION.cypher_pattern = '(GeoRegion)-[:HAS_SUBREGION]->(GeoSubRegion)',
   ac_HAS_SUBREGION.temperature_threshold = null,
+  ac_HAS_SUBREGION.node_class = 'arc_class',
   ac_HAS_SUBREGION.updated_at = datetime();
 
 MERGE (ac_HAS_TABOOS:Schema:ArcClass {key: 'HAS_TABOOS'})
@@ -2877,6 +3073,7 @@ ON CREATE SET
   ac_HAS_TABOOS.arc_property_info = '[{name: \'severity\', type: \'string\', required: true}]',
   ac_HAS_TABOOS.cypher_pattern = '(Locale)-[:HAS_TABOOS]->(TabooSet)',
   ac_HAS_TABOOS.temperature_threshold = null,
+  ac_HAS_TABOOS.node_class = 'arc_class',
   ac_HAS_TABOOS.created_by = 'seed:schema',
   ac_HAS_TABOOS.created_at = datetime()
 ON MATCH SET
@@ -2891,6 +3088,7 @@ ON MATCH SET
   ac_HAS_TABOOS.arc_property_info = '[{name: \'severity\', type: \'string\', required: true}]',
   ac_HAS_TABOOS.cypher_pattern = '(Locale)-[:HAS_TABOOS]->(TabooSet)',
   ac_HAS_TABOOS.temperature_threshold = null,
+  ac_HAS_TABOOS.node_class = 'arc_class',
   ac_HAS_TABOOS.updated_at = datetime();
 
 MERGE (ac_INSTRUCTION_OF:Schema:ArcClass {key: 'INSTRUCTION_OF'})
@@ -2906,6 +3104,7 @@ ON CREATE SET
   ac_INSTRUCTION_OF.arc_property_info = null,
   ac_INSTRUCTION_OF.cypher_pattern = '(BlockInstruction)-[:INSTRUCTION_OF]->(Page, Block)',
   ac_INSTRUCTION_OF.temperature_threshold = null,
+  ac_INSTRUCTION_OF.node_class = 'arc_class',
   ac_INSTRUCTION_OF.created_by = 'seed:schema',
   ac_INSTRUCTION_OF.created_at = datetime()
 ON MATCH SET
@@ -2920,6 +3119,7 @@ ON MATCH SET
   ac_INSTRUCTION_OF.arc_property_info = null,
   ac_INSTRUCTION_OF.cypher_pattern = '(BlockInstruction)-[:INSTRUCTION_OF]->(Page, Block)',
   ac_INSTRUCTION_OF.temperature_threshold = null,
+  ac_INSTRUCTION_OF.node_class = 'arc_class',
   ac_INSTRUCTION_OF.updated_at = datetime();
 
 MERGE (ac_IN_CONTINENT:Schema:ArcClass {key: 'IN_CONTINENT'})
@@ -2935,6 +3135,7 @@ ON CREATE SET
   ac_IN_CONTINENT.arc_property_info = null,
   ac_IN_CONTINENT.cypher_pattern = '(GeoRegion)-[:IN_CONTINENT]->(Continent)',
   ac_IN_CONTINENT.temperature_threshold = null,
+  ac_IN_CONTINENT.node_class = 'arc_class',
   ac_IN_CONTINENT.created_by = 'seed:schema',
   ac_IN_CONTINENT.created_at = datetime()
 ON MATCH SET
@@ -2949,6 +3150,7 @@ ON MATCH SET
   ac_IN_CONTINENT.arc_property_info = null,
   ac_IN_CONTINENT.cypher_pattern = '(GeoRegion)-[:IN_CONTINENT]->(Continent)',
   ac_IN_CONTINENT.temperature_threshold = null,
+  ac_IN_CONTINENT.node_class = 'arc_class',
   ac_IN_CONTINENT.updated_at = datetime();
 
 MERGE (ac_IN_REGION:Schema:ArcClass {key: 'IN_REGION'})
@@ -2964,6 +3166,7 @@ ON CREATE SET
   ac_IN_REGION.arc_property_info = null,
   ac_IN_REGION.cypher_pattern = '(GeoSubRegion)-[:IN_REGION]->(GeoRegion)',
   ac_IN_REGION.temperature_threshold = null,
+  ac_IN_REGION.node_class = 'arc_class',
   ac_IN_REGION.created_by = 'seed:schema',
   ac_IN_REGION.created_at = datetime()
 ON MATCH SET
@@ -2978,6 +3181,7 @@ ON MATCH SET
   ac_IN_REGION.arc_property_info = null,
   ac_IN_REGION.cypher_pattern = '(GeoSubRegion)-[:IN_REGION]->(GeoRegion)',
   ac_IN_REGION.temperature_threshold = null,
+  ac_IN_REGION.node_class = 'arc_class',
   ac_IN_REGION.updated_at = datetime();
 
 // NATIVE_OF (ADR-029)
@@ -2994,6 +3198,7 @@ ON CREATE SET
   ac_NATIVE_OF.arc_property_info = null,
   ac_NATIVE_OF.cypher_pattern = '(EntityNative, ProjectNative, PageNative, BlockNative)-[:NATIVE_OF]->(Entity, Project, Page, Block)',
   ac_NATIVE_OF.temperature_threshold = null,
+  ac_NATIVE_OF.node_class = 'arc_class',
   ac_NATIVE_OF.created_by = 'seed:schema',
   ac_NATIVE_OF.created_at = datetime()
 ON MATCH SET
@@ -3008,6 +3213,7 @@ ON MATCH SET
   ac_NATIVE_OF.arc_property_info = null,
   ac_NATIVE_OF.cypher_pattern = '(EntityNative, ProjectNative, PageNative, BlockNative)-[:NATIVE_OF]->(Entity, Project, Page, Block)',
   ac_NATIVE_OF.temperature_threshold = null,
+  ac_NATIVE_OF.node_class = 'arc_class',
   ac_NATIVE_OF.updated_at = datetime();
 
 MERGE (ac_OF_TYPE:Schema:ArcClass {key: 'OF_TYPE'})
@@ -3023,6 +3229,7 @@ ON CREATE SET
   ac_OF_TYPE.arc_property_info = null,
   ac_OF_TYPE.cypher_pattern = '(Block)-[:OF_TYPE]->(BlockType)',
   ac_OF_TYPE.temperature_threshold = null,
+  ac_OF_TYPE.node_class = 'arc_class',
   ac_OF_TYPE.created_by = 'seed:schema',
   ac_OF_TYPE.created_at = datetime()
 ON MATCH SET
@@ -3037,6 +3244,7 @@ ON MATCH SET
   ac_OF_TYPE.arc_property_info = null,
   ac_OF_TYPE.cypher_pattern = '(Block)-[:OF_TYPE]->(BlockType)',
   ac_OF_TYPE.temperature_threshold = null,
+  ac_OF_TYPE.node_class = 'arc_class',
   ac_OF_TYPE.updated_at = datetime();
 
 MERGE (ac_PAGE_OF:Schema:ArcClass {key: 'PAGE_OF'})
@@ -3052,6 +3260,7 @@ ON CREATE SET
   ac_PAGE_OF.arc_property_info = null,
   ac_PAGE_OF.cypher_pattern = '(Page)-[:PAGE_OF]->(Project)',
   ac_PAGE_OF.temperature_threshold = null,
+  ac_PAGE_OF.node_class = 'arc_class',
   ac_PAGE_OF.created_by = 'seed:schema',
   ac_PAGE_OF.created_at = datetime()
 ON MATCH SET
@@ -3066,6 +3275,7 @@ ON MATCH SET
   ac_PAGE_OF.arc_property_info = null,
   ac_PAGE_OF.cypher_pattern = '(Page)-[:PAGE_OF]->(Project)',
   ac_PAGE_OF.temperature_threshold = null,
+  ac_PAGE_OF.node_class = 'arc_class',
   ac_PAGE_OF.updated_at = datetime();
 
 MERGE (ac_PART_OF_REALM:Schema:ArcClass {key: 'PART_OF_REALM'})
@@ -3081,6 +3291,7 @@ ON CREATE SET
   ac_PART_OF_REALM.arc_property_info = null,
   ac_PART_OF_REALM.cypher_pattern = '(CulturalSubRealm)-[:PART_OF_REALM]->(CulturalRealm)',
   ac_PART_OF_REALM.temperature_threshold = null,
+  ac_PART_OF_REALM.node_class = 'arc_class',
   ac_PART_OF_REALM.created_by = 'seed:schema',
   ac_PART_OF_REALM.created_at = datetime()
 ON MATCH SET
@@ -3095,6 +3306,7 @@ ON MATCH SET
   ac_PART_OF_REALM.arc_property_info = null,
   ac_PART_OF_REALM.cypher_pattern = '(CulturalSubRealm)-[:PART_OF_REALM]->(CulturalRealm)',
   ac_PART_OF_REALM.temperature_threshold = null,
+  ac_PART_OF_REALM.node_class = 'arc_class',
   ac_PART_OF_REALM.updated_at = datetime();
 
 MERGE (ac_PATTERNS_OF:Schema:ArcClass {key: 'PATTERNS_OF'})
@@ -3110,6 +3322,7 @@ ON CREATE SET
   ac_PATTERNS_OF.arc_property_info = '[{name: \'usage\', type: \'string\', required: true}]',
   ac_PATTERNS_OF.cypher_pattern = '(PatternSet)-[:PATTERNS_OF]->(Locale)',
   ac_PATTERNS_OF.temperature_threshold = null,
+  ac_PATTERNS_OF.node_class = 'arc_class',
   ac_PATTERNS_OF.created_by = 'seed:schema',
   ac_PATTERNS_OF.created_at = datetime()
 ON MATCH SET
@@ -3124,6 +3337,7 @@ ON MATCH SET
   ac_PATTERNS_OF.arc_property_info = '[{name: \'usage\', type: \'string\', required: true}]',
   ac_PATTERNS_OF.cypher_pattern = '(PatternSet)-[:PATTERNS_OF]->(Locale)',
   ac_PATTERNS_OF.temperature_threshold = null,
+  ac_PATTERNS_OF.node_class = 'arc_class',
   ac_PATTERNS_OF.updated_at = datetime();
 
 MERGE (ac_PRINCIPLES_OF:Schema:ArcClass {key: 'PRINCIPLES_OF'})
@@ -3139,6 +3353,7 @@ ON CREATE SET
   ac_PRINCIPLES_OF.arc_property_info = null,
   ac_PRINCIPLES_OF.cypher_pattern = '(BrandPrinciples)-[:PRINCIPLES_OF]->(Brand)',
   ac_PRINCIPLES_OF.temperature_threshold = null,
+  ac_PRINCIPLES_OF.node_class = 'arc_class',
   ac_PRINCIPLES_OF.created_by = 'seed:schema',
   ac_PRINCIPLES_OF.created_at = datetime()
 ON MATCH SET
@@ -3153,6 +3368,7 @@ ON MATCH SET
   ac_PRINCIPLES_OF.arc_property_info = null,
   ac_PRINCIPLES_OF.cypher_pattern = '(BrandPrinciples)-[:PRINCIPLES_OF]->(Brand)',
   ac_PRINCIPLES_OF.temperature_threshold = null,
+  ac_PRINCIPLES_OF.node_class = 'arc_class',
   ac_PRINCIPLES_OF.updated_at = datetime();
 
 MERGE (ac_PROJECT_OF:Schema:ArcClass {key: 'PROJECT_OF'})
@@ -3168,6 +3384,7 @@ ON CREATE SET
   ac_PROJECT_OF.arc_property_info = null,
   ac_PROJECT_OF.cypher_pattern = '(Project)-[:PROJECT_OF]->(OrgConfig)',
   ac_PROJECT_OF.temperature_threshold = null,
+  ac_PROJECT_OF.node_class = 'arc_class',
   ac_PROJECT_OF.created_by = 'seed:schema',
   ac_PROJECT_OF.created_at = datetime()
 ON MATCH SET
@@ -3182,6 +3399,7 @@ ON MATCH SET
   ac_PROJECT_OF.arc_property_info = null,
   ac_PROJECT_OF.cypher_pattern = '(Project)-[:PROJECT_OF]->(OrgConfig)',
   ac_PROJECT_OF.temperature_threshold = null,
+  ac_PROJECT_OF.node_class = 'arc_class',
   ac_PROJECT_OF.updated_at = datetime();
 
 MERGE (ac_PROMPT_STYLE_OF:Schema:ArcClass {key: 'PROMPT_STYLE_OF'})
@@ -3197,6 +3415,7 @@ ON CREATE SET
   ac_PROMPT_STYLE_OF.arc_property_info = null,
   ac_PROMPT_STYLE_OF.cypher_pattern = '(PromptStyle)-[:PROMPT_STYLE_OF]->(Brand)',
   ac_PROMPT_STYLE_OF.temperature_threshold = null,
+  ac_PROMPT_STYLE_OF.node_class = 'arc_class',
   ac_PROMPT_STYLE_OF.created_by = 'seed:schema',
   ac_PROMPT_STYLE_OF.created_at = datetime()
 ON MATCH SET
@@ -3211,6 +3430,7 @@ ON MATCH SET
   ac_PROMPT_STYLE_OF.arc_property_info = null,
   ac_PROMPT_STYLE_OF.cypher_pattern = '(PromptStyle)-[:PROMPT_STYLE_OF]->(Brand)',
   ac_PROMPT_STYLE_OF.temperature_threshold = null,
+  ac_PROMPT_STYLE_OF.node_class = 'arc_class',
   ac_PROMPT_STYLE_OF.updated_at = datetime();
 
 // SEO_KEYWORDS_OF (ADR-031)
@@ -3227,6 +3447,7 @@ ON CREATE SET
   ac_SEO_KEYWORDS_OF.arc_property_info = null,
   ac_SEO_KEYWORDS_OF.cypher_pattern = '(SEOKeywordSet)-[:SEO_KEYWORDS_OF]->(Locale)',
   ac_SEO_KEYWORDS_OF.temperature_threshold = null,
+  ac_SEO_KEYWORDS_OF.node_class = 'arc_class',
   ac_SEO_KEYWORDS_OF.created_by = 'seed:schema',
   ac_SEO_KEYWORDS_OF.created_at = datetime()
 ON MATCH SET
@@ -3241,6 +3462,7 @@ ON MATCH SET
   ac_SEO_KEYWORDS_OF.arc_property_info = null,
   ac_SEO_KEYWORDS_OF.cypher_pattern = '(SEOKeywordSet)-[:SEO_KEYWORDS_OF]->(Locale)',
   ac_SEO_KEYWORDS_OF.temperature_threshold = null,
+  ac_SEO_KEYWORDS_OF.node_class = 'arc_class',
   ac_SEO_KEYWORDS_OF.updated_at = datetime();
 
 // SEO_SCOPE_OF (ADR-031)
@@ -3257,6 +3479,7 @@ ON CREATE SET
   ac_SEO_SCOPE_OF.arc_property_info = null,
   ac_SEO_SCOPE_OF.cypher_pattern = '(ProjectSEOScope)-[:SEO_SCOPE_OF]->(Project)',
   ac_SEO_SCOPE_OF.temperature_threshold = null,
+  ac_SEO_SCOPE_OF.node_class = 'arc_class',
   ac_SEO_SCOPE_OF.created_by = 'seed:schema',
   ac_SEO_SCOPE_OF.created_at = datetime()
 ON MATCH SET
@@ -3271,6 +3494,7 @@ ON MATCH SET
   ac_SEO_SCOPE_OF.arc_property_info = null,
   ac_SEO_SCOPE_OF.cypher_pattern = '(ProjectSEOScope)-[:SEO_SCOPE_OF]->(Project)',
   ac_SEO_SCOPE_OF.temperature_threshold = null,
+  ac_SEO_SCOPE_OF.node_class = 'arc_class',
   ac_SEO_SCOPE_OF.updated_at = datetime();
 
 // SLUGIFICATION_OF (ADR-030)
@@ -3287,6 +3511,7 @@ ON CREATE SET
   ac_SLUGIFICATION_OF.arc_property_info = null,
   ac_SLUGIFICATION_OF.cypher_pattern = '(Slugification)-[:SLUGIFICATION_OF]->(Locale)',
   ac_SLUGIFICATION_OF.temperature_threshold = null,
+  ac_SLUGIFICATION_OF.node_class = 'arc_class',
   ac_SLUGIFICATION_OF.created_by = 'seed:schema',
   ac_SLUGIFICATION_OF.created_at = datetime()
 ON MATCH SET
@@ -3301,6 +3526,7 @@ ON MATCH SET
   ac_SLUGIFICATION_OF.arc_property_info = null,
   ac_SLUGIFICATION_OF.cypher_pattern = '(Slugification)-[:SLUGIFICATION_OF]->(Locale)',
   ac_SLUGIFICATION_OF.temperature_threshold = null,
+  ac_SLUGIFICATION_OF.node_class = 'arc_class',
   ac_SLUGIFICATION_OF.updated_at = datetime();
 
 MERGE (ac_STYLE_OF:Schema:ArcClass {key: 'STYLE_OF'})
@@ -3316,6 +3542,7 @@ ON CREATE SET
   ac_STYLE_OF.arc_property_info = null,
   ac_STYLE_OF.cypher_pattern = '(Style)-[:STYLE_OF]->(Locale)',
   ac_STYLE_OF.temperature_threshold = null,
+  ac_STYLE_OF.node_class = 'arc_class',
   ac_STYLE_OF.created_by = 'seed:schema',
   ac_STYLE_OF.created_at = datetime()
 ON MATCH SET
@@ -3330,6 +3557,7 @@ ON MATCH SET
   ac_STYLE_OF.arc_property_info = null,
   ac_STYLE_OF.cypher_pattern = '(Style)-[:STYLE_OF]->(Locale)',
   ac_STYLE_OF.temperature_threshold = null,
+  ac_STYLE_OF.node_class = 'arc_class',
   ac_STYLE_OF.updated_at = datetime();
 
 MERGE (ac_SUPPORTS_LOCALE:Schema:ArcClass {key: 'SUPPORTS_LOCALE'})
@@ -3345,6 +3573,7 @@ ON CREATE SET
   ac_SUPPORTS_LOCALE.arc_property_info = '[{name: \'status\', type: \'string\', required: false}]',
   ac_SUPPORTS_LOCALE.cypher_pattern = '(Project)-[:SUPPORTS_LOCALE]->(Locale)',
   ac_SUPPORTS_LOCALE.temperature_threshold = null,
+  ac_SUPPORTS_LOCALE.node_class = 'arc_class',
   ac_SUPPORTS_LOCALE.created_by = 'seed:schema',
   ac_SUPPORTS_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -3359,6 +3588,7 @@ ON MATCH SET
   ac_SUPPORTS_LOCALE.arc_property_info = '[{name: \'status\', type: \'string\', required: false}]',
   ac_SUPPORTS_LOCALE.cypher_pattern = '(Project)-[:SUPPORTS_LOCALE]->(Locale)',
   ac_SUPPORTS_LOCALE.temperature_threshold = null,
+  ac_SUPPORTS_LOCALE.node_class = 'arc_class',
   ac_SUPPORTS_LOCALE.updated_at = datetime();
 
 MERGE (ac_TABOOS_OF:Schema:ArcClass {key: 'TABOOS_OF'})
@@ -3374,6 +3604,7 @@ ON CREATE SET
   ac_TABOOS_OF.arc_property_info = '[{name: \'severity\', type: \'string\', required: true}]',
   ac_TABOOS_OF.cypher_pattern = '(TabooSet)-[:TABOOS_OF]->(Locale)',
   ac_TABOOS_OF.temperature_threshold = null,
+  ac_TABOOS_OF.node_class = 'arc_class',
   ac_TABOOS_OF.created_by = 'seed:schema',
   ac_TABOOS_OF.created_at = datetime()
 ON MATCH SET
@@ -3388,6 +3619,7 @@ ON MATCH SET
   ac_TABOOS_OF.arc_property_info = '[{name: \'severity\', type: \'string\', required: true}]',
   ac_TABOOS_OF.cypher_pattern = '(TabooSet)-[:TABOOS_OF]->(Locale)',
   ac_TABOOS_OF.temperature_threshold = null,
+  ac_TABOOS_OF.node_class = 'arc_class',
   ac_TABOOS_OF.updated_at = datetime();
 
 MERGE (ac_FROM_CLASS:Schema:ArcClass {key: 'FROM_CLASS'})
@@ -3403,6 +3635,7 @@ ON CREATE SET
   ac_FROM_CLASS.arc_property_info = null,
   ac_FROM_CLASS.cypher_pattern = '(ArcClass)-[:FROM_CLASS]->(Class)',
   ac_FROM_CLASS.temperature_threshold = null,
+  ac_FROM_CLASS.node_class = 'arc_class',
   ac_FROM_CLASS.created_by = 'seed:schema',
   ac_FROM_CLASS.created_at = datetime()
 ON MATCH SET
@@ -3417,6 +3650,7 @@ ON MATCH SET
   ac_FROM_CLASS.arc_property_info = null,
   ac_FROM_CLASS.cypher_pattern = '(ArcClass)-[:FROM_CLASS]->(Class)',
   ac_FROM_CLASS.temperature_threshold = null,
+  ac_FROM_CLASS.node_class = 'arc_class',
   ac_FROM_CLASS.updated_at = datetime();
 
 MERGE (ac_OF_CLASS:Schema:ArcClass {key: 'OF_CLASS'})
@@ -3432,6 +3666,7 @@ ON CREATE SET
   ac_OF_CLASS.arc_property_info = null,
   ac_OF_CLASS.cypher_pattern = '(*)-[:OF_CLASS]->(Class)',
   ac_OF_CLASS.temperature_threshold = null,
+  ac_OF_CLASS.node_class = 'arc_class',
   ac_OF_CLASS.created_by = 'seed:schema',
   ac_OF_CLASS.created_at = datetime()
 ON MATCH SET
@@ -3446,6 +3681,7 @@ ON MATCH SET
   ac_OF_CLASS.arc_property_info = null,
   ac_OF_CLASS.cypher_pattern = '(*)-[:OF_CLASS]->(Class)',
   ac_OF_CLASS.temperature_threshold = null,
+  ac_OF_CLASS.node_class = 'arc_class',
   ac_OF_CLASS.updated_at = datetime();
 
 MERGE (ac_TO_CLASS:Schema:ArcClass {key: 'TO_CLASS'})
@@ -3461,6 +3697,7 @@ ON CREATE SET
   ac_TO_CLASS.arc_property_info = null,
   ac_TO_CLASS.cypher_pattern = '(ArcClass)-[:TO_CLASS]->(Class)',
   ac_TO_CLASS.temperature_threshold = null,
+  ac_TO_CLASS.node_class = 'arc_class',
   ac_TO_CLASS.created_by = 'seed:schema',
   ac_TO_CLASS.created_at = datetime()
 ON MATCH SET
@@ -3475,6 +3712,7 @@ ON MATCH SET
   ac_TO_CLASS.arc_property_info = null,
   ac_TO_CLASS.cypher_pattern = '(ArcClass)-[:TO_CLASS]->(Class)',
   ac_TO_CLASS.temperature_threshold = null,
+  ac_TO_CLASS.node_class = 'arc_class',
   ac_TO_CLASS.updated_at = datetime();
 
 MERGE (ac_BELONGS_TO:Schema:ArcClass {key: 'BELONGS_TO'})
@@ -3490,6 +3728,7 @@ ON CREATE SET
   ac_BELONGS_TO.arc_property_info = null,
   ac_BELONGS_TO.cypher_pattern = '(Entity)-[:BELONGS_TO]->(EntityCategory)',
   ac_BELONGS_TO.temperature_threshold = 0.1,
+  ac_BELONGS_TO.node_class = 'arc_class',
   ac_BELONGS_TO.created_by = 'seed:schema',
   ac_BELONGS_TO.created_at = datetime()
 ON MATCH SET
@@ -3504,6 +3743,7 @@ ON MATCH SET
   ac_BELONGS_TO.arc_property_info = null,
   ac_BELONGS_TO.cypher_pattern = '(Entity)-[:BELONGS_TO]->(EntityCategory)',
   ac_BELONGS_TO.temperature_threshold = 0.1,
+  ac_BELONGS_TO.node_class = 'arc_class',
   ac_BELONGS_TO.updated_at = datetime();
 
 MERGE (ac_CATEGORY_OF:Schema:ArcClass {key: 'CATEGORY_OF'})
@@ -3519,6 +3759,7 @@ ON CREATE SET
   ac_CATEGORY_OF.arc_property_info = null,
   ac_CATEGORY_OF.cypher_pattern = '(EntityCategory)-[:CATEGORY_OF]->(Entity)',
   ac_CATEGORY_OF.temperature_threshold = 0.5,
+  ac_CATEGORY_OF.node_class = 'arc_class',
   ac_CATEGORY_OF.created_by = 'seed:schema',
   ac_CATEGORY_OF.created_at = datetime()
 ON MATCH SET
@@ -3533,6 +3774,7 @@ ON MATCH SET
   ac_CATEGORY_OF.arc_property_info = null,
   ac_CATEGORY_OF.cypher_pattern = '(EntityCategory)-[:CATEGORY_OF]->(Entity)',
   ac_CATEGORY_OF.temperature_threshold = 0.5,
+  ac_CATEGORY_OF.node_class = 'arc_class',
   ac_CATEGORY_OF.updated_at = datetime();
 
 MERGE (ac_CULTURE_REF_USED_BY:Schema:ArcClass {key: 'CULTURE_REF_USED_BY'})
@@ -3548,6 +3790,7 @@ ON CREATE SET
   ac_CULTURE_REF_USED_BY.arc_property_info = '[{name: \'context_note\', type: \'string\', required: false}, {name: \'relevance\', type: \'string\', required: false, enum: [\'essential\', \'recommended\', \'optional\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}]',
   ac_CULTURE_REF_USED_BY.cypher_pattern = '(CultureRef)-[:CULTURE_REF_USED_BY]->(EntityNative)',
   ac_CULTURE_REF_USED_BY.temperature_threshold = 0.5,
+  ac_CULTURE_REF_USED_BY.node_class = 'arc_class',
   ac_CULTURE_REF_USED_BY.created_by = 'seed:schema',
   ac_CULTURE_REF_USED_BY.created_at = datetime()
 ON MATCH SET
@@ -3562,6 +3805,7 @@ ON MATCH SET
   ac_CULTURE_REF_USED_BY.arc_property_info = '[{name: \'context_note\', type: \'string\', required: false}, {name: \'relevance\', type: \'string\', required: false, enum: [\'essential\', \'recommended\', \'optional\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}]',
   ac_CULTURE_REF_USED_BY.cypher_pattern = '(CultureRef)-[:CULTURE_REF_USED_BY]->(EntityNative)',
   ac_CULTURE_REF_USED_BY.temperature_threshold = 0.5,
+  ac_CULTURE_REF_USED_BY.node_class = 'arc_class',
   ac_CULTURE_REF_USED_BY.updated_at = datetime();
 
 MERGE (ac_CURATES_KEYWORD:Schema:ArcClass {key: 'CURATES_KEYWORD'})
@@ -3577,6 +3821,7 @@ ON CREATE SET
   ac_CURATES_KEYWORD.arc_property_info = '[{name: \'curated_at\', type: \'datetime\', required: true}, {name: \'curator\', type: \'string\', required: true, enum: [\'human\', \'ai-suggested\', \'auto-imported\']}, {name: \'priority\', type: \'string\', required: true, enum: [\'high\', \'medium\', \'low\']}, {name: \'notes\', type: \'string\', required: false}, {name: \'strategy\', type: \'string\', required: false, enum: [\'pillar\', \'cluster\', \'long-tail\', \'branded\']}, {name: \'verified\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_CURATES_KEYWORD.cypher_pattern = '(ProjectSEOScope)-[:CURATES_KEYWORD]->(SEOKeyword)',
   ac_CURATES_KEYWORD.temperature_threshold = 0.5,
+  ac_CURATES_KEYWORD.node_class = 'arc_class',
   ac_CURATES_KEYWORD.created_by = 'seed:schema',
   ac_CURATES_KEYWORD.created_at = datetime()
 ON MATCH SET
@@ -3591,6 +3836,7 @@ ON MATCH SET
   ac_CURATES_KEYWORD.arc_property_info = '[{name: \'curated_at\', type: \'datetime\', required: true}, {name: \'curator\', type: \'string\', required: true, enum: [\'human\', \'ai-suggested\', \'auto-imported\']}, {name: \'priority\', type: \'string\', required: true, enum: [\'high\', \'medium\', \'low\']}, {name: \'notes\', type: \'string\', required: false}, {name: \'strategy\', type: \'string\', required: false, enum: [\'pillar\', \'cluster\', \'long-tail\', \'branded\']}, {name: \'verified\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_CURATES_KEYWORD.cypher_pattern = '(ProjectSEOScope)-[:CURATES_KEYWORD]->(SEOKeyword)',
   ac_CURATES_KEYWORD.temperature_threshold = 0.5,
+  ac_CURATES_KEYWORD.node_class = 'arc_class',
   ac_CURATES_KEYWORD.updated_at = datetime();
 
 MERGE (ac_EXPRESSION_USED_BY:Schema:ArcClass {key: 'EXPRESSION_USED_BY'})
@@ -3606,6 +3852,7 @@ ON CREATE SET
   ac_EXPRESSION_USED_BY.arc_property_info = '[{name: \'context\', type: \'string\', required: false, enum: [\'homepage\', \'pricing\', \'features\', \'support\', \'landing_page\', \'email\']}, {name: \'purpose\', type: \'string\', required: false, enum: [\'cta\', \'headline\', \'tagline\', \'description\', \'warning\', \'celebration\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'tone_match\', type: \'float\', required: false}]',
   ac_EXPRESSION_USED_BY.cypher_pattern = '(Expression)-[:EXPRESSION_USED_BY]->(EntityNative)',
   ac_EXPRESSION_USED_BY.temperature_threshold = 0.5,
+  ac_EXPRESSION_USED_BY.node_class = 'arc_class',
   ac_EXPRESSION_USED_BY.created_by = 'seed:schema',
   ac_EXPRESSION_USED_BY.created_at = datetime()
 ON MATCH SET
@@ -3620,6 +3867,7 @@ ON MATCH SET
   ac_EXPRESSION_USED_BY.arc_property_info = '[{name: \'context\', type: \'string\', required: false, enum: [\'homepage\', \'pricing\', \'features\', \'support\', \'landing_page\', \'email\']}, {name: \'purpose\', type: \'string\', required: false, enum: [\'cta\', \'headline\', \'tagline\', \'description\', \'warning\', \'celebration\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'tone_match\', type: \'float\', required: false}]',
   ac_EXPRESSION_USED_BY.cypher_pattern = '(Expression)-[:EXPRESSION_USED_BY]->(EntityNative)',
   ac_EXPRESSION_USED_BY.temperature_threshold = 0.5,
+  ac_EXPRESSION_USED_BY.node_class = 'arc_class',
   ac_EXPRESSION_USED_BY.updated_at = datetime();
 
 MERGE (ac_FEATURE_OF:Schema:ArcClass {key: 'FEATURE_OF'})
@@ -3635,6 +3883,7 @@ ON CREATE SET
   ac_FEATURE_OF.arc_property_info = null,
   ac_FEATURE_OF.cypher_pattern = '(Entity)-[:FEATURE_OF]->(Entity)',
   ac_FEATURE_OF.temperature_threshold = 0.3,
+  ac_FEATURE_OF.node_class = 'arc_class',
   ac_FEATURE_OF.created_by = 'seed:schema',
   ac_FEATURE_OF.created_at = datetime()
 ON MATCH SET
@@ -3649,6 +3898,7 @@ ON MATCH SET
   ac_FEATURE_OF.arc_property_info = null,
   ac_FEATURE_OF.cypher_pattern = '(Entity)-[:FEATURE_OF]->(Entity)',
   ac_FEATURE_OF.temperature_threshold = 0.3,
+  ac_FEATURE_OF.node_class = 'arc_class',
   ac_FEATURE_OF.updated_at = datetime();
 
 MERGE (ac_HAS_FEATURE:Schema:ArcClass {key: 'HAS_FEATURE'})
@@ -3664,6 +3914,7 @@ ON CREATE SET
   ac_HAS_FEATURE.arc_property_info = '[{name: \'highlight\', type: \'boolean\', required: false, default: \'false\'}, {name: \'priority\', type: \'integer\', required: false, default: \'1\'}]',
   ac_HAS_FEATURE.cypher_pattern = '(Entity)-[:HAS_FEATURE]->(Entity)',
   ac_HAS_FEATURE.temperature_threshold = 0.3,
+  ac_HAS_FEATURE.node_class = 'arc_class',
   ac_HAS_FEATURE.created_by = 'seed:schema',
   ac_HAS_FEATURE.created_at = datetime()
 ON MATCH SET
@@ -3678,6 +3929,7 @@ ON MATCH SET
   ac_HAS_FEATURE.arc_property_info = '[{name: \'highlight\', type: \'boolean\', required: false, default: \'false\'}, {name: \'priority\', type: \'integer\', required: false, default: \'1\'}]',
   ac_HAS_FEATURE.cypher_pattern = '(Entity)-[:HAS_FEATURE]->(Entity)',
   ac_HAS_FEATURE.temperature_threshold = 0.3,
+  ac_HAS_FEATURE.node_class = 'arc_class',
   ac_HAS_FEATURE.updated_at = datetime();
 
 MERGE (ac_HAS_SUBTOPIC:Schema:ArcClass {key: 'HAS_SUBTOPIC'})
@@ -3693,6 +3945,7 @@ ON CREATE SET
   ac_HAS_SUBTOPIC.arc_property_info = '[{name: \'relevance_score\', type: \'float\', required: false}]',
   ac_HAS_SUBTOPIC.cypher_pattern = '(Page)-[:HAS_SUBTOPIC]->(Page)',
   ac_HAS_SUBTOPIC.temperature_threshold = 0.2,
+  ac_HAS_SUBTOPIC.node_class = 'arc_class',
   ac_HAS_SUBTOPIC.created_by = 'seed:schema',
   ac_HAS_SUBTOPIC.created_at = datetime()
 ON MATCH SET
@@ -3707,6 +3960,7 @@ ON MATCH SET
   ac_HAS_SUBTOPIC.arc_property_info = '[{name: \'relevance_score\', type: \'float\', required: false}]',
   ac_HAS_SUBTOPIC.cypher_pattern = '(Page)-[:HAS_SUBTOPIC]->(Page)',
   ac_HAS_SUBTOPIC.temperature_threshold = 0.2,
+  ac_HAS_SUBTOPIC.node_class = 'arc_class',
   ac_HAS_SUBTOPIC.updated_at = datetime();
 
 MERGE (ac_KEYWORD_CURATED_BY:Schema:ArcClass {key: 'KEYWORD_CURATED_BY'})
@@ -3722,6 +3976,7 @@ ON CREATE SET
   ac_KEYWORD_CURATED_BY.arc_property_info = null,
   ac_KEYWORD_CURATED_BY.cypher_pattern = '(SEOKeyword)-[:KEYWORD_CURATED_BY]->(ProjectSEOScope)',
   ac_KEYWORD_CURATED_BY.temperature_threshold = null,
+  ac_KEYWORD_CURATED_BY.node_class = 'arc_class',
   ac_KEYWORD_CURATED_BY.created_by = 'seed:schema',
   ac_KEYWORD_CURATED_BY.created_at = datetime()
 ON MATCH SET
@@ -3736,6 +3991,7 @@ ON MATCH SET
   ac_KEYWORD_CURATED_BY.arc_property_info = null,
   ac_KEYWORD_CURATED_BY.cypher_pattern = '(SEOKeyword)-[:KEYWORD_CURATED_BY]->(ProjectSEOScope)',
   ac_KEYWORD_CURATED_BY.temperature_threshold = null,
+  ac_KEYWORD_CURATED_BY.node_class = 'arc_class',
   ac_KEYWORD_CURATED_BY.updated_at = datetime();
 
 MERGE (ac_MONITORS_QUERY:Schema:ArcClass {key: 'MONITORS_QUERY'})
@@ -3751,6 +4007,7 @@ ON CREATE SET
   ac_MONITORS_QUERY.arc_property_info = '[{name: \'curator\', type: \'string\', required: true, enum: [\'human\', \'ai-suggested\', \'auto-imported\']}, {name: \'monitored_at\', type: \'datetime\', required: true}, {name: \'priority\', type: \'string\', required: true, enum: [\'high\', \'medium\', \'low\']}, {name: \'monitor_frequency\', type: \'string\', required: false, enum: [\'realtime\', \'hourly\', \'daily\', \'weekly\'], default: \'daily\'}, {name: \'notes\', type: \'string\', required: false}, {name: \'platforms\', type: \'string[]\', required: false}, {name: \'verified\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_MONITORS_QUERY.cypher_pattern = '(ProjectGEOScope)-[:MONITORS_QUERY]->(GEOQuery)',
   ac_MONITORS_QUERY.temperature_threshold = 0.5,
+  ac_MONITORS_QUERY.node_class = 'arc_class',
   ac_MONITORS_QUERY.created_by = 'seed:schema',
   ac_MONITORS_QUERY.created_at = datetime()
 ON MATCH SET
@@ -3765,6 +4022,7 @@ ON MATCH SET
   ac_MONITORS_QUERY.arc_property_info = '[{name: \'curator\', type: \'string\', required: true, enum: [\'human\', \'ai-suggested\', \'auto-imported\']}, {name: \'monitored_at\', type: \'datetime\', required: true}, {name: \'priority\', type: \'string\', required: true, enum: [\'high\', \'medium\', \'low\']}, {name: \'monitor_frequency\', type: \'string\', required: false, enum: [\'realtime\', \'hourly\', \'daily\', \'weekly\'], default: \'daily\'}, {name: \'notes\', type: \'string\', required: false}, {name: \'platforms\', type: \'string[]\', required: false}, {name: \'verified\', type: \'boolean\', required: false, default: \'false\'}]',
   ac_MONITORS_QUERY.cypher_pattern = '(ProjectGEOScope)-[:MONITORS_QUERY]->(GEOQuery)',
   ac_MONITORS_QUERY.temperature_threshold = 0.5,
+  ac_MONITORS_QUERY.node_class = 'arc_class',
   ac_MONITORS_QUERY.updated_at = datetime();
 
 MERGE (ac_OF_CATEGORY:Schema:ArcClass {key: 'OF_CATEGORY'})
@@ -3780,6 +4038,7 @@ ON CREATE SET
   ac_OF_CATEGORY.arc_property_info = '[{name: \'priority\', type: \'integer\', required: false, default: \'Null\'}]',
   ac_OF_CATEGORY.cypher_pattern = '(Entity)-[:OF_CATEGORY]->(EntityCategory)',
   ac_OF_CATEGORY.temperature_threshold = 0.5,
+  ac_OF_CATEGORY.node_class = 'arc_class',
   ac_OF_CATEGORY.created_by = 'seed:schema',
   ac_OF_CATEGORY.created_at = datetime()
 ON MATCH SET
@@ -3794,6 +4053,7 @@ ON MATCH SET
   ac_OF_CATEGORY.arc_property_info = '[{name: \'priority\', type: \'integer\', required: false, default: \'Null\'}]',
   ac_OF_CATEGORY.cypher_pattern = '(Entity)-[:OF_CATEGORY]->(EntityCategory)',
   ac_OF_CATEGORY.temperature_threshold = 0.5,
+  ac_OF_CATEGORY.node_class = 'arc_class',
   ac_OF_CATEGORY.updated_at = datetime();
 
 MERGE (ac_PATTERN_USED_BY:Schema:ArcClass {key: 'PATTERN_USED_BY'})
@@ -3809,6 +4069,7 @@ ON CREATE SET
   ac_PATTERN_USED_BY.arc_property_info = '[{name: \'mandatory\', type: \'boolean\', required: false, default: \'false\'}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'usage_context\', type: \'string\', required: false, enum: [\'headline\', \'body\', \'cta\', \'tagline\', \'meta_description\', \'alt_text\']}]',
   ac_PATTERN_USED_BY.cypher_pattern = '(Pattern)-[:PATTERN_USED_BY]->(EntityNative)',
   ac_PATTERN_USED_BY.temperature_threshold = 0.5,
+  ac_PATTERN_USED_BY.node_class = 'arc_class',
   ac_PATTERN_USED_BY.created_by = 'seed:schema',
   ac_PATTERN_USED_BY.created_at = datetime()
 ON MATCH SET
@@ -3823,6 +4084,7 @@ ON MATCH SET
   ac_PATTERN_USED_BY.arc_property_info = '[{name: \'mandatory\', type: \'boolean\', required: false, default: \'false\'}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'usage_context\', type: \'string\', required: false, enum: [\'headline\', \'body\', \'cta\', \'tagline\', \'meta_description\', \'alt_text\']}]',
   ac_PATTERN_USED_BY.cypher_pattern = '(Pattern)-[:PATTERN_USED_BY]->(EntityNative)',
   ac_PATTERN_USED_BY.temperature_threshold = 0.5,
+  ac_PATTERN_USED_BY.node_class = 'arc_class',
   ac_PATTERN_USED_BY.updated_at = datetime();
 
 MERGE (ac_POPULAR_IN:Schema:ArcClass {key: 'POPULAR_IN'})
@@ -3838,6 +4100,7 @@ ON CREATE SET
   ac_POPULAR_IN.arc_property_info = '[{name: \'confidence\', type: \'float\', required: false, default: \'0.9\'}, {name: \'source_type\', type: \'string\', required: false, enum: [\'market_data\', \'search_volume\', \'manual\', \'inference\'], default: \'manual\'}, {name: \'weight\', type: \'float\', required: false, default: \'0.8\'}]',
   ac_POPULAR_IN.cypher_pattern = '(Entity, SEOKeyword)-[:POPULAR_IN]->(Continent, GeoRegion, GeoSubRegion, Country)',
   ac_POPULAR_IN.temperature_threshold = 0.25,
+  ac_POPULAR_IN.node_class = 'arc_class',
   ac_POPULAR_IN.created_by = 'seed:schema',
   ac_POPULAR_IN.created_at = datetime()
 ON MATCH SET
@@ -3852,6 +4115,7 @@ ON MATCH SET
   ac_POPULAR_IN.arc_property_info = '[{name: \'confidence\', type: \'float\', required: false, default: \'0.9\'}, {name: \'source_type\', type: \'string\', required: false, enum: [\'market_data\', \'search_volume\', \'manual\', \'inference\'], default: \'manual\'}, {name: \'weight\', type: \'float\', required: false, default: \'0.8\'}]',
   ac_POPULAR_IN.cypher_pattern = '(Entity, SEOKeyword)-[:POPULAR_IN]->(Continent, GeoRegion, GeoSubRegion, Country)',
   ac_POPULAR_IN.temperature_threshold = 0.25,
+  ac_POPULAR_IN.node_class = 'arc_class',
   ac_POPULAR_IN.updated_at = datetime();
 
 MERGE (ac_QUERY_MONITORED_BY:Schema:ArcClass {key: 'QUERY_MONITORED_BY'})
@@ -3867,6 +4131,7 @@ ON CREATE SET
   ac_QUERY_MONITORED_BY.arc_property_info = null,
   ac_QUERY_MONITORED_BY.cypher_pattern = '(GEOQuery)-[:QUERY_MONITORED_BY]->(ProjectGEOScope)',
   ac_QUERY_MONITORED_BY.temperature_threshold = null,
+  ac_QUERY_MONITORED_BY.node_class = 'arc_class',
   ac_QUERY_MONITORED_BY.created_by = 'seed:schema',
   ac_QUERY_MONITORED_BY.created_at = datetime()
 ON MATCH SET
@@ -3881,6 +4146,7 @@ ON MATCH SET
   ac_QUERY_MONITORED_BY.arc_property_info = null,
   ac_QUERY_MONITORED_BY.cypher_pattern = '(GEOQuery)-[:QUERY_MONITORED_BY]->(ProjectGEOScope)',
   ac_QUERY_MONITORED_BY.temperature_threshold = null,
+  ac_QUERY_MONITORED_BY.node_class = 'arc_class',
   ac_QUERY_MONITORED_BY.updated_at = datetime();
 
 MERGE (ac_REFERENCED_BY:Schema:ArcClass {key: 'REFERENCED_BY'})
@@ -3896,6 +4162,7 @@ ON CREATE SET
   ac_REFERENCED_BY.arc_property_info = null,
   ac_REFERENCED_BY.cypher_pattern = '(Entity)-[:REFERENCED_BY]->(Block)',
   ac_REFERENCED_BY.temperature_threshold = null,
+  ac_REFERENCED_BY.node_class = 'arc_class',
   ac_REFERENCED_BY.created_by = 'seed:schema',
   ac_REFERENCED_BY.created_at = datetime()
 ON MATCH SET
@@ -3910,6 +4177,7 @@ ON MATCH SET
   ac_REFERENCED_BY.arc_property_info = null,
   ac_REFERENCED_BY.cypher_pattern = '(Entity)-[:REFERENCED_BY]->(Block)',
   ac_REFERENCED_BY.temperature_threshold = null,
+  ac_REFERENCED_BY.node_class = 'arc_class',
   ac_REFERENCED_BY.updated_at = datetime();
 
 MERGE (ac_REFERENCES:Schema:ArcClass {key: 'REFERENCES'})
@@ -3925,6 +4193,7 @@ ON CREATE SET
   ac_REFERENCES.arc_property_info = '[{name: \'purpose\', type: \'string\', required: true, enum: [\'inject\', \'link\']}, {name: \'count\', type: \'integer\', required: false, default: \'1\'}]',
   ac_REFERENCES.cypher_pattern = '(Block)-[:REFERENCES]->(Entity)',
   ac_REFERENCES.temperature_threshold = 0.7,
+  ac_REFERENCES.node_class = 'arc_class',
   ac_REFERENCES.created_by = 'seed:schema',
   ac_REFERENCES.created_at = datetime()
 ON MATCH SET
@@ -3939,6 +4208,7 @@ ON MATCH SET
   ac_REFERENCES.arc_property_info = '[{name: \'purpose\', type: \'string\', required: true, enum: [\'inject\', \'link\']}, {name: \'count\', type: \'integer\', required: false, default: \'1\'}]',
   ac_REFERENCES.cypher_pattern = '(Block)-[:REFERENCES]->(Entity)',
   ac_REFERENCES.temperature_threshold = 0.7,
+  ac_REFERENCES.node_class = 'arc_class',
   ac_REFERENCES.updated_at = datetime();
 
 MERGE (ac_REPRESENTED_BY:Schema:ArcClass {key: 'REPRESENTED_BY'})
@@ -3954,6 +4224,7 @@ ON CREATE SET
   ac_REPRESENTED_BY.arc_property_info = null,
   ac_REPRESENTED_BY.cypher_pattern = '(Entity)-[:REPRESENTED_BY]->(Page)',
   ac_REPRESENTED_BY.temperature_threshold = null,
+  ac_REPRESENTED_BY.node_class = 'arc_class',
   ac_REPRESENTED_BY.created_by = 'seed:schema',
   ac_REPRESENTED_BY.created_at = datetime()
 ON MATCH SET
@@ -3968,6 +4239,7 @@ ON MATCH SET
   ac_REPRESENTED_BY.arc_property_info = null,
   ac_REPRESENTED_BY.cypher_pattern = '(Entity)-[:REPRESENTED_BY]->(Page)',
   ac_REPRESENTED_BY.temperature_threshold = null,
+  ac_REPRESENTED_BY.node_class = 'arc_class',
   ac_REPRESENTED_BY.updated_at = datetime();
 
 MERGE (ac_REPRESENTS:Schema:ArcClass {key: 'REPRESENTS'})
@@ -3983,6 +4255,7 @@ ON CREATE SET
   ac_REPRESENTS.arc_property_info = null,
   ac_REPRESENTS.cypher_pattern = '(Page)-[:REPRESENTS]->(Entity)',
   ac_REPRESENTS.temperature_threshold = null,
+  ac_REPRESENTS.node_class = 'arc_class',
   ac_REPRESENTS.created_by = 'seed:schema',
   ac_REPRESENTS.created_at = datetime()
 ON MATCH SET
@@ -3997,6 +4270,7 @@ ON MATCH SET
   ac_REPRESENTS.arc_property_info = null,
   ac_REPRESENTS.cypher_pattern = '(Page)-[:REPRESENTS]->(Entity)',
   ac_REPRESENTS.temperature_threshold = null,
+  ac_REPRESENTS.node_class = 'arc_class',
   ac_REPRESENTS.updated_at = datetime();
 
 MERGE (ac_SEMANTICALLY_EQUIVALENT:Schema:ArcClass {key: 'SEMANTICALLY_EQUIVALENT'})
@@ -4012,6 +4286,7 @@ ON CREATE SET
   ac_SEMANTICALLY_EQUIVALENT.arc_property_info = '[{name: \'auto_created\', type: \'boolean\', required: false}, {name: \'confidence\', type: \'float\', required: false}]',
   ac_SEMANTICALLY_EQUIVALENT.cypher_pattern = '(EntityNative)-[:SEMANTICALLY_EQUIVALENT]->(EntityNative)',
   ac_SEMANTICALLY_EQUIVALENT.temperature_threshold = null,
+  ac_SEMANTICALLY_EQUIVALENT.node_class = 'arc_class',
   ac_SEMANTICALLY_EQUIVALENT.created_by = 'seed:schema',
   ac_SEMANTICALLY_EQUIVALENT.created_at = datetime()
 ON MATCH SET
@@ -4026,6 +4301,7 @@ ON MATCH SET
   ac_SEMANTICALLY_EQUIVALENT.arc_property_info = '[{name: \'auto_created\', type: \'boolean\', required: false}, {name: \'confidence\', type: \'float\', required: false}]',
   ac_SEMANTICALLY_EQUIVALENT.cypher_pattern = '(EntityNative)-[:SEMANTICALLY_EQUIVALENT]->(EntityNative)',
   ac_SEMANTICALLY_EQUIVALENT.temperature_threshold = null,
+  ac_SEMANTICALLY_EQUIVALENT.node_class = 'arc_class',
   ac_SEMANTICALLY_EQUIVALENT.updated_at = datetime();
 
 MERGE (ac_SEMANTIC_LINK:Schema:ArcClass {key: 'SEMANTIC_LINK'})
@@ -4041,6 +4317,7 @@ ON CREATE SET
   ac_SEMANTIC_LINK.arc_property_info = '[{name: \'temperature\', type: \'float\', required: false}, {name: \'type\', type: \'string\', required: false}]',
   ac_SEMANTIC_LINK.cypher_pattern = '(Entity)-[:SEMANTIC_LINK]->(Entity)',
   ac_SEMANTIC_LINK.temperature_threshold = 0.3,
+  ac_SEMANTIC_LINK.node_class = 'arc_class',
   ac_SEMANTIC_LINK.created_by = 'seed:schema',
   ac_SEMANTIC_LINK.created_at = datetime()
 ON MATCH SET
@@ -4055,6 +4332,7 @@ ON MATCH SET
   ac_SEMANTIC_LINK.arc_property_info = '[{name: \'temperature\', type: \'float\', required: false}, {name: \'type\', type: \'string\', required: false}]',
   ac_SEMANTIC_LINK.cypher_pattern = '(Entity)-[:SEMANTIC_LINK]->(Entity)',
   ac_SEMANTIC_LINK.temperature_threshold = 0.3,
+  ac_SEMANTIC_LINK.node_class = 'arc_class',
   ac_SEMANTIC_LINK.updated_at = datetime();
 
 // SLUGIFIED_BY (ADR-030)
@@ -4071,6 +4349,7 @@ ON CREATE SET
   ac_SLUGIFIED_BY.arc_property_info = '[{name: \'applied_rule\', type: \'string\', required: true, enum: [\'latin_preserve\', \'latin_strip\', \'native_script\', \'transliterate\']}, {name: \'validated\', type: \'boolean\', required: true}, {name: \'validation_errors\', type: \'array\', required: false}, {name: \'validation_timestamp\', type: \'datetime\', required: false}]',
   ac_SLUGIFIED_BY.cypher_pattern = '(BlockNative)-[:SLUGIFIED_BY]->(Slugification)',
   ac_SLUGIFIED_BY.temperature_threshold = null,
+  ac_SLUGIFIED_BY.node_class = 'arc_class',
   ac_SLUGIFIED_BY.created_by = 'seed:schema',
   ac_SLUGIFIED_BY.created_at = datetime()
 ON MATCH SET
@@ -4085,6 +4364,7 @@ ON MATCH SET
   ac_SLUGIFIED_BY.arc_property_info = '[{name: \'applied_rule\', type: \'string\', required: true, enum: [\'latin_preserve\', \'latin_strip\', \'native_script\', \'transliterate\']}, {name: \'validated\', type: \'boolean\', required: true}, {name: \'validation_errors\', type: \'array\', required: false}, {name: \'validation_timestamp\', type: \'datetime\', required: false}]',
   ac_SLUGIFIED_BY.cypher_pattern = '(BlockNative)-[:SLUGIFIED_BY]->(Slugification)',
   ac_SLUGIFIED_BY.temperature_threshold = null,
+  ac_SLUGIFIED_BY.node_class = 'arc_class',
   ac_SLUGIFIED_BY.updated_at = datetime();
 
 // SLUGIFIES (ADR-030)
@@ -4101,6 +4381,7 @@ ON CREATE SET
   ac_SLUGIFIES.arc_property_info = null,
   ac_SLUGIFIES.cypher_pattern = '(Slugification)-[:SLUGIFIES]->(BlockNative)',
   ac_SLUGIFIES.temperature_threshold = null,
+  ac_SLUGIFIES.node_class = 'arc_class',
   ac_SLUGIFIES.created_by = 'seed:schema',
   ac_SLUGIFIES.created_at = datetime()
 ON MATCH SET
@@ -4115,6 +4396,7 @@ ON MATCH SET
   ac_SLUGIFIES.arc_property_info = null,
   ac_SLUGIFIES.cypher_pattern = '(Slugification)-[:SLUGIFIES]->(BlockNative)',
   ac_SLUGIFIES.temperature_threshold = null,
+  ac_SLUGIFIES.node_class = 'arc_class',
   ac_SLUGIFIES.updated_at = datetime();
 
 MERGE (ac_SUBTOPIC_OF:Schema:ArcClass {key: 'SUBTOPIC_OF'})
@@ -4130,6 +4412,7 @@ ON CREATE SET
   ac_SUBTOPIC_OF.arc_property_info = null,
   ac_SUBTOPIC_OF.cypher_pattern = '(Page)-[:SUBTOPIC_OF]->(Page)',
   ac_SUBTOPIC_OF.temperature_threshold = 0.2,
+  ac_SUBTOPIC_OF.node_class = 'arc_class',
   ac_SUBTOPIC_OF.created_by = 'seed:schema',
   ac_SUBTOPIC_OF.created_at = datetime()
 ON MATCH SET
@@ -4144,6 +4427,7 @@ ON MATCH SET
   ac_SUBTOPIC_OF.arc_property_info = null,
   ac_SUBTOPIC_OF.cypher_pattern = '(Page)-[:SUBTOPIC_OF]->(Page)',
   ac_SUBTOPIC_OF.temperature_threshold = 0.2,
+  ac_SUBTOPIC_OF.node_class = 'arc_class',
   ac_SUBTOPIC_OF.updated_at = datetime();
 
 MERGE (ac_USES_CULTURE_REF:Schema:ArcClass {key: 'USES_CULTURE_REF'})
@@ -4159,6 +4443,7 @@ ON CREATE SET
   ac_USES_CULTURE_REF.arc_property_info = '[{name: \'context_note\', type: \'string\', required: false}, {name: \'relevance\', type: \'string\', required: false, enum: [\'essential\', \'recommended\', \'optional\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}]',
   ac_USES_CULTURE_REF.cypher_pattern = '(EntityNative)-[:USES_CULTURE_REF]->(CultureRef)',
   ac_USES_CULTURE_REF.temperature_threshold = 0.6,
+  ac_USES_CULTURE_REF.node_class = 'arc_class',
   ac_USES_CULTURE_REF.created_by = 'seed:schema',
   ac_USES_CULTURE_REF.created_at = datetime()
 ON MATCH SET
@@ -4173,6 +4458,7 @@ ON MATCH SET
   ac_USES_CULTURE_REF.arc_property_info = '[{name: \'context_note\', type: \'string\', required: false}, {name: \'relevance\', type: \'string\', required: false, enum: [\'essential\', \'recommended\', \'optional\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}]',
   ac_USES_CULTURE_REF.cypher_pattern = '(EntityNative)-[:USES_CULTURE_REF]->(CultureRef)',
   ac_USES_CULTURE_REF.temperature_threshold = 0.6,
+  ac_USES_CULTURE_REF.node_class = 'arc_class',
   ac_USES_CULTURE_REF.updated_at = datetime();
 
 MERGE (ac_USES_EXPRESSION:Schema:ArcClass {key: 'USES_EXPRESSION'})
@@ -4188,6 +4474,7 @@ ON CREATE SET
   ac_USES_EXPRESSION.arc_property_info = '[{name: \'context\', type: \'string\', required: false, enum: [\'homepage\', \'pricing\', \'features\', \'support\', \'landing_page\', \'email\']}, {name: \'purpose\', type: \'string\', required: false, enum: [\'cta\', \'headline\', \'tagline\', \'description\', \'warning\', \'celebration\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'tone_match\', type: \'float\', required: false}]',
   ac_USES_EXPRESSION.cypher_pattern = '(EntityNative)-[:USES_EXPRESSION]->(Expression)',
   ac_USES_EXPRESSION.temperature_threshold = 0.4,
+  ac_USES_EXPRESSION.node_class = 'arc_class',
   ac_USES_EXPRESSION.created_by = 'seed:schema',
   ac_USES_EXPRESSION.created_at = datetime()
 ON MATCH SET
@@ -4202,6 +4489,7 @@ ON MATCH SET
   ac_USES_EXPRESSION.arc_property_info = '[{name: \'context\', type: \'string\', required: false, enum: [\'homepage\', \'pricing\', \'features\', \'support\', \'landing_page\', \'email\']}, {name: \'purpose\', type: \'string\', required: false, enum: [\'cta\', \'headline\', \'tagline\', \'description\', \'warning\', \'celebration\']}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'tone_match\', type: \'float\', required: false}]',
   ac_USES_EXPRESSION.cypher_pattern = '(EntityNative)-[:USES_EXPRESSION]->(Expression)',
   ac_USES_EXPRESSION.temperature_threshold = 0.4,
+  ac_USES_EXPRESSION.node_class = 'arc_class',
   ac_USES_EXPRESSION.updated_at = datetime();
 
 MERGE (ac_USES_PATTERN:Schema:ArcClass {key: 'USES_PATTERN'})
@@ -4217,6 +4505,7 @@ ON CREATE SET
   ac_USES_PATTERN.arc_property_info = '[{name: \'mandatory\', type: \'boolean\', required: false, default: \'false\'}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'usage_context\', type: \'string\', required: false, enum: [\'headline\', \'body\', \'cta\', \'tagline\', \'meta_description\', \'alt_text\']}]',
   ac_USES_PATTERN.cypher_pattern = '(EntityNative)-[:USES_PATTERN]->(Pattern)',
   ac_USES_PATTERN.temperature_threshold = 0.6,
+  ac_USES_PATTERN.node_class = 'arc_class',
   ac_USES_PATTERN.created_by = 'seed:schema',
   ac_USES_PATTERN.created_at = datetime()
 ON MATCH SET
@@ -4231,6 +4520,7 @@ ON MATCH SET
   ac_USES_PATTERN.arc_property_info = '[{name: \'mandatory\', type: \'boolean\', required: false, default: \'false\'}, {name: \'temperature\', type: \'float\', required: false, default: \'0.7\'}, {name: \'usage_context\', type: \'string\', required: false, enum: [\'headline\', \'body\', \'cta\', \'tagline\', \'meta_description\', \'alt_text\']}]',
   ac_USES_PATTERN.cypher_pattern = '(EntityNative)-[:USES_PATTERN]->(Pattern)',
   ac_USES_PATTERN.temperature_threshold = 0.6,
+  ac_USES_PATTERN.node_class = 'arc_class',
   ac_USES_PATTERN.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════

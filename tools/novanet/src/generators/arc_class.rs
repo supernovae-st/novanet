@@ -319,6 +319,8 @@ fn generate_arc_schema(
         } else {
             writeln!(out, "  {var}.temperature_threshold = null,").unwrap();
         }
+        // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+        writeln!(out, "  {var}.node_class = 'arc_class',").unwrap();
         // v0.17.3 (ADR-036): Add provenance tracking
         writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
@@ -359,6 +361,8 @@ fn generate_arc_schema(
         } else {
             writeln!(out, "  {var}.temperature_threshold = null,").unwrap();
         }
+        // v0.19.0 (ADR-037): Always set node_class on match too
+        writeln!(out, "  {var}.node_class = 'arc_class',").unwrap();
         writeln!(out, "  {var}.updated_at = datetime();").unwrap();
         writeln!(out).unwrap();
     }

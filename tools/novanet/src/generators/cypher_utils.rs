@@ -93,6 +93,7 @@ pub fn cypher_list_owned(items: &[String]) -> String {
 /// Write a MERGE statement for a `:Schema:<Label>` node with ON CREATE/ON MATCH SET.
 ///
 /// Properties are formatted as `{var}.{name} = '{value}'`.
+/// v0.19.0 (ADR-037): Adds `node_class` (lowercase of label) for SCHEMA nodes.
 /// Automatically adds `created_by` (provenance), `created_at` on CREATE and `updated_at` on MATCH.
 pub fn write_merge_meta(
     out: &mut String,
@@ -101,12 +102,18 @@ pub fn write_merge_meta(
     key: &str,
     props: &[(&str, &str)],
 ) {
+    // v0.19.0 (ADR-037): node_class is lowercase for SCHEMA nodes
+    // Convert PascalCase/CamelCase to snake_case for node_class
+    let node_class = to_snake_case(label);
+
     writeln!(out, "MERGE ({var}:Schema:{label} {{key: '{key}'}})").unwrap();
 
     writeln!(out, "ON CREATE SET").unwrap();
     for (name, value) in props {
         writeln!(out, "  {var}.{name} = '{value}',").unwrap();
     }
+    // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+    writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
     // v0.17.3 (ADR-036): Add provenance tracking
     writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
     writeln!(out, "  {var}.created_at = datetime()").unwrap();
@@ -115,7 +122,32 @@ pub fn write_merge_meta(
     for (name, value) in props {
         writeln!(out, "  {var}.{name} = '{value}',").unwrap();
     }
+    // v0.19.0 (ADR-037): Always set node_class on match too
+    writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
     writeln!(out, "  {var}.updated_at = datetime();").unwrap();
+}
+
+/// Convert PascalCase or CamelCase to snake_case.
+///
+/// # Examples
+/// ```ignore
+/// assert_eq!(to_snake_case("Realm"), "realm");
+/// assert_eq!(to_snake_case("ArcClass"), "arc_class");
+/// assert_eq!(to_snake_case("ArcCardinality"), "arc_cardinality");
+/// ```
+fn to_snake_case(s: &str) -> String {
+    let mut result = String::with_capacity(s.len() + 4);
+    for (i, c) in s.chars().enumerate() {
+        if c.is_uppercase() {
+            if i > 0 {
+                result.push('_');
+            }
+            result.push(c.to_ascii_lowercase());
+        } else {
+            result.push(c);
+        }
+    }
+    result
 }
 
 /// Write a section header comment in Cypher format.
@@ -273,10 +305,27 @@ mod tests {
         assert!(out.contains("MERGE (r:Schema:Realm {key: 'shared'})"));
         assert!(out.contains("r.display_name = 'Shared'"));
         assert!(out.contains("r.emoji = 'globe'"));
+        // v0.19.0 (ADR-037): node_class discriminator
+        assert!(out.contains("r.node_class = 'realm'"));
         // v0.17.3 (ADR-036): Provenance tracking
         assert!(out.contains("r.created_by = 'seed:schema'"));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));
+    }
+
+    #[test]
+    fn to_snake_case_simple() {
+        assert_eq!(to_snake_case("Realm"), "realm");
+        assert_eq!(to_snake_case("Layer"), "layer");
+        assert_eq!(to_snake_case("Class"), "class");
+    }
+
+    #[test]
+    fn to_snake_case_multi_word() {
+        assert_eq!(to_snake_case("ArcClass"), "arc_class");
+        assert_eq!(to_snake_case("ArcFamily"), "arc_family");
+        assert_eq!(to_snake_case("ArcScope"), "arc_scope");
+        assert_eq!(to_snake_case("ArcCardinality"), "arc_cardinality");
     }
 
     #[test]

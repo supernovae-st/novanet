@@ -31,6 +31,7 @@ ON CREATE SET
   c_Project.context_budget = 'high',
   c_Project.visibility = 'fragment',
   c_Project.generation_count = 0,
+  c_Project.node_class = 'class',
   c_Project.created_by = 'seed:schema',
   c_Project.created_at = datetime()
 ON MATCH SET
@@ -46,6 +47,7 @@ ON MATCH SET
   c_Project.context_budget = 'high',
   c_Project.visibility = 'fragment',
   c_Project.generation_count = 0,
+  c_Project.node_class = 'class',
   c_Project.updated_at = datetime();
 
 MERGE (c_Page:Schema:Class {label: 'Page'})
@@ -62,6 +64,7 @@ ON CREATE SET
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
+  c_Page.node_class = 'class',
   c_Page.created_by = 'seed:schema',
   c_Page.created_at = datetime()
 ON MATCH SET
@@ -77,6 +80,7 @@ ON MATCH SET
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
+  c_Page.node_class = 'class',
   c_Page.updated_at = datetime();
 
 MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
@@ -93,6 +97,7 @@ ON CREATE SET
   c_PageNative.context_budget = 'low',
   c_PageNative.visibility = 'publishable',
   c_PageNative.generation_count = 0,
+  c_PageNative.node_class = 'class',
   c_PageNative.created_by = 'seed:schema',
   c_PageNative.created_at = datetime()
 ON MATCH SET
@@ -108,6 +113,7 @@ ON MATCH SET
   c_PageNative.context_budget = 'low',
   c_PageNative.visibility = 'publishable',
   c_PageNative.generation_count = 0,
+  c_PageNative.node_class = 'class',
   c_PageNative.updated_at = datetime();
 
 MERGE (c_Concept:Schema:Class {label: 'Concept'})
@@ -124,6 +130,7 @@ ON CREATE SET
   c_Concept.context_budget = 'high',
   c_Concept.visibility = 'publishable',
   c_Concept.generation_count = 0,
+  c_Concept.node_class = 'class',
   c_Concept.created_by = 'seed:schema',
   c_Concept.created_at = datetime()
 ON MATCH SET
@@ -139,6 +146,7 @@ ON MATCH SET
   c_Concept.context_budget = 'high',
   c_Concept.visibility = 'publishable',
   c_Concept.generation_count = 0,
+  c_Concept.node_class = 'class',
   c_Concept.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════

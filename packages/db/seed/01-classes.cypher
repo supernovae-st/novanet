@@ -27,6 +27,7 @@ ON CREATE SET
   c_Adaptation.context_budget = 'medium',
   c_Adaptation.visibility = 'internal',
   c_Adaptation.generation_count = 0,
+  c_Adaptation.node_class = 'class',
   c_Adaptation.created_by = 'seed:schema',
   c_Adaptation.created_at = datetime()
 ON MATCH SET
@@ -42,6 +43,7 @@ ON MATCH SET
   c_Adaptation.context_budget = 'medium',
   c_Adaptation.visibility = 'internal',
   c_Adaptation.generation_count = 0,
+  c_Adaptation.node_class = 'class',
   c_Adaptation.updated_at = datetime();
 
 MERGE (c_AudienceSet:Schema:Class {label: 'AudienceSet'})
@@ -58,6 +60,7 @@ ON CREATE SET
   c_AudienceSet.context_budget = 'medium',
   c_AudienceSet.visibility = 'internal',
   c_AudienceSet.generation_count = 0,
+  c_AudienceSet.node_class = 'class',
   c_AudienceSet.created_by = 'seed:schema',
   c_AudienceSet.created_at = datetime()
 ON MATCH SET
@@ -73,6 +76,7 @@ ON MATCH SET
   c_AudienceSet.context_budget = 'medium',
   c_AudienceSet.visibility = 'internal',
   c_AudienceSet.generation_count = 0,
+  c_AudienceSet.node_class = 'class',
   c_AudienceSet.updated_at = datetime();
 
 MERGE (c_AudienceTrait:Schema:Class {label: 'AudienceTrait'})
@@ -89,6 +93,7 @@ ON CREATE SET
   c_AudienceTrait.context_budget = 'medium',
   c_AudienceTrait.visibility = 'internal',
   c_AudienceTrait.generation_count = 0,
+  c_AudienceTrait.node_class = 'class',
   c_AudienceTrait.created_by = 'seed:schema',
   c_AudienceTrait.created_at = datetime()
 ON MATCH SET
@@ -104,6 +109,7 @@ ON MATCH SET
   c_AudienceTrait.context_budget = 'medium',
   c_AudienceTrait.visibility = 'internal',
   c_AudienceTrait.generation_count = 0,
+  c_AudienceTrait.node_class = 'class',
   c_AudienceTrait.updated_at = datetime();
 
 MERGE (c_Block:Schema:Class {label: 'Block'})
@@ -120,6 +126,7 @@ ON CREATE SET
   c_Block.context_budget = 'high',
   c_Block.visibility = 'fragment',
   c_Block.generation_count = 0,
+  c_Block.node_class = 'class',
   c_Block.created_by = 'seed:schema',
   c_Block.created_at = datetime()
 ON MATCH SET
@@ -135,6 +142,7 @@ ON MATCH SET
   c_Block.context_budget = 'high',
   c_Block.visibility = 'fragment',
   c_Block.generation_count = 0,
+  c_Block.node_class = 'class',
   c_Block.updated_at = datetime();
 
 MERGE (c_BlockInstruction:Schema:Class {label: 'BlockInstruction'})
@@ -151,6 +159,7 @@ ON CREATE SET
   c_BlockInstruction.context_budget = 'medium',
   c_BlockInstruction.visibility = 'internal',
   c_BlockInstruction.generation_count = 0,
+  c_BlockInstruction.node_class = 'class',
   c_BlockInstruction.created_by = 'seed:schema',
   c_BlockInstruction.created_at = datetime()
 ON MATCH SET
@@ -166,6 +175,7 @@ ON MATCH SET
   c_BlockInstruction.context_budget = 'medium',
   c_BlockInstruction.visibility = 'internal',
   c_BlockInstruction.generation_count = 0,
+  c_BlockInstruction.node_class = 'class',
   c_BlockInstruction.updated_at = datetime();
 
 MERGE (c_BlockNative:Schema:Class {label: 'BlockNative'})
@@ -182,6 +192,7 @@ ON CREATE SET
   c_BlockNative.context_budget = 'low',
   c_BlockNative.visibility = 'publishable',
   c_BlockNative.generation_count = 0,
+  c_BlockNative.node_class = 'class',
   c_BlockNative.created_by = 'seed:schema',
   c_BlockNative.created_at = datetime()
 ON MATCH SET
@@ -197,6 +208,7 @@ ON MATCH SET
   c_BlockNative.context_budget = 'low',
   c_BlockNative.visibility = 'publishable',
   c_BlockNative.generation_count = 0,
+  c_BlockNative.node_class = 'class',
   c_BlockNative.updated_at = datetime();
 
 MERGE (c_BlockRules:Schema:Class {label: 'BlockRules'})
@@ -213,6 +225,7 @@ ON CREATE SET
   c_BlockRules.context_budget = 'medium',
   c_BlockRules.visibility = 'internal',
   c_BlockRules.generation_count = 0,
+  c_BlockRules.node_class = 'class',
   c_BlockRules.created_by = 'seed:schema',
   c_BlockRules.created_at = datetime()
 ON MATCH SET
@@ -228,6 +241,7 @@ ON MATCH SET
   c_BlockRules.context_budget = 'medium',
   c_BlockRules.visibility = 'internal',
   c_BlockRules.generation_count = 0,
+  c_BlockRules.node_class = 'class',
   c_BlockRules.updated_at = datetime();
 
 MERGE (c_BlockType:Schema:Class {label: 'BlockType'})
@@ -244,6 +258,7 @@ ON CREATE SET
   c_BlockType.context_budget = 'medium',
   c_BlockType.visibility = 'fragment',
   c_BlockType.generation_count = 0,
+  c_BlockType.node_class = 'class',
   c_BlockType.created_by = 'seed:schema',
   c_BlockType.created_at = datetime()
 ON MATCH SET
@@ -259,6 +274,7 @@ ON MATCH SET
   c_BlockType.context_budget = 'medium',
   c_BlockType.visibility = 'fragment',
   c_BlockType.generation_count = 0,
+  c_BlockType.node_class = 'class',
   c_BlockType.updated_at = datetime();
 
 MERGE (c_Brand:Schema:Class {label: 'Brand'})
@@ -275,6 +291,7 @@ ON CREATE SET
   c_Brand.context_budget = 'high',
   c_Brand.visibility = 'fragment',
   c_Brand.generation_count = 0,
+  c_Brand.node_class = 'class',
   c_Brand.created_by = 'seed:schema',
   c_Brand.created_at = datetime()
 ON MATCH SET
@@ -290,6 +307,7 @@ ON MATCH SET
   c_Brand.context_budget = 'high',
   c_Brand.visibility = 'fragment',
   c_Brand.generation_count = 0,
+  c_Brand.node_class = 'class',
   c_Brand.updated_at = datetime();
 
 MERGE (c_BrandDesign:Schema:Class {label: 'BrandDesign'})
@@ -306,6 +324,7 @@ ON CREATE SET
   c_BrandDesign.context_budget = 'high',
   c_BrandDesign.visibility = 'fragment',
   c_BrandDesign.generation_count = 0,
+  c_BrandDesign.node_class = 'class',
   c_BrandDesign.created_by = 'seed:schema',
   c_BrandDesign.created_at = datetime()
 ON MATCH SET
@@ -321,6 +340,7 @@ ON MATCH SET
   c_BrandDesign.context_budget = 'high',
   c_BrandDesign.visibility = 'fragment',
   c_BrandDesign.generation_count = 0,
+  c_BrandDesign.node_class = 'class',
   c_BrandDesign.updated_at = datetime();
 
 MERGE (c_BrandPrinciples:Schema:Class {label: 'BrandPrinciples'})
@@ -337,6 +357,7 @@ ON CREATE SET
   c_BrandPrinciples.context_budget = 'high',
   c_BrandPrinciples.visibility = 'fragment',
   c_BrandPrinciples.generation_count = 0,
+  c_BrandPrinciples.node_class = 'class',
   c_BrandPrinciples.created_by = 'seed:schema',
   c_BrandPrinciples.created_at = datetime()
 ON MATCH SET
@@ -352,6 +373,7 @@ ON MATCH SET
   c_BrandPrinciples.context_budget = 'high',
   c_BrandPrinciples.visibility = 'fragment',
   c_BrandPrinciples.generation_count = 0,
+  c_BrandPrinciples.node_class = 'class',
   c_BrandPrinciples.updated_at = datetime();
 
 MERGE (c_ContentSlot:Schema:Class {label: 'ContentSlot'})
@@ -368,6 +390,7 @@ ON CREATE SET
   c_ContentSlot.context_budget = 'high',
   c_ContentSlot.visibility = 'fragment',
   c_ContentSlot.generation_count = 0,
+  c_ContentSlot.node_class = 'class',
   c_ContentSlot.created_by = 'seed:schema',
   c_ContentSlot.created_at = datetime()
 ON MATCH SET
@@ -383,6 +406,7 @@ ON MATCH SET
   c_ContentSlot.context_budget = 'high',
   c_ContentSlot.visibility = 'fragment',
   c_ContentSlot.generation_count = 0,
+  c_ContentSlot.node_class = 'class',
   c_ContentSlot.updated_at = datetime();
 
 MERGE (c_Continent:Schema:Class {label: 'Continent'})
@@ -399,6 +423,7 @@ ON CREATE SET
   c_Continent.context_budget = 'medium',
   c_Continent.visibility = 'internal',
   c_Continent.generation_count = 0,
+  c_Continent.node_class = 'class',
   c_Continent.created_by = 'seed:schema',
   c_Continent.created_at = datetime()
 ON MATCH SET
@@ -414,6 +439,7 @@ ON MATCH SET
   c_Continent.context_budget = 'medium',
   c_Continent.visibility = 'internal',
   c_Continent.generation_count = 0,
+  c_Continent.node_class = 'class',
   c_Continent.updated_at = datetime();
 
 MERGE (c_Country:Schema:Class {label: 'Country'})
@@ -430,6 +456,7 @@ ON CREATE SET
   c_Country.context_budget = 'medium',
   c_Country.visibility = 'internal',
   c_Country.generation_count = 0,
+  c_Country.node_class = 'class',
   c_Country.created_by = 'seed:schema',
   c_Country.created_at = datetime()
 ON MATCH SET
@@ -445,6 +472,7 @@ ON MATCH SET
   c_Country.context_budget = 'medium',
   c_Country.visibility = 'internal',
   c_Country.generation_count = 0,
+  c_Country.node_class = 'class',
   c_Country.updated_at = datetime();
 
 MERGE (c_CulturalRealm:Schema:Class {label: 'CulturalRealm'})
@@ -461,6 +489,7 @@ ON CREATE SET
   c_CulturalRealm.context_budget = 'medium',
   c_CulturalRealm.visibility = 'internal',
   c_CulturalRealm.generation_count = 0,
+  c_CulturalRealm.node_class = 'class',
   c_CulturalRealm.created_by = 'seed:schema',
   c_CulturalRealm.created_at = datetime()
 ON MATCH SET
@@ -476,6 +505,7 @@ ON MATCH SET
   c_CulturalRealm.context_budget = 'medium',
   c_CulturalRealm.visibility = 'internal',
   c_CulturalRealm.generation_count = 0,
+  c_CulturalRealm.node_class = 'class',
   c_CulturalRealm.updated_at = datetime();
 
 MERGE (c_CulturalSubRealm:Schema:Class {label: 'CulturalSubRealm'})
@@ -492,6 +522,7 @@ ON CREATE SET
   c_CulturalSubRealm.context_budget = 'medium',
   c_CulturalSubRealm.visibility = 'internal',
   c_CulturalSubRealm.generation_count = 0,
+  c_CulturalSubRealm.node_class = 'class',
   c_CulturalSubRealm.created_by = 'seed:schema',
   c_CulturalSubRealm.created_at = datetime()
 ON MATCH SET
@@ -507,6 +538,7 @@ ON MATCH SET
   c_CulturalSubRealm.context_budget = 'medium',
   c_CulturalSubRealm.visibility = 'internal',
   c_CulturalSubRealm.generation_count = 0,
+  c_CulturalSubRealm.node_class = 'class',
   c_CulturalSubRealm.updated_at = datetime();
 
 MERGE (c_Culture:Schema:Class {label: 'Culture'})
@@ -523,6 +555,7 @@ ON CREATE SET
   c_Culture.context_budget = 'medium',
   c_Culture.visibility = 'internal',
   c_Culture.generation_count = 0,
+  c_Culture.node_class = 'class',
   c_Culture.created_by = 'seed:schema',
   c_Culture.created_at = datetime()
 ON MATCH SET
@@ -538,6 +571,7 @@ ON MATCH SET
   c_Culture.context_budget = 'medium',
   c_Culture.visibility = 'internal',
   c_Culture.generation_count = 0,
+  c_Culture.node_class = 'class',
   c_Culture.updated_at = datetime();
 
 MERGE (c_CultureRef:Schema:Class {label: 'CultureRef'})
@@ -554,6 +588,7 @@ ON CREATE SET
   c_CultureRef.context_budget = 'medium',
   c_CultureRef.visibility = 'internal',
   c_CultureRef.generation_count = 0,
+  c_CultureRef.node_class = 'class',
   c_CultureRef.created_by = 'seed:schema',
   c_CultureRef.created_at = datetime()
 ON MATCH SET
@@ -569,6 +604,7 @@ ON MATCH SET
   c_CultureRef.context_budget = 'medium',
   c_CultureRef.visibility = 'internal',
   c_CultureRef.generation_count = 0,
+  c_CultureRef.node_class = 'class',
   c_CultureRef.updated_at = datetime();
 
 MERGE (c_CultureSet:Schema:Class {label: 'CultureSet'})
@@ -585,6 +621,7 @@ ON CREATE SET
   c_CultureSet.context_budget = 'medium',
   c_CultureSet.visibility = 'internal',
   c_CultureSet.generation_count = 0,
+  c_CultureSet.node_class = 'class',
   c_CultureSet.created_by = 'seed:schema',
   c_CultureSet.created_at = datetime()
 ON MATCH SET
@@ -600,6 +637,7 @@ ON MATCH SET
   c_CultureSet.context_budget = 'medium',
   c_CultureSet.visibility = 'internal',
   c_CultureSet.generation_count = 0,
+  c_CultureSet.node_class = 'class',
   c_CultureSet.updated_at = datetime();
 
 MERGE (c_EconomicRegion:Schema:Class {label: 'EconomicRegion'})
@@ -616,6 +654,7 @@ ON CREATE SET
   c_EconomicRegion.context_budget = 'medium',
   c_EconomicRegion.visibility = 'internal',
   c_EconomicRegion.generation_count = 0,
+  c_EconomicRegion.node_class = 'class',
   c_EconomicRegion.created_by = 'seed:schema',
   c_EconomicRegion.created_at = datetime()
 ON MATCH SET
@@ -631,6 +670,7 @@ ON MATCH SET
   c_EconomicRegion.context_budget = 'medium',
   c_EconomicRegion.visibility = 'internal',
   c_EconomicRegion.generation_count = 0,
+  c_EconomicRegion.node_class = 'class',
   c_EconomicRegion.updated_at = datetime();
 
 MERGE (c_Entity:Schema:Class {label: 'Entity'})
@@ -647,6 +687,7 @@ ON CREATE SET
   c_Entity.context_budget = 'high',
   c_Entity.visibility = 'publishable',
   c_Entity.generation_count = 0,
+  c_Entity.node_class = 'class',
   c_Entity.created_by = 'seed:schema',
   c_Entity.created_at = datetime()
 ON MATCH SET
@@ -662,6 +703,7 @@ ON MATCH SET
   c_Entity.context_budget = 'high',
   c_Entity.visibility = 'publishable',
   c_Entity.generation_count = 0,
+  c_Entity.node_class = 'class',
   c_Entity.updated_at = datetime();
 
 MERGE (c_EntityCategory:Schema:Class {label: 'EntityCategory'})
@@ -678,6 +720,7 @@ ON CREATE SET
   c_EntityCategory.context_budget = 'medium',
   c_EntityCategory.visibility = 'internal',
   c_EntityCategory.generation_count = 0,
+  c_EntityCategory.node_class = 'class',
   c_EntityCategory.created_by = 'seed:schema',
   c_EntityCategory.created_at = datetime()
 ON MATCH SET
@@ -693,6 +736,7 @@ ON MATCH SET
   c_EntityCategory.context_budget = 'medium',
   c_EntityCategory.visibility = 'internal',
   c_EntityCategory.generation_count = 0,
+  c_EntityCategory.node_class = 'class',
   c_EntityCategory.updated_at = datetime();
 
 MERGE (c_EntityNative:Schema:Class {label: 'EntityNative'})
@@ -709,6 +753,7 @@ ON CREATE SET
   c_EntityNative.context_budget = 'high',
   c_EntityNative.visibility = 'publishable',
   c_EntityNative.generation_count = 0,
+  c_EntityNative.node_class = 'class',
   c_EntityNative.created_by = 'seed:schema',
   c_EntityNative.created_at = datetime()
 ON MATCH SET
@@ -724,6 +769,7 @@ ON MATCH SET
   c_EntityNative.context_budget = 'high',
   c_EntityNative.visibility = 'publishable',
   c_EntityNative.generation_count = 0,
+  c_EntityNative.node_class = 'class',
   c_EntityNative.updated_at = datetime();
 
 MERGE (c_Expression:Schema:Class {label: 'Expression'})
@@ -740,6 +786,7 @@ ON CREATE SET
   c_Expression.context_budget = 'medium',
   c_Expression.visibility = 'internal',
   c_Expression.generation_count = 0,
+  c_Expression.node_class = 'class',
   c_Expression.created_by = 'seed:schema',
   c_Expression.created_at = datetime()
 ON MATCH SET
@@ -755,6 +802,7 @@ ON MATCH SET
   c_Expression.context_budget = 'medium',
   c_Expression.visibility = 'internal',
   c_Expression.generation_count = 0,
+  c_Expression.node_class = 'class',
   c_Expression.updated_at = datetime();
 
 MERGE (c_ExpressionSet:Schema:Class {label: 'ExpressionSet'})
@@ -771,6 +819,7 @@ ON CREATE SET
   c_ExpressionSet.context_budget = 'medium',
   c_ExpressionSet.visibility = 'internal',
   c_ExpressionSet.generation_count = 0,
+  c_ExpressionSet.node_class = 'class',
   c_ExpressionSet.created_by = 'seed:schema',
   c_ExpressionSet.created_at = datetime()
 ON MATCH SET
@@ -786,6 +835,7 @@ ON MATCH SET
   c_ExpressionSet.context_budget = 'medium',
   c_ExpressionSet.visibility = 'internal',
   c_ExpressionSet.generation_count = 0,
+  c_ExpressionSet.node_class = 'class',
   c_ExpressionSet.updated_at = datetime();
 
 MERGE (c_Formatting:Schema:Class {label: 'Formatting'})
@@ -802,6 +852,7 @@ ON CREATE SET
   c_Formatting.context_budget = 'medium',
   c_Formatting.visibility = 'internal',
   c_Formatting.generation_count = 0,
+  c_Formatting.node_class = 'class',
   c_Formatting.created_by = 'seed:schema',
   c_Formatting.created_at = datetime()
 ON MATCH SET
@@ -817,6 +868,7 @@ ON MATCH SET
   c_Formatting.context_budget = 'medium',
   c_Formatting.visibility = 'internal',
   c_Formatting.generation_count = 0,
+  c_Formatting.node_class = 'class',
   c_Formatting.updated_at = datetime();
 
 MERGE (c_GEOAnswer:Schema:Class {label: 'GEOAnswer'})
@@ -833,6 +885,7 @@ ON CREATE SET
   c_GEOAnswer.context_budget = 'medium',
   c_GEOAnswer.visibility = 'publishable',
   c_GEOAnswer.generation_count = 0,
+  c_GEOAnswer.node_class = 'class',
   c_GEOAnswer.created_by = 'seed:schema',
   c_GEOAnswer.created_at = datetime()
 ON MATCH SET
@@ -848,6 +901,7 @@ ON MATCH SET
   c_GEOAnswer.context_budget = 'medium',
   c_GEOAnswer.visibility = 'publishable',
   c_GEOAnswer.generation_count = 0,
+  c_GEOAnswer.node_class = 'class',
   c_GEOAnswer.updated_at = datetime();
 
 MERGE (c_GEOQuery:Schema:Class {label: 'GEOQuery'})
@@ -864,6 +918,7 @@ ON CREATE SET
   c_GEOQuery.context_budget = 'medium',
   c_GEOQuery.visibility = 'publishable',
   c_GEOQuery.generation_count = 0,
+  c_GEOQuery.node_class = 'class',
   c_GEOQuery.created_by = 'seed:schema',
   c_GEOQuery.created_at = datetime()
 ON MATCH SET
@@ -879,6 +934,7 @@ ON MATCH SET
   c_GEOQuery.context_budget = 'medium',
   c_GEOQuery.visibility = 'publishable',
   c_GEOQuery.generation_count = 0,
+  c_GEOQuery.node_class = 'class',
   c_GEOQuery.updated_at = datetime();
 
 MERGE (c_GEOQuerySet:Schema:Class {label: 'GEOQuerySet'})
@@ -895,6 +951,7 @@ ON CREATE SET
   c_GEOQuerySet.context_budget = 'medium',
   c_GEOQuerySet.visibility = 'internal',
   c_GEOQuerySet.generation_count = 0,
+  c_GEOQuerySet.node_class = 'class',
   c_GEOQuerySet.created_by = 'seed:schema',
   c_GEOQuerySet.created_at = datetime()
 ON MATCH SET
@@ -910,6 +967,7 @@ ON MATCH SET
   c_GEOQuerySet.context_budget = 'medium',
   c_GEOQuerySet.visibility = 'internal',
   c_GEOQuerySet.generation_count = 0,
+  c_GEOQuerySet.node_class = 'class',
   c_GEOQuerySet.updated_at = datetime();
 
 MERGE (c_GeoRegion:Schema:Class {label: 'GeoRegion'})
@@ -926,6 +984,7 @@ ON CREATE SET
   c_GeoRegion.context_budget = 'medium',
   c_GeoRegion.visibility = 'internal',
   c_GeoRegion.generation_count = 0,
+  c_GeoRegion.node_class = 'class',
   c_GeoRegion.created_by = 'seed:schema',
   c_GeoRegion.created_at = datetime()
 ON MATCH SET
@@ -941,6 +1000,7 @@ ON MATCH SET
   c_GeoRegion.context_budget = 'medium',
   c_GeoRegion.visibility = 'internal',
   c_GeoRegion.generation_count = 0,
+  c_GeoRegion.node_class = 'class',
   c_GeoRegion.updated_at = datetime();
 
 MERGE (c_GeoSubRegion:Schema:Class {label: 'GeoSubRegion'})
@@ -957,6 +1017,7 @@ ON CREATE SET
   c_GeoSubRegion.context_budget = 'medium',
   c_GeoSubRegion.visibility = 'internal',
   c_GeoSubRegion.generation_count = 0,
+  c_GeoSubRegion.node_class = 'class',
   c_GeoSubRegion.created_by = 'seed:schema',
   c_GeoSubRegion.created_at = datetime()
 ON MATCH SET
@@ -972,6 +1033,7 @@ ON MATCH SET
   c_GeoSubRegion.context_budget = 'medium',
   c_GeoSubRegion.visibility = 'internal',
   c_GeoSubRegion.generation_count = 0,
+  c_GeoSubRegion.node_class = 'class',
   c_GeoSubRegion.updated_at = datetime();
 
 MERGE (c_IncomeGroup:Schema:Class {label: 'IncomeGroup'})
@@ -988,6 +1050,7 @@ ON CREATE SET
   c_IncomeGroup.context_budget = 'medium',
   c_IncomeGroup.visibility = 'internal',
   c_IncomeGroup.generation_count = 0,
+  c_IncomeGroup.node_class = 'class',
   c_IncomeGroup.created_by = 'seed:schema',
   c_IncomeGroup.created_at = datetime()
 ON MATCH SET
@@ -1003,6 +1066,7 @@ ON MATCH SET
   c_IncomeGroup.context_budget = 'medium',
   c_IncomeGroup.visibility = 'internal',
   c_IncomeGroup.generation_count = 0,
+  c_IncomeGroup.node_class = 'class',
   c_IncomeGroup.updated_at = datetime();
 
 MERGE (c_LanguageBranch:Schema:Class {label: 'LanguageBranch'})
@@ -1019,6 +1083,7 @@ ON CREATE SET
   c_LanguageBranch.context_budget = 'medium',
   c_LanguageBranch.visibility = 'internal',
   c_LanguageBranch.generation_count = 0,
+  c_LanguageBranch.node_class = 'class',
   c_LanguageBranch.created_by = 'seed:schema',
   c_LanguageBranch.created_at = datetime()
 ON MATCH SET
@@ -1034,6 +1099,7 @@ ON MATCH SET
   c_LanguageBranch.context_budget = 'medium',
   c_LanguageBranch.visibility = 'internal',
   c_LanguageBranch.generation_count = 0,
+  c_LanguageBranch.node_class = 'class',
   c_LanguageBranch.updated_at = datetime();
 
 MERGE (c_LanguageFamily:Schema:Class {label: 'LanguageFamily'})
@@ -1050,6 +1116,7 @@ ON CREATE SET
   c_LanguageFamily.context_budget = 'medium',
   c_LanguageFamily.visibility = 'internal',
   c_LanguageFamily.generation_count = 0,
+  c_LanguageFamily.node_class = 'class',
   c_LanguageFamily.created_by = 'seed:schema',
   c_LanguageFamily.created_at = datetime()
 ON MATCH SET
@@ -1065,6 +1132,7 @@ ON MATCH SET
   c_LanguageFamily.context_budget = 'medium',
   c_LanguageFamily.visibility = 'internal',
   c_LanguageFamily.generation_count = 0,
+  c_LanguageFamily.node_class = 'class',
   c_LanguageFamily.updated_at = datetime();
 
 MERGE (c_LendingCategory:Schema:Class {label: 'LendingCategory'})
@@ -1081,6 +1149,7 @@ ON CREATE SET
   c_LendingCategory.context_budget = 'medium',
   c_LendingCategory.visibility = 'internal',
   c_LendingCategory.generation_count = 0,
+  c_LendingCategory.node_class = 'class',
   c_LendingCategory.created_by = 'seed:schema',
   c_LendingCategory.created_at = datetime()
 ON MATCH SET
@@ -1096,6 +1165,7 @@ ON MATCH SET
   c_LendingCategory.context_budget = 'medium',
   c_LendingCategory.visibility = 'internal',
   c_LendingCategory.generation_count = 0,
+  c_LendingCategory.node_class = 'class',
   c_LendingCategory.updated_at = datetime();
 
 MERGE (c_Locale:Schema:Class {label: 'Locale'})
@@ -1112,6 +1182,7 @@ ON CREATE SET
   c_Locale.context_budget = 'medium',
   c_Locale.visibility = 'internal',
   c_Locale.generation_count = 0,
+  c_Locale.node_class = 'class',
   c_Locale.created_by = 'seed:schema',
   c_Locale.created_at = datetime()
 ON MATCH SET
@@ -1127,6 +1198,7 @@ ON MATCH SET
   c_Locale.context_budget = 'medium',
   c_Locale.visibility = 'internal',
   c_Locale.generation_count = 0,
+  c_Locale.node_class = 'class',
   c_Locale.updated_at = datetime();
 
 MERGE (c_OrgConfig:Schema:Class {label: 'OrgConfig'})
@@ -1143,6 +1215,7 @@ ON CREATE SET
   c_OrgConfig.context_budget = 'medium',
   c_OrgConfig.visibility = 'internal',
   c_OrgConfig.generation_count = 0,
+  c_OrgConfig.node_class = 'class',
   c_OrgConfig.created_by = 'seed:schema',
   c_OrgConfig.created_at = datetime()
 ON MATCH SET
@@ -1158,6 +1231,7 @@ ON MATCH SET
   c_OrgConfig.context_budget = 'medium',
   c_OrgConfig.visibility = 'internal',
   c_OrgConfig.generation_count = 0,
+  c_OrgConfig.node_class = 'class',
   c_OrgConfig.updated_at = datetime();
 
 MERGE (c_OutputArtifact:Schema:Class {label: 'OutputArtifact'})
@@ -1174,6 +1248,7 @@ ON CREATE SET
   c_OutputArtifact.context_budget = 'low',
   c_OutputArtifact.visibility = 'publishable',
   c_OutputArtifact.generation_count = 0,
+  c_OutputArtifact.node_class = 'class',
   c_OutputArtifact.created_by = 'seed:schema',
   c_OutputArtifact.created_at = datetime()
 ON MATCH SET
@@ -1189,6 +1264,7 @@ ON MATCH SET
   c_OutputArtifact.context_budget = 'low',
   c_OutputArtifact.visibility = 'publishable',
   c_OutputArtifact.generation_count = 0,
+  c_OutputArtifact.node_class = 'class',
   c_OutputArtifact.updated_at = datetime();
 
 MERGE (c_Page:Schema:Class {label: 'Page'})
@@ -1205,6 +1281,7 @@ ON CREATE SET
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
+  c_Page.node_class = 'class',
   c_Page.created_by = 'seed:schema',
   c_Page.created_at = datetime()
 ON MATCH SET
@@ -1220,6 +1297,7 @@ ON MATCH SET
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
+  c_Page.node_class = 'class',
   c_Page.updated_at = datetime();
 
 MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
@@ -1236,6 +1314,7 @@ ON CREATE SET
   c_PageNative.context_budget = 'low',
   c_PageNative.visibility = 'publishable',
   c_PageNative.generation_count = 0,
+  c_PageNative.node_class = 'class',
   c_PageNative.created_by = 'seed:schema',
   c_PageNative.created_at = datetime()
 ON MATCH SET
@@ -1251,6 +1330,7 @@ ON MATCH SET
   c_PageNative.context_budget = 'low',
   c_PageNative.visibility = 'publishable',
   c_PageNative.generation_count = 0,
+  c_PageNative.node_class = 'class',
   c_PageNative.updated_at = datetime();
 
 MERGE (c_Pattern:Schema:Class {label: 'Pattern'})
@@ -1267,6 +1347,7 @@ ON CREATE SET
   c_Pattern.context_budget = 'medium',
   c_Pattern.visibility = 'internal',
   c_Pattern.generation_count = 0,
+  c_Pattern.node_class = 'class',
   c_Pattern.created_by = 'seed:schema',
   c_Pattern.created_at = datetime()
 ON MATCH SET
@@ -1282,6 +1363,7 @@ ON MATCH SET
   c_Pattern.context_budget = 'medium',
   c_Pattern.visibility = 'internal',
   c_Pattern.generation_count = 0,
+  c_Pattern.node_class = 'class',
   c_Pattern.updated_at = datetime();
 
 MERGE (c_PatternSet:Schema:Class {label: 'PatternSet'})
@@ -1298,6 +1380,7 @@ ON CREATE SET
   c_PatternSet.context_budget = 'medium',
   c_PatternSet.visibility = 'internal',
   c_PatternSet.generation_count = 0,
+  c_PatternSet.node_class = 'class',
   c_PatternSet.created_by = 'seed:schema',
   c_PatternSet.created_at = datetime()
 ON MATCH SET
@@ -1313,6 +1396,7 @@ ON MATCH SET
   c_PatternSet.context_budget = 'medium',
   c_PatternSet.visibility = 'internal',
   c_PatternSet.generation_count = 0,
+  c_PatternSet.node_class = 'class',
   c_PatternSet.updated_at = datetime();
 
 MERGE (c_PopulationCluster:Schema:Class {label: 'PopulationCluster'})
@@ -1329,6 +1413,7 @@ ON CREATE SET
   c_PopulationCluster.context_budget = 'medium',
   c_PopulationCluster.visibility = 'internal',
   c_PopulationCluster.generation_count = 0,
+  c_PopulationCluster.node_class = 'class',
   c_PopulationCluster.created_by = 'seed:schema',
   c_PopulationCluster.created_at = datetime()
 ON MATCH SET
@@ -1344,6 +1429,7 @@ ON MATCH SET
   c_PopulationCluster.context_budget = 'medium',
   c_PopulationCluster.visibility = 'internal',
   c_PopulationCluster.generation_count = 0,
+  c_PopulationCluster.node_class = 'class',
   c_PopulationCluster.updated_at = datetime();
 
 MERGE (c_PopulationSubCluster:Schema:Class {label: 'PopulationSubCluster'})
@@ -1360,6 +1446,7 @@ ON CREATE SET
   c_PopulationSubCluster.context_budget = 'medium',
   c_PopulationSubCluster.visibility = 'internal',
   c_PopulationSubCluster.generation_count = 0,
+  c_PopulationSubCluster.node_class = 'class',
   c_PopulationSubCluster.created_by = 'seed:schema',
   c_PopulationSubCluster.created_at = datetime()
 ON MATCH SET
@@ -1375,6 +1462,7 @@ ON MATCH SET
   c_PopulationSubCluster.context_budget = 'medium',
   c_PopulationSubCluster.visibility = 'internal',
   c_PopulationSubCluster.generation_count = 0,
+  c_PopulationSubCluster.node_class = 'class',
   c_PopulationSubCluster.updated_at = datetime();
 
 MERGE (c_Project:Schema:Class {label: 'Project'})
@@ -1391,6 +1479,7 @@ ON CREATE SET
   c_Project.context_budget = 'high',
   c_Project.visibility = 'fragment',
   c_Project.generation_count = 0,
+  c_Project.node_class = 'class',
   c_Project.created_by = 'seed:schema',
   c_Project.created_at = datetime()
 ON MATCH SET
@@ -1406,6 +1495,7 @@ ON MATCH SET
   c_Project.context_budget = 'high',
   c_Project.visibility = 'fragment',
   c_Project.generation_count = 0,
+  c_Project.node_class = 'class',
   c_Project.updated_at = datetime();
 
 MERGE (c_ProjectGEOScope:Schema:Class {label: 'ProjectGEOScope'})
@@ -1422,6 +1512,7 @@ ON CREATE SET
   c_ProjectGEOScope.context_budget = 'high',
   c_ProjectGEOScope.visibility = 'fragment',
   c_ProjectGEOScope.generation_count = 0,
+  c_ProjectGEOScope.node_class = 'class',
   c_ProjectGEOScope.created_by = 'seed:schema',
   c_ProjectGEOScope.created_at = datetime()
 ON MATCH SET
@@ -1437,6 +1528,7 @@ ON MATCH SET
   c_ProjectGEOScope.context_budget = 'high',
   c_ProjectGEOScope.visibility = 'fragment',
   c_ProjectGEOScope.generation_count = 0,
+  c_ProjectGEOScope.node_class = 'class',
   c_ProjectGEOScope.updated_at = datetime();
 
 MERGE (c_ProjectNative:Schema:Class {label: 'ProjectNative'})
@@ -1453,6 +1545,7 @@ ON CREATE SET
   c_ProjectNative.context_budget = 'high',
   c_ProjectNative.visibility = 'fragment',
   c_ProjectNative.generation_count = 0,
+  c_ProjectNative.node_class = 'class',
   c_ProjectNative.created_by = 'seed:schema',
   c_ProjectNative.created_at = datetime()
 ON MATCH SET
@@ -1468,6 +1561,7 @@ ON MATCH SET
   c_ProjectNative.context_budget = 'high',
   c_ProjectNative.visibility = 'fragment',
   c_ProjectNative.generation_count = 0,
+  c_ProjectNative.node_class = 'class',
   c_ProjectNative.updated_at = datetime();
 
 MERGE (c_ProjectSEOScope:Schema:Class {label: 'ProjectSEOScope'})
@@ -1484,6 +1578,7 @@ ON CREATE SET
   c_ProjectSEOScope.context_budget = 'high',
   c_ProjectSEOScope.visibility = 'fragment',
   c_ProjectSEOScope.generation_count = 0,
+  c_ProjectSEOScope.node_class = 'class',
   c_ProjectSEOScope.created_by = 'seed:schema',
   c_ProjectSEOScope.created_at = datetime()
 ON MATCH SET
@@ -1499,6 +1594,7 @@ ON MATCH SET
   c_ProjectSEOScope.context_budget = 'high',
   c_ProjectSEOScope.visibility = 'fragment',
   c_ProjectSEOScope.generation_count = 0,
+  c_ProjectSEOScope.node_class = 'class',
   c_ProjectSEOScope.updated_at = datetime();
 
 MERGE (c_PromptArtifact:Schema:Class {label: 'PromptArtifact'})
@@ -1515,6 +1611,7 @@ ON CREATE SET
   c_PromptArtifact.context_budget = 'medium',
   c_PromptArtifact.visibility = 'internal',
   c_PromptArtifact.generation_count = 0,
+  c_PromptArtifact.node_class = 'class',
   c_PromptArtifact.created_by = 'seed:schema',
   c_PromptArtifact.created_at = datetime()
 ON MATCH SET
@@ -1530,6 +1627,7 @@ ON MATCH SET
   c_PromptArtifact.context_budget = 'medium',
   c_PromptArtifact.visibility = 'internal',
   c_PromptArtifact.generation_count = 0,
+  c_PromptArtifact.node_class = 'class',
   c_PromptArtifact.updated_at = datetime();
 
 MERGE (c_PromptStyle:Schema:Class {label: 'PromptStyle'})
@@ -1546,6 +1644,7 @@ ON CREATE SET
   c_PromptStyle.context_budget = 'high',
   c_PromptStyle.visibility = 'fragment',
   c_PromptStyle.generation_count = 0,
+  c_PromptStyle.node_class = 'class',
   c_PromptStyle.created_by = 'seed:schema',
   c_PromptStyle.created_at = datetime()
 ON MATCH SET
@@ -1561,6 +1660,7 @@ ON MATCH SET
   c_PromptStyle.context_budget = 'high',
   c_PromptStyle.visibility = 'fragment',
   c_PromptStyle.generation_count = 0,
+  c_PromptStyle.node_class = 'class',
   c_PromptStyle.updated_at = datetime();
 
 MERGE (c_SEOKeyword:Schema:Class {label: 'SEOKeyword'})
@@ -1577,6 +1677,7 @@ ON CREATE SET
   c_SEOKeyword.context_budget = 'medium',
   c_SEOKeyword.visibility = 'publishable',
   c_SEOKeyword.generation_count = 0,
+  c_SEOKeyword.node_class = 'class',
   c_SEOKeyword.created_by = 'seed:schema',
   c_SEOKeyword.created_at = datetime()
 ON MATCH SET
@@ -1592,6 +1693,7 @@ ON MATCH SET
   c_SEOKeyword.context_budget = 'medium',
   c_SEOKeyword.visibility = 'publishable',
   c_SEOKeyword.generation_count = 0,
+  c_SEOKeyword.node_class = 'class',
   c_SEOKeyword.updated_at = datetime();
 
 MERGE (c_SEOKeywordFormat:Schema:Class {label: 'SEOKeywordFormat'})
@@ -1608,6 +1710,7 @@ ON CREATE SET
   c_SEOKeywordFormat.context_budget = 'medium',
   c_SEOKeywordFormat.visibility = 'internal',
   c_SEOKeywordFormat.generation_count = 0,
+  c_SEOKeywordFormat.node_class = 'class',
   c_SEOKeywordFormat.created_by = 'seed:schema',
   c_SEOKeywordFormat.created_at = datetime()
 ON MATCH SET
@@ -1623,6 +1726,7 @@ ON MATCH SET
   c_SEOKeywordFormat.context_budget = 'medium',
   c_SEOKeywordFormat.visibility = 'internal',
   c_SEOKeywordFormat.generation_count = 0,
+  c_SEOKeywordFormat.node_class = 'class',
   c_SEOKeywordFormat.updated_at = datetime();
 
 MERGE (c_SEOKeywordSet:Schema:Class {label: 'SEOKeywordSet'})
@@ -1639,6 +1743,7 @@ ON CREATE SET
   c_SEOKeywordSet.context_budget = 'medium',
   c_SEOKeywordSet.visibility = 'internal',
   c_SEOKeywordSet.generation_count = 0,
+  c_SEOKeywordSet.node_class = 'class',
   c_SEOKeywordSet.created_by = 'seed:schema',
   c_SEOKeywordSet.created_at = datetime()
 ON MATCH SET
@@ -1654,6 +1759,7 @@ ON MATCH SET
   c_SEOKeywordSet.context_budget = 'medium',
   c_SEOKeywordSet.visibility = 'internal',
   c_SEOKeywordSet.generation_count = 0,
+  c_SEOKeywordSet.node_class = 'class',
   c_SEOKeywordSet.updated_at = datetime();
 
 MERGE (c_Slugification:Schema:Class {label: 'Slugification'})
@@ -1670,6 +1776,7 @@ ON CREATE SET
   c_Slugification.context_budget = 'medium',
   c_Slugification.visibility = 'internal',
   c_Slugification.generation_count = 0,
+  c_Slugification.node_class = 'class',
   c_Slugification.created_by = 'seed:schema',
   c_Slugification.created_at = datetime()
 ON MATCH SET
@@ -1685,6 +1792,7 @@ ON MATCH SET
   c_Slugification.context_budget = 'medium',
   c_Slugification.visibility = 'internal',
   c_Slugification.generation_count = 0,
+  c_Slugification.node_class = 'class',
   c_Slugification.updated_at = datetime();
 
 MERGE (c_Style:Schema:Class {label: 'Style'})
@@ -1701,6 +1809,7 @@ ON CREATE SET
   c_Style.context_budget = 'medium',
   c_Style.visibility = 'internal',
   c_Style.generation_count = 0,
+  c_Style.node_class = 'class',
   c_Style.created_by = 'seed:schema',
   c_Style.created_at = datetime()
 ON MATCH SET
@@ -1716,6 +1825,7 @@ ON MATCH SET
   c_Style.context_budget = 'medium',
   c_Style.visibility = 'internal',
   c_Style.generation_count = 0,
+  c_Style.node_class = 'class',
   c_Style.updated_at = datetime();
 
 MERGE (c_Taboo:Schema:Class {label: 'Taboo'})
@@ -1732,6 +1842,7 @@ ON CREATE SET
   c_Taboo.context_budget = 'medium',
   c_Taboo.visibility = 'internal',
   c_Taboo.generation_count = 0,
+  c_Taboo.node_class = 'class',
   c_Taboo.created_by = 'seed:schema',
   c_Taboo.created_at = datetime()
 ON MATCH SET
@@ -1747,6 +1858,7 @@ ON MATCH SET
   c_Taboo.context_budget = 'medium',
   c_Taboo.visibility = 'internal',
   c_Taboo.generation_count = 0,
+  c_Taboo.node_class = 'class',
   c_Taboo.updated_at = datetime();
 
 MERGE (c_TabooSet:Schema:Class {label: 'TabooSet'})
@@ -1763,6 +1875,7 @@ ON CREATE SET
   c_TabooSet.context_budget = 'medium',
   c_TabooSet.visibility = 'internal',
   c_TabooSet.generation_count = 0,
+  c_TabooSet.node_class = 'class',
   c_TabooSet.created_by = 'seed:schema',
   c_TabooSet.created_at = datetime()
 ON MATCH SET
@@ -1778,6 +1891,7 @@ ON MATCH SET
   c_TabooSet.context_budget = 'medium',
   c_TabooSet.visibility = 'internal',
   c_TabooSet.generation_count = 0,
+  c_TabooSet.node_class = 'class',
   c_TabooSet.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════

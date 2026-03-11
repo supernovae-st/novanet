@@ -30,6 +30,7 @@ ON CREATE SET
   ac_HAS_PAGE.arc_property_info = null,
   ac_HAS_PAGE.cypher_pattern = '(Project)-[:HAS_PAGE]->(Page)',
   ac_HAS_PAGE.temperature_threshold = null,
+  ac_HAS_PAGE.node_class = 'arc_class',
   ac_HAS_PAGE.created_by = 'seed:schema',
   ac_HAS_PAGE.created_at = datetime()
 ON MATCH SET
@@ -44,6 +45,7 @@ ON MATCH SET
   ac_HAS_PAGE.arc_property_info = null,
   ac_HAS_PAGE.cypher_pattern = '(Project)-[:HAS_PAGE]->(Page)',
   ac_HAS_PAGE.temperature_threshold = null,
+  ac_HAS_PAGE.node_class = 'arc_class',
   ac_HAS_PAGE.updated_at = datetime();
 
 MERGE (ac_USES_ENTITY:Schema:ArcClass {key: 'USES_ENTITY'})
@@ -59,6 +61,7 @@ ON CREATE SET
   ac_USES_ENTITY.arc_property_info = null,
   ac_USES_ENTITY.cypher_pattern = '(Page)-[:USES_ENTITY]->(Entity)',
   ac_USES_ENTITY.temperature_threshold = null,
+  ac_USES_ENTITY.node_class = 'arc_class',
   ac_USES_ENTITY.created_by = 'seed:schema',
   ac_USES_ENTITY.created_at = datetime()
 ON MATCH SET
@@ -73,6 +76,7 @@ ON MATCH SET
   ac_USES_ENTITY.arc_property_info = null,
   ac_USES_ENTITY.cypher_pattern = '(Page)-[:USES_ENTITY]->(Entity)',
   ac_USES_ENTITY.temperature_threshold = null,
+  ac_USES_ENTITY.node_class = 'arc_class',
   ac_USES_ENTITY.updated_at = datetime();
 
 MERGE (ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'})
@@ -88,6 +92,7 @@ ON CREATE SET
   ac_FOR_LOCALE.arc_property_info = null,
   ac_FOR_LOCALE.cypher_pattern = '(PageNative)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
+  ac_FOR_LOCALE.node_class = 'arc_class',
   ac_FOR_LOCALE.created_by = 'seed:schema',
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -102,6 +107,7 @@ ON MATCH SET
   ac_FOR_LOCALE.arc_property_info = null,
   ac_FOR_LOCALE.cypher_pattern = '(PageNative)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
+  ac_FOR_LOCALE.node_class = 'arc_class',
   ac_FOR_LOCALE.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════

@@ -25,6 +25,7 @@ ON CREATE SET
   r_test.emoji = '🧪',
   r_test.color = '#3b82f6',
   r_test.llm_context = 'A test realm for snapshot testing.',
+  r_test.node_class = 'realm',
   r_test.created_by = 'seed:schema',
   r_test.created_at = datetime()
 ON MATCH SET
@@ -32,6 +33,7 @@ ON MATCH SET
   r_test.emoji = '🧪',
   r_test.color = '#3b82f6',
   r_test.llm_context = 'A test realm for snapshot testing.',
+  r_test.node_class = 'realm',
   r_test.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -45,6 +47,7 @@ ON CREATE SET
   l_base.emoji = '📋',
   l_base.color = '#10b981',
   l_base.llm_context = 'The base layer.',
+  l_base.node_class = 'layer',
   l_base.created_by = 'seed:schema',
   l_base.created_at = datetime()
 ON MATCH SET
@@ -52,6 +55,7 @@ ON MATCH SET
   l_base.emoji = '📋',
   l_base.color = '#10b981',
   l_base.llm_context = 'The base layer.',
+  l_base.node_class = 'layer',
   l_base.updated_at = datetime();
 
 MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'base'})
@@ -62,6 +66,7 @@ ON CREATE SET
   l_derived.emoji = '🔧',
   l_derived.color = '#f59e0b',
   l_derived.llm_context = 'A derived layer.',
+  l_derived.node_class = 'layer',
   l_derived.created_by = 'seed:schema',
   l_derived.created_at = datetime()
 ON MATCH SET
@@ -69,6 +74,7 @@ ON MATCH SET
   l_derived.emoji = '🔧',
   l_derived.color = '#f59e0b',
   l_derived.llm_context = 'A derived layer.',
+  l_derived.node_class = 'layer',
   l_derived.updated_at = datetime();
 
 MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'derived'})
@@ -80,10 +86,12 @@ MERGE (r)-[:HAS_LAYER]->(l);
 
 MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
 ON CREATE SET
+  af_semantic.node_class = 'arc_family',
   af_semantic.created_by = 'seed:schema',
   af_semantic.created_at = datetime(),
   af_semantic.updated_at = datetime()
 ON MATCH SET
+  af_semantic.node_class = 'arc_family',
   af_semantic.updated_at = datetime()
 SET
   af_semantic.display_name = 'Semantic',
