@@ -940,7 +940,7 @@ impl App {
             return self.handle_search_key(key);
         }
 
-        // Search navigation: Ctrl-n (next) / Ctrl-p (prev) work in any mode
+        // Ctrl modifiers: search nav (n/p) + vertical panel nav (up/down)
         if key
             .modifiers
             .contains(crossterm::event::KeyModifiers::CONTROL)
@@ -952,6 +952,17 @@ impl App {
                 }
                 KeyCode::Char('p') => {
                     self.prev_search_result();
+                    return true;
+                }
+                // Ctrl+Up/Down: vertical panel switching (Identity↔Content, Props↔Arcs)
+                KeyCode::Up => {
+                    self.focus = self.focus.up();
+                    self.set_status(self.focus.name());
+                    return true;
+                }
+                KeyCode::Down => {
+                    self.focus = self.focus.down();
+                    self.set_status(self.focus.name());
                     return true;
                 }
                 _ => {}
