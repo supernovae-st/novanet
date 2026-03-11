@@ -7,7 +7,7 @@
 //! - Prune old backups
 
 use super::archive::{create_archive, extract_archive, read_manifest_from_archive};
-use super::types::{BackupContents, BackupError, BackupInfo, BackupManifest, Result};
+use super::types::{BackupError, BackupInfo, BackupManifest, Result};
 use chrono::Utc;
 use std::path::{Path, PathBuf};
 use tracing::instrument;
