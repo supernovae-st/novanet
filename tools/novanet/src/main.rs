@@ -189,6 +189,8 @@ enum Commands {
         #[command(subcommand)]
         action: SeedAction,
     },
+    /// Backup management (create, list, restore, prune)
+    Backup(novanet::commands::backup::BackupArgs),
 }
 
 #[derive(Subcommand)]
@@ -1216,6 +1218,10 @@ async fn main() -> color_eyre::Result<()> {
                 novanet::commands::seed::diff(Some(root), db.graph(), class).await?;
             }
         },
+        Commands::Backup(args) => {
+            eprintln!("novanet backup {:?}", args.command);
+            novanet::commands::backup::run_backup(args).await?;
+        }
     }
 
     Ok(())
