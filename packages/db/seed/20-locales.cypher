@@ -8,7 +8,7 @@
 MERGE (l:Locale {key: "af-ZA"})
 ON CREATE SET
   l.display_name = "Afrikaans (South Africa)",
-  l.description = "Afrikaans locale for Suid-Afrika market",
+  l.content = "Afrikaans locale for Suid-Afrika market",
   l.llm_context = "USE: for Afrikaans content targeting Suid-Afrika. TRIGGERS: af-ZA, Afrikaans, suid-afrika.",
   l.language_code = "af",
   l.country_code = "ZA",
@@ -32,7 +32,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "am-ET"})
 ON CREATE SET
   l.display_name = "Amharic (Ethiopia)",
-  l.description = "Amharic locale for ኢትዮጵያ market",
+  l.content = "Amharic locale for ኢትዮጵያ market",
   l.llm_context = "USE: for Amharic content targeting ኢትዮጵያ. TRIGGERS: am-ET, አማርኛ, ኢትዮጵያ.",
   l.language_code = "am",
   l.country_code = "ET",
@@ -56,7 +56,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-AE"})
 ON CREATE SET
   l.display_name = "Arabic (UAE)",
-  l.description = "Arabic locale for الإمارات العربية المتحدة market",
+  l.content = "Arabic locale for الإمارات العربية المتحدة market",
   l.llm_context = "USE: for Arabic content targeting الإمارات العربية المتحدة. TRIGGERS: ar-AE, العربية, الإمارات العربية المتحدة.",
   l.language_code = "ar",
   l.country_code = "AE",
@@ -80,7 +80,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-BH"})
 ON CREATE SET
   l.display_name = "Arabic (Bahrain)",
-  l.description = "Arabic locale for البحرين market",
+  l.content = "Arabic locale for البحرين market",
   l.llm_context = "USE: for Arabic content targeting البحرين. TRIGGERS: ar-BH, العربية, البحرين.",
   l.language_code = "ar",
   l.country_code = "BH",
@@ -104,7 +104,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-DZ"})
 ON CREATE SET
   l.display_name = "Arabic (Algeria)",
-  l.description = "Arabic locale for الجزائر market",
+  l.content = "Arabic locale for الجزائر market",
   l.llm_context = "USE: for Arabic content targeting الجزائر. TRIGGERS: ar-DZ, العربية, الجزائر.",
   l.language_code = "ar",
   l.country_code = "DZ",
@@ -128,7 +128,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-EG"})
 ON CREATE SET
   l.display_name = "Arabic (Egypt)",
-  l.description = "Arabic locale for مصر market",
+  l.content = "Arabic locale for مصر market",
   l.llm_context = "USE: for Arabic content targeting مصر. TRIGGERS: ar-EG, العربية, مصر.",
   l.language_code = "ar",
   l.country_code = "EG",
@@ -152,7 +152,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-IQ"})
 ON CREATE SET
   l.display_name = "Arabic (Iraq)",
-  l.description = "Arabic locale for العراق market",
+  l.content = "Arabic locale for العراق market",
   l.llm_context = "USE: for Arabic content targeting العراق. TRIGGERS: ar-IQ, العربية, العراق.",
   l.language_code = "ar",
   l.country_code = "IQ",
@@ -176,7 +176,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-JO"})
 ON CREATE SET
   l.display_name = "Arabic (Jordan)",
-  l.description = "Arabic locale for الأردن market",
+  l.content = "Arabic locale for الأردن market",
   l.llm_context = "USE: for Arabic content targeting الأردن. TRIGGERS: ar-JO, العربية, الأردن.",
   l.language_code = "ar",
   l.country_code = "JO",
@@ -200,7 +200,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-KW"})
 ON CREATE SET
   l.display_name = "Arabic (Kuwait)",
-  l.description = "Arabic locale for الكويت market",
+  l.content = "Arabic locale for الكويت market",
   l.llm_context = "USE: for Arabic content targeting الكويت. TRIGGERS: ar-KW, العربية, الكويت.",
   l.language_code = "ar",
   l.country_code = "KW",
@@ -224,7 +224,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-LB"})
 ON CREATE SET
   l.display_name = "Arabic (Lebanon)",
-  l.description = "Arabic locale for لبنان market",
+  l.content = "Arabic locale for لبنان market",
   l.llm_context = "USE: for Arabic content targeting لبنان. TRIGGERS: ar-LB, العربية, لبنان.",
   l.language_code = "ar",
   l.country_code = "LB",
@@ -248,7 +248,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-LY"})
 ON CREATE SET
   l.display_name = "Arabic (Libya)",
-  l.description = "Arabic locale for ليبيا market",
+  l.content = "Arabic locale for ليبيا market",
   l.llm_context = "USE: for Arabic content targeting ليبيا. TRIGGERS: ar-LY, العربية, ليبيا.",
   l.language_code = "ar",
   l.country_code = "LY",
@@ -272,7 +272,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-MA"})
 ON CREATE SET
   l.display_name = "Arabic (Morocco)",
-  l.description = "Arabic locale for المغرب market",
+  l.content = "Arabic locale for المغرب market",
   l.llm_context = "USE: for Arabic content targeting المغرب. TRIGGERS: ar-MA, العربية, المغرب.",
   l.language_code = "ar",
   l.country_code = "MA",
@@ -296,7 +296,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-OM"})
 ON CREATE SET
   l.display_name = "Arabic (Oman)",
-  l.description = "Arabic locale for سلطنة عُمان market",
+  l.content = "Arabic locale for سلطنة عُمان market",
   l.llm_context = "USE: for Arabic content targeting سلطنة عُمان. TRIGGERS: ar-OM, العربية, سلطنة عُمان.",
   l.language_code = "ar",
   l.country_code = "OM",
@@ -320,7 +320,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-QA"})
 ON CREATE SET
   l.display_name = "Arabic (Qatar)",
-  l.description = "Arabic locale for قطر market",
+  l.content = "Arabic locale for قطر market",
   l.llm_context = "USE: for Arabic content targeting قطر. TRIGGERS: ar-QA, العربية, قطر.",
   l.language_code = "ar",
   l.country_code = "QA",
@@ -344,7 +344,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-SA"})
 ON CREATE SET
   l.display_name = "Arabic (Saudi Arabia)",
-  l.description = "Arabic locale for المملكة العربية السعودية market",
+  l.content = "Arabic locale for المملكة العربية السعودية market",
   l.llm_context = "USE: for Arabic content targeting المملكة العربية السعودية. TRIGGERS: ar-SA, العربية, المملكة العربية السعودية.",
   l.language_code = "ar",
   l.country_code = "SA",
@@ -368,7 +368,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ar-TN"})
 ON CREATE SET
   l.display_name = "Arabic (Tunisia)",
-  l.description = "Arabic locale for تونس market",
+  l.content = "Arabic locale for تونس market",
   l.llm_context = "USE: for Arabic content targeting تونس. TRIGGERS: ar-TN, العربية, تونس.",
   l.language_code = "ar",
   l.country_code = "TN",
@@ -392,7 +392,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "as-IN"})
 ON CREATE SET
   l.display_name = "Assamese (India)",
-  l.description = "Assamese locale for ভাৰত market",
+  l.content = "Assamese locale for ভাৰত market",
   l.llm_context = "USE: for Assamese content targeting ভাৰত. TRIGGERS: as-IN, অসমীয়া, ভাৰত.",
   l.language_code = "as",
   l.country_code = "IN",
@@ -416,7 +416,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "az-AZ"})
 ON CREATE SET
   l.display_name = "Azerbaijani (Azerbaijan)",
-  l.description = "Azerbaijani locale for Azərbaycan market",
+  l.content = "Azerbaijani locale for Azərbaycan market",
   l.llm_context = "USE: for Azerbaijani content targeting Azərbaycan. TRIGGERS: az-AZ, Azərbaycan dili, azərbaycan.",
   l.language_code = "az",
   l.country_code = "AZ",
@@ -440,7 +440,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "be-BY"})
 ON CREATE SET
   l.display_name = "Belarusian (Belarus)",
-  l.description = "Belarusian locale for Беларусь market",
+  l.content = "Belarusian locale for Беларусь market",
   l.llm_context = "USE: for Belarusian content targeting Беларусь. TRIGGERS: be-BY, беларуская мова, беларусь.",
   l.language_code = "be",
   l.country_code = "BY",
@@ -464,7 +464,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "bg-BG"})
 ON CREATE SET
   l.display_name = "Bulgarian (Bulgaria)",
-  l.description = "Bulgarian locale for България market",
+  l.content = "Bulgarian locale for България market",
   l.llm_context = "USE: for Bulgarian content targeting България. TRIGGERS: bg-BG, Български, българия.",
   l.language_code = "bg",
   l.country_code = "BG",
@@ -488,7 +488,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "bn-BD"})
 ON CREATE SET
   l.display_name = "Bengali (Bangladesh)",
-  l.description = "Bengali locale for বাংলাদেশ market",
+  l.content = "Bengali locale for বাংলাদেশ market",
   l.llm_context = "USE: for Bengali content targeting বাংলাদেশ. TRIGGERS: bn-BD, বাংলা, বাংলাদেশ.",
   l.language_code = "bn",
   l.country_code = "BD",
@@ -512,7 +512,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "bn-IN"})
 ON CREATE SET
   l.display_name = "Bengali (India)",
-  l.description = "Bengali locale for ভারত market",
+  l.content = "Bengali locale for ভারত market",
   l.llm_context = "USE: for Bengali content targeting ভারত. TRIGGERS: bn-IN, বাংলা, ভারত.",
   l.language_code = "bn",
   l.country_code = "IN",
@@ -536,7 +536,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "bs-BA"})
 ON CREATE SET
   l.display_name = "Bosnian (Bosnia)",
-  l.description = "Bosnian locale for Bosna i Hercegovina market",
+  l.content = "Bosnian locale for Bosna i Hercegovina market",
   l.llm_context = "USE: for Bosnian content targeting Bosna i Hercegovina. TRIGGERS: bs-BA, Bosanski, bosna i hercegovina.",
   l.language_code = "bs",
   l.country_code = "BA",
@@ -560,7 +560,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ca-AD"})
 ON CREATE SET
   l.display_name = "Catalan (Andorra)",
-  l.description = "Catalan locale for Andorra market",
+  l.content = "Catalan locale for Andorra market",
   l.llm_context = "USE: for Catalan content targeting Andorra. TRIGGERS: ca-AD, català, andorra.",
   l.language_code = "ca",
   l.country_code = "AD",
@@ -584,7 +584,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ca-ES"})
 ON CREATE SET
   l.display_name = "Catalan (Spain)",
-  l.description = "Catalan locale for Espanya market",
+  l.content = "Catalan locale for Espanya market",
   l.llm_context = "USE: for Catalan content targeting Espanya. TRIGGERS: ca-ES, català, espanya.",
   l.language_code = "ca",
   l.country_code = "ES",
@@ -608,7 +608,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ceb-PH"})
 ON CREATE SET
   l.display_name = "Cebuano (Philippines)",
-  l.description = "Cebuano locale for Pilipinas market",
+  l.content = "Cebuano locale for Pilipinas market",
   l.llm_context = "USE: for Cebuano content targeting Pilipinas. TRIGGERS: ceb-PH, Sinugbuanon, pilipinas.",
   l.language_code = "ceb",
   l.country_code = "PH",
@@ -632,7 +632,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "cs-CZ"})
 ON CREATE SET
   l.display_name = "Czech (Czech Republic)",
-  l.description = "Czech locale for Česká republika market",
+  l.content = "Czech locale for Česká republika market",
   l.llm_context = "USE: for Czech content targeting Česká republika. TRIGGERS: cs-CZ, Čeština, česká republika.",
   l.language_code = "cs",
   l.country_code = "CZ",
@@ -656,7 +656,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "cy-GB"})
 ON CREATE SET
   l.display_name = "Welsh (United Kingdom)",
-  l.description = "Welsh locale for Y Deyrnas Unedig market",
+  l.content = "Welsh locale for Y Deyrnas Unedig market",
   l.llm_context = "USE: for Welsh content targeting Y Deyrnas Unedig. TRIGGERS: cy-GB, Cymraeg, y deyrnas unedig.",
   l.language_code = "cy",
   l.country_code = "GB",
@@ -680,7 +680,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "da-DK"})
 ON CREATE SET
   l.display_name = "Danish (Denmark)",
-  l.description = "Danish locale for Danmark market",
+  l.content = "Danish locale for Danmark market",
   l.llm_context = "USE: for Danish content targeting Danmark. TRIGGERS: da-DK, Dansk, danmark.",
   l.language_code = "da",
   l.country_code = "DK",
@@ -704,7 +704,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "de-AT"})
 ON CREATE SET
   l.display_name = "German (Austria)",
-  l.description = "German locale for Österreich market",
+  l.content = "German locale for Österreich market",
   l.llm_context = "USE: for German content targeting Österreich. TRIGGERS: de-AT, Deutsch, österreich.",
   l.language_code = "de",
   l.country_code = "AT",
@@ -728,7 +728,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "de-CH"})
 ON CREATE SET
   l.display_name = "German (Switzerland)",
-  l.description = "German locale for Schweiz market",
+  l.content = "German locale for Schweiz market",
   l.llm_context = "USE: for German content targeting Schweiz. TRIGGERS: de-CH, Deutsch, schweiz.",
   l.language_code = "de",
   l.country_code = "CH",
@@ -752,7 +752,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "de-DE"})
 ON CREATE SET
   l.display_name = "German (Germany)",
-  l.description = "German locale for Deutschland market",
+  l.content = "German locale for Deutschland market",
   l.llm_context = "USE: for German content targeting Deutschland. TRIGGERS: de-DE, Deutsch, deutschland.",
   l.language_code = "de",
   l.country_code = "DE",
@@ -776,7 +776,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "wo-SN"})
 ON CREATE SET
   l.display_name = "Wolof (Senegal)",
-  l.description = "Wolof locale for Senegaal market",
+  l.content = "Wolof locale for Senegaal market",
   l.llm_context = "USE: for Wolof content targeting Senegaal. TRIGGERS: wo-SN, Wolof, senegaal.",
   l.language_code = "wo",
   l.country_code = "SN",
@@ -800,7 +800,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "de-LU"})
 ON CREATE SET
   l.display_name = "German (Luxembourg)",
-  l.description = "German locale for Luxemburg market",
+  l.content = "German locale for Luxemburg market",
   l.llm_context = "USE: for German content targeting Luxemburg. TRIGGERS: de-LU, Deutsch, luxemburg.",
   l.language_code = "de",
   l.country_code = "LU",
@@ -824,7 +824,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "el-GR"})
 ON CREATE SET
   l.display_name = "Greek (Greece)",
-  l.description = "Greek locale for Ελλάδα market",
+  l.content = "Greek locale for Ελλάδα market",
   l.llm_context = "USE: for Greek content targeting Ελλάδα. TRIGGERS: el-GR, Ελληνικά, ελλάδα.",
   l.language_code = "el",
   l.country_code = "GR",
@@ -848,7 +848,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-AE"})
 ON CREATE SET
   l.display_name = "English (UAE)",
-  l.description = "English locale for الإمارات العربية المتحدة (Al-ʾImārāt al-ʿArabīyah al-Muttaḥidah) market",
+  l.content = "English locale for الإمارات العربية المتحدة (Al-ʾImārāt al-ʿArabīyah al-Muttaḥidah) market",
   l.llm_context = "USE: for English content targeting الإمارات العربية المتحدة (Al-ʾImārāt al-ʿArabīyah al-Muttaḥidah). TRIGGERS: en-AE, English, الإمارات العربية المتحدة (al-ʾimārāt al-ʿarabīyah al-muttaḥidah).",
   l.language_code = "en",
   l.country_code = "AE",
@@ -872,7 +872,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-AU"})
 ON CREATE SET
   l.display_name = "English (Australia)",
-  l.description = "English locale for Australia market",
+  l.content = "English locale for Australia market",
   l.llm_context = "USE: for English content targeting Australia. TRIGGERS: en-AU, English, australia.",
   l.language_code = "en",
   l.country_code = "AU",
@@ -896,7 +896,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-BB"})
 ON CREATE SET
   l.display_name = "English (Barbados)",
-  l.description = "English locale for Barbados market",
+  l.content = "English locale for Barbados market",
   l.llm_context = "USE: for English content targeting Barbados. TRIGGERS: en-BB, English, barbados.",
   l.language_code = "en",
   l.country_code = "BB",
@@ -920,7 +920,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-MG"})
 ON CREATE SET
   l.display_name = "French (Madagascar)",
-  l.description = "French locale for Madagascar market",
+  l.content = "French locale for Madagascar market",
   l.llm_context = "USE: for French content targeting Madagascar. TRIGGERS: fr-MG, français, madagascar.",
   l.language_code = "fr",
   l.country_code = "MG",
@@ -944,7 +944,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-BW"})
 ON CREATE SET
   l.display_name = "English (Botswana)",
-  l.description = "English locale for Botswana market",
+  l.content = "English locale for Botswana market",
   l.llm_context = "USE: for English content targeting Botswana. TRIGGERS: en-BW, English, botswana.",
   l.language_code = "en",
   l.country_code = "BW",
@@ -968,7 +968,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-CA"})
 ON CREATE SET
   l.display_name = "English (Canada)",
-  l.description = "English locale for Canada market",
+  l.content = "English locale for Canada market",
   l.llm_context = "USE: for English content targeting Canada. TRIGGERS: en-CA, English, canada.",
   l.language_code = "en",
   l.country_code = "CA",
@@ -992,7 +992,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-CY"})
 ON CREATE SET
   l.display_name = "English (Cyprus)",
-  l.description = "English locale for Κύπρος (Kýpros) / Kıbrıs market",
+  l.content = "English locale for Κύπρος (Kýpros) / Kıbrıs market",
   l.llm_context = "USE: for English content targeting Κύπρος (Kýpros) / Kıbrıs. TRIGGERS: en-CY, English, κύπρος (kýpros) / kıbrıs.",
   l.language_code = "en",
   l.country_code = "CY",
@@ -1016,7 +1016,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-FJ"})
 ON CREATE SET
   l.display_name = "English (Fiji)",
-  l.description = "English locale for Fiji market",
+  l.content = "English locale for Fiji market",
   l.llm_context = "USE: for English content targeting Fiji. TRIGGERS: en-FJ, English, fiji.",
   l.language_code = "en",
   l.country_code = "FJ",
@@ -1040,7 +1040,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-GB"})
 ON CREATE SET
   l.display_name = "English (United Kingdom)",
-  l.description = "English locale for United Kingdom market",
+  l.content = "English locale for United Kingdom market",
   l.llm_context = "USE: for English content targeting United Kingdom. TRIGGERS: en-GB, English, united kingdom.",
   l.language_code = "en",
   l.country_code = "GB",
@@ -1064,7 +1064,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-GH"})
 ON CREATE SET
   l.display_name = "English (Ghana)",
-  l.description = "English locale for Ghana market",
+  l.content = "English locale for Ghana market",
   l.llm_context = "USE: for English content targeting Ghana. TRIGGERS: en-GH, English, ghana.",
   l.language_code = "en",
   l.country_code = "GH",
@@ -1088,7 +1088,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-HK"})
 ON CREATE SET
   l.display_name = "English (Hong Kong)",
-  l.description = "English locale for 香港 (Hong Kong) market",
+  l.content = "English locale for 香港 (Hong Kong) market",
   l.llm_context = "USE: for English content targeting 香港 (Hong Kong). TRIGGERS: en-HK, English, 香港 (hong kong).",
   l.language_code = "en",
   l.country_code = "HK",
@@ -1112,7 +1112,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-IE"})
 ON CREATE SET
   l.display_name = "English (Ireland)",
-  l.description = "English locale for Ireland (Éire in Irish) market",
+  l.content = "English locale for Ireland (Éire in Irish) market",
   l.llm_context = "USE: for English content targeting Ireland (Éire in Irish). TRIGGERS: en-IE, English, ireland (éire in irish).",
   l.language_code = "en",
   l.country_code = "IE",
@@ -1136,7 +1136,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-IN"})
 ON CREATE SET
   l.display_name = "English (India)",
-  l.description = "English locale for भारत (Bhārat) market",
+  l.content = "English locale for भारत (Bhārat) market",
   l.llm_context = "USE: for English content targeting भारत (Bhārat). TRIGGERS: en-IN, English, भारत (bhārat).",
   l.language_code = "en",
   l.country_code = "IN",
@@ -1160,7 +1160,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-JM"})
 ON CREATE SET
   l.display_name = "English (Jamaica)",
-  l.description = "English locale for Jamaica market",
+  l.content = "English locale for Jamaica market",
   l.llm_context = "USE: for English content targeting Jamaica. TRIGGERS: en-JM, English, jamaica.",
   l.language_code = "en",
   l.country_code = "JM",
@@ -1184,7 +1184,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-KE"})
 ON CREATE SET
   l.display_name = "English (Kenya)",
-  l.description = "English locale for Kenya market",
+  l.content = "English locale for Kenya market",
   l.llm_context = "USE: for English content targeting Kenya. TRIGGERS: en-KE, English, kenya.",
   l.language_code = "en",
   l.country_code = "KE",
@@ -1208,7 +1208,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-KY"})
 ON CREATE SET
   l.display_name = "English (Cayman Islands)",
-  l.description = "English locale for Cayman Islands market",
+  l.content = "English locale for Cayman Islands market",
   l.llm_context = "USE: for English content targeting Cayman Islands. TRIGGERS: en-KY, English, cayman islands.",
   l.language_code = "en",
   l.country_code = "KY",
@@ -1232,7 +1232,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-MU"})
 ON CREATE SET
   l.display_name = "English (Mauritius)",
-  l.description = "English locale for Mauritius market",
+  l.content = "English locale for Mauritius market",
   l.llm_context = "USE: for English content targeting Mauritius. TRIGGERS: en-MU, English, mauritius.",
   l.language_code = "en",
   l.country_code = "MU",
@@ -1256,7 +1256,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-MY"})
 ON CREATE SET
   l.display_name = "English (Malaysia)",
-  l.description = "English locale for Malaysia market",
+  l.content = "English locale for Malaysia market",
   l.llm_context = "USE: for English content targeting Malaysia. TRIGGERS: en-MY, English, malaysia.",
   l.language_code = "en",
   l.country_code = "MY",
@@ -1280,7 +1280,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-NG"})
 ON CREATE SET
   l.display_name = "English (Nigeria)",
-  l.description = "English locale for Nigeria market",
+  l.content = "English locale for Nigeria market",
   l.llm_context = "USE: for English content targeting Nigeria. TRIGGERS: en-NG, English, nigeria.",
   l.language_code = "en",
   l.country_code = "NG",
@@ -1304,7 +1304,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-NZ"})
 ON CREATE SET
   l.display_name = "English (New Zealand)",
-  l.description = "English locale for New Zealand market",
+  l.content = "English locale for New Zealand market",
   l.llm_context = "USE: for English content targeting New Zealand. TRIGGERS: en-NZ, English, new zealand.",
   l.language_code = "en",
   l.country_code = "NZ",
@@ -1328,7 +1328,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-PH"})
 ON CREATE SET
   l.display_name = "English (Philippines)",
-  l.description = "English locale for Pilipinas market",
+  l.content = "English locale for Pilipinas market",
   l.llm_context = "USE: for English content targeting Pilipinas. TRIGGERS: en-PH, English, pilipinas.",
   l.language_code = "en",
   l.country_code = "PH",
@@ -1352,7 +1352,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-PK"})
 ON CREATE SET
   l.display_name = "English (Pakistan)",
-  l.description = "English locale for پاکستان (Pākistān) market",
+  l.content = "English locale for پاکستان (Pākistān) market",
   l.llm_context = "USE: for English content targeting پاکستان (Pākistān). TRIGGERS: en-PK, English, پاکستان (pākistān).",
   l.language_code = "en",
   l.country_code = "PK",
@@ -1376,7 +1376,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-SA"})
 ON CREATE SET
   l.display_name = "English (Saudi Arabia)",
-  l.description = "English locale for المملكة العربية السعودية (Al-Mamlakah al-ʻArabīyah as-Saʻūdīyah) market",
+  l.content = "English locale for المملكة العربية السعودية (Al-Mamlakah al-ʻArabīyah as-Saʻūdīyah) market",
   l.llm_context = "USE: for English content targeting المملكة العربية السعودية (Al-Mamlakah al-ʻArabīyah as-Saʻūdīyah). TRIGGERS: en-SA, English, المملكة العربية السعودية (al-mamlakah al-ʻarabīyah as-saʻūdīyah).",
   l.language_code = "en",
   l.country_code = "SA",
@@ -1400,7 +1400,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-SG"})
 ON CREATE SET
   l.display_name = "English (Singapore)",
-  l.description = "English locale for Singapore market",
+  l.content = "English locale for Singapore market",
   l.llm_context = "USE: for English content targeting Singapore. TRIGGERS: en-SG, English, singapore.",
   l.language_code = "en",
   l.country_code = "SG",
@@ -1424,7 +1424,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-TT"})
 ON CREATE SET
   l.display_name = "English (Trinidad and Tobago)",
-  l.description = "English locale for Trinidad and Tobago market",
+  l.content = "English locale for Trinidad and Tobago market",
   l.llm_context = "USE: for English content targeting Trinidad and Tobago. TRIGGERS: en-TT, English, trinidad and tobago.",
   l.language_code = "en",
   l.country_code = "TT",
@@ -1448,7 +1448,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-TZ"})
 ON CREATE SET
   l.display_name = "English (Tanzania)",
-  l.description = "English locale for Tanzania market",
+  l.content = "English locale for Tanzania market",
   l.llm_context = "USE: for English content targeting Tanzania. TRIGGERS: en-TZ, English, tanzania.",
   l.language_code = "en",
   l.country_code = "TZ",
@@ -1472,7 +1472,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-UG"})
 ON CREATE SET
   l.display_name = "English (Uganda)",
-  l.description = "English locale for Uganda market",
+  l.content = "English locale for Uganda market",
   l.llm_context = "USE: for English content targeting Uganda. TRIGGERS: en-UG, English, uganda.",
   l.language_code = "en",
   l.country_code = "UG",
@@ -1496,7 +1496,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-US"})
 ON CREATE SET
   l.display_name = "English (United States)",
-  l.description = "English locale for United States market",
+  l.content = "English locale for United States market",
   l.llm_context = "USE: for English content targeting United States. TRIGGERS: en-US, English, united states.",
   l.language_code = "en",
   l.country_code = "US",
@@ -1520,7 +1520,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-VN"})
 ON CREATE SET
   l.display_name = "English (Vietnam)",
-  l.description = "English locale for Việt Nam market",
+  l.content = "English locale for Việt Nam market",
   l.llm_context = "USE: for English content targeting Việt Nam. TRIGGERS: en-VN, English, việt nam.",
   l.language_code = "en",
   l.country_code = "VN",
@@ -1544,7 +1544,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-ZA"})
 ON CREATE SET
   l.display_name = "English (South Africa)",
-  l.description = "English locale for South Africa market",
+  l.content = "English locale for South Africa market",
   l.llm_context = "USE: for English content targeting South Africa. TRIGGERS: en-ZA, English, south africa.",
   l.language_code = "en",
   l.country_code = "ZA",
@@ -1568,7 +1568,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-ZM"})
 ON CREATE SET
   l.display_name = "English (Zambia)",
-  l.description = "English locale for Zambia market",
+  l.content = "English locale for Zambia market",
   l.llm_context = "USE: for English content targeting Zambia. TRIGGERS: en-ZM, English, zambia.",
   l.language_code = "en",
   l.country_code = "ZM",
@@ -1592,7 +1592,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "en-ZW"})
 ON CREATE SET
   l.display_name = "English (Zimbabwe)",
-  l.description = "English locale for Zimbabwe market",
+  l.content = "English locale for Zimbabwe market",
   l.llm_context = "USE: for English content targeting Zimbabwe. TRIGGERS: en-ZW, English, zimbabwe.",
   l.language_code = "en",
   l.country_code = "ZW",
@@ -1616,7 +1616,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-AR"})
 ON CREATE SET
   l.display_name = "Spanish (Argentina)",
-  l.description = "Spanish locale for Argentina market",
+  l.content = "Spanish locale for Argentina market",
   l.llm_context = "USE: for Spanish content targeting Argentina. TRIGGERS: es-AR, Español, argentina.",
   l.language_code = "es",
   l.country_code = "AR",
@@ -1640,7 +1640,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-BO"})
 ON CREATE SET
   l.display_name = "Spanish (Bolivia)",
-  l.description = "Spanish locale for Bolivia market",
+  l.content = "Spanish locale for Bolivia market",
   l.llm_context = "USE: for Spanish content targeting Bolivia. TRIGGERS: es-BO, Español, bolivia.",
   l.language_code = "es",
   l.country_code = "BO",
@@ -1664,7 +1664,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-CL"})
 ON CREATE SET
   l.display_name = "Spanish (Chile)",
-  l.description = "Spanish locale for Chile market",
+  l.content = "Spanish locale for Chile market",
   l.llm_context = "USE: for Spanish content targeting Chile. TRIGGERS: es-CL, Español, chile.",
   l.language_code = "es",
   l.country_code = "CL",
@@ -1688,7 +1688,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-CO"})
 ON CREATE SET
   l.display_name = "Spanish (Colombia)",
-  l.description = "Spanish locale for Colombia market",
+  l.content = "Spanish locale for Colombia market",
   l.llm_context = "USE: for Spanish content targeting Colombia. TRIGGERS: es-CO, Español, colombia.",
   l.language_code = "es",
   l.country_code = "CO",
@@ -1712,7 +1712,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-CR"})
 ON CREATE SET
   l.display_name = "Spanish (Costa Rica)",
-  l.description = "Spanish locale for Costa Rica market",
+  l.content = "Spanish locale for Costa Rica market",
   l.llm_context = "USE: for Spanish content targeting Costa Rica. TRIGGERS: es-CR, Español, costa rica.",
   l.language_code = "es",
   l.country_code = "CR",
@@ -1736,7 +1736,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-CU"})
 ON CREATE SET
   l.display_name = "Spanish (Cuba)",
-  l.description = "Spanish locale for Cuba market",
+  l.content = "Spanish locale for Cuba market",
   l.llm_context = "USE: for Spanish content targeting Cuba. TRIGGERS: es-CU, Español, cuba.",
   l.language_code = "es",
   l.country_code = "CU",
@@ -1760,7 +1760,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-DO"})
 ON CREATE SET
   l.display_name = "Spanish (Dominican Rep)",
-  l.description = "Spanish locale for República Dominicana market",
+  l.content = "Spanish locale for República Dominicana market",
   l.llm_context = "USE: for Spanish content targeting República Dominicana. TRIGGERS: es-DO, Español, república dominicana.",
   l.language_code = "es",
   l.country_code = "DO",
@@ -1784,7 +1784,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-EC"})
 ON CREATE SET
   l.display_name = "Spanish (Ecuador)",
-  l.description = "Spanish locale for Ecuador market",
+  l.content = "Spanish locale for Ecuador market",
   l.llm_context = "USE: for Spanish content targeting Ecuador. TRIGGERS: es-EC, Español, ecuador.",
   l.language_code = "es",
   l.country_code = "EC",
@@ -1808,7 +1808,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-ES"})
 ON CREATE SET
   l.display_name = "Spanish (Spain)",
-  l.description = "Spanish locale for España market",
+  l.content = "Spanish locale for España market",
   l.llm_context = "USE: for Spanish content targeting España. TRIGGERS: es-ES, Español, españa.",
   l.language_code = "es",
   l.country_code = "ES",
@@ -1832,7 +1832,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-GT"})
 ON CREATE SET
   l.display_name = "Spanish (Guatemala)",
-  l.description = "Spanish locale for Guatemala market",
+  l.content = "Spanish locale for Guatemala market",
   l.llm_context = "USE: for Spanish content targeting Guatemala. TRIGGERS: es-GT, Español, guatemala.",
   l.language_code = "es",
   l.country_code = "GT",
@@ -1856,7 +1856,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-HN"})
 ON CREATE SET
   l.display_name = "Spanish (Honduras)",
-  l.description = "Spanish locale for Honduras market",
+  l.content = "Spanish locale for Honduras market",
   l.llm_context = "USE: for Spanish content targeting Honduras. TRIGGERS: es-HN, Español, honduras.",
   l.language_code = "es",
   l.country_code = "HN",
@@ -1880,7 +1880,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-MX"})
 ON CREATE SET
   l.display_name = "Spanish (Mexico)",
-  l.description = "Spanish locale for México market",
+  l.content = "Spanish locale for México market",
   l.llm_context = "USE: for Spanish content targeting México. TRIGGERS: es-MX, Español, méxico.",
   l.language_code = "es",
   l.country_code = "MX",
@@ -1904,7 +1904,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-NI"})
 ON CREATE SET
   l.display_name = "Spanish (Nicaragua)",
-  l.description = "Spanish locale for Nicaragua market",
+  l.content = "Spanish locale for Nicaragua market",
   l.llm_context = "USE: for Spanish content targeting Nicaragua. TRIGGERS: es-NI, Español, nicaragua.",
   l.language_code = "es",
   l.country_code = "NI",
@@ -1928,7 +1928,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-PA"})
 ON CREATE SET
   l.display_name = "Spanish (Panama)",
-  l.description = "Spanish locale for Panamá market",
+  l.content = "Spanish locale for Panamá market",
   l.llm_context = "USE: for Spanish content targeting Panamá. TRIGGERS: es-PA, Español, panamá.",
   l.language_code = "es",
   l.country_code = "PA",
@@ -1952,7 +1952,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-PE"})
 ON CREATE SET
   l.display_name = "Spanish (Peru)",
-  l.description = "Spanish locale for Perú market",
+  l.content = "Spanish locale for Perú market",
   l.llm_context = "USE: for Spanish content targeting Perú. TRIGGERS: es-PE, Español, perú.",
   l.language_code = "es",
   l.country_code = "PE",
@@ -1976,7 +1976,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-PR"})
 ON CREATE SET
   l.display_name = "Spanish (Puerto Rico)",
-  l.description = "Spanish locale for Puerto Rico market",
+  l.content = "Spanish locale for Puerto Rico market",
   l.llm_context = "USE: for Spanish content targeting Puerto Rico. TRIGGERS: es-PR, Español, puerto rico.",
   l.language_code = "es",
   l.country_code = "PR",
@@ -2000,7 +2000,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-PY"})
 ON CREATE SET
   l.display_name = "Spanish (Paraguay)",
-  l.description = "Spanish locale for Paraguay market",
+  l.content = "Spanish locale for Paraguay market",
   l.llm_context = "USE: for Spanish content targeting Paraguay. TRIGGERS: es-PY, Español, paraguay.",
   l.language_code = "es",
   l.country_code = "PY",
@@ -2024,7 +2024,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-SV"})
 ON CREATE SET
   l.display_name = "Spanish (El Salvador)",
-  l.description = "Spanish locale for El Salvador market",
+  l.content = "Spanish locale for El Salvador market",
   l.llm_context = "USE: for Spanish content targeting El Salvador. TRIGGERS: es-SV, Español, el salvador.",
   l.language_code = "es",
   l.country_code = "SV",
@@ -2048,7 +2048,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-UY"})
 ON CREATE SET
   l.display_name = "Spanish (Uruguay)",
-  l.description = "Spanish locale for Uruguay market",
+  l.content = "Spanish locale for Uruguay market",
   l.llm_context = "USE: for Spanish content targeting Uruguay. TRIGGERS: es-UY, Español, uruguay.",
   l.language_code = "es",
   l.country_code = "UY",
@@ -2072,7 +2072,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "es-VE"})
 ON CREATE SET
   l.display_name = "Spanish (Venezuela)",
-  l.description = "Spanish locale for Venezuela market",
+  l.content = "Spanish locale for Venezuela market",
   l.llm_context = "USE: for Spanish content targeting Venezuela. TRIGGERS: es-VE, Español, venezuela.",
   l.language_code = "es",
   l.country_code = "VE",
@@ -2096,7 +2096,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "et-EE"})
 ON CREATE SET
   l.display_name = "Estonian (Estonia)",
-  l.description = "Estonian locale for Eesti market",
+  l.content = "Estonian locale for Eesti market",
   l.llm_context = "USE: for Estonian content targeting Eesti. TRIGGERS: et-EE, eesti keel, eesti.",
   l.language_code = "et",
   l.country_code = "EE",
@@ -2120,7 +2120,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "eu-ES"})
 ON CREATE SET
   l.display_name = "Basque (Spain)",
-  l.description = "Basque locale for Espainia market",
+  l.content = "Basque locale for Espainia market",
   l.llm_context = "USE: for Basque content targeting Espainia. TRIGGERS: eu-ES, Euskara, espainia.",
   l.language_code = "eu",
   l.country_code = "ES",
@@ -2144,7 +2144,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fa-IR"})
 ON CREATE SET
   l.display_name = "Persian (Iran)",
-  l.description = "Persian locale for ایران market",
+  l.content = "Persian locale for ایران market",
   l.llm_context = "USE: for Persian content targeting ایران. TRIGGERS: fa-IR, فارسی, ایران.",
   l.language_code = "fa",
   l.country_code = "IR",
@@ -2168,7 +2168,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fi-FI"})
 ON CREATE SET
   l.display_name = "Finnish (Finland)",
-  l.description = "Finnish locale for Suomi market",
+  l.content = "Finnish locale for Suomi market",
   l.llm_context = "USE: for Finnish content targeting Suomi. TRIGGERS: fi-FI, suomi, suomi.",
   l.language_code = "fi",
   l.country_code = "FI",
@@ -2192,7 +2192,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-BE"})
 ON CREATE SET
   l.display_name = "French (Belgium)",
-  l.description = "French locale for Belgique market",
+  l.content = "French locale for Belgique market",
   l.llm_context = "USE: for French content targeting Belgique. TRIGGERS: fr-BE, français, belgique.",
   l.language_code = "fr",
   l.country_code = "BE",
@@ -2216,7 +2216,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-BF"})
 ON CREATE SET
   l.display_name = "French (Burkina Faso)",
-  l.description = "French locale for Burkina Faso market",
+  l.content = "French locale for Burkina Faso market",
   l.llm_context = "USE: for French content targeting Burkina Faso. TRIGGERS: fr-BF, français, burkina faso.",
   l.language_code = "fr",
   l.country_code = "BF",
@@ -2240,7 +2240,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-CA"})
 ON CREATE SET
   l.display_name = "French (Canada)",
-  l.description = "French locale for Canada market",
+  l.content = "French locale for Canada market",
   l.llm_context = "USE: for French content targeting Canada. TRIGGERS: fr-CA, français, canada.",
   l.language_code = "fr",
   l.country_code = "CA",
@@ -2264,7 +2264,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-CD"})
 ON CREATE SET
   l.display_name = "French (DR Congo)",
-  l.description = "French locale for République démocratique du Congo market",
+  l.content = "French locale for République démocratique du Congo market",
   l.llm_context = "USE: for French content targeting République démocratique du Congo. TRIGGERS: fr-CD, français, république démocratique du congo.",
   l.language_code = "fr",
   l.country_code = "CD",
@@ -2288,7 +2288,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-CH"})
 ON CREATE SET
   l.display_name = "French (Switzerland)",
-  l.description = "French locale for Suisse market",
+  l.content = "French locale for Suisse market",
   l.llm_context = "USE: for French content targeting Suisse. TRIGGERS: fr-CH, français, suisse.",
   l.language_code = "fr",
   l.country_code = "CH",
@@ -2312,7 +2312,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-CI"})
 ON CREATE SET
   l.display_name = "French (Cote d'Ivoire)",
-  l.description = "French locale for Côte d'Ivoire market",
+  l.content = "French locale for Côte d'Ivoire market",
   l.llm_context = "USE: for French content targeting Côte d'Ivoire. TRIGGERS: fr-CI, français, côte d'ivoire.",
   l.language_code = "fr",
   l.country_code = "CI",
@@ -2336,7 +2336,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-CM"})
 ON CREATE SET
   l.display_name = "French (Cameroon)",
-  l.description = "French locale for Cameroun market",
+  l.content = "French locale for Cameroun market",
   l.llm_context = "USE: for French content targeting Cameroun. TRIGGERS: fr-CM, français, cameroun.",
   l.language_code = "fr",
   l.country_code = "CM",
@@ -2360,7 +2360,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-DZ"})
 ON CREATE SET
   l.display_name = "French (Algeria)",
-  l.description = "French locale for Algérie market",
+  l.content = "French locale for Algérie market",
   l.llm_context = "USE: for French content targeting Algérie. TRIGGERS: fr-DZ, français, algérie.",
   l.language_code = "fr",
   l.country_code = "DZ",
@@ -2384,7 +2384,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-FR"})
 ON CREATE SET
   l.display_name = "French (France)",
-  l.description = "French locale for France market",
+  l.content = "French locale for France market",
   l.llm_context = "USE: for French content targeting France. TRIGGERS: fr-FR, français, france.",
   l.language_code = "fr",
   l.country_code = "FR",
@@ -2408,7 +2408,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-LU"})
 ON CREATE SET
   l.display_name = "French (Luxembourg)",
-  l.description = "French locale for Luxembourg market",
+  l.content = "French locale for Luxembourg market",
   l.llm_context = "USE: for French content targeting Luxembourg. TRIGGERS: fr-LU, français, luxembourg.",
   l.language_code = "fr",
   l.country_code = "LU",
@@ -2432,7 +2432,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-MA"})
 ON CREATE SET
   l.display_name = "French (Morocco)",
-  l.description = "French locale for Maroc market",
+  l.content = "French locale for Maroc market",
   l.llm_context = "USE: for French content targeting Maroc. TRIGGERS: fr-MA, français, maroc.",
   l.language_code = "fr",
   l.country_code = "MA",
@@ -2456,7 +2456,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-RW"})
 ON CREATE SET
   l.display_name = "French (Rwanda)",
-  l.description = "French locale for Rwanda market",
+  l.content = "French locale for Rwanda market",
   l.llm_context = "USE: for French content targeting Rwanda. TRIGGERS: fr-RW, français, rwanda.",
   l.language_code = "fr",
   l.country_code = "RW",
@@ -2480,7 +2480,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-SN"})
 ON CREATE SET
   l.display_name = "French (Senegal)",
-  l.description = "French locale for Sénégal market",
+  l.content = "French locale for Sénégal market",
   l.llm_context = "USE: for French content targeting Sénégal. TRIGGERS: fr-SN, français, sénégal.",
   l.language_code = "fr",
   l.country_code = "SN",
@@ -2504,7 +2504,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "fr-TN"})
 ON CREATE SET
   l.display_name = "French (Tunisia)",
-  l.description = "French locale for Tunisie market",
+  l.content = "French locale for Tunisie market",
   l.llm_context = "USE: for French content targeting Tunisie. TRIGGERS: fr-TN, français, tunisie.",
   l.language_code = "fr",
   l.country_code = "TN",
@@ -2528,7 +2528,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ga-IE"})
 ON CREATE SET
   l.display_name = "Irish (Ireland)",
-  l.description = "Irish locale for Éire market",
+  l.content = "Irish locale for Éire market",
   l.llm_context = "USE: for Irish content targeting Éire. TRIGGERS: ga-IE, Gaeilge, éire.",
   l.language_code = "ga",
   l.country_code = "IE",
@@ -2552,7 +2552,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "gl-ES"})
 ON CREATE SET
   l.display_name = "Galician (Spain)",
-  l.description = "Galician locale for España market",
+  l.content = "Galician locale for España market",
   l.llm_context = "USE: for Galician content targeting España. TRIGGERS: gl-ES, Galego, españa.",
   l.language_code = "gl",
   l.country_code = "ES",
@@ -2576,7 +2576,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "gn-PY"})
 ON CREATE SET
   l.display_name = "Guarani (Paraguay)",
-  l.description = "Guarani locale for Paraguái market",
+  l.content = "Guarani locale for Paraguái market",
   l.llm_context = "USE: for Guarani content targeting Paraguái. TRIGGERS: gn-PY, Avañe'ẽ, paraguái.",
   l.language_code = "gn",
   l.country_code = "PY",
@@ -2600,7 +2600,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "gu-IN"})
 ON CREATE SET
   l.display_name = "Gujarati (India)",
-  l.description = "Gujarati locale for ભારત market",
+  l.content = "Gujarati locale for ભારત market",
   l.llm_context = "USE: for Gujarati content targeting ભારત. TRIGGERS: gu-IN, ગુજરાતી, ભારત.",
   l.language_code = "gu",
   l.country_code = "IN",
@@ -2624,7 +2624,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ha-NG"})
 ON CREATE SET
   l.display_name = "Hausa (Nigeria)",
-  l.description = "Hausa locale for Najeriya market",
+  l.content = "Hausa locale for Najeriya market",
   l.llm_context = "USE: for Hausa content targeting Najeriya. TRIGGERS: ha-NG, Hausa, najeriya.",
   l.language_code = "ha",
   l.country_code = "NG",
@@ -2648,7 +2648,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "he-IL"})
 ON CREATE SET
   l.display_name = "Hebrew (Israel)",
-  l.description = "Hebrew locale for ישראל market",
+  l.content = "Hebrew locale for ישראל market",
   l.llm_context = "USE: for Hebrew content targeting ישראל. TRIGGERS: he-IL, עברית, ישראל.",
   l.language_code = "he",
   l.country_code = "IL",
@@ -2672,7 +2672,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "hi-IN"})
 ON CREATE SET
   l.display_name = "Hindi (India)",
-  l.description = "Hindi locale for भारत market",
+  l.content = "Hindi locale for भारत market",
   l.llm_context = "USE: for Hindi content targeting भारत. TRIGGERS: hi-IN, हिन्दी, भारत.",
   l.language_code = "hi",
   l.country_code = "IN",
@@ -2696,7 +2696,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "hr-HR"})
 ON CREATE SET
   l.display_name = "Croatian (Croatia)",
-  l.description = "Croatian locale for Hrvatska market",
+  l.content = "Croatian locale for Hrvatska market",
   l.llm_context = "USE: for Croatian content targeting Hrvatska. TRIGGERS: hr-HR, Hrvatski, hrvatska.",
   l.language_code = "hr",
   l.country_code = "HR",
@@ -2720,7 +2720,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ht-HT"})
 ON CREATE SET
   l.display_name = "Haitian Creole (Haiti)",
-  l.description = "Haitian Creole locale for Ayiti market",
+  l.content = "Haitian Creole locale for Ayiti market",
   l.llm_context = "USE: for Haitian Creole content targeting Ayiti. TRIGGERS: ht-HT, Kreyòl ayisyen, ayiti.",
   l.language_code = "ht",
   l.country_code = "HT",
@@ -2744,7 +2744,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "hu-HU"})
 ON CREATE SET
   l.display_name = "Hungarian (Hungary)",
-  l.description = "Hungarian locale for Magyarország market",
+  l.content = "Hungarian locale for Magyarország market",
   l.llm_context = "USE: for Hungarian content targeting Magyarország. TRIGGERS: hu-HU, magyar, magyarország.",
   l.language_code = "hu",
   l.country_code = "HU",
@@ -2768,7 +2768,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "hy-AM"})
 ON CREATE SET
   l.display_name = "Armenian (Armenia)",
-  l.description = "Armenian locale for Հայաստան market",
+  l.content = "Armenian locale for Հայաստան market",
   l.llm_context = "USE: for Armenian content targeting Հայաստան. TRIGGERS: hy-AM, Հայերեն, հայաստան.",
   l.language_code = "hy",
   l.country_code = "AM",
@@ -2792,7 +2792,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "id-ID"})
 ON CREATE SET
   l.display_name = "Indonesian (Indonesia)",
-  l.description = "Indonesian locale for Indonesia market",
+  l.content = "Indonesian locale for Indonesia market",
   l.llm_context = "USE: for Indonesian content targeting Indonesia. TRIGGERS: id-ID, Bahasa Indonesia, indonesia.",
   l.language_code = "id",
   l.country_code = "ID",
@@ -2816,7 +2816,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ig-NG"})
 ON CREATE SET
   l.display_name = "Igbo (Nigeria)",
-  l.description = "Igbo locale for Naịjịrịa market",
+  l.content = "Igbo locale for Naịjịrịa market",
   l.llm_context = "USE: for Igbo content targeting Naịjịrịa. TRIGGERS: ig-NG, Asụsụ Igbo, naịjịrịa.",
   l.language_code = "ig",
   l.country_code = "NG",
@@ -2840,7 +2840,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "is-IS"})
 ON CREATE SET
   l.display_name = "Icelandic (Iceland)",
-  l.description = "Icelandic locale for Ísland market",
+  l.content = "Icelandic locale for Ísland market",
   l.llm_context = "USE: for Icelandic content targeting Ísland. TRIGGERS: is-IS, Íslenska, ísland.",
   l.language_code = "is",
   l.country_code = "IS",
@@ -2864,7 +2864,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "it-CH"})
 ON CREATE SET
   l.display_name = "Italian (Switzerland)",
-  l.description = "Italian locale for Svizzera market",
+  l.content = "Italian locale for Svizzera market",
   l.llm_context = "USE: for Italian content targeting Svizzera. TRIGGERS: it-CH, Italiano, svizzera.",
   l.language_code = "it",
   l.country_code = "CH",
@@ -2888,7 +2888,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "it-IT"})
 ON CREATE SET
   l.display_name = "Italian (Italy)",
-  l.description = "Italian locale for Italia market",
+  l.content = "Italian locale for Italia market",
   l.llm_context = "USE: for Italian content targeting Italia. TRIGGERS: it-IT, Italiano, italia.",
   l.language_code = "it",
   l.country_code = "IT",
@@ -2912,7 +2912,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ja-JP"})
 ON CREATE SET
   l.display_name = "Japanese (Japan)",
-  l.description = "Japanese locale for 日本 market",
+  l.content = "Japanese locale for 日本 market",
   l.llm_context = "USE: for Japanese content targeting 日本. TRIGGERS: ja-JP, 日本語, 日本.",
   l.language_code = "ja",
   l.country_code = "JP",
@@ -2936,7 +2936,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "jv-ID"})
 ON CREATE SET
   l.display_name = "Javanese (Indonesia)",
-  l.description = "Javanese locale for Indonesia market",
+  l.content = "Javanese locale for Indonesia market",
   l.llm_context = "USE: for Javanese content targeting Indonesia. TRIGGERS: jv-ID, Basa Jawa, indonesia.",
   l.language_code = "jv",
   l.country_code = "ID",
@@ -2960,7 +2960,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ka-GE"})
 ON CREATE SET
   l.display_name = "Georgian (Georgia)",
-  l.description = "Georgian locale for საქართველო market",
+  l.content = "Georgian locale for საქართველო market",
   l.llm_context = "USE: for Georgian content targeting საქართველო. TRIGGERS: ka-GE, ქართული, საქართველო.",
   l.language_code = "ka",
   l.country_code = "GE",
@@ -2984,7 +2984,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "kk-KZ"})
 ON CREATE SET
   l.display_name = "Kazakh (Kazakhstan)",
-  l.description = "Kazakh locale for Қазақстан market",
+  l.content = "Kazakh locale for Қазақстан market",
   l.llm_context = "USE: for Kazakh content targeting Қазақстан. TRIGGERS: kk-KZ, Қазақ тілі, қазақстан.",
   l.language_code = "kk",
   l.country_code = "KZ",
@@ -3008,7 +3008,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "km-KH"})
 ON CREATE SET
   l.display_name = "Khmer (Cambodia)",
-  l.description = "Khmer locale for កម្ពុជា market",
+  l.content = "Khmer locale for កម្ពុជា market",
   l.llm_context = "USE: for Khmer content targeting កម្ពុជា. TRIGGERS: km-KH, ភាសាខ្មែរ, កម្ពុជា.",
   l.language_code = "km",
   l.country_code = "KH",
@@ -3032,7 +3032,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "kn-IN"})
 ON CREATE SET
   l.display_name = "Kannada (India)",
-  l.description = "Kannada locale for ಭಾರತ market",
+  l.content = "Kannada locale for ಭಾರತ market",
   l.llm_context = "USE: for Kannada content targeting ಭಾರತ. TRIGGERS: kn-IN, ಕನ್ನಡ, ಭಾರತ.",
   l.language_code = "kn",
   l.country_code = "IN",
@@ -3056,7 +3056,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ko-KR"})
 ON CREATE SET
   l.display_name = "Korean (South Korea)",
-  l.description = "Korean locale for 대한민국 market",
+  l.content = "Korean locale for 대한민국 market",
   l.llm_context = "USE: for Korean content targeting 대한민국. TRIGGERS: ko-KR, 한국어, 대한민국.",
   l.language_code = "ko",
   l.country_code = "KR",
@@ -3080,7 +3080,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ku-TR"})
 ON CREATE SET
   l.display_name = "Kurdish (Turkey)",
-  l.description = "Kurdish locale for Tirkiye market",
+  l.content = "Kurdish locale for Tirkiye market",
   l.llm_context = "USE: for Kurdish content targeting Tirkiye. TRIGGERS: ku-TR, Kurdî, tirkiye.",
   l.language_code = "ku",
   l.country_code = "TR",
@@ -3104,7 +3104,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ky-KG"})
 ON CREATE SET
   l.display_name = "Kyrgyz (Kyrgyzstan)",
-  l.description = "Kyrgyz locale for Кыргызстан market",
+  l.content = "Kyrgyz locale for Кыргызстан market",
   l.llm_context = "USE: for Kyrgyz content targeting Кыргызстан. TRIGGERS: ky-KG, Кыргызча, кыргызстан.",
   l.language_code = "ky",
   l.country_code = "KG",
@@ -3128,7 +3128,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ln-CD"})
 ON CREATE SET
   l.display_name = "Lingala (DR Congo)",
-  l.description = "Lingala locale for Republiki ya Kongó Demokratiki market",
+  l.content = "Lingala locale for Republiki ya Kongó Demokratiki market",
   l.llm_context = "USE: for Lingala content targeting Republiki ya Kongó Demokratiki. TRIGGERS: ln-CD, Lingála, republiki ya kongó demokratiki.",
   l.language_code = "ln",
   l.country_code = "CD",
@@ -3152,7 +3152,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "lt-LT"})
 ON CREATE SET
   l.display_name = "Lithuanian (Lithuania)",
-  l.description = "Lithuanian locale for Lietuva market",
+  l.content = "Lithuanian locale for Lietuva market",
   l.llm_context = "USE: for Lithuanian content targeting Lietuva. TRIGGERS: lt-LT, Lietuvių kalba, lietuva.",
   l.language_code = "lt",
   l.country_code = "LT",
@@ -3176,7 +3176,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "lv-LV"})
 ON CREATE SET
   l.display_name = "Latvian (Latvia)",
-  l.description = "Latvian locale for Latvija market",
+  l.content = "Latvian locale for Latvija market",
   l.llm_context = "USE: for Latvian content targeting Latvija. TRIGGERS: lv-LV, Latviešu valoda, latvija.",
   l.language_code = "lv",
   l.country_code = "LV",
@@ -3200,7 +3200,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mg-MG"})
 ON CREATE SET
   l.display_name = "Malagasy (Madagascar)",
-  l.description = "Malagasy locale for Madagasikara market",
+  l.content = "Malagasy locale for Madagasikara market",
   l.llm_context = "USE: for Malagasy content targeting Madagasikara. TRIGGERS: mg-MG, Malagasy, madagasikara.",
   l.language_code = "mg",
   l.country_code = "MG",
@@ -3224,7 +3224,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mi-NZ"})
 ON CREATE SET
   l.display_name = "Maori (New Zealand)",
-  l.description = "Maori locale for Aotearoa market",
+  l.content = "Maori locale for Aotearoa market",
   l.llm_context = "USE: for Maori content targeting Aotearoa. TRIGGERS: mi-NZ, Te Reo Māori, aotearoa.",
   l.language_code = "mi",
   l.country_code = "NZ",
@@ -3248,7 +3248,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mk-MK"})
 ON CREATE SET
   l.display_name = "Macedonian (North Macedonia)",
-  l.description = "Macedonian locale for Северна Македонија market",
+  l.content = "Macedonian locale for Северна Македонија market",
   l.llm_context = "USE: for Macedonian content targeting Северна Македонија. TRIGGERS: mk-MK, Македонски, северна македонија.",
   l.language_code = "mk",
   l.country_code = "MK",
@@ -3272,7 +3272,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ml-IN"})
 ON CREATE SET
   l.display_name = "Malayalam (India)",
-  l.description = "Malayalam locale for ഭാരതം market",
+  l.content = "Malayalam locale for ഭാരതം market",
   l.llm_context = "USE: for Malayalam content targeting ഭാരതം. TRIGGERS: ml-IN, മലയാളം, ഭാരതം.",
   l.language_code = "ml",
   l.country_code = "IN",
@@ -3296,7 +3296,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mn-MN"})
 ON CREATE SET
   l.display_name = "Mongolian (Mongolia)",
-  l.description = "Mongolian locale for Монгол Улс market",
+  l.content = "Mongolian locale for Монгол Улс market",
   l.llm_context = "USE: for Mongolian content targeting Монгол Улс. TRIGGERS: mn-MN, Монгол хэл, монгол улс.",
   l.language_code = "mn",
   l.country_code = "MN",
@@ -3320,7 +3320,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mr-IN"})
 ON CREATE SET
   l.display_name = "Marathi (India)",
-  l.description = "Marathi locale for भारत market",
+  l.content = "Marathi locale for भारत market",
   l.llm_context = "USE: for Marathi content targeting भारत. TRIGGERS: mr-IN, मराठी, भारत.",
   l.language_code = "mr",
   l.country_code = "IN",
@@ -3344,7 +3344,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ms-BN"})
 ON CREATE SET
   l.display_name = "Malay (Brunei)",
-  l.description = "Malay locale for Negara Brunei Darussalam market",
+  l.content = "Malay locale for Negara Brunei Darussalam market",
   l.llm_context = "USE: for Malay content targeting Negara Brunei Darussalam. TRIGGERS: ms-BN, Bahasa Melayu, negara brunei darussalam.",
   l.language_code = "ms",
   l.country_code = "BN",
@@ -3368,7 +3368,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ms-MY"})
 ON CREATE SET
   l.display_name = "Malay (Malaysia)",
-  l.description = "Malay locale for Malaysia market",
+  l.content = "Malay locale for Malaysia market",
   l.llm_context = "USE: for Malay content targeting Malaysia. TRIGGERS: ms-MY, Bahasa Melayu, malaysia.",
   l.language_code = "ms",
   l.country_code = "MY",
@@ -3392,7 +3392,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ms-SG"})
 ON CREATE SET
   l.display_name = "Malay (Singapore)",
-  l.description = "Malay locale for Singapura market",
+  l.content = "Malay locale for Singapura market",
   l.llm_context = "USE: for Malay content targeting Singapura. TRIGGERS: ms-SG, Bahasa Melayu, singapura.",
   l.language_code = "ms",
   l.country_code = "SG",
@@ -3416,7 +3416,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "mt-MT"})
 ON CREATE SET
   l.display_name = "Maltese (Malta)",
-  l.description = "Maltese locale for Malta market",
+  l.content = "Maltese locale for Malta market",
   l.llm_context = "USE: for Maltese content targeting Malta. TRIGGERS: mt-MT, Malti, malta.",
   l.language_code = "mt",
   l.country_code = "MT",
@@ -3440,7 +3440,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "my-MM"})
 ON CREATE SET
   l.display_name = "Burmese (Myanmar)",
-  l.description = "Burmese locale for မြန်မာနိုင်ငံ market",
+  l.content = "Burmese locale for မြန်မာနိုင်ငံ market",
   l.llm_context = "USE: for Burmese content targeting မြန်မာနိုင်ငံ. TRIGGERS: my-MM, မြန်မာဘာသာ, မြန်မာနိုင်ငံ.",
   l.language_code = "my",
   l.country_code = "MM",
@@ -3464,7 +3464,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ne-NP"})
 ON CREATE SET
   l.display_name = "Nepali (Nepal)",
-  l.description = "Nepali locale for नेपाल market",
+  l.content = "Nepali locale for नेपाल market",
   l.llm_context = "USE: for Nepali content targeting नेपाल. TRIGGERS: ne-NP, नेपाली, नेपाल.",
   l.language_code = "ne",
   l.country_code = "NP",
@@ -3488,7 +3488,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "nl-BE"})
 ON CREATE SET
   l.display_name = "Dutch (Belgium)",
-  l.description = "Dutch locale for België market",
+  l.content = "Dutch locale for België market",
   l.llm_context = "USE: for Dutch content targeting België. TRIGGERS: nl-BE, Nederlands, belgië.",
   l.language_code = "nl",
   l.country_code = "BE",
@@ -3512,7 +3512,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "nl-NL"})
 ON CREATE SET
   l.display_name = "Dutch (Netherlands)",
-  l.description = "Dutch locale for Nederland market",
+  l.content = "Dutch locale for Nederland market",
   l.llm_context = "USE: for Dutch content targeting Nederland. TRIGGERS: nl-NL, Nederlands, nederland.",
   l.language_code = "nl",
   l.country_code = "NL",
@@ -3536,7 +3536,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "no-NO"})
 ON CREATE SET
   l.display_name = "Norwegian (Norway)",
-  l.description = "Norwegian locale for Norge market",
+  l.content = "Norwegian locale for Norge market",
   l.llm_context = "USE: for Norwegian content targeting Norge. TRIGGERS: no-NO, Norsk, norge.",
   l.language_code = "no",
   l.country_code = "NO",
@@ -3560,7 +3560,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ny-MW"})
 ON CREATE SET
   l.display_name = "Chichewa (Malawi)",
-  l.description = "Chichewa locale for Malaŵi market",
+  l.content = "Chichewa locale for Malaŵi market",
   l.llm_context = "USE: for Chichewa content targeting Malaŵi. TRIGGERS: ny-MW, Chicheŵa, malaŵi.",
   l.language_code = "ny",
   l.country_code = "MW",
@@ -3584,7 +3584,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "or-IN"})
 ON CREATE SET
   l.display_name = "Odia (India)",
-  l.description = "Odia locale for India market",
+  l.content = "Odia locale for India market",
   l.llm_context = "USE: for Odia content targeting India. TRIGGERS: or-IN, Odia.",
   l.language_code = "or",
   l.country_code = "IN",
@@ -3608,7 +3608,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "el-CY"})
 ON CREATE SET
   l.display_name = "Greek (Cyprus)",
-  l.description = "Greek locale for Κύπρος market",
+  l.content = "Greek locale for Κύπρος market",
   l.llm_context = "USE: for Greek content targeting Κύπρος. TRIGGERS: el-CY, Ελληνικά, κύπρος.",
   l.language_code = "el",
   l.country_code = "CY",
@@ -3632,7 +3632,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pa-IN"})
 ON CREATE SET
   l.display_name = "Punjabi (India)",
-  l.description = "Punjabi locale for ਭਾਰਤ market",
+  l.content = "Punjabi locale for ਭਾਰਤ market",
   l.llm_context = "USE: for Punjabi content targeting ਭਾਰਤ. TRIGGERS: pa-IN, ਪੰਜਾਬੀ, ਭਾਰਤ.",
   l.language_code = "pa",
   l.country_code = "IN",
@@ -3656,7 +3656,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pa-PK"})
 ON CREATE SET
   l.display_name = "Punjabi (Pakistan)",
-  l.description = "Punjabi locale for پاکستان market",
+  l.content = "Punjabi locale for پاکستان market",
   l.llm_context = "USE: for Punjabi content targeting پاکستان. TRIGGERS: pa-PK, پنجابی, پاکستان.",
   l.language_code = "pa",
   l.country_code = "PK",
@@ -3680,7 +3680,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pl-PL"})
 ON CREATE SET
   l.display_name = "Polish (Poland)",
-  l.description = "Polish locale for Polska market",
+  l.content = "Polish locale for Polska market",
   l.llm_context = "USE: for Polish content targeting Polska. TRIGGERS: pl-PL, Polski, polska.",
   l.language_code = "pl",
   l.country_code = "PL",
@@ -3704,7 +3704,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ps-AF"})
 ON CREATE SET
   l.display_name = "Pashto (Afghanistan)",
-  l.description = "Pashto locale for افغانستان market",
+  l.content = "Pashto locale for افغانستان market",
   l.llm_context = "USE: for Pashto content targeting افغانستان. TRIGGERS: ps-AF, پښتو, افغانستان.",
   l.language_code = "ps",
   l.country_code = "AF",
@@ -3728,7 +3728,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pt-AO"})
 ON CREATE SET
   l.display_name = "Portuguese (Angola)",
-  l.description = "Portuguese locale for Angola market",
+  l.content = "Portuguese locale for Angola market",
   l.llm_context = "USE: for Portuguese content targeting Angola. TRIGGERS: pt-AO, Português, angola.",
   l.language_code = "pt",
   l.country_code = "AO",
@@ -3752,7 +3752,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pt-BR"})
 ON CREATE SET
   l.display_name = "Portuguese (Brazil)",
-  l.description = "Portuguese locale for Brasil market",
+  l.content = "Portuguese locale for Brasil market",
   l.llm_context = "USE: for Portuguese content targeting Brasil. TRIGGERS: pt-BR, Português, brasil.",
   l.language_code = "pt",
   l.country_code = "BR",
@@ -3776,7 +3776,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pt-CH"})
 ON CREATE SET
   l.display_name = "Portuguese (Switzerland)",
-  l.description = "Portuguese locale for Suíça market",
+  l.content = "Portuguese locale for Suíça market",
   l.llm_context = "USE: for Portuguese content targeting Suíça. TRIGGERS: pt-CH, Português, suíça.",
   l.language_code = "pt",
   l.country_code = "CH",
@@ -3800,7 +3800,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pt-MZ"})
 ON CREATE SET
   l.display_name = "Portuguese (Mozambique)",
-  l.description = "Portuguese locale for Moçambique market",
+  l.content = "Portuguese locale for Moçambique market",
   l.llm_context = "USE: for Portuguese content targeting Moçambique. TRIGGERS: pt-MZ, Português, moçambique.",
   l.language_code = "pt",
   l.country_code = "MZ",
@@ -3824,7 +3824,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "pt-PT"})
 ON CREATE SET
   l.display_name = "Portuguese (Portugal)",
-  l.description = "Portuguese locale for Portugal market",
+  l.content = "Portuguese locale for Portugal market",
   l.llm_context = "USE: for Portuguese content targeting Portugal. TRIGGERS: pt-PT, Português, portugal.",
   l.language_code = "pt",
   l.country_code = "PT",
@@ -3848,7 +3848,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "qu-PE"})
 ON CREATE SET
   l.display_name = "Quechua (Peru)",
-  l.description = "Quechua locale for Piruw market",
+  l.content = "Quechua locale for Piruw market",
   l.llm_context = "USE: for Quechua content targeting Piruw. TRIGGERS: qu-PE, Runasimi, piruw.",
   l.language_code = "qu",
   l.country_code = "PE",
@@ -3872,7 +3872,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ro-MD"})
 ON CREATE SET
   l.display_name = "Romanian (Moldova)",
-  l.description = "Romanian locale for Moldova market",
+  l.content = "Romanian locale for Moldova market",
   l.llm_context = "USE: for Romanian content targeting Moldova. TRIGGERS: ro-MD, Română, moldova.",
   l.language_code = "ro",
   l.country_code = "MD",
@@ -3896,7 +3896,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ro-RO"})
 ON CREATE SET
   l.display_name = "Romanian (Romania)",
-  l.description = "Romanian locale for România market",
+  l.content = "Romanian locale for România market",
   l.llm_context = "USE: for Romanian content targeting România. TRIGGERS: ro-RO, Română, românia.",
   l.language_code = "ro",
   l.country_code = "RO",
@@ -3920,7 +3920,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-BY"})
 ON CREATE SET
   l.display_name = "Russian (Belarus)",
-  l.description = "Russian locale for Беларусь market",
+  l.content = "Russian locale for Беларусь market",
   l.llm_context = "USE: for Russian content targeting Беларусь. TRIGGERS: ru-BY, Русский, беларусь.",
   l.language_code = "ru",
   l.country_code = "BY",
@@ -3944,7 +3944,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-IL"})
 ON CREATE SET
   l.display_name = "Russian (Israel)",
-  l.description = "Russian locale for Израиль market",
+  l.content = "Russian locale for Израиль market",
   l.llm_context = "USE: for Russian content targeting Израиль. TRIGGERS: ru-IL, Русский, израиль.",
   l.language_code = "ru",
   l.country_code = "IL",
@@ -3968,7 +3968,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-KG"})
 ON CREATE SET
   l.display_name = "Russian (Kyrgyzstan)",
-  l.description = "Russian locale for Кыргызстан market",
+  l.content = "Russian locale for Кыргызстан market",
   l.llm_context = "USE: for Russian content targeting Кыргызстан. TRIGGERS: ru-KG, Русский, кыргызстан.",
   l.language_code = "ru",
   l.country_code = "KG",
@@ -3992,7 +3992,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-KZ"})
 ON CREATE SET
   l.display_name = "Russian (Kazakhstan)",
-  l.description = "Russian locale for Казахстан market",
+  l.content = "Russian locale for Казахстан market",
   l.llm_context = "USE: for Russian content targeting Казахстан. TRIGGERS: ru-KZ, Русский, казахстан.",
   l.language_code = "ru",
   l.country_code = "KZ",
@@ -4016,7 +4016,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-MD"})
 ON CREATE SET
   l.display_name = "Russian (Moldova)",
-  l.description = "Russian locale for Молдова market",
+  l.content = "Russian locale for Молдова market",
   l.llm_context = "USE: for Russian content targeting Молдова. TRIGGERS: ru-MD, Русский, молдова.",
   l.language_code = "ru",
   l.country_code = "MD",
@@ -4040,7 +4040,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ru-RU"})
 ON CREATE SET
   l.display_name = "Russian (Russia)",
-  l.description = "Russian locale for Россия market",
+  l.content = "Russian locale for Россия market",
   l.llm_context = "USE: for Russian content targeting Россия. TRIGGERS: ru-RU, Русский, россия.",
   l.language_code = "ru",
   l.country_code = "RU",
@@ -4064,7 +4064,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "rw-RW"})
 ON CREATE SET
   l.display_name = "Kinyarwanda (Rwanda)",
-  l.description = "Kinyarwanda locale for Rwanda market",
+  l.content = "Kinyarwanda locale for Rwanda market",
   l.llm_context = "USE: for Kinyarwanda content targeting Rwanda. TRIGGERS: rw-RW, Ikinyarwanda, rwanda.",
   l.language_code = "rw",
   l.country_code = "RW",
@@ -4088,7 +4088,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sd-PK"})
 ON CREATE SET
   l.display_name = "Sindhi (Pakistan)",
-  l.description = "Sindhi locale for پاکستان market",
+  l.content = "Sindhi locale for پاکستان market",
   l.llm_context = "USE: for Sindhi content targeting پاکستان. TRIGGERS: sd-PK, سنڌي, پاکستان.",
   l.language_code = "sd",
   l.country_code = "PK",
@@ -4112,7 +4112,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "si-LK"})
 ON CREATE SET
   l.display_name = "Sinhala (Sri Lanka)",
-  l.description = "Sinhala locale for ශ්‍රී ලංකාව market",
+  l.content = "Sinhala locale for ශ්‍රී ලංකාව market",
   l.llm_context = "USE: for Sinhala content targeting ශ්‍රී ලංකාව. TRIGGERS: si-LK, සිංහල, ශ්‍රී ලංකාව.",
   l.language_code = "si",
   l.country_code = "LK",
@@ -4136,7 +4136,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sk-SK"})
 ON CREATE SET
   l.display_name = "Slovak (Slovakia)",
-  l.description = "Slovak locale for Slovensko market",
+  l.content = "Slovak locale for Slovensko market",
   l.llm_context = "USE: for Slovak content targeting Slovensko. TRIGGERS: sk-SK, Slovenčina, slovensko.",
   l.language_code = "sk",
   l.country_code = "SK",
@@ -4160,7 +4160,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sl-SI"})
 ON CREATE SET
   l.display_name = "Slovenian (Slovenia)",
-  l.description = "Slovenian locale for Slovenija market",
+  l.content = "Slovenian locale for Slovenija market",
   l.llm_context = "USE: for Slovenian content targeting Slovenija. TRIGGERS: sl-SI, Slovenščina, slovenija.",
   l.language_code = "sl",
   l.country_code = "SI",
@@ -4184,7 +4184,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sn-ZW"})
 ON CREATE SET
   l.display_name = "Shona (Zimbabwe)",
-  l.description = "Shona locale for Zimbabwe market",
+  l.content = "Shona locale for Zimbabwe market",
   l.llm_context = "USE: for Shona content targeting Zimbabwe. TRIGGERS: sn-ZW, chiShona, zimbabwe.",
   l.language_code = "sn",
   l.country_code = "ZW",
@@ -4208,7 +4208,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "so-SO"})
 ON CREATE SET
   l.display_name = "Somali (Somalia)",
-  l.description = "Somali locale for Soomaaliya market",
+  l.content = "Somali locale for Soomaaliya market",
   l.llm_context = "USE: for Somali content targeting Soomaaliya. TRIGGERS: so-SO, Af-Soomaali, soomaaliya.",
   l.language_code = "so",
   l.country_code = "SO",
@@ -4232,7 +4232,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sq-AL"})
 ON CREATE SET
   l.display_name = "Albanian (Albania)",
-  l.description = "Albanian locale for Shqipëri market",
+  l.content = "Albanian locale for Shqipëri market",
   l.llm_context = "USE: for Albanian content targeting Shqipëri. TRIGGERS: sq-AL, Shqip, shqipëri.",
   l.language_code = "sq",
   l.country_code = "AL",
@@ -4256,7 +4256,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sr-RS"})
 ON CREATE SET
   l.display_name = "Serbian (Serbia)",
-  l.description = "Serbian locale for Srbija market",
+  l.content = "Serbian locale for Srbija market",
   l.llm_context = "USE: for Serbian content targeting Srbija. TRIGGERS: sr-RS, Srpski, srbija.",
   l.language_code = "sr",
   l.country_code = "RS",
@@ -4280,7 +4280,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "su-ID"})
 ON CREATE SET
   l.display_name = "Sundanese (Indonesia)",
-  l.description = "Sundanese locale for Indonesia market",
+  l.content = "Sundanese locale for Indonesia market",
   l.llm_context = "USE: for Sundanese content targeting Indonesia. TRIGGERS: su-ID, Basa Sunda, indonesia.",
   l.language_code = "su",
   l.country_code = "ID",
@@ -4304,7 +4304,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sv-SE"})
 ON CREATE SET
   l.display_name = "Swedish (Sweden)",
-  l.description = "Swedish locale for Sverige market",
+  l.content = "Swedish locale for Sverige market",
   l.llm_context = "USE: for Swedish content targeting Sverige. TRIGGERS: sv-SE, Svenska, sverige.",
   l.language_code = "sv",
   l.country_code = "SE",
@@ -4328,7 +4328,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sw-KE"})
 ON CREATE SET
   l.display_name = "Swahili (Kenya)",
-  l.description = "Swahili locale for Kenya market",
+  l.content = "Swahili locale for Kenya market",
   l.llm_context = "USE: for Swahili content targeting Kenya. TRIGGERS: sw-KE, Kiswahili, kenya.",
   l.language_code = "sw",
   l.country_code = "KE",
@@ -4352,7 +4352,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "sw-TZ"})
 ON CREATE SET
   l.display_name = "Swahili (Tanzania)",
-  l.description = "Swahili locale for Tanzania market",
+  l.content = "Swahili locale for Tanzania market",
   l.llm_context = "USE: for Swahili content targeting Tanzania. TRIGGERS: sw-TZ, Kiswahili, tanzania.",
   l.language_code = "sw",
   l.country_code = "TZ",
@@ -4376,7 +4376,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ta-IN"})
 ON CREATE SET
   l.display_name = "Tamil (India)",
-  l.description = "Tamil locale for இந்தியா market",
+  l.content = "Tamil locale for இந்தியா market",
   l.llm_context = "USE: for Tamil content targeting இந்தியா. TRIGGERS: ta-IN, தமிழ், இந்தியா.",
   l.language_code = "ta",
   l.country_code = "IN",
@@ -4400,7 +4400,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ta-LK"})
 ON CREATE SET
   l.display_name = "Tamil (Sri Lanka)",
-  l.description = "Tamil locale for இலங்கை market",
+  l.content = "Tamil locale for இலங்கை market",
   l.llm_context = "USE: for Tamil content targeting இலங்கை. TRIGGERS: ta-LK, தமிழ், இலங்கை.",
   l.language_code = "ta",
   l.country_code = "LK",
@@ -4424,7 +4424,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "te-IN"})
 ON CREATE SET
   l.display_name = "Telugu (India)",
-  l.description = "Telugu locale for భారతదేశం market",
+  l.content = "Telugu locale for భారతదేశం market",
   l.llm_context = "USE: for Telugu content targeting భారతదేశం. TRIGGERS: te-IN, తెలుగు, భారతదేశం.",
   l.language_code = "te",
   l.country_code = "IN",
@@ -4448,7 +4448,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "tg-TJ"})
 ON CREATE SET
   l.display_name = "Tajik (Tajikistan)",
-  l.description = "Tajik locale for Тоҷикистон market",
+  l.content = "Tajik locale for Тоҷикистон market",
   l.llm_context = "USE: for Tajik content targeting Тоҷикистон. TRIGGERS: tg-TJ, Тоҷикӣ, тоҷикистон.",
   l.language_code = "tg",
   l.country_code = "TJ",
@@ -4472,7 +4472,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "th-TH"})
 ON CREATE SET
   l.display_name = "Thai (Thailand)",
-  l.description = "Thai locale for ประเทศไทย market",
+  l.content = "Thai locale for ประเทศไทย market",
   l.llm_context = "USE: for Thai content targeting ประเทศไทย. TRIGGERS: th-TH, ภาษาไทย, ประเทศไทย.",
   l.language_code = "th",
   l.country_code = "TH",
@@ -4496,7 +4496,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "tk-TM"})
 ON CREATE SET
   l.display_name = "Turkmen (Turkmenistan)",
-  l.description = "Turkmen locale for Türkmenistan market",
+  l.content = "Turkmen locale for Türkmenistan market",
   l.llm_context = "USE: for Turkmen content targeting Türkmenistan. TRIGGERS: tk-TM, Türkmençe, türkmenistan.",
   l.language_code = "tk",
   l.country_code = "TM",
@@ -4520,7 +4520,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "tl-PH"})
 ON CREATE SET
   l.display_name = "Tagalog (Philippines)",
-  l.description = "Tagalog locale for Pilipinas market",
+  l.content = "Tagalog locale for Pilipinas market",
   l.llm_context = "USE: for Tagalog content targeting Pilipinas. TRIGGERS: tl-PH, Tagalog, pilipinas.",
   l.language_code = "tl",
   l.country_code = "PH",
@@ -4544,7 +4544,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "tr-TR"})
 ON CREATE SET
   l.display_name = "Turkish (Turkey)",
-  l.description = "Turkish locale for Türkiye market",
+  l.content = "Turkish locale for Türkiye market",
   l.llm_context = "USE: for Turkish content targeting Türkiye. TRIGGERS: tr-TR, Türkçe, türkiye.",
   l.language_code = "tr",
   l.country_code = "TR",
@@ -4568,7 +4568,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "uk-UA"})
 ON CREATE SET
   l.display_name = "Ukrainian (Ukraine)",
-  l.description = "Ukrainian locale for Україна market",
+  l.content = "Ukrainian locale for Україна market",
   l.llm_context = "USE: for Ukrainian content targeting Україна. TRIGGERS: uk-UA, Українська, україна.",
   l.language_code = "uk",
   l.country_code = "UA",
@@ -4592,7 +4592,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "ur-PK"})
 ON CREATE SET
   l.display_name = "Urdu (Pakistan)",
-  l.description = "Urdu locale for پاکستان market",
+  l.content = "Urdu locale for پاکستان market",
   l.llm_context = "USE: for Urdu content targeting پاکستان. TRIGGERS: ur-PK, اردو, پاکستان.",
   l.language_code = "ur",
   l.country_code = "PK",
@@ -4616,7 +4616,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "uz-UZ"})
 ON CREATE SET
   l.display_name = "Uzbek (Uzbekistan)",
-  l.description = "Uzbek locale for O'zbekiston market",
+  l.content = "Uzbek locale for O'zbekiston market",
   l.llm_context = "USE: for Uzbek content targeting O'zbekiston. TRIGGERS: uz-UZ, O'zbek tili, o'zbekiston.",
   l.language_code = "uz",
   l.country_code = "UZ",
@@ -4640,7 +4640,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "vi-VN"})
 ON CREATE SET
   l.display_name = "Vietnamese (Vietnam)",
-  l.description = "Vietnamese locale for Việt Nam market",
+  l.content = "Vietnamese locale for Việt Nam market",
   l.llm_context = "USE: for Vietnamese content targeting Việt Nam. TRIGGERS: vi-VN, Tiếng Việt, việt nam.",
   l.language_code = "vi",
   l.country_code = "VN",
@@ -4664,7 +4664,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "xh-ZA"})
 ON CREATE SET
   l.display_name = "Xhosa (South Africa)",
-  l.description = "Xhosa locale for iNingizimu Afrika market",
+  l.content = "Xhosa locale for iNingizimu Afrika market",
   l.llm_context = "USE: for Xhosa content targeting iNingizimu Afrika. TRIGGERS: xh-ZA, isiXhosa, iningizimu afrika.",
   l.language_code = "xh",
   l.country_code = "ZA",
@@ -4688,7 +4688,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "yo-NG"})
 ON CREATE SET
   l.display_name = "Yoruba (Nigeria)",
-  l.description = "Yoruba locale for Nàìjíríà market",
+  l.content = "Yoruba locale for Nàìjíríà market",
   l.llm_context = "USE: for Yoruba content targeting Nàìjíríà. TRIGGERS: yo-NG, Yorùbá, nàìjíríà.",
   l.language_code = "yo",
   l.country_code = "NG",
@@ -4712,7 +4712,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zh-CN"})
 ON CREATE SET
   l.display_name = "Chinese (China)",
-  l.description = "Chinese locale for 中国 market",
+  l.content = "Chinese locale for 中国 market",
   l.llm_context = "USE: for Chinese content targeting 中国. TRIGGERS: zh-CN, 中文, 中国.",
   l.language_code = "zh",
   l.country_code = "CN",
@@ -4736,7 +4736,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zh-HK"})
 ON CREATE SET
   l.display_name = "Chinese (Hong Kong)",
-  l.description = "Chinese locale for 香港 market",
+  l.content = "Chinese locale for 香港 market",
   l.llm_context = "USE: for Chinese content targeting 香港. TRIGGERS: zh-HK, 中文, 香港.",
   l.language_code = "zh",
   l.country_code = "HK",
@@ -4760,7 +4760,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zh-SG"})
 ON CREATE SET
   l.display_name = "Chinese (Singapore)",
-  l.description = "Chinese locale for 新加坡 market",
+  l.content = "Chinese locale for 新加坡 market",
   l.llm_context = "USE: for Chinese content targeting 新加坡. TRIGGERS: zh-SG, 中文, 新加坡.",
   l.language_code = "zh",
   l.country_code = "SG",
@@ -4784,7 +4784,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zh-TH"})
 ON CREATE SET
   l.display_name = "Chinese (Thailand)",
-  l.description = "Chinese locale for ไทย market",
+  l.content = "Chinese locale for ไทย market",
   l.llm_context = "USE: for Chinese content targeting ไทย. TRIGGERS: zh-TH, 中文, ไทย.",
   l.language_code = "zh",
   l.country_code = "TH",
@@ -4808,7 +4808,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zh-TW"})
 ON CREATE SET
   l.display_name = "Chinese (Taiwan)",
-  l.description = "Chinese locale for 台灣 market",
+  l.content = "Chinese locale for 台灣 market",
   l.llm_context = "USE: for Chinese content targeting 台灣. TRIGGERS: zh-TW, 中文, 台灣.",
   l.language_code = "zh",
   l.country_code = "TW",
@@ -4832,7 +4832,7 @@ ON MATCH SET
 MERGE (l:Locale {key: "zu-ZA"})
 ON CREATE SET
   l.display_name = "Zulu (South Africa)",
-  l.description = "Zulu locale for iNingizimu Afrika market",
+  l.content = "Zulu locale for iNingizimu Afrika market",
   l.llm_context = "USE: for Zulu content targeting iNingizimu Afrika. TRIGGERS: zu-ZA, isiZulu, iningizimu afrika.",
   l.language_code = "zu",
   l.country_code = "ZA",

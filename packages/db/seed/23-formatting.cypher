@@ -11,7 +11,7 @@
 
 MERGE (f:Formatting {key: 'ceb-PH'})
 SET f.display_name = 'ceb-PH Formatting',
-    f.description = 'Formatting rules for ceb-PH',
+    f.content = 'Formatting rules for ceb-PH',
     f.llm_context = 'ceb-PH: Numbers use \'.\' decimal, \',\' thousands. Dates: MM/DD/YYYY (gregorian) Time: 12-hour Currency: peso sign or P before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -31,7 +31,7 @@ SET f.display_name = 'ceb-PH Formatting',
 
 MERGE (f:Formatting {key: 'mn-MN'})
 SET f.display_name = 'mn-MN Formatting',
-    f.description = 'Formatting rules for mn-MN',
+    f.content = 'Formatting rules for mn-MN',
     f.llm_context = 'mn-MN: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY.MM.DD (gregorian) Time: 24-hour Currency: ₮ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -51,7 +51,7 @@ SET f.display_name = 'mn-MN Formatting',
 
 MERGE (f:Formatting {key: 'en-MY'})
 SET f.display_name = 'en-MY Formatting',
-    f.description = 'Formatting rules for en-MY',
+    f.content = 'Formatting rules for en-MY',
     f.llm_context = 'en-MY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (day/month/year) (gregorian) Time: 12-hour (primary), 24-hour (also commonly used) Currency: RM (Ringgit Malaysia) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -71,7 +71,7 @@ SET f.display_name = 'en-MY Formatting',
 
 MERGE (f:Formatting {key: 'bn-BD'})
 SET f.display_name = 'bn-BD Formatting',
-    f.description = 'Formatting rules for bn-BD',
+    f.content = 'Formatting rules for bn-BD',
     f.llm_context = 'bn-BD: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ৳ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -91,7 +91,7 @@ SET f.display_name = 'bn-BD Formatting',
 
 MERGE (f:Formatting {key: 'en-TZ'})
 SET f.display_name = 'en-TZ Formatting',
-    f.description = 'Formatting rules for en-TZ',
+    f.content = 'Formatting rules for en-TZ',
     f.llm_context = 'en-TZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: TSh before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -111,7 +111,7 @@ SET f.display_name = 'en-TZ Formatting',
 
 MERGE (f:Formatting {key: 'en-SG'})
 SET f.display_name = 'en-SG Formatting',
-    f.description = 'Formatting rules for en-SG',
+    f.content = 'Formatting rules for en-SG',
     f.llm_context = 'en-SG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -131,7 +131,7 @@ SET f.display_name = 'en-SG Formatting',
 
 MERGE (f:Formatting {key: 'ta-LK'})
 SET f.display_name = 'ta-LK Formatting',
-    f.description = 'Formatting rules for ta-LK',
+    f.content = 'Formatting rules for ta-LK',
     f.llm_context = 'ta-LK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ரூ or Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -151,7 +151,7 @@ SET f.display_name = 'ta-LK Formatting',
 
 MERGE (f:Formatting {key: 'en-ZA'})
 SET f.display_name = 'en-ZA Formatting',
-    f.description = 'Formatting rules for en-ZA',
+    f.content = 'Formatting rules for en-ZA',
     f.llm_context = 'en-ZA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (official), DD/MM/YYYY (common) (gregorian) Time: 24-hour (official/formal), 12-hour (informal) Currency: R before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -171,7 +171,7 @@ SET f.display_name = 'en-ZA Formatting',
 
 MERGE (f:Formatting {key: 'en-BB'})
 SET f.display_name = 'en-BB Formatting',
-    f.description = 'Formatting rules for en-BB',
+    f.content = 'Formatting rules for en-BB',
     f.llm_context = 'en-BB: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (British heritage) (gregorian) Time: 12-hour (primary), 24-hour (transport, official) Currency: $ or Bds$ (when distinguishing from USD) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","Barbados National Standards Institution"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -191,7 +191,7 @@ SET f.display_name = 'en-BB Formatting',
 
 MERGE (f:Formatting {key: 'si-LK'})
 SET f.display_name = 'si-LK Formatting',
-    f.description = 'Formatting rules for si-LK',
+    f.content = 'Formatting rules for si-LK',
     f.llm_context = 'si-LK: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (gregorian) Time: 24-hour Currency: රු or Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -211,7 +211,7 @@ SET f.display_name = 'si-LK Formatting',
 
 MERGE (f:Formatting {key: 'bs-BA'})
 SET f.display_name = 'bs-BA Formatting',
-    f.description = 'Formatting rules for bs-BA',
+    f.content = 'Formatting rules for bs-BA',
     f.llm_context = 'bs-BA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (period separator) (gregorian) Time: 24-hour Currency: KM after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -231,7 +231,7 @@ SET f.display_name = 'bs-BA Formatting',
 
 MERGE (f:Formatting {key: 'it-CH'})
 SET f.display_name = 'it-CH Formatting',
-    f.description = 'Formatting rules for it-CH',
+    f.content = 'Formatting rules for it-CH',
     f.llm_context = 'it-CH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: CHF or fr. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -251,7 +251,7 @@ SET f.display_name = 'it-CH Formatting',
 
 MERGE (f:Formatting {key: 'tr-TR'})
 SET f.display_name = 'tr-TR Formatting',
-    f.description = 'Formatting rules for tr-TR',
+    f.content = 'Formatting rules for tr-TR',
     f.llm_context = 'tr-TR: Numbers use \'.\' decimal, \',\' thousands. Dates: D.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: ₺ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -271,7 +271,7 @@ SET f.display_name = 'tr-TR Formatting',
 
 MERGE (f:Formatting {key: 'es-MX'})
 SET f.display_name = 'es-MX Formatting',
-    f.description = 'Formatting rules for es-MX',
+    f.content = 'Formatting rules for es-MX',
     f.llm_context = 'es-MX: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: Hybrid (12-hour common in daily speech, 24-hour in formal/transport) Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -291,7 +291,7 @@ SET f.display_name = 'es-MX Formatting',
 
 MERGE (f:Formatting {key: 'ar-MA'})
 SET f.display_name = 'ar-MA Formatting',
-    f.description = 'Formatting rules for ar-MA',
+    f.content = 'Formatting rules for ar-MA',
     f.llm_context = 'ar-MA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 24-hour Currency: د.م. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -311,7 +311,7 @@ SET f.display_name = 'ar-MA Formatting',
 
 MERGE (f:Formatting {key: 'ar-LY'})
 SET f.display_name = 'ar-LY Formatting',
-    f.description = 'Formatting rules for ar-LY',
+    f.content = 'Formatting rules for ar-LY',
     f.llm_context = 'ar-LY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: د.ل after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -331,7 +331,7 @@ SET f.display_name = 'ar-LY Formatting',
 
 MERGE (f:Formatting {key: 'fr-MG'})
 SET f.display_name = 'fr-MG Formatting',
-    f.description = 'Formatting rules for fr-MG',
+    f.content = 'Formatting rules for fr-MG',
     f.llm_context = 'fr-MG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Ar (Ariary) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -351,7 +351,7 @@ SET f.display_name = 'fr-MG Formatting',
 
 MERGE (f:Formatting {key: 'ar-EG'})
 SET f.display_name = 'ar-EG Formatting',
-    f.description = 'Formatting rules for ar-EG',
+    f.content = 'Formatting rules for ar-EG',
     f.llm_context = 'ar-EG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: ج.م after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -371,7 +371,7 @@ SET f.display_name = 'ar-EG Formatting',
 
 MERGE (f:Formatting {key: 'my-MM'})
 SET f.display_name = 'my-MM Formatting',
-    f.description = 'Formatting rules for my-MM',
+    f.content = 'Formatting rules for my-MM',
     f.llm_context = 'my-MM: Numbers use \'.\' decimal, \',\' thousands. Dates: d/M/yyyy (gregorian) Time: 24-hour Currency: K or Ks after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -391,7 +391,7 @@ SET f.display_name = 'my-MM Formatting',
 
 MERGE (f:Formatting {key: 'ta-IN'})
 SET f.display_name = 'ta-IN Formatting',
-    f.description = 'Formatting rules for ta-IN',
+    f.content = 'Formatting rules for ta-IN',
     f.llm_context = 'ta-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -411,7 +411,7 @@ SET f.display_name = 'ta-IN Formatting',
 
 MERGE (f:Formatting {key: 'fr-CD'})
 SET f.display_name = 'fr-CD Formatting',
-    f.description = 'Formatting rules for fr-CD',
+    f.content = 'Formatting rules for fr-CD',
     f.llm_context = 'fr-CD: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: FC after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -431,7 +431,7 @@ SET f.display_name = 'fr-CD Formatting',
 
 MERGE (f:Formatting {key: 'as-IN'})
 SET f.display_name = 'as-IN Formatting',
-    f.description = 'Formatting rules for as-IN',
+    f.content = 'Formatting rules for as-IN',
     f.llm_context = 'as-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD-MM-YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -451,7 +451,7 @@ SET f.display_name = 'as-IN Formatting',
 
 MERGE (f:Formatting {key: 'lt-LT'})
 SET f.display_name = 'lt-LT Formatting',
-    f.description = 'Formatting rules for lt-LT',
+    f.content = 'Formatting rules for lt-LT',
     f.llm_context = 'lt-LT: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (ISO format, commonly used in Lithuania) (gregorian) Time: 24-hour Currency: EUR or euro (the euro symbol is less commonly used in Lithuanian text) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -471,7 +471,7 @@ SET f.display_name = 'lt-LT Formatting',
 
 MERGE (f:Formatting {key: 'sw-KE'})
 SET f.display_name = 'sw-KE Formatting',
-    f.description = 'Formatting rules for sw-KE',
+    f.content = 'Formatting rules for sw-KE',
     f.llm_context = 'sw-KE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Ksh before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -491,7 +491,7 @@ SET f.display_name = 'sw-KE Formatting',
 
 MERGE (f:Formatting {key: 'hy-AM'})
 SET f.display_name = 'hy-AM Formatting',
-    f.description = 'Formatting rules for hy-AM',
+    f.content = 'Formatting rules for hy-AM',
     f.llm_context = 'hy-AM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: dram after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -511,7 +511,7 @@ SET f.display_name = 'hy-AM Formatting',
 
 MERGE (f:Formatting {key: 'pt-MZ'})
 SET f.display_name = 'pt-MZ Formatting',
-    f.description = 'Formatting rules for pt-MZ',
+    f.content = 'Formatting rules for pt-MZ',
     f.llm_context = 'pt-MZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (primary) Currency: MT or MTn after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -531,7 +531,7 @@ SET f.display_name = 'pt-MZ Formatting',
 
 MERGE (f:Formatting {key: 'nl-BE'})
 SET f.display_name = 'nl-BE Formatting',
-    f.description = 'Formatting rules for nl-BE',
+    f.content = 'Formatting rules for nl-BE',
     f.llm_context = 'nl-BE: Numbers use \'.\' decimal, \',\' thousands. Dates: D/MM/YYYY (gregorian) Time: 24-hour Currency: € before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -551,7 +551,7 @@ SET f.display_name = 'nl-BE Formatting',
 
 MERGE (f:Formatting {key: 'te-IN'})
 SET f.display_name = 'te-IN Formatting',
-    f.description = 'Formatting rules for te-IN',
+    f.content = 'Formatting rules for te-IN',
     f.llm_context = 'te-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD-MM-YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -571,7 +571,7 @@ SET f.display_name = 'te-IN Formatting',
 
 MERGE (f:Formatting {key: 'ml-IN'})
 SET f.display_name = 'ml-IN Formatting',
-    f.description = 'Formatting rules for ml-IN',
+    f.content = 'Formatting rules for ml-IN',
     f.llm_context = 'ml-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -591,7 +591,7 @@ SET f.display_name = 'ml-IN Formatting',
 
 MERGE (f:Formatting {key: 'vi-VN'})
 SET f.display_name = 'vi-VN Formatting',
-    f.description = 'Formatting rules for vi-VN',
+    f.content = 'Formatting rules for vi-VN',
     f.llm_context = 'vi-VN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: ₫ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -611,7 +611,7 @@ SET f.display_name = 'vi-VN Formatting',
 
 MERGE (f:Formatting {key: 'fr-BE'})
 SET f.display_name = 'fr-BE Formatting',
-    f.description = 'Formatting rules for fr-BE',
+    f.content = 'Formatting rules for fr-BE',
     f.llm_context = 'fr-BE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (gregorian) Time: 24-hour (standard in Belgium) Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","SPF Economie (Belgian federal statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -631,7 +631,7 @@ SET f.display_name = 'fr-BE Formatting',
 
 MERGE (f:Formatting {key: 'ru-IL'})
 SET f.display_name = 'ru-IL Formatting',
-    f.description = 'Formatting rules for ru-IL',
+    f.content = 'Formatting rules for ru-IL',
     f.llm_context = 'ru-IL: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: ₪ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -651,7 +651,7 @@ SET f.display_name = 'ru-IL Formatting',
 
 MERGE (f:Formatting {key: 'rw-RW'})
 SET f.display_name = 'rw-RW Formatting',
-    f.description = 'Formatting rules for rw-RW',
+    f.content = 'Formatting rules for rw-RW',
     f.llm_context = 'rw-RW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: FRw after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -671,7 +671,7 @@ SET f.display_name = 'rw-RW Formatting',
 
 MERGE (f:Formatting {key: 'en-KY'})
 SET f.display_name = 'en-KY Formatting',
-    f.description = 'Formatting rules for en-KY',
+    f.content = 'Formatting rules for en-KY',
     f.llm_context = 'en-KY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -691,7 +691,7 @@ SET f.display_name = 'en-KY Formatting',
 
 MERGE (f:Formatting {key: 'ky-KG'})
 SET f.display_name = 'ky-KG Formatting',
-    f.description = 'Formatting rules for ky-KG',
+    f.content = 'Formatting rules for ky-KG',
     f.llm_context = 'ky-KG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: сом after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -711,7 +711,7 @@ SET f.display_name = 'ky-KG Formatting',
 
 MERGE (f:Formatting {key: 'en-IE'})
 SET f.display_name = 'en-IE Formatting',
-    f.description = 'Formatting rules for en-IE',
+    f.content = 'Formatting rules for en-IE',
     f.llm_context = 'en-IE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (primary), 12-hour (also common) Currency: EUR before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -731,7 +731,7 @@ SET f.display_name = 'en-IE Formatting',
 
 MERGE (f:Formatting {key: 'su-ID'})
 SET f.display_name = 'su-ID Formatting',
-    f.description = 'Formatting rules for su-ID',
+    f.content = 'Formatting rules for su-ID',
     f.llm_context = 'su-ID: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Rp before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -751,7 +751,7 @@ SET f.display_name = 'su-ID Formatting',
 
 MERGE (f:Formatting {key: 'en-UG'})
 SET f.display_name = 'en-UG Formatting',
-    f.description = 'Formatting rules for en-UG',
+    f.content = 'Formatting rules for en-UG',
     f.llm_context = 'en-UG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: USh before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -771,7 +771,7 @@ SET f.display_name = 'en-UG Formatting',
 
 MERGE (f:Formatting {key: 'sw-TZ'})
 SET f.display_name = 'sw-TZ Formatting',
-    f.description = 'Formatting rules for sw-TZ',
+    f.content = 'Formatting rules for sw-TZ',
     f.llm_context = 'sw-TZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: TSh before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -791,7 +791,7 @@ SET f.display_name = 'sw-TZ Formatting',
 
 MERGE (f:Formatting {key: 'hu-HU'})
 SET f.display_name = 'hu-HU Formatting',
-    f.description = 'Formatting rules for hu-HU',
+    f.content = 'Formatting rules for hu-HU',
     f.llm_context = 'hu-HU: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY. MM. DD. (year, month, day with dots and trailing dot) (gregorian) Time: 24-hour Currency: Ft after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -811,7 +811,7 @@ SET f.display_name = 'hu-HU Formatting',
 
 MERGE (f:Formatting {key: 'es-EC'})
 SET f.display_name = 'es-EC Formatting',
-    f.description = 'Formatting rules for es-EC',
+    f.content = 'Formatting rules for es-EC',
     f.llm_context = 'es-EC: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -831,7 +831,7 @@ SET f.display_name = 'es-EC Formatting',
 
 MERGE (f:Formatting {key: 'mg-MG'})
 SET f.display_name = 'mg-MG Formatting',
-    f.description = 'Formatting rules for mg-MG',
+    f.content = 'Formatting rules for mg-MG',
     f.llm_context = 'mg-MG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Ar after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -851,7 +851,7 @@ SET f.display_name = 'mg-MG Formatting',
 
 MERGE (f:Formatting {key: 'ca-AD'})
 SET f.display_name = 'ca-AD Formatting',
-    f.description = 'Formatting rules for ca-AD',
+    f.content = 'Formatting rules for ca-AD',
     f.llm_context = 'ca-AD: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -871,7 +871,7 @@ SET f.display_name = 'ca-AD Formatting',
 
 MERGE (f:Formatting {key: 'ko-KR'})
 SET f.display_name = 'ko-KR Formatting',
-    f.description = 'Formatting rules for ko-KR',
+    f.content = 'Formatting rules for ko-KR',
     f.llm_context = 'ko-KR: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY. M. D. (gregorian) Time: 12-hour Currency: ₩ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -891,7 +891,7 @@ SET f.display_name = 'ko-KR Formatting',
 
 MERGE (f:Formatting {key: 'ln-CD'})
 SET f.display_name = 'ln-CD Formatting',
-    f.description = 'Formatting rules for ln-CD',
+    f.content = 'Formatting rules for ln-CD',
     f.llm_context = 'ln-CD: Numbers use \'.\' decimal, \',\' thousands. Dates: D/M/YYYY (gregorian) Time: 24-hour Currency: FC after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -911,7 +911,7 @@ SET f.display_name = 'ln-CD Formatting',
 
 MERGE (f:Formatting {key: 'en-KE'})
 SET f.display_name = 'en-KE Formatting',
-    f.description = 'Formatting rules for en-KE',
+    f.content = 'Formatting rules for en-KE',
     f.llm_context = 'en-KE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Ksh before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -931,7 +931,7 @@ SET f.display_name = 'en-KE Formatting',
 
 MERGE (f:Formatting {key: 'ar-DZ'})
 SET f.display_name = 'ar-DZ Formatting',
-    f.description = 'Formatting rules for ar-DZ',
+    f.content = 'Formatting rules for ar-DZ',
     f.llm_context = 'ar-DZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 24-hour Currency: د.ج after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -951,7 +951,7 @@ SET f.display_name = 'ar-DZ Formatting',
 
 MERGE (f:Formatting {key: 'fr-CA'})
 SET f.display_name = 'fr-CA Formatting',
-    f.description = 'Formatting rules for fr-CA',
+    f.content = 'Formatting rules for fr-CA',
     f.llm_context = 'fr-CA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (official Canadian standard per ISO 8601) (gregorian) Time: 24-hour (standard in Quebec) Currency: $ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -971,7 +971,7 @@ SET f.display_name = 'fr-CA Formatting',
 
 MERGE (f:Formatting {key: 'en-GB'})
 SET f.display_name = 'en-GB Formatting',
-    f.description = 'Formatting rules for en-GB',
+    f.content = 'Formatting rules for en-GB',
     f.llm_context = 'en-GB: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: £ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -991,7 +991,7 @@ SET f.display_name = 'en-GB Formatting',
 
 MERGE (f:Formatting {key: 'fr-RW'})
 SET f.display_name = 'fr-RW Formatting',
-    f.description = 'Formatting rules for fr-RW',
+    f.content = 'Formatting rules for fr-RW',
     f.llm_context = 'fr-RW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: FRw (preferred), RF (alternative) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1011,7 +1011,7 @@ SET f.display_name = 'fr-RW Formatting',
 
 MERGE (f:Formatting {key: 'ru-BY'})
 SET f.display_name = 'ru-BY Formatting',
-    f.description = 'Formatting rules for ru-BY',
+    f.content = 'Formatting rules for ru-BY',
     f.llm_context = 'ru-BY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: Br after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1031,7 +1031,7 @@ SET f.display_name = 'ru-BY Formatting',
 
 MERGE (f:Formatting {key: 'es-GT'})
 SET f.display_name = 'es-GT Formatting',
-    f.description = 'Formatting rules for es-GT',
+    f.content = 'Formatting rules for es-GT',
     f.llm_context = 'es-GT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Q before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1051,7 +1051,7 @@ SET f.display_name = 'es-GT Formatting',
 
 MERGE (f:Formatting {key: 'ms-SG'})
 SET f.display_name = 'ms-SG Formatting',
-    f.description = 'Formatting rules for ms-SG',
+    f.content = 'Formatting rules for ms-SG',
     f.llm_context = 'ms-SG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ (Dollar sign, sometimes S$ for disambiguation) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1071,7 +1071,7 @@ SET f.display_name = 'ms-SG Formatting',
 
 MERGE (f:Formatting {key: 'ht-HT'})
 SET f.display_name = 'ht-HT Formatting',
-    f.description = 'Formatting rules for ht-HT',
+    f.content = 'Formatting rules for ht-HT',
     f.llm_context = 'ht-HT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (common in daily use) / 24-hour (formal contexts) Currency: G (or HTG) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1091,7 +1091,7 @@ SET f.display_name = 'ht-HT Formatting',
 
 MERGE (f:Formatting {key: 'ms-MY'})
 SET f.display_name = 'ms-MY Formatting',
-    f.description = 'Formatting rules for ms-MY',
+    f.content = 'Formatting rules for ms-MY',
     f.llm_context = 'ms-MY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: RM (Ringgit Malaysia) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1111,7 +1111,7 @@ SET f.display_name = 'ms-MY Formatting',
 
 MERGE (f:Formatting {key: 'sq-AL'})
 SET f.display_name = 'sq-AL Formatting',
-    f.description = 'Formatting rules for sq-AL',
+    f.content = 'Formatting rules for sq-AL',
     f.llm_context = 'sq-AL: Numbers use \'.\' decimal, \',\' thousands. Dates: D.M.YYYY (period separator, no leading zeros) (gregorian) Time: 24-hour Currency: Lek after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1131,7 +1131,7 @@ SET f.display_name = 'sq-AL Formatting',
 
 MERGE (f:Formatting {key: 'mk-MK'})
 SET f.display_name = 'mk-MK Formatting',
-    f.description = 'Formatting rules for mk-MK',
+    f.content = 'Formatting rules for mk-MK',
     f.llm_context = 'mk-MK: Numbers use \'.\' decimal, \',\' thousands. Dates: d.M.yyyy (period separator, no leading zeros) (gregorian) Time: 24-hour Currency: ден. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1151,7 +1151,7 @@ SET f.display_name = 'mk-MK Formatting',
 
 MERGE (f:Formatting {key: 'mr-IN'})
 SET f.display_name = 'mr-IN Formatting',
-    f.description = 'Formatting rules for mr-IN',
+    f.content = 'Formatting rules for mr-IN',
     f.llm_context = 'mr-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1171,7 +1171,7 @@ SET f.display_name = 'mr-IN Formatting',
 
 MERGE (f:Formatting {key: 'es-CU'})
 SET f.display_name = 'es-CU Formatting',
-    f.description = 'Formatting rules for es-CU',
+    f.content = 'Formatting rules for es-CU',
     f.llm_context = 'es-CU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1191,7 +1191,7 @@ SET f.display_name = 'es-CU Formatting',
 
 MERGE (f:Formatting {key: 'ru-KG'})
 SET f.display_name = 'ru-KG Formatting',
-    f.description = 'Formatting rules for ru-KG',
+    f.content = 'Formatting rules for ru-KG',
     f.llm_context = 'ru-KG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: сом (full name, commonly used) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1211,7 +1211,7 @@ SET f.display_name = 'ru-KG Formatting',
 
 MERGE (f:Formatting {key: 'ig-NG'})
 SET f.display_name = 'ig-NG Formatting',
-    f.description = 'Formatting rules for ig-NG',
+    f.content = 'Formatting rules for ig-NG',
     f.llm_context = 'ig-NG: Numbers use \'.\' decimal, \',\' thousands. Dates: D/M/YYYY (gregorian) Time: 12-hour Currency: ₦ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1231,7 +1231,7 @@ SET f.display_name = 'ig-NG Formatting',
 
 MERGE (f:Formatting {key: 'ka-GE'})
 SET f.display_name = 'ka-GE Formatting',
-    f.description = 'Formatting rules for ka-GE',
+    f.content = 'Formatting rules for ka-GE',
     f.llm_context = 'ka-GE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: ₾ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1251,7 +1251,7 @@ SET f.display_name = 'ka-GE Formatting',
 
 MERGE (f:Formatting {key: 'ar-BH'})
 SET f.display_name = 'ar-BH Formatting',
-    f.description = 'Formatting rules for ar-BH',
+    f.content = 'Formatting rules for ar-BH',
     f.llm_context = 'ar-BH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: د.ب after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -1271,7 +1271,7 @@ SET f.display_name = 'ar-BH Formatting',
 
 MERGE (f:Formatting {key: 'fr-LU'})
 SET f.display_name = 'fr-LU Formatting',
-    f.description = 'Formatting rules for fr-LU',
+    f.content = 'Formatting rules for fr-LU',
     f.llm_context = 'fr-LU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY or DD.MM.YYYY (period also common due to German influence) (gregorian) Time: 24-hour (exclusively in Luxembourg) Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","STATEC (statistics Luxembourg"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1291,7 +1291,7 @@ SET f.display_name = 'fr-LU Formatting',
 
 MERGE (f:Formatting {key: 'en-ZW'})
 SET f.display_name = 'en-ZW Formatting',
-    f.description = 'Formatting rules for en-ZW',
+    f.content = 'Formatting rules for en-ZW',
     f.llm_context = 'en-ZW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (Day-Month-Year order, British convention) (gregorian) Time: 24-hour (formal/official), 12-hour (informal/casual) Currency: $ or US$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1311,7 +1311,7 @@ SET f.display_name = 'en-ZW Formatting',
 
 MERGE (f:Formatting {key: 'en-IN'})
 SET f.display_name = 'en-IN Formatting',
-    f.description = 'Formatting rules for en-IN',
+    f.content = 'Formatting rules for en-IN',
     f.llm_context = 'en-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Rs. or ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1331,7 +1331,7 @@ SET f.display_name = 'en-IN Formatting',
 
 MERGE (f:Formatting {key: 'zh-TW'})
 SET f.display_name = 'zh-TW Formatting',
-    f.description = 'Formatting rules for zh-TW',
+    f.content = 'Formatting rules for zh-TW',
     f.llm_context = 'zh-TW: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY年M月D日 (gregorian) Time: 12-hour Currency: NT$ or $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1351,7 +1351,7 @@ SET f.display_name = 'zh-TW Formatting',
 
 MERGE (f:Formatting {key: 'de-CH'})
 SET f.display_name = 'de-CH Formatting',
-    f.description = 'Formatting rules for de-CH',
+    f.content = 'Formatting rules for de-CH',
     f.llm_context = 'de-CH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: CHF or Fr. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1371,7 +1371,7 @@ SET f.display_name = 'de-CH Formatting',
 
 MERGE (f:Formatting {key: 'pt-BR'})
 SET f.display_name = 'pt-BR Formatting',
-    f.description = 'Formatting rules for pt-BR',
+    f.content = 'Formatting rules for pt-BR',
     f.llm_context = 'pt-BR: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (primarily), 12-hour (informal) Currency: R$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1391,7 +1391,7 @@ SET f.display_name = 'pt-BR Formatting',
 
 MERGE (f:Formatting {key: 'fa-IR'})
 SET f.display_name = 'fa-IR Formatting',
-    f.description = 'Formatting rules for fa-IR',
+    f.content = 'Formatting rules for fa-IR',
     f.llm_context = 'fa-IR: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (hijri) Time: 24-hour Currency: ﷼ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1411,7 +1411,7 @@ SET f.display_name = 'fa-IR Formatting',
 
 MERGE (f:Formatting {key: 'de-AT'})
 SET f.display_name = 'de-AT Formatting',
-    f.description = 'Formatting rules for de-AT',
+    f.content = 'Formatting rules for de-AT',
     f.llm_context = 'de-AT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1431,7 +1431,7 @@ SET f.display_name = 'de-AT Formatting',
 
 MERGE (f:Formatting {key: 'fr-TN'})
 SET f.display_name = 'fr-TN Formatting',
-    f.description = 'Formatting rules for fr-TN',
+    f.content = 'Formatting rules for fr-TN',
     f.llm_context = 'fr-TN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: DT (dinar tunisien) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1451,7 +1451,7 @@ SET f.display_name = 'fr-TN Formatting',
 
 MERGE (f:Formatting {key: 'en-TT'})
 SET f.display_name = 'en-TT Formatting',
-    f.description = 'Formatting rules for en-TT',
+    f.content = 'Formatting rules for en-TT',
     f.llm_context = 'en-TT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: TT$ or $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1471,7 +1471,7 @@ SET f.display_name = 'en-TT Formatting',
 
 MERGE (f:Formatting {key: 'is-IS'})
 SET f.display_name = 'is-IS Formatting',
-    f.description = 'Formatting rules for is-IS',
+    f.content = 'Formatting rules for is-IS',
     f.llm_context = 'is-IS: Numbers use \'.\' decimal, \',\' thousands. Dates: D.M.YYYY (day.month.year, no leading zeros) (gregorian) Time: 24-hour Currency: kr. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1491,7 +1491,7 @@ SET f.display_name = 'is-IS Formatting',
 
 MERGE (f:Formatting {key: 'ca-ES'})
 SET f.display_name = 'ca-ES Formatting',
-    f.description = 'Formatting rules for ca-ES',
+    f.content = 'Formatting rules for ca-ES',
     f.llm_context = 'ca-ES: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1511,7 +1511,7 @@ SET f.display_name = 'ca-ES Formatting',
 
 MERGE (f:Formatting {key: 'ru-KZ'})
 SET f.display_name = 'ru-KZ Formatting',
-    f.description = 'Formatting rules for ru-KZ',
+    f.content = 'Formatting rules for ru-KZ',
     f.llm_context = 'ru-KZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: ₸ (tenge symbol, Unicode U+20B8) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1531,7 +1531,7 @@ SET f.display_name = 'ru-KZ Formatting',
 
 MERGE (f:Formatting {key: 'kn-IN'})
 SET f.display_name = 'kn-IN Formatting',
-    f.description = 'Formatting rules for kn-IN',
+    f.content = 'Formatting rules for kn-IN',
     f.llm_context = 'kn-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1551,7 +1551,7 @@ SET f.display_name = 'kn-IN Formatting',
 
 MERGE (f:Formatting {key: 'ro-RO'})
 SET f.display_name = 'ro-RO Formatting',
-    f.description = 'Formatting rules for ro-RO',
+    f.content = 'Formatting rules for ro-RO',
     f.llm_context = 'ro-RO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (period separator) (gregorian) Time: 24-hour Currency: lei (plural), leu (singular) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1571,7 +1571,7 @@ SET f.display_name = 'ro-RO Formatting',
 
 MERGE (f:Formatting {key: 'gu-IN'})
 SET f.display_name = 'gu-IN Formatting',
-    f.description = 'Formatting rules for gu-IN',
+    f.content = 'Formatting rules for gu-IN',
     f.llm_context = 'gu-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1591,7 +1591,7 @@ SET f.display_name = 'gu-IN Formatting',
 
 MERGE (f:Formatting {key: 'pt-AO'})
 SET f.display_name = 'pt-AO Formatting',
-    f.description = 'Formatting rules for pt-AO',
+    f.content = 'Formatting rules for pt-AO',
     f.llm_context = 'pt-AO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Kz after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1611,7 +1611,7 @@ SET f.display_name = 'pt-AO Formatting',
 
 MERGE (f:Formatting {key: 'ny-MW'})
 SET f.display_name = 'ny-MW Formatting',
-    f.description = 'Formatting rules for ny-MW',
+    f.content = 'Formatting rules for ny-MW',
     f.llm_context = 'ny-MW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: MK before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1631,7 +1631,7 @@ SET f.display_name = 'ny-MW Formatting',
 
 MERGE (f:Formatting {key: 'or-IN'})
 SET f.display_name = 'or-IN Formatting',
-    f.description = 'Formatting rules for or-IN',
+    f.content = 'Formatting rules for or-IN',
     f.llm_context = 'or-IN: Numbers use Indian numbering system (lakhs, crores). Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"odia","correct_examples":[],"incorrect_examples":[]}',
@@ -1651,7 +1651,7 @@ SET f.display_name = 'or-IN Formatting',
 
 MERGE (f:Formatting {key: 'zh-CN'})
 SET f.display_name = 'zh-CN Formatting',
-    f.description = 'Formatting rules for zh-CN',
+    f.content = 'Formatting rules for zh-CN',
     f.llm_context = 'zh-CN: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY年M月D日 (gregorian) Time: 24-hour Currency: ¥ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1671,7 +1671,7 @@ SET f.display_name = 'zh-CN Formatting',
 
 MERGE (f:Formatting {key: 'sn-ZW'})
 SET f.display_name = 'sn-ZW Formatting',
-    f.description = 'Formatting rules for sn-ZW',
+    f.content = 'Formatting rules for sn-ZW',
     f.llm_context = 'sn-ZW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (Day-Month-Year order, British convention) (gregorian) Time: 24-hour (formal/official), 12-hour (informal/casual) Currency: $ or US$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1691,7 +1691,7 @@ SET f.display_name = 'sn-ZW Formatting',
 
 MERGE (f:Formatting {key: 'ar-JO'})
 SET f.display_name = 'ar-JO Formatting',
-    f.description = 'Formatting rules for ar-JO',
+    f.content = 'Formatting rules for ar-JO',
     f.llm_context = 'ar-JO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: د.أ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -1711,7 +1711,7 @@ SET f.display_name = 'ar-JO Formatting',
 
 MERGE (f:Formatting {key: 'ar-KW'})
 SET f.display_name = 'ar-KW Formatting',
-    f.description = 'Formatting rules for ar-KW',
+    f.content = 'Formatting rules for ar-KW',
     f.llm_context = 'ar-KW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: د.ك after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -1731,7 +1731,7 @@ SET f.display_name = 'ar-KW Formatting',
 
 MERGE (f:Formatting {key: 'en-AU'})
 SET f.display_name = 'en-AU Formatting',
-    f.description = 'Formatting rules for en-AU',
+    f.content = 'Formatting rules for en-AU',
     f.llm_context = 'en-AU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (common speech) / 24-hour (digital/transport) Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1751,7 +1751,7 @@ SET f.display_name = 'en-AU Formatting',
 
 MERGE (f:Formatting {key: 'fr-FR'})
 SET f.display_name = 'fr-FR Formatting',
-    f.description = 'Formatting rules for fr-FR',
+    f.content = 'Formatting rules for fr-FR',
     f.llm_context = 'fr-FR: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (gregorian) Time: 24-hour (exclusively in France) Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","INSEE (national statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1771,7 +1771,7 @@ SET f.display_name = 'fr-FR Formatting',
 
 MERGE (f:Formatting {key: 'fr-SN'})
 SET f.display_name = 'fr-SN Formatting',
-    f.description = 'Formatting rules for fr-SN',
+    f.content = 'Formatting rules for fr-SN',
     f.llm_context = 'fr-SN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (gregorian) Time: 24-hour (French convention) Currency: F CFA after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","ANSD Senegal (national statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1791,7 +1791,7 @@ SET f.display_name = 'fr-SN Formatting',
 
 MERGE (f:Formatting {key: 'pa-IN'})
 SET f.display_name = 'pa-IN Formatting',
-    f.description = 'Formatting rules for pa-IN',
+    f.content = 'Formatting rules for pa-IN',
     f.llm_context = 'pa-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1811,7 +1811,7 @@ SET f.display_name = 'pa-IN Formatting',
 
 MERGE (f:Formatting {key: 'cs-CZ'})
 SET f.display_name = 'cs-CZ Formatting',
-    f.description = 'Formatting rules for cs-CZ',
+    f.content = 'Formatting rules for cs-CZ',
     f.llm_context = 'cs-CZ: Numbers use \'.\' decimal, \',\' thousands. Dates: d. M. yyyy (day-first, period separators) (gregorian) Time: 24-hour Currency: Kč after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1831,7 +1831,7 @@ SET f.display_name = 'cs-CZ Formatting',
 
 MERGE (f:Formatting {key: 'es-CL'})
 SET f.display_name = 'es-CL Formatting',
-    f.description = 'Formatting rules for es-CL',
+    f.content = 'Formatting rules for es-CL',
     f.llm_context = 'es-CL: Numbers use \'.\' decimal, \',\' thousands. Dates: DD-MM-YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1851,7 +1851,7 @@ SET f.display_name = 'es-CL Formatting',
 
 MERGE (f:Formatting {key: 'nl-NL'})
 SET f.display_name = 'nl-NL Formatting',
-    f.description = 'Formatting rules for nl-NL',
+    f.content = 'Formatting rules for nl-NL',
     f.llm_context = 'nl-NL: Numbers use \'.\' decimal, \',\' thousands. Dates: DD-MM-YYYY (gregorian) Time: 24-hour Currency: EUR before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1871,7 +1871,7 @@ SET f.display_name = 'nl-NL Formatting',
 
 MERGE (f:Formatting {key: 'es-HN'})
 SET f.display_name = 'es-HN Formatting',
-    f.description = 'Formatting rules for es-HN',
+    f.content = 'Formatting rules for es-HN',
     f.llm_context = 'es-HN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: L before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1891,7 +1891,7 @@ SET f.display_name = 'es-HN Formatting',
 
 MERGE (f:Formatting {key: 'bg-BG'})
 SET f.display_name = 'bg-BG Formatting',
-    f.description = 'Formatting rules for bg-BG',
+    f.content = 'Formatting rules for bg-BG',
     f.llm_context = 'bg-BG: Numbers use \'.\' decimal, \',\' thousands. Dates: D.MM.YYYY (period separator, no leading zero on day) (gregorian) Time: 24-hour Currency: лв. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1911,7 +1911,7 @@ SET f.display_name = 'bg-BG Formatting',
 
 MERGE (f:Formatting {key: 'sd-PK'})
 SET f.display_name = 'sd-PK Formatting',
-    f.description = 'Formatting rules for sd-PK',
+    f.content = 'Formatting rules for sd-PK',
     f.llm_context = 'sd-PK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1931,7 +1931,7 @@ SET f.display_name = 'sd-PK Formatting',
 
 MERGE (f:Formatting {key: 'en-GH'})
 SET f.display_name = 'en-GH Formatting',
-    f.description = 'Formatting rules for en-GH',
+    f.content = 'Formatting rules for en-GH',
     f.llm_context = 'en-GH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: GH₵ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1951,7 +1951,7 @@ SET f.display_name = 'en-GH Formatting',
 
 MERGE (f:Formatting {key: 'en-PH'})
 SET f.display_name = 'en-PH Formatting',
-    f.description = 'Formatting rules for en-PH',
+    f.content = 'Formatting rules for en-PH',
     f.llm_context = 'en-PH: Numbers use \'.\' decimal, \',\' thousands. Dates: MM/DD/YYYY (gregorian) Time: 12-hour Currency: P (peso sign) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1971,7 +1971,7 @@ SET f.display_name = 'en-PH Formatting',
 
 MERGE (f:Formatting {key: 'sl-SI'})
 SET f.display_name = 'sl-SI Formatting',
-    f.description = 'Formatting rules for sl-SI',
+    f.content = 'Formatting rules for sl-SI',
     f.llm_context = 'sl-SI: Numbers use \'.\' decimal, \',\' thousands. Dates: d. M. yyyy (day-first, period + space separators) (gregorian) Time: 24-hour Currency: EUR (code used as symbol in Slovenia) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -1991,7 +1991,7 @@ SET f.display_name = 'sl-SI Formatting',
 
 MERGE (f:Formatting {key: 'en-HK'})
 SET f.display_name = 'en-HK Formatting',
-    f.description = 'Formatting rules for en-HK',
+    f.content = 'Formatting rules for en-HK',
     f.llm_context = 'en-HK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (colloquial), 24-hour (official/transport) Currency: HK$ or $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2011,7 +2011,7 @@ SET f.display_name = 'en-HK Formatting',
 
 MERGE (f:Formatting {key: 'en-MU'})
 SET f.display_name = 'en-MU Formatting',
-    f.description = 'Formatting rules for en-MU',
+    f.content = 'Formatting rules for en-MU',
     f.llm_context = 'en-MU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2031,7 +2031,7 @@ SET f.display_name = 'en-MU Formatting',
 
 MERGE (f:Formatting {key: 'et-EE'})
 SET f.display_name = 'et-EE Formatting',
-    f.description = 'Formatting rules for et-EE',
+    f.content = 'Formatting rules for et-EE',
     f.llm_context = 'et-EE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (e.g., 15.01.2025) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2051,7 +2051,7 @@ SET f.display_name = 'et-EE Formatting',
 
 MERGE (f:Formatting {key: 'es-SV'})
 SET f.display_name = 'es-SV Formatting',
-    f.description = 'Formatting rules for es-SV',
+    f.content = 'Formatting rules for es-SV',
     f.llm_context = 'es-SV: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2071,7 +2071,7 @@ SET f.display_name = 'es-SV Formatting',
 
 MERGE (f:Formatting {key: 'pt-CH'})
 SET f.display_name = 'pt-CH Formatting',
-    f.description = 'Formatting rules for pt-CH',
+    f.content = 'Formatting rules for pt-CH',
     f.llm_context = 'pt-CH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: CHF or Fr. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2091,7 +2091,7 @@ SET f.display_name = 'pt-CH Formatting',
 
 MERGE (f:Formatting {key: 'es-PR'})
 SET f.display_name = 'es-PR Formatting',
-    f.description = 'Formatting rules for es-PR',
+    f.content = 'Formatting rules for es-PR',
     f.llm_context = 'es-PR: Numbers use \'.\' decimal, \',\' thousands. Dates: MM/DD/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2111,7 +2111,7 @@ SET f.display_name = 'es-PR Formatting',
 
 MERGE (f:Formatting {key: 'ur-PK'})
 SET f.display_name = 'ur-PK Formatting',
-    f.description = 'Formatting rules for ur-PK',
+    f.content = 'Formatting rules for ur-PK',
     f.llm_context = 'ur-PK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2131,7 +2131,7 @@ SET f.display_name = 'ur-PK Formatting',
 
 MERGE (f:Formatting {key: 'en-ZM'})
 SET f.display_name = 'en-ZM Formatting',
-    f.description = 'Formatting rules for en-ZM',
+    f.content = 'Formatting rules for en-ZM',
     f.llm_context = 'en-ZM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: K before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2151,7 +2151,7 @@ SET f.display_name = 'en-ZM Formatting',
 
 MERGE (f:Formatting {key: 'ar-OM'})
 SET f.display_name = 'ar-OM Formatting',
-    f.description = 'Formatting rules for ar-OM',
+    f.content = 'Formatting rules for ar-OM',
     f.llm_context = 'ar-OM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: ر.ع. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -2171,7 +2171,7 @@ SET f.display_name = 'ar-OM Formatting',
 
 MERGE (f:Formatting {key: 'ru-MD'})
 SET f.display_name = 'ru-MD Formatting',
-    f.description = 'Formatting rules for ru-MD',
+    f.content = 'Formatting rules for ru-MD',
     f.llm_context = 'ru-MD: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: лей (lei) / L after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2191,7 +2191,7 @@ SET f.display_name = 'ru-MD Formatting',
 
 MERGE (f:Formatting {key: 'mt-MT'})
 SET f.display_name = 'mt-MT Formatting',
-    f.description = 'Formatting rules for mt-MT',
+    f.content = 'Formatting rules for mt-MT',
     f.llm_context = 'mt-MT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2211,7 +2211,7 @@ SET f.display_name = 'mt-MT Formatting',
 
 MERGE (f:Formatting {key: 'eu-ES'})
 SET f.display_name = 'eu-ES Formatting',
-    f.description = 'Formatting rules for eu-ES',
+    f.content = 'Formatting rules for eu-ES',
     f.llm_context = 'eu-ES: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2231,7 +2231,7 @@ SET f.display_name = 'eu-ES Formatting',
 
 MERGE (f:Formatting {key: 'ja-JP'})
 SET f.display_name = 'ja-JP Formatting',
-    f.description = 'Formatting rules for ja-JP',
+    f.content = 'Formatting rules for ja-JP',
     f.llm_context = 'ja-JP: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (gregorian) Time: 24-hour Currency: ¥ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2251,7 +2251,7 @@ SET f.display_name = 'ja-JP Formatting',
 
 MERGE (f:Formatting {key: 'bn-IN'})
 SET f.display_name = 'bn-IN Formatting',
-    f.description = 'Formatting rules for bn-IN',
+    f.content = 'Formatting rules for bn-IN',
     f.llm_context = 'bn-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2271,7 +2271,7 @@ SET f.display_name = 'bn-IN Formatting',
 
 MERGE (f:Formatting {key: 'he-IL'})
 SET f.display_name = 'he-IL Formatting',
-    f.description = 'Formatting rules for he-IL',
+    f.content = 'Formatting rules for he-IL',
     f.llm_context = 'he-IL: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY or DD.MM.YYYY (both accepted, slash more common) (gregorian) Time: 24-hour Currency: ₪ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2291,7 +2291,7 @@ SET f.display_name = 'he-IL Formatting',
 
 MERGE (f:Formatting {key: 'zh-HK'})
 SET f.display_name = 'zh-HK Formatting',
-    f.description = 'Formatting rules for zh-HK',
+    f.content = 'Formatting rules for zh-HK',
     f.llm_context = 'zh-HK: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY年M月D日 (gregorian) Time: 12-hour (colloquial), 24-hour (official/transport) Currency: HK$ or $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2311,7 +2311,7 @@ SET f.display_name = 'zh-HK Formatting',
 
 MERGE (f:Formatting {key: 'es-CO'})
 SET f.display_name = 'es-CO Formatting',
-    f.description = 'Formatting rules for es-CO',
+    f.content = 'Formatting rules for es-CO',
     f.llm_context = 'es-CO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2331,7 +2331,7 @@ SET f.display_name = 'es-CO Formatting',
 
 MERGE (f:Formatting {key: 'de-LU'})
 SET f.display_name = 'de-LU Formatting',
-    f.description = 'Formatting rules for de-LU',
+    f.content = 'Formatting rules for de-LU',
     f.llm_context = 'de-LU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: EUR (code used more than symbol in German context) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2351,7 +2351,7 @@ SET f.display_name = 'de-LU Formatting',
 
 MERGE (f:Formatting {key: 'es-BO'})
 SET f.display_name = 'es-BO Formatting',
-    f.description = 'Formatting rules for es-BO',
+    f.content = 'Formatting rules for es-BO',
     f.llm_context = 'es-BO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Bs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2371,7 +2371,7 @@ SET f.display_name = 'es-BO Formatting',
 
 MERGE (f:Formatting {key: 'th-TH'})
 SET f.display_name = 'th-TH Formatting',
-    f.description = 'Formatting rules for th-TH',
+    f.content = 'Formatting rules for th-TH',
     f.llm_context = 'th-TH: Numbers use \'.\' decimal, \',\' thousands. Dates: d/M/yyyy (gregorian) Time: 24-hour Currency: ฿ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2391,7 +2391,7 @@ SET f.display_name = 'th-TH Formatting',
 
 MERGE (f:Formatting {key: 'kk-KZ'})
 SET f.display_name = 'kk-KZ Formatting',
-    f.description = 'Formatting rules for kk-KZ',
+    f.content = 'Formatting rules for kk-KZ',
     f.llm_context = 'kk-KZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: ₸ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2411,7 +2411,7 @@ SET f.display_name = 'kk-KZ Formatting',
 
 MERGE (f:Formatting {key: 'fi-FI'})
 SET f.display_name = 'fi-FI Formatting',
-    f.description = 'Formatting rules for fi-FI',
+    f.content = 'Formatting rules for fi-FI',
     f.llm_context = 'fi-FI: Numbers use \'.\' decimal, \',\' thousands. Dates: D.M.YYYY (e.g., 15.1.2025) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2431,7 +2431,7 @@ SET f.display_name = 'fi-FI Formatting',
 
 MERGE (f:Formatting {key: 'ar-TN'})
 SET f.display_name = 'ar-TN Formatting',
-    f.description = 'Formatting rules for ar-TN',
+    f.content = 'Formatting rules for ar-TN',
     f.llm_context = 'ar-TN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 24-hour Currency: د.ت after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2451,7 +2451,7 @@ SET f.display_name = 'ar-TN Formatting',
 
 MERGE (f:Formatting {key: 'en-VN'})
 SET f.display_name = 'en-VN Formatting',
-    f.description = 'Formatting rules for en-VN',
+    f.content = 'Formatting rules for en-VN',
     f.llm_context = 'en-VN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (day/month/year - following Vietnamese convention) (gregorian) Time: 24-hour (primary), 12-hour (also used in informal contexts) Currency: VND or ₫ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2471,7 +2471,7 @@ SET f.display_name = 'en-VN Formatting',
 
 MERGE (f:Formatting {key: 'tl-PH'})
 SET f.display_name = 'tl-PH Formatting',
-    f.description = 'Formatting rules for tl-PH',
+    f.content = 'Formatting rules for tl-PH',
     f.llm_context = 'tl-PH: Numbers use \'.\' decimal, \',\' thousands. Dates: MM/DD/YYYY (gregorian) Time: 12-hour Currency: P (peso sign) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2491,7 +2491,7 @@ SET f.display_name = 'tl-PH Formatting',
 
 MERGE (f:Formatting {key: 'en-PK'})
 SET f.display_name = 'en-PK Formatting',
-    f.description = 'Formatting rules for en-PK',
+    f.content = 'Formatting rules for en-PK',
     f.llm_context = 'en-PK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Rs. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2511,7 +2511,7 @@ SET f.display_name = 'en-PK Formatting',
 
 MERGE (f:Formatting {key: 'fr-CH'})
 SET f.display_name = 'fr-CH Formatting',
-    f.description = 'Formatting rules for fr-CH',
+    f.content = 'Formatting rules for fr-CH',
     f.llm_context = 'fr-CH: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: CHF or Fr. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2531,7 +2531,7 @@ SET f.display_name = 'fr-CH Formatting',
 
 MERGE (f:Formatting {key: 'cy-GB'})
 SET f.display_name = 'cy-GB Formatting',
-    f.description = 'Formatting rules for cy-GB',
+    f.content = 'Formatting rules for cy-GB',
     f.llm_context = 'cy-GB: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (formal) / 12-hour (informal) Currency: £ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2551,7 +2551,7 @@ SET f.display_name = 'cy-GB Formatting',
 
 MERGE (f:Formatting {key: 'en-FJ'})
 SET f.display_name = 'en-FJ Formatting',
-    f.description = 'Formatting rules for en-FJ',
+    f.content = 'Formatting rules for en-FJ',
     f.llm_context = 'en-FJ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: $ or FJ$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2571,7 +2571,7 @@ SET f.display_name = 'en-FJ Formatting',
 
 MERGE (f:Formatting {key: 'af-ZA'})
 SET f.display_name = 'af-ZA Formatting',
-    f.description = 'Formatting rules for af-ZA',
+    f.content = 'Formatting rules for af-ZA',
     f.llm_context = 'af-ZA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (official), DD/MM/YYYY (common) (gregorian) Time: 24-hour (official), 12-hour (informal) Currency: R before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2591,7 +2591,7 @@ SET f.display_name = 'af-ZA Formatting',
 
 MERGE (f:Formatting {key: 'en-JM'})
 SET f.display_name = 'en-JM Formatting',
-    f.description = 'Formatting rules for en-JM',
+    f.content = 'Formatting rules for en-JM',
     f.llm_context = 'en-JM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: J$ (preferred) or $ (in local context only) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2611,7 +2611,7 @@ SET f.display_name = 'en-JM Formatting',
 
 MERGE (f:Formatting {key: 'da-DK'})
 SET f.display_name = 'da-DK Formatting',
-    f.description = 'Formatting rules for da-DK',
+    f.content = 'Formatting rules for da-DK',
     f.llm_context = 'da-DK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day-first) (gregorian) Time: 24-hour Currency: kr. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2631,7 +2631,7 @@ SET f.display_name = 'da-DK Formatting',
 
 MERGE (f:Formatting {key: 'en-US'})
 SET f.display_name = 'en-US Formatting',
-    f.description = 'Formatting rules for en-US',
+    f.content = 'Formatting rules for en-US',
     f.llm_context = 'en-US: Numbers use \'.\' decimal, \',\' thousands. Dates: MM/DD/YYYY (gregorian) Time: 12-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2651,7 +2651,7 @@ SET f.display_name = 'en-US Formatting',
 
 MERGE (f:Formatting {key: 'pt-PT'})
 SET f.display_name = 'pt-PT Formatting',
-    f.description = 'Formatting rules for pt-PT',
+    f.content = 'Formatting rules for pt-PT',
     f.llm_context = 'pt-PT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (standard) Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2671,7 +2671,7 @@ SET f.display_name = 'pt-PT Formatting',
 
 MERGE (f:Formatting {key: 'ga-IE'})
 SET f.display_name = 'ga-IE Formatting',
-    f.description = 'Formatting rules for ga-IE',
+    f.content = 'Formatting rules for ga-IE',
     f.llm_context = 'ga-IE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (primary), 12-hour (also used) Currency: EUR before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2691,7 +2691,7 @@ SET f.display_name = 'ga-IE Formatting',
 
 MERGE (f:Formatting {key: 'es-AR'})
 SET f.display_name = 'es-AR Formatting',
-    f.description = 'Formatting rules for es-AR',
+    f.content = 'Formatting rules for es-AR',
     f.llm_context = 'es-AR: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2711,7 +2711,7 @@ SET f.display_name = 'es-AR Formatting',
 
 MERGE (f:Formatting {key: 'gl-ES'})
 SET f.display_name = 'gl-ES Formatting',
-    f.description = 'Formatting rules for gl-ES',
+    f.content = 'Formatting rules for gl-ES',
     f.llm_context = 'gl-ES: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2731,7 +2731,7 @@ SET f.display_name = 'gl-ES Formatting',
 
 MERGE (f:Formatting {key: 'es-ES'})
 SET f.display_name = 'es-ES Formatting',
-    f.description = 'Formatting rules for es-ES',
+    f.content = 'Formatting rules for es-ES',
     f.llm_context = 'es-ES: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2751,7 +2751,7 @@ SET f.display_name = 'es-ES Formatting',
 
 MERGE (f:Formatting {key: 'zh-TH'})
 SET f.display_name = 'zh-TH Formatting',
-    f.description = 'Formatting rules for zh-TH',
+    f.content = 'Formatting rules for zh-TH',
     f.llm_context = 'zh-TH: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY年M月D日 (gregorian) Time: 24-hour Currency: ฿ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2771,7 +2771,7 @@ SET f.display_name = 'zh-TH Formatting',
 
 MERGE (f:Formatting {key: 'be-BY'})
 SET f.display_name = 'be-BY Formatting',
-    f.description = 'Formatting rules for be-BY',
+    f.content = 'Formatting rules for be-BY',
     f.llm_context = 'be-BY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: Br after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2791,7 +2791,7 @@ SET f.display_name = 'be-BY Formatting',
 
 MERGE (f:Formatting {key: 'wo-SN'})
 SET f.display_name = 'wo-SN Formatting',
-    f.description = 'Formatting rules for wo-SN',
+    f.content = 'Formatting rules for wo-SN',
     f.llm_context = 'wo-SN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: CFA or F CFA after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2811,7 +2811,7 @@ SET f.display_name = 'wo-SN Formatting',
 
 MERGE (f:Formatting {key: 'es-NI'})
 SET f.display_name = 'es-NI Formatting',
-    f.description = 'Formatting rules for es-NI',
+    f.content = 'Formatting rules for es-NI',
     f.llm_context = 'es-NI: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: C$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2831,7 +2831,7 @@ SET f.display_name = 'es-NI Formatting',
 
 MERGE (f:Formatting {key: 'sv-SE'})
 SET f.display_name = 'sv-SE Formatting',
-    f.description = 'Formatting rules for sv-SE',
+    f.content = 'Formatting rules for sv-SE',
     f.llm_context = 'sv-SE: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (ISO 8601 - preferred in Sweden) (gregorian) Time: 24-hour Currency: kr after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2851,7 +2851,7 @@ SET f.display_name = 'sv-SE Formatting',
 
 MERGE (f:Formatting {key: 'hr-HR'})
 SET f.display_name = 'hr-HR Formatting',
-    f.description = 'Formatting rules for hr-HR',
+    f.content = 'Formatting rules for hr-HR',
     f.llm_context = 'hr-HR: Numbers use \'.\' decimal, \',\' thousands. Dates: d. M. yyyy. (day-first, period separators, trailing period on year) (gregorian) Time: 24-hour Currency: EUR or euro (written out in Croatian contexts) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2871,7 +2871,7 @@ SET f.display_name = 'hr-HR Formatting',
 
 MERGE (f:Formatting {key: 'fr-CI'})
 SET f.display_name = 'fr-CI Formatting',
-    f.description = 'Formatting rules for fr-CI',
+    f.content = 'Formatting rules for fr-CI',
     f.llm_context = 'fr-CI: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (gregorian) Time: 24-hour (French convention) Currency: F CFA after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","INS Cote d\'Ivoire (national statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2891,7 +2891,7 @@ SET f.display_name = 'fr-CI Formatting',
 
 MERGE (f:Formatting {key: 'ku-TR'})
 SET f.display_name = 'ku-TR Formatting',
-    f.description = 'Formatting rules for ku-TR',
+    f.content = 'Formatting rules for ku-TR',
     f.llm_context = 'ku-TR: Numbers use \'.\' decimal, \',\' thousands. Dates: D.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: ₺ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2911,7 +2911,7 @@ SET f.display_name = 'ku-TR Formatting',
 
 MERGE (f:Formatting {key: 'en-BW'})
 SET f.display_name = 'en-BW Formatting',
-    f.description = 'Formatting rules for en-BW',
+    f.content = 'Formatting rules for en-BW',
     f.llm_context = 'en-BW: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour (formal), 12-hour (informal) Currency: P before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2931,7 +2931,7 @@ SET f.display_name = 'en-BW Formatting',
 
 MERGE (f:Formatting {key: 'ar-IQ'})
 SET f.display_name = 'ar-IQ Formatting',
-    f.description = 'Formatting rules for ar-IQ',
+    f.content = 'Formatting rules for ar-IQ',
     f.llm_context = 'ar-IQ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: د.ع after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -2951,7 +2951,7 @@ SET f.display_name = 'ar-IQ Formatting',
 
 MERGE (f:Formatting {key: 'pa-PK'})
 SET f.display_name = 'pa-PK Formatting',
-    f.description = 'Formatting rules for pa-PK',
+    f.content = 'Formatting rules for pa-PK',
     f.llm_context = 'pa-PK: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: Rs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2971,7 +2971,7 @@ SET f.display_name = 'pa-PK Formatting',
 
 MERGE (f:Formatting {key: 'es-DO'})
 SET f.display_name = 'es-DO Formatting',
-    f.description = 'Formatting rules for es-DO',
+    f.content = 'Formatting rules for es-DO',
     f.llm_context = 'es-DO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: US$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","JCE (Cedula format"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -2991,7 +2991,7 @@ SET f.display_name = 'es-DO Formatting',
 
 MERGE (f:Formatting {key: 'es-CR'})
 SET f.display_name = 'es-CR Formatting',
-    f.description = 'Formatting rules for es-CR',
+    f.content = 'Formatting rules for es-CR',
     f.llm_context = 'es-CR: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₡ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","Tribunal Supremo de Elecciones (TSE"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3011,7 +3011,7 @@ SET f.display_name = 'es-CR Formatting',
 
 MERGE (f:Formatting {key: 'ps-AF'})
 SET f.display_name = 'ps-AF Formatting',
-    f.description = 'Formatting rules for ps-AF',
+    f.content = 'Formatting rules for ps-AF',
     f.llm_context = 'ps-AF: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (hijri) Time: 24-hour Currency: ؋ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -3031,7 +3031,7 @@ SET f.display_name = 'ps-AF Formatting',
 
 MERGE (f:Formatting {key: 'fr-CM'})
 SET f.display_name = 'fr-CM Formatting',
-    f.description = 'Formatting rules for fr-CM',
+    f.content = 'Formatting rules for fr-CM',
     f.llm_context = 'fr-CM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: FCFA (Franc CFA) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3051,7 +3051,7 @@ SET f.display_name = 'fr-CM Formatting',
 
 MERGE (f:Formatting {key: 'el-GR'})
 SET f.display_name = 'el-GR Formatting',
-    f.description = 'Formatting rules for el-GR',
+    f.content = 'Formatting rules for el-GR',
     f.llm_context = 'el-GR: Numbers use \'.\' decimal, \',\' thousands. Dates: d/M/yyyy (e.g., 15/1/2025) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3071,7 +3071,7 @@ SET f.display_name = 'el-GR Formatting',
 
 MERGE (f:Formatting {key: 'hi-IN'})
 SET f.display_name = 'hi-IN Formatting',
-    f.description = 'Formatting rules for hi-IN',
+    f.content = 'Formatting rules for hi-IN',
     f.llm_context = 'hi-IN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₹ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3091,7 +3091,7 @@ SET f.display_name = 'hi-IN Formatting',
 
 MERGE (f:Formatting {key: 'qu-PE'})
 SET f.display_name = 'qu-PE Formatting',
-    f.description = 'Formatting rules for qu-PE',
+    f.content = 'Formatting rules for qu-PE',
     f.llm_context = 'qu-PE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: S/ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3111,7 +3111,7 @@ SET f.display_name = 'qu-PE Formatting',
 
 MERGE (f:Formatting {key: 'sr-RS'})
 SET f.display_name = 'sr-RS Formatting',
-    f.description = 'Formatting rules for sr-RS',
+    f.content = 'Formatting rules for sr-RS',
     f.llm_context = 'sr-RS: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (period separator) (gregorian) Time: 24-hour Currency: din. or RSD after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3131,7 +3131,7 @@ SET f.display_name = 'sr-RS Formatting',
 
 MERGE (f:Formatting {key: 'ms-BN'})
 SET f.display_name = 'ms-BN Formatting',
-    f.description = 'Formatting rules for ms-BN',
+    f.content = 'Formatting rules for ms-BN',
     f.llm_context = 'ms-BN: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: B$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3151,7 +3151,7 @@ SET f.display_name = 'ms-BN Formatting',
 
 MERGE (f:Formatting {key: 'es-UY'})
 SET f.display_name = 'es-UY Formatting',
-    f.description = 'Formatting rules for es-UY',
+    f.content = 'Formatting rules for es-UY',
     f.llm_context = 'es-UY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: $U before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3171,7 +3171,7 @@ SET f.display_name = 'es-UY Formatting',
 
 MERGE (f:Formatting {key: 'zu-ZA'})
 SET f.display_name = 'zu-ZA Formatting',
-    f.description = 'Formatting rules for zu-ZA',
+    f.content = 'Formatting rules for zu-ZA',
     f.llm_context = 'zu-ZA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (CLDR standard for zu-ZA) (gregorian) Time: 24-hour (official/formal), 12-hour (informal) Currency: R before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3191,7 +3191,7 @@ SET f.display_name = 'zu-ZA Formatting',
 
 MERGE (f:Formatting {key: 'fr-BF'})
 SET f.display_name = 'fr-BF Formatting',
-    f.description = 'Formatting rules for fr-BF',
+    f.content = 'Formatting rules for fr-BF',
     f.llm_context = 'fr-BF: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (gregorian) Time: 24-hour (French convention) Currency: FCFA after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","INSD Burkina Faso (national statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3211,7 +3211,7 @@ SET f.display_name = 'fr-BF Formatting',
 
 MERGE (f:Formatting {key: 'en-SA'})
 SET f.display_name = 'en-SA Formatting',
-    f.description = 'Formatting rules for en-SA',
+    f.content = 'Formatting rules for en-SA',
     f.llm_context = 'en-SA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: SAR or SR before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3231,7 +3231,7 @@ SET f.display_name = 'en-SA Formatting',
 
 MERGE (f:Formatting {key: 'id-ID'})
 SET f.display_name = 'id-ID Formatting',
-    f.description = 'Formatting rules for id-ID',
+    f.content = 'Formatting rules for id-ID',
     f.llm_context = 'id-ID: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Rp before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3251,7 +3251,7 @@ SET f.display_name = 'id-ID Formatting',
 
 MERGE (f:Formatting {key: 'ar-QA'})
 SET f.display_name = 'ar-QA Formatting',
-    f.description = 'Formatting rules for ar-QA',
+    f.content = 'Formatting rules for ar-QA',
     f.llm_context = 'ar-QA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: ر.ق after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -3271,7 +3271,7 @@ SET f.display_name = 'ar-QA Formatting',
 
 MERGE (f:Formatting {key: 'es-VE'})
 SET f.display_name = 'es-VE Formatting',
-    f.description = 'Formatting rules for es-VE',
+    f.content = 'Formatting rules for es-VE',
     f.llm_context = 'es-VE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: Bs. before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3291,7 +3291,7 @@ SET f.display_name = 'es-VE Formatting',
 
 MERGE (f:Formatting {key: 'az-AZ'})
 SET f.display_name = 'az-AZ Formatting',
-    f.description = 'Formatting rules for az-AZ',
+    f.content = 'Formatting rules for az-AZ',
     f.llm_context = 'az-AZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: ₼ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3311,7 +3311,7 @@ SET f.display_name = 'az-AZ Formatting',
 
 MERGE (f:Formatting {key: 'de-DE'})
 SET f.display_name = 'de-DE Formatting',
-    f.description = 'Formatting rules for de-DE',
+    f.content = 'Formatting rules for de-DE',
     f.llm_context = 'de-DE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day, month, year with period separators) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3331,7 +3331,7 @@ SET f.display_name = 'de-DE Formatting',
 
 MERGE (f:Formatting {key: 'ar-SA'})
 SET f.display_name = 'ar-SA Formatting',
-    f.description = 'Formatting rules for ar-SA',
+    f.content = 'Formatting rules for ar-SA',
     f.llm_context = 'ar-SA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: ر.س after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":"arabic-indic","correct_examples":[],"incorrect_examples":[]}',
@@ -3351,7 +3351,7 @@ SET f.display_name = 'ar-SA Formatting',
 
 MERGE (f:Formatting {key: 'fr-MA'})
 SET f.display_name = 'fr-MA Formatting',
-    f.description = 'Formatting rules for fr-MA',
+    f.content = 'Formatting rules for fr-MA',
     f.llm_context = 'fr-MA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 24-hour Currency: DH (or د.م. in Arabic contexts) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","HCP (Haut-Commissariat au Plan"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3371,7 +3371,7 @@ SET f.display_name = 'fr-MA Formatting',
 
 MERGE (f:Formatting {key: 'uz-UZ'})
 SET f.display_name = 'uz-UZ Formatting',
-    f.description = 'Formatting rules for uz-UZ',
+    f.content = 'Formatting rules for uz-UZ',
     f.llm_context = 'uz-UZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (day/month/year) (gregorian) Time: 24-hour Currency: soʻm (or so\'m) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3391,7 +3391,7 @@ SET f.display_name = 'uz-UZ Formatting',
 
 MERGE (f:Formatting {key: 'lv-LV'})
 SET f.display_name = 'lv-LV Formatting',
-    f.description = 'Formatting rules for lv-LV',
+    f.content = 'Formatting rules for lv-LV',
     f.llm_context = 'lv-LV: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (e.g., 15.01.2025) (gregorian) Time: 24-hour Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3411,7 +3411,7 @@ SET f.display_name = 'lv-LV Formatting',
 
 MERGE (f:Formatting {key: 'xh-ZA'})
 SET f.display_name = 'xh-ZA Formatting',
-    f.description = 'Formatting rules for xh-ZA',
+    f.content = 'Formatting rules for xh-ZA',
     f.llm_context = 'xh-ZA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (official), DD/MM/YYYY (common) (gregorian) Time: 24-hour (official), 12-hour (informal) Currency: R before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3431,7 +3431,7 @@ SET f.display_name = 'xh-ZA Formatting',
 
 MERGE (f:Formatting {key: 'ro-MD'})
 SET f.display_name = 'ro-MD Formatting',
-    f.description = 'Formatting rules for ro-MD',
+    f.content = 'Formatting rules for ro-MD',
     f.llm_context = 'ro-MD: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (period separator) (gregorian) Time: 24-hour Currency: lei (plural), leu (singular) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3451,7 +3451,7 @@ SET f.display_name = 'ro-MD Formatting',
 
 MERGE (f:Formatting {key: 'en-NG'})
 SET f.display_name = 'en-NG Formatting',
-    f.description = 'Formatting rules for en-NG',
+    f.content = 'Formatting rules for en-NG',
     f.llm_context = 'en-NG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₦ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3471,7 +3471,7 @@ SET f.display_name = 'en-NG Formatting',
 
 MERGE (f:Formatting {key: 'it-IT'})
 SET f.display_name = 'it-IT Formatting',
-    f.description = 'Formatting rules for it-IT',
+    f.content = 'Formatting rules for it-IT',
     f.llm_context = 'it-IT: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3491,7 +3491,7 @@ SET f.display_name = 'it-IT Formatting',
 
 MERGE (f:Formatting {key: 'no-NO'})
 SET f.display_name = 'no-NO Formatting',
-    f.description = 'Formatting rules for no-NO',
+    f.content = 'Formatting rules for no-NO',
     f.llm_context = 'no-NO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: kr after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3511,7 +3511,7 @@ SET f.display_name = 'no-NO Formatting',
 
 MERGE (f:Formatting {key: 'sk-SK'})
 SET f.display_name = 'sk-SK Formatting',
-    f.description = 'Formatting rules for sk-SK',
+    f.content = 'Formatting rules for sk-SK',
     f.llm_context = 'sk-SK: Numbers use \'.\' decimal, \',\' thousands. Dates: d. M. yyyy (e.g., 15. 1. 2025) (gregorian) Time: 24-hour Currency: euro after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3531,7 +3531,7 @@ SET f.display_name = 'sk-SK Formatting',
 
 MERGE (f:Formatting {key: 'gn-PY'})
 SET f.display_name = 'gn-PY Formatting',
-    f.description = 'Formatting rules for gn-PY',
+    f.content = 'Formatting rules for gn-PY',
     f.llm_context = 'gn-PY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Gs. (Guaranies) or ₲ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3551,7 +3551,7 @@ SET f.display_name = 'gn-PY Formatting',
 
 MERGE (f:Formatting {key: 'uk-UA'})
 SET f.display_name = 'uk-UA Formatting',
-    f.description = 'Formatting rules for uk-UA',
+    f.content = 'Formatting rules for uk-UA',
     f.llm_context = 'uk-UA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: ₴ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3571,7 +3571,7 @@ SET f.display_name = 'uk-UA Formatting',
 
 MERGE (f:Formatting {key: 'pl-PL'})
 SET f.display_name = 'pl-PL Formatting',
-    f.description = 'Formatting rules for pl-PL',
+    f.content = 'Formatting rules for pl-PL',
     f.llm_context = 'pl-PL: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (period separator) (gregorian) Time: 24-hour Currency: zł after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3591,7 +3591,7 @@ SET f.display_name = 'pl-PL Formatting',
 
 MERGE (f:Formatting {key: 'zh-SG'})
 SET f.display_name = 'zh-SG Formatting',
-    f.description = 'Formatting rules for zh-SG',
+    f.content = 'Formatting rules for zh-SG',
     f.llm_context = 'zh-SG: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY年M月D日 (gregorian) Time: 12-hour Currency: S$ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3611,7 +3611,7 @@ SET f.display_name = 'zh-SG Formatting',
 
 MERGE (f:Formatting {key: 'en-CA'})
 SET f.display_name = 'en-CA Formatting',
-    f.description = 'Formatting rules for en-CA',
+    f.content = 'Formatting rules for en-CA',
     f.llm_context = 'en-CA: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY-MM-DD (official Canadian standard) (gregorian) Time: 12-hour (common in everyday use), 24-hour (official and technical) Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3631,7 +3631,7 @@ SET f.display_name = 'en-CA Formatting',
 
 MERGE (f:Formatting {key: 'en-AE'})
 SET f.display_name = 'en-AE Formatting',
-    f.description = 'Formatting rules for en-AE',
+    f.content = 'Formatting rules for en-AE',
     f.llm_context = 'en-AE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: AED or Dhs before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3651,7 +3651,7 @@ SET f.display_name = 'en-AE Formatting',
 
 MERGE (f:Formatting {key: 'en-CY'})
 SET f.display_name = 'en-CY Formatting',
-    f.description = 'Formatting rules for en-CY',
+    f.content = 'Formatting rules for en-CY',
     f.llm_context = 'en-CY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2025) (gregorian) Time: 12-hour (casual) / 24-hour (official) Currency: EUR after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3671,7 +3671,7 @@ SET f.display_name = 'en-CY Formatting',
 
 MERGE (f:Formatting {key: 'ru-RU'})
 SET f.display_name = 'ru-RU Formatting',
-    f.description = 'Formatting rules for ru-RU',
+    f.content = 'Formatting rules for ru-RU',
     f.llm_context = 'ru-RU: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: ₽ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3691,7 +3691,7 @@ SET f.display_name = 'ru-RU Formatting',
 
 MERGE (f:Formatting {key: 'mi-NZ'})
 SET f.display_name = 'mi-NZ Formatting',
-    f.description = 'Formatting rules for mi-NZ',
+    f.content = 'Formatting rules for mi-NZ',
     f.llm_context = 'mi-NZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (common speech) / 24-hour (digital/transport) Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3711,7 +3711,7 @@ SET f.display_name = 'mi-NZ Formatting',
 
 MERGE (f:Formatting {key: 'es-PE'})
 SET f.display_name = 'es-PE Formatting',
-    f.description = 'Formatting rules for es-PE',
+    f.content = 'Formatting rules for es-PE',
     f.llm_context = 'es-PE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: S/ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3731,7 +3731,7 @@ SET f.display_name = 'es-PE Formatting',
 
 MERGE (f:Formatting {key: 'yo-NG'})
 SET f.display_name = 'yo-NG Formatting',
-    f.description = 'Formatting rules for yo-NG',
+    f.content = 'Formatting rules for yo-NG',
     f.llm_context = 'yo-NG: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: ₦ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3751,7 +3751,7 @@ SET f.display_name = 'yo-NG Formatting',
 
 MERGE (f:Formatting {key: 'tk-TM'})
 SET f.display_name = 'tk-TM Formatting',
-    f.description = 'Formatting rules for tk-TM',
+    f.content = 'Formatting rules for tk-TM',
     f.llm_context = 'tk-TM: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (day.month.year) (gregorian) Time: 24-hour Currency: m (or man.) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3771,7 +3771,7 @@ SET f.display_name = 'tk-TM Formatting',
 
 MERGE (f:Formatting {key: 'es-PY'})
 SET f.display_name = 'es-PY Formatting',
-    f.description = 'Formatting rules for es-PY',
+    f.content = 'Formatting rules for es-PY',
     f.llm_context = 'es-PY: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Gs. or ₲ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3791,7 +3791,7 @@ SET f.display_name = 'es-PY Formatting',
 
 MERGE (f:Formatting {key: 'ha-NG'})
 SET f.display_name = 'ha-NG Formatting',
-    f.description = 'Formatting rules for ha-NG',
+    f.content = 'Formatting rules for ha-NG',
     f.llm_context = 'ha-NG: Numbers use \'.\' decimal, \',\' thousands. Dates: D/M/YYYY (gregorian) Time: 24-hour Currency: ₦ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3811,7 +3811,7 @@ SET f.display_name = 'ha-NG Formatting',
 
 MERGE (f:Formatting {key: 'el-CY'})
 SET f.display_name = 'el-CY Formatting',
-    f.description = 'Formatting rules for el-CY',
+    f.content = 'Formatting rules for el-CY',
     f.llm_context = 'el-CY: Numbers use \'.\' decimal, \',\' thousands. Dates: d/M/yyyy (e.g., 15/1/2025) (gregorian) Time: 24-hour Currency: € after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3831,7 +3831,7 @@ SET f.display_name = 'el-CY Formatting',
 
 MERGE (f:Formatting {key: 'jv-ID'})
 SET f.display_name = 'jv-ID Formatting',
-    f.description = 'Formatting rules for jv-ID',
+    f.content = 'Formatting rules for jv-ID',
     f.llm_context = 'jv-ID: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 24-hour Currency: Rp before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3851,7 +3851,7 @@ SET f.display_name = 'jv-ID Formatting',
 
 MERGE (f:Formatting {key: 'km-KH'})
 SET f.display_name = 'km-KH Formatting',
-    f.description = 'Formatting rules for km-KH',
+    f.content = 'Formatting rules for km-KH',
     f.llm_context = 'km-KH: Numbers use \'.\' decimal, \',\' thousands. Dates: d/M/yyyy (gregorian) Time: 24-hour Currency: ៛ after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3871,7 +3871,7 @@ SET f.display_name = 'km-KH Formatting',
 
 MERGE (f:Formatting {key: 'so-SO'})
 SET f.display_name = 'so-SO Formatting',
-    f.description = 'Formatting rules for so-SO',
+    f.content = 'Formatting rules for so-SO',
     f.llm_context = 'so-SO: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (common), 24-hour (official/military) Currency: S or Sh after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3891,7 +3891,7 @@ SET f.display_name = 'so-SO Formatting',
 
 MERGE (f:Formatting {key: 'ar-AE'})
 SET f.display_name = 'ar-AE Formatting',
-    f.description = 'Formatting rules for ar-AE',
+    f.content = 'Formatting rules for ar-AE',
     f.llm_context = 'ar-AE: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour (general) / 24-hour (business/transport) Currency: د.إ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3911,7 +3911,7 @@ SET f.display_name = 'ar-AE Formatting',
 
 MERGE (f:Formatting {key: 'en-NZ'})
 SET f.display_name = 'en-NZ Formatting',
-    f.description = 'Formatting rules for en-NZ',
+    f.content = 'Formatting rules for en-NZ',
     f.llm_context = 'en-NZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour (common speech) / 24-hour (digital/transport) Currency: $ before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3931,7 +3931,7 @@ SET f.display_name = 'en-NZ Formatting',
 
 MERGE (f:Formatting {key: 'ne-NP'})
 SET f.display_name = 'ne-NP Formatting',
-    f.description = 'Formatting rules for ne-NP',
+    f.content = 'Formatting rules for ne-NP',
     f.llm_context = 'ne-NP: Numbers use \'.\' decimal, \',\' thousands. Dates: YYYY/MM/DD (gregorian) Time: 12-hour Currency: रु॰ or रू before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3951,7 +3951,7 @@ SET f.display_name = 'ne-NP Formatting',
 
 MERGE (f:Formatting {key: 'fr-DZ'})
 SET f.display_name = 'fr-DZ Formatting',
-    f.description = 'Formatting rules for fr-DZ',
+    f.content = 'Formatting rules for fr-DZ',
     f.llm_context = 'fr-DZ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (e.g., 15/01/2026) (hijri) Time: 24-hour (French convention used officially) Currency: DA after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones","ONS Algeria (national statistics"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3971,7 +3971,7 @@ SET f.display_name = 'fr-DZ Formatting',
 
 MERGE (f:Formatting {key: 'ar-LB'})
 SET f.display_name = 'ar-LB Formatting',
-    f.description = 'Formatting rules for ar-LB',
+    f.content = 'Formatting rules for ar-LB',
     f.llm_context = 'ar-LB: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (hijri) Time: 12-hour Currency: ل.ل. after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -3991,7 +3991,7 @@ SET f.display_name = 'ar-LB Formatting',
 
 MERGE (f:Formatting {key: 'tg-TJ'})
 SET f.display_name = 'tg-TJ Formatting',
-    f.description = 'Formatting rules for tg-TJ',
+    f.content = 'Formatting rules for tg-TJ',
     f.llm_context = 'tg-TJ: Numbers use \'.\' decimal, \',\' thousands. Dates: DD.MM.YYYY (gregorian) Time: 24-hour Currency: сом. (abbreviated) or сомонӣ (full) after amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',
@@ -4011,7 +4011,7 @@ SET f.display_name = 'tg-TJ Formatting',
 
 MERGE (f:Formatting {key: 'es-PA'})
 SET f.display_name = 'es-PA Formatting',
-    f.description = 'Formatting rules for es-PA',
+    f.content = 'Formatting rules for es-PA',
     f.llm_context = 'es-PA: Numbers use \'.\' decimal, \',\' thousands. Dates: DD/MM/YYYY (gregorian) Time: 12-hour Currency: B/. (PAB) / $ (USD) before amount',
     f.data_sources = '["CLDR (primary","ISO 4217 (currency","IANA (timezones"]',
     f.number = '{"decimal_separator":".","thousands_separator":",","negative_sign":"-","positive_sign":"+","grouping_pattern":3,"numeral_system":null,"correct_examples":[],"incorrect_examples":[]}',

@@ -366,26 +366,26 @@ SET
 MERGE (as_intra_realm:Schema:ArcScope {key: 'intra_realm'})
 ON CREATE SET
   as_intra_realm.display_name = 'Intra-Realm',
-  as_intra_realm.description = 'Arc connects nodes within the same realm',
+  as_intra_realm.content = 'Arc connects nodes within the same realm',
   as_intra_realm.node_class = 'arc_scope',
   as_intra_realm.created_by = 'seed:schema',
   as_intra_realm.created_at = datetime()
 ON MATCH SET
   as_intra_realm.display_name = 'Intra-Realm',
-  as_intra_realm.description = 'Arc connects nodes within the same realm',
+  as_intra_realm.content = 'Arc connects nodes within the same realm',
   as_intra_realm.node_class = 'arc_scope',
   as_intra_realm.updated_at = datetime();
 
 MERGE (as_cross_realm:Schema:ArcScope {key: 'cross_realm'})
 ON CREATE SET
   as_cross_realm.display_name = 'Cross-Realm',
-  as_cross_realm.description = 'Arc connects nodes across different realms',
+  as_cross_realm.content = 'Arc connects nodes across different realms',
   as_cross_realm.node_class = 'arc_scope',
   as_cross_realm.created_by = 'seed:schema',
   as_cross_realm.created_at = datetime()
 ON MATCH SET
   as_cross_realm.display_name = 'Cross-Realm',
-  as_cross_realm.description = 'Arc connects nodes across different realms',
+  as_cross_realm.content = 'Arc connects nodes across different realms',
   as_cross_realm.node_class = 'arc_scope',
   as_cross_realm.updated_at = datetime();
 
@@ -396,65 +396,65 @@ ON MATCH SET
 MERGE (ac_zero_to_one:Schema:ArcCardinality {key: 'zero_to_one'})
 ON CREATE SET
   ac_zero_to_one.display_name = '0..1',
-  ac_zero_to_one.description = 'Optional single target (nullable reference)',
+  ac_zero_to_one.content = 'Optional single target (nullable reference)',
   ac_zero_to_one.node_class = 'arc_cardinality',
   ac_zero_to_one.created_by = 'seed:schema',
   ac_zero_to_one.created_at = datetime()
 ON MATCH SET
   ac_zero_to_one.display_name = '0..1',
-  ac_zero_to_one.description = 'Optional single target (nullable reference)',
+  ac_zero_to_one.content = 'Optional single target (nullable reference)',
   ac_zero_to_one.node_class = 'arc_cardinality',
   ac_zero_to_one.updated_at = datetime();
 
 MERGE (ac_one_to_one:Schema:ArcCardinality {key: 'one_to_one'})
 ON CREATE SET
   ac_one_to_one.display_name = '1:1',
-  ac_one_to_one.description = 'Single source to single target',
+  ac_one_to_one.content = 'Single source to single target',
   ac_one_to_one.node_class = 'arc_cardinality',
   ac_one_to_one.created_by = 'seed:schema',
   ac_one_to_one.created_at = datetime()
 ON MATCH SET
   ac_one_to_one.display_name = '1:1',
-  ac_one_to_one.description = 'Single source to single target',
+  ac_one_to_one.content = 'Single source to single target',
   ac_one_to_one.node_class = 'arc_cardinality',
   ac_one_to_one.updated_at = datetime();
 
 MERGE (ac_one_to_many:Schema:ArcCardinality {key: 'one_to_many'})
 ON CREATE SET
   ac_one_to_many.display_name = '1:N',
-  ac_one_to_many.description = 'Single source to multiple targets',
+  ac_one_to_many.content = 'Single source to multiple targets',
   ac_one_to_many.node_class = 'arc_cardinality',
   ac_one_to_many.created_by = 'seed:schema',
   ac_one_to_many.created_at = datetime()
 ON MATCH SET
   ac_one_to_many.display_name = '1:N',
-  ac_one_to_many.description = 'Single source to multiple targets',
+  ac_one_to_many.content = 'Single source to multiple targets',
   ac_one_to_many.node_class = 'arc_cardinality',
   ac_one_to_many.updated_at = datetime();
 
 MERGE (ac_many_to_one:Schema:ArcCardinality {key: 'many_to_one'})
 ON CREATE SET
   ac_many_to_one.display_name = 'N:1',
-  ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
+  ac_many_to_one.content = 'Multiple sources to single target (inverse of one_to_many)',
   ac_many_to_one.node_class = 'arc_cardinality',
   ac_many_to_one.created_by = 'seed:schema',
   ac_many_to_one.created_at = datetime()
 ON MATCH SET
   ac_many_to_one.display_name = 'N:1',
-  ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
+  ac_many_to_one.content = 'Multiple sources to single target (inverse of one_to_many)',
   ac_many_to_one.node_class = 'arc_cardinality',
   ac_many_to_one.updated_at = datetime();
 
 MERGE (ac_many_to_many:Schema:ArcCardinality {key: 'many_to_many'})
 ON CREATE SET
   ac_many_to_many.display_name = 'N:M',
-  ac_many_to_many.description = 'Multiple sources to multiple targets',
+  ac_many_to_many.content = 'Multiple sources to multiple targets',
   ac_many_to_many.node_class = 'arc_cardinality',
   ac_many_to_many.created_by = 'seed:schema',
   ac_many_to_many.created_at = datetime()
 ON MATCH SET
   ac_many_to_many.display_name = 'N:M',
-  ac_many_to_many.description = 'Multiple sources to multiple targets',
+  ac_many_to_many.content = 'Multiple sources to multiple targets',
   ac_many_to_many.node_class = 'arc_cardinality',
   ac_many_to_many.updated_at = datetime();
 

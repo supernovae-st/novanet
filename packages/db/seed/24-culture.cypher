@@ -11,7 +11,7 @@
 
 MERGE (c:Culture {key: 'ceb-PH'})
 SET c.display_name = 'ceb-PH Culture Norms',
-    c.description = 'Cultural context and norms for ceb-PH',
+    c.content = 'Cultural context and norms for ceb-PH',
     c.llm_context = 'USE: ceb-PH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -33,7 +33,7 @@ SET c.display_name = 'ceb-PH Culture Norms',
 
 MERGE (c:Culture {key: 'mn-MN'})
 SET c.display_name = 'mn-MN Culture Norms',
-    c.description = 'Cultural context and norms for mn-MN',
+    c.content = 'Cultural context and norms for mn-MN',
     c.llm_context = 'USE: mn-MN culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -55,7 +55,7 @@ SET c.display_name = 'mn-MN Culture Norms',
 
 MERGE (c:Culture {key: 'en-MY'})
 SET c.display_name = 'en-MY Culture Norms',
-    c.description = 'Cultural context and norms for en-MY',
+    c.content = 'Cultural context and norms for en-MY',
     c.llm_context = 'USE: en-MY culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -77,7 +77,7 @@ SET c.display_name = 'en-MY Culture Norms',
 
 MERGE (c:Culture {key: 'bn-BD'})
 SET c.display_name = 'bn-BD Culture Norms',
-    c.description = 'Cultural context and norms for bn-BD',
+    c.content = 'Cultural context and norms for bn-BD',
     c.llm_context = 'USE: bn-BD culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -99,7 +99,7 @@ SET c.display_name = 'bn-BD Culture Norms',
 
 MERGE (c:Culture {key: 'en-TZ'})
 SET c.display_name = 'en-TZ Culture Norms',
-    c.description = 'Cultural context and norms for en-TZ',
+    c.content = 'Cultural context and norms for en-TZ',
     c.llm_context = 'USE: en-TZ culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -121,7 +121,7 @@ SET c.display_name = 'en-TZ Culture Norms',
 
 MERGE (c:Culture {key: 'en-SG'})
 SET c.display_name = 'en-SG Culture Norms',
-    c.description = 'Cultural context and norms for en-SG',
+    c.content = 'Cultural context and norms for en-SG',
     c.llm_context = 'USE: en-SG culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -143,7 +143,7 @@ SET c.display_name = 'en-SG Culture Norms',
 
 MERGE (c:Culture {key: 'ta-LK'})
 SET c.display_name = 'ta-LK Culture Norms',
-    c.description = 'Cultural context and norms for ta-LK',
+    c.content = 'Cultural context and norms for ta-LK',
     c.llm_context = 'USE: ta-LK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -165,7 +165,7 @@ SET c.display_name = 'ta-LK Culture Norms',
 
 MERGE (c:Culture {key: 'en-ZA'})
 SET c.display_name = 'en-ZA Culture Norms',
-    c.description = 'Cultural context and norms for en-ZA',
+    c.content = 'Cultural context and norms for en-ZA',
     c.llm_context = 'USE: en-ZA culture (southern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -187,7 +187,7 @@ SET c.display_name = 'en-ZA Culture Norms',
 
 MERGE (c:Culture {key: 'en-BB'})
 SET c.display_name = 'en-BB Culture Norms',
-    c.description = 'Cultural context and norms for en-BB',
+    c.content = 'Cultural context and norms for en-BB',
     c.llm_context = 'USE: en-BB culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -209,7 +209,7 @@ SET c.display_name = 'en-BB Culture Norms',
 
 MERGE (c:Culture {key: 'si-LK'})
 SET c.display_name = 'si-LK Culture Norms',
-    c.description = 'Cultural context and norms for si-LK',
+    c.content = 'Cultural context and norms for si-LK',
     c.llm_context = 'USE: si-LK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -231,7 +231,7 @@ SET c.display_name = 'si-LK Culture Norms',
 
 MERGE (c:Culture {key: 'bs-BA'})
 SET c.display_name = 'bs-BA Culture Norms',
-    c.description = 'Cultural context and norms for bs-BA',
+    c.content = 'Cultural context and norms for bs-BA',
     c.llm_context = 'USE: bs-BA culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -253,7 +253,7 @@ SET c.display_name = 'bs-BA Culture Norms',
 
 MERGE (c:Culture {key: 'it-CH'})
 SET c.display_name = 'it-CH Culture Norms',
-    c.description = 'Cultural context and norms for it-CH',
+    c.content = 'Cultural context and norms for it-CH',
     c.llm_context = 'USE: it-CH culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -275,7 +275,7 @@ SET c.display_name = 'it-CH Culture Norms',
 
 MERGE (c:Culture {key: 'tr-TR'})
 SET c.display_name = 'tr-TR Culture Norms',
-    c.description = 'Cultural context and norms for tr-TR',
+    c.content = 'Cultural context and norms for tr-TR',
     c.llm_context = 'USE: tr-TR culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -297,7 +297,7 @@ SET c.display_name = 'tr-TR Culture Norms',
 
 MERGE (c:Culture {key: 'es-MX'})
 SET c.display_name = 'es-MX Culture Norms',
-    c.description = 'Cultural context and norms for es-MX',
+    c.content = 'Cultural context and norms for es-MX',
     c.llm_context = 'USE: es-MX culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -319,7 +319,7 @@ SET c.display_name = 'es-MX Culture Norms',
 
 MERGE (c:Culture {key: 'ar-MA'})
 SET c.display_name = 'ar-MA Culture Norms',
-    c.description = 'Cultural context and norms for ar-MA',
+    c.content = 'Cultural context and norms for ar-MA',
     c.llm_context = 'USE: ar-MA culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -341,7 +341,7 @@ SET c.display_name = 'ar-MA Culture Norms',
 
 MERGE (c:Culture {key: 'ar-LY'})
 SET c.display_name = 'ar-LY Culture Norms',
-    c.description = 'Cultural context and norms for ar-LY',
+    c.content = 'Cultural context and norms for ar-LY',
     c.llm_context = 'USE: ar-LY culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -363,7 +363,7 @@ SET c.display_name = 'ar-LY Culture Norms',
 
 MERGE (c:Culture {key: 'fr-MG'})
 SET c.display_name = 'fr-MG Culture Norms',
-    c.description = 'Cultural context and norms for fr-MG',
+    c.content = 'Cultural context and norms for fr-MG',
     c.llm_context = 'USE: fr-MG culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -385,7 +385,7 @@ SET c.display_name = 'fr-MG Culture Norms',
 
 MERGE (c:Culture {key: 'ar-EG'})
 SET c.display_name = 'ar-EG Culture Norms',
-    c.description = 'Cultural context and norms for ar-EG',
+    c.content = 'Cultural context and norms for ar-EG',
     c.llm_context = 'USE: ar-EG culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -407,7 +407,7 @@ SET c.display_name = 'ar-EG Culture Norms',
 
 MERGE (c:Culture {key: 'my-MM'})
 SET c.display_name = 'my-MM Culture Norms',
-    c.description = 'Cultural context and norms for my-MM',
+    c.content = 'Cultural context and norms for my-MM',
     c.llm_context = 'USE: my-MM culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -429,7 +429,7 @@ SET c.display_name = 'my-MM Culture Norms',
 
 MERGE (c:Culture {key: 'ta-IN'})
 SET c.display_name = 'ta-IN Culture Norms',
-    c.description = 'Cultural context and norms for ta-IN',
+    c.content = 'Cultural context and norms for ta-IN',
     c.llm_context = 'USE: ta-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -451,7 +451,7 @@ SET c.display_name = 'ta-IN Culture Norms',
 
 MERGE (c:Culture {key: 'fr-CD'})
 SET c.display_name = 'fr-CD Culture Norms',
-    c.description = 'Cultural context and norms for fr-CD',
+    c.content = 'Cultural context and norms for fr-CD',
     c.llm_context = 'USE: fr-CD culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -473,7 +473,7 @@ SET c.display_name = 'fr-CD Culture Norms',
 
 MERGE (c:Culture {key: 'as-IN'})
 SET c.display_name = 'as-IN Culture Norms',
-    c.description = 'Cultural context and norms for as-IN',
+    c.content = 'Cultural context and norms for as-IN',
     c.llm_context = 'USE: as-IN culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -495,7 +495,7 @@ SET c.display_name = 'as-IN Culture Norms',
 
 MERGE (c:Culture {key: 'lt-LT'})
 SET c.display_name = 'lt-LT Culture Norms',
-    c.description = 'Cultural context and norms for lt-LT',
+    c.content = 'Cultural context and norms for lt-LT',
     c.llm_context = 'USE: lt-LT culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -517,7 +517,7 @@ SET c.display_name = 'lt-LT Culture Norms',
 
 MERGE (c:Culture {key: 'sw-KE'})
 SET c.display_name = 'sw-KE Culture Norms',
-    c.description = 'Cultural context and norms for sw-KE',
+    c.content = 'Cultural context and norms for sw-KE',
     c.llm_context = 'USE: sw-KE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -539,7 +539,7 @@ SET c.display_name = 'sw-KE Culture Norms',
 
 MERGE (c:Culture {key: 'hy-AM'})
 SET c.display_name = 'hy-AM Culture Norms',
-    c.description = 'Cultural context and norms for hy-AM',
+    c.content = 'Cultural context and norms for hy-AM',
     c.llm_context = 'USE: hy-AM culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -561,7 +561,7 @@ SET c.display_name = 'hy-AM Culture Norms',
 
 MERGE (c:Culture {key: 'pt-MZ'})
 SET c.display_name = 'pt-MZ Culture Norms',
-    c.description = 'Cultural context and norms for pt-MZ',
+    c.content = 'Cultural context and norms for pt-MZ',
     c.llm_context = 'USE: pt-MZ culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -583,7 +583,7 @@ SET c.display_name = 'pt-MZ Culture Norms',
 
 MERGE (c:Culture {key: 'nl-BE'})
 SET c.display_name = 'nl-BE Culture Norms',
-    c.description = 'Cultural context and norms for nl-BE',
+    c.content = 'Cultural context and norms for nl-BE',
     c.llm_context = 'USE: nl-BE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -605,7 +605,7 @@ SET c.display_name = 'nl-BE Culture Norms',
 
 MERGE (c:Culture {key: 'te-IN'})
 SET c.display_name = 'te-IN Culture Norms',
-    c.description = 'Cultural context and norms for te-IN',
+    c.content = 'Cultural context and norms for te-IN',
     c.llm_context = 'USE: te-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -627,7 +627,7 @@ SET c.display_name = 'te-IN Culture Norms',
 
 MERGE (c:Culture {key: 'ml-IN'})
 SET c.display_name = 'ml-IN Culture Norms',
-    c.description = 'Cultural context and norms for ml-IN',
+    c.content = 'Cultural context and norms for ml-IN',
     c.llm_context = 'USE: ml-IN culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -649,7 +649,7 @@ SET c.display_name = 'ml-IN Culture Norms',
 
 MERGE (c:Culture {key: 'vi-VN'})
 SET c.display_name = 'vi-VN Culture Norms',
-    c.description = 'Cultural context and norms for vi-VN',
+    c.content = 'Cultural context and norms for vi-VN',
     c.llm_context = 'USE: vi-VN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -671,7 +671,7 @@ SET c.display_name = 'vi-VN Culture Norms',
 
 MERGE (c:Culture {key: 'fr-BE'})
 SET c.display_name = 'fr-BE Culture Norms',
-    c.description = 'Cultural context and norms for fr-BE',
+    c.content = 'Cultural context and norms for fr-BE',
     c.llm_context = 'USE: fr-BE culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -693,7 +693,7 @@ SET c.display_name = 'fr-BE Culture Norms',
 
 MERGE (c:Culture {key: 'ru-IL'})
 SET c.display_name = 'ru-IL Culture Norms',
-    c.description = 'Cultural context and norms for ru-IL',
+    c.content = 'Cultural context and norms for ru-IL',
     c.llm_context = 'USE: ru-IL culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -715,7 +715,7 @@ SET c.display_name = 'ru-IL Culture Norms',
 
 MERGE (c:Culture {key: 'rw-RW'})
 SET c.display_name = 'rw-RW Culture Norms',
-    c.description = 'Cultural context and norms for rw-RW',
+    c.content = 'Cultural context and norms for rw-RW',
     c.llm_context = 'USE: rw-RW culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -737,7 +737,7 @@ SET c.display_name = 'rw-RW Culture Norms',
 
 MERGE (c:Culture {key: 'en-KY'})
 SET c.display_name = 'en-KY Culture Norms',
-    c.description = 'Cultural context and norms for en-KY',
+    c.content = 'Cultural context and norms for en-KY',
     c.llm_context = 'USE: en-KY culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -759,7 +759,7 @@ SET c.display_name = 'en-KY Culture Norms',
 
 MERGE (c:Culture {key: 'ky-KG'})
 SET c.display_name = 'ky-KG Culture Norms',
-    c.description = 'Cultural context and norms for ky-KG',
+    c.content = 'Cultural context and norms for ky-KG',
     c.llm_context = 'USE: ky-KG culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -781,7 +781,7 @@ SET c.display_name = 'ky-KG Culture Norms',
 
 MERGE (c:Culture {key: 'en-IE'})
 SET c.display_name = 'en-IE Culture Norms',
-    c.description = 'Cultural context and norms for en-IE',
+    c.content = 'Cultural context and norms for en-IE',
     c.llm_context = 'USE: en-IE culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -803,7 +803,7 @@ SET c.display_name = 'en-IE Culture Norms',
 
 MERGE (c:Culture {key: 'su-ID'})
 SET c.display_name = 'su-ID Culture Norms',
-    c.description = 'Cultural context and norms for su-ID',
+    c.content = 'Cultural context and norms for su-ID',
     c.llm_context = 'USE: su-ID culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -825,7 +825,7 @@ SET c.display_name = 'su-ID Culture Norms',
 
 MERGE (c:Culture {key: 'en-UG'})
 SET c.display_name = 'en-UG Culture Norms',
-    c.description = 'Cultural context and norms for en-UG',
+    c.content = 'Cultural context and norms for en-UG',
     c.llm_context = 'USE: en-UG culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -847,7 +847,7 @@ SET c.display_name = 'en-UG Culture Norms',
 
 MERGE (c:Culture {key: 'sw-TZ'})
 SET c.display_name = 'sw-TZ Culture Norms',
-    c.description = 'Cultural context and norms for sw-TZ',
+    c.content = 'Cultural context and norms for sw-TZ',
     c.llm_context = 'USE: sw-TZ culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -869,7 +869,7 @@ SET c.display_name = 'sw-TZ Culture Norms',
 
 MERGE (c:Culture {key: 'hu-HU'})
 SET c.display_name = 'hu-HU Culture Norms',
-    c.description = 'Cultural context and norms for hu-HU',
+    c.content = 'Cultural context and norms for hu-HU',
     c.llm_context = 'USE: hu-HU culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -891,7 +891,7 @@ SET c.display_name = 'hu-HU Culture Norms',
 
 MERGE (c:Culture {key: 'es-EC'})
 SET c.display_name = 'es-EC Culture Norms',
-    c.description = 'Cultural context and norms for es-EC',
+    c.content = 'Cultural context and norms for es-EC',
     c.llm_context = 'USE: es-EC culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -913,7 +913,7 @@ SET c.display_name = 'es-EC Culture Norms',
 
 MERGE (c:Culture {key: 'mg-MG'})
 SET c.display_name = 'mg-MG Culture Norms',
-    c.description = 'Cultural context and norms for mg-MG',
+    c.content = 'Cultural context and norms for mg-MG',
     c.llm_context = 'USE: mg-MG culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -935,7 +935,7 @@ SET c.display_name = 'mg-MG Culture Norms',
 
 MERGE (c:Culture {key: 'ca-AD'})
 SET c.display_name = 'ca-AD Culture Norms',
-    c.description = 'Cultural context and norms for ca-AD',
+    c.content = 'Cultural context and norms for ca-AD',
     c.llm_context = 'USE: ca-AD culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -957,7 +957,7 @@ SET c.display_name = 'ca-AD Culture Norms',
 
 MERGE (c:Culture {key: 'ko-KR'})
 SET c.display_name = 'ko-KR Culture Norms',
-    c.description = 'Cultural context and norms for ko-KR',
+    c.content = 'Cultural context and norms for ko-KR',
     c.llm_context = 'USE: ko-KR culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -979,7 +979,7 @@ SET c.display_name = 'ko-KR Culture Norms',
 
 MERGE (c:Culture {key: 'ln-CD'})
 SET c.display_name = 'ln-CD Culture Norms',
-    c.description = 'Cultural context and norms for ln-CD',
+    c.content = 'Cultural context and norms for ln-CD',
     c.llm_context = 'USE: ln-CD culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1001,7 +1001,7 @@ SET c.display_name = 'ln-CD Culture Norms',
 
 MERGE (c:Culture {key: 'en-KE'})
 SET c.display_name = 'en-KE Culture Norms',
-    c.description = 'Cultural context and norms for en-KE',
+    c.content = 'Cultural context and norms for en-KE',
     c.llm_context = 'USE: en-KE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1023,7 +1023,7 @@ SET c.display_name = 'en-KE Culture Norms',
 
 MERGE (c:Culture {key: 'ar-DZ'})
 SET c.display_name = 'ar-DZ Culture Norms',
-    c.description = 'Cultural context and norms for ar-DZ',
+    c.content = 'Cultural context and norms for ar-DZ',
     c.llm_context = 'USE: ar-DZ culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -1045,7 +1045,7 @@ SET c.display_name = 'ar-DZ Culture Norms',
 
 MERGE (c:Culture {key: 'fr-CA'})
 SET c.display_name = 'fr-CA Culture Norms',
-    c.description = 'Cultural context and norms for fr-CA',
+    c.content = 'Cultural context and norms for fr-CA',
     c.llm_context = 'USE: fr-CA culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1067,7 +1067,7 @@ SET c.display_name = 'fr-CA Culture Norms',
 
 MERGE (c:Culture {key: 'en-GB'})
 SET c.display_name = 'en-GB Culture Norms',
-    c.description = 'Cultural context and norms for en-GB',
+    c.content = 'Cultural context and norms for en-GB',
     c.llm_context = 'USE: en-GB culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1089,7 +1089,7 @@ SET c.display_name = 'en-GB Culture Norms',
 
 MERGE (c:Culture {key: 'fr-RW'})
 SET c.display_name = 'fr-RW Culture Norms',
-    c.description = 'Cultural context and norms for fr-RW',
+    c.content = 'Cultural context and norms for fr-RW',
     c.llm_context = 'USE: fr-RW culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1111,7 +1111,7 @@ SET c.display_name = 'fr-RW Culture Norms',
 
 MERGE (c:Culture {key: 'ru-BY'})
 SET c.display_name = 'ru-BY Culture Norms',
-    c.description = 'Cultural context and norms for ru-BY',
+    c.content = 'Cultural context and norms for ru-BY',
     c.llm_context = 'USE: ru-BY culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1133,7 +1133,7 @@ SET c.display_name = 'ru-BY Culture Norms',
 
 MERGE (c:Culture {key: 'es-GT'})
 SET c.display_name = 'es-GT Culture Norms',
-    c.description = 'Cultural context and norms for es-GT',
+    c.content = 'Cultural context and norms for es-GT',
     c.llm_context = 'USE: es-GT culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1155,7 +1155,7 @@ SET c.display_name = 'es-GT Culture Norms',
 
 MERGE (c:Culture {key: 'ms-SG'})
 SET c.display_name = 'ms-SG Culture Norms',
-    c.description = 'Cultural context and norms for ms-SG',
+    c.content = 'Cultural context and norms for ms-SG',
     c.llm_context = 'USE: ms-SG culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1177,7 +1177,7 @@ SET c.display_name = 'ms-SG Culture Norms',
 
 MERGE (c:Culture {key: 'ht-HT'})
 SET c.display_name = 'ht-HT Culture Norms',
-    c.description = 'Cultural context and norms for ht-HT',
+    c.content = 'Cultural context and norms for ht-HT',
     c.llm_context = 'USE: ht-HT culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1199,7 +1199,7 @@ SET c.display_name = 'ht-HT Culture Norms',
 
 MERGE (c:Culture {key: 'ms-MY'})
 SET c.display_name = 'ms-MY Culture Norms',
-    c.description = 'Cultural context and norms for ms-MY',
+    c.content = 'Cultural context and norms for ms-MY',
     c.llm_context = 'USE: ms-MY culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1221,7 +1221,7 @@ SET c.display_name = 'ms-MY Culture Norms',
 
 MERGE (c:Culture {key: 'sq-AL'})
 SET c.display_name = 'sq-AL Culture Norms',
-    c.description = 'Cultural context and norms for sq-AL',
+    c.content = 'Cultural context and norms for sq-AL',
     c.llm_context = 'USE: sq-AL culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1243,7 +1243,7 @@ SET c.display_name = 'sq-AL Culture Norms',
 
 MERGE (c:Culture {key: 'mk-MK'})
 SET c.display_name = 'mk-MK Culture Norms',
-    c.description = 'Cultural context and norms for mk-MK',
+    c.content = 'Cultural context and norms for mk-MK',
     c.llm_context = 'USE: mk-MK culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1265,7 +1265,7 @@ SET c.display_name = 'mk-MK Culture Norms',
 
 MERGE (c:Culture {key: 'mr-IN'})
 SET c.display_name = 'mr-IN Culture Norms',
-    c.description = 'Cultural context and norms for mr-IN',
+    c.content = 'Cultural context and norms for mr-IN',
     c.llm_context = 'USE: mr-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1287,7 +1287,7 @@ SET c.display_name = 'mr-IN Culture Norms',
 
 MERGE (c:Culture {key: 'es-CU'})
 SET c.display_name = 'es-CU Culture Norms',
-    c.description = 'Cultural context and norms for es-CU',
+    c.content = 'Cultural context and norms for es-CU',
     c.llm_context = 'USE: es-CU culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1309,7 +1309,7 @@ SET c.display_name = 'es-CU Culture Norms',
 
 MERGE (c:Culture {key: 'ru-KG'})
 SET c.display_name = 'ru-KG Culture Norms',
-    c.description = 'Cultural context and norms for ru-KG',
+    c.content = 'Cultural context and norms for ru-KG',
     c.llm_context = 'USE: ru-KG culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1331,7 +1331,7 @@ SET c.display_name = 'ru-KG Culture Norms',
 
 MERGE (c:Culture {key: 'ig-NG'})
 SET c.display_name = 'ig-NG Culture Norms',
-    c.description = 'Cultural context and norms for ig-NG',
+    c.content = 'Cultural context and norms for ig-NG',
     c.llm_context = 'USE: ig-NG culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1353,7 +1353,7 @@ SET c.display_name = 'ig-NG Culture Norms',
 
 MERGE (c:Culture {key: 'ka-GE'})
 SET c.display_name = 'ka-GE Culture Norms',
-    c.description = 'Cultural context and norms for ka-GE',
+    c.content = 'Cultural context and norms for ka-GE',
     c.llm_context = 'USE: ka-GE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1375,7 +1375,7 @@ SET c.display_name = 'ka-GE Culture Norms',
 
 MERGE (c:Culture {key: 'ar-BH'})
 SET c.display_name = 'ar-BH Culture Norms',
-    c.description = 'Cultural context and norms for ar-BH',
+    c.content = 'Cultural context and norms for ar-BH',
     c.llm_context = 'USE: ar-BH culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -1397,7 +1397,7 @@ SET c.display_name = 'ar-BH Culture Norms',
 
 MERGE (c:Culture {key: 'fr-LU'})
 SET c.display_name = 'fr-LU Culture Norms',
-    c.description = 'Cultural context and norms for fr-LU',
+    c.content = 'Cultural context and norms for fr-LU',
     c.llm_context = 'USE: fr-LU culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1419,7 +1419,7 @@ SET c.display_name = 'fr-LU Culture Norms',
 
 MERGE (c:Culture {key: 'en-ZW'})
 SET c.display_name = 'en-ZW Culture Norms',
-    c.description = 'Cultural context and norms for en-ZW',
+    c.content = 'Cultural context and norms for en-ZW',
     c.llm_context = 'USE: en-ZW culture (southern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -1441,7 +1441,7 @@ SET c.display_name = 'en-ZW Culture Norms',
 
 MERGE (c:Culture {key: 'en-IN'})
 SET c.display_name = 'en-IN Culture Norms',
-    c.description = 'Cultural context and norms for en-IN',
+    c.content = 'Cultural context and norms for en-IN',
     c.llm_context = 'USE: en-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1463,7 +1463,7 @@ SET c.display_name = 'en-IN Culture Norms',
 
 MERGE (c:Culture {key: 'zh-TW'})
 SET c.display_name = 'zh-TW Culture Norms',
-    c.description = 'Cultural context and norms for zh-TW',
+    c.content = 'Cultural context and norms for zh-TW',
     c.llm_context = 'USE: zh-TW culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1485,7 +1485,7 @@ SET c.display_name = 'zh-TW Culture Norms',
 
 MERGE (c:Culture {key: 'de-CH'})
 SET c.display_name = 'de-CH Culture Norms',
-    c.description = 'Cultural context and norms for de-CH',
+    c.content = 'Cultural context and norms for de-CH',
     c.llm_context = 'USE: de-CH culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1507,7 +1507,7 @@ SET c.display_name = 'de-CH Culture Norms',
 
 MERGE (c:Culture {key: 'pt-BR'})
 SET c.display_name = 'pt-BR Culture Norms',
-    c.description = 'Cultural context and norms for pt-BR',
+    c.content = 'Cultural context and norms for pt-BR',
     c.llm_context = 'USE: pt-BR culture (southern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -1529,7 +1529,7 @@ SET c.display_name = 'pt-BR Culture Norms',
 
 MERGE (c:Culture {key: 'fa-IR'})
 SET c.display_name = 'fa-IR Culture Norms',
-    c.description = 'Cultural context and norms for fa-IR',
+    c.content = 'Cultural context and norms for fa-IR',
     c.llm_context = 'USE: fa-IR culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'saturday',
@@ -1551,7 +1551,7 @@ SET c.display_name = 'fa-IR Culture Norms',
 
 MERGE (c:Culture {key: 'de-AT'})
 SET c.display_name = 'de-AT Culture Norms',
-    c.description = 'Cultural context and norms for de-AT',
+    c.content = 'Cultural context and norms for de-AT',
     c.llm_context = 'USE: de-AT culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1573,7 +1573,7 @@ SET c.display_name = 'de-AT Culture Norms',
 
 MERGE (c:Culture {key: 'fr-TN'})
 SET c.display_name = 'fr-TN Culture Norms',
-    c.description = 'Cultural context and norms for fr-TN',
+    c.content = 'Cultural context and norms for fr-TN',
     c.llm_context = 'USE: fr-TN culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1595,7 +1595,7 @@ SET c.display_name = 'fr-TN Culture Norms',
 
 MERGE (c:Culture {key: 'en-TT'})
 SET c.display_name = 'en-TT Culture Norms',
-    c.description = 'Cultural context and norms for en-TT',
+    c.content = 'Cultural context and norms for en-TT',
     c.llm_context = 'USE: en-TT culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1617,7 +1617,7 @@ SET c.display_name = 'en-TT Culture Norms',
 
 MERGE (c:Culture {key: 'is-IS'})
 SET c.display_name = 'is-IS Culture Norms',
-    c.description = 'Cultural context and norms for is-IS',
+    c.content = 'Cultural context and norms for is-IS',
     c.llm_context = 'USE: is-IS culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1639,7 +1639,7 @@ SET c.display_name = 'is-IS Culture Norms',
 
 MERGE (c:Culture {key: 'ca-ES'})
 SET c.display_name = 'ca-ES Culture Norms',
-    c.description = 'Cultural context and norms for ca-ES',
+    c.content = 'Cultural context and norms for ca-ES',
     c.llm_context = 'USE: ca-ES culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1661,7 +1661,7 @@ SET c.display_name = 'ca-ES Culture Norms',
 
 MERGE (c:Culture {key: 'ru-KZ'})
 SET c.display_name = 'ru-KZ Culture Norms',
-    c.description = 'Cultural context and norms for ru-KZ',
+    c.content = 'Cultural context and norms for ru-KZ',
     c.llm_context = 'USE: ru-KZ culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1683,7 +1683,7 @@ SET c.display_name = 'ru-KZ Culture Norms',
 
 MERGE (c:Culture {key: 'kn-IN'})
 SET c.display_name = 'kn-IN Culture Norms',
-    c.description = 'Cultural context and norms for kn-IN',
+    c.content = 'Cultural context and norms for kn-IN',
     c.llm_context = 'USE: kn-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1705,7 +1705,7 @@ SET c.display_name = 'kn-IN Culture Norms',
 
 MERGE (c:Culture {key: 'ro-RO'})
 SET c.display_name = 'ro-RO Culture Norms',
-    c.description = 'Cultural context and norms for ro-RO',
+    c.content = 'Cultural context and norms for ro-RO',
     c.llm_context = 'USE: ro-RO culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1727,7 +1727,7 @@ SET c.display_name = 'ro-RO Culture Norms',
 
 MERGE (c:Culture {key: 'gu-IN'})
 SET c.display_name = 'gu-IN Culture Norms',
-    c.description = 'Cultural context and norms for gu-IN',
+    c.content = 'Cultural context and norms for gu-IN',
     c.llm_context = 'USE: gu-IN culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1749,7 +1749,7 @@ SET c.display_name = 'gu-IN Culture Norms',
 
 MERGE (c:Culture {key: 'pt-AO'})
 SET c.display_name = 'pt-AO Culture Norms',
-    c.description = 'Cultural context and norms for pt-AO',
+    c.content = 'Cultural context and norms for pt-AO',
     c.llm_context = 'USE: pt-AO culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1771,7 +1771,7 @@ SET c.display_name = 'pt-AO Culture Norms',
 
 MERGE (c:Culture {key: 'ny-MW'})
 SET c.display_name = 'ny-MW Culture Norms',
-    c.description = 'Cultural context and norms for ny-MW',
+    c.content = 'Cultural context and norms for ny-MW',
     c.llm_context = 'USE: ny-MW culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1793,7 +1793,7 @@ SET c.display_name = 'ny-MW Culture Norms',
 
 MERGE (c:Culture {key: 'or-IN'})
 SET c.display_name = 'or-IN Culture Norms',
-    c.description = 'Cultural context and norms for or-IN',
+    c.content = 'Cultural context and norms for or-IN',
     c.llm_context = 'USE: or-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: Odia festivals, Jagannath, Odisha references. NOT: generic Indian culture.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1815,7 +1815,7 @@ SET c.display_name = 'or-IN Culture Norms',
 
 MERGE (c:Culture {key: 'zh-CN'})
 SET c.display_name = 'zh-CN Culture Norms',
-    c.description = 'Cultural context and norms for zh-CN',
+    c.content = 'Cultural context and norms for zh-CN',
     c.llm_context = 'USE: zh-CN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1837,7 +1837,7 @@ SET c.display_name = 'zh-CN Culture Norms',
 
 MERGE (c:Culture {key: 'sn-ZW'})
 SET c.display_name = 'sn-ZW Culture Norms',
-    c.description = 'Cultural context and norms for sn-ZW',
+    c.content = 'Cultural context and norms for sn-ZW',
     c.llm_context = 'USE: sn-ZW culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -1859,7 +1859,7 @@ SET c.display_name = 'sn-ZW Culture Norms',
 
 MERGE (c:Culture {key: 'ar-JO'})
 SET c.display_name = 'ar-JO Culture Norms',
-    c.description = 'Cultural context and norms for ar-JO',
+    c.content = 'Cultural context and norms for ar-JO',
     c.llm_context = 'USE: ar-JO culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -1881,7 +1881,7 @@ SET c.display_name = 'ar-JO Culture Norms',
 
 MERGE (c:Culture {key: 'ar-KW'})
 SET c.display_name = 'ar-KW Culture Norms',
-    c.description = 'Cultural context and norms for ar-KW',
+    c.content = 'Cultural context and norms for ar-KW',
     c.llm_context = 'USE: ar-KW culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -1903,7 +1903,7 @@ SET c.display_name = 'ar-KW Culture Norms',
 
 MERGE (c:Culture {key: 'en-AU'})
 SET c.display_name = 'en-AU Culture Norms',
-    c.description = 'Cultural context and norms for en-AU',
+    c.content = 'Cultural context and norms for en-AU',
     c.llm_context = 'USE: en-AU culture (southern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -1925,7 +1925,7 @@ SET c.display_name = 'en-AU Culture Norms',
 
 MERGE (c:Culture {key: 'fr-FR'})
 SET c.display_name = 'fr-FR Culture Norms',
-    c.description = 'Cultural context and norms for fr-FR',
+    c.content = 'Cultural context and norms for fr-FR',
     c.llm_context = 'USE: fr-FR culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1947,7 +1947,7 @@ SET c.display_name = 'fr-FR Culture Norms',
 
 MERGE (c:Culture {key: 'fr-SN'})
 SET c.display_name = 'fr-SN Culture Norms',
-    c.description = 'Cultural context and norms for fr-SN',
+    c.content = 'Cultural context and norms for fr-SN',
     c.llm_context = 'USE: fr-SN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1969,7 +1969,7 @@ SET c.display_name = 'fr-SN Culture Norms',
 
 MERGE (c:Culture {key: 'pa-IN'})
 SET c.display_name = 'pa-IN Culture Norms',
-    c.description = 'Cultural context and norms for pa-IN',
+    c.content = 'Cultural context and norms for pa-IN',
     c.llm_context = 'USE: pa-IN culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -1991,7 +1991,7 @@ SET c.display_name = 'pa-IN Culture Norms',
 
 MERGE (c:Culture {key: 'cs-CZ'})
 SET c.display_name = 'cs-CZ Culture Norms',
-    c.description = 'Cultural context and norms for cs-CZ',
+    c.content = 'Cultural context and norms for cs-CZ',
     c.llm_context = 'USE: cs-CZ culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2013,7 +2013,7 @@ SET c.display_name = 'cs-CZ Culture Norms',
 
 MERGE (c:Culture {key: 'es-CL'})
 SET c.display_name = 'es-CL Culture Norms',
-    c.description = 'Cultural context and norms for es-CL',
+    c.content = 'Cultural context and norms for es-CL',
     c.llm_context = 'USE: es-CL culture (southern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -2035,7 +2035,7 @@ SET c.display_name = 'es-CL Culture Norms',
 
 MERGE (c:Culture {key: 'nl-NL'})
 SET c.display_name = 'nl-NL Culture Norms',
-    c.description = 'Cultural context and norms for nl-NL',
+    c.content = 'Cultural context and norms for nl-NL',
     c.llm_context = 'USE: nl-NL culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2057,7 +2057,7 @@ SET c.display_name = 'nl-NL Culture Norms',
 
 MERGE (c:Culture {key: 'es-HN'})
 SET c.display_name = 'es-HN Culture Norms',
-    c.description = 'Cultural context and norms for es-HN',
+    c.content = 'Cultural context and norms for es-HN',
     c.llm_context = 'USE: es-HN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2079,7 +2079,7 @@ SET c.display_name = 'es-HN Culture Norms',
 
 MERGE (c:Culture {key: 'bg-BG'})
 SET c.display_name = 'bg-BG Culture Norms',
-    c.description = 'Cultural context and norms for bg-BG',
+    c.content = 'Cultural context and norms for bg-BG',
     c.llm_context = 'USE: bg-BG culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2101,7 +2101,7 @@ SET c.display_name = 'bg-BG Culture Norms',
 
 MERGE (c:Culture {key: 'sd-PK'})
 SET c.display_name = 'sd-PK Culture Norms',
-    c.description = 'Cultural context and norms for sd-PK',
+    c.content = 'Cultural context and norms for sd-PK',
     c.llm_context = 'USE: sd-PK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2123,7 +2123,7 @@ SET c.display_name = 'sd-PK Culture Norms',
 
 MERGE (c:Culture {key: 'en-GH'})
 SET c.display_name = 'en-GH Culture Norms',
-    c.description = 'Cultural context and norms for en-GH',
+    c.content = 'Cultural context and norms for en-GH',
     c.llm_context = 'USE: en-GH culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2145,7 +2145,7 @@ SET c.display_name = 'en-GH Culture Norms',
 
 MERGE (c:Culture {key: 'en-PH'})
 SET c.display_name = 'en-PH Culture Norms',
-    c.description = 'Cultural context and norms for en-PH',
+    c.content = 'Cultural context and norms for en-PH',
     c.llm_context = 'USE: en-PH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2167,7 +2167,7 @@ SET c.display_name = 'en-PH Culture Norms',
 
 MERGE (c:Culture {key: 'sl-SI'})
 SET c.display_name = 'sl-SI Culture Norms',
-    c.description = 'Cultural context and norms for sl-SI',
+    c.content = 'Cultural context and norms for sl-SI',
     c.llm_context = 'USE: sl-SI culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2189,7 +2189,7 @@ SET c.display_name = 'sl-SI Culture Norms',
 
 MERGE (c:Culture {key: 'en-HK'})
 SET c.display_name = 'en-HK Culture Norms',
-    c.description = 'Cultural context and norms for en-HK',
+    c.content = 'Cultural context and norms for en-HK',
     c.llm_context = 'USE: en-HK culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2211,7 +2211,7 @@ SET c.display_name = 'en-HK Culture Norms',
 
 MERGE (c:Culture {key: 'en-MU'})
 SET c.display_name = 'en-MU Culture Norms',
-    c.description = 'Cultural context and norms for en-MU',
+    c.content = 'Cultural context and norms for en-MU',
     c.llm_context = 'USE: en-MU culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2233,7 +2233,7 @@ SET c.display_name = 'en-MU Culture Norms',
 
 MERGE (c:Culture {key: 'et-EE'})
 SET c.display_name = 'et-EE Culture Norms',
-    c.description = 'Cultural context and norms for et-EE',
+    c.content = 'Cultural context and norms for et-EE',
     c.llm_context = 'USE: et-EE culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2255,7 +2255,7 @@ SET c.display_name = 'et-EE Culture Norms',
 
 MERGE (c:Culture {key: 'es-SV'})
 SET c.display_name = 'es-SV Culture Norms',
-    c.description = 'Cultural context and norms for es-SV',
+    c.content = 'Cultural context and norms for es-SV',
     c.llm_context = 'USE: es-SV culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2277,7 +2277,7 @@ SET c.display_name = 'es-SV Culture Norms',
 
 MERGE (c:Culture {key: 'pt-CH'})
 SET c.display_name = 'pt-CH Culture Norms',
-    c.description = 'Cultural context and norms for pt-CH',
+    c.content = 'Cultural context and norms for pt-CH',
     c.llm_context = 'USE: pt-CH culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2299,7 +2299,7 @@ SET c.display_name = 'pt-CH Culture Norms',
 
 MERGE (c:Culture {key: 'es-PR'})
 SET c.display_name = 'es-PR Culture Norms',
-    c.description = 'Cultural context and norms for es-PR',
+    c.content = 'Cultural context and norms for es-PR',
     c.llm_context = 'USE: es-PR culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2321,7 +2321,7 @@ SET c.display_name = 'es-PR Culture Norms',
 
 MERGE (c:Culture {key: 'ur-PK'})
 SET c.display_name = 'ur-PK Culture Norms',
-    c.description = 'Cultural context and norms for ur-PK',
+    c.content = 'Cultural context and norms for ur-PK',
     c.llm_context = 'USE: ur-PK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2343,7 +2343,7 @@ SET c.display_name = 'ur-PK Culture Norms',
 
 MERGE (c:Culture {key: 'en-ZM'})
 SET c.display_name = 'en-ZM Culture Norms',
-    c.description = 'Cultural context and norms for en-ZM',
+    c.content = 'Cultural context and norms for en-ZM',
     c.llm_context = 'USE: en-ZM culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2365,7 +2365,7 @@ SET c.display_name = 'en-ZM Culture Norms',
 
 MERGE (c:Culture {key: 'ar-OM'})
 SET c.display_name = 'ar-OM Culture Norms',
-    c.description = 'Cultural context and norms for ar-OM',
+    c.content = 'Cultural context and norms for ar-OM',
     c.llm_context = 'USE: ar-OM culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -2387,7 +2387,7 @@ SET c.display_name = 'ar-OM Culture Norms',
 
 MERGE (c:Culture {key: 'ru-MD'})
 SET c.display_name = 'ru-MD Culture Norms',
-    c.description = 'Cultural context and norms for ru-MD',
+    c.content = 'Cultural context and norms for ru-MD',
     c.llm_context = 'USE: ru-MD culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2409,7 +2409,7 @@ SET c.display_name = 'ru-MD Culture Norms',
 
 MERGE (c:Culture {key: 'mt-MT'})
 SET c.display_name = 'mt-MT Culture Norms',
-    c.description = 'Cultural context and norms for mt-MT',
+    c.content = 'Cultural context and norms for mt-MT',
     c.llm_context = 'USE: mt-MT culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2431,7 +2431,7 @@ SET c.display_name = 'mt-MT Culture Norms',
 
 MERGE (c:Culture {key: 'eu-ES'})
 SET c.display_name = 'eu-ES Culture Norms',
-    c.description = 'Cultural context and norms for eu-ES',
+    c.content = 'Cultural context and norms for eu-ES',
     c.llm_context = 'USE: eu-ES culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2453,7 +2453,7 @@ SET c.display_name = 'eu-ES Culture Norms',
 
 MERGE (c:Culture {key: 'ja-JP'})
 SET c.display_name = 'ja-JP Culture Norms',
-    c.description = 'Cultural context and norms for ja-JP',
+    c.content = 'Cultural context and norms for ja-JP',
     c.llm_context = 'USE: ja-JP culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2475,7 +2475,7 @@ SET c.display_name = 'ja-JP Culture Norms',
 
 MERGE (c:Culture {key: 'bn-IN'})
 SET c.display_name = 'bn-IN Culture Norms',
-    c.description = 'Cultural context and norms for bn-IN',
+    c.content = 'Cultural context and norms for bn-IN',
     c.llm_context = 'USE: bn-IN culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2497,7 +2497,7 @@ SET c.display_name = 'bn-IN Culture Norms',
 
 MERGE (c:Culture {key: 'he-IL'})
 SET c.display_name = 'he-IL Culture Norms',
-    c.description = 'Cultural context and norms for he-IL',
+    c.content = 'Cultural context and norms for he-IL',
     c.llm_context = 'USE: he-IL culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -2519,7 +2519,7 @@ SET c.display_name = 'he-IL Culture Norms',
 
 MERGE (c:Culture {key: 'zh-HK'})
 SET c.display_name = 'zh-HK Culture Norms',
-    c.description = 'Cultural context and norms for zh-HK',
+    c.content = 'Cultural context and norms for zh-HK',
     c.llm_context = 'USE: zh-HK culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2541,7 +2541,7 @@ SET c.display_name = 'zh-HK Culture Norms',
 
 MERGE (c:Culture {key: 'es-CO'})
 SET c.display_name = 'es-CO Culture Norms',
-    c.description = 'Cultural context and norms for es-CO',
+    c.content = 'Cultural context and norms for es-CO',
     c.llm_context = 'USE: es-CO culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2563,7 +2563,7 @@ SET c.display_name = 'es-CO Culture Norms',
 
 MERGE (c:Culture {key: 'de-LU'})
 SET c.display_name = 'de-LU Culture Norms',
-    c.description = 'Cultural context and norms for de-LU',
+    c.content = 'Cultural context and norms for de-LU',
     c.llm_context = 'USE: de-LU culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2585,7 +2585,7 @@ SET c.display_name = 'de-LU Culture Norms',
 
 MERGE (c:Culture {key: 'es-BO'})
 SET c.display_name = 'es-BO Culture Norms',
-    c.description = 'Cultural context and norms for es-BO',
+    c.content = 'Cultural context and norms for es-BO',
     c.llm_context = 'USE: es-BO culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -2607,7 +2607,7 @@ SET c.display_name = 'es-BO Culture Norms',
 
 MERGE (c:Culture {key: 'th-TH'})
 SET c.display_name = 'th-TH Culture Norms',
-    c.description = 'Cultural context and norms for th-TH',
+    c.content = 'Cultural context and norms for th-TH',
     c.llm_context = 'USE: th-TH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2629,7 +2629,7 @@ SET c.display_name = 'th-TH Culture Norms',
 
 MERGE (c:Culture {key: 'kk-KZ'})
 SET c.display_name = 'kk-KZ Culture Norms',
-    c.description = 'Cultural context and norms for kk-KZ',
+    c.content = 'Cultural context and norms for kk-KZ',
     c.llm_context = 'USE: kk-KZ culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2651,7 +2651,7 @@ SET c.display_name = 'kk-KZ Culture Norms',
 
 MERGE (c:Culture {key: 'fi-FI'})
 SET c.display_name = 'fi-FI Culture Norms',
-    c.description = 'Cultural context and norms for fi-FI',
+    c.content = 'Cultural context and norms for fi-FI',
     c.llm_context = 'USE: fi-FI culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2673,7 +2673,7 @@ SET c.display_name = 'fi-FI Culture Norms',
 
 MERGE (c:Culture {key: 'ar-TN'})
 SET c.display_name = 'ar-TN Culture Norms',
-    c.description = 'Cultural context and norms for ar-TN',
+    c.content = 'Cultural context and norms for ar-TN',
     c.llm_context = 'USE: ar-TN culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2695,7 +2695,7 @@ SET c.display_name = 'ar-TN Culture Norms',
 
 MERGE (c:Culture {key: 'en-VN'})
 SET c.display_name = 'en-VN Culture Norms',
-    c.description = 'Cultural context and norms for en-VN',
+    c.content = 'Cultural context and norms for en-VN',
     c.llm_context = 'USE: en-VN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2717,7 +2717,7 @@ SET c.display_name = 'en-VN Culture Norms',
 
 MERGE (c:Culture {key: 'tl-PH'})
 SET c.display_name = 'tl-PH Culture Norms',
-    c.description = 'Cultural context and norms for tl-PH',
+    c.content = 'Cultural context and norms for tl-PH',
     c.llm_context = 'USE: tl-PH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2739,7 +2739,7 @@ SET c.display_name = 'tl-PH Culture Norms',
 
 MERGE (c:Culture {key: 'en-PK'})
 SET c.display_name = 'en-PK Culture Norms',
-    c.description = 'Cultural context and norms for en-PK',
+    c.content = 'Cultural context and norms for en-PK',
     c.llm_context = 'USE: en-PK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2761,7 +2761,7 @@ SET c.display_name = 'en-PK Culture Norms',
 
 MERGE (c:Culture {key: 'fr-CH'})
 SET c.display_name = 'fr-CH Culture Norms',
-    c.description = 'Cultural context and norms for fr-CH',
+    c.content = 'Cultural context and norms for fr-CH',
     c.llm_context = 'USE: fr-CH culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2783,7 +2783,7 @@ SET c.display_name = 'fr-CH Culture Norms',
 
 MERGE (c:Culture {key: 'cy-GB'})
 SET c.display_name = 'cy-GB Culture Norms',
-    c.description = 'Cultural context and norms for cy-GB',
+    c.content = 'Cultural context and norms for cy-GB',
     c.llm_context = 'USE: cy-GB culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2805,7 +2805,7 @@ SET c.display_name = 'cy-GB Culture Norms',
 
 MERGE (c:Culture {key: 'en-FJ'})
 SET c.display_name = 'en-FJ Culture Norms',
-    c.description = 'Cultural context and norms for en-FJ',
+    c.content = 'Cultural context and norms for en-FJ',
     c.llm_context = 'USE: en-FJ culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -2827,7 +2827,7 @@ SET c.display_name = 'en-FJ Culture Norms',
 
 MERGE (c:Culture {key: 'af-ZA'})
 SET c.display_name = 'af-ZA Culture Norms',
-    c.description = 'Cultural context and norms for af-ZA',
+    c.content = 'Cultural context and norms for af-ZA',
     c.llm_context = 'USE: af-ZA culture (southern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -2849,7 +2849,7 @@ SET c.display_name = 'af-ZA Culture Norms',
 
 MERGE (c:Culture {key: 'en-JM'})
 SET c.display_name = 'en-JM Culture Norms',
-    c.description = 'Cultural context and norms for en-JM',
+    c.content = 'Cultural context and norms for en-JM',
     c.llm_context = 'USE: en-JM culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2871,7 +2871,7 @@ SET c.display_name = 'en-JM Culture Norms',
 
 MERGE (c:Culture {key: 'da-DK'})
 SET c.display_name = 'da-DK Culture Norms',
-    c.description = 'Cultural context and norms for da-DK',
+    c.content = 'Cultural context and norms for da-DK',
     c.llm_context = 'USE: da-DK culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2893,7 +2893,7 @@ SET c.display_name = 'da-DK Culture Norms',
 
 MERGE (c:Culture {key: 'en-US'})
 SET c.display_name = 'en-US Culture Norms',
-    c.description = 'Cultural context and norms for en-US',
+    c.content = 'Cultural context and norms for en-US',
     c.llm_context = 'USE: en-US culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2915,7 +2915,7 @@ SET c.display_name = 'en-US Culture Norms',
 
 MERGE (c:Culture {key: 'pt-PT'})
 SET c.display_name = 'pt-PT Culture Norms',
-    c.description = 'Cultural context and norms for pt-PT',
+    c.content = 'Cultural context and norms for pt-PT',
     c.llm_context = 'USE: pt-PT culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2937,7 +2937,7 @@ SET c.display_name = 'pt-PT Culture Norms',
 
 MERGE (c:Culture {key: 'ga-IE'})
 SET c.display_name = 'ga-IE Culture Norms',
-    c.description = 'Cultural context and norms for ga-IE',
+    c.content = 'Cultural context and norms for ga-IE',
     c.llm_context = 'USE: ga-IE culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -2959,7 +2959,7 @@ SET c.display_name = 'ga-IE Culture Norms',
 
 MERGE (c:Culture {key: 'es-AR'})
 SET c.display_name = 'es-AR Culture Norms',
-    c.description = 'Cultural context and norms for es-AR',
+    c.content = 'Cultural context and norms for es-AR',
     c.llm_context = 'USE: es-AR culture (southern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -2981,7 +2981,7 @@ SET c.display_name = 'es-AR Culture Norms',
 
 MERGE (c:Culture {key: 'gl-ES'})
 SET c.display_name = 'gl-ES Culture Norms',
-    c.description = 'Cultural context and norms for gl-ES',
+    c.content = 'Cultural context and norms for gl-ES',
     c.llm_context = 'USE: gl-ES culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3003,7 +3003,7 @@ SET c.display_name = 'gl-ES Culture Norms',
 
 MERGE (c:Culture {key: 'es-ES'})
 SET c.display_name = 'es-ES Culture Norms',
-    c.description = 'Cultural context and norms for es-ES',
+    c.content = 'Cultural context and norms for es-ES',
     c.llm_context = 'USE: es-ES culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3025,7 +3025,7 @@ SET c.display_name = 'es-ES Culture Norms',
 
 MERGE (c:Culture {key: 'zh-TH'})
 SET c.display_name = 'zh-TH Culture Norms',
-    c.description = 'Cultural context and norms for zh-TH',
+    c.content = 'Cultural context and norms for zh-TH',
     c.llm_context = 'USE: zh-TH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3047,7 +3047,7 @@ SET c.display_name = 'zh-TH Culture Norms',
 
 MERGE (c:Culture {key: 'be-BY'})
 SET c.display_name = 'be-BY Culture Norms',
-    c.description = 'Cultural context and norms for be-BY',
+    c.content = 'Cultural context and norms for be-BY',
     c.llm_context = 'USE: be-BY culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3069,7 +3069,7 @@ SET c.display_name = 'be-BY Culture Norms',
 
 MERGE (c:Culture {key: 'wo-SN'})
 SET c.display_name = 'wo-SN Culture Norms',
-    c.description = 'Cultural context and norms for wo-SN',
+    c.content = 'Cultural context and norms for wo-SN',
     c.llm_context = 'USE: wo-SN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3091,7 +3091,7 @@ SET c.display_name = 'wo-SN Culture Norms',
 
 MERGE (c:Culture {key: 'es-NI'})
 SET c.display_name = 'es-NI Culture Norms',
-    c.description = 'Cultural context and norms for es-NI',
+    c.content = 'Cultural context and norms for es-NI',
     c.llm_context = 'USE: es-NI culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3113,7 +3113,7 @@ SET c.display_name = 'es-NI Culture Norms',
 
 MERGE (c:Culture {key: 'sv-SE'})
 SET c.display_name = 'sv-SE Culture Norms',
-    c.description = 'Cultural context and norms for sv-SE',
+    c.content = 'Cultural context and norms for sv-SE',
     c.llm_context = 'USE: sv-SE culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3135,7 +3135,7 @@ SET c.display_name = 'sv-SE Culture Norms',
 
 MERGE (c:Culture {key: 'hr-HR'})
 SET c.display_name = 'hr-HR Culture Norms',
-    c.description = 'Cultural context and norms for hr-HR',
+    c.content = 'Cultural context and norms for hr-HR',
     c.llm_context = 'USE: hr-HR culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3157,7 +3157,7 @@ SET c.display_name = 'hr-HR Culture Norms',
 
 MERGE (c:Culture {key: 'fr-CI'})
 SET c.display_name = 'fr-CI Culture Norms',
-    c.description = 'Cultural context and norms for fr-CI',
+    c.content = 'Cultural context and norms for fr-CI',
     c.llm_context = 'USE: fr-CI culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3179,7 +3179,7 @@ SET c.display_name = 'fr-CI Culture Norms',
 
 MERGE (c:Culture {key: 'ku-TR'})
 SET c.display_name = 'ku-TR Culture Norms',
-    c.description = 'Cultural context and norms for ku-TR',
+    c.content = 'Cultural context and norms for ku-TR',
     c.llm_context = 'USE: ku-TR culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3201,7 +3201,7 @@ SET c.display_name = 'ku-TR Culture Norms',
 
 MERGE (c:Culture {key: 'en-BW'})
 SET c.display_name = 'en-BW Culture Norms',
-    c.description = 'Cultural context and norms for en-BW',
+    c.content = 'Cultural context and norms for en-BW',
     c.llm_context = 'USE: en-BW culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3223,7 +3223,7 @@ SET c.display_name = 'en-BW Culture Norms',
 
 MERGE (c:Culture {key: 'ar-IQ'})
 SET c.display_name = 'ar-IQ Culture Norms',
-    c.description = 'Cultural context and norms for ar-IQ',
+    c.content = 'Cultural context and norms for ar-IQ',
     c.llm_context = 'USE: ar-IQ culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -3245,7 +3245,7 @@ SET c.display_name = 'ar-IQ Culture Norms',
 
 MERGE (c:Culture {key: 'pa-PK'})
 SET c.display_name = 'pa-PK Culture Norms',
-    c.description = 'Cultural context and norms for pa-PK',
+    c.content = 'Cultural context and norms for pa-PK',
     c.llm_context = 'USE: pa-PK culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3267,7 +3267,7 @@ SET c.display_name = 'pa-PK Culture Norms',
 
 MERGE (c:Culture {key: 'es-DO'})
 SET c.display_name = 'es-DO Culture Norms',
-    c.description = 'Cultural context and norms for es-DO',
+    c.content = 'Cultural context and norms for es-DO',
     c.llm_context = 'USE: es-DO culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3289,7 +3289,7 @@ SET c.display_name = 'es-DO Culture Norms',
 
 MERGE (c:Culture {key: 'es-CR'})
 SET c.display_name = 'es-CR Culture Norms',
-    c.description = 'Cultural context and norms for es-CR',
+    c.content = 'Cultural context and norms for es-CR',
     c.llm_context = 'USE: es-CR culture (northern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3311,7 +3311,7 @@ SET c.display_name = 'es-CR Culture Norms',
 
 MERGE (c:Culture {key: 'ps-AF'})
 SET c.display_name = 'ps-AF Culture Norms',
-    c.description = 'Cultural context and norms for ps-AF',
+    c.content = 'Cultural context and norms for ps-AF',
     c.llm_context = 'USE: ps-AF culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'saturday',
@@ -3333,7 +3333,7 @@ SET c.display_name = 'ps-AF Culture Norms',
 
 MERGE (c:Culture {key: 'fr-CM'})
 SET c.display_name = 'fr-CM Culture Norms',
-    c.description = 'Cultural context and norms for fr-CM',
+    c.content = 'Cultural context and norms for fr-CM',
     c.llm_context = 'USE: fr-CM culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3355,7 +3355,7 @@ SET c.display_name = 'fr-CM Culture Norms',
 
 MERGE (c:Culture {key: 'el-GR'})
 SET c.display_name = 'el-GR Culture Norms',
-    c.description = 'Cultural context and norms for el-GR',
+    c.content = 'Cultural context and norms for el-GR',
     c.llm_context = 'USE: el-GR culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3377,7 +3377,7 @@ SET c.display_name = 'el-GR Culture Norms',
 
 MERGE (c:Culture {key: 'hi-IN'})
 SET c.display_name = 'hi-IN Culture Norms',
-    c.description = 'Cultural context and norms for hi-IN',
+    c.content = 'Cultural context and norms for hi-IN',
     c.llm_context = 'USE: hi-IN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3399,7 +3399,7 @@ SET c.display_name = 'hi-IN Culture Norms',
 
 MERGE (c:Culture {key: 'qu-PE'})
 SET c.display_name = 'qu-PE Culture Norms',
-    c.description = 'Cultural context and norms for qu-PE',
+    c.content = 'Cultural context and norms for qu-PE',
     c.llm_context = 'USE: qu-PE culture (southern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3421,7 +3421,7 @@ SET c.display_name = 'qu-PE Culture Norms',
 
 MERGE (c:Culture {key: 'sr-RS'})
 SET c.display_name = 'sr-RS Culture Norms',
-    c.description = 'Cultural context and norms for sr-RS',
+    c.content = 'Cultural context and norms for sr-RS',
     c.llm_context = 'USE: sr-RS culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3443,7 +3443,7 @@ SET c.display_name = 'sr-RS Culture Norms',
 
 MERGE (c:Culture {key: 'ms-BN'})
 SET c.display_name = 'ms-BN Culture Norms',
-    c.description = 'Cultural context and norms for ms-BN',
+    c.content = 'Cultural context and norms for ms-BN',
     c.llm_context = 'USE: ms-BN culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3465,7 +3465,7 @@ SET c.display_name = 'ms-BN Culture Norms',
 
 MERGE (c:Culture {key: 'es-UY'})
 SET c.display_name = 'es-UY Culture Norms',
-    c.description = 'Cultural context and norms for es-UY',
+    c.content = 'Cultural context and norms for es-UY',
     c.llm_context = 'USE: es-UY culture (southern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3487,7 +3487,7 @@ SET c.display_name = 'es-UY Culture Norms',
 
 MERGE (c:Culture {key: 'zu-ZA'})
 SET c.display_name = 'zu-ZA Culture Norms',
-    c.description = 'Cultural context and norms for zu-ZA',
+    c.content = 'Cultural context and norms for zu-ZA',
     c.llm_context = 'USE: zu-ZA culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3509,7 +3509,7 @@ SET c.display_name = 'zu-ZA Culture Norms',
 
 MERGE (c:Culture {key: 'fr-BF'})
 SET c.display_name = 'fr-BF Culture Norms',
-    c.description = 'Cultural context and norms for fr-BF',
+    c.content = 'Cultural context and norms for fr-BF',
     c.llm_context = 'USE: fr-BF culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3531,7 +3531,7 @@ SET c.display_name = 'fr-BF Culture Norms',
 
 MERGE (c:Culture {key: 'en-SA'})
 SET c.display_name = 'en-SA Culture Norms',
-    c.description = 'Cultural context and norms for en-SA',
+    c.content = 'Cultural context and norms for en-SA',
     c.llm_context = 'USE: en-SA culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -3553,7 +3553,7 @@ SET c.display_name = 'en-SA Culture Norms',
 
 MERGE (c:Culture {key: 'id-ID'})
 SET c.display_name = 'id-ID Culture Norms',
-    c.description = 'Cultural context and norms for id-ID',
+    c.content = 'Cultural context and norms for id-ID',
     c.llm_context = 'USE: id-ID culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3575,7 +3575,7 @@ SET c.display_name = 'id-ID Culture Norms',
 
 MERGE (c:Culture {key: 'ar-QA'})
 SET c.display_name = 'ar-QA Culture Norms',
-    c.description = 'Cultural context and norms for ar-QA',
+    c.content = 'Cultural context and norms for ar-QA',
     c.llm_context = 'USE: ar-QA culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -3597,7 +3597,7 @@ SET c.display_name = 'ar-QA Culture Norms',
 
 MERGE (c:Culture {key: 'es-VE'})
 SET c.display_name = 'es-VE Culture Norms',
-    c.description = 'Cultural context and norms for es-VE',
+    c.content = 'Cultural context and norms for es-VE',
     c.llm_context = 'USE: es-VE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3619,7 +3619,7 @@ SET c.display_name = 'es-VE Culture Norms',
 
 MERGE (c:Culture {key: 'az-AZ'})
 SET c.display_name = 'az-AZ Culture Norms',
-    c.description = 'Cultural context and norms for az-AZ',
+    c.content = 'Cultural context and norms for az-AZ',
     c.llm_context = 'USE: az-AZ culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3641,7 +3641,7 @@ SET c.display_name = 'az-AZ Culture Norms',
 
 MERGE (c:Culture {key: 'de-DE'})
 SET c.display_name = 'de-DE Culture Norms',
-    c.description = 'Cultural context and norms for de-DE',
+    c.content = 'Cultural context and norms for de-DE',
     c.llm_context = 'USE: de-DE culture (northern hemisphere, direct communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3663,7 +3663,7 @@ SET c.display_name = 'de-DE Culture Norms',
 
 MERGE (c:Culture {key: 'ar-SA'})
 SET c.display_name = 'ar-SA Culture Norms',
-    c.description = 'Cultural context and norms for ar-SA',
+    c.content = 'Cultural context and norms for ar-SA',
     c.llm_context = 'USE: ar-SA culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -3685,7 +3685,7 @@ SET c.display_name = 'ar-SA Culture Norms',
 
 MERGE (c:Culture {key: 'fr-MA'})
 SET c.display_name = 'fr-MA Culture Norms',
-    c.description = 'Cultural context and norms for fr-MA',
+    c.content = 'Cultural context and norms for fr-MA',
     c.llm_context = 'USE: fr-MA culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3707,7 +3707,7 @@ SET c.display_name = 'fr-MA Culture Norms',
 
 MERGE (c:Culture {key: 'uz-UZ'})
 SET c.display_name = 'uz-UZ Culture Norms',
-    c.description = 'Cultural context and norms for uz-UZ',
+    c.content = 'Cultural context and norms for uz-UZ',
     c.llm_context = 'USE: uz-UZ culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3729,7 +3729,7 @@ SET c.display_name = 'uz-UZ Culture Norms',
 
 MERGE (c:Culture {key: 'lv-LV'})
 SET c.display_name = 'lv-LV Culture Norms',
-    c.description = 'Cultural context and norms for lv-LV',
+    c.content = 'Cultural context and norms for lv-LV',
     c.llm_context = 'USE: lv-LV culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3751,7 +3751,7 @@ SET c.display_name = 'lv-LV Culture Norms',
 
 MERGE (c:Culture {key: 'xh-ZA'})
 SET c.display_name = 'xh-ZA Culture Norms',
-    c.description = 'Cultural context and norms for xh-ZA',
+    c.content = 'Cultural context and norms for xh-ZA',
     c.llm_context = 'USE: xh-ZA culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3773,7 +3773,7 @@ SET c.display_name = 'xh-ZA Culture Norms',
 
 MERGE (c:Culture {key: 'ro-MD'})
 SET c.display_name = 'ro-MD Culture Norms',
-    c.description = 'Cultural context and norms for ro-MD',
+    c.content = 'Cultural context and norms for ro-MD',
     c.llm_context = 'USE: ro-MD culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3795,7 +3795,7 @@ SET c.display_name = 'ro-MD Culture Norms',
 
 MERGE (c:Culture {key: 'en-NG'})
 SET c.display_name = 'en-NG Culture Norms',
-    c.description = 'Cultural context and norms for en-NG',
+    c.content = 'Cultural context and norms for en-NG',
     c.llm_context = 'USE: en-NG culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3817,7 +3817,7 @@ SET c.display_name = 'en-NG Culture Norms',
 
 MERGE (c:Culture {key: 'it-IT'})
 SET c.display_name = 'it-IT Culture Norms',
-    c.description = 'Cultural context and norms for it-IT',
+    c.content = 'Cultural context and norms for it-IT',
     c.llm_context = 'USE: it-IT culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3839,7 +3839,7 @@ SET c.display_name = 'it-IT Culture Norms',
 
 MERGE (c:Culture {key: 'no-NO'})
 SET c.display_name = 'no-NO Culture Norms',
-    c.description = 'Cultural context and norms for no-NO',
+    c.content = 'Cultural context and norms for no-NO',
     c.llm_context = 'USE: no-NO culture (northern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3861,7 +3861,7 @@ SET c.display_name = 'no-NO Culture Norms',
 
 MERGE (c:Culture {key: 'sk-SK'})
 SET c.display_name = 'sk-SK Culture Norms',
-    c.description = 'Cultural context and norms for sk-SK',
+    c.content = 'Cultural context and norms for sk-SK',
     c.llm_context = 'USE: sk-SK culture (northern hemisphere, balanced communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3883,7 +3883,7 @@ SET c.display_name = 'sk-SK Culture Norms',
 
 MERGE (c:Culture {key: 'gn-PY'})
 SET c.display_name = 'gn-PY Culture Norms',
-    c.description = 'Cultural context and norms for gn-PY',
+    c.content = 'Cultural context and norms for gn-PY',
     c.llm_context = 'USE: gn-PY culture (southern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -3905,7 +3905,7 @@ SET c.display_name = 'gn-PY Culture Norms',
 
 MERGE (c:Culture {key: 'uk-UA'})
 SET c.display_name = 'uk-UA Culture Norms',
-    c.description = 'Cultural context and norms for uk-UA',
+    c.content = 'Cultural context and norms for uk-UA',
     c.llm_context = 'USE: uk-UA culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3927,7 +3927,7 @@ SET c.display_name = 'uk-UA Culture Norms',
 
 MERGE (c:Culture {key: 'pl-PL'})
 SET c.display_name = 'pl-PL Culture Norms',
-    c.description = 'Cultural context and norms for pl-PL',
+    c.content = 'Cultural context and norms for pl-PL',
     c.llm_context = 'USE: pl-PL culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3949,7 +3949,7 @@ SET c.display_name = 'pl-PL Culture Norms',
 
 MERGE (c:Culture {key: 'zh-SG'})
 SET c.display_name = 'zh-SG Culture Norms',
-    c.description = 'Cultural context and norms for zh-SG',
+    c.content = 'Cultural context and norms for zh-SG',
     c.llm_context = 'USE: zh-SG culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3971,7 +3971,7 @@ SET c.display_name = 'zh-SG Culture Norms',
 
 MERGE (c:Culture {key: 'en-CA'})
 SET c.display_name = 'en-CA Culture Norms',
-    c.description = 'Cultural context and norms for en-CA',
+    c.content = 'Cultural context and norms for en-CA',
     c.llm_context = 'USE: en-CA culture (northern hemisphere, balanced communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -3993,7 +3993,7 @@ SET c.display_name = 'en-CA Culture Norms',
 
 MERGE (c:Culture {key: 'en-AE'})
 SET c.display_name = 'en-AE Culture Norms',
-    c.description = 'Cultural context and norms for en-AE',
+    c.content = 'Cultural context and norms for en-AE',
     c.llm_context = 'USE: en-AE culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4015,7 +4015,7 @@ SET c.display_name = 'en-AE Culture Norms',
 
 MERGE (c:Culture {key: 'en-CY'})
 SET c.display_name = 'en-CY Culture Norms',
-    c.description = 'Cultural context and norms for en-CY',
+    c.content = 'Cultural context and norms for en-CY',
     c.llm_context = 'USE: en-CY culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4037,7 +4037,7 @@ SET c.display_name = 'en-CY Culture Norms',
 
 MERGE (c:Culture {key: 'ru-RU'})
 SET c.display_name = 'ru-RU Culture Norms',
-    c.description = 'Cultural context and norms for ru-RU',
+    c.content = 'Cultural context and norms for ru-RU',
     c.llm_context = 'USE: ru-RU culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4059,7 +4059,7 @@ SET c.display_name = 'ru-RU Culture Norms',
 
 MERGE (c:Culture {key: 'mi-NZ'})
 SET c.display_name = 'mi-NZ Culture Norms',
-    c.description = 'Cultural context and norms for mi-NZ',
+    c.content = 'Cultural context and norms for mi-NZ',
     c.llm_context = 'USE: mi-NZ culture (southern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -4081,7 +4081,7 @@ SET c.display_name = 'mi-NZ Culture Norms',
 
 MERGE (c:Culture {key: 'es-PE'})
 SET c.display_name = 'es-PE Culture Norms',
-    c.description = 'Cultural context and norms for es-PE',
+    c.content = 'Cultural context and norms for es-PE',
     c.llm_context = 'USE: es-PE culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -4103,7 +4103,7 @@ SET c.display_name = 'es-PE Culture Norms',
 
 MERGE (c:Culture {key: 'yo-NG'})
 SET c.display_name = 'yo-NG Culture Norms',
-    c.description = 'Cultural context and norms for yo-NG',
+    c.content = 'Cultural context and norms for yo-NG',
     c.llm_context = 'USE: yo-NG culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4125,7 +4125,7 @@ SET c.display_name = 'yo-NG Culture Norms',
 
 MERGE (c:Culture {key: 'tk-TM'})
 SET c.display_name = 'tk-TM Culture Norms',
-    c.description = 'Cultural context and norms for tk-TM',
+    c.content = 'Cultural context and norms for tk-TM',
     c.llm_context = 'USE: tk-TM culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4147,7 +4147,7 @@ SET c.display_name = 'tk-TM Culture Norms',
 
 MERGE (c:Culture {key: 'es-PY'})
 SET c.display_name = 'es-PY Culture Norms',
-    c.description = 'Cultural context and norms for es-PY',
+    c.content = 'Cultural context and norms for es-PY',
     c.llm_context = 'USE: es-PY culture (southern hemisphere, indirect communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -4169,7 +4169,7 @@ SET c.display_name = 'es-PY Culture Norms',
 
 MERGE (c:Culture {key: 'ha-NG'})
 SET c.display_name = 'ha-NG Culture Norms',
-    c.description = 'Cultural context and norms for ha-NG',
+    c.content = 'Cultural context and norms for ha-NG',
     c.llm_context = 'USE: ha-NG culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -4191,7 +4191,7 @@ SET c.display_name = 'ha-NG Culture Norms',
 
 MERGE (c:Culture {key: 'el-CY'})
 SET c.display_name = 'el-CY Culture Norms',
-    c.description = 'Cultural context and norms for el-CY',
+    c.content = 'Cultural context and norms for el-CY',
     c.llm_context = 'USE: el-CY culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4213,7 +4213,7 @@ SET c.display_name = 'el-CY Culture Norms',
 
 MERGE (c:Culture {key: 'jv-ID'})
 SET c.display_name = 'jv-ID Culture Norms',
-    c.description = 'Cultural context and norms for jv-ID',
+    c.content = 'Cultural context and norms for jv-ID',
     c.llm_context = 'USE: jv-ID culture (southern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -4235,7 +4235,7 @@ SET c.display_name = 'jv-ID Culture Norms',
 
 MERGE (c:Culture {key: 'km-KH'})
 SET c.display_name = 'km-KH Culture Norms',
-    c.description = 'Cultural context and norms for km-KH',
+    c.content = 'Cultural context and norms for km-KH',
     c.llm_context = 'USE: km-KH culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4257,7 +4257,7 @@ SET c.display_name = 'km-KH Culture Norms',
 
 MERGE (c:Culture {key: 'so-SO'})
 SET c.display_name = 'so-SO Culture Norms',
-    c.description = 'Cultural context and norms for so-SO',
+    c.content = 'Cultural context and norms for so-SO',
     c.llm_context = 'USE: so-SO culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'saturday',
@@ -4279,7 +4279,7 @@ SET c.display_name = 'so-SO Culture Norms',
 
 MERGE (c:Culture {key: 'ar-AE'})
 SET c.display_name = 'ar-AE Culture Norms',
-    c.description = 'Cultural context and norms for ar-AE',
+    c.content = 'Cultural context and norms for ar-AE',
     c.llm_context = 'USE: ar-AE culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4301,7 +4301,7 @@ SET c.display_name = 'ar-AE Culture Norms',
 
 MERGE (c:Culture {key: 'en-NZ'})
 SET c.display_name = 'en-NZ Culture Norms',
-    c.description = 'Cultural context and norms for en-NZ',
+    c.content = 'Cultural context and norms for en-NZ',
     c.llm_context = 'USE: en-NZ culture (southern hemisphere, direct communication, low hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'southern',
     c.work_week_start = 'monday',
@@ -4323,7 +4323,7 @@ SET c.display_name = 'en-NZ Culture Norms',
 
 MERGE (c:Culture {key: 'ne-NP'})
 SET c.display_name = 'ne-NP Culture Norms',
-    c.description = 'Cultural context and norms for ne-NP',
+    c.content = 'Cultural context and norms for ne-NP',
     c.llm_context = 'USE: ne-NP culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'sunday',
@@ -4345,7 +4345,7 @@ SET c.display_name = 'ne-NP Culture Norms',
 
 MERGE (c:Culture {key: 'fr-DZ'})
 SET c.display_name = 'fr-DZ Culture Norms',
-    c.description = 'Cultural context and norms for fr-DZ',
+    c.content = 'Cultural context and norms for fr-DZ',
     c.llm_context = 'USE: fr-DZ culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4367,7 +4367,7 @@ SET c.display_name = 'fr-DZ Culture Norms',
 
 MERGE (c:Culture {key: 'ar-LB'})
 SET c.display_name = 'ar-LB Culture Norms',
-    c.description = 'Cultural context and norms for ar-LB',
+    c.content = 'Cultural context and norms for ar-LB',
     c.llm_context = 'USE: ar-LB culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4389,7 +4389,7 @@ SET c.display_name = 'ar-LB Culture Norms',
 
 MERGE (c:Culture {key: 'tg-TJ'})
 SET c.display_name = 'tg-TJ Culture Norms',
-    c.description = 'Cultural context and norms for tg-TJ',
+    c.content = 'Cultural context and norms for tg-TJ',
     c.llm_context = 'USE: tg-TJ culture (northern hemisphere, indirect communication, high hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
@@ -4411,7 +4411,7 @@ SET c.display_name = 'tg-TJ Culture Norms',
 
 MERGE (c:Culture {key: 'es-PA'})
 SET c.display_name = 'es-PA Culture Norms',
-    c.description = 'Cultural context and norms for es-PA',
+    c.content = 'Cultural context and norms for es-PA',
     c.llm_context = 'USE: es-PA culture (northern hemisphere, balanced communication, medium hierarchy). TRIGGERS: regional holidays, seasonal references, formality levels. NOT: generic greetings, universal values.',
     c.hemisphere = 'northern',
     c.work_week_start = 'monday',
