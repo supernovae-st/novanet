@@ -37,7 +37,7 @@ SET r.temperature = 0.95,
 
 MATCH (tool:Entity {key: 'entity:qr-code-generator'})
 MATCH (obj:Entity)
-WHERE obj.key IN ['qr-code-instagram', 'qr-code-wifi', 'qr-code-vcard', 'qr-code-menu']
+WHERE obj.key IN ['entity:qr-code-instagram', 'entity:qr-code-wifi', 'entity:qr-code-vcard', 'entity:qr-code-menu']
 MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.85,
     r.llm_context = 'TOOL → OBJECT: Le générateur est utilisé pour créer ce type de QR code'
@@ -49,10 +49,10 @@ SET r.temperature = 0.85,
 
 MATCH (e:Entity {key: 'entity:qr-code-generator'})
 MATCH (l:Locale {key: 'fr-FR'})
-MERGE (en:EntityNative {key: 'qr-code-generator@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
 SET en.locale = 'fr-FR',
     en.title = 'Générateur de QR Code',
-    en.description = 'Outil de création de QR codes personnalisés',
+    en.content = 'Outil de création de QR codes personnalisés',
     en.entity_type = 'TOOL',
     en.slug_terms = ['générateur', 'qr', 'code', 'créer'],
     en.updated_at = datetime()
@@ -66,10 +66,10 @@ MERGE (en)-[:FOR_LOCALE]->(l)
 
 MATCH (e:Entity {key: 'entity:create-qr-code'})
 MATCH (l:Locale {key: 'fr-FR'})
-MERGE (en:EntityNative {key: 'create-qr-code@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:create-qr-code@fr-FR'})
 SET en.locale = 'fr-FR',
     en.title = 'Créer un QR Code',
-    en.description = 'Action de générer un QR code personnalisé',
+    en.content = 'Action de générer un QR code personnalisé',
     en.entity_type = 'ACTION',
     en.slug_terms = ['créer', 'générer', 'qr', 'code'],
     en.updated_at = datetime()
@@ -83,16 +83,16 @@ MERGE (en)-[:FOR_LOCALE]->(l)
 
 MATCH (l:Locale {key: 'fr-FR'})
 UNWIND [
-  {key: 'qr-code-instagram', title: 'QR Code Instagram', desc: 'QR code pour lien Instagram', type: 'OBJECT'},
-  {key: 'qr-code-wifi', title: 'QR Code WiFi', desc: 'QR code pour partager un réseau WiFi', type: 'OBJECT'},
-  {key: 'qr-code-vcard', title: 'QR Code vCard', desc: 'QR code carte de visite', type: 'OBJECT'},
-  {key: 'qr-code-menu', title: 'QR Code Menu', desc: 'QR code pour menu restaurant', type: 'OBJECT'}
+  {key: 'entity:qr-code-instagram', title: 'QR Code Instagram', desc: 'QR code pour lien Instagram', type: 'OBJECT'},
+  {key: 'entity:qr-code-wifi', title: 'QR Code WiFi', desc: 'QR code pour partager un réseau WiFi', type: 'OBJECT'},
+  {key: 'entity:qr-code-vcard', title: 'QR Code vCard', desc: 'QR code carte de visite', type: 'OBJECT'},
+  {key: 'entity:qr-code-menu', title: 'QR Code Menu', desc: 'QR code pour menu restaurant', type: 'OBJECT'}
 ] AS obj
 MATCH (e:Entity {key: obj.key})
 MERGE (en:EntityNative {key: obj.key + '@fr-FR'})
 SET en.locale = 'fr-FR',
     en.title = obj.title,
-    en.description = obj.desc,
+    en.content = obj.desc,
     en.entity_type = obj.type,
     en.updated_at = datetime()
 MERGE (e)-[:HAS_NATIVE]->(en)
@@ -111,8 +111,8 @@ MERGE (en)-[:FOR_LOCALE]->(l)
 MATCH (k:SEOKeyword)
 WHERE k.key STARTS WITH 'seo-creer-qr-code' OR k.key STARTS WITH 'seo-creer-un-qr-code'
    OR k.key STARTS WITH 'seo-generer-qr-code' OR k.key STARTS WITH 'seo-generer-un-qr-code'
-MATCH (en_action:EntityNative {key: 'create-qr-code@fr-FR'})
-MATCH (en_tool:EntityNative {key: 'qr-code-generator@fr-FR'})
+MATCH (en_action:EntityNative {key: 'entity:create-qr-code@fr-FR'})
+MATCH (en_tool:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
 MERGE (en_action)-[r1:TARGETS]->(k)
 SET r1.rank = 'primary',
     r1.semantic_coef = 1.0

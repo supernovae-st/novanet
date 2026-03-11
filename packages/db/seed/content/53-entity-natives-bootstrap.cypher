@@ -15,7 +15,7 @@
 //   9. qr-code-generator
 //
 // Each gets EntityNative for en-US and fr-FR (18 total)
-// Key format: {entity-slug}@{locale} (ADR-029)
+// Key format: entity:{entity-slug}@{locale} (ADR-029)
 //
 // denomination_forms stored as separate properties (Neo4j doesn't support Maps)
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -25,10 +25,10 @@
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'qr-code@en-US'})
+MERGE (en:EntityNative {key: 'entity:qr-code@en-US'})
 ON CREATE SET
   en.display_name = 'QR Code',
-  en.description = 'A QR code (Quick Response code) is a two-dimensional barcode that stores information readable by smartphones and scanners.',
+  en.content = 'A QR code (Quick Response code) is a two-dimensional barcode that stores information readable by smartphones and scanners.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:qr-code',
   en.denomination_text = 'QR code',
@@ -40,10 +40,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'qr-code@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:qr-code@fr-FR'})
 ON CREATE SET
   en.display_name = 'Code QR',
-  en.description = 'Un code QR (Quick Response) est un code-barres bidimensionnel qui stocke des informations lisibles par smartphones et scanners.',
+  en.content = 'Un code QR (Quick Response) est un code-barres bidimensionnel qui stocke des informations lisibles par smartphones et scanners.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:qr-code',
   en.denomination_text = 'code QR',
@@ -59,10 +59,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'custom-qr-code@en-US'})
+MERGE (en:EntityNative {key: 'entity:custom-qr-code@en-US'})
 ON CREATE SET
   en.display_name = 'Custom QR Code',
-  en.description = 'A custom QR code with personalized design elements like colors, logos, and patterns while maintaining scannability.',
+  en.content = 'A custom QR code with personalized design elements like colors, logos, and patterns while maintaining scannability.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:custom-qr-code',
   en.denomination_text = 'custom QR code',
@@ -74,10 +74,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'custom-qr-code@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:custom-qr-code@fr-FR'})
 ON CREATE SET
   en.display_name = 'Code QR Personnalisé',
-  en.description = 'Un code QR personnalisé avec des éléments de design comme couleurs, logos et motifs tout en restant scannable.',
+  en.content = 'Un code QR personnalisé avec des éléments de design comme couleurs, logos et motifs tout en restant scannable.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:custom-qr-code',
   en.denomination_text = 'code QR personnalisé',
@@ -93,10 +93,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'qr-code-art@en-US'})
+MERGE (en:EntityNative {key: 'entity:qr-code-art@en-US'})
 ON CREATE SET
   en.display_name = 'QR Code Art',
-  en.description = 'QR code art transforms functional codes into visually stunning designs using AI-generated imagery and artistic styles.',
+  en.content = 'QR code art transforms functional codes into visually stunning designs using AI-generated imagery and artistic styles.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:qr-code-art',
   en.denomination_text = 'QR code art',
@@ -108,10 +108,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'qr-code-art@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:qr-code-art@fr-FR'})
 ON CREATE SET
   en.display_name = 'Art Code QR',
-  en.description = 'L\'art code QR transforme les codes fonctionnels en designs visuellement époustouflants grâce à l\'IA et des styles artistiques.',
+  en.content = 'L\'art code QR transforme les codes fonctionnels en designs visuellement époustouflants grâce à l\'IA et des styles artistiques.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:qr-code-art',
   en.denomination_text = 'art code QR',
@@ -127,10 +127,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'dynamic-qr-code@en-US'})
+MERGE (en:EntityNative {key: 'entity:dynamic-qr-code@en-US'})
 ON CREATE SET
   en.display_name = 'Dynamic QR Code',
-  en.description = 'A dynamic QR code allows you to change the destination URL anytime without reprinting the code, plus track scans and analytics.',
+  en.content = 'A dynamic QR code allows you to change the destination URL anytime without reprinting the code, plus track scans and analytics.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:dynamic-qr-code',
   en.denomination_text = 'dynamic QR code',
@@ -142,10 +142,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'dynamic-qr-code@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:dynamic-qr-code@fr-FR'})
 ON CREATE SET
   en.display_name = 'Code QR Dynamique',
-  en.description = 'Un code QR dynamique permet de changer l\'URL de destination à tout moment sans réimprimer le code, avec suivi des scans et analytics.',
+  en.content = 'Un code QR dynamique permet de changer l\'URL de destination à tout moment sans réimprimer le code, avec suivi des scans et analytics.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:dynamic-qr-code',
   en.denomination_text = 'code QR dynamique',
@@ -161,10 +161,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'static-qr-code@en-US'})
+MERGE (en:EntityNative {key: 'entity:static-qr-code@en-US'})
 ON CREATE SET
   en.display_name = 'Static QR Code',
-  en.description = 'A static QR code has a fixed destination that cannot be changed after creation. Best for permanent content like WiFi credentials.',
+  en.content = 'A static QR code has a fixed destination that cannot be changed after creation. Best for permanent content like WiFi credentials.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:static-qr-code',
   en.denomination_text = 'static QR code',
@@ -176,10 +176,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'static-qr-code@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:static-qr-code@fr-FR'})
 ON CREATE SET
   en.display_name = 'Code QR Statique',
-  en.description = 'Un code QR statique a une destination fixe qui ne peut pas être modifiée après création. Idéal pour le contenu permanent comme les identifiants WiFi.',
+  en.content = 'Un code QR statique a une destination fixe qui ne peut pas être modifiée après création. Idéal pour le contenu permanent comme les identifiants WiFi.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:static-qr-code',
   en.denomination_text = 'code QR statique',
@@ -195,10 +195,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'smart-link@en-US'})
+MERGE (en:EntityNative {key: 'entity:smart-link@en-US'})
 ON CREATE SET
   en.display_name = 'Smart Link',
-  en.description = 'A smart link intelligently routes users to different destinations based on device, location, language, or time.',
+  en.content = 'A smart link intelligently routes users to different destinations based on device, location, language, or time.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:smart-link',
   en.denomination_text = 'smart link',
@@ -210,10 +210,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'smart-link@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:smart-link@fr-FR'})
 ON CREATE SET
   en.display_name = 'Lien Intelligent',
-  en.description = 'Un lien intelligent redirige les utilisateurs vers différentes destinations selon l\'appareil, la localisation, la langue ou l\'heure.',
+  en.content = 'Un lien intelligent redirige les utilisateurs vers différentes destinations selon l\'appareil, la localisation, la langue ou l\'heure.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:smart-link',
   en.denomination_text = 'lien intelligent',
@@ -229,10 +229,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'landing-page@en-US'})
+MERGE (en:EntityNative {key: 'entity:landing-page@en-US'})
 ON CREATE SET
   en.display_name = 'Landing Page',
-  en.description = 'A landing page is a standalone web page designed for marketing campaigns, optimized for conversion.',
+  en.content = 'A landing page is a standalone web page designed for marketing campaigns, optimized for conversion.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:landing-page',
   en.denomination_text = 'landing page',
@@ -244,10 +244,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'landing-page@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:landing-page@fr-FR'})
 ON CREATE SET
   en.display_name = 'Page de Destination',
-  en.description = 'Une page de destination est une page web autonome conçue pour les campagnes marketing, optimisée pour la conversion.',
+  en.content = 'Une page de destination est une page web autonome conçue pour les campagnes marketing, optimisée pour la conversion.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:landing-page',
   en.denomination_text = 'page de destination',
@@ -263,10 +263,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'barcode@en-US'})
+MERGE (en:EntityNative {key: 'entity:barcode@en-US'})
 ON CREATE SET
   en.display_name = 'Barcode',
-  en.description = 'A barcode is a machine-readable code consisting of parallel lines or patterns that represents data about an item.',
+  en.content = 'A barcode is a machine-readable code consisting of parallel lines or patterns that represents data about an item.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:barcode',
   en.denomination_text = 'barcode',
@@ -278,10 +278,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'barcode@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:barcode@fr-FR'})
 ON CREATE SET
   en.display_name = 'Code-Barres',
-  en.description = 'Un code-barres est un code lisible par machine composé de lignes parallèles ou de motifs représentant des données sur un article.',
+  en.content = 'Un code-barres est un code lisible par machine composé de lignes parallèles ou de motifs représentant des données sur un article.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:barcode',
   en.denomination_text = 'code-barres',
@@ -297,10 +297,10 @@ ON CREATE SET
 // =============================================================================
 
 // en-US
-MERGE (en:EntityNative {key: 'qr-code-generator@en-US'})
+MERGE (en:EntityNative {key: 'entity:qr-code-generator@en-US'})
 ON CREATE SET
   en.display_name = 'QR Code Generator',
-  en.description = 'A QR code generator is a tool that creates QR codes from URLs, text, contact info, WiFi credentials, and other data types.',
+  en.content = 'A QR code generator is a tool that creates QR codes from URLs, text, contact info, WiFi credentials, and other data types.',
   en.locale_key = 'en-US',
   en.entity_key = 'entity:qr-code-generator',
   en.denomination_text = 'QR code generator',
@@ -312,10 +312,10 @@ ON CREATE SET
   en.updated_at = datetime();
 
 // fr-FR
-MERGE (en:EntityNative {key: 'qr-code-generator@fr-FR'})
+MERGE (en:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
 ON CREATE SET
   en.display_name = 'Générateur de Code QR',
-  en.description = 'Un générateur de code QR est un outil qui crée des codes QR à partir d\'URLs, texte, coordonnées, identifiants WiFi et autres types de données.',
+  en.content = 'Un générateur de code QR est un outil qui crée des codes QR à partir d\'URLs, texte, coordonnées, identifiants WiFi et autres types de données.',
   en.locale_key = 'fr-FR',
   en.entity_key = 'entity:qr-code-generator',
   en.denomination_text = 'générateur de code QR',
