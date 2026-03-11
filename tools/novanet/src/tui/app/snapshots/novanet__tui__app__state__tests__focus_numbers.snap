@@ -1,8 +1,9 @@
 ---
 source: novanet/src/tui/app/state.rs
-expression: "format!(\"Tree: [{}]\\nContent: [{}]\\nProps: [{}]\\nArcs: [{}]\",\nFocus::Tree.number(), Focus::Content.number(), Focus::Props.number(),\nFocus::Arcs.number())"
+expression: "format!(\"Tree: [{}]\\nIdentity: [{}]\\nContent: [{}]\\nProps: [{}]\\nArcs: [{}]\",\nFocus::Tree.number(), Focus::Identity.number(), Focus::Content.number(),\nFocus::Props.number(), Focus::Arcs.number())"
 ---
 Tree: [1]
-Content: [2]
-Props: [3]
-Arcs: [4]
+Identity: [2]
+Content: [3]
+Props: [4]
+Arcs: [5]

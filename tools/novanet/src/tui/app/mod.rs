@@ -227,6 +227,9 @@ impl App {
 
     /// Map selected_box to the appropriate Focus panel.
     /// v0.16.3: Updated for 4-panel layout (Tree/Yaml/Props/Arcs).
+    /// v0.18.3: DEPRECATED - use Focus directly instead of InfoBox.
+    #[deprecated(since = "0.18.3", note = "Use Focus enum directly")]
+    #[allow(deprecated)]
     pub fn focus_for_selected_box(&self) -> Focus {
         match self.selected_box {
             InfoBox::Tree => Focus::Tree,
@@ -822,6 +825,9 @@ impl App {
                                 return true;
                             }
                         }
+                        Panel::Identity => {
+                            // v0.18.3: Identity panel - no scroll (static content)
+                        }
                         Panel::Content => {
                             if self.yaml.scroll > 0 {
                                 self.yaml.scroll =
@@ -858,6 +864,9 @@ impl App {
                                 self.load_yaml_for_current();
                                 return true;
                             }
+                        }
+                        Panel::Identity => {
+                            // v0.18.3: Identity panel - no scroll (static content)
                         }
                         Panel::Content => {
                             let max_scroll =
@@ -932,6 +941,7 @@ impl App {
         }
 
         // Search navigation: Ctrl-n (next) / Ctrl-p (prev) work in any mode
+        // Spatial panel navigation: Ctrl+arrows (v0.18.3)
         if key
             .modifiers
             .contains(crossterm::event::KeyModifiers::CONTROL)
@@ -943,6 +953,27 @@ impl App {
                 }
                 KeyCode::Char('p') => {
                     self.prev_search_result();
+                    return true;
+                }
+                // v0.18.3: Ctrl+arrows for spatial panel navigation
+                KeyCode::Up => {
+                    self.focus = self.focus.up();
+                    self.set_status(self.focus.name());
+                    return true;
+                }
+                KeyCode::Down => {
+                    self.focus = self.focus.down();
+                    self.set_status(self.focus.name());
+                    return true;
+                }
+                KeyCode::Left => {
+                    self.focus = self.focus.left();
+                    self.set_status(self.focus.name());
+                    return true;
+                }
+                KeyCode::Right => {
+                    self.focus = self.focus.right();
+                    self.set_status(self.focus.name());
                     return true;
                 }
                 _ => {}
@@ -1015,33 +1046,28 @@ impl App {
                 true
             }
 
-            // Box navigation: Tab cycles through 6 boxes (Tree, Header, Properties, Arcs, Source, Diagram)
-            // ←/→ are aliases for box navigation
+            // Panel navigation: Tab cycles through 5 panels (v0.18.3)
+            // Tree [1] → Identity [2] → Content [3] → Props [4] → Arcs [5]
             KeyCode::Tab => {
-                self.selected_box = self.selected_box.next();
-                // Update panel focus based on which box is selected
-                self.focus = self.focus_for_selected_box();
-                self.set_status(self.selected_box.name());
+                self.focus = self.focus.next();
+                self.set_status(self.focus.name());
                 true
             }
             KeyCode::BackTab => {
-                self.selected_box = self.selected_box.prev();
-                self.focus = self.focus_for_selected_box();
-                self.set_status(self.selected_box.name());
+                self.focus = self.focus.prev();
+                self.set_status(self.focus.name());
                 true
             }
             KeyCode::Left => {
-                // Left: previous box (alias for Shift+Tab)
-                self.selected_box = self.selected_box.prev();
-                self.focus = self.focus_for_selected_box();
-                self.set_status(self.selected_box.name());
+                // Left arrow: spatial navigation left (v0.18.3)
+                self.focus = self.focus.left();
+                self.set_status(self.focus.name());
                 true
             }
             KeyCode::Right => {
-                // Right: next box (alias for Tab)
-                self.selected_box = self.selected_box.next();
-                self.focus = self.focus_for_selected_box();
-                self.set_status(self.selected_box.name());
+                // Right arrow: spatial navigation right (v0.18.3)
+                self.focus = self.focus.right();
+                self.set_status(self.focus.name());
                 true
             }
 
@@ -1053,6 +1079,10 @@ impl App {
                 match self.focus {
                     Focus::Tree => {
                         self.toggle_tree_item();
+                    }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no action on Enter yet
+                        // Future: could toggle between expanded/collapsed view
                     }
                     Focus::Content => {
                         // v0.17.3: Toggle instance panel sections collapse/expand
@@ -1081,8 +1111,29 @@ impl App {
                 true
             }
 
-            // Toggle collapse/expand: h/l/Space (Tree only)
-            KeyCode::Char('h') | KeyCode::Char('l') | KeyCode::Char(' ') => {
+            // h/l: Panel navigation OR tree toggle (v0.18.3)
+            // When in Tree: toggle collapse/expand (existing behavior)
+            // When in other panels: linear panel navigation (h=prev, l=next)
+            KeyCode::Char('h') => {
+                if self.focus == Focus::Tree {
+                    self.toggle_tree_item();
+                } else {
+                    self.focus = self.focus.prev();
+                    self.set_status(self.focus.name());
+                }
+                true
+            }
+            KeyCode::Char('l') => {
+                if self.focus == Focus::Tree {
+                    self.toggle_tree_item();
+                } else {
+                    self.focus = self.focus.next();
+                    self.set_status(self.focus.name());
+                }
+                true
+            }
+            // Space: toggle collapse/expand (Tree only)
+            KeyCode::Char(' ') => {
                 if self.focus == Focus::Tree {
                     self.toggle_tree_item();
                 }
@@ -1155,6 +1206,9 @@ impl App {
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
                     }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
+                    }
                     Focus::Content => {
                         self.yaml.scroll = 0;
                     }
@@ -1175,6 +1229,9 @@ impl App {
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
+                    }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
                     }
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -1201,6 +1258,9 @@ impl App {
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
                         }
+                    }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
                     }
                     Focus::Content => {
                         if self.yaml.scroll > 0 {
@@ -1235,6 +1295,9 @@ impl App {
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
                         }
+                    }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
                     }
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -1277,6 +1340,9 @@ impl App {
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                     }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
+                    }
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
@@ -1299,6 +1365,9 @@ impl App {
                         self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
+                    }
+                    Focus::Identity => {
+                        // v0.18.3: Identity panel - no scroll (static content)
                     }
                     Focus::Content => {
                         self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);

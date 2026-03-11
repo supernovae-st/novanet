@@ -659,8 +659,9 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     render_props_panel(f, right_chunks[0], app, &content); // Props+Stats [3]
     render_graph_panel(f, right_chunks[1], app);           // Arcs [4]
 
-    // v0.17.3: Capture panel rects for mouse hit-testing
+    // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
+    app.panel_rects.identity = Some(center_chunks[0]);
     app.panel_rects.content = Some(center_chunks[1]);
     app.panel_rects.props = Some(right_chunks[0]);
     app.panel_rects.arcs = Some(right_chunks[1]);
@@ -698,8 +699,9 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     render_props_panel(f, v_chunks[2], app, &content); // Props+Stats [3]
     render_graph_panel(f, v_chunks[3], app);           // Arcs [4]
 
-    // v0.17.3: Capture panel rects for mouse hit-testing
+    // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
+    app.panel_rects.identity = Some(v_chunks[0]);
     app.panel_rects.content = Some(v_chunks[1]);
     app.panel_rects.props = Some(v_chunks[2]);
     app.panel_rects.arcs = Some(v_chunks[3]);

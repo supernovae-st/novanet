@@ -77,6 +77,7 @@ pub(crate) fn get_contextual_shortcuts(
                     }
                 }
             }
+            Focus::Identity => "Tab:panel y:copy".to_string(), // v0.18.3
             Focus::Content | Focus::Props => "↑/↓:scroll Enter:page y:copy".to_string(),
             Focus::Arcs => "↑/↓:scroll Tab:panel".to_string(),
         },
@@ -588,8 +589,9 @@ mod tests {
 
     #[test]
     fn test_focus_next() {
-        // v0.16.3: 4-panel cycle: Tree → Yaml → Props → Arcs → Tree
-        assert_eq!(Focus::Tree.next(), Focus::Content);
+        // v0.18.3: 5-panel cycle: Tree → Identity → Content → Props → Arcs → Tree
+        assert_eq!(Focus::Tree.next(), Focus::Identity);
+        assert_eq!(Focus::Identity.next(), Focus::Content);
         assert_eq!(Focus::Content.next(), Focus::Props);
         assert_eq!(Focus::Props.next(), Focus::Arcs);
         assert_eq!(Focus::Arcs.next(), Focus::Tree);
@@ -597,11 +599,12 @@ mod tests {
 
     #[test]
     fn test_focus_prev() {
-        // v0.16.3: 4-panel cycle reverse
+        // v0.18.3: 5-panel cycle reverse
         assert_eq!(Focus::Tree.prev(), Focus::Arcs);
         assert_eq!(Focus::Arcs.prev(), Focus::Props);
         assert_eq!(Focus::Props.prev(), Focus::Content);
-        assert_eq!(Focus::Content.prev(), Focus::Tree);
+        assert_eq!(Focus::Content.prev(), Focus::Identity);
+        assert_eq!(Focus::Identity.prev(), Focus::Tree);
     }
 
     // =========================================================================
@@ -611,7 +614,8 @@ mod tests {
     #[test]
     fn test_shortcuts_all_focus_panels_for_graph() {
         // Ensure all focus panels produce valid shortcuts for Graph mode
-        for focus in [Focus::Tree, Focus::Content, Focus::Props, Focus::Arcs] {
+        // v0.18.3: 5 panels including Identity
+        for focus in [Focus::Tree, Focus::Identity, Focus::Content, Focus::Props, Focus::Arcs] {
             let result = get_contextual_shortcuts(NavMode::Graph, focus, false, CollapseState::Collapsed);
             assert!(
                 !result.is_empty(),

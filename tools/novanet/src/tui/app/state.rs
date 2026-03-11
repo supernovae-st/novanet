@@ -55,50 +55,115 @@ impl NavMode {
     }
 }
 
-/// Which panel has focus.
-/// v0.17.3: 4 scrollable panels: Tree [1], Content [2], Props [3], Arcs [4]
+/// Which panel is currently focused for keyboard input.
+/// v0.18.3: Extended to 5 panels for new layout.
+///
+/// Layout:
+/// ```text
+/// ┌──────────┬────────────────────────┬──────────────────┐
+/// │ TREE [1] │ Identity [2]           │ Props [4]        │
+/// │          ├────────────────────────┼──────────────────┤
+/// │          │ Content [3]            │ Arcs [5]         │
+/// └──────────┴────────────────────────┴──────────────────┘
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree, // [1] Left panel - tree navigation
-    Content, // [2] Center panel - context-aware content (was Yaml)
-    Props,   // [3] Right top - properties
-    Arcs,    // [4] Right bottom - relationships
+    Tree,     // [1] Left panel - tree navigation
+    Identity, // [2] Center top - identity & provenance (NEW in v0.18.3)
+    Content,  // [3] Center bottom - data viewer
+    Props,    // [4] Right top - properties
+    Arcs,     // [5] Right bottom - relationships
 }
 
 impl Focus {
-    /// Cycle to next focus panel (Tab).
-    /// Cycle: Tree [1] → Content [2] → Props [3] → Arcs [4] → Tree [1]
+    /// Cycle to next focus panel (Tab or l).
+    /// Cycle: Tree [1] → Identity [2] → Content [3] → Props [4] → Arcs [5] → Tree [1]
     pub fn next(self) -> Self {
         match self {
-            Focus::Tree => Focus::Content,
+            Focus::Tree => Focus::Identity,
+            Focus::Identity => Focus::Content,
             Focus::Content => Focus::Props,
             Focus::Props => Focus::Arcs,
             Focus::Arcs => Focus::Tree,
         }
     }
 
-    /// Cycle to previous focus panel (Shift+Tab).
+    /// Cycle to previous focus panel (Shift+Tab or h).
     pub fn prev(self) -> Self {
         match self {
             Focus::Tree => Focus::Arcs,
-            Focus::Content => Focus::Tree,
+            Focus::Identity => Focus::Tree,
+            Focus::Content => Focus::Identity,
             Focus::Props => Focus::Content,
             Focus::Arcs => Focus::Props,
         }
     }
 
-    /// Get panel number for display [1-4].
+    /// Get panel number for display [1-5].
     pub fn number(self) -> u8 {
         match self {
             Focus::Tree => 1,
-            Focus::Content => 2,
-            Focus::Props => 3,
-            Focus::Arcs => 4,
+            Focus::Identity => 2,
+            Focus::Content => 3,
+            Focus::Props => 4,
+            Focus::Arcs => 5,
+        }
+    }
+
+    /// Spatial navigation: move up.
+    pub fn up(self) -> Self {
+        match self {
+            Focus::Content => Focus::Identity,  // Center bottom → top
+            Focus::Arcs => Focus::Props,        // Right bottom → top
+            other => other,                     // No change
+        }
+    }
+
+    /// Spatial navigation: move down.
+    pub fn down(self) -> Self {
+        match self {
+            Focus::Identity => Focus::Content,  // Center top → bottom
+            Focus::Props => Focus::Arcs,        // Right top → bottom
+            other => other,                     // No change
+        }
+    }
+
+    /// Spatial navigation: move left.
+    pub fn left(self) -> Self {
+        match self {
+            Focus::Identity | Focus::Content => Focus::Tree,
+            Focus::Props => Focus::Identity,
+            Focus::Arcs => Focus::Content,
+            Focus::Tree => Focus::Tree,  // Already leftmost
+        }
+    }
+
+    /// Spatial navigation: move right.
+    pub fn right(self) -> Self {
+        match self {
+            Focus::Tree => Focus::Identity,     // Go to center top by default
+            Focus::Identity => Focus::Props,
+            Focus::Content => Focus::Arcs,
+            Focus::Props | Focus::Arcs => self, // Already rightmost
+        }
+    }
+
+    /// Display name for status bar.
+    pub fn name(self) -> &'static str {
+        match self {
+            Focus::Tree => "TREE",
+            Focus::Identity => "IDENTITY",
+            Focus::Content => "CONTENT",
+            Focus::Props => "PROPS",
+            Focus::Arcs => "ARCS",
         }
     }
 }
 
+/// DEPRECATED: Use Focus enum instead.
+/// v0.18.3: Scheduled for removal. Use Focus enum for panel navigation.
+///
 /// Which info box is selected for copy/scroll within the Graph mode.
 /// Implements "Focusable Box" pattern from TUI Box Navigation design.
 ///
@@ -112,6 +177,7 @@ impl Focus {
 /// ```
 /// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Tree
 /// v0.13.1: Diagram and Architecture removed (panel simplification)
+#[deprecated(since = "0.18.3", note = "Use Focus enum instead")]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InfoBox {
     #[default]
@@ -446,10 +512,12 @@ impl OverlayState {
 
 /// Panel identifiers for mouse hit-testing.
 /// v0.17.3: Renamed Yaml → Content to reflect context-aware content.
+/// v0.18.3: Added Identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Panel {
     Tree,
-    Content, // was Yaml
+    Identity, // v0.18.3: Center top - identity & provenance
+    Content,  // was Yaml
     Props,
     Arcs,
 }
@@ -459,6 +527,7 @@ impl Panel {
     pub const fn to_focus(self) -> Focus {
         match self {
             Panel::Tree => Focus::Tree,
+            Panel::Identity => Focus::Identity,
             Panel::Content => Focus::Content,
             Panel::Props => Focus::Props,
             Panel::Arcs => Focus::Arcs,
@@ -469,10 +538,12 @@ impl Panel {
 /// Stores panel rectangles for mouse hit-testing.
 /// Updated during each render pass with the actual panel areas.
 /// v0.17.3: Renamed yaml → content to reflect context-aware content.
+/// v0.18.3: Added identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Default)]
 pub struct PanelRects {
     pub tree: Option<Rect>,
-    pub content: Option<Rect>, // was yaml
+    pub identity: Option<Rect>, // v0.18.3: Center top
+    pub content: Option<Rect>,  // was yaml
     pub props: Option<Rect>,
     pub arcs: Option<Rect>,
 }
@@ -485,6 +556,11 @@ impl PanelRects {
         if let Some(rect) = &self.tree {
             if Self::contains(rect, column, row) {
                 return Some(Panel::Tree);
+            }
+        }
+        if let Some(rect) = &self.identity {
+            if Self::contains(rect, column, row) {
+                return Some(Panel::Identity);
             }
         }
         if let Some(rect) = &self.content {
@@ -517,6 +593,7 @@ impl PanelRects {
     /// Clear all panel rects (called at start of render).
     pub fn clear(&mut self) {
         self.tree = None;
+        self.identity = None;
         self.content = None;
         self.props = None;
         self.arcs = None;
@@ -562,43 +639,95 @@ mod tests {
     }
 
     // -------------------------------------------------------------------------
-    // Focus Tests
+    // Focus Tests (v0.18.3: 5 panels)
     // -------------------------------------------------------------------------
 
     #[test]
     fn test_focus_cycle_next() {
+        // v0.18.3: Tree → Identity → Content → Props → Arcs → Tree
         let focus = Focus::Tree;
-        assert_eq!(focus.next(), Focus::Content);
-        assert_eq!(focus.next().next(), Focus::Props);
-        assert_eq!(focus.next().next().next(), Focus::Arcs);
-        assert_eq!(focus.next().next().next().next(), Focus::Tree);
+        assert_eq!(focus.next(), Focus::Identity);
+        assert_eq!(focus.next().next(), Focus::Content);
+        assert_eq!(focus.next().next().next(), Focus::Props);
+        assert_eq!(focus.next().next().next().next(), Focus::Arcs);
+        assert_eq!(focus.next().next().next().next().next(), Focus::Tree);
     }
 
     #[test]
     fn test_focus_cycle_prev() {
+        // v0.18.3: Tree ← Identity ← Content ← Props ← Arcs ← Tree
         let focus = Focus::Tree;
         assert_eq!(focus.prev(), Focus::Arcs);
         assert_eq!(focus.prev().prev(), Focus::Props);
         assert_eq!(focus.prev().prev().prev(), Focus::Content);
-        assert_eq!(focus.prev().prev().prev().prev(), Focus::Tree);
+        assert_eq!(focus.prev().prev().prev().prev(), Focus::Identity);
+        assert_eq!(focus.prev().prev().prev().prev().prev(), Focus::Tree);
     }
 
     #[test]
     fn test_focus_numbers() {
+        // v0.18.3: 5 panels [1-5]
         insta::assert_snapshot!(format!(
-            "Tree: [{}]\nContent: [{}]\nProps: [{}]\nArcs: [{}]",
+            "Tree: [{}]\nIdentity: [{}]\nContent: [{}]\nProps: [{}]\nArcs: [{}]",
             Focus::Tree.number(),
+            Focus::Identity.number(),
             Focus::Content.number(),
             Focus::Props.number(),
             Focus::Arcs.number()
         ));
     }
 
+    #[test]
+    fn test_focus_spatial_up() {
+        assert_eq!(Focus::Content.up(), Focus::Identity);
+        assert_eq!(Focus::Arcs.up(), Focus::Props);
+        assert_eq!(Focus::Tree.up(), Focus::Tree);     // No change
+        assert_eq!(Focus::Identity.up(), Focus::Identity); // Already top
+        assert_eq!(Focus::Props.up(), Focus::Props);   // Already top
+    }
+
+    #[test]
+    fn test_focus_spatial_down() {
+        assert_eq!(Focus::Identity.down(), Focus::Content);
+        assert_eq!(Focus::Props.down(), Focus::Arcs);
+        assert_eq!(Focus::Tree.down(), Focus::Tree);   // No change
+        assert_eq!(Focus::Content.down(), Focus::Content); // Already bottom
+        assert_eq!(Focus::Arcs.down(), Focus::Arcs);   // Already bottom
+    }
+
+    #[test]
+    fn test_focus_spatial_left() {
+        assert_eq!(Focus::Identity.left(), Focus::Tree);
+        assert_eq!(Focus::Content.left(), Focus::Tree);
+        assert_eq!(Focus::Props.left(), Focus::Identity);
+        assert_eq!(Focus::Arcs.left(), Focus::Content);
+        assert_eq!(Focus::Tree.left(), Focus::Tree);   // Already leftmost
+    }
+
+    #[test]
+    fn test_focus_spatial_right() {
+        assert_eq!(Focus::Tree.right(), Focus::Identity);
+        assert_eq!(Focus::Identity.right(), Focus::Props);
+        assert_eq!(Focus::Content.right(), Focus::Arcs);
+        assert_eq!(Focus::Props.right(), Focus::Props);   // Already rightmost
+        assert_eq!(Focus::Arcs.right(), Focus::Arcs);     // Already rightmost
+    }
+
+    #[test]
+    fn test_focus_names() {
+        assert_eq!(Focus::Tree.name(), "TREE");
+        assert_eq!(Focus::Identity.name(), "IDENTITY");
+        assert_eq!(Focus::Content.name(), "CONTENT");
+        assert_eq!(Focus::Props.name(), "PROPS");
+        assert_eq!(Focus::Arcs.name(), "ARCS");
+    }
+
     // -------------------------------------------------------------------------
-    // InfoBox Tests
+    // InfoBox Tests (DEPRECATED: v0.18.3 - will be removed)
     // -------------------------------------------------------------------------
 
     #[test]
+    #[allow(deprecated)]
     fn test_infobox_cycle() {
         let box_ = InfoBox::Tree;
         assert_eq!(box_.next(), InfoBox::Header);
@@ -609,6 +738,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(deprecated)]
     fn test_infobox_names() {
         insta::assert_snapshot!(format!(
             "Tree: {}\nHeader: {}\nProperties: {}\nArcs: {}\nSource: {}",
@@ -621,6 +751,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(deprecated)]
     fn test_infobox_right_panel() {
         assert!(!InfoBox::Tree.is_right_panel());
         assert!(!InfoBox::Header.is_right_panel());
@@ -723,14 +854,16 @@ mod tests {
     }
 
     // -------------------------------------------------------------------------
-    // PanelRects Tests
+    // PanelRects Tests (v0.18.3: 5 panels)
     // -------------------------------------------------------------------------
 
     #[test]
     fn test_panel_rects_hit_test() {
+        // v0.18.3: 5-panel layout with identity
         let rects = PanelRects {
             tree: Some(Rect::new(0, 0, 30, 20)),
-            content: Some(Rect::new(30, 0, 40, 20)),
+            identity: Some(Rect::new(30, 0, 40, 10)),  // Center top
+            content: Some(Rect::new(30, 10, 40, 10)),  // Center bottom
             props: Some(Rect::new(70, 0, 30, 10)),
             arcs: Some(Rect::new(70, 10, 30, 10)),
         };
@@ -738,8 +871,11 @@ mod tests {
         // Hit tree panel
         assert_eq!(rects.hit_test(15, 10), Some(Panel::Tree));
 
-        // Hit content panel
-        assert_eq!(rects.hit_test(50, 10), Some(Panel::Content));
+        // Hit identity panel (center top)
+        assert_eq!(rects.hit_test(50, 5), Some(Panel::Identity));
+
+        // Hit content panel (center bottom)
+        assert_eq!(rects.hit_test(50, 15), Some(Panel::Content));
 
         // Hit props panel
         assert_eq!(rects.hit_test(85, 5), Some(Panel::Props));
@@ -753,7 +889,9 @@ mod tests {
 
     #[test]
     fn test_panel_to_focus() {
+        // v0.18.3: 5 panels map to 5 Focus variants
         assert_eq!(Panel::Tree.to_focus(), Focus::Tree);
+        assert_eq!(Panel::Identity.to_focus(), Focus::Identity);
         assert_eq!(Panel::Content.to_focus(), Focus::Content);
         assert_eq!(Panel::Props.to_focus(), Focus::Props);
         assert_eq!(Panel::Arcs.to_focus(), Focus::Arcs);

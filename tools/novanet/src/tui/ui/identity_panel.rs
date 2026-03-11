@@ -15,7 +15,7 @@ use crate::tui::theme;
 
 /// Render the Identity + Provenance panel.
 pub fn render_identity_panel(f: &mut Frame, area: Rect, app: &App) {
-    let is_focused = app.focus == Focus::Content; // Share focus with data viewer
+    let is_focused = app.focus == Focus::Identity; // v0.18.3: Dedicated focus state
 
     let border_color = if is_focused {
         theme::ui::ACCENT
