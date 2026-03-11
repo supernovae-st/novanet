@@ -116,7 +116,7 @@ impl FormattingGenerator {
         format!(
             r#"MERGE (f:Formatting {{key: '{}'}})
 SET f.display_name = '{}',
-    f.description = '{}',
+    f.content = '{}',
     f.llm_context = '{}',
     f.data_sources = '{}',
     f.number = '{}',

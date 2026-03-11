@@ -186,7 +186,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                 &scope.key,
                 &[
                     ("display_name", &scope.display_name),
-                    ("description", &scope.description),
+                    ("content", &scope.description),
                 ],
             );
         }
@@ -207,7 +207,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                 &card.key,
                 &[
                     ("display_name", &card.display_name),
-                    ("description", &card.description),
+                    ("content", &card.description),
                 ],
             );
         }

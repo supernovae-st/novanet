@@ -125,7 +125,7 @@ impl ExpressionGenerator {
         format!(
             r#"MERGE (es:ExpressionSet {{key: '{}'}})
 SET es.display_name = '{}',
-    es.description = '{}',
+    es.content = '{}',
     es.semantic_fields_count = {},
     es.total_expressions = {},
     es.semantic_fields = '{}',

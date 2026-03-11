@@ -190,7 +190,7 @@ SET sr.display_name = '{}',
         format!(
             r#"MERGE (s:Slugification {{key: '{}'}})
 SET s.display_name = '{}',
-    s.description = '{}',
+    s.content = '{}',
     s.slug_rule = '{}',
     s.stopwords = '{}',
     s.stopwords_count = {},

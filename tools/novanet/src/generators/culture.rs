@@ -115,7 +115,7 @@ impl CultureGenerator {
         format!(
             r"MERGE (c:Culture {{key: '{}'}})
 SET c.display_name = '{}',
-    c.description = '{}',
+    c.content = '{}',
     c.llm_context = '{}',
     c.hemisphere = '{}',
     c.work_week_start = '{}',

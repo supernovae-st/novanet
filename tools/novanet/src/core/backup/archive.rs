@@ -90,7 +90,7 @@ pub async fn extract_archive(backup_path: &Path, brain_dir: &Path) -> Result<()>
     // Create it first if it doesn't exist
     std::fs::create_dir_all(brain_dir)?;
     let canonical_brain_dir = brain_dir.canonicalize().map_err(|e| {
-        BackupError::IoError(format!(
+        BackupError::Archive(format!(
             "Failed to canonicalize brain directory {}: {}",
             brain_dir.display(),
             e
@@ -112,11 +112,10 @@ pub async fn extract_archive(backup_path: &Path, brain_dir: &Path) -> Result<()>
         // Security check: ensure no path traversal components
         for component in relative_path.components() {
             if let std::path::Component::ParentDir = component {
-                return Err(BackupError::PathTraversal(format!(
+                return Err(BackupError::InvalidFormat(format!(
                     "Archive contains path traversal attempt: {}",
                     path.display()
-                ))
-                .into());
+                )));
             }
         }
 
@@ -141,12 +140,11 @@ pub async fn extract_archive(backup_path: &Path, brain_dir: &Path) -> Result<()>
         };
 
         if !canonical_dest.starts_with(&canonical_brain_dir) {
-            return Err(BackupError::PathTraversal(format!(
+            return Err(BackupError::InvalidFormat(format!(
                 "Archive entry would extract outside target directory: {} -> {}",
                 path.display(),
                 canonical_dest.display()
-            ))
-            .into());
+            )));
         }
 
         // Extract the file

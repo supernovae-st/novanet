@@ -131,7 +131,7 @@ impl MarketGenerator {
         format!(
             r#"MERGE (m:Market {{key: '{}'}})
 SET m.display_name = '{}',
-    m.description = '{}',
+    m.content = '{}',
     m.llm_context = '{}',
     m.population_millions = {},
 {}    m.internet_penetration = {},

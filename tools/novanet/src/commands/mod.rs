@@ -1,7 +1,7 @@
 //! CLI subcommand implementations.
 
 pub mod arc;
-// pub mod backup; // TODO: Requires core/backup module + flate2/tar deps
+pub mod backup;
 pub mod blueprint;
 pub mod completions;
 pub mod db;
