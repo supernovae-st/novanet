@@ -1070,6 +1070,18 @@ impl App {
                 self.set_status(self.focus.name());
                 true
             }
+            KeyCode::Up => {
+                // Up arrow: spatial navigation up (v0.18.3)
+                self.focus = self.focus.up();
+                self.set_status(self.focus.name());
+                true
+            }
+            KeyCode::Down => {
+                // Down arrow: spatial navigation down (v0.18.3)
+                self.focus = self.focus.down();
+                self.set_status(self.focus.name());
+                true
+            }
 
             // v0.17.3: 't' keybinding removed (SourceTab toggle removed)
             // Content panel now shows context-aware content based on tree selection
@@ -1249,8 +1261,8 @@ impl App {
                 true
             }
 
-            // Navigation: ↑↓ and j/k scroll the focused panel
-            KeyCode::Up | KeyCode::Char('k') => {
+            // Navigation: j/k scroll the focused panel (↑↓ = spatial nav between panels)
+            KeyCode::Char('k') => {
                 match self.focus {
                     Focus::Tree => {
                         if self.tree_cursor > 0 {
@@ -1286,7 +1298,7 @@ impl App {
                 }
                 true
             }
-            KeyCode::Down | KeyCode::Char('j') => {
+            KeyCode::Char('j') => {
                 match self.focus {
                     Focus::Tree => {
                         let max = self.current_item_count().saturating_sub(1);
