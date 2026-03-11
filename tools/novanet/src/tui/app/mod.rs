@@ -941,7 +941,6 @@ impl App {
         }
 
         // Search navigation: Ctrl-n (next) / Ctrl-p (prev) work in any mode
-        // Spatial panel navigation: Ctrl+arrows (v0.18.3)
         if key
             .modifiers
             .contains(crossterm::event::KeyModifiers::CONTROL)
@@ -953,27 +952,6 @@ impl App {
                 }
                 KeyCode::Char('p') => {
                     self.prev_search_result();
-                    return true;
-                }
-                // v0.18.3: Ctrl+arrows for spatial panel navigation
-                KeyCode::Up => {
-                    self.focus = self.focus.up();
-                    self.set_status(self.focus.name());
-                    return true;
-                }
-                KeyCode::Down => {
-                    self.focus = self.focus.down();
-                    self.set_status(self.focus.name());
-                    return true;
-                }
-                KeyCode::Left => {
-                    self.focus = self.focus.left();
-                    self.set_status(self.focus.name());
-                    return true;
-                }
-                KeyCode::Right => {
-                    self.focus = self.focus.right();
-                    self.set_status(self.focus.name());
                     return true;
                 }
                 _ => {}
