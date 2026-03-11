@@ -1,11 +1,11 @@
-//! Schema validation rules for v0.18.0 standardization.
+//! Schema validation rules for v0.19.0 standardization.
 //!
 //! Validates:
-//! - Standard properties presence (key, display_name, description, llm_context, created_by, created_by_meta, created_at, updated_at)
+//! - Standard properties presence (8 REQUIRED: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at)
 //! - Composite key denormalization (entity_key, page_key, block_key, locale_key)
-//! - Property ordering (key → *_key → display_name → ... → created_at → updated_at)
+//! - Property ordering (key → *_key → display_name → node_class → content → ... → created_at → updated_at)
 //! - ADR-030/032 compliance: slug derivation, TARGETS arc properties
-//! - ADR-035 compliance: Provenance tracking (created_by, created_by_meta)
+//! - v0.19.0: content REPLACES description, provenance REPLACES created_by + created_by_file
 //!
 //! # Usage
 //!
@@ -104,8 +104,13 @@ const ORG_LAYERS: &[&str] = &[
     "output",
 ];
 
-/// Expected order for standard properties (ADR-035: Provenance Tracking).
+/// Expected order for standard properties (v0.19.0: 8 REQUIRED properties).
 /// Properties present in the node must appear in this order (others can be interspersed).
+///
+/// v0.19.0 changes:
+/// - `content` REPLACES `description`
+/// - `provenance` REPLACES `created_by` + `created_by_file`
+/// - `node_class` added for explicit class reference
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
     "entity_key",
@@ -113,10 +118,10 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "block_key",
     "locale_key",
     "display_name",
-    "description",
+    "node_class",
+    "content",
     "llm_context",
-    "created_by",
-    "created_by_meta",
+    "provenance",
     "created_at",
     "updated_at",
 ];
@@ -539,7 +544,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                         .into(),
                 });
             }
-        }
+        },
         "EntityNative" => {
             let has = node
                 .def
@@ -557,8 +562,8 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                         .into(),
                 });
             }
-        }
-        _ => {}
+        },
+        _ => {},
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
@@ -685,7 +690,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                                 message: "locale_key should have pattern: ^[a-z]{2}-[A-Z]{2}$"
                                     .into(),
                             });
-                        }
+                        },
                         Some(pattern)
                             if !pattern.contains("[a-z]") || !pattern.contains("[A-Z]") =>
                         {
@@ -698,8 +703,8 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                                     pattern
                                 ),
                             });
-                        }
-                        Some(_) => {} // Valid pattern
+                        },
+                        Some(_) => {}, // Valid pattern
                     }
 
                     // Check indexed is true
@@ -958,7 +963,7 @@ fn extract_arc_property_names(arc: &ArcClassDef) -> Vec<(String, Option<String>)
                     }
                 })
                 .collect()
-        }
+        },
         // Map format: {prop_name: {type: ..., ...}}
         serde_yaml::Value::Mapping(m) => m
             .iter()

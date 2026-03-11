@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // 11-entity-native-bootstrap.cypher
 // Bootstrap EntityNative nodes for 9 pillar entities
-// v0.19.0 - Standard properties: node_class + created_by (ADR-042)
+// v0.19.0 - Standard properties: node_class + provenance (ADR-042)
 // v0.17.3 - Remove content.features (use HAS_FEATURE arcs instead)
 // NOTE: Features are expressed via EntityNative nodes of feature entities + HAS_FEATURE arcs
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -22,8 +22,7 @@ SET en.display_name = 'QR Code',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -39,8 +38,7 @@ SET en.display_name = 'QR Code Personnalisé',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -56,8 +54,7 @@ SET en.display_name = 'QR Code Art',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -73,8 +70,7 @@ SET en.display_name = 'QR Code Dynamique',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -90,8 +86,7 @@ SET en.display_name = 'QR Code Statique',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -107,8 +102,7 @@ SET en.display_name = 'Lien Intelligent',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -124,8 +118,7 @@ SET en.display_name = 'Page de Destination',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -141,8 +134,7 @@ SET en.display_name = 'Code-barres',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -158,8 +150,7 @@ SET en.display_name = 'Générateur de QR Code',
     en.locale = 'fr-FR',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -179,8 +170,7 @@ SET en.display_name = 'QR Code',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -196,8 +186,7 @@ SET en.display_name = 'Custom QR Code',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -213,8 +202,7 @@ SET en.display_name = 'Dynamic QR Code',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -230,8 +218,7 @@ SET en.display_name = 'Static QR Code',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -247,8 +234,7 @@ SET en.display_name = 'QR Code Generator',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -264,8 +250,7 @@ SET en.display_name = 'QR Code Art',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -281,8 +266,7 @@ SET en.display_name = 'Smart Link',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -298,8 +282,7 @@ SET en.display_name = 'Landing Page',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 
@@ -315,8 +298,7 @@ SET en.display_name = 'Barcode',
     en.locale = 'en-US',
     en.version = 1,
     en.node_class = 'EntityNative',
-    en.created_by = 'seed:content',
-    en.created_by_file = '11-entity-native-bootstrap.cypher',
+    en.provenance = '{"source":"seed","file":"11-entity-native-bootstrap.cypher"}',
     en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime();
 

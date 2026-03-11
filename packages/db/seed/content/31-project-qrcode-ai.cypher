@@ -1,5 +1,6 @@
 // NovaNet Project Data v0.13.0 - QRCode-AI Complete Setup
-// v0.13.0 ADR-029: *Native pattern (ProjectNative→ProjectNative, HAS_CONTENT→HAS_NATIVE)
+// v0.13.0 ADR-029: *Native pattern (ProjectNative->ProjectNative, HAS_CONTENT->HAS_NATIVE)
+// v0.19.0: Standard properties (ADR-042)
 // YAML v7.11.0 alignment - icon, priority, freshness removed (managed in YAML views)
 //
 // Creates project-specific nodes:
@@ -12,7 +13,7 @@
 // v0.13.0: ProjectNative renamed to ProjectNative (ADR-029)
 //
 // STANDARD PROPERTIES:
-//   key, display_name, description, llm_context, created_at, updated_at
+//   key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BRAND IDENTITY (invariant - visual/artistic direction)
@@ -21,9 +22,11 @@
 MATCH (p:Project {key: "qrcode-ai"})
 MERGE (p)-[:HAS_BRAND]->(bi:Brand {key: "brand-qrcode-ai"}) // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY + BrandIdentity
 SET bi.display_name = "QR Code AI Brand",
+    bi.node_class = "Brand",
     bi.brand_name = "QR Code AI",
-    bi.description = "Visual identity and design system for QR Code AI",
+    bi.content = "Visual identity and design system for QR Code AI",
     bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectNative).",
+    bi.provenance = '{"source":"seed","file":"31-project-qrcode-ai.cypher"}',
     bi.style_keywords = '["modern", "clean", "professional", "tech-forward"]',
     bi.style_mood = "Professional yet approachable, tech-savvy but accessible",
     bi.style_influences = '["Apple", "Stripe", "Linear"]',
@@ -38,7 +41,8 @@ SET bi.display_name = "QR Code AI Brand",
 MATCH (bi:Brand {key: "brand-qrcode-ai"})
 MERGE (bi)-[:HAS_DESIGN]->(bd:BrandDesign {key: "brand-design-qrcode-ai"})
 SET bd.display_name = "QR Code AI Design System",
-    bd.description = "Visual design tokens and guidelines for QR Code AI",
+    bd.node_class = "BrandDesign",
+    bd.content = "Visual design tokens and guidelines for QR Code AI",
     bd.color_primary = "#6366F1",
     bd.color_secondary = "#8B5CF6",
     bd.color_accent = "#F59E0B",
@@ -53,6 +57,7 @@ SET bd.display_name = "QR Code AI Design System",
     bd.shadow_style = "soft",
     bd.animation_style = "smooth",
     bd.llm_context = "USE: when generating visual content or applying brand design tokens. TRIGGERS: colors, fonts, design tokens, @brand.design.",
+    bd.provenance = '{"source":"seed","file":"31-project-qrcode-ai.cypher"}',
     bd.created_at = coalesce(bd.created_at, datetime()),
     bd.updated_at = datetime();
 
@@ -66,8 +71,10 @@ MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "en-US"})
 MERGE (p)-[:HAS_NATIVE]->(pl:ProjectNative {key: "qrcode-ai-en-US"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
-    pl.description = "English localization for QR Code AI project identity",
+    pl.node_class = "ProjectNative",
+    pl.content = "English localization for QR Code AI project identity",
     pl.llm_context = "USE: native English brand messaging. TRIGGERS: en-US project content. NOT: translation.",
+    pl.provenance = '{"source":"seed","file":"31-project-qrcode-ai.cypher"}',
     pl.what_short = "AI-powered QR code generator",
     pl.what_medium = "Create customizable QR codes with built-in analytics and AI design suggestions",
     pl.what_long = "QR Code AI is a comprehensive platform for creating, managing, and tracking QR codes. Generate custom designs, track scans in real-time, and leverage AI to optimize your codes for maximum engagement.",
@@ -94,25 +101,27 @@ MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "fr-FR"})
 MERGE (p)-[:HAS_NATIVE]->(pl:ProjectNative {key: "qrcode-ai-fr-FR"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
-    pl.description = "Localisation française de l'identité QR Code AI",
-    pl.llm_context = "USE: messaging de marque français natif. TRIGGERS: fr-FR contenu projet. NOT: traduction.",
-    pl.what_short = "Générateur de QR codes propulsé par l'IA",
-    pl.what_medium = "Créez des QR codes personnalisables avec analytics intégrées et suggestions de design IA",
-    pl.what_long = "QR Code AI est une plateforme complète pour créer, gérer et suivre vos QR codes. Générez des designs sur mesure, suivez les scans en temps réel, et utilisez l'IA pour optimiser l'engagement.",
+    pl.node_class = "ProjectNative",
+    pl.content = "Localisation francaise de l'identite QR Code AI",
+    pl.llm_context = "USE: messaging de marque francais natif. TRIGGERS: fr-FR contenu projet. NOT: traduction.",
+    pl.provenance = '{"source":"seed","file":"31-project-qrcode-ai.cypher"}',
+    pl.what_short = "Generateur de QR codes propulse par l'IA",
+    pl.what_medium = "Creez des QR codes personnalisables avec analytics integrees et suggestions de design IA",
+    pl.what_long = "QR Code AI est une plateforme complete pour creer, gerer et suivre vos QR codes. Generez des designs sur mesure, suivez les scans en temps reel, et utilisez l'IA pour optimiser l'engagement.",
     pl.tagline = "QR Codes intelligents, marketing plus malin",
-    pl.pitch_one_liner = "Créez des QR codes professionnels en quelques secondes avec design IA et analytics.",
-    pl.pitch_elevator = "QR Code AI aide les entreprises à créer des QR codes professionnels et traçables instantanément. Notre IA suggère des designs optimaux tandis que les analytics temps réel montrent la performance.",
-    pl.pitch_detailed = "QR Code AI transforme l'utilisation des QR codes en entreprise. Créez des codes personnalisés en quelques secondes avec les suggestions de design IA. Suivez chaque scan avec des analytics détaillées. Parfait pour les campagnes marketing, cartes de visite, menus et plus.",
+    pl.pitch_one_liner = "Creez des QR codes professionnels en quelques secondes avec design IA et analytics.",
+    pl.pitch_elevator = "QR Code AI aide les entreprises a creer des QR codes professionnels et tracables instantanement. Notre IA suggere des designs optimaux tandis que les analytics temps reel montrent la performance.",
+    pl.pitch_detailed = "QR Code AI transforme l'utilisation des QR codes en entreprise. Creez des codes personnalises en quelques secondes avec les suggestions de design IA. Suivez chaque scan avec des analytics detaillees. Parfait pour les campagnes marketing, cartes de visite, menus et plus.",
     pl.voice_personality = '["Professionnel", "Utile", "Tech-savvy"]',
     pl.voice_tone = '{"formal_casual": 0.5, "serious_playful": 0.3, "technical_simple": 0.4, "reserved_enthusiastic": 0.4}',
-    pl.voice_do = "[\"Être clair et direct\", \"Utiliser des verbes d'action\", \"Mettre en avant les bénéfices\"]",
-    pl.voice_dont = "[\"Utiliser du jargon\", \"Être trop familier\", \"Faire de fausses promesses\"]",
-    pl.cta_primary = "Créer un QR Code gratuit",
+    pl.voice_do = "[\"Etre clair et direct\", \"Utiliser des verbes d'action\", \"Mettre en avant les benefices\"]",
+    pl.voice_dont = "[\"Utiliser du jargon\", \"Etre trop familier\", \"Faire de fausses promesses\"]",
+    pl.cta_primary = "Creer un QR Code gratuit",
     pl.cta_secondary = "Voir les tarifs",
-    pl.cta_tertiary = "Voir la démo",
-    pl.meta_description = "Créez des QR codes gratuits avec design IA et analytics. Générateur de QR codes professionnel pour cartes de visite, marketing, menus et plus.",
-    pl.primary_keywords = '["générateur qr code", "qr code gratuit", "créer qr code"]',
-    pl.secondary_keywords = '["qr code dynamique", "qr code analytics", "qr code personnalisé"]',
-    pl.target_audience = "[{\"type\": \"primary\", \"title\": \"Propriétaire de PME\", \"pain_points\": [\"Budget marketing limité\", \"Besoin d'outils professionnels\", \"Contraintes de temps\"], \"goals\": [\"Développer la clientèle\", \"Suivre le ROI marketing\", \"Image professionnelle\"]}, {\"type\": \"secondary\", \"title\": \"Professionnel Marketing\", \"pain_points\": [\"Besoin d'analytics détaillées\", \"Complexité du suivi de campagne\"], \"goals\": [\"Mesurer la performance\", \"Optimiser les conversions\"]}]",
+    pl.cta_tertiary = "Voir la demo",
+    pl.meta_description = "Creez des QR codes gratuits avec design IA et analytics. Generateur de QR codes professionnel pour cartes de visite, marketing, menus et plus.",
+    pl.primary_keywords = '["generateur qr code", "qr code gratuit", "creer qr code"]',
+    pl.secondary_keywords = '["qr code dynamique", "qr code analytics", "qr code personnalise"]',
+    pl.target_audience = "[{\"type\": \"primary\", \"title\": \"Proprietaire de PME\", \"pain_points\": [\"Budget marketing limite\", \"Besoin d'outils professionnels\", \"Contraintes de temps\"], \"goals\": [\"Developper la clientele\", \"Suivre le ROI marketing\", \"Image professionnelle\"]}, {\"type\": \"secondary\", \"title\": \"Professionnel Marketing\", \"pain_points\": [\"Besoin d'analytics detaillees\", \"Complexite du suivi de campagne\"], \"goals\": [\"Mesurer la performance\", \"Optimiser les conversions\"]}]",
     pl.created_at = coalesce(pl.created_at, datetime()),
     pl.updated_at = datetime();

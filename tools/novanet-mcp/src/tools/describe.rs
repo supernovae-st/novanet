@@ -155,7 +155,7 @@ async fn describe_category(state: &State, category_key: Option<String>) -> Resul
         let q = r#"
             MATCH (c:EntityCategory {category_key: $key})
             OPTIONAL MATCH (e:Entity)-[:BELONGS_TO]->(c)
-            RETURN c.category_key AS category, c.description AS description,
+            RETURN c.category_key AS category, c.content AS content,
                    collect(e.key) AS entity_keys, count(e) AS entity_count
         "#;
 
@@ -172,7 +172,7 @@ async fn describe_category(state: &State, category_key: Option<String>) -> Resul
             WITH c, count(e) AS entity_count
             RETURN collect({
                 category: c.category_key,
-                description: c.description,
+                content: c.content,
                 entity_count: entity_count
             }) AS categories
         "#;
@@ -200,7 +200,7 @@ async fn describe_relations(state: &State) -> Result<DescribeResult> {
         MATCH (a:ArcClass)
         RETURN a.name AS name, a.family AS family, a.scope AS scope,
                a.cardinality AS cardinality, a.source AS source, a.target AS target,
-               a.description AS description
+               a.content AS content
         ORDER BY a.family, a.name
     "#;
 

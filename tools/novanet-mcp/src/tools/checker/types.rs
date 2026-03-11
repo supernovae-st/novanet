@@ -245,9 +245,9 @@ impl SchemaContext {
         }
     }
 
-    /// Builder: set class description
-    pub fn with_description(mut self, desc: impl Into<String>) -> Self {
-        self.class_description = Some(desc.into());
+    /// Builder: set class content (v0.19.0: replaces description)
+    pub fn with_content(mut self, content: impl Into<String>) -> Self {
+        self.class_description = Some(content.into());
         self
     }
 
@@ -363,7 +363,7 @@ mod tests {
     #[test]
     fn test_schema_context_builders() {
         let ctx = SchemaContext::new()
-            .with_description("LLM-generated content")
+            .with_content("LLM-generated content")
             .with_llm_context("USE: when loading localized data")
             .with_mandatory_arcs(vec!["FOR_LOCALE".to_string()])
             .with_related_classes(vec!["Entity".to_string(), "Locale".to_string()]);

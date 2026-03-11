@@ -80,7 +80,7 @@ impl From<&str> for ArcScope {
 ///
 /// Enhanced in v0.17.0 for neuro-symbolic validation:
 /// - `llm_context`: USE/TRIGGERS/NOT pattern for AI guidance
-/// - `description`: Human-readable purpose
+/// - `content`: Human-readable purpose (v0.19.0: replaces description)
 /// - `schema_hint`: Agent guidance for usage
 /// - `context_budget`: Token estimation hint
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -97,10 +97,10 @@ pub struct ClassMetadata {
     pub required_properties: Vec<String>,
     /// Properties that MAY be present
     pub optional_properties: Vec<String>,
-    // === Ontology-driven fields (v0.17.0) ===
-    /// Human-readable description of this class
+    // === Ontology-driven fields (v0.17.0, updated v0.19.0) ===
+    /// Human-readable content of this class (v0.19.0: replaces description)
     #[serde(default)]
-    pub description: Option<String>,
+    pub content: Option<String>,
     /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
     #[serde(default)]
     pub llm_context: Option<String>,
@@ -133,7 +133,7 @@ pub struct ArcClassMetadata {
     pub family: String,
     /// Properties on the arc itself
     pub properties: Vec<String>,
-    // === Ontology-driven fields (v0.17.0) ===
+    // === Ontology-driven fields (v0.17.0, updated v0.19.0) ===
     /// Cardinality: one_to_one, one_to_many, many_to_many
     #[serde(default)]
     pub cardinality: ArcCardinality,
@@ -143,9 +143,9 @@ pub struct ArcClassMetadata {
     /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
     #[serde(default)]
     pub llm_context: Option<String>,
-    /// Human-readable description
+    /// Human-readable content (v0.19.0: replaces description)
     #[serde(default)]
-    pub description: Option<String>,
+    pub content: Option<String>,
     /// Inverse arc name (e.g., "NATIVE_OF" for "HAS_NATIVE")
     #[serde(default)]
     pub inverse_name: Option<String>,
@@ -364,7 +364,7 @@ mod tests {
             trait_type: "generated".to_string(),
             required_properties: vec!["key".to_string()],
             optional_properties: vec![],
-            description: Some("LLM-generated locale-native content".to_string()),
+            content: Some("LLM-generated locale-native content".to_string()),
             llm_context: Some("USE: when loading localized entity data".to_string()),
             schema_hint: Some("Load via HAS_NATIVE from Entity".to_string()),
             context_budget: ContextBudget::Medium,
@@ -375,7 +375,7 @@ mod tests {
 
         let retrieved = cache.get_class("EntityNative").unwrap();
         assert_eq!(
-            retrieved.description,
+            retrieved.content,
             Some("LLM-generated locale-native content".to_string())
         );
         assert!(retrieved.llm_context.as_ref().unwrap().contains("USE:"));
@@ -395,7 +395,7 @@ mod tests {
             cardinality: ArcCardinality::OneToMany,
             scope: ArcScope::IntraRealm,
             llm_context: Some("USE: when loading locale-specific content".to_string()),
-            description: Some("Links entity to its native content".to_string()),
+            content: Some("Links entity to its native content".to_string()),
             inverse_name: Some("NATIVE_OF".to_string()),
         };
 

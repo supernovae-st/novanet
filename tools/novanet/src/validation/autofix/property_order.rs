@@ -13,8 +13,13 @@ use indexmap::IndexMap;
 // PropertyOrderFixer Implementation (GREEN Phase)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Canonical order for standard properties.
-/// NOTE: Must match STANDARD_PROPERTY_NAMES in info.rs, clipboard.rs, schema_rules.rs (ADR-035)
+/// Canonical order for standard properties (v0.19.0: 8 REQUIRED properties).
+/// NOTE: Must match STANDARD_PROPS_ORDER in schema_rules.rs
+///
+/// v0.19.0 changes:
+/// - `content` REPLACES `description`
+/// - `provenance` REPLACES `created_by` + `created_by_file`
+/// - `node_class` added for explicit class reference
 const STANDARD_PROPS_ORDER: &[&str] = &[
     "key",
     "entity_key",
@@ -22,10 +27,10 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "block_key",
     "locale_key",
     "display_name",
-    "description",
+    "node_class",
+    "content",
     "llm_context",
-    "created_by",
-    "created_by_meta",
+    "provenance",
     "created_at",
     "updated_at",
 ];
@@ -108,24 +113,24 @@ mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
     // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
-use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
+    use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
 
     /// Create a node with properties in wrong order.
-    /// Current: description, key, display_name, updated_at, created_at
-    /// Expected: key, display_name, description, created_at, updated_at
+    /// Current: content, key, display_name, updated_at, created_at
+    /// Expected: key, display_name, content, created_at, updated_at
     fn create_node_with_wrong_order() -> ParsedNode {
         let mut props = IndexMap::new();
 
         // Intentionally wrong order
         props.insert(
-            "description".to_string(),
+            "content".to_string(),
             PropertyDef {
                 prop_type: "string".to_string(),
                 required: Some(true),
-                description: Some("Test description".to_string()),
+                description: Some("Test content".to_string()),
                 extra: BTreeMap::new(),
             },
         );
@@ -205,13 +210,7 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
             .collect();
         assert_eq!(
             keys_before,
-            vec![
-                "description",
-                "key",
-                "display_name",
-                "updated_at",
-                "created_at"
-            ]
+            vec!["content", "key", "display_name", "updated_at", "created_at"]
         );
 
         let issue = SchemaIssue {
@@ -238,15 +237,9 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
 
                 assert_eq!(
                     keys_after,
-                    vec![
-                        "key",
-                        "display_name",
-                        "description",
-                        "created_at",
-                        "updated_at"
-                    ]
+                    vec!["key", "display_name", "content", "created_at", "updated_at"]
                 );
-            }
+            },
             _ => panic!("Expected Modified, got {:?}", result),
         }
     }
@@ -306,7 +299,7 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
         match result {
             FixAction::Skipped { reason } => {
                 assert!(reason.contains("already in correct order"));
-            }
+            },
             _ => panic!("Expected Skipped for already-ordered properties"),
         }
     }
@@ -323,7 +316,7 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
             prop::sample::select(vec![
                 "key".to_string(),
                 "display_name".to_string(),
-                "description".to_string(),
+                "content".to_string(),
                 "created_at".to_string(),
                 "updated_at".to_string(),
             ]),
@@ -398,7 +391,7 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
 
             prop_assert_eq!(
                 keys_after,
-                vec!["key", "display_name", "description", "created_at", "updated_at"]
+                vec!["key", "display_name", "content", "created_at", "updated_at"]
             );
         }
 

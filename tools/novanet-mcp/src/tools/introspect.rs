@@ -86,7 +86,7 @@ async fn get_classes(
         WHERE ($realm IS NULL OR c.realm = $realm)
           AND ($layer IS NULL OR c.layer = $layer)
         RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-               c.trait AS trait_type, c.description AS description
+               c.trait AS trait_type, c.content AS content
         ORDER BY c.realm, c.layer, c.name
     "#;
 
@@ -142,7 +142,7 @@ async fn get_class(
             OPTIONAL MATCH (c)<-[:TO_CLASS]-(incoming:ArcClass)
             OPTIONAL MATCH (c)<-[:FROM_CLASS]-(outgoing:ArcClass)
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-                   c.trait AS trait_type, c.description AS description,
+                   c.trait AS trait_type, c.content AS content,
                    c.llm_context AS llm_context,
                    collect(DISTINCT incoming.name) AS incoming_arcs,
                    collect(DISTINCT outgoing.name) AS outgoing_arcs
@@ -155,7 +155,7 @@ async fn get_class(
             r#"
             MATCH (c:Class {name: $name})
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-                   c.trait AS trait_type, c.description AS description,
+                   c.trait AS trait_type, c.content AS content,
                    c.llm_context AS llm_context
             "#,
             false,
@@ -195,7 +195,7 @@ async fn get_arcs(state: &State, family: Option<&str>) -> Result<IntrospectResul
         RETURN a.name AS name, a.family AS family,
                a.scope AS scope, a.cardinality AS cardinality,
                a.source AS source, a.target AS target,
-               a.description AS description
+               a.content AS content
         ORDER BY a.family, a.name
     "#;
 
@@ -237,7 +237,7 @@ async fn get_arc(state: &State, name: Option<&str>) -> Result<IntrospectResult> 
         RETURN a.name AS name, a.family AS family,
                a.scope AS scope, a.cardinality AS cardinality,
                a.source AS source, a.target AS target,
-               a.description AS description, a.llm_context AS llm_context
+               a.content AS content, a.llm_context AS llm_context
     "#;
 
     let mut params = serde_json::Map::new();

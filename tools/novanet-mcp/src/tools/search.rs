@@ -134,7 +134,7 @@ async fn fulltext_search(
                labels(node)[0] AS kind,
                score,
                node.name AS name,
-               node.description AS description,
+               node.content AS content,
                properties(node) AS props
         ORDER BY score DESC
         LIMIT {limit}
@@ -177,7 +177,7 @@ async fn property_search(
         vec![
             "key".to_string(),
             "name".to_string(),
-            "description".to_string(),
+            "content".to_string(),
         ]
     });
 
@@ -216,7 +216,7 @@ async fn property_search(
                labels(n)[0] AS kind,
                score,
                n.name AS name,
-               n.description AS description,
+               n.content AS content,
                properties(n) AS props
         ORDER BY score DESC
         LIMIT {limit}
@@ -331,7 +331,7 @@ fn extract_matches(row: &serde_json::Value, query: &str) -> Vec<PropertyMatch> {
     let mut matches = Vec::new();
     let query_lower = query.to_lowercase();
 
-    for prop in ["key", "name", "description"] {
+    for prop in ["key", "name", "content"] {
         if let Some(value) = row.get(prop).and_then(|v| v.as_str()) {
             if value.to_lowercase().contains(&query_lower) {
                 matches.push(PropertyMatch {
@@ -445,13 +445,13 @@ mod tests {
         let row = serde_json::json!({
             "key": "test-entity",
             "name": "Test Entity Name",
-            "description": "A test entity for testing"
+            "content": "A test entity for testing"
         });
 
         let matches = extract_matches(&row, "test");
         assert_eq!(matches.len(), 3);
         assert!(matches.iter().any(|m| m.property == "key"));
         assert!(matches.iter().any(|m| m.property == "name"));
-        assert!(matches.iter().any(|m| m.property == "description"));
+        assert!(matches.iter().any(|m| m.property == "content"));
     }
 }

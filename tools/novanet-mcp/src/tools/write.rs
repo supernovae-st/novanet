@@ -187,7 +187,7 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
             })
             .unwrap_or_default(),
         // Ontology-driven fields (v0.17.0)
-        description: row["description"].as_str().map(String::from),
+        content: row["content"].as_str().map(String::from),
         llm_context: row["llm_context"].as_str().map(String::from),
         schema_hint: row["schema_hint"].as_str().map(String::from),
         context_budget: row["context_budget"]

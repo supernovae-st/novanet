@@ -490,7 +490,7 @@ pub fn schema_validate_with_fix(
                                 issue.rule, issue.node_name, issue.message, status, change_desc
                             ),
                         });
-                    }
+                    },
                     FixAction::Skipped { reason } => {
                         result_issues.push(ValidationIssue {
                             severity,
@@ -499,7 +499,7 @@ pub fn schema_validate_with_fix(
                                 issue.rule, issue.node_name, issue.message, reason
                             ),
                         });
-                    }
+                    },
                 }
             }
 
@@ -614,7 +614,7 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
                 serde_json::to_string_pretty(&stats)
                     .map_err(|e| crate::NovaNetError::Validation(e.to_string()))?
             );
-        }
+        },
         crate::output::OutputFormat::Table => {
             // Table output for human readability
             println!("\nNODE STATISTICS");
@@ -643,12 +643,12 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
             for (family, count) in families {
                 println!("  {:<15} {}", family, count);
             }
-        }
+        },
         _ => {
             return Err(crate::NovaNetError::Validation(
                 "Unsupported format for stats (use json or table)".into(),
             ));
-        }
+        },
     }
 
     Ok(())
@@ -795,9 +795,9 @@ mod tests {
 
         // Create a test node with issues (wrong property order, missing timestamps)
         let mut standard_properties = IndexMap::new();
-        // WRONG ORDER: description before key
+        // WRONG ORDER: content before key (v0.19.0: content replaces description)
         standard_properties.insert(
-            "description".to_string(),
+            "content".to_string(),
             PropertyDef {
                 prop_type: "string".to_string(),
                 required: Some(true),

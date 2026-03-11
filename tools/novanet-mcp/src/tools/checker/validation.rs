@@ -269,8 +269,8 @@ pub fn validate_denomination_forms(
 pub fn build_schema_context(meta: &ClassMetadata) -> SchemaContext {
     let mut ctx = SchemaContext::new();
 
-    if let Some(desc) = &meta.description {
-        ctx = ctx.with_description(desc.clone());
+    if let Some(content) = &meta.content {
+        ctx = ctx.with_content(content.clone());
     }
 
     if let Some(llm_ctx) = &meta.llm_context {
@@ -439,7 +439,7 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
                                 .collect()
                         })
                         .unwrap_or_default(),
-                    description: row["description"].as_str().map(String::from),
+                    content: row["content"].as_str().map(String::from),
                     llm_context: row["llm_context"].as_str().map(String::from),
                     ..Default::default()
                 }
@@ -681,7 +681,7 @@ mod tests {
             trait_type: "authored".to_string(),
             required_properties: vec![],
             optional_properties: vec![],
-            description: Some("Locale-native content".to_string()),
+            content: Some("Locale-native content".to_string()),
             llm_context: Some("USE: when loading localized data".to_string()),
             ..Default::default()
         };

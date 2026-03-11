@@ -3,6 +3,7 @@
 // Must run before 31-project-*.cypher files
 //
 // v11.3: OrgConfig (merged from Organization + Tenant)
+// v0.19.0: Standard properties (ADR-042)
 // OrgConfig is the root of the org realm, owns all Projects
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -11,8 +12,10 @@
 
 MERGE (org:OrgConfig {key: "supernovae"})
 SET org.display_name = "SuperNovae",
-    org.description = "AI-powered content localization",
+    org.node_class = "OrgConfig",
+    org.content = "AI-powered content localization",
     org.llm_context = "USE: org-level context. TRIGGERS: supernovae, company. NOT: project-specific.",
+    org.provenance = '{"source":"seed","file":"30-org-config.cypher"}',
     org.domain = "supernovae.studio",
     org.website_url = "https://supernovae.studio",
     org.industry = "Software / AI / Localization",
@@ -25,8 +28,10 @@ SET org.display_name = "SuperNovae",
 
 MERGE (p1:Project {key: "supernovae-studio"})
 SET p1.display_name = "SuperNovae Studio",
-    p1.description = "Company website and branding",
+    p1.node_class = "Project",
+    p1.content = "Company website and branding",
     p1.llm_context = "USE: company branding. TRIGGERS: studio, website, brand. NOT: products.",
+    p1.provenance = '{"source":"seed","file":"30-org-config.cypher"}',
     p1.domain = "supernovae.studio",
     p1.priority = 1,
     p1.created_at = coalesce(p1.created_at, datetime()),
@@ -38,8 +43,10 @@ SET p1.display_name = "SuperNovae Studio",
 
 MERGE (p2:Project {key: "qrcode-ai"})
 SET p2.display_name = "QR Code AI",
-    p2.description = "AI-powered QR code generator with analytics",
+    p2.node_class = "Project",
+    p2.content = "AI-powered QR code generator with analytics",
     p2.llm_context = "USE: when generating QR Code AI content. TRIGGERS: qr code, qrcode-ai, qr generator. NOT: other projects.",
+    p2.provenance = '{"source":"seed","file":"30-org-config.cypher"}',
     p2.domain = "qrcode-ai.com",
     p2.default_locale = "en-US",
     p2.supported_locales = '["en-US", "fr-FR", "de-DE", "es-ES", "ja-JP"]',
