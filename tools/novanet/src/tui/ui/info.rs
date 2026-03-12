@@ -85,9 +85,6 @@ const COLOR_REQUIRED_MARKER: Color = Color::Rgb(220, 50, 47);
 /// Blue type badge [str] - Solarized Blue #268bd2
 const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 
-/// Yellow type badge [obj] - Solarized Yellow #b58900
-const COLOR_TYPE_OBJECT: Color = Color::Rgb(181, 137, 0);
-
 // =============================================================================
 // v0.19.0 STANDARD PROPERTIES (ADR-044)
 // =============================================================================
@@ -119,13 +116,10 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "updated_at",
 ];
 
-/// Composite key properties (denormalized keys for HAS_NATIVE lookups).
-/// These are kept separate from standard properties but still shown in STANDARD section.
-const COMPOSITE_KEY_PROPERTIES: &[&str] = &["entity_key", "page_key", "block_key", "locale_key"];
-
 /// Check if a property name is a standard property.
+/// v0.19.0: Only the 8 ADR-044 properties are standard. Composite keys are SPECIFIC.
 fn is_standard_property(name: &str) -> bool {
-    STANDARD_PROPERTY_NAMES.contains(&name) || COMPOSITE_KEY_PROPERTIES.contains(&name)
+    STANDARD_PROPERTY_NAMES.contains(&name)
 }
 
 // =============================================================================
@@ -393,7 +387,6 @@ fn build_provenance_section(provenance: Option<&JsonValue>) -> SectionContent<'s
 #[derive(Clone, Copy)]
 enum PropType {
     String,
-    Object,
     DateTime,
 }
 
@@ -401,7 +394,6 @@ impl PropType {
     fn badge(&self) -> &'static str {
         match self {
             PropType::String => "[str]",
-            PropType::Object => "[obj]",
             PropType::DateTime => "[dt]",
         }
     }
@@ -409,7 +401,6 @@ impl PropType {
     fn color(&self) -> Color {
         match self {
             PropType::String => COLOR_TYPE_STRING,
-            PropType::Object => COLOR_TYPE_OBJECT,
             PropType::DateTime => COLOR_TYPE_STRING, // Same color as string
         }
     }
@@ -803,17 +794,8 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         .properties
         .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // SPECIFIC section - Realm-specific properties
-    content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── SPECIFIC ({}) ──", 2),
-        Style::default().fg(COLOR_HEADER_SPECIFIC),
-    )]));
-    content
-        .properties
-        .add_line(render_property_line("color", false, PropType::String));
-    content
-        .properties
-        .add_line(render_property_line("icon", false, PropType::Object));
+    // v0.19.0: Realm has NO specific properties per ADR-044
+    // Only the 8 standard properties exist on Realm nodes
 
     // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
     if !realm.layers.is_empty() {
@@ -944,17 +926,8 @@ fn build_layer_content(
         .properties
         .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // SPECIFIC section - Layer-specific properties
-    content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── SPECIFIC ({}) ──", 2),
-        Style::default().fg(COLOR_HEADER_SPECIFIC),
-    )]));
-    content
-        .properties
-        .add_line(render_property_line("color", false, PropType::String));
-    content
-        .properties
-        .add_line(render_property_line("icon", false, PropType::Object));
+    // v0.19.0: Layer has NO specific properties per ADR-044
+    // Only the 8 standard properties exist on Layer nodes
 
     // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
     let class_count = layer.classes.len();
@@ -2518,6 +2491,8 @@ enum BoxVisualState {
     /// Panel not active
     Unfocused,
     /// Panel active, but this box is not selected
+    /// NOTE: Reserved for future sub-panel focus tracking.
+    #[allow(dead_code)]
     Focused,
     /// This box is selected (active for copy/scroll)
     Selected,
