@@ -394,6 +394,7 @@ fn build_provenance_section(provenance: Option<&JsonValue>) -> SectionContent<'s
 enum PropType {
     String,
     Object,
+    DateTime,
 }
 
 impl PropType {
@@ -401,6 +402,7 @@ impl PropType {
         match self {
             PropType::String => "[str]",
             PropType::Object => "[obj]",
+            PropType::DateTime => "[dt]",
         }
     }
 
@@ -408,6 +410,7 @@ impl PropType {
         match self {
             PropType::String => COLOR_TYPE_STRING,
             PropType::Object => COLOR_TYPE_OBJECT,
+            PropType::DateTime => COLOR_TYPE_STRING, // Same color as string
         }
     }
 }
@@ -769,10 +772,10 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - v0.17: Show realm schema properties in formatted list
-    // Realm has structural properties: key, display_name, color, icon, llm_context
+    // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
+    // Standard: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
     content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── STANDARD ({}) ──", 4),
+        format!("── STANDARD ({}) ──", 8),
         Style::default().fg(COLOR_HEADER_STANDARD),
     )]));
     content
@@ -783,19 +786,34 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         .add_line(render_property_line("display_name", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("color", false, PropType::String));
+        .add_line(render_property_line("node_class", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("icon", false, PropType::Object));
+        .add_line(render_property_line("content", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("llm_context", false, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("provenance", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("created_at", true, PropType::DateTime));
+    content
+        .properties
+        .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // SPECIFIC section
+    // SPECIFIC section - Realm-specific properties
     content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── SPECIFIC ({}) ──", 1),
+        format!("── SPECIFIC ({}) ──", 2),
         Style::default().fg(COLOR_HEADER_SPECIFIC),
     )]));
     content
         .properties
-        .add_line(render_property_line("llm_context", false, PropType::String));
+        .add_line(render_property_line("color", false, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("icon", false, PropType::Object));
 
     // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
     if !realm.layers.is_empty() {
@@ -895,10 +913,10 @@ fn build_layer_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - v0.17: Show layer schema properties in formatted list
-    // Layer has structural properties: key, display_name, color, llm_context
+    // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
+    // Standard: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
     content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── STANDARD ({}) ──", 3),
+        format!("── STANDARD ({}) ──", 8),
         Style::default().fg(COLOR_HEADER_STANDARD),
     )]));
     content
@@ -909,16 +927,34 @@ fn build_layer_content(
         .add_line(render_property_line("display_name", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("color", false, PropType::String));
+        .add_line(render_property_line("node_class", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("content", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("llm_context", false, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("provenance", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("created_at", true, PropType::DateTime));
+    content
+        .properties
+        .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // SPECIFIC section
+    // SPECIFIC section - Layer-specific properties
     content.properties.add_line(Line::from(vec![Span::styled(
-        format!("── SPECIFIC ({}) ──", 1),
+        format!("── SPECIFIC ({}) ──", 2),
         Style::default().fg(COLOR_HEADER_SPECIFIC),
     )]));
     content
         .properties
-        .add_line(render_property_line("llm_context", false, PropType::String));
+        .add_line(render_property_line("color", false, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("icon", false, PropType::Object));
 
     // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
     let class_count = layer.classes.len();
