@@ -1,5 +1,5 @@
 // =============================================================================
-// COUNTRY SEED - NovaNet v0.12.3
+// COUNTRY SEED - NovaNet v0.19.0
 // =============================================================================
 // Creates all 249 ISO 3166-1 countries/territories with UN M49 classification.
 //
@@ -14,7 +14,7 @@
 // Create Country nodes
 
 MERGE (c:Country {key: 'AF'})
-SET c.display_name = 'Afghanistan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Afghanistan',
     c.alpha3 = 'AFG',
     c.m49_code = 4,
     c.region = 'Asia',
@@ -27,7 +27,7 @@ SET c.display_name = 'Afghanistan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AX'})
-SET c.display_name = 'Åland Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Åland Islands',
     c.alpha3 = 'ALA',
     c.m49_code = 248,
     c.region = 'Europe',
@@ -40,7 +40,7 @@ SET c.display_name = 'Åland Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AL'})
-SET c.display_name = 'Albania',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Albania',
     c.alpha3 = 'ALB',
     c.m49_code = 8,
     c.region = 'Europe',
@@ -53,7 +53,7 @@ SET c.display_name = 'Albania',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DZ'})
-SET c.display_name = 'Algeria',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Algeria',
     c.alpha3 = 'DZA',
     c.m49_code = 12,
     c.region = 'Africa',
@@ -66,7 +66,7 @@ SET c.display_name = 'Algeria',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AS'})
-SET c.display_name = 'American Samoa',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'American Samoa',
     c.alpha3 = 'ASM',
     c.m49_code = 16,
     c.region = 'Oceania',
@@ -79,7 +79,7 @@ SET c.display_name = 'American Samoa',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AD'})
-SET c.display_name = 'Andorra',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Andorra',
     c.alpha3 = 'AND',
     c.m49_code = 20,
     c.region = 'Europe',
@@ -92,7 +92,7 @@ SET c.display_name = 'Andorra',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AO'})
-SET c.display_name = 'Angola',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Angola',
     c.alpha3 = 'AGO',
     c.m49_code = 24,
     c.region = 'Africa',
@@ -105,7 +105,7 @@ SET c.display_name = 'Angola',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AI'})
-SET c.display_name = 'Anguilla',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Anguilla',
     c.alpha3 = 'AIA',
     c.m49_code = 660,
     c.region = 'Americas',
@@ -118,7 +118,7 @@ SET c.display_name = 'Anguilla',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AQ'})
-SET c.display_name = 'Antarctica',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Antarctica',
     c.alpha3 = 'ATA',
     c.m49_code = 10,
     c.region = '',
@@ -131,7 +131,7 @@ SET c.display_name = 'Antarctica',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AG'})
-SET c.display_name = 'Antigua and Barbuda',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Antigua and Barbuda',
     c.alpha3 = 'ATG',
     c.m49_code = 28,
     c.region = 'Americas',
@@ -144,7 +144,7 @@ SET c.display_name = 'Antigua and Barbuda',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AR'})
-SET c.display_name = 'Argentina',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Argentina',
     c.alpha3 = 'ARG',
     c.m49_code = 32,
     c.region = 'Americas',
@@ -157,7 +157,7 @@ SET c.display_name = 'Argentina',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AM'})
-SET c.display_name = 'Armenia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Armenia',
     c.alpha3 = 'ARM',
     c.m49_code = 51,
     c.region = 'Asia',
@@ -170,7 +170,7 @@ SET c.display_name = 'Armenia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AW'})
-SET c.display_name = 'Aruba',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Aruba',
     c.alpha3 = 'ABW',
     c.m49_code = 533,
     c.region = 'Americas',
@@ -183,7 +183,7 @@ SET c.display_name = 'Aruba',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AU'})
-SET c.display_name = 'Australia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Australia',
     c.alpha3 = 'AUS',
     c.m49_code = 36,
     c.region = 'Oceania',
@@ -196,7 +196,7 @@ SET c.display_name = 'Australia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AT'})
-SET c.display_name = 'Austria',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Austria',
     c.alpha3 = 'AUT',
     c.m49_code = 40,
     c.region = 'Europe',
@@ -209,7 +209,7 @@ SET c.display_name = 'Austria',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AZ'})
-SET c.display_name = 'Azerbaijan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Azerbaijan',
     c.alpha3 = 'AZE',
     c.m49_code = 31,
     c.region = 'Asia',
@@ -222,7 +222,7 @@ SET c.display_name = 'Azerbaijan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BS'})
-SET c.display_name = 'Bahamas',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bahamas',
     c.alpha3 = 'BHS',
     c.m49_code = 44,
     c.region = 'Americas',
@@ -235,7 +235,7 @@ SET c.display_name = 'Bahamas',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BH'})
-SET c.display_name = 'Bahrain',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bahrain',
     c.alpha3 = 'BHR',
     c.m49_code = 48,
     c.region = 'Asia',
@@ -248,7 +248,7 @@ SET c.display_name = 'Bahrain',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BD'})
-SET c.display_name = 'Bangladesh',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bangladesh',
     c.alpha3 = 'BGD',
     c.m49_code = 50,
     c.region = 'Asia',
@@ -261,7 +261,7 @@ SET c.display_name = 'Bangladesh',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BB'})
-SET c.display_name = 'Barbados',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Barbados',
     c.alpha3 = 'BRB',
     c.m49_code = 52,
     c.region = 'Americas',
@@ -274,7 +274,7 @@ SET c.display_name = 'Barbados',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BY'})
-SET c.display_name = 'Belarus',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Belarus',
     c.alpha3 = 'BLR',
     c.m49_code = 112,
     c.region = 'Europe',
@@ -287,7 +287,7 @@ SET c.display_name = 'Belarus',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BE'})
-SET c.display_name = 'Belgium',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Belgium',
     c.alpha3 = 'BEL',
     c.m49_code = 56,
     c.region = 'Europe',
@@ -300,7 +300,7 @@ SET c.display_name = 'Belgium',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BZ'})
-SET c.display_name = 'Belize',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Belize',
     c.alpha3 = 'BLZ',
     c.m49_code = 84,
     c.region = 'Americas',
@@ -313,7 +313,7 @@ SET c.display_name = 'Belize',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BJ'})
-SET c.display_name = 'Benin',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Benin',
     c.alpha3 = 'BEN',
     c.m49_code = 204,
     c.region = 'Africa',
@@ -326,7 +326,7 @@ SET c.display_name = 'Benin',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BM'})
-SET c.display_name = 'Bermuda',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bermuda',
     c.alpha3 = 'BMU',
     c.m49_code = 60,
     c.region = 'Americas',
@@ -339,7 +339,7 @@ SET c.display_name = 'Bermuda',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BT'})
-SET c.display_name = 'Bhutan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bhutan',
     c.alpha3 = 'BTN',
     c.m49_code = 64,
     c.region = 'Asia',
@@ -352,7 +352,7 @@ SET c.display_name = 'Bhutan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BO'})
-SET c.display_name = 'Bolivia, Plurinational State of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bolivia, Plurinational State of',
     c.alpha3 = 'BOL',
     c.m49_code = 68,
     c.region = 'Americas',
@@ -365,7 +365,7 @@ SET c.display_name = 'Bolivia, Plurinational State of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BQ'})
-SET c.display_name = 'Bonaire, Sint Eustatius and Saba',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bonaire, Sint Eustatius and Saba',
     c.alpha3 = 'BES',
     c.m49_code = 535,
     c.region = 'Americas',
@@ -378,7 +378,7 @@ SET c.display_name = 'Bonaire, Sint Eustatius and Saba',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BA'})
-SET c.display_name = 'Bosnia and Herzegovina',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bosnia and Herzegovina',
     c.alpha3 = 'BIH',
     c.m49_code = 70,
     c.region = 'Europe',
@@ -391,7 +391,7 @@ SET c.display_name = 'Bosnia and Herzegovina',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BW'})
-SET c.display_name = 'Botswana',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Botswana',
     c.alpha3 = 'BWA',
     c.m49_code = 72,
     c.region = 'Africa',
@@ -404,7 +404,7 @@ SET c.display_name = 'Botswana',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BV'})
-SET c.display_name = 'Bouvet Island',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bouvet Island',
     c.alpha3 = 'BVT',
     c.m49_code = 74,
     c.region = 'Americas',
@@ -417,7 +417,7 @@ SET c.display_name = 'Bouvet Island',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BR'})
-SET c.display_name = 'Brazil',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Brazil',
     c.alpha3 = 'BRA',
     c.m49_code = 76,
     c.region = 'Americas',
@@ -430,7 +430,7 @@ SET c.display_name = 'Brazil',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IO'})
-SET c.display_name = 'British Indian Ocean Territory',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'British Indian Ocean Territory',
     c.alpha3 = 'IOT',
     c.m49_code = 86,
     c.region = 'Africa',
@@ -443,7 +443,7 @@ SET c.display_name = 'British Indian Ocean Territory',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BN'})
-SET c.display_name = 'Brunei Darussalam',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Brunei Darussalam',
     c.alpha3 = 'BRN',
     c.m49_code = 96,
     c.region = 'Asia',
@@ -456,7 +456,7 @@ SET c.display_name = 'Brunei Darussalam',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BG'})
-SET c.display_name = 'Bulgaria',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Bulgaria',
     c.alpha3 = 'BGR',
     c.m49_code = 100,
     c.region = 'Europe',
@@ -469,7 +469,7 @@ SET c.display_name = 'Bulgaria',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BF'})
-SET c.display_name = 'Burkina Faso',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Burkina Faso',
     c.alpha3 = 'BFA',
     c.m49_code = 854,
     c.region = 'Africa',
@@ -482,7 +482,7 @@ SET c.display_name = 'Burkina Faso',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BI'})
-SET c.display_name = 'Burundi',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Burundi',
     c.alpha3 = 'BDI',
     c.m49_code = 108,
     c.region = 'Africa',
@@ -495,7 +495,7 @@ SET c.display_name = 'Burundi',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CV'})
-SET c.display_name = 'Cabo Verde',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cabo Verde',
     c.alpha3 = 'CPV',
     c.m49_code = 132,
     c.region = 'Africa',
@@ -508,7 +508,7 @@ SET c.display_name = 'Cabo Verde',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KH'})
-SET c.display_name = 'Cambodia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cambodia',
     c.alpha3 = 'KHM',
     c.m49_code = 116,
     c.region = 'Asia',
@@ -521,7 +521,7 @@ SET c.display_name = 'Cambodia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CM'})
-SET c.display_name = 'Cameroon',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cameroon',
     c.alpha3 = 'CMR',
     c.m49_code = 120,
     c.region = 'Africa',
@@ -534,7 +534,7 @@ SET c.display_name = 'Cameroon',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CA'})
-SET c.display_name = 'Canada',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Canada',
     c.alpha3 = 'CAN',
     c.m49_code = 124,
     c.region = 'Americas',
@@ -547,7 +547,7 @@ SET c.display_name = 'Canada',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KY'})
-SET c.display_name = 'Cayman Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cayman Islands',
     c.alpha3 = 'CYM',
     c.m49_code = 136,
     c.region = 'Americas',
@@ -560,7 +560,7 @@ SET c.display_name = 'Cayman Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CF'})
-SET c.display_name = 'Central African Republic',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Central African Republic',
     c.alpha3 = 'CAF',
     c.m49_code = 140,
     c.region = 'Africa',
@@ -573,7 +573,7 @@ SET c.display_name = 'Central African Republic',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TD'})
-SET c.display_name = 'Chad',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Chad',
     c.alpha3 = 'TCD',
     c.m49_code = 148,
     c.region = 'Africa',
@@ -586,7 +586,7 @@ SET c.display_name = 'Chad',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CL'})
-SET c.display_name = 'Chile',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Chile',
     c.alpha3 = 'CHL',
     c.m49_code = 152,
     c.region = 'Americas',
@@ -599,7 +599,7 @@ SET c.display_name = 'Chile',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CN'})
-SET c.display_name = 'China',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'China',
     c.alpha3 = 'CHN',
     c.m49_code = 156,
     c.region = 'Asia',
@@ -612,7 +612,7 @@ SET c.display_name = 'China',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CX'})
-SET c.display_name = 'Christmas Island',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Christmas Island',
     c.alpha3 = 'CXR',
     c.m49_code = 162,
     c.region = 'Oceania',
@@ -625,7 +625,7 @@ SET c.display_name = 'Christmas Island',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CC'})
-SET c.display_name = 'Cocos (Keeling) Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cocos (Keeling) Islands',
     c.alpha3 = 'CCK',
     c.m49_code = 166,
     c.region = 'Oceania',
@@ -638,7 +638,7 @@ SET c.display_name = 'Cocos (Keeling) Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CO'})
-SET c.display_name = 'Colombia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Colombia',
     c.alpha3 = 'COL',
     c.m49_code = 170,
     c.region = 'Americas',
@@ -651,7 +651,7 @@ SET c.display_name = 'Colombia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KM'})
-SET c.display_name = 'Comoros',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Comoros',
     c.alpha3 = 'COM',
     c.m49_code = 174,
     c.region = 'Africa',
@@ -664,7 +664,7 @@ SET c.display_name = 'Comoros',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CG'})
-SET c.display_name = 'Congo',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Congo',
     c.alpha3 = 'COG',
     c.m49_code = 178,
     c.region = 'Africa',
@@ -677,7 +677,7 @@ SET c.display_name = 'Congo',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CD'})
-SET c.display_name = 'Congo, Democratic Republic of the',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Congo, Democratic Republic of the',
     c.alpha3 = 'COD',
     c.m49_code = 180,
     c.region = 'Africa',
@@ -690,7 +690,7 @@ SET c.display_name = 'Congo, Democratic Republic of the',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CK'})
-SET c.display_name = 'Cook Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cook Islands',
     c.alpha3 = 'COK',
     c.m49_code = 184,
     c.region = 'Oceania',
@@ -703,7 +703,7 @@ SET c.display_name = 'Cook Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CR'})
-SET c.display_name = 'Costa Rica',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Costa Rica',
     c.alpha3 = 'CRI',
     c.m49_code = 188,
     c.region = 'Americas',
@@ -716,7 +716,7 @@ SET c.display_name = 'Costa Rica',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CI'})
-SET c.display_name = 'Côte d\'Ivoire',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Côte d\'Ivoire',
     c.alpha3 = 'CIV',
     c.m49_code = 384,
     c.region = 'Africa',
@@ -729,7 +729,7 @@ SET c.display_name = 'Côte d\'Ivoire',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HR'})
-SET c.display_name = 'Croatia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Croatia',
     c.alpha3 = 'HRV',
     c.m49_code = 191,
     c.region = 'Europe',
@@ -742,7 +742,7 @@ SET c.display_name = 'Croatia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CU'})
-SET c.display_name = 'Cuba',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cuba',
     c.alpha3 = 'CUB',
     c.m49_code = 192,
     c.region = 'Americas',
@@ -755,7 +755,7 @@ SET c.display_name = 'Cuba',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CW'})
-SET c.display_name = 'Curaçao',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Curaçao',
     c.alpha3 = 'CUW',
     c.m49_code = 531,
     c.region = 'Americas',
@@ -768,7 +768,7 @@ SET c.display_name = 'Curaçao',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CY'})
-SET c.display_name = 'Cyprus',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Cyprus',
     c.alpha3 = 'CYP',
     c.m49_code = 196,
     c.region = 'Asia',
@@ -781,7 +781,7 @@ SET c.display_name = 'Cyprus',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CZ'})
-SET c.display_name = 'Czechia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Czechia',
     c.alpha3 = 'CZE',
     c.m49_code = 203,
     c.region = 'Europe',
@@ -794,7 +794,7 @@ SET c.display_name = 'Czechia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DK'})
-SET c.display_name = 'Denmark',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Denmark',
     c.alpha3 = 'DNK',
     c.m49_code = 208,
     c.region = 'Europe',
@@ -807,7 +807,7 @@ SET c.display_name = 'Denmark',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DJ'})
-SET c.display_name = 'Djibouti',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Djibouti',
     c.alpha3 = 'DJI',
     c.m49_code = 262,
     c.region = 'Africa',
@@ -820,7 +820,7 @@ SET c.display_name = 'Djibouti',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DM'})
-SET c.display_name = 'Dominica',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Dominica',
     c.alpha3 = 'DMA',
     c.m49_code = 212,
     c.region = 'Americas',
@@ -833,7 +833,7 @@ SET c.display_name = 'Dominica',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DO'})
-SET c.display_name = 'Dominican Republic',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Dominican Republic',
     c.alpha3 = 'DOM',
     c.m49_code = 214,
     c.region = 'Americas',
@@ -846,7 +846,7 @@ SET c.display_name = 'Dominican Republic',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'EC'})
-SET c.display_name = 'Ecuador',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Ecuador',
     c.alpha3 = 'ECU',
     c.m49_code = 218,
     c.region = 'Americas',
@@ -859,7 +859,7 @@ SET c.display_name = 'Ecuador',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'EG'})
-SET c.display_name = 'Egypt',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Egypt',
     c.alpha3 = 'EGY',
     c.m49_code = 818,
     c.region = 'Africa',
@@ -872,7 +872,7 @@ SET c.display_name = 'Egypt',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SV'})
-SET c.display_name = 'El Salvador',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'El Salvador',
     c.alpha3 = 'SLV',
     c.m49_code = 222,
     c.region = 'Americas',
@@ -885,7 +885,7 @@ SET c.display_name = 'El Salvador',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GQ'})
-SET c.display_name = 'Equatorial Guinea',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Equatorial Guinea',
     c.alpha3 = 'GNQ',
     c.m49_code = 226,
     c.region = 'Africa',
@@ -898,7 +898,7 @@ SET c.display_name = 'Equatorial Guinea',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ER'})
-SET c.display_name = 'Eritrea',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Eritrea',
     c.alpha3 = 'ERI',
     c.m49_code = 232,
     c.region = 'Africa',
@@ -911,7 +911,7 @@ SET c.display_name = 'Eritrea',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'EE'})
-SET c.display_name = 'Estonia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Estonia',
     c.alpha3 = 'EST',
     c.m49_code = 233,
     c.region = 'Europe',
@@ -924,7 +924,7 @@ SET c.display_name = 'Estonia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SZ'})
-SET c.display_name = 'Eswatini',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Eswatini',
     c.alpha3 = 'SWZ',
     c.m49_code = 748,
     c.region = 'Africa',
@@ -937,7 +937,7 @@ SET c.display_name = 'Eswatini',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ET'})
-SET c.display_name = 'Ethiopia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Ethiopia',
     c.alpha3 = 'ETH',
     c.m49_code = 231,
     c.region = 'Africa',
@@ -950,7 +950,7 @@ SET c.display_name = 'Ethiopia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FK'})
-SET c.display_name = 'Falkland Islands (Malvinas)',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Falkland Islands (Malvinas)',
     c.alpha3 = 'FLK',
     c.m49_code = 238,
     c.region = 'Americas',
@@ -963,7 +963,7 @@ SET c.display_name = 'Falkland Islands (Malvinas)',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FO'})
-SET c.display_name = 'Faroe Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Faroe Islands',
     c.alpha3 = 'FRO',
     c.m49_code = 234,
     c.region = 'Europe',
@@ -976,7 +976,7 @@ SET c.display_name = 'Faroe Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FJ'})
-SET c.display_name = 'Fiji',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Fiji',
     c.alpha3 = 'FJI',
     c.m49_code = 242,
     c.region = 'Oceania',
@@ -989,7 +989,7 @@ SET c.display_name = 'Fiji',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FI'})
-SET c.display_name = 'Finland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Finland',
     c.alpha3 = 'FIN',
     c.m49_code = 246,
     c.region = 'Europe',
@@ -1002,7 +1002,7 @@ SET c.display_name = 'Finland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FR'})
-SET c.display_name = 'France',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'France',
     c.alpha3 = 'FRA',
     c.m49_code = 250,
     c.region = 'Europe',
@@ -1015,7 +1015,7 @@ SET c.display_name = 'France',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GF'})
-SET c.display_name = 'French Guiana',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'French Guiana',
     c.alpha3 = 'GUF',
     c.m49_code = 254,
     c.region = 'Americas',
@@ -1028,7 +1028,7 @@ SET c.display_name = 'French Guiana',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PF'})
-SET c.display_name = 'French Polynesia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'French Polynesia',
     c.alpha3 = 'PYF',
     c.m49_code = 258,
     c.region = 'Oceania',
@@ -1041,7 +1041,7 @@ SET c.display_name = 'French Polynesia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TF'})
-SET c.display_name = 'French Southern Territories',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'French Southern Territories',
     c.alpha3 = 'ATF',
     c.m49_code = 260,
     c.region = 'Africa',
@@ -1054,7 +1054,7 @@ SET c.display_name = 'French Southern Territories',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GA'})
-SET c.display_name = 'Gabon',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Gabon',
     c.alpha3 = 'GAB',
     c.m49_code = 266,
     c.region = 'Africa',
@@ -1067,7 +1067,7 @@ SET c.display_name = 'Gabon',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GM'})
-SET c.display_name = 'Gambia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Gambia',
     c.alpha3 = 'GMB',
     c.m49_code = 270,
     c.region = 'Africa',
@@ -1080,7 +1080,7 @@ SET c.display_name = 'Gambia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GE'})
-SET c.display_name = 'Georgia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Georgia',
     c.alpha3 = 'GEO',
     c.m49_code = 268,
     c.region = 'Asia',
@@ -1093,7 +1093,7 @@ SET c.display_name = 'Georgia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'DE'})
-SET c.display_name = 'Germany',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Germany',
     c.alpha3 = 'DEU',
     c.m49_code = 276,
     c.region = 'Europe',
@@ -1106,7 +1106,7 @@ SET c.display_name = 'Germany',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GH'})
-SET c.display_name = 'Ghana',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Ghana',
     c.alpha3 = 'GHA',
     c.m49_code = 288,
     c.region = 'Africa',
@@ -1119,7 +1119,7 @@ SET c.display_name = 'Ghana',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GI'})
-SET c.display_name = 'Gibraltar',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Gibraltar',
     c.alpha3 = 'GIB',
     c.m49_code = 292,
     c.region = 'Europe',
@@ -1132,7 +1132,7 @@ SET c.display_name = 'Gibraltar',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GR'})
-SET c.display_name = 'Greece',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Greece',
     c.alpha3 = 'GRC',
     c.m49_code = 300,
     c.region = 'Europe',
@@ -1145,7 +1145,7 @@ SET c.display_name = 'Greece',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GL'})
-SET c.display_name = 'Greenland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Greenland',
     c.alpha3 = 'GRL',
     c.m49_code = 304,
     c.region = 'Americas',
@@ -1158,7 +1158,7 @@ SET c.display_name = 'Greenland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GD'})
-SET c.display_name = 'Grenada',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Grenada',
     c.alpha3 = 'GRD',
     c.m49_code = 308,
     c.region = 'Americas',
@@ -1171,7 +1171,7 @@ SET c.display_name = 'Grenada',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GP'})
-SET c.display_name = 'Guadeloupe',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guadeloupe',
     c.alpha3 = 'GLP',
     c.m49_code = 312,
     c.region = 'Americas',
@@ -1184,7 +1184,7 @@ SET c.display_name = 'Guadeloupe',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GU'})
-SET c.display_name = 'Guam',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guam',
     c.alpha3 = 'GUM',
     c.m49_code = 316,
     c.region = 'Oceania',
@@ -1197,7 +1197,7 @@ SET c.display_name = 'Guam',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GT'})
-SET c.display_name = 'Guatemala',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guatemala',
     c.alpha3 = 'GTM',
     c.m49_code = 320,
     c.region = 'Americas',
@@ -1210,7 +1210,7 @@ SET c.display_name = 'Guatemala',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GG'})
-SET c.display_name = 'Guernsey',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guernsey',
     c.alpha3 = 'GGY',
     c.m49_code = 831,
     c.region = 'Europe',
@@ -1223,7 +1223,7 @@ SET c.display_name = 'Guernsey',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GN'})
-SET c.display_name = 'Guinea',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guinea',
     c.alpha3 = 'GIN',
     c.m49_code = 324,
     c.region = 'Africa',
@@ -1236,7 +1236,7 @@ SET c.display_name = 'Guinea',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GW'})
-SET c.display_name = 'Guinea-Bissau',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guinea-Bissau',
     c.alpha3 = 'GNB',
     c.m49_code = 624,
     c.region = 'Africa',
@@ -1249,7 +1249,7 @@ SET c.display_name = 'Guinea-Bissau',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GY'})
-SET c.display_name = 'Guyana',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Guyana',
     c.alpha3 = 'GUY',
     c.m49_code = 328,
     c.region = 'Americas',
@@ -1262,7 +1262,7 @@ SET c.display_name = 'Guyana',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HT'})
-SET c.display_name = 'Haiti',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Haiti',
     c.alpha3 = 'HTI',
     c.m49_code = 332,
     c.region = 'Americas',
@@ -1275,7 +1275,7 @@ SET c.display_name = 'Haiti',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HM'})
-SET c.display_name = 'Heard Island and McDonald Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Heard Island and McDonald Islands',
     c.alpha3 = 'HMD',
     c.m49_code = 334,
     c.region = 'Oceania',
@@ -1288,7 +1288,7 @@ SET c.display_name = 'Heard Island and McDonald Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VA'})
-SET c.display_name = 'Holy See',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Holy See',
     c.alpha3 = 'VAT',
     c.m49_code = 336,
     c.region = 'Europe',
@@ -1301,7 +1301,7 @@ SET c.display_name = 'Holy See',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HN'})
-SET c.display_name = 'Honduras',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Honduras',
     c.alpha3 = 'HND',
     c.m49_code = 340,
     c.region = 'Americas',
@@ -1314,7 +1314,7 @@ SET c.display_name = 'Honduras',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HK'})
-SET c.display_name = 'Hong Kong',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Hong Kong',
     c.alpha3 = 'HKG',
     c.m49_code = 344,
     c.region = 'Asia',
@@ -1327,7 +1327,7 @@ SET c.display_name = 'Hong Kong',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'HU'})
-SET c.display_name = 'Hungary',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Hungary',
     c.alpha3 = 'HUN',
     c.m49_code = 348,
     c.region = 'Europe',
@@ -1340,7 +1340,7 @@ SET c.display_name = 'Hungary',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IS'})
-SET c.display_name = 'Iceland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Iceland',
     c.alpha3 = 'ISL',
     c.m49_code = 352,
     c.region = 'Europe',
@@ -1353,7 +1353,7 @@ SET c.display_name = 'Iceland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IN'})
-SET c.display_name = 'India',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'India',
     c.alpha3 = 'IND',
     c.m49_code = 356,
     c.region = 'Asia',
@@ -1366,7 +1366,7 @@ SET c.display_name = 'India',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ID'})
-SET c.display_name = 'Indonesia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Indonesia',
     c.alpha3 = 'IDN',
     c.m49_code = 360,
     c.region = 'Asia',
@@ -1379,7 +1379,7 @@ SET c.display_name = 'Indonesia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IR'})
-SET c.display_name = 'Iran, Islamic Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Iran, Islamic Republic of',
     c.alpha3 = 'IRN',
     c.m49_code = 364,
     c.region = 'Asia',
@@ -1392,7 +1392,7 @@ SET c.display_name = 'Iran, Islamic Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IQ'})
-SET c.display_name = 'Iraq',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Iraq',
     c.alpha3 = 'IRQ',
     c.m49_code = 368,
     c.region = 'Asia',
@@ -1405,7 +1405,7 @@ SET c.display_name = 'Iraq',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IE'})
-SET c.display_name = 'Ireland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Ireland',
     c.alpha3 = 'IRL',
     c.m49_code = 372,
     c.region = 'Europe',
@@ -1418,7 +1418,7 @@ SET c.display_name = 'Ireland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IM'})
-SET c.display_name = 'Isle of Man',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Isle of Man',
     c.alpha3 = 'IMN',
     c.m49_code = 833,
     c.region = 'Europe',
@@ -1431,7 +1431,7 @@ SET c.display_name = 'Isle of Man',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IL'})
-SET c.display_name = 'Israel',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Israel',
     c.alpha3 = 'ISR',
     c.m49_code = 376,
     c.region = 'Asia',
@@ -1444,7 +1444,7 @@ SET c.display_name = 'Israel',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'IT'})
-SET c.display_name = 'Italy',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Italy',
     c.alpha3 = 'ITA',
     c.m49_code = 380,
     c.region = 'Europe',
@@ -1457,7 +1457,7 @@ SET c.display_name = 'Italy',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'JM'})
-SET c.display_name = 'Jamaica',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Jamaica',
     c.alpha3 = 'JAM',
     c.m49_code = 388,
     c.region = 'Americas',
@@ -1470,7 +1470,7 @@ SET c.display_name = 'Jamaica',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'JP'})
-SET c.display_name = 'Japan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Japan',
     c.alpha3 = 'JPN',
     c.m49_code = 392,
     c.region = 'Asia',
@@ -1483,7 +1483,7 @@ SET c.display_name = 'Japan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'JE'})
-SET c.display_name = 'Jersey',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Jersey',
     c.alpha3 = 'JEY',
     c.m49_code = 832,
     c.region = 'Europe',
@@ -1496,7 +1496,7 @@ SET c.display_name = 'Jersey',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'JO'})
-SET c.display_name = 'Jordan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Jordan',
     c.alpha3 = 'JOR',
     c.m49_code = 400,
     c.region = 'Asia',
@@ -1509,7 +1509,7 @@ SET c.display_name = 'Jordan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KZ'})
-SET c.display_name = 'Kazakhstan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Kazakhstan',
     c.alpha3 = 'KAZ',
     c.m49_code = 398,
     c.region = 'Asia',
@@ -1522,7 +1522,7 @@ SET c.display_name = 'Kazakhstan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KE'})
-SET c.display_name = 'Kenya',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Kenya',
     c.alpha3 = 'KEN',
     c.m49_code = 404,
     c.region = 'Africa',
@@ -1535,7 +1535,7 @@ SET c.display_name = 'Kenya',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KI'})
-SET c.display_name = 'Kiribati',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Kiribati',
     c.alpha3 = 'KIR',
     c.m49_code = 296,
     c.region = 'Oceania',
@@ -1548,7 +1548,7 @@ SET c.display_name = 'Kiribati',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KP'})
-SET c.display_name = 'Korea, Democratic People\'s Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Korea, Democratic People\'s Republic of',
     c.alpha3 = 'PRK',
     c.m49_code = 408,
     c.region = 'Asia',
@@ -1561,7 +1561,7 @@ SET c.display_name = 'Korea, Democratic People\'s Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KR'})
-SET c.display_name = 'Korea, Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Korea, Republic of',
     c.alpha3 = 'KOR',
     c.m49_code = 410,
     c.region = 'Asia',
@@ -1574,7 +1574,7 @@ SET c.display_name = 'Korea, Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KW'})
-SET c.display_name = 'Kuwait',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Kuwait',
     c.alpha3 = 'KWT',
     c.m49_code = 414,
     c.region = 'Asia',
@@ -1587,7 +1587,7 @@ SET c.display_name = 'Kuwait',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KG'})
-SET c.display_name = 'Kyrgyzstan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Kyrgyzstan',
     c.alpha3 = 'KGZ',
     c.m49_code = 417,
     c.region = 'Asia',
@@ -1600,7 +1600,7 @@ SET c.display_name = 'Kyrgyzstan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LA'})
-SET c.display_name = 'Lao People\'s Democratic Republic',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Lao People\'s Democratic Republic',
     c.alpha3 = 'LAO',
     c.m49_code = 418,
     c.region = 'Asia',
@@ -1613,7 +1613,7 @@ SET c.display_name = 'Lao People\'s Democratic Republic',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LV'})
-SET c.display_name = 'Latvia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Latvia',
     c.alpha3 = 'LVA',
     c.m49_code = 428,
     c.region = 'Europe',
@@ -1626,7 +1626,7 @@ SET c.display_name = 'Latvia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LB'})
-SET c.display_name = 'Lebanon',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Lebanon',
     c.alpha3 = 'LBN',
     c.m49_code = 422,
     c.region = 'Asia',
@@ -1639,7 +1639,7 @@ SET c.display_name = 'Lebanon',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LS'})
-SET c.display_name = 'Lesotho',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Lesotho',
     c.alpha3 = 'LSO',
     c.m49_code = 426,
     c.region = 'Africa',
@@ -1652,7 +1652,7 @@ SET c.display_name = 'Lesotho',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LR'})
-SET c.display_name = 'Liberia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Liberia',
     c.alpha3 = 'LBR',
     c.m49_code = 430,
     c.region = 'Africa',
@@ -1665,7 +1665,7 @@ SET c.display_name = 'Liberia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LY'})
-SET c.display_name = 'Libya',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Libya',
     c.alpha3 = 'LBY',
     c.m49_code = 434,
     c.region = 'Africa',
@@ -1678,7 +1678,7 @@ SET c.display_name = 'Libya',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LI'})
-SET c.display_name = 'Liechtenstein',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Liechtenstein',
     c.alpha3 = 'LIE',
     c.m49_code = 438,
     c.region = 'Europe',
@@ -1691,7 +1691,7 @@ SET c.display_name = 'Liechtenstein',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LT'})
-SET c.display_name = 'Lithuania',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Lithuania',
     c.alpha3 = 'LTU',
     c.m49_code = 440,
     c.region = 'Europe',
@@ -1704,7 +1704,7 @@ SET c.display_name = 'Lithuania',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LU'})
-SET c.display_name = 'Luxembourg',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Luxembourg',
     c.alpha3 = 'LUX',
     c.m49_code = 442,
     c.region = 'Europe',
@@ -1717,7 +1717,7 @@ SET c.display_name = 'Luxembourg',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MO'})
-SET c.display_name = 'Macao',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Macao',
     c.alpha3 = 'MAC',
     c.m49_code = 446,
     c.region = 'Asia',
@@ -1730,7 +1730,7 @@ SET c.display_name = 'Macao',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MG'})
-SET c.display_name = 'Madagascar',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Madagascar',
     c.alpha3 = 'MDG',
     c.m49_code = 450,
     c.region = 'Africa',
@@ -1743,7 +1743,7 @@ SET c.display_name = 'Madagascar',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MW'})
-SET c.display_name = 'Malawi',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Malawi',
     c.alpha3 = 'MWI',
     c.m49_code = 454,
     c.region = 'Africa',
@@ -1756,7 +1756,7 @@ SET c.display_name = 'Malawi',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MY'})
-SET c.display_name = 'Malaysia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Malaysia',
     c.alpha3 = 'MYS',
     c.m49_code = 458,
     c.region = 'Asia',
@@ -1769,7 +1769,7 @@ SET c.display_name = 'Malaysia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MV'})
-SET c.display_name = 'Maldives',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Maldives',
     c.alpha3 = 'MDV',
     c.m49_code = 462,
     c.region = 'Asia',
@@ -1782,7 +1782,7 @@ SET c.display_name = 'Maldives',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ML'})
-SET c.display_name = 'Mali',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mali',
     c.alpha3 = 'MLI',
     c.m49_code = 466,
     c.region = 'Africa',
@@ -1795,7 +1795,7 @@ SET c.display_name = 'Mali',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MT'})
-SET c.display_name = 'Malta',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Malta',
     c.alpha3 = 'MLT',
     c.m49_code = 470,
     c.region = 'Europe',
@@ -1808,7 +1808,7 @@ SET c.display_name = 'Malta',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MH'})
-SET c.display_name = 'Marshall Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Marshall Islands',
     c.alpha3 = 'MHL',
     c.m49_code = 584,
     c.region = 'Oceania',
@@ -1821,7 +1821,7 @@ SET c.display_name = 'Marshall Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MQ'})
-SET c.display_name = 'Martinique',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Martinique',
     c.alpha3 = 'MTQ',
     c.m49_code = 474,
     c.region = 'Americas',
@@ -1834,7 +1834,7 @@ SET c.display_name = 'Martinique',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MR'})
-SET c.display_name = 'Mauritania',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mauritania',
     c.alpha3 = 'MRT',
     c.m49_code = 478,
     c.region = 'Africa',
@@ -1847,7 +1847,7 @@ SET c.display_name = 'Mauritania',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MU'})
-SET c.display_name = 'Mauritius',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mauritius',
     c.alpha3 = 'MUS',
     c.m49_code = 480,
     c.region = 'Africa',
@@ -1860,7 +1860,7 @@ SET c.display_name = 'Mauritius',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'YT'})
-SET c.display_name = 'Mayotte',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mayotte',
     c.alpha3 = 'MYT',
     c.m49_code = 175,
     c.region = 'Africa',
@@ -1873,7 +1873,7 @@ SET c.display_name = 'Mayotte',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MX'})
-SET c.display_name = 'Mexico',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mexico',
     c.alpha3 = 'MEX',
     c.m49_code = 484,
     c.region = 'Americas',
@@ -1886,7 +1886,7 @@ SET c.display_name = 'Mexico',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'FM'})
-SET c.display_name = 'Micronesia, Federated States of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Micronesia, Federated States of',
     c.alpha3 = 'FSM',
     c.m49_code = 583,
     c.region = 'Oceania',
@@ -1899,7 +1899,7 @@ SET c.display_name = 'Micronesia, Federated States of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MD'})
-SET c.display_name = 'Moldova, Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Moldova, Republic of',
     c.alpha3 = 'MDA',
     c.m49_code = 498,
     c.region = 'Europe',
@@ -1912,7 +1912,7 @@ SET c.display_name = 'Moldova, Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MC'})
-SET c.display_name = 'Monaco',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Monaco',
     c.alpha3 = 'MCO',
     c.m49_code = 492,
     c.region = 'Europe',
@@ -1925,7 +1925,7 @@ SET c.display_name = 'Monaco',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MN'})
-SET c.display_name = 'Mongolia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mongolia',
     c.alpha3 = 'MNG',
     c.m49_code = 496,
     c.region = 'Asia',
@@ -1938,7 +1938,7 @@ SET c.display_name = 'Mongolia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ME'})
-SET c.display_name = 'Montenegro',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Montenegro',
     c.alpha3 = 'MNE',
     c.m49_code = 499,
     c.region = 'Europe',
@@ -1951,7 +1951,7 @@ SET c.display_name = 'Montenegro',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MS'})
-SET c.display_name = 'Montserrat',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Montserrat',
     c.alpha3 = 'MSR',
     c.m49_code = 500,
     c.region = 'Americas',
@@ -1964,7 +1964,7 @@ SET c.display_name = 'Montserrat',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MA'})
-SET c.display_name = 'Morocco',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Morocco',
     c.alpha3 = 'MAR',
     c.m49_code = 504,
     c.region = 'Africa',
@@ -1977,7 +1977,7 @@ SET c.display_name = 'Morocco',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MZ'})
-SET c.display_name = 'Mozambique',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Mozambique',
     c.alpha3 = 'MOZ',
     c.m49_code = 508,
     c.region = 'Africa',
@@ -1990,7 +1990,7 @@ SET c.display_name = 'Mozambique',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MM'})
-SET c.display_name = 'Myanmar',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Myanmar',
     c.alpha3 = 'MMR',
     c.m49_code = 104,
     c.region = 'Asia',
@@ -2003,7 +2003,7 @@ SET c.display_name = 'Myanmar',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NA'})
-SET c.display_name = 'Namibia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Namibia',
     c.alpha3 = 'NAM',
     c.m49_code = 516,
     c.region = 'Africa',
@@ -2016,7 +2016,7 @@ SET c.display_name = 'Namibia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NR'})
-SET c.display_name = 'Nauru',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Nauru',
     c.alpha3 = 'NRU',
     c.m49_code = 520,
     c.region = 'Oceania',
@@ -2029,7 +2029,7 @@ SET c.display_name = 'Nauru',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NP'})
-SET c.display_name = 'Nepal',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Nepal',
     c.alpha3 = 'NPL',
     c.m49_code = 524,
     c.region = 'Asia',
@@ -2042,7 +2042,7 @@ SET c.display_name = 'Nepal',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NL'})
-SET c.display_name = 'Netherlands, Kingdom of the',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Netherlands, Kingdom of the',
     c.alpha3 = 'NLD',
     c.m49_code = 528,
     c.region = 'Europe',
@@ -2055,7 +2055,7 @@ SET c.display_name = 'Netherlands, Kingdom of the',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NC'})
-SET c.display_name = 'New Caledonia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'New Caledonia',
     c.alpha3 = 'NCL',
     c.m49_code = 540,
     c.region = 'Oceania',
@@ -2068,7 +2068,7 @@ SET c.display_name = 'New Caledonia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NZ'})
-SET c.display_name = 'New Zealand',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'New Zealand',
     c.alpha3 = 'NZL',
     c.m49_code = 554,
     c.region = 'Oceania',
@@ -2081,7 +2081,7 @@ SET c.display_name = 'New Zealand',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NI'})
-SET c.display_name = 'Nicaragua',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Nicaragua',
     c.alpha3 = 'NIC',
     c.m49_code = 558,
     c.region = 'Americas',
@@ -2094,7 +2094,7 @@ SET c.display_name = 'Nicaragua',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NE'})
-SET c.display_name = 'Niger',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Niger',
     c.alpha3 = 'NER',
     c.m49_code = 562,
     c.region = 'Africa',
@@ -2107,7 +2107,7 @@ SET c.display_name = 'Niger',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NG'})
-SET c.display_name = 'Nigeria',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Nigeria',
     c.alpha3 = 'NGA',
     c.m49_code = 566,
     c.region = 'Africa',
@@ -2120,7 +2120,7 @@ SET c.display_name = 'Nigeria',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NU'})
-SET c.display_name = 'Niue',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Niue',
     c.alpha3 = 'NIU',
     c.m49_code = 570,
     c.region = 'Oceania',
@@ -2133,7 +2133,7 @@ SET c.display_name = 'Niue',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NF'})
-SET c.display_name = 'Norfolk Island',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Norfolk Island',
     c.alpha3 = 'NFK',
     c.m49_code = 574,
     c.region = 'Oceania',
@@ -2146,7 +2146,7 @@ SET c.display_name = 'Norfolk Island',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MK'})
-SET c.display_name = 'North Macedonia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'North Macedonia',
     c.alpha3 = 'MKD',
     c.m49_code = 807,
     c.region = 'Europe',
@@ -2159,7 +2159,7 @@ SET c.display_name = 'North Macedonia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MP'})
-SET c.display_name = 'Northern Mariana Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Northern Mariana Islands',
     c.alpha3 = 'MNP',
     c.m49_code = 580,
     c.region = 'Oceania',
@@ -2172,7 +2172,7 @@ SET c.display_name = 'Northern Mariana Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'NO'})
-SET c.display_name = 'Norway',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Norway',
     c.alpha3 = 'NOR',
     c.m49_code = 578,
     c.region = 'Europe',
@@ -2185,7 +2185,7 @@ SET c.display_name = 'Norway',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'OM'})
-SET c.display_name = 'Oman',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Oman',
     c.alpha3 = 'OMN',
     c.m49_code = 512,
     c.region = 'Asia',
@@ -2198,7 +2198,7 @@ SET c.display_name = 'Oman',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PK'})
-SET c.display_name = 'Pakistan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Pakistan',
     c.alpha3 = 'PAK',
     c.m49_code = 586,
     c.region = 'Asia',
@@ -2211,7 +2211,7 @@ SET c.display_name = 'Pakistan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PW'})
-SET c.display_name = 'Palau',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Palau',
     c.alpha3 = 'PLW',
     c.m49_code = 585,
     c.region = 'Oceania',
@@ -2224,7 +2224,7 @@ SET c.display_name = 'Palau',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PS'})
-SET c.display_name = 'Palestine, State of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Palestine, State of',
     c.alpha3 = 'PSE',
     c.m49_code = 275,
     c.region = 'Asia',
@@ -2237,7 +2237,7 @@ SET c.display_name = 'Palestine, State of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PA'})
-SET c.display_name = 'Panama',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Panama',
     c.alpha3 = 'PAN',
     c.m49_code = 591,
     c.region = 'Americas',
@@ -2250,7 +2250,7 @@ SET c.display_name = 'Panama',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PG'})
-SET c.display_name = 'Papua New Guinea',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Papua New Guinea',
     c.alpha3 = 'PNG',
     c.m49_code = 598,
     c.region = 'Oceania',
@@ -2263,7 +2263,7 @@ SET c.display_name = 'Papua New Guinea',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PY'})
-SET c.display_name = 'Paraguay',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Paraguay',
     c.alpha3 = 'PRY',
     c.m49_code = 600,
     c.region = 'Americas',
@@ -2276,7 +2276,7 @@ SET c.display_name = 'Paraguay',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PE'})
-SET c.display_name = 'Peru',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Peru',
     c.alpha3 = 'PER',
     c.m49_code = 604,
     c.region = 'Americas',
@@ -2289,7 +2289,7 @@ SET c.display_name = 'Peru',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PH'})
-SET c.display_name = 'Philippines',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Philippines',
     c.alpha3 = 'PHL',
     c.m49_code = 608,
     c.region = 'Asia',
@@ -2302,7 +2302,7 @@ SET c.display_name = 'Philippines',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PN'})
-SET c.display_name = 'Pitcairn',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Pitcairn',
     c.alpha3 = 'PCN',
     c.m49_code = 612,
     c.region = 'Oceania',
@@ -2315,7 +2315,7 @@ SET c.display_name = 'Pitcairn',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PL'})
-SET c.display_name = 'Poland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Poland',
     c.alpha3 = 'POL',
     c.m49_code = 616,
     c.region = 'Europe',
@@ -2328,7 +2328,7 @@ SET c.display_name = 'Poland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PT'})
-SET c.display_name = 'Portugal',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Portugal',
     c.alpha3 = 'PRT',
     c.m49_code = 620,
     c.region = 'Europe',
@@ -2341,7 +2341,7 @@ SET c.display_name = 'Portugal',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PR'})
-SET c.display_name = 'Puerto Rico',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Puerto Rico',
     c.alpha3 = 'PRI',
     c.m49_code = 630,
     c.region = 'Americas',
@@ -2354,7 +2354,7 @@ SET c.display_name = 'Puerto Rico',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'QA'})
-SET c.display_name = 'Qatar',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Qatar',
     c.alpha3 = 'QAT',
     c.m49_code = 634,
     c.region = 'Asia',
@@ -2367,7 +2367,7 @@ SET c.display_name = 'Qatar',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'RE'})
-SET c.display_name = 'Réunion',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Réunion',
     c.alpha3 = 'REU',
     c.m49_code = 638,
     c.region = 'Africa',
@@ -2380,7 +2380,7 @@ SET c.display_name = 'Réunion',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'RO'})
-SET c.display_name = 'Romania',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Romania',
     c.alpha3 = 'ROU',
     c.m49_code = 642,
     c.region = 'Europe',
@@ -2393,7 +2393,7 @@ SET c.display_name = 'Romania',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'RU'})
-SET c.display_name = 'Russian Federation',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Russian Federation',
     c.alpha3 = 'RUS',
     c.m49_code = 643,
     c.region = 'Europe',
@@ -2406,7 +2406,7 @@ SET c.display_name = 'Russian Federation',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'RW'})
-SET c.display_name = 'Rwanda',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Rwanda',
     c.alpha3 = 'RWA',
     c.m49_code = 646,
     c.region = 'Africa',
@@ -2419,7 +2419,7 @@ SET c.display_name = 'Rwanda',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'BL'})
-SET c.display_name = 'Saint Barthélemy',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Barthélemy',
     c.alpha3 = 'BLM',
     c.m49_code = 652,
     c.region = 'Americas',
@@ -2432,7 +2432,7 @@ SET c.display_name = 'Saint Barthélemy',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SH'})
-SET c.display_name = 'Saint Helena, Ascension and Tristan da Cunha',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Helena, Ascension and Tristan da Cunha',
     c.alpha3 = 'SHN',
     c.m49_code = 654,
     c.region = 'Africa',
@@ -2445,7 +2445,7 @@ SET c.display_name = 'Saint Helena, Ascension and Tristan da Cunha',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'KN'})
-SET c.display_name = 'Saint Kitts and Nevis',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Kitts and Nevis',
     c.alpha3 = 'KNA',
     c.m49_code = 659,
     c.region = 'Americas',
@@ -2458,7 +2458,7 @@ SET c.display_name = 'Saint Kitts and Nevis',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LC'})
-SET c.display_name = 'Saint Lucia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Lucia',
     c.alpha3 = 'LCA',
     c.m49_code = 662,
     c.region = 'Americas',
@@ -2471,7 +2471,7 @@ SET c.display_name = 'Saint Lucia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'MF'})
-SET c.display_name = 'Saint Martin (French part)',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Martin (French part)',
     c.alpha3 = 'MAF',
     c.m49_code = 663,
     c.region = 'Americas',
@@ -2484,7 +2484,7 @@ SET c.display_name = 'Saint Martin (French part)',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'PM'})
-SET c.display_name = 'Saint Pierre and Miquelon',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Pierre and Miquelon',
     c.alpha3 = 'SPM',
     c.m49_code = 666,
     c.region = 'Americas',
@@ -2497,7 +2497,7 @@ SET c.display_name = 'Saint Pierre and Miquelon',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VC'})
-SET c.display_name = 'Saint Vincent and the Grenadines',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saint Vincent and the Grenadines',
     c.alpha3 = 'VCT',
     c.m49_code = 670,
     c.region = 'Americas',
@@ -2510,7 +2510,7 @@ SET c.display_name = 'Saint Vincent and the Grenadines',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'WS'})
-SET c.display_name = 'Samoa',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Samoa',
     c.alpha3 = 'WSM',
     c.m49_code = 882,
     c.region = 'Oceania',
@@ -2523,7 +2523,7 @@ SET c.display_name = 'Samoa',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SM'})
-SET c.display_name = 'San Marino',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'San Marino',
     c.alpha3 = 'SMR',
     c.m49_code = 674,
     c.region = 'Europe',
@@ -2536,7 +2536,7 @@ SET c.display_name = 'San Marino',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ST'})
-SET c.display_name = 'Sao Tome and Principe',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sao Tome and Principe',
     c.alpha3 = 'STP',
     c.m49_code = 678,
     c.region = 'Africa',
@@ -2549,7 +2549,7 @@ SET c.display_name = 'Sao Tome and Principe',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SA'})
-SET c.display_name = 'Saudi Arabia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Saudi Arabia',
     c.alpha3 = 'SAU',
     c.m49_code = 682,
     c.region = 'Asia',
@@ -2562,7 +2562,7 @@ SET c.display_name = 'Saudi Arabia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SN'})
-SET c.display_name = 'Senegal',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Senegal',
     c.alpha3 = 'SEN',
     c.m49_code = 686,
     c.region = 'Africa',
@@ -2575,7 +2575,7 @@ SET c.display_name = 'Senegal',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'RS'})
-SET c.display_name = 'Serbia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Serbia',
     c.alpha3 = 'SRB',
     c.m49_code = 688,
     c.region = 'Europe',
@@ -2588,7 +2588,7 @@ SET c.display_name = 'Serbia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SC'})
-SET c.display_name = 'Seychelles',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Seychelles',
     c.alpha3 = 'SYC',
     c.m49_code = 690,
     c.region = 'Africa',
@@ -2601,7 +2601,7 @@ SET c.display_name = 'Seychelles',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SL'})
-SET c.display_name = 'Sierra Leone',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sierra Leone',
     c.alpha3 = 'SLE',
     c.m49_code = 694,
     c.region = 'Africa',
@@ -2614,7 +2614,7 @@ SET c.display_name = 'Sierra Leone',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SG'})
-SET c.display_name = 'Singapore',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Singapore',
     c.alpha3 = 'SGP',
     c.m49_code = 702,
     c.region = 'Asia',
@@ -2627,7 +2627,7 @@ SET c.display_name = 'Singapore',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SX'})
-SET c.display_name = 'Sint Maarten (Dutch part)',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sint Maarten (Dutch part)',
     c.alpha3 = 'SXM',
     c.m49_code = 534,
     c.region = 'Americas',
@@ -2640,7 +2640,7 @@ SET c.display_name = 'Sint Maarten (Dutch part)',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SK'})
-SET c.display_name = 'Slovakia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Slovakia',
     c.alpha3 = 'SVK',
     c.m49_code = 703,
     c.region = 'Europe',
@@ -2653,7 +2653,7 @@ SET c.display_name = 'Slovakia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SI'})
-SET c.display_name = 'Slovenia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Slovenia',
     c.alpha3 = 'SVN',
     c.m49_code = 705,
     c.region = 'Europe',
@@ -2666,7 +2666,7 @@ SET c.display_name = 'Slovenia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SB'})
-SET c.display_name = 'Solomon Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Solomon Islands',
     c.alpha3 = 'SLB',
     c.m49_code = 90,
     c.region = 'Oceania',
@@ -2679,7 +2679,7 @@ SET c.display_name = 'Solomon Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SO'})
-SET c.display_name = 'Somalia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Somalia',
     c.alpha3 = 'SOM',
     c.m49_code = 706,
     c.region = 'Africa',
@@ -2692,7 +2692,7 @@ SET c.display_name = 'Somalia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ZA'})
-SET c.display_name = 'South Africa',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'South Africa',
     c.alpha3 = 'ZAF',
     c.m49_code = 710,
     c.region = 'Africa',
@@ -2705,7 +2705,7 @@ SET c.display_name = 'South Africa',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GS'})
-SET c.display_name = 'South Georgia and the South Sandwich Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'South Georgia and the South Sandwich Islands',
     c.alpha3 = 'SGS',
     c.m49_code = 239,
     c.region = 'Americas',
@@ -2718,7 +2718,7 @@ SET c.display_name = 'South Georgia and the South Sandwich Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SS'})
-SET c.display_name = 'South Sudan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'South Sudan',
     c.alpha3 = 'SSD',
     c.m49_code = 728,
     c.region = 'Africa',
@@ -2731,7 +2731,7 @@ SET c.display_name = 'South Sudan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ES'})
-SET c.display_name = 'Spain',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Spain',
     c.alpha3 = 'ESP',
     c.m49_code = 724,
     c.region = 'Europe',
@@ -2744,7 +2744,7 @@ SET c.display_name = 'Spain',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'LK'})
-SET c.display_name = 'Sri Lanka',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sri Lanka',
     c.alpha3 = 'LKA',
     c.m49_code = 144,
     c.region = 'Asia',
@@ -2757,7 +2757,7 @@ SET c.display_name = 'Sri Lanka',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SD'})
-SET c.display_name = 'Sudan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sudan',
     c.alpha3 = 'SDN',
     c.m49_code = 729,
     c.region = 'Africa',
@@ -2770,7 +2770,7 @@ SET c.display_name = 'Sudan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SR'})
-SET c.display_name = 'Suriname',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Suriname',
     c.alpha3 = 'SUR',
     c.m49_code = 740,
     c.region = 'Americas',
@@ -2783,7 +2783,7 @@ SET c.display_name = 'Suriname',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SJ'})
-SET c.display_name = 'Svalbard and Jan Mayen',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Svalbard and Jan Mayen',
     c.alpha3 = 'SJM',
     c.m49_code = 744,
     c.region = 'Europe',
@@ -2796,7 +2796,7 @@ SET c.display_name = 'Svalbard and Jan Mayen',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SE'})
-SET c.display_name = 'Sweden',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Sweden',
     c.alpha3 = 'SWE',
     c.m49_code = 752,
     c.region = 'Europe',
@@ -2809,7 +2809,7 @@ SET c.display_name = 'Sweden',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'CH'})
-SET c.display_name = 'Switzerland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Switzerland',
     c.alpha3 = 'CHE',
     c.m49_code = 756,
     c.region = 'Europe',
@@ -2822,7 +2822,7 @@ SET c.display_name = 'Switzerland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'SY'})
-SET c.display_name = 'Syrian Arab Republic',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Syrian Arab Republic',
     c.alpha3 = 'SYR',
     c.m49_code = 760,
     c.region = 'Asia',
@@ -2835,7 +2835,7 @@ SET c.display_name = 'Syrian Arab Republic',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TW'})
-SET c.display_name = 'Taiwan, Province of China',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Taiwan, Province of China',
     c.alpha3 = 'TWN',
     c.m49_code = 158,
     c.region = '',
@@ -2848,7 +2848,7 @@ SET c.display_name = 'Taiwan, Province of China',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TJ'})
-SET c.display_name = 'Tajikistan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tajikistan',
     c.alpha3 = 'TJK',
     c.m49_code = 762,
     c.region = 'Asia',
@@ -2861,7 +2861,7 @@ SET c.display_name = 'Tajikistan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TZ'})
-SET c.display_name = 'Tanzania, United Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tanzania, United Republic of',
     c.alpha3 = 'TZA',
     c.m49_code = 834,
     c.region = 'Africa',
@@ -2874,7 +2874,7 @@ SET c.display_name = 'Tanzania, United Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TH'})
-SET c.display_name = 'Thailand',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Thailand',
     c.alpha3 = 'THA',
     c.m49_code = 764,
     c.region = 'Asia',
@@ -2887,7 +2887,7 @@ SET c.display_name = 'Thailand',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TL'})
-SET c.display_name = 'Timor-Leste',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Timor-Leste',
     c.alpha3 = 'TLS',
     c.m49_code = 626,
     c.region = 'Asia',
@@ -2900,7 +2900,7 @@ SET c.display_name = 'Timor-Leste',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TG'})
-SET c.display_name = 'Togo',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Togo',
     c.alpha3 = 'TGO',
     c.m49_code = 768,
     c.region = 'Africa',
@@ -2913,7 +2913,7 @@ SET c.display_name = 'Togo',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TK'})
-SET c.display_name = 'Tokelau',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tokelau',
     c.alpha3 = 'TKL',
     c.m49_code = 772,
     c.region = 'Oceania',
@@ -2926,7 +2926,7 @@ SET c.display_name = 'Tokelau',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TO'})
-SET c.display_name = 'Tonga',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tonga',
     c.alpha3 = 'TON',
     c.m49_code = 776,
     c.region = 'Oceania',
@@ -2939,7 +2939,7 @@ SET c.display_name = 'Tonga',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TT'})
-SET c.display_name = 'Trinidad and Tobago',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Trinidad and Tobago',
     c.alpha3 = 'TTO',
     c.m49_code = 780,
     c.region = 'Americas',
@@ -2952,7 +2952,7 @@ SET c.display_name = 'Trinidad and Tobago',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TN'})
-SET c.display_name = 'Tunisia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tunisia',
     c.alpha3 = 'TUN',
     c.m49_code = 788,
     c.region = 'Africa',
@@ -2965,7 +2965,7 @@ SET c.display_name = 'Tunisia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TR'})
-SET c.display_name = 'Türkiye',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Türkiye',
     c.alpha3 = 'TUR',
     c.m49_code = 792,
     c.region = 'Asia',
@@ -2978,7 +2978,7 @@ SET c.display_name = 'Türkiye',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TM'})
-SET c.display_name = 'Turkmenistan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Turkmenistan',
     c.alpha3 = 'TKM',
     c.m49_code = 795,
     c.region = 'Asia',
@@ -2991,7 +2991,7 @@ SET c.display_name = 'Turkmenistan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TC'})
-SET c.display_name = 'Turks and Caicos Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Turks and Caicos Islands',
     c.alpha3 = 'TCA',
     c.m49_code = 796,
     c.region = 'Americas',
@@ -3004,7 +3004,7 @@ SET c.display_name = 'Turks and Caicos Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'TV'})
-SET c.display_name = 'Tuvalu',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Tuvalu',
     c.alpha3 = 'TUV',
     c.m49_code = 798,
     c.region = 'Oceania',
@@ -3017,7 +3017,7 @@ SET c.display_name = 'Tuvalu',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'UG'})
-SET c.display_name = 'Uganda',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Uganda',
     c.alpha3 = 'UGA',
     c.m49_code = 800,
     c.region = 'Africa',
@@ -3030,7 +3030,7 @@ SET c.display_name = 'Uganda',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'UA'})
-SET c.display_name = 'Ukraine',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Ukraine',
     c.alpha3 = 'UKR',
     c.m49_code = 804,
     c.region = 'Europe',
@@ -3043,7 +3043,7 @@ SET c.display_name = 'Ukraine',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'AE'})
-SET c.display_name = 'United Arab Emirates',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'United Arab Emirates',
     c.alpha3 = 'ARE',
     c.m49_code = 784,
     c.region = 'Asia',
@@ -3056,7 +3056,7 @@ SET c.display_name = 'United Arab Emirates',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'GB'})
-SET c.display_name = 'United Kingdom of Great Britain and Northern Ireland',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'United Kingdom of Great Britain and Northern Ireland',
     c.alpha3 = 'GBR',
     c.m49_code = 826,
     c.region = 'Europe',
@@ -3069,7 +3069,7 @@ SET c.display_name = 'United Kingdom of Great Britain and Northern Ireland',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'US'})
-SET c.display_name = 'United States of America',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'United States of America',
     c.alpha3 = 'USA',
     c.m49_code = 840,
     c.region = 'Americas',
@@ -3082,7 +3082,7 @@ SET c.display_name = 'United States of America',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'UM'})
-SET c.display_name = 'United States Minor Outlying Islands',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'United States Minor Outlying Islands',
     c.alpha3 = 'UMI',
     c.m49_code = 581,
     c.region = 'Oceania',
@@ -3095,7 +3095,7 @@ SET c.display_name = 'United States Minor Outlying Islands',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'UY'})
-SET c.display_name = 'Uruguay',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Uruguay',
     c.alpha3 = 'URY',
     c.m49_code = 858,
     c.region = 'Americas',
@@ -3108,7 +3108,7 @@ SET c.display_name = 'Uruguay',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'UZ'})
-SET c.display_name = 'Uzbekistan',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Uzbekistan',
     c.alpha3 = 'UZB',
     c.m49_code = 860,
     c.region = 'Asia',
@@ -3121,7 +3121,7 @@ SET c.display_name = 'Uzbekistan',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VU'})
-SET c.display_name = 'Vanuatu',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Vanuatu',
     c.alpha3 = 'VUT',
     c.m49_code = 548,
     c.region = 'Oceania',
@@ -3134,7 +3134,7 @@ SET c.display_name = 'Vanuatu',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VE'})
-SET c.display_name = 'Venezuela, Bolivarian Republic of',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Venezuela, Bolivarian Republic of',
     c.alpha3 = 'VEN',
     c.m49_code = 862,
     c.region = 'Americas',
@@ -3147,7 +3147,7 @@ SET c.display_name = 'Venezuela, Bolivarian Republic of',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VN'})
-SET c.display_name = 'Viet Nam',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Viet Nam',
     c.alpha3 = 'VNM',
     c.m49_code = 704,
     c.region = 'Asia',
@@ -3160,7 +3160,7 @@ SET c.display_name = 'Viet Nam',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VG'})
-SET c.display_name = 'Virgin Islands (British)',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Virgin Islands (British)',
     c.alpha3 = 'VGB',
     c.m49_code = 92,
     c.region = 'Americas',
@@ -3173,7 +3173,7 @@ SET c.display_name = 'Virgin Islands (British)',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'VI'})
-SET c.display_name = 'Virgin Islands (U.S.)',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Virgin Islands (U.S.)',
     c.alpha3 = 'VIR',
     c.m49_code = 850,
     c.region = 'Americas',
@@ -3186,7 +3186,7 @@ SET c.display_name = 'Virgin Islands (U.S.)',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'WF'})
-SET c.display_name = 'Wallis and Futuna',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Wallis and Futuna',
     c.alpha3 = 'WLF',
     c.m49_code = 876,
     c.region = 'Oceania',
@@ -3199,7 +3199,7 @@ SET c.display_name = 'Wallis and Futuna',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'EH'})
-SET c.display_name = 'Western Sahara',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Western Sahara',
     c.alpha3 = 'ESH',
     c.m49_code = 732,
     c.region = 'Africa',
@@ -3212,7 +3212,7 @@ SET c.display_name = 'Western Sahara',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'YE'})
-SET c.display_name = 'Yemen',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Yemen',
     c.alpha3 = 'YEM',
     c.m49_code = 887,
     c.region = 'Asia',
@@ -3225,7 +3225,7 @@ SET c.display_name = 'Yemen',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ZM'})
-SET c.display_name = 'Zambia',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Zambia',
     c.alpha3 = 'ZMB',
     c.m49_code = 894,
     c.region = 'Africa',
@@ -3238,7 +3238,7 @@ SET c.display_name = 'Zambia',
     c.updated_at = datetime();
 
 MERGE (c:Country {key: 'ZW'})
-SET c.display_name = 'Zimbabwe',
+SET c.node_class = 'Country', c.provenance = '{"source": "seed:immutable", "version": "v0.19.0"}', c.display_name = 'Zimbabwe',
     c.alpha3 = 'ZWE',
     c.m49_code = 716,
     c.region = 'Africa',

@@ -1,6 +1,6 @@
 // ============================================================================
 // SLUGIFICATION SEED - Generated from ATH 2-rules-slug
-// Generated: 2026-02-08 00:48:57
+// Generated: 2026-03-12 (v0.19.0 standard properties)
 // Source: /Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data/2-rules-slug/
 // Locales: 200
 // ============================================================================
@@ -9,7 +9,9 @@
 // ----------------------------------------------------------------------------
 
 MERGE (s:Slugification {key: 'af-ZA'})
-SET s.display_name = 'Afrikaans (South Africa) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Afrikaans (South Africa) Slugification',
     s.content = 'URL slug generation rules for af-ZA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","het","was","sal","kan"],"pronoun":["wat","wie","dit","ons"],"conjunction":["en","of","maar","as"],"adverb":["nie","ook","dan"],"article":["die"],"preposition":["in","op","van","met","na","vir","uit","by","tot","oor"]}',
@@ -26,7 +28,9 @@ SET s.display_name = 'Afrikaans (South Africa) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-AE'})
-SET s.display_name = 'Arabic (UAE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Arabic (UAE) Slugification',
     s.content = 'URL slug generation rules for ar-AE',
     s.slug_rule = 'native_script',
     s.stopwords = '{"currency":["درهم"],"pronoun":["هو","هي"],"preposition":["من","في","على","إلى","عن","مع"],"conjunction":["و","أو","أن"],"demonstrative":["هذا","هذه","ذلك"],"verb":["كان"]}',
@@ -43,7 +47,9 @@ SET s.display_name = 'Arabic (UAE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-BH'})
-SET s.display_name = 'AR (BH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (BH) Slugification',
     s.content = 'URL slug generation rules for ar-BH',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -60,7 +66,9 @@ SET s.display_name = 'AR (BH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-DZ'})
-SET s.display_name = 'AR (DZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (DZ) Slugification',
     s.content = 'URL slug generation rules for ar-DZ',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["كيفاش"]}',
@@ -77,7 +85,9 @@ SET s.display_name = 'AR (DZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-EG'})
-SET s.display_name = 'AR (EG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (EG) Slugification',
     s.content = 'URL slug generation rules for ar-EG',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["و","أو","ثم","عشان","علشان"],"pronoun":["هو","هي","هم"],"preposition":["في","من","على","إلى","عن","مع","زي"],"demonstrative":["هذا","هذه","ذلك","دي","ده","دول"],"verb":["كان","يكون"],"interrogative":["ازاي"],"filler":["يعني"],"possessive":["بتاع","بتاعت"],"adverb":["كده"],"negation":["لا"]}',
@@ -94,7 +104,9 @@ SET s.display_name = 'AR (EG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-IQ'})
-SET s.display_name = 'AR (IQ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (IQ) Slugification',
     s.content = 'URL slug generation rules for ar-IQ',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["في","من","على","الى","عن","مع"],"pronoun":["هو","هي","هم"],"interrogative":["شلون","شنو"],"conjunction":["و","او","لكن"],"article":["ال"],"adverb":["هواي"],"verb":["كان","يكون","اكو","ماكو"],"demonstrative":["هذا","هذه","ذلك"]}',
@@ -111,7 +123,9 @@ SET s.display_name = 'AR (IQ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-JO'})
-SET s.display_name = 'AR (JO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (JO) Slugification',
     s.content = 'URL slug generation rules for ar-JO',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -128,7 +142,9 @@ SET s.display_name = 'AR (JO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-KW'})
-SET s.display_name = 'AR (KW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (KW) Slugification',
     s.content = 'URL slug generation rules for ar-KW',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["هو","هي"],"verb":["كان"],"demonstrative":["هذا","هذه","ذلك"],"preposition":["من","في","على","إلى","عن","مع"],"currency":["دينار"],"conjunction":["و","أو","أن"]}',
@@ -145,7 +161,9 @@ SET s.display_name = 'AR (KW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-LB'})
-SET s.display_name = 'AR (LB) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (LB) Slugification',
     s.content = 'URL slug generation rules for ar-LB',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["كان","يكون"],"adverb":["هيك","كتير","هلق","وين","كيف"],"conjunction":["و","او","ان"],"preposition":["في","من","الى","على","عن","مع"],"article":["ال"],"pronoun":["هذا","هذه","هو","هي","شو"]}',
@@ -162,7 +180,9 @@ SET s.display_name = 'AR (LB) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-LY'})
-SET s.display_name = 'AR (LY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (LY) Slugification',
     s.content = 'URL slug generation rules for ar-LY',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["و","أو","ثم","لكن"],"adverb":["هناك","هكي","توا","برشا"],"article":["ال","الـ"],"verb":["كان","يكون"],"pronoun":["هو","هي","هذا","هذه","ذلك"],"preposition":["في","من","إلى","على","عن","مع"]}',
@@ -179,7 +199,9 @@ SET s.display_name = 'AR (LY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-MA'})
-SET s.display_name = 'AR (MA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (MA) Slugification',
     s.content = 'URL slug generation rules for ar-MA',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["هو","هي"],"conjunction":["و","أو","لكن"],"preposition":["في","من","إلى","على","عن","مع","بين"],"verb":["كان","يكون","غادي","راه"],"article":["شي"],"demonstrative":["هذا","هذه","ذلك"],"possessive":["ديال"],"interrogative":["فين","كيفاش","علاش","واش"]}',
@@ -196,7 +218,9 @@ SET s.display_name = 'AR (MA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-OM'})
-SET s.display_name = 'AR (OM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (OM) Slugification',
     s.content = 'URL slug generation rules for ar-OM',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -213,7 +237,9 @@ SET s.display_name = 'AR (OM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-QA'})
-SET s.display_name = 'AR (QA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (QA) Slugification',
     s.content = 'URL slug generation rules for ar-QA',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["كان"],"preposition":["من","في","على","الى","عن"],"demonstrative":["هذا","هذه"],"conjunction":["ان","و","او"],"currency":["ريال"]}',
@@ -230,7 +256,9 @@ SET s.display_name = 'AR (QA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-SA'})
-SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Arabic (Saudi Arabia) Slugification',
     s.content = 'URL slug generation rules for ar-SA',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["كان"],"negation":["لم"],"currency":["ريال"],"demonstrative":["هذا","هذه"],"preposition":["من","في","على","الى","عن"],"conjunction":["ان"]}',
@@ -247,7 +275,9 @@ SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ar-TN'})
-SET s.display_name = 'AR (TN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AR (TN) Slugification',
     s.content = 'URL slug generation rules for ar-TN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"interrogative":["كيف"],"article":["ال"],"pronoun":["هو","هي"],"demonstrative":["هذا","هذه","هاذي","هاذا"],"conjunction":["و","أو","ثم","فما"],"verb":["كان","يكون"],"preposition":["في","من","إلى","على","عن","مع"],"adverb":["برشا","توة"]}',
@@ -264,7 +294,9 @@ SET s.display_name = 'AR (TN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'as-IN'})
-SET s.display_name = 'AS (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AS (IN) Slugification',
     s.content = 'URL slug generation rules for as-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["হৈছে","আছে","কৰে"],"article":["এটা","এখন","এজন"],"demonstrative":["এই","সেই"],"conjunction":["আৰু","কিন্তু","বা","যদিও"],"pronoun":["মই","তুমি","তেওঁ","আমি"]}',
@@ -281,7 +313,9 @@ SET s.display_name = 'AS (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'az-AZ'})
-SET s.display_name = 'AZ (AZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'AZ (AZ) Slugification',
     s.content = 'URL slug generation rules for az-AZ',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["bir"],"pronoun":["bu","o","nə","hansı"],"conjunction":["və","ki","amma","lakin","yəni"],"verb":["edir","olur","var","yox"],"adverb":["necə","daha","artıq"]}',
@@ -298,7 +332,9 @@ SET s.display_name = 'AZ (AZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'be-BY'})
-SET s.display_name = 'BE (BY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'BE (BY) Slugification',
     s.content = 'URL slug generation rules for be-BY',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["што","які","гэта","гэты","той","яго","яе","ён","яна","яны","мы","вы","ты","я"],"conjunction":["і","як","але","ці","бо"],"preposition":["ў","на","у","да","з","за","ад","па","пра"],"verb":["ёсць","быў","была","было","будзе","мае"]}',
@@ -315,7 +351,9 @@ SET s.display_name = 'BE (BY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'bg-BG'})
-SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Bulgarian (Bulgaria) Slugification',
     s.content = 'URL slug generation rules for bg-BG',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["и","като"],"preposition":["в","на","за","с","от","по","при","до","към"],"verb":["е","бе","са","съм"]}',
@@ -332,7 +370,9 @@ SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'bn-BD'})
-SET s.display_name = 'Bengali (Bangladesh) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Bengali (Bangladesh) Slugification',
     s.content = 'URL slug generation rules for bn-BD',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["এ","এই","একটি","এক"],"pronoun":["যে","যা","তা","সে","তার","আমি","আমার","তুমি","আপনি"],"verb":["হয়","ছিল","হবে","করা","করে","আছে","নেই","হয়েছে","হচ্ছে"],"conjunction":["ও","এবং","কিন্তু","তবে"],"preposition":["থেকে","জন্য","সাথে","মধ্যে","উপর","নিচে","কাছে","দ্বারা"],"interrogative":["কেমন"]}',
@@ -349,7 +389,9 @@ SET s.display_name = 'Bengali (Bangladesh) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'bn-IN'})
-SET s.display_name = 'BN (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'BN (IN) Slugification',
     s.content = 'URL slug generation rules for bn-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["একটি","কোনো"],"verb":["হয়","আছে","করা"],"conjunction":["ও","এবং","কিন্তু","বা"],"pronoun":["তা"]}',
@@ -366,7 +408,9 @@ SET s.display_name = 'BN (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'bs-BA'})
-SET s.display_name = 'BS (BA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'BS (BA) Slugification',
     s.content = 'URL slug generation rules for bs-BA',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["i","a","ali","ili","da","te","pa","jer"],"preposition":["u","na","za","sa","od","do","po","iz","kod","o","kroz"]}',
@@ -383,7 +427,9 @@ SET s.display_name = 'BS (BA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ca-AD'})
-SET s.display_name = 'CA (AD) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'CA (AD) Slugification',
     s.content = 'URL slug generation rules for ca-AD',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","els","les","un","una"],"conjunction":["i","o","que"],"contraction":["del","al","pel"],"verb":["és"],"preposition":["de","a","en","per","amb"]}',
@@ -400,7 +446,9 @@ SET s.display_name = 'CA (AD) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ca-ES'})
-SET s.display_name = 'CA (ES) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'CA (ES) Slugification',
     s.content = 'URL slug generation rules for ca-ES',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","els","les","un","una","uns","unes"],"conjunction":["i","o","ni","pero","sino","que","com"],"pronoun":["aquest","aquesta","aquell","aquella"],"preposition":["de","a","en","per","amb","sense","sobre","sota","entre","cap","fins"],"verb":["es","ser","estar","haver"]}',
@@ -417,7 +465,9 @@ SET s.display_name = 'CA (ES) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ceb-PH'})
-SET s.display_name = 'CEB (PH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'CEB (PH) Slugification',
     s.content = 'URL slug generation rules for ceb-PH',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"demonstrative":["kini"],"preposition":["sa","tungod","para"],"conjunction":["ug","o","kay","apan","bisan","aron"],"adverb":["usab"],"pronoun":["ako","siya"],"article":["ang"]}',
@@ -434,7 +484,9 @@ SET s.display_name = 'CEB (PH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'cs-CZ'})
-SET s.display_name = 'Czech (Czechia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Czech (Czechia) Slugification',
     s.content = 'URL slug generation rules for cs-CZ',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["je","jsou","byl","byla","bylo","být","mít","má"],"preposition":["v","na","do","z","ze","k","ke","o","s","se","pro","při","po","od","před","za","mezi","pod","nad"],"pronoun":["ten","to","ta","který","která","které"],"conjunction":["a","ale","i","nebo","že","když","protože"]}',
@@ -451,7 +503,9 @@ SET s.display_name = 'Czech (Czechia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'cy-GB'})
-SET s.display_name = 'CY (GB) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'CY (GB) Slugification',
     s.content = 'URL slug generation rules for cy-GB',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["yng","ym","wrth","heb","fel"]}',
@@ -468,7 +522,9 @@ SET s.display_name = 'CY (GB) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'da-DK'})
-SET s.display_name = 'Danish (Denmark) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Danish (Denmark) Slugification',
     s.content = 'URL slug generation rules for da-DK',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["der","som","sig"],"verb":["er"],"article":["en","et","den","det","de"],"preposition":["i","på","af","til","for","med","fra","om"],"conjunction":["og","eller","men"]}',
@@ -485,7 +541,9 @@ SET s.display_name = 'Danish (Denmark) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'de-AT'})
-SET s.display_name = 'German (Austria) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'German (Austria) Slugification',
     s.content = 'URL slug generation rules for de-AT',
     s.slug_rule = 'latin_transform',
     s.stopwords = '{"verb":["ist","sind","hat","haben","wird","werden"],"conjunction":["und","oder","aber"],"article":["der","die","das","ein","eine"],"preposition":["in","im","an","am","auf","aus","bei","mit","nach","von","vor","zu","zum","zur","fuer","durch","um","ueber","unter"]}',
@@ -502,7 +560,9 @@ SET s.display_name = 'German (Austria) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'de-CH'})
-SET s.display_name = 'German (Switzerland) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'German (Switzerland) Slugification',
     s.content = 'URL slug generation rules for de-CH',
     s.slug_rule = 'latin_transform',
     s.stopwords = '{"conjunction":["und","oder","aber"],"verb":["ist","sind","wird","werden"],"preposition":["in","auf","mit","für","von","zu","bei","uf","bim","zum","zur","vom","im","am"],"article":["der","die","das","ein","eine"]}',
@@ -519,7 +579,9 @@ SET s.display_name = 'German (Switzerland) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'de-DE'})
-SET s.display_name = 'German (Germany) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'German (Germany) Slugification',
     s.content = 'URL slug generation rules for de-DE',
     s.slug_rule = 'latin_transform',
     s.stopwords = '{"conjunction":["und","oder","aber"],"verb":["ist","sind","war","sein","werden"],"article":["der","die","das","ein","eine","des","dem","den"],"contraction":["im","am","zum","zur","vom","beim"],"preposition":["in","an","auf","für","von","mit","zu","bei","aus"]}',
@@ -536,7 +598,9 @@ SET s.display_name = 'German (Germany) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'de-LU'})
-SET s.display_name = 'DE (LU) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'DE (LU) Slugification',
     s.content = 'URL slug generation rules for de-LU',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"contraction":["im","am","zum","zur","vom","beim"],"preposition":["in","an","auf","fur","von","mit","zu","bei","aus"],"conjunction":["und","oder","aber"],"verb":["ist","sind","war","sein","werden"],"article":["der","die","das","ein","eine","des","dem","den"]}',
@@ -553,7 +617,9 @@ SET s.display_name = 'DE (LU) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'el-CY'})
-SET s.display_name = 'EL (CY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EL (CY) Slugification',
     s.content = 'URL slug generation rules for el-CY',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["δαμέ","εκεί"],"interrogative":["πού","πώς"],"conjunction":["και","τζιαι"],"pronoun":["αυτό","μας","σας"],"preposition":["με","για","στο","από"],"article":["το","την","τον","της","του"],"verb":["είναι"],"negation":["δεν","έννεν"]}',
@@ -570,7 +636,9 @@ SET s.display_name = 'EL (CY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'el-GR'})
-SET s.display_name = 'Greek (Greece) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Greek (Greece) Slugification',
     s.content = 'URL slug generation rules for el-GR',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["και","ή","αλλά","όμως","επειδή","ότι"],"verb":["είναι","έχω","γίνομαι","πάμε"],"article":["το","τη","την","της","τον","του","των","ο","η","οι","τα","ένα","μια","ένας"],"pronoun":["αυτό","αυτή","αυτός","εκείνο","εκείνη"],"adverb":["δεν","εδώ","τώρα","σήμερα"],"preposition":["σε","στο","στη","στην","στα","από","με","για","προς","κατά","μετά","παρά","χωρίς","ως"]}',
@@ -587,7 +655,9 @@ SET s.display_name = 'Greek (Greece) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-AE'})
-SET s.display_name = 'EN (AE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (AE) Slugification',
     s.content = 'URL slug generation rules for en-AE',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["of","in","to","for","on","with"],"verb":["is","are","was","were","be"],"pronoun":["it","this","that"],"currency":["dirhams","aed"],"article":["the","a","an"],"conjunction":["and","or","but"]}',
@@ -604,7 +674,9 @@ SET s.display_name = 'EN (AE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-AU'})
-SET s.display_name = 'EN (AU) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (AU) Slugification',
     s.content = 'URL slug generation rules for en-AU',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["in","on","at","to","for","of","with","by"],"article":["the","a","an"],"conjunction":["and","or","but","as"],"verb":["is","are","was","were","be","been"],"pronoun":["it","this","that"]}',
@@ -621,7 +693,9 @@ SET s.display_name = 'EN (AU) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-BB'})
-SET s.display_name = 'EN (BB) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (BB) Slugification',
     s.content = 'URL slug generation rules for en-BB',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it","that","this","wuh","yuh"],"conjunction":["and","or","but"],"article":["the","a","an"],"verb":["is","are","was","were","be","been","being"],"preposition":["in","on","at","to","for","of","with","by","from","fuh","wid","bout"]}',
@@ -638,7 +712,9 @@ SET s.display_name = 'EN (BB) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-BW'})
-SET s.display_name = 'EN (BW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (BW) Slugification',
     s.content = 'URL slug generation rules for en-BW',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but"],"preposition":["of","to","in","for","at","by","with"],"verb":["is","are"],"article":["the","a","an"],"pronoun":["it","this"]}',
@@ -655,7 +731,9 @@ SET s.display_name = 'EN (BW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-CA'})
-SET s.display_name = 'EN (CA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (CA) Slugification',
     s.content = 'URL slug generation rules for en-CA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it","this","that"],"conjunction":["and","or","but","as","if"],"adverb":["not"],"interjection":["eh"],"article":["the","a","an"],"preposition":["of","in","to","for","on","at","by","with","from"],"verb":["is","are","was","be"]}',
@@ -672,7 +750,9 @@ SET s.display_name = 'EN (CA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-CY'})
-SET s.display_name = 'EN (CY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (CY) Slugification',
     s.content = 'URL slug generation rules for en-CY',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"pronoun":["it","that","this"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being"]}',
@@ -689,7 +769,9 @@ SET s.display_name = 'EN (CY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-FJ'})
-SET s.display_name = 'EN (FJ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (FJ) Slugification',
     s.content = 'URL slug generation rules for en-FJ',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","of","with","by","from","as","ni","mai"],"article":["the","a","an","na"],"pronoun":["it","this","that"],"verb":["is","are","was","were","be","been","being"]}',
@@ -706,7 +788,9 @@ SET s.display_name = 'EN (FJ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-GB'})
-SET s.display_name = 'English (United Kingdom) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'English (United Kingdom) Slugification',
     s.content = 'URL slug generation rules for en-GB',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["of","to","in","for","on","with","at","by","from"],"article":["the","a","an"],"verb":["is","are","be"],"conjunction":["and","or","but","as"],"pronoun":["it","this","that"]}',
@@ -723,7 +807,9 @@ SET s.display_name = 'English (United Kingdom) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-GH'})
-SET s.display_name = 'EN (GH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (GH) Slugification',
     s.content = 'URL slug generation rules for en-GH',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it","that","this"],"article":["the","a","an"],"verb":["is","are","was","were","be","been","being"],"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","with","by","from","of","as"],"interjection":["ehn"]}',
@@ -740,7 +826,9 @@ SET s.display_name = 'EN (GH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-HK'})
-SET s.display_name = 'EN (HK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (HK) Slugification',
     s.content = 'URL slug generation rules for en-HK',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but"],"article":["the","a","an"],"preposition":["in","on","at","to","for","of","with","by"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"pronoun":["it","this","that"],"abbreviation":["hk"]}',
@@ -757,7 +845,9 @@ SET s.display_name = 'EN (HK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-IE'})
-SET s.display_name = 'EN (IE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (IE) Slugification',
     s.content = 'URL slug generation rules for en-IE',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"contraction":["tis","twas"],"article":["the","a","an"],"preposition":["of","to","in","for","on","with","at","by","from"],"verb":["is","are","was","be"],"conjunction":["and","or","but","as"],"pronoun":["it","this","that","yere","meself","yerself"],"filler":["sure","so","like"]}',
@@ -774,7 +864,9 @@ SET s.display_name = 'EN (IE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-IN'})
-SET s.display_name = 'EN (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (IN) Slugification',
     s.content = 'URL slug generation rules for en-IN',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","are","be"],"pronoun":["it","this","that"],"conjunction":["and","or","but","as"],"preposition":["of","to","in","for","on","with","at","by","from"],"article":["the","a","an"]}',
@@ -791,7 +883,9 @@ SET s.display_name = 'EN (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-JM'})
-SET s.display_name = 'EN (JM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (JM) Slugification',
     s.content = 'URL slug generation rules for en-JM',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"article":["a","an","the"],"pronoun":["it","that","this"],"conjunction":["and","or","but"],"preposition":["of","in","on","at","to","for","with","by","from","as"]}',
@@ -808,7 +902,9 @@ SET s.display_name = 'EN (JM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-KE'})
-SET s.display_name = 'EN (KE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (KE) Slugification',
     s.content = 'URL slug generation rules for en-KE',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["pia","sana","tu"],"preposition":["in","on","at","to","for","with","by","from","of","as","ya","wa","kwa","la","za"],"conjunction":["and","or","but","na","au"],"verb":["is","are","was","were","be","been","being","ni","iko","sema"],"article":["the","a","an"],"pronoun":["it","that","this","hii","hiyo"]}',
@@ -825,7 +921,9 @@ SET s.display_name = 'EN (KE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-KY'})
-SET s.display_name = 'EN (KY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (KY) Slugification',
     s.content = 'URL slug generation rules for en-KY',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it"],"preposition":["of","in","to","for","on","at","by"],"verb":["is","are","was","be"],"article":["the","a","an"],"conjunction":["and","or","but"]}',
@@ -842,7 +940,9 @@ SET s.display_name = 'EN (KY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-MU'})
-SET s.display_name = 'EN (MU) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (MU) Slugification',
     s.content = 'URL slug generation rules for en-MU',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["the","a","an"],"pronoun":["it","this","our","your"],"verb":["is","are"],"preposition":["of","in","to","for","with","from","at"],"conjunction":["and","but","or"]}',
@@ -859,7 +959,9 @@ SET s.display_name = 'EN (MU) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-MY'})
-SET s.display_name = 'EN (MY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (MY) Slugification',
     s.content = 'URL slug generation rules for en-MY',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but"],"article":["the","a","an"],"verb":["is","are","was","were","be","been","being"],"pronoun":["it","this","that"],"preposition":["in","on","at","to","for","with","by","from","of"]}',
@@ -876,7 +978,9 @@ SET s.display_name = 'EN (MY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-NG'})
-SET s.display_name = 'EN (NG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (NG) Slugification',
     s.content = 'URL slug generation rules for en-NG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but"],"pronoun":["it","that","this"],"auxiliary":["na"],"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"verb":["is","are","was","were","be","been","being","dey"],"interrogative":["wetin"]}',
@@ -893,7 +997,9 @@ SET s.display_name = 'EN (NG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-NZ'})
-SET s.display_name = 'EN (NZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (NZ) Slugification',
     s.content = 'URL slug generation rules for en-NZ',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it","this"],"article":["the","a","an","te","nga"],"preposition":["of","to","in","for"],"verb":["is","are","was","be"],"conjunction":["and","or","but"]}',
@@ -910,7 +1016,9 @@ SET s.display_name = 'EN (NZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-PH'})
-SET s.display_name = 'EN (PH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (PH) Slugification',
     s.content = 'URL slug generation rules for en-PH',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"pronoun":["it","that","this"],"conjunction":["and","or","but","kasi"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"interrogative":["ano"],"article":["a","an","the"],"verb":["is","are","was","were","be","been","being"]}',
@@ -927,7 +1035,9 @@ SET s.display_name = 'EN (PH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-PK'})
-SET s.display_name = 'EN (PK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (PK) Slugification',
     s.content = 'URL slug generation rules for en-PK',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["of","in","on","at","to","for","with","by","from"],"verb":["is","are","was","were","be","been","being","have","has","had"],"article":["the","a","an"],"pronoun":["it","this","that","these","those"],"honorific":["sahib","ji"],"conjunction":["and","or","but"]}',
@@ -944,7 +1054,9 @@ SET s.display_name = 'EN (PK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-SA'})
-SET s.display_name = 'EN (SA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (SA) Slugification',
     s.content = 'URL slug generation rules for en-SA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["in","on","at","to","for","of","with","by"],"conjunction":["and","or","but"],"verb":["is","are"],"article":["the","a","an"]}',
@@ -961,7 +1073,9 @@ SET s.display_name = 'EN (SA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-SG'})
-SET s.display_name = 'EN (SG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (SG) Slugification',
     s.content = 'URL slug generation rules for en-SG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"classifier":["one"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"article":["a","an","the"],"pronoun":["it","that","this"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being"]}',
@@ -978,7 +1092,9 @@ SET s.display_name = 'EN (SG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-TT'})
-SET s.display_name = 'EN (TT) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (TT) Slugification',
     s.content = 'URL slug generation rules for en-TT',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","are","was","be"],"pronoun":["it","this","that","yuh","dey","dem"],"article":["the","a","an"],"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","of","with","by","wid"],"interjection":["eh","nah"]}',
@@ -995,7 +1111,9 @@ SET s.display_name = 'EN (TT) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-TZ'})
-SET s.display_name = 'EN (TZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (TZ) Slugification',
     s.content = 'URL slug generation rules for en-TZ',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["and","or","but","na","kama","au"],"preposition":["of","in","on","at","to","for","with","by","from","as","ya","wa","kwa","la","za","katika"],"pronoun":["it","that","this","hii","hiyo"],"article":["a","an","the"],"verb":["is","are","was","were","be","been","being","ni"]}',
@@ -1012,7 +1130,9 @@ SET s.display_name = 'EN (TZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-UG'})
-SET s.display_name = 'EN (UG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (UG) Slugification',
     s.content = 'URL slug generation rules for en-UG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["the","a","an"],"preposition":["in","on","at","to","for","with","by","from","of","as","mu","ku","okwa"],"conjunction":["and","or","but","ne","oba","nga","era"],"pronoun":["it","that","this","kino","ekyo"],"adverb":["wano"],"verb":["is","are","was","were","be","been","being","eri"]}',
@@ -1029,7 +1149,9 @@ SET s.display_name = 'EN (UG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-US'})
-SET s.display_name = 'English (United States) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'English (United States) Slugification',
     s.content = 'URL slug generation rules for en-US',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"conjunction":["and","or","but"],"pronoun":["it","that","this"],"article":["a","an","the"]}',
@@ -1046,7 +1168,9 @@ SET s.display_name = 'English (United States) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-VN'})
-SET s.display_name = 'EN (VN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (VN) Slugification',
     s.content = 'URL slug generation rules for en-VN',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["the","a","an"],"verb":["is","are","was","were","be"],"conjunction":["and","or","but"],"abbreviation":["vn"],"preposition":["of","to","in","for","with","at","by","from","on"]}',
@@ -1063,7 +1187,9 @@ SET s.display_name = 'EN (VN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-ZA'})
-SET s.display_name = 'EN (ZA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (ZA) Slugification',
     s.content = 'URL slug generation rules for en-ZA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["mos"],"article":["the","a","an"],"conjunction":["and","or","but","as"],"preposition":["of","in","on","at","to","for","with","by","from","into"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should"],"pronoun":["it","its","this","that","these","those"],"interjection":["ja","ne","hey"]}',
@@ -1080,7 +1206,9 @@ SET s.display_name = 'EN (ZA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-ZM'})
-SET s.display_name = 'EN (ZM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (ZM) Slugification',
     s.content = 'URL slug generation rules for en-ZM',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"verb":["is","are","was","be"],"adverb":["also","just","very","even"],"article":["the","a","an"],"preposition":["of","to","in","for","on","with","at","by","from"],"conjunction":["and","or","but","as"]}',
@@ -1097,7 +1225,9 @@ SET s.display_name = 'EN (ZM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'en-ZW'})
-SET s.display_name = 'EN (ZW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EN (ZW) Slugification',
     s.content = 'URL slug generation rules for en-ZW',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["the","a","an"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"adverb":["not","too","very","just","only","also","how","when","where","why"],"pronoun":["it","this","that","these","those","what","which","who","your","our","their","its"],"conjunction":["and","or","but","as","if","so","than"],"preposition":["of","in","to","for","on","with","at","by","from"]}',
@@ -1114,7 +1244,9 @@ SET s.display_name = 'EN (ZW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-AR'})
-SET s.display_name = 'ES (AR) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (AR) Slugification',
     s.content = 'URL slug generation rules for es-AR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","ser","sos","tenés","podés"],"interjection":["che","boludo","dale","bueno"],"preposition":["de","en","con","para","por"],"contraction":["del","al"],"conjunction":["que","y","o"],"adverb":["muy","más"],"article":["el","la","los","las","un","una"]}',
@@ -1131,7 +1263,9 @@ SET s.display_name = 'ES (AR) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-BO'})
-SET s.display_name = 'ES (BO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (BO) Slugification',
     s.content = 'URL slug generation rules for es-BO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son"],"adverb":["nomas","bien"],"preposition":["de","en","con","para","por"],"conjunction":["y","o","que"],"article":["el","la","los","las","un","una"],"pronoun":["su","sus"],"contraction":["del","al"],"interjection":["che"]}',
@@ -1148,7 +1282,9 @@ SET s.display_name = 'ES (BO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-CL'})
-SET s.display_name = 'ES (CL) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (CL) Slugification',
     s.content = 'URL slug generation rules for es-CL',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son"],"article":["el","la","los","las","un","una"],"contraction":["del","al"],"conjunction":["y","o","pero","que","si"],"adverb":["muy"],"pronoun":["su","sus","mi","mis"],"preposition":["de","en","a","con","por","para"]}',
@@ -1165,7 +1301,9 @@ SET s.display_name = 'ES (CL) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-CO'})
-SET s.display_name = 'ES (CO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (CO) Slugification',
     s.content = 'URL slug generation rules for es-CO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","los","las","un","una"],"adverb":["ahi"],"filler":["pues"],"verb":["es","son"],"preposition":["de","en","con","para","por","pa","pal","onde"],"conjunction":["y","o","que"]}',
@@ -1182,7 +1320,9 @@ SET s.display_name = 'ES (CO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-CR'})
-SET s.display_name = 'ES (CR) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (CR) Slugification',
     s.content = 'URL slug generation rules for es-CR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","en","con","para","por"],"conjunction":["y","o","pero"],"verb":["es","está","son"],"article":["el","la","los","las","un","una"],"contraction":["del","al"],"demonstrative":["este"]}',
@@ -1199,7 +1339,9 @@ SET s.display_name = 'ES (CR) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-CU'})
-SET s.display_name = 'ES (CU) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (CU) Slugification',
     s.content = 'URL slug generation rules for es-CU',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["y","o"],"article":["el","la","los","las","un","una"],"pronoun":["que"],"contraction":["pa","na"],"adverb":["aca","asi"],"verb":["es","son"],"preposition":["de","en","con","por","para"]}',
@@ -1216,7 +1358,9 @@ SET s.display_name = 'ES (CU) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-DO'})
-SET s.display_name = 'ES (DO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (DO) Slugification',
     s.content = 'URL slug generation rules for es-DO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son"],"interjection":["ombe"],"adverb":["tato"],"pronoun":["que"],"preposition":["de","en","con","para","por","pa","pal"],"article":["el","la","los","las","un","una"],"conjunction":["y","o"]}',
@@ -1233,7 +1377,9 @@ SET s.display_name = 'ES (DO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-EC'})
-SET s.display_name = 'ES (EC) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (EC) Slugification',
     s.content = 'URL slug generation rules for es-EC',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","en","con","para","por","a"],"contraction":["del","al"],"conjunction":["que","y","o"],"pronoun":["se","su"],"adverb":["como"],"article":["el","la","los","las","un","una"]}',
@@ -1250,7 +1396,9 @@ SET s.display_name = 'ES (EC) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-ES'})
-SET s.display_name = 'Spanish (Spain) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Spanish (Spain) Slugification',
     s.content = 'URL slug generation rules for es-ES',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["y","o","pero","que","si","pues"],"verb":["es","son"],"adverb":["muy"],"article":["el","la","los","las","un","una"],"preposition":["de","en","a","con","por","para"],"contraction":["del","al"],"interjection":["vale"],"pronoun":["su","sus","mi","mis"]}',
@@ -1267,7 +1415,9 @@ SET s.display_name = 'Spanish (Spain) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-GT'})
-SET s.display_name = 'ES (GT) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (GT) Slugification',
     s.content = 'URL slug generation rules for es-GT',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["vos"],"contraction":["del","al"],"preposition":["de","en","con","para","por","a"],"conjunction":["que","y","o"],"article":["el","la","los","las","un","una"],"interjection":["puchis","va","sho"]}',
@@ -1284,7 +1434,9 @@ SET s.display_name = 'ES (GT) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-HN'})
-SET s.display_name = 'ES (HN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (HN) Slugification',
     s.content = 'URL slug generation rules for es-HN',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","los","las","un","una"],"verb":["es","son"],"pronoun":["vos"],"preposition":["de","en","con","para","por","a"],"contraction":["del","al"],"interjection":["va"],"conjunction":["que","y","o","pues"]}',
@@ -1301,7 +1453,9 @@ SET s.display_name = 'ES (HN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-MX'})
-SET s.display_name = 'Spanish (Mexico) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Spanish (Mexico) Slugification',
     s.content = 'URL slug generation rules for es-MX',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"adverb":["más","muy","aquí","como"],"article":["el","la","los","las","un","una"],"preposition":["de","en","a","con","por","para"],"contraction":["del","al"],"verb":["es","son"],"conjunction":["y","o","pero","que","si","pues"],"pronoun":["su","sus"]}',
@@ -1318,7 +1472,9 @@ SET s.display_name = 'Spanish (Mexico) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-NI'})
-SET s.display_name = 'ES (NI) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (NI) Slugification',
     s.content = 'URL slug generation rules for es-NI',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si","pues"],"adverb":["entonces"],"article":["el","la","los","las","un","una"],"interjection":["ideay"],"pronoun":["su","sus","mi","mis"],"contraction":["del","al"],"verb":["es","son"]}',
@@ -1335,7 +1491,9 @@ SET s.display_name = 'ES (NI) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-PA'})
-SET s.display_name = 'ES (PA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (PA) Slugification',
     s.content = 'URL slug generation rules for es-PA',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son","ser","estar"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","e","u","que","pero","ni","como"],"preposition":["de","del","en","a","al","con","por","para","sin","sobre"]}',
@@ -1352,7 +1510,9 @@ SET s.display_name = 'ES (PA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-PE'})
-SET s.display_name = 'ES (PE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (PE) Slugification',
     s.content = 'URL slug generation rules for es-PE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["y","o"],"pronoun":["que","su","se"],"article":["el","la","los","las","un","una","lo"],"abbreviation":["pe"],"preposition":["de","en","con","para","por"],"verb":["es","son"],"contraction":["del","al"]}',
@@ -1369,7 +1529,9 @@ SET s.display_name = 'ES (PE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-PR'})
-SET s.display_name = 'ES (PR) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (PR) Slugification',
     s.content = 'URL slug generation rules for es-PR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","que"],"contraction":["del","al"],"preposition":["de","en","con","para","por","pa"]}',
@@ -1386,7 +1548,9 @@ SET s.display_name = 'ES (PR) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-PY'})
-SET s.display_name = 'ES (PY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (PY) Slugification',
     s.content = 'URL slug generation rules for es-PY',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","los","las","un","una"],"interjection":["che"],"pronoun":["nde"],"verb":["es","son"],"adverb":["gua\'u"],"conjunction":["y","o","que"],"preposition":["de","en","con","por","para"],"demonstrative":["ko"]}',
@@ -1403,7 +1567,9 @@ SET s.display_name = 'ES (PY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-SV'})
-SET s.display_name = 'ES (SV) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (SV) Slugification',
     s.content = 'URL slug generation rules for es-SV',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["el","la","los","las","un","una"],"preposition":["de","en","con","por","para","a"],"contraction":["al","del"],"verb":["es","son"],"conjunction":["y","o","que"]}',
@@ -1420,7 +1586,9 @@ SET s.display_name = 'ES (SV) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-UY'})
-SET s.display_name = 'ES (UY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (UY) Slugification',
     s.content = 'URL slug generation rules for es-UY',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["su","sus","mi","mis"],"conjunction":["y","o","pero","que","si"],"article":["el","la","los","las","un","una"],"verb":["es","son","sos"],"interjection":["bo","ta"],"contraction":["del","al"],"preposition":["de","en","a","con","por","para"],"adverb":["muy","más","tan"]}',
@@ -1437,7 +1605,9 @@ SET s.display_name = 'ES (UY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'es-VE'})
-SET s.display_name = 'ES (VE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ES (VE) Slugification',
     s.content = 'URL slug generation rules for es-VE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["es","son"],"interjection":["vale","mira"],"preposition":["de","en","a","con","por","para"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"pronoun":["su","sus","mi","mis"],"conjunction":["y","o","pero","que","si","pues"]}',
@@ -1454,7 +1624,9 @@ SET s.display_name = 'ES (VE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'et-EE'})
-SET s.display_name = 'Estonian (Estonia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Estonian (Estonia) Slugification',
     s.content = 'URL slug generation rules for et-EE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["ja","ning","või","aga","kuid","et"],"verb":["on","oli"],"pronoun":["see","mis","kes","ta","tema"],"adverb":["ka","veel","siin","seal","nüüd"],"preposition":["kui"],"possessive":["oma"]}',
@@ -1471,7 +1643,9 @@ SET s.display_name = 'Estonian (Estonia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'eu-ES'})
-SET s.display_name = 'EU (ES) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'EU (ES) Slugification',
     s.content = 'URL slug generation rules for eu-ES',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"quantifier":["guzti","batzuk"]}',
@@ -1488,7 +1662,9 @@ SET s.display_name = 'EU (ES) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fa-IR'})
-SET s.display_name = 'Persian (Iran) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Persian (Iran) Slugification',
     s.content = 'URL slug generation rules for fa-IR',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["به","از","در","با","برای"],"auxiliary":["می"],"adverb":["نیز","هم","حتی"],"demonstrative":["این","آن"],"conjunction":["و","یا","که"]}',
@@ -1505,7 +1681,9 @@ SET s.display_name = 'Persian (Iran) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fi-FI'})
-SET s.display_name = 'Finnish (Finland) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Finnish (Finland) Slugification',
     s.content = 'URL slug generation rules for fi-FI',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["on","ei","oli","ovat"],"pronoun":["se","tämä","joka","mitä"],"conjunction":["ja","tai","sekä","että","mutta","vaan","eli","kun","jos","vaikka","koska","jotta"],"quantifier":["kaikki"],"adverb":["myös"]}',
@@ -1522,7 +1700,9 @@ SET s.display_name = 'Finnish (Finland) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-BE'})
-SET s.display_name = 'FR (BE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (BE) Slugification',
     s.content = 'URL slug generation rules for fr-BE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","du","à","au","aux","en","dans","pour","sur","avec"],"article":["le","la","les","un","une","des"],"conjunction":["et","ou"]}',
@@ -1539,7 +1719,9 @@ SET s.display_name = 'FR (BE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-BF'})
-SET s.display_name = 'FR (BF) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (BF) Slugification',
     s.content = 'URL slug generation rules for fr-BF',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["le","la","les","un","une","des"],"interjection":["bon","voila"],"filler":["quoi"],"adverb":["meme","aussi"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","chez"],"conjunction":["et","ou","wala","donc"]}',
@@ -1556,7 +1738,9 @@ SET s.display_name = 'FR (BF) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-CA'})
-SET s.display_name = 'French (Canada) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'French (Canada) Slugification',
     s.content = 'URL slug generation rules for fr-CA',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"adverb":["ben","icitte"],"pronoun":["qui","ce","cette","ces"],"article":["le","la","les","un","une","des"],"conjunction":["et","ou","mais","donc","que","pis"],"preposition":["de","du","dans","pour","avec","sur","par","en","aux","au","chez"],"verb":["est","sont"]}',
@@ -1573,7 +1757,9 @@ SET s.display_name = 'French (Canada) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-CD'})
-SET s.display_name = 'FR (CD) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (CD) Slugification',
     s.content = 'URL slug generation rules for fr-CD',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["eza"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"article":["le","la","les","un","une","des"],"adverb":["kaka","très","trop"],"conjunction":["et","ou"],"possessive":["ya"],"interrogative":["nini"],"negation":["te"]}',
@@ -1590,7 +1776,9 @@ SET s.display_name = 'FR (CD) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-CH'})
-SET s.display_name = 'FR (CH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (CH) Slugification',
     s.content = 'URL slug generation rules for fr-CH',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["et","ou"],"article":["le","la","les","un","une"],"preposition":["de","du","des","à","au","aux","en","sur","pour","avec","dans","par"],"verb":["est","sont"],"pronoun":["que","qui"]}',
@@ -1607,7 +1795,9 @@ SET s.display_name = 'FR (CH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-CI'})
-SET s.display_name = 'FR (CI) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (CI) Slugification',
     s.content = 'URL slug generation rules for fr-CI',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"filler":["quoi"],"conjunction":["et","ou"],"adverb":["meme","ici"],"interjection":["deh","ya"],"contraction":["cest"],"article":["le","la","les","un","une","des"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec"]}',
@@ -1624,7 +1814,9 @@ SET s.display_name = 'FR (CI) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-CM'})
-SET s.display_name = 'FR (CM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (CM) Slugification',
     s.content = 'URL slug generation rules for fr-CM',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"adverb":["dja","meme","ici"],"conjunction":["et","ou"],"contraction":["cest"],"article":["le","la","les","un","une"],"preposition":["de","du","des","a","au","aux","en","pour","dans","sur","avec"],"filler":["ca"],"verb":["go"]}',
@@ -1641,7 +1833,9 @@ SET s.display_name = 'FR (CM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-DZ'})
-SET s.display_name = 'FR (DZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (DZ) Slugification',
     s.content = 'URL slug generation rules for fr-DZ',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["que","qui","ce","se","il","elle","on"],"conjunction":["et","ou","mais","car"],"article":["le","la","les","un","une","el","al"],"verb":["est","sont","être","avoir"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec","chez"]}',
@@ -1658,7 +1852,9 @@ SET s.display_name = 'FR (DZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-FR'})
-SET s.display_name = 'French (France) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'French (France) Slugification',
     s.content = 'URL slug generation rules for fr-FR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["et","ou","mais","car"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec"],"article":["le","la","les","un","une"],"verb":["est","sont","être","avoir"],"pronoun":["que","qui","ce","se","il","elle","on"]}',
@@ -1675,7 +1871,9 @@ SET s.display_name = 'French (France) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-LU'})
-SET s.display_name = 'FR (LU) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (LU) Slugification',
     s.content = 'URL slug generation rules for fr-LU',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","du","à","au","aux","en","dans","pour","sur","avec"],"article":["le","la","les","un","une","des"],"conjunction":["et","ou"]}',
@@ -1692,7 +1890,9 @@ SET s.display_name = 'FR (LU) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-MA'})
-SET s.display_name = 'FR (MA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (MA) Slugification',
     s.content = 'URL slug generation rules for fr-MA',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["que","qui"],"conjunction":["et","ou"],"verb":["est","sont"],"article":["le","la","les","un","une"],"preposition":["de","du","des","en","dans","pour","sur","par","avec","au","aux"]}',
@@ -1709,7 +1909,9 @@ SET s.display_name = 'FR (MA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-MG'})
-SET s.display_name = 'FR (MG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (MG) Slugification',
     s.content = 'URL slug generation rules for fr-MG',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","amin","ho"],"article":["le","la","les","un","une","des","ny"],"conjunction":["et","ou","sy","ary"]}',
@@ -1726,7 +1928,9 @@ SET s.display_name = 'FR (MG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-RW'})
-SET s.display_name = 'FR (RW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (RW) Slugification',
     s.content = 'URL slug generation rules for fr-RW',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["est","sont"],"conjunction":["et","ou","mais","donc","na"],"pronoun":["que","qui","ce"],"preposition":["de","du","des","au","aux","en","pour","avec","sur","dans","muri","kuri"],"adverb":["aussi","ici"],"article":["le","la","les","un","une"]}',
@@ -1743,7 +1947,9 @@ SET s.display_name = 'FR (RW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-SN'})
-SET s.display_name = 'FR (SN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (SN) Slugification',
     s.content = 'URL slug generation rules for fr-SN',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["et","ou"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"filler":["quoi"],"interjection":["nak","bon","waw"],"article":["le","la","les","un","une","des"]}',
@@ -1760,7 +1966,9 @@ SET s.display_name = 'FR (SN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'fr-TN'})
-SET s.display_name = 'FR (TN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'FR (TN) Slugification',
     s.content = 'URL slug generation rules for fr-TN',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"abbreviation":["tn"],"conjunction":["et","ou"],"pronoun":["que","qui"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec","par"],"article":["le","la","les","un","une","des"]}',
@@ -1777,7 +1985,9 @@ SET s.display_name = 'FR (TN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ga-IE'})
-SET s.display_name = 'GA (IE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'GA (IE) Slugification',
     s.content = 'URL slug generation rules for ga-IE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["ag","ar","le","i","do","de","as","faoi"],"pronoun":["se","si"],"conjunction":["agus","ach","mar","no"],"verb":["is","ta"],"article":["an","na"],"demonstrative":["seo"]}',
@@ -1794,7 +2004,9 @@ SET s.display_name = 'GA (IE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'gl-ES'})
-SET s.display_name = 'GL (ES) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'GL (ES) Slugification',
     s.content = 'URL slug generation rules for gl-ES',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["e","ou","nin","mais","pero","que","como"],"verb":["e","ser","estar","ter"],"article":["o","a","os","as","un","unha","uns","unhas"],"pronoun":["este","esta","ese","esa","aquel","aquela"],"preposition":["de","en","con","para","por","sobre","entre","sen","ata","desde"]}',
@@ -1811,7 +2023,9 @@ SET s.display_name = 'GL (ES) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'gn-PY'})
-SET s.display_name = 'GN (PY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'GN (PY) Slugification',
     s.content = 'URL slug generation rules for gn-PY',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["avei","voi","katu"]}',
@@ -1828,7 +2042,9 @@ SET s.display_name = 'GN (PY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'gu-IN'})
-SET s.display_name = 'GU (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'GU (IN) Slugification',
     s.content = 'URL slug generation rules for gu-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["અને","પણ","કે","અથવા"],"quantifier":["બધા"]}',
@@ -1845,7 +2061,9 @@ SET s.display_name = 'GU (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ha-NG'})
-SET s.display_name = 'HA (NG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'HA (NG) Slugification',
     s.content = 'URL slug generation rules for ha-NG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["ko","kuma","amma"],"negation":["ba"],"preposition":["a","cikin","daga","kan","zuwa","don"],"adverb":["sai"],"pronoun":["shi"]}',
@@ -1862,7 +2080,9 @@ SET s.display_name = 'HA (NG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'he-IL'})
-SET s.display_name = 'Hebrew (Israel) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Hebrew (Israel) Slugification',
     s.content = 'URL slug generation rules for he-IL',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["אך"],"adverb":["גם","רק"]}',
@@ -1879,7 +2099,9 @@ SET s.display_name = 'Hebrew (Israel) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'hi-IN'})
-SET s.display_name = 'Hindi (India) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Hindi (India) Slugification',
     s.content = 'URL slug generation rules for hi-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["साथ"],"honorific":["जी"]}',
@@ -1896,7 +2118,9 @@ SET s.display_name = 'Hindi (India) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'hr-HR'})
-SET s.display_name = 'Croatian (Croatia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Croatian (Croatia) Slugification',
     s.content = 'URL slug generation rules for hr-HR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["taj","ta","to","koji","koja","koje","ovaj","ova","ovo"],"adverb":["kao"],"preposition":["u","na","za","s","sa","od","do","iz","o","kroz","prema","tijekom","nakon","prije"],"conjunction":["i","a","ali","ili","pa","te","ni","niti"],"verb":["je","su","biti"]}',
@@ -1913,7 +2137,9 @@ SET s.display_name = 'Croatian (Croatia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ht-HT'})
-SET s.display_name = 'HT (HT) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'HT (HT) Slugification',
     s.content = 'URL slug generation rules for ht-HT',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"demonstrative":["sa"],"quantifier":["tout"],"verb":["gen"],"negation":["pa"]}',
@@ -1930,7 +2156,9 @@ SET s.display_name = 'HT (HT) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'hu-HU'})
-SET s.display_name = 'Hungarian (Hungary) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Hungarian (Hungary) Slugification',
     s.content = 'URL slug generation rules for hu-HU',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["és","vagy","de","hogy"]}',
@@ -1947,7 +2175,9 @@ SET s.display_name = 'Hungarian (Hungary) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'hy-AM'})
-SET s.display_name = 'HY (AM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'HY (AM) Slugification',
     s.content = 'URL slug generation rules for hy-AM',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["-delays (the, definite article suffix)"],"adverb":["delays (naev - also, too)"],"verb":["delays (e - is)"],"preposition":["delays (het - with)","-delays (its - from)","delays (depi - to, towards)","delays (mej - in)","delays (hamar - for)","delays (vra - on, upon)"],"conjunction":["delays / և (yev - and)"],"pronoun":["delays (ays - this)","delays (ayn - that)","delays (vor - which, that)","delays (na - it, he/she)"]}',
@@ -1964,7 +2194,9 @@ SET s.display_name = 'HY (AM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'id-ID'})
-SET s.display_name = 'Indonesian (Indonesia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Indonesian (Indonesia) Slugification',
     s.content = 'URL slug generation rules for id-ID',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["dan","atau"],"adverb":["juga"],"preposition":["di","ke","dari","untuk","dengan","pada","dalam","oleh","sebagai","antara","tentang"]}',
@@ -1981,7 +2213,9 @@ SET s.display_name = 'Indonesian (Indonesia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ig-NG'})
-SET s.display_name = 'IG (NG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'IG (NG) Slugification',
     s.content = 'URL slug generation rules for ig-NG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"demonstrative":["ahu"]}',
@@ -1998,7 +2232,9 @@ SET s.display_name = 'IG (NG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'is-IS'})
-SET s.display_name = 'IS (IS) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'IS (IS) Slugification',
     s.content = 'URL slug generation rules for is-IS',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["það","þetta","hann","hún","við","þeir"],"verb":["er","var","vera","hefur","verður"],"conjunction":["og","eða","en","sem"],"preposition":["á","í","til","um","af","frá","með","fyrir","við","eftir"],"article":["hinn","hin","hið"]}',
@@ -2015,7 +2251,9 @@ SET s.display_name = 'IS (IS) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'it-CH'})
-SET s.display_name = 'IT (CH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'IT (CH) Slugification',
     s.content = 'URL slug generation rules for it-CH',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["il","lo","la","i","gli","le","un","uno","una"],"preposition":["di","da","in","con","su","per","tra","fra","a","presso","entro"],"conjunction":["e","o","ma"]}',
@@ -2032,7 +2270,9 @@ SET s.display_name = 'IT (CH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'it-IT'})
-SET s.display_name = 'Italian (Italy) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Italian (Italy) Slugification',
     s.content = 'URL slug generation rules for it-IT',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["di","da","in","con","su","per","tra","fra","a"],"conjunction":["e","o","ma"],"article":["il","lo","la","i","gli","le","un","uno","una"]}',
@@ -2049,7 +2289,9 @@ SET s.display_name = 'Italian (Italy) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ja-JP'})
-SET s.display_name = 'Japanese (Japan) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Japanese (Japan) Slugification',
     s.content = 'URL slug generation rules for ja-JP',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2066,7 +2308,9 @@ SET s.display_name = 'Japanese (Japan) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'jv-ID'})
-SET s.display_name = 'JV (ID) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'JV (ID) Slugification',
     s.content = 'URL slug generation rules for jv-ID',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["ing","nang","menyang","saka","kanggo","karo","dening"],"conjunction":["lan","utawa"],"adverb":["mung"]}',
@@ -2083,7 +2327,9 @@ SET s.display_name = 'JV (ID) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ka-GE'})
-SET s.display_name = 'KA (GE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KA (GE) Slugification',
     s.content = 'URL slug generation rules for ka-GE',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["სად","როგორ","რატომ","აქ"],"verb":["არის","იყო"],"conjunction":["და","ან","მაგრამ","თუ","რომ","როცა"],"pronoun":["ეს","ის","რა","ვინ","მე","შენ","ჩვენ","თქვენ"]}',
@@ -2100,7 +2346,9 @@ SET s.display_name = 'KA (GE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'kk-KZ'})
-SET s.display_name = 'KK (KZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KK (KZ) Slugification',
     s.content = 'URL slug generation rules for kk-KZ',
     s.slug_rule = 'native_script',
     s.stopwords = '{"currency":["теңге"],"abbreviation":["ҚР","ТМД"],"pronoun":["сен","ол","біз"],"conjunction":["және","бірақ","немесе"]}',
@@ -2117,7 +2365,9 @@ SET s.display_name = 'KK (KZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'km-KH'})
-SET s.display_name = 'KM (KH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KM (KH) Slugification',
     s.content = 'URL slug generation rules for km-KH',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["នៅ","ក្នុង","របស់","ពី"],"adverb":["ផង"],"demonstrative":["នេះ","នោះ"],"conjunction":["និង"],"verb":["មាន","ជា"]}',
@@ -2134,7 +2384,9 @@ SET s.display_name = 'KM (KH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'kn-IN'})
-SET s.display_name = 'KN (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KN (IN) Slugification',
     s.content = 'URL slug generation rules for kn-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["ಇದೆ","ಆಗಿದೆ","ಮಾಡಿ","ಬಂದ","ಹೋದ"],"demonstrative":["ಈ","ಆ"],"pronoun":["ಇದು","ಅದು","ಅವರು","ಅವನು","ಅವಳು"],"article":["ಒಂದು"],"conjunction":["ಮತ್ತು","ಹಾಗೂ","ಆದರೆ","ಅಥವಾ","ಆದ್ದರಿಂದ"],"interrogative":["ಏನು","ಯಾರು","ಹೇಗೆ","ಎಲ್ಲಿ","ಯಾವ"]}',
@@ -2151,7 +2403,9 @@ SET s.display_name = 'KN (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ko-KR'})
-SET s.display_name = 'Korean (South Korea) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Korean (South Korea) Slugification',
     s.content = 'URL slug generation rules for ko-KR',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2168,7 +2422,9 @@ SET s.display_name = 'Korean (South Korea) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ku-TR'})
-SET s.display_name = 'KU (TR) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KU (TR) Slugification',
     s.content = 'URL slug generation rules for ku-TR',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["u","an","le","ku","eger"],"article":["yek","hinek","hemû"],"verb":["e","bû","ye","ne","heye","nine"],"adverb":["iro","duh","sibe","geleki"],"pronoun":["ew","ev","ez","em","tu","hun"],"preposition":["di","de","ji","bi","li","ser","ber","nav"]}',
@@ -2185,7 +2441,9 @@ SET s.display_name = 'KU (TR) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ky-KG'})
-SET s.display_name = 'KY (KG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'KY (KG) Slugification',
     s.content = 'URL slug generation rules for ky-KG',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["жана"],"verb":["болуп"],"pronoun":["бул","ал","анын"],"negation":["эмес"]}',
@@ -2202,7 +2460,9 @@ SET s.display_name = 'KY (KG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ln-CD'})
-SET s.display_name = 'LN (CD) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'LN (CD) Slugification',
     s.content = 'URL slug generation rules for ln-CD',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["ntango"],"conjunction":["kasi","soki"],"adverb":["mingi"]}',
@@ -2219,7 +2479,9 @@ SET s.display_name = 'LN (CD) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'lt-LT'})
-SET s.display_name = 'Lithuanian (Lithuania) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Lithuanian (Lithuania) Slugification',
     s.content = 'URL slug generation rules for lt-LT',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"verb":["yra","buvo"],"pronoun":["tai","kas","kuris","kuri"],"preposition":["į","iš","su","be","prie","po","per","ant","už","nuo","apie","pas"],"conjunction":["ir","arba","bet","tačiau","kad","jei","nes","nors"]}',
@@ -2236,7 +2498,9 @@ SET s.display_name = 'Lithuanian (Lithuania) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'lv-LV'})
-SET s.display_name = 'Latvian (Latvia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Latvian (Latvia) Slugification',
     s.content = 'URL slug generation rules for lv-LV',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["un","vai","bet","jo","ka","lai","kad","ja"],"pronoun":["tas","tā","šis","šī","kas"],"verb":["ir","nav"],"preposition":["no","uz","ar","par","pie","pēc","bez","līdz","pa","caur"]}',
@@ -2253,7 +2517,9 @@ SET s.display_name = 'Latvian (Latvia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mg-MG'})
-SET s.display_name = 'MG (MG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MG (MG) Slugification',
     s.content = 'URL slug generation rules for mg-MG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"article":["ny","ilay"],"preposition":["amin","ho","any","eto","ao","momba","miaraka","avy","mankany"],"conjunction":["sy","na","fa","dia","ary"]}',
@@ -2270,7 +2536,9 @@ SET s.display_name = 'MG (MG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mi-NZ'})
-SET s.display_name = 'MI (NZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MI (NZ) Slugification',
     s.content = 'URL slug generation rules for mi-NZ',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{}',
@@ -2287,7 +2555,9 @@ SET s.display_name = 'MI (NZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mk-MK'})
-SET s.display_name = 'MK (MK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MK (MK) Slugification',
     s.content = 'URL slug generation rules for mk-MK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["на","во","со","од","за","до","кон","при","низ"],"conjunction":["и","или","но","а"],"pronoun":["што","кој","која","кое","тој","таа","тоа","овој","оваа","ова"],"verb":["е","се","беше","има","нема"],"adverb":["како","кога","каде"]}',
@@ -2304,7 +2574,9 @@ SET s.display_name = 'MK (MK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ml-IN'})
-SET s.display_name = 'ML (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ML (IN) Slugification',
     s.content = 'URL slug generation rules for ml-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2321,7 +2593,9 @@ SET s.display_name = 'ML (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mn-MN'})
-SET s.display_name = 'MN (MN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MN (MN) Slugification',
     s.content = 'URL slug generation rules for mn-MN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"interrogative":["ямар","юу","хэн"],"conjunction":["бөгөөд","ба","болон","эсвэл","харин","гэхдээ"],"demonstrative":["энэ","тэр","ийм","тийм"]}',
@@ -2338,7 +2612,9 @@ SET s.display_name = 'MN (MN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mr-IN'})
-SET s.display_name = 'MR (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MR (IN) Slugification',
     s.content = 'URL slug generation rules for mr-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"interrogative":["कसे","काय","कोण"],"verb":["आहे","असे","होते","केले","करणे"],"quantifier":["सर्व","अनेक"],"demonstrative":["हा","ही","हे","तो","ती","ते"],"conjunction":["आणि","व","किंवा","पण","परंतु","म्हणून","कारण","जर"]}',
@@ -2355,7 +2631,9 @@ SET s.display_name = 'MR (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ms-BN'})
-SET s.display_name = 'MS (BN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MS (BN) Slugification',
     s.content = 'URL slug generation rules for ms-BN',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"auxiliary":["akan","telah"],"honorific":["baginda"],"conjunction":["dan","atau","agar"],"preposition":["di","ke","dari","untuk","pada","dengan","oleh","bagi","berkenaan","bersama"],"demonstrative":["ini","itu"],"adverb":["juga","saja"]}',
@@ -2372,7 +2650,9 @@ SET s.display_name = 'MS (BN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ms-MY'})
-SET s.display_name = 'Malay (Malaysia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Malay (Malaysia) Slugification',
     s.content = 'URL slug generation rules for ms-MY',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"negation":["tak"],"preposition":["di","ke","dari","untuk","pada","dengan","kat"],"demonstrative":["ini","itu"],"conjunction":["dan","atau"],"auxiliary":["akan","nak"],"adverb":["juga","gak","je","sahaja"]}',
@@ -2389,7 +2669,9 @@ SET s.display_name = 'Malay (Malaysia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ms-SG'})
-SET s.display_name = 'MS (SG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MS (SG) Slugification',
     s.content = 'URL slug generation rules for ms-SG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["dan","atau"],"possessive":["punya"],"demonstrative":["ini","itu"],"negation":["tidak"],"preposition":["di","ke","dari","untuk","dengan","pada"],"auxiliary":["akan"],"adverb":["juga"]}',
@@ -2406,7 +2688,9 @@ SET s.display_name = 'MS (SG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'mt-MT'})
-SET s.display_name = 'MT (MT) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MT (MT) Slugification',
     s.content = 'URL slug generation rules for mt-MT',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"demonstrative":["dawn","dawk","dan","din"],"adverb":["hemm","hawn"],"quantifier":["kull"],"pronoun":["kollox"],"indefinite":["xi"]}',
@@ -2423,7 +2707,9 @@ SET s.display_name = 'MT (MT) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'my-MM'})
-SET s.display_name = 'MY (MM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'MY (MM) Slugification',
     s.content = 'URL slug generation rules for my-MM',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2440,7 +2726,9 @@ SET s.display_name = 'MY (MM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ne-NP'})
-SET s.display_name = 'NE (NP) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'NE (NP) Slugification',
     s.content = 'URL slug generation rules for ne-NP',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["यो","त्यो","यी","ती","कुनै"],"adverb":["पनि"],"conjunction":["र","तथा","वा","तर"],"verb":["हो","छ","थियो","गर्नु","हुनु","भयो"]}',
@@ -2457,7 +2745,9 @@ SET s.display_name = 'NE (NP) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'nl-BE'})
-SET s.display_name = 'NL (BE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'NL (BE) Slugification',
     s.content = 'URL slug generation rules for nl-BE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["de","het","een","ne"],"preposition":["van","in","op","met","voor","aan","te","naar","bij","uit","om","over"],"conjunction":["en","of","maar","als"],"verb":["is","zijn","wordt"],"pronoun":["dat","die","dit","ge","gij","wa"]}',
@@ -2474,7 +2764,9 @@ SET s.display_name = 'NL (BE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'nl-NL'})
-SET s.display_name = 'Dutch (Netherlands) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Dutch (Netherlands) Slugification',
     s.content = 'URL slug generation rules for nl-NL',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["deze","die","dit","dat","zij"],"conjunction":["en","of","maar","als"],"verb":["is","zijn","was","waren"],"preposition":["van","in","op","voor","met","aan","bij","door","naar","uit","over","om","na","ter","tot","bij"],"adverb":["ook","nog"],"article":["de","het","een","der","des"]}',
@@ -2491,7 +2783,9 @@ SET s.display_name = 'Dutch (Netherlands) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'no-NO'})
-SET s.display_name = 'Norwegian (Norway) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Norwegian (Norway) Slugification',
     s.content = 'URL slug generation rules for no-NO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["ved","over","under","etter"]}',
@@ -2508,7 +2802,9 @@ SET s.display_name = 'Norwegian (Norway) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ny-MW'})
-SET s.display_name = 'NY (MW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'NY (MW) Slugification',
     s.content = 'URL slug generation rules for ny-MW',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"interrogative":["ndani","chiyani"]}',
@@ -2525,7 +2821,9 @@ SET s.display_name = 'NY (MW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'or-IN'})
-SET s.display_name = 'OR (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'OR (IN) Slugification',
     s.content = 'URL slug generation rules for or-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2542,7 +2840,9 @@ SET s.display_name = 'OR (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pa-IN'})
-SET s.display_name = 'PA (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PA (IN) Slugification',
     s.content = 'URL slug generation rules for pa-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"honorific":["ਜੀ"]}',
@@ -2559,7 +2859,9 @@ SET s.display_name = 'PA (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pa-PK'})
-SET s.display_name = 'PA (PK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PA (PK) Slugification',
     s.content = 'URL slug generation rules for pa-PK',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -2576,7 +2878,9 @@ SET s.display_name = 'PA (PK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pl-PL'})
-SET s.display_name = 'Polish (Poland) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Polish (Poland) Slugification',
     s.content = 'URL slug generation rules for pl-PL',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["w","z","do","na","o","od","po","dla","ze","we","przy","przez","pod","za"],"negation":["nie"],"conjunction":["i","a","oraz","czy","ale"],"pronoun":["to","się"],"verb":["jest"]}',
@@ -2593,7 +2897,9 @@ SET s.display_name = 'Polish (Poland) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ps-AF'})
-SET s.display_name = 'PS (AF) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PS (AF) Slugification',
     s.content = 'URL slug generation rules for ps-AF',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["هم","بس"],"conjunction":["خو"]}',
@@ -2610,7 +2916,9 @@ SET s.display_name = 'PS (AF) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pt-AO'})
-SET s.display_name = 'PT (AO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PT (AO) Slugification',
     s.content = 'URL slug generation rules for pt-AO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"adverb":["bué","mais","então"],"verb":["é","ser","estar"],"interjection":["yá"],"preposition":["de","da","do","em","na","no","para","por","com","sem"],"conjunction":["e","ou","mas"],"pronoun":["se"],"article":["o","a","os","as","um","uma"]}',
@@ -2627,7 +2935,9 @@ SET s.display_name = 'PT (AO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pt-BR'})
-SET s.display_name = 'Portuguese (Brazil) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Portuguese (Brazil) Slugification',
     s.content = 'URL slug generation rules for pt-BR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["se"],"article":["o","a","os","as","um","uma"],"preposition":["de","da","do","em","na","no","para","por","com","sem","pro","pra"],"conjunction":["e","ou","mas"],"filler":["tipo"],"verb":["é","ser","estar","tá"]}',
@@ -2644,7 +2954,9 @@ SET s.display_name = 'Portuguese (Brazil) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pt-CH'})
-SET s.display_name = 'PT (CH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PT (CH) Slugification',
     s.content = 'URL slug generation rules for pt-CH',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["o","a","os","as","um","uma"],"pronoun":["se"],"verb":["é","ser","estar"],"conjunction":["e","ou","mas"],"preposition":["de","da","do","em","na","no","para","por","com","sem","ao","aos","pelo","pela","neste","nesta"]}',
@@ -2661,7 +2973,9 @@ SET s.display_name = 'PT (CH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pt-MZ'})
-SET s.display_name = 'PT (MZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'PT (MZ) Slugification',
     s.content = 'URL slug generation rules for pt-MZ',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["e","ou","mas"],"article":["o","a","os","as","um","uma"],"pronoun":["que","se"],"contraction":["na","no","do","da","ao","pelo","pela"],"preposition":["de","em","para","com","por"],"verb":["é","são"]}',
@@ -2678,7 +2992,9 @@ SET s.display_name = 'PT (MZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'pt-PT'})
-SET s.display_name = 'Portuguese (Portugal) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Portuguese (Portugal) Slugification',
     s.content = 'URL slug generation rules for pt-PT',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["o","a","os","as","um","uma"],"preposition":["de","da","do","em","no","na","para","por","com"],"pronoun":["que","se"],"contraction":["ao","aos","das","dos","pelo","pela","num","numa","duma","dum","nalgum","nalguma"],"conjunction":["e","ou","mas"]}',
@@ -2695,7 +3011,9 @@ SET s.display_name = 'Portuguese (Portugal) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'qu-PE'})
-SET s.display_name = 'QU (PE) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'QU (PE) Slugification',
     s.content = 'URL slug generation rules for qu-PE',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{}',
@@ -2712,7 +3030,9 @@ SET s.display_name = 'QU (PE) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ro-MD'})
-SET s.display_name = 'RO (MD) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RO (MD) Slugification',
     s.content = 'URL slug generation rules for ro-MD',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["care","ce","acesta","aceasta"],"conjunction":["și","sau","dar","ori","deci"],"preposition":["de","la","pe","cu","din","pentru","prin","spre","fără"],"verb":["este","sunt","fost"],"article":["un","o","al","ale"]}',
@@ -2729,7 +3049,9 @@ SET s.display_name = 'RO (MD) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ro-RO'})
-SET s.display_name = 'Romanian (Romania) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Romanian (Romania) Slugification',
     s.content = 'URL slug generation rules for ro-RO',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{}',
@@ -2746,7 +3068,9 @@ SET s.display_name = 'Romanian (Romania) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-BY'})
-SET s.display_name = 'RU (BY) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RU (BY) Slugification',
     s.content = 'URL slug generation rules for ru-BY',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["и","а","но","или","что","как"],"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при"],"pronoun":["это","то","он","она","они","мы","вы","его","её","их"]}',
@@ -2763,7 +3087,9 @@ SET s.display_name = 'RU (BY) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-IL'})
-SET s.display_name = 'RU (IL) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RU (IL) Slugification',
     s.content = 'URL slug generation rules for ru-IL',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["и","а","но","или","что","как","если"],"preposition":["в","на","с","к","у","о","по","за","из","до","для","от","при"],"pronoun":["это","он","она","они","мы","вы","я","его","её","их"],"adverb":["тут","там","ещё","уже","тоже"]}',
@@ -2780,7 +3106,9 @@ SET s.display_name = 'RU (IL) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-KG'})
-SET s.display_name = 'RU (KG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RU (KG) Slugification',
     s.content = 'URL slug generation rules for ru-KG',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["это"],"adverb":["там"],"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при"],"conjunction":["и","а","но","что","как"]}',
@@ -2797,7 +3125,9 @@ SET s.display_name = 'RU (KG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-KZ'})
-SET s.display_name = 'RU (KZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RU (KZ) Slugification',
     s.content = 'URL slug generation rules for ru-KZ',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при","через"],"adverb":["ещё","очень","также"],"conjunction":["и","а","но","или","что","как"],"verb":["можно","нужно"],"pronoun":["это","то","он","она","они","мы","вы","его","её","их"]}',
@@ -2814,7 +3144,9 @@ SET s.display_name = 'RU (KZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-MD'})
-SET s.display_name = 'RU (MD) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RU (MD) Slugification',
     s.content = 'URL slug generation rules for ru-MD',
     s.slug_rule = 'native_script',
     s.stopwords = '{"conjunction":["и","а","но","что","как"],"adverb":["ещё","уже"],"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при","про"],"pronoun":["это","себе"]}',
@@ -2831,7 +3163,9 @@ SET s.display_name = 'RU (MD) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ru-RU'})
-SET s.display_name = 'Russian (Russia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Russian (Russia) Slugification',
     s.content = 'URL slug generation rules for ru-RU',
     s.slug_rule = 'native_script',
     s.stopwords = '{"pronoun":["это","то","он","она","они","мы","вы","его","её","их"],"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при"],"conjunction":["и","а","но","или","что","как"]}',
@@ -2848,7 +3182,9 @@ SET s.display_name = 'Russian (Russia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'rw-RW'})
-SET s.display_name = 'RW (RW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'RW (RW) Slugification',
     s.content = 'URL slug generation rules for rw-RW',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["muri"],"conjunction":["kandi","naho"],"interrogative":["none"]}',
@@ -2865,7 +3201,9 @@ SET s.display_name = 'RW (RW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sd-PK'})
-SET s.display_name = 'SD (PK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SD (PK) Slugification',
     s.content = 'URL slug generation rules for sd-PK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["هڪ","هي","اهي"],"conjunction":["۽","يا","پر","جيڪو","ته"],"pronoun":["هو","هوءَ","اهو","اها"],"verb":["آهي","آهن","ٿيو","هئي","هئا","ڪيو","ڪري"]}',
@@ -2882,7 +3220,9 @@ SET s.display_name = 'SD (PK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'si-LK'})
-SET s.display_name = 'SI (LK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SI (LK) Slugification',
     s.content = 'URL slug generation rules for si-LK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["ඇත","නැත","කළ"],"pronoun":["එය","මම","ඔබ","ඔහු"],"demonstrative":["ඒ","මේ"],"conjunction":["සහ","හෝ","නමුත්"],"honorific":["ශ්‍රී"]}',
@@ -2899,7 +3239,9 @@ SET s.display_name = 'SI (LK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sk-SK'})
-SET s.display_name = 'Slovak (Slovakia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Slovak (Slovakia) Slugification',
     s.content = 'URL slug generation rules for sk-SK',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["a","i","alebo","ale","no","lebo","pretože","aby","keď","ak","kým"],"verb":["je","sú","bol","bola","bolo","boli","byť"],"pronoun":["to","ten","tá","táto","tento","toto","ktorý","ktorá","ktoré"],"preposition":["v","vo","na","do","z","zo","s","so","k","ku","o","od","po","pre","pri","za","nad","pod","medzi","bez"],"adverb":["ako","tak","tu","tam","tiež","ešte","veľmi","len","už","práve"]}',
@@ -2916,7 +3258,9 @@ SET s.display_name = 'Slovak (Slovakia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sl-SI'})
-SET s.display_name = 'Slovenian (Slovenia) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Slovenian (Slovenia) Slugification',
     s.content = 'URL slug generation rules for sl-SI',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["in","ali","ter","pa","a","ampak","vendar","da","ker","če","ko","kot"],"pronoun":["ta","ti","to","te","tisto","jaz","mi","vi","on","ona","oni","se","kaj","kdo","kar","ki","vse"],"adverb":["tudi","samo","le","zelo","bolj","lahko","kako","tako","potem","zdaj"],"verb":["je","so","sem","si","smo","ste","bo","bil","bila","biti","ima","imajo"],"preposition":["na","v","za","z","s","po","do","od","pri","med","nad","pod","pred","ob","o","k","iz"],"article":["en","ena","eno","eden","neki","neka","neke"]}',
@@ -2933,7 +3277,9 @@ SET s.display_name = 'Slovenian (Slovenia) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sn-ZW'})
-SET s.display_name = 'SN (ZW) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SN (ZW) Slugification',
     s.content = 'URL slug generation rules for sn-ZW',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["kupi"],"pronoun":["ani","chii"]}',
@@ -2950,7 +3296,9 @@ SET s.display_name = 'SN (ZW) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'so-SO'})
-SET s.display_name = 'SO (SO) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SO (SO) Slugification',
     s.content = 'URL slug generation rules for so-SO',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["ka","ku","ilaa","dhexe"],"adverb":["sida","markii"],"pronoun":["waxaa","aan","uu","ay","waxa"],"verb":["waa","yahay","tahay"],"conjunction":["iyo","ama","laakiin","oo","ee","haddii"]}',
@@ -2967,7 +3315,9 @@ SET s.display_name = 'SO (SO) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sq-AL'})
-SET s.display_name = 'SQ (AL) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SQ (AL) Slugification',
     s.content = 'URL slug generation rules for sq-AL',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"preposition":["në","me","për","nga","pa","prej","tek","te"],"conjunction":["dhe","por","ose","si","kur"]}',
@@ -2984,7 +3334,9 @@ SET s.display_name = 'SQ (AL) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sr-RS'})
-SET s.display_name = 'SR (RS) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SR (RS) Slugification',
     s.content = 'URL slug generation rules for sr-RS',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["у","на","за","са","од","до","по","о","из","ка","при","преко","кроз","између","око"],"pronoun":["ми","ви","он","она","они","то","ово","та"],"conjunction":["и","а","али","или","као","што","ако","када","док","него","већ","па","те"]}',
@@ -3001,7 +3353,9 @@ SET s.display_name = 'SR (RS) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'su-ID'})
-SET s.display_name = 'SU (ID) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SU (ID) Slugification',
     s.content = 'URL slug generation rules for su-ID',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["kanggo","dina","kana","tina"],"conjunction":["sareng"]}',
@@ -3018,7 +3372,9 @@ SET s.display_name = 'SU (ID) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sv-SE'})
-SET s.display_name = 'Swedish (Sweden) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Swedish (Sweden) Slugification',
     s.content = 'URL slug generation rules for sv-SE',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["och","eller","men","samt"],"preposition":["i","på","av","för","med","till","från","om","vid","över","under","utan"],"article":["en","ett","den","det"],"verb":["är","var"],"pronoun":["som","de","du","han","hon","vi"]}',
@@ -3035,7 +3391,9 @@ SET s.display_name = 'Swedish (Sweden) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sw-KE'})
-SET s.display_name = 'Swahili (Kenya) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Swahili (Kenya) Slugification',
     s.content = 'URL slug generation rules for sw-KE',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["sana","tu","kweli"],"interjection":["basi"]}',
@@ -3052,7 +3410,9 @@ SET s.display_name = 'Swahili (Kenya) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'sw-TZ'})
-SET s.display_name = 'SW (TZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'SW (TZ) Slugification',
     s.content = 'URL slug generation rules for sw-TZ',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"adverb":["hapa","pale","sana"],"preposition":["ya","wa","kwa","katika","la"],"conjunction":["au","lakini","kama"],"demonstrative":["hii","hiyo","hizi","ile"]}',
@@ -3069,7 +3429,9 @@ SET s.display_name = 'SW (TZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ta-IN'})
-SET s.display_name = 'TA (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TA (IN) Slugification',
     s.content = 'URL slug generation rules for ta-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"verb":["உள்ள","இருக்கும்","செய்யும்"],"pronoun":["அது","இது","அவர்","இவர்"],"interrogative":["என்ன","எப்படி","ஏன்"],"conjunction":["என்று","மற்றும்","ஆனால்","அல்லது"],"article":["ஒரு","அந்த","இந்த"]}',
@@ -3086,7 +3448,9 @@ SET s.display_name = 'TA (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ta-LK'})
-SET s.display_name = 'TA (LK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TA (LK) Slugification',
     s.content = 'URL slug generation rules for ta-LK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"article":["ஒரு"],"pronoun":["அது","இது","அவர்","அவள்"],"conjunction":["மற்றும்","அல்லது","ஆனால்"]}',
@@ -3103,7 +3467,9 @@ SET s.display_name = 'TA (LK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'te-IN'})
-SET s.display_name = 'TE (IN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TE (IN) Slugification',
     s.content = 'URL slug generation rules for te-IN',
     s.slug_rule = 'native_script',
     s.stopwords = '{"quantifier":["అన్ని","కొన్ని"]}',
@@ -3120,7 +3486,9 @@ SET s.display_name = 'TE (IN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'tg-TJ'})
-SET s.display_name = 'TG (TJ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TG (TJ) Slugification',
     s.content = 'URL slug generation rules for tg-TJ',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -3137,7 +3505,9 @@ SET s.display_name = 'TG (TJ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'th-TH'})
-SET s.display_name = 'Thai (Thailand) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Thai (Thailand) Slugification',
     s.content = 'URL slug generation rules for th-TH',
     s.slug_rule = 'native_script',
     s.stopwords = '{}',
@@ -3154,7 +3524,9 @@ SET s.display_name = 'Thai (Thailand) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'tk-TM'})
-SET s.display_name = 'TK (TM) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TK (TM) Slugification',
     s.content = 'URL slug generation rules for tk-TM',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"article":["bir","birnäçe"],"verb":["bolsa","bar"],"adverb":["ýok","has","iň"],"pronoun":["bu","şu","ol"],"conjunction":["we","hem","ýa-da","hem-de"],"preposition":["bilen","üçin"]}',
@@ -3171,7 +3543,9 @@ SET s.display_name = 'TK (TM) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'tl-PH'})
-SET s.display_name = 'TL (PH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'TL (PH) Slugification',
     s.content = 'URL slug generation rules for tl-PH',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["kasi"]}',
@@ -3188,7 +3562,9 @@ SET s.display_name = 'TL (PH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'tr-TR'})
-SET s.display_name = 'Turkish (Turkey) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Turkish (Turkey) Slugification',
     s.content = 'URL slug generation rules for tr-TR',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"pronoun":["bu","şu","o","olan"],"article":["bir"],"adverb":["daha","çok","en"],"conjunction":["ve","veya","da","de","ya"],"preposition":["ile","için"]}',
@@ -3205,7 +3581,9 @@ SET s.display_name = 'Turkish (Turkey) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'uk-UA'})
-SET s.display_name = 'Ukrainian (Ukraine) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Ukrainian (Ukraine) Slugification',
     s.content = 'URL slug generation rules for uk-UA',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["як"],"conjunction":["і","та","або","але"],"preposition":["в","на","з","до","від","для"],"pronoun":["що","це","той","цей"]}',
@@ -3222,7 +3600,9 @@ SET s.display_name = 'Ukrainian (Ukraine) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'ur-PK'})
-SET s.display_name = 'UR (PK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'UR (PK) Slugification',
     s.content = 'URL slug generation rules for ur-PK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"adverb":["بھی"],"demonstrative":["یہ","وہ"],"conjunction":["تو"]}',
@@ -3239,7 +3619,9 @@ SET s.display_name = 'UR (PK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'uz-UZ'})
-SET s.display_name = 'UZ (UZ) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'UZ (UZ) Slugification',
     s.content = 'URL slug generation rules for uz-UZ',
     s.slug_rule = 'latin_preserve',
     s.stopwords = '{"conjunction":["va","yoki","ham","esa"],"pronoun":["bu","shu","u"],"adverb":["keyin","oldin"]}',
@@ -3256,7 +3638,9 @@ SET s.display_name = 'UZ (UZ) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'vi-VN'})
-SET s.display_name = 'Vietnamese (Vietnam) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Vietnamese (Vietnam) Slugification',
     s.content = 'URL slug generation rules for vi-VN',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["của","cho","với","từ","đến","tại","trong","ngoài"],"article":["các","những","một"],"conjunction":["và","hoặc","nhưng","nếu"],"demonstrative":["này","đó","kia","đây"],"copula":["là"]}',
@@ -3273,7 +3657,9 @@ SET s.display_name = 'Vietnamese (Vietnam) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'wo-SN'})
-SET s.display_name = 'WO (SN) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'WO (SN) Slugification',
     s.content = 'URL slug generation rules for wo-SN',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{}',
@@ -3290,7 +3676,9 @@ SET s.display_name = 'WO (SN) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'xh-ZA'})
-SET s.display_name = 'XH (ZA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'XH (ZA) Slugification',
     s.content = 'URL slug generation rules for xh-ZA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"preposition":["ku","e","kwa","nge"],"pronoun":["mna","wena","yena","thina"],"demonstrative":["lo","le","eli","aba","ezi","oku","oko"],"conjunction":["na","okanye","kodwa","ukuba","ngenxa","kunye"],"adverb":["njalo","nje"]}',
@@ -3307,7 +3695,9 @@ SET s.display_name = 'XH (ZA) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'yo-NG'})
-SET s.display_name = 'YO (NG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'YO (NG) Slugification',
     s.content = 'URL slug generation rules for yo-NG',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"negation":["ko"]}',
@@ -3324,7 +3714,9 @@ SET s.display_name = 'YO (NG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zh-CN'})
-SET s.display_name = 'Chinese (Simplified) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Chinese (Simplified) Slugification',
     s.content = 'URL slug generation rules for zh-CN',
     s.slug_rule = 'romanized',
     s.stopwords = '{}',
@@ -3341,7 +3733,9 @@ SET s.display_name = 'Chinese (Simplified) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zh-HK'})
-SET s.display_name = 'ZH (HK) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ZH (HK) Slugification',
     s.content = 'URL slug generation rules for zh-HK',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["喺"],"verb":["係"],"conjunction":["同","及"]}',
@@ -3358,7 +3752,9 @@ SET s.display_name = 'ZH (HK) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zh-SG'})
-SET s.display_name = 'ZH (SG) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ZH (SG) Slugification',
     s.content = 'URL slug generation rules for zh-SG',
     s.slug_rule = 'romanized',
     s.stopwords = '{"verb":["是 (shi)","有 (you)"],"pronoun":["这 (zhe)","那 (na)"],"classifier":["个 (ge)"],"conjunction":["和 (he)","与 (yu)","或 (huo)"],"preposition":["在 (zai)","为 (wei)"]}',
@@ -3375,7 +3771,9 @@ SET s.display_name = 'ZH (SG) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zh-TH'})
-SET s.display_name = 'ZH (TH) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ZH (TH) Slugification',
     s.content = 'URL slug generation rules for zh-TH',
     s.slug_rule = 'romanized',
     s.stopwords = '{"preposition":["zai (在)"],"demonstrative":["zhe (这)","na (那)"],"classifier":["ge (个)"],"conjunction":["he (和)","yu (与)"],"verb":["shi (是)"]}',
@@ -3392,7 +3790,9 @@ SET s.display_name = 'ZH (TH) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zh-TW'})
-SET s.display_name = 'Chinese (Traditional) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'Chinese (Traditional) Slugification',
     s.content = 'URL slug generation rules for zh-TW',
     s.slug_rule = 'native_script',
     s.stopwords = '{"preposition":["在"],"adverb":["也"],"conjunction":["和"]}',
@@ -3409,7 +3809,9 @@ SET s.display_name = 'Chinese (Traditional) Slugification',
     s.created_at = coalesce(s.created_at, datetime());
 
 MERGE (s:Slugification {key: 'zu-ZA'})
-SET s.display_name = 'ZU (ZA) Slugification',
+SET s.node_class = 'Slugification',
+    s.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+    s.display_name = 'ZU (ZA) Slugification',
     s.content = 'URL slug generation rules for zu-ZA',
     s.slug_rule = 'latin_strip',
     s.stopwords = '{"conjunction":["kanye"],"adverb":["kakhulu","njalo"]}',
