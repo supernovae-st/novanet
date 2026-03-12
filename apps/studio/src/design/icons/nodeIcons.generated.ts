@@ -6,7 +6,7 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (57 nodes) — DUAL FORMAT
+// NODE ICONS (60 nodes) — DUAL FORMAT
 // =============================================================================
 
 /**
@@ -18,7 +18,7 @@ export interface NodeIcon {
 }
 
 /**
- * Dual-format icons for all 57 node types.
+ * Dual-format icons for all 60 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-classes/<realm>/<layer>/<name>.yaml
@@ -44,12 +44,14 @@ export const NODE_ICONS: Record<NodeType, NodeIcon> = {
   CulturalSubRealm: { web: 'palette', terminal: '◈' },
   Culture: { web: 'globe', terminal: '◉' },
   CultureRef: { web: 'drama', terminal: '◎' },
+  CultureRefEnrichment: { web: 'globe', terminal: '◉' },
   CultureSet: { web: 'drama', terminal: '◎' },
   EconomicRegion: { web: 'bar-chart-2', terminal: '▣' },
   Entity: { web: 'diamond', terminal: '◆' },
   EntityCategory: { web: 'folder', terminal: '▤' },
   EntityNative: { web: 'circle-check', terminal: '●' },
   Expression: { web: 'message-square', terminal: '◇' },
+  ExpressionEnrichment: { web: 'sparkles', terminal: '✧' },
   ExpressionSet: { web: 'message-square', terminal: '◇' },
   Formatting: { web: 'hash', terminal: '▦' },
   GEOAnswer: { web: 'message-square', terminal: '◇' },
@@ -82,6 +84,7 @@ export const NODE_ICONS: Record<NodeType, NodeIcon> = {
   Slugification: { web: 'link', terminal: '⌘' },
   Style: { web: 'drama', terminal: '◎' },
   Taboo: { web: 'ban', terminal: '⊘' },
+  TabooEnrichment: { web: 'alert-triangle', terminal: '⚠' },
   TabooSet: { web: 'ban', terminal: '⊘' },
 };
 
