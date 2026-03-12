@@ -311,21 +311,20 @@ mod tests {
     use proptest::prelude::*;
 
     /// Generate a random permutation of standard property names
+    /// v0.19.0: ALL nodes have 8 standard properties (ADR-044)
     fn prop_names_permutation() -> impl Strategy<Value = Vec<String>> {
-        prop::collection::vec(
-            prop::sample::select(vec![
-                "key".to_string(),
-                "display_name".to_string(),
-                "content".to_string(),
-                "created_at".to_string(),
-                "updated_at".to_string(),
-            ]),
-            5..=5, // Exactly 5 properties
-        )
-        .prop_filter("All properties must be unique", |names| {
-            let unique: std::collections::HashSet<_> = names.iter().collect();
-            unique.len() == 5
-        })
+        // Use Just + prop_shuffle to generate permutations (no duplicates)
+        Just(vec![
+            "key".to_string(),
+            "display_name".to_string(),
+            "node_class".to_string(),
+            "content".to_string(),
+            "llm_context".to_string(),
+            "provenance".to_string(),
+            "created_at".to_string(),
+            "updated_at".to_string(),
+        ])
+        .prop_shuffle()
     }
 
     /// Create a node with properties in the given order
@@ -389,9 +388,10 @@ mod tests {
                 .map(|k| k.as_str())
                 .collect();
 
+            // v0.19.0: ALL nodes have 8 standard properties (ADR-044)
             prop_assert_eq!(
                 keys_after,
-                vec!["key", "display_name", "content", "created_at", "updated_at"]
+                vec!["key", "display_name", "node_class", "content", "llm_context", "provenance", "created_at", "updated_at"]
             );
         }
 

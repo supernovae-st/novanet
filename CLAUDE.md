@@ -104,20 +104,24 @@ Categories: realms, layers, arc_families, states, navigation, quality, modes.
 
 ## Required Properties by Node Class
 
-All nodes MUST have these 5 standard properties for data quality (CSR compliance):
+All nodes (DATA and SCHEMA) MUST have these 8 standard properties for data quality (CSR compliance):
 
-| Node Class | key | display_name | description | created_at | updated_at | Additional Required |
-|------------|:---:|:------------:|:-----------:|:----------:|:----------:|---------------------|
-| **Entity** | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| **EntityNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `denomination_forms` (ADR-033), `locale` |
-| **Page** | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| **PageNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale`, `slug` |
-| **Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `block_type` |
-| **BlockNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale`, `content` |
-| **SEOKeyword** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale` |
-| **Expression** | ✅ | ⚠️ `text` | — | ✅ | ⚠️ | `locale`, `text` (uses `text` not `display_name`) |
+| # | Property | Type | Description |
+|---|----------|------|-------------|
+| 1 | `key` | string | Unique identifier |
+| 2 | `display_name` | string | Human-readable label |
+| 3 | `node_class` | string | PascalCase=DATA, lowercase=SCHEMA |
+| 4 | `content` | string | What this node IS |
+| 5 | `llm_context` | string | ADR-027 USE/TRIGGERS/NOT/RELATES |
+| 6 | `provenance` | object | Data origin (seed/nika/mcp) |
+| 7 | `created_at` | datetime | Creation timestamp |
+| 8 | `updated_at` | datetime | Last modification |
 
-**Legend:** ✅ Required | ⚠️ Alternative field used
+**node_class convention:**
+- `PascalCase` = DATA node (Entity, Page, Block, EntityNative...)
+- `lowercase` = SCHEMA node (realm, layer, class, arc_class)
+
+**Legend:** All 8 properties are REQUIRED for ALL nodes
 
 **ADR-033 denomination_forms** (EntityNative only):
 ```json

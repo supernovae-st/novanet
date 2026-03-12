@@ -1,4 +1,4 @@
-//! Parse 57 YAML node definitions (v0.17.3 - trait removed).
+//! Parse 60 YAML node definitions (v0.19.0 - trait removed).
 //!
 //! Fails fast if any YAML is missing `realm` or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-classes/<realm>/<layer>/<name>.yaml`
@@ -444,12 +444,12 @@ node:
             return;
         }
 
-        // v0.17.3: 57 nodes (36 shared + 21 org), trait removed (ADR-036)
-        let nodes = load_all_nodes(root).expect("should parse all 57 nodes");
+        // v0.19.0: 60 nodes (36 shared + 24 org), trait removed (ADR-036)
+        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
         assert_eq!(
             nodes.len(),
-            57,
-            "expected 57 YAML node files (v0.17.3: 36 shared + 21 org)"
+            60,
+            "expected 60 YAML node files (v0.19.0: 36 shared + 24 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -480,8 +480,8 @@ node:
         );
         assert_eq!(
             realm_count("org"),
-            21,
-            "org realm count (v0.17.3: 21 org nodes)"
+            24,
+            "org realm count (v0.19.0: 24 org nodes)"
         );
 
         // Spot-check known nodes (v0.17.3: trait checks removed)

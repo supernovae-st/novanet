@@ -89,23 +89,23 @@ const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 const COLOR_TYPE_OBJECT: Color = Color::Rgb(181, 137, 0);
 
 // =============================================================================
-// v0.19.0 STANDARD PROPERTIES (ADR-035)
+// v0.19.0 STANDARD PROPERTIES (ADR-044)
 // =============================================================================
 
-/// Standard properties that ALL DATA nodes have (57 classes).
-/// v0.19.0: 8 properties aligned with SCHEMA nodes for positions 1-3, 5.
+/// Standard properties that ALL nodes have (DATA and SCHEMA).
+/// v0.19.0: ALL nodes have THE SAME 8 standard properties.
 ///
 /// Order: key -> display_name -> node_class -> content -> llm_context -> provenance -> created_at -> updated_at
 ///
-/// DATA NODES (8 props):     SCHEMA NODES (5 props):
-/// 1. key                    1. key
-/// 2. display_name           2. display_name
-/// 3. node_class    <- SAME  3. node_class    <- SAME
-/// 4. content                4. description
-/// 5. llm_context   <- SAME  5. llm_context   <- SAME
-/// 6. provenance             (color, icon = class-specific)
-/// 7. created_at
-/// 8. updated_at
+/// ALL NODES (8 props):
+/// 1. key            - Unique identifier
+/// 2. display_name   - Human-readable label
+/// 3. node_class     - Type discriminator (PascalCase=DATA, lowercase=SCHEMA)
+/// 4. content        - What this node IS (1-3 sentences)
+/// 5. llm_context    - ADR-027 USE/TRIGGERS/NOT/RELATES pattern
+/// 6. provenance     - Data origin {source, version}
+/// 7. created_at     - Creation timestamp
+/// 8. updated_at     - Last modification timestamp
 ///
 /// Note: Composite keys (*_key) are handled separately via COMPOSITE_KEY_PROPERTIES.
 const STANDARD_PROPERTY_NAMES: &[&str] = &[

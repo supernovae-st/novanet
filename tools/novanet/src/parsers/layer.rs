@@ -96,8 +96,9 @@ pub struct LayerDef {
     /// Human-readable name.
     pub display_name: String,
 
-    /// Multi-line description.
-    pub description: String,
+    /// v0.19.0: What this layer IS (1-3 sentences).
+    /// Renamed from `description` to `content` per ADR-044.
+    pub content: String,
 
     /// Hex color for visual encoding (fill color for nodes).
     pub color: String,
@@ -199,7 +200,7 @@ mod tests {
 layer:
   key: test
   display_name: Test Layer
-  description: A test layer
+  content: A test layer
   color: "#ff0000"
 "##;
         let doc: LayerDoc = serde_yaml::from_str(yaml).unwrap();
@@ -216,7 +217,7 @@ layer:
 layer:
   key: semantic
   display_name: Semantic
-  description: |
+  content: |
     Meaning and knowledge relationships.
   color: "#f97316"
   icon:
@@ -227,19 +228,17 @@ layer:
   classes:
     - Entity
     - EntityNative
-    - AudiencePersona
-    - ChannelSurface
-  class_count: 4
+  class_count: 2
   llm_context: |
     USE: when working with semantic entities.
-    TRIGGERS: "entity", "meaning", "audience".
+    TRIGGERS: "entity", "meaning".
 "##;
         let doc: LayerDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.layer.key, "semantic");
         assert_eq!(doc.layer.realms, vec!["org"]);
-        assert_eq!(doc.layer.classes.len(), 4);
+        assert_eq!(doc.layer.classes.len(), 2);
         assert!(doc.layer.classes.all().contains(&"Entity"));
-        assert_eq!(doc.layer.class_count, 4);
+        assert_eq!(doc.layer.class_count, 2);
         assert!(doc.layer.llm_context.is_some());
         assert_eq!(doc.layer.icon.web, "brain");
     }
@@ -250,7 +249,7 @@ layer:
 layer:
   key: config
   display_name: Config
-  description: Configuration layer
+  content: Configuration layer
   color: "#6366f1"
   realms:
     - shared

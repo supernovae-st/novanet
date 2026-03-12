@@ -35,8 +35,9 @@ pub struct RealmDef {
     /// Human-readable name.
     pub display_name: String,
 
-    /// Multi-line description.
-    pub description: String,
+    /// v0.19.0: What this realm IS (1-3 sentences).
+    /// Renamed from `description` to `content` per ADR-044.
+    pub content: String,
 
     /// Hex color for visual encoding.
     pub color: String,
@@ -125,7 +126,7 @@ mod tests {
 realm:
   key: test
   display_name: Test Realm
-  description: A test realm
+  content: A test realm
   color: "#ff0000"
 "##;
         let doc: RealmDoc = serde_yaml::from_str(yaml).unwrap();
@@ -141,7 +142,7 @@ realm:
 realm:
   key: shared
   display_name: Shared
-  description: |
+  content: |
     Universal knowledge (READ-ONLY).
   color: "#2aa198"
   icon:
