@@ -12,27 +12,27 @@
 // --- Hellenic (Greek) ---
 MATCH (l:Locale) WHERE l.key IN ['el-GR', 'el-CY']
 MATCH (lb:LanguageBranch {key: 'grk'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Celtic ---
 MATCH (l:Locale) WHERE l.key IN ['cy-GB', 'ga-IE']
 MATCH (lb:LanguageBranch {key: 'cel'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Iranian ---
 MATCH (l:Locale {key: 'fa-IR'})
 MATCH (lb:LanguageBranch {key: 'ira'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Baltic ---
 MATCH (l:Locale) WHERE l.key IN ['lt-LT', 'lv-LV']
 MATCH (lb:LanguageBranch {key: 'bal'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Mon-Khmer (Austroasiatic) ---
 MATCH (l:Locale) WHERE l.key IN ['vi-VN', 'km-KH']
 MATCH (lb:LanguageBranch {key: 'mkh'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Tai-Kadai (Thai, Lao) ---
 // Create tai-kadai branch if not exists
@@ -47,12 +47,12 @@ ON CREATE SET
 
 MATCH (l:Locale) WHERE l.key IN ['th-TH', 'lo-LA']
 MATCH (lb:LanguageBranch {key: 'tai'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Indo-Aryan (Odia) ---
 MATCH (l:Locale {key: 'or-IN'})
 MATCH (lb:LanguageBranch {key: 'inc'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Bantu (Swahili) ---
 // Create Bantu branch if not exists
@@ -67,12 +67,12 @@ ON CREATE SET
 
 MATCH (l:Locale) WHERE l.key IN ['sw-KE', 'sw-TZ']
 MATCH (lb:LanguageBranch {key: 'bnt'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // --- Isolates (Armenian, Georgian, Albanian) → Use 'other' branch ---
 MATCH (l:Locale) WHERE l.key IN ['hy-AM', 'ka-GE', 'sq-AL']
 MATCH (lb:LanguageBranch {key: 'other'})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // ============================================================================
 // SECTION 2: Add iso_code to LanguageBranch nodes missing it
@@ -160,7 +160,7 @@ SET lb.iso_code = 'mis', lb.updated_at = datetime();
 
 // Verify orphan locales are connected:
 // MATCH (l:Locale)
-// OPTIONAL MATCH (l)-[:OF_BRANCH]->(lb:LanguageBranch)
+// OPTIONAL MATCH (l)-[:SPEAKS_BRANCH]->(lb:LanguageBranch)
 // WITH count(l) AS total, count(lb) AS linked
 // RETURN total, linked, round(100.0 * linked / total, 1) AS coverage_pct;
 

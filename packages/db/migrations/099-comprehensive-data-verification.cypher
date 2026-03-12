@@ -19,7 +19,7 @@ RETURN 'OrgConfig' AS check,
 
 // 1.2 Project completeness
 MATCH (p:Project)
-OPTIONAL MATCH (p)-[:HAS_DEFAULT_LOCALE]->(dl:Locale)
+OPTIONAL MATCH (p)-[:DEFAULT_LOCALE]->(dl:Locale)
 OPTIONAL MATCH (p)-[:HAS_BRAND]->(b:Brand)
 OPTIONAL MATCH (p)-[:HAS_SEO_SCOPE]->(seo:ProjectSEOScope)
 OPTIONAL MATCH (p)-[:HAS_GEO_SCOPE]->(geo:ProjectGEOScope)
@@ -82,7 +82,7 @@ RETURN 'Locale BCP47' AS check,
 
 // 2.4 LanguageBranch connections
 MATCH (l:Locale)
-OPTIONAL MATCH (l)-[:OF_BRANCH]->(lb:LanguageBranch)
+OPTIONAL MATCH (l)-[:SPEAKS_BRANCH]->(lb:LanguageBranch)
 WITH count(l) AS total,
      count(lb) AS linked
 RETURN 'Locale-Branch Links' AS check,

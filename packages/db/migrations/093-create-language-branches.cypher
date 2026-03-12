@@ -141,11 +141,11 @@ ON MATCH SET
 MATCH (l:Locale)
 WHERE l.language_family IS NOT NULL
 MATCH (lb:LanguageBranch {key: l.language_family})
-MERGE (l)-[:OF_BRANCH]->(lb);
+MERGE (l)-[:SPEAKS_BRANCH]->(lb);
 
 // Verify language branch coverage
 MATCH (lb:LanguageBranch)
-OPTIONAL MATCH (l:Locale)-[:OF_BRANCH]->(lb)
+OPTIONAL MATCH (l:Locale)-[:SPEAKS_BRANCH]->(lb)
 RETURN lb.key AS branch,
        lb.display_name AS name,
        count(l) AS locale_count
@@ -153,7 +153,7 @@ ORDER BY lb.key;
 
 // Find orphan locales (missing branch connection)
 MATCH (l:Locale)
-WHERE NOT (l)-[:OF_BRANCH]->(:LanguageBranch)
+WHERE NOT (l)-[:SPEAKS_BRANCH]->(:LanguageBranch)
 RETURN l.key AS locale,
        l.language_family AS expected_branch,
        'ORPHAN' AS status

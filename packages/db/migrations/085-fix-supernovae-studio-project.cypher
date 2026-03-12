@@ -14,7 +14,7 @@ MERGE (oc)-[:HAS_PROJECT]->(p);
 // Fix qrcode-ai project (ensure it has proper locale config)
 MATCH (p:Project {key: 'qrcode-ai'})
 MATCH (l:Locale {key: 'en-US'})
-MERGE (p)-[:HAS_DEFAULT_LOCALE]->(l);
+MERGE (p)-[:DEFAULT_LOCALE]->(l);
 
 // Create supernovae-studio project if it doesn't exist
 MERGE (p:Project {key: 'supernovae-studio'})
@@ -50,7 +50,7 @@ MERGE (p)-[:HAS_BRAND]->(b);
 // Set default locale for supernovae-studio to en-US
 MATCH (p:Project {key: 'supernovae-studio'})
 MATCH (l:Locale {key: 'en-US'})
-MERGE (p)-[:HAS_DEFAULT_LOCALE]->(l);
+MERGE (p)-[:DEFAULT_LOCALE]->(l);
 
 // Add supported locales (en-US, fr-FR for dev team)
 MATCH (p:Project {key: 'supernovae-studio'})
@@ -64,7 +64,7 @@ MERGE (oc)-[:HAS_PROJECT]->(p);
 
 // Verify project configuration
 MATCH (p:Project {key: 'supernovae-studio'})
-OPTIONAL MATCH (p)-[:HAS_DEFAULT_LOCALE]->(dl:Locale)
+OPTIONAL MATCH (p)-[:DEFAULT_LOCALE]->(dl:Locale)
 OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(sl:Locale)
 OPTIONAL MATCH (p)-[:HAS_BRAND]->(b:Brand)
 RETURN p.key AS project,
