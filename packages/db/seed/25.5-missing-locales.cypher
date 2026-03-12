@@ -7,6 +7,10 @@
 
 MERGE (cr:CultureRef {key: 'cultureref:pakikisama-harmony@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Pakikisama (Harmony)',
     cr.importance = 'critical',
     cr.expression = 'Maintaining smooth interpersonal relationships and group harmony is paramount',
@@ -21,6 +25,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hiya-sense-of-shame@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Hiya (Sense of Shame)',
     cr.importance = 'critical',
     cr.expression = 'Deep concern for social acceptance and avoiding embarrassment or losing face',
@@ -35,6 +43,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:utang-na-loob-debt-of-gratitude@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Utang na Loob (Debt of Gratitude)',
     cr.importance = 'high',
     cr.expression = 'Strong sense of reciprocity and obligation to return favors',
@@ -49,6 +61,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bayanihan-community-spirit@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Bayanihan (Community Spirit)',
     cr.importance = 'high',
     cr.expression = 'Community helping each other, especially in times of need',
@@ -63,6 +79,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-first-values@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Family-First Values',
     cr.importance = 'critical',
     cr.expression = 'Family is the center of Filipino life; decisions consider family impact',
@@ -77,6 +97,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders-po-opo@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Respect for Elders (Po/Opo)',
     cr.importance = 'high',
     cr.expression = 'Use of honorifics and deference to older or senior individuals',
@@ -91,6 +115,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-mabuhay-spirit@fil-PH'})
 SET cr.locale = 'fil-PH',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for fil-PH',
+    cr.llm_context = 'USE: when generating content for fil-PH.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Hospitality (Mabuhay Spirit)',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests warmly is a core cultural value',
@@ -275,6 +303,10 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (cr:CultureRef {key: 'cultureref:theravada-buddhism@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Theravada Buddhism',
     cr.importance = 'critical',
     cr.expression = 'Buddhism permeates daily life; monks and temples hold central reverence',
@@ -289,6 +321,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony-and-non-confrontation@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Harmony and Non-confrontation',
     cr.importance = 'critical',
     cr.expression = 'Preserving face and avoiding conflict is paramount in all interactions',
@@ -303,6 +339,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabaidee-spirit@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Sabaidee Spirit',
     cr.importance = 'high',
     cr.expression = 'The universal greeting reflects cultural warmth and well-wishing',
@@ -317,6 +357,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-hierarchy@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Respect for Hierarchy',
     cr.importance = 'high',
     cr.expression = 'Age and social status determine appropriate behavior and language',
@@ -331,6 +375,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Modesty',
     cr.importance = 'high',
     cr.expression = 'Physical and behavioral modesty is expected in public',
@@ -345,6 +393,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-support@lo-LA'})
 SET cr.locale = 'lo-LA',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for lo-LA',
+    cr.llm_context = 'USE: when generating content for lo-LA.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Community Support',
     cr.importance = 'medium',
     cr.expression = 'Supporting local businesses and community reflects goodwill',
@@ -543,6 +595,10 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (cr:CultureRef {key: 'cultureref:lord-jagannath-devotion@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Lord Jagannath Devotion',
     cr.importance = 'critical',
     cr.expression = 'Lord Jagannath holds central significance in Odia life and culture',
@@ -557,6 +613,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:temple-heritage@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Temple Heritage',
     cr.importance = 'high',
     cr.expression = 'Odisha\'s temples are central to cultural identity and daily practice',
@@ -571,6 +631,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:odissi-classical-arts@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Odissi Classical Arts',
     cr.importance = 'high',
     cr.expression = 'Odissi dance originated in temples; represents regional pride',
@@ -585,6 +649,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dayakari-politeness@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'ଦୟାକରି (Dayakari - Politeness)',
     cr.importance = 'high',
     cr.expression = 'Respect and politeness are fundamental to Odia interactions',
@@ -599,6 +667,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:folk-culture-preservation@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Folk Culture Preservation',
     cr.importance = 'medium',
     cr.expression = 'Active efforts to preserve indigenous heritage against Western influence',
@@ -613,6 +685,10 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:festival-traditions@or-IN'})
 SET cr.locale = 'or-IN',
+    cr.node_class = 'CultureRef',
+    cr.content = 'Cultural value for or-IN',
+    cr.llm_context = 'USE: when generating content for or-IN.',
+    cr.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     cr.text = 'Festival Traditions',
     cr.importance = 'high',
     cr.expression = 'Major festivals like Rath Yatra, Nuakhai, Pousa Purnima are central',

@@ -17,6 +17,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-santo-nino@ceb-PH'})
 SET t.display_name = 'Disrespecting religious symbols (Santo Nino',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ceb-PH',
     t.term = 'Disrespecting religious symbols (Santo Nino',
     t.type = 'topic',
@@ -36,6 +38,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:cross@ceb-PH'})
 SET t.display_name = 'cross',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ceb-PH',
     t.term = 'cross',
     t.type = 'topic',
@@ -55,6 +59,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:saints@ceb-PH'})
 SET t.display_name = 'saints)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ceb-PH',
     t.term = 'saints)',
     t.type = 'topic',
@@ -74,6 +80,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@ceb-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ceb-PH',
     t.term = 'Mocking or disrespecting elders',
     t.type = 'topic',
@@ -93,6 +101,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@ceb-PH'})
 SET t.display_name = 'Causing public hiya (shame/embarrassment)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ceb-PH',
     t.term = 'Causing public hiya (shame/embarrassment)',
     t.type = 'topic',
@@ -120,6 +130,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-chinggis-khaan@mn-MN'})
 SET t.display_name = 'Disrespecting Chinggis Khaan',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mn-MN',
     t.term = 'Disrespecting Chinggis Khaan',
     t.type = 'topic',
@@ -139,6 +151,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:inner-mongolia-and-territorial-issues@mn-MN'})
 SET t.display_name = 'Inner Mongolia and territorial issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mn-MN',
     t.term = 'Inner Mongolia and territorial issues',
     t.type = 'topic',
@@ -158,6 +172,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-elders-or-family@mn-MN'})
 SET t.display_name = 'Criticism of elders or family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mn-MN',
     t.term = 'Criticism of elders or family',
     t.type = 'topic',
@@ -185,6 +201,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:race-relations-and-racial-policies@en-MY'})
 SET t.display_name = 'Race relations and racial policies',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-MY',
     t.term = 'Race relations and racial policies',
     t.type = 'topic',
@@ -204,6 +222,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-issues-and-comparisons@en-MY'})
 SET t.display_name = 'Religious issues and comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-MY',
     t.term = 'Religious issues and comparisons',
     t.type = 'topic',
@@ -223,6 +243,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:royalty-raja-raja-melayu@en-MY'})
 SET t.display_name = 'Royalty (Raja-raja Melayu)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-MY',
     t.term = 'Royalty (Raja-raja Melayu)',
     t.type = 'topic',
@@ -250,6 +272,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam@bn-BD'})
 SET t.display_name = 'Insulting Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-BD',
     t.term = 'Insulting Islam',
     t.type = 'topic',
@@ -269,6 +293,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1971-liberation-war-denialism@bn-BD'})
 SET t.display_name = '1971 Liberation War denialism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-BD',
     t.term = '1971 Liberation War denialism',
     t.type = 'topic',
@@ -288,6 +314,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hindu-muslim-communal-tensions@bn-BD'})
 SET t.display_name = 'Hindu-Muslim communal tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-BD',
     t.term = 'Hindu-Muslim communal tensions',
     t.type = 'topic',
@@ -315,6 +343,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticizing-nyerere@en-TZ'})
 SET t.display_name = 'Criticizing Nyerere',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TZ',
     t.term = 'Criticizing Nyerere',
     t.type = 'topic',
@@ -334,6 +364,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:zanzibar-separatismpolitics@en-TZ'})
 SET t.display_name = 'Zanzibar separatism/politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TZ',
     t.term = 'Zanzibar separatism/politics',
     t.type = 'topic',
@@ -353,6 +385,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-division@en-TZ'})
 SET t.display_name = 'Religious division',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TZ',
     t.term = 'Religious division',
     t.type = 'topic',
@@ -380,6 +414,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racial-or-religious-denigration@en-SG'})
 SET t.display_name = 'Racial or religious denigration',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-SG',
     t.term = 'Racial or religious denigration',
     t.type = 'topic',
@@ -407,6 +443,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@ta-LK'})
 SET t.display_name = 'Ethnic conflict/civil war',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-LK',
     t.term = 'Ethnic conflict/civil war',
     t.type = 'topic',
@@ -426,6 +464,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ltteterrorism-references@ta-LK'})
 SET t.display_name = 'LTTE/terrorism references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-LK',
     t.term = 'LTTE/terrorism references',
     t.type = 'topic',
@@ -445,6 +485,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:tamil-sinhalese-comparisons@ta-LK'})
 SET t.display_name = 'Tamil-Sinhalese comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-LK',
     t.term = 'Tamil-Sinhalese comparisons',
     t.type = 'topic',
@@ -472,6 +514,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racial-stereotypes@en-ZA'})
 SET t.display_name = 'Racial stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZA',
     t.term = 'Racial stereotypes',
     t.type = 'topic',
@@ -491,6 +535,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@en-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZA',
     t.term = 'Apartheid nostalgia',
     t.type = 'topic',
@@ -510,6 +556,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:land-reform-debates@en-ZA'})
 SET t.display_name = 'Land reform debates',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZA',
     t.term = 'Land reform debates',
     t.type = 'topic',
@@ -537,6 +585,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:mocking-bajan-accent-or-dialect@en-BB'})
 SET t.display_name = 'Mocking Bajan accent or dialect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-BB',
     t.term = 'Mocking Bajan accent or dialect',
     t.type = 'topic',
@@ -556,6 +606,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:slavery-glorification-or-minimization@en-BB'})
 SET t.display_name = 'Slavery glorification or minimization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-BB',
     t.term = 'Slavery glorification or minimization',
     t.type = 'topic',
@@ -583,6 +635,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@si-LK'})
 SET t.display_name = 'Ethnic conflict/civil war',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'si-LK',
     t.term = 'Ethnic conflict/civil war',
     t.type = 'topic',
@@ -602,6 +656,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ltteterrorism-references@si-LK'})
 SET t.display_name = 'LTTE/terrorism references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'si-LK',
     t.term = 'LTTE/terrorism references',
     t.type = 'topic',
@@ -621,6 +677,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-insulting@si-LK'})
 SET t.display_name = 'Religious insulting',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'si-LK',
     t.term = 'Religious insulting',
     t.type = 'topic',
@@ -648,6 +706,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-attribution-or-nationalism@bs-BA'})
 SET t.display_name = 'Ethnic attribution or nationalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bs-BA',
     t.term = 'Ethnic attribution or nationalism',
     t.type = 'topic',
@@ -667,6 +727,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1992-1995-war-references@bs-BA'})
 SET t.display_name = '1992-1995 war references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bs-BA',
     t.term = '1992-1995 war references',
     t.type = 'topic',
@@ -686,6 +748,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-comparisons@bs-BA'})
 SET t.display_name = 'Religious comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bs-BA',
     t.term = 'Religious comparisons',
     t.type = 'topic',
@@ -713,6 +777,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:treating-swiss-italian-as-just-italian@it-CH'})
 SET t.display_name = 'Treating Swiss Italian as "just Italian"',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'it-CH',
     t.term = 'Treating Swiss Italian as "just Italian"',
     t.type = 'topic',
@@ -732,6 +798,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:implying-ticino-is-less-swiss@it-CH'})
 SET t.display_name = 'Implying Ticino is less Swiss',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'it-CH',
     t.term = 'Implying Ticino is less Swiss',
     t.type = 'topic',
@@ -751,6 +819,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:language-region-favoritism@it-CH'})
 SET t.display_name = 'Language region favoritism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'it-CH',
     t.term = 'Language region favoritism',
     t.type = 'topic',
@@ -778,6 +848,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-or-disrespect-of-ataturk@tr-TR'})
 SET t.display_name = 'Criticism or disrespect of Ataturk',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tr-TR',
     t.term = 'Criticism or disrespect of Ataturk',
     t.type = 'topic',
@@ -797,6 +869,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:recognition-of-armenian-genocide@tr-TR'})
 SET t.display_name = 'Recognition of Armenian "genocide"',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tr-TR',
     t.term = 'Recognition of Armenian "genocide"',
     t.type = 'topic',
@@ -816,6 +890,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:kurdish-separatismpkk-support@tr-TR'})
 SET t.display_name = 'Kurdish separatism/PKK support',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tr-TR',
     t.term = 'Kurdish separatism/PKK support',
     t.type = 'topic',
@@ -843,6 +919,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:us-mexico-war-1846-1848@es-MX'})
 SET t.display_name = 'US-Mexico War 1846-1848',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-MX',
     t.term = 'US-Mexico War 1846-1848',
     t.type = 'topic',
@@ -862,6 +940,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:la-malincheconquest-narrative@es-MX'})
 SET t.display_name = 'La Malinche/Conquest narrative',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-MX',
     t.term = 'La Malinche/Conquest narrative',
     t.type = 'topic',
@@ -881,6 +961,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:drug-cartels-and-narco-violence@es-MX'})
 SET t.display_name = 'Drug cartels and narco-violence',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-MX',
     t.term = 'Drug cartels and narco-violence',
     t.type = 'topic',
@@ -908,6 +990,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:western-sahara-sovereignty@ar-MA'})
 SET t.display_name = 'Western Sahara sovereignty',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-MA',
     t.term = 'Western Sahara sovereignty',
     t.type = 'topic',
@@ -927,6 +1011,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-MA'})
 SET t.display_name = 'Criticism of the monarchy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-MA',
     t.term = 'Criticism of the monarchy',
     t.type = 'topic',
@@ -946,6 +1032,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ar-MA'})
 SET t.display_name = 'Insulting Islam or the Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-MA',
     t.term = 'Insulting Islam or the Prophet',
     t.type = 'topic',
@@ -973,6 +1061,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@ar-LY'})
 SET t.display_name = 'Criticism of Islam or Islamic values',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LY',
     t.term = 'Criticism of Islam or Islamic values',
     t.type = 'topic',
@@ -992,6 +1082,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-libya-or-libyan-identity@ar-LY'})
 SET t.display_name = 'Criticism of Libya or Libyan identity',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LY',
     t.term = 'Criticism of Libya or Libyan identity',
     t.type = 'topic',
@@ -1011,6 +1103,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:current-political-factions@ar-LY'})
 SET t.display_name = 'Current political factions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LY',
     t.term = 'Current political factions',
     t.type = 'topic',
@@ -1038,6 +1132,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:violations-de-fady@fr-MG'})
 SET t.display_name = 'Violations de fady',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-MG',
     t.term = 'Violations de fady',
     t.type = 'topic',
@@ -1057,6 +1153,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:irrespect-envers-les-ancetres-razana@fr-MG'})
 SET t.display_name = 'Irrespect envers les ancetres (razana)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-MG',
     t.term = 'Irrespect envers les ancetres (razana)',
     t.type = 'topic',
@@ -1084,6 +1182,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-religious-figures@ar-EG'})
 SET t.display_name = 'Insulting Islam or religious figures',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-EG',
     t.term = 'Insulting Islam or religious figures',
     t.type = 'topic',
@@ -1103,6 +1203,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary-on-current-events@ar-EG'})
 SET t.display_name = 'Political commentary on current events',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-EG',
     t.term = 'Political commentary on current events',
     t.type = 'topic',
@@ -1122,6 +1224,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:israel-references@ar-EG'})
 SET t.display_name = 'Israel references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-EG',
     t.term = 'Israel references',
     t.type = 'topic',
@@ -1149,6 +1253,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-situation-and-military@my-MM'})
 SET t.display_name = 'Political situation and military',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'my-MM',
     t.term = 'Political situation and military',
     t.type = 'topic',
@@ -1168,6 +1274,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@my-MM'})
 SET t.display_name = 'Buddhist disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'my-MM',
     t.term = 'Buddhist disrespect',
     t.type = 'topic',
@@ -1187,6 +1295,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-conflicts@my-MM'})
 SET t.display_name = 'Ethnic conflicts',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'my-MM',
     t.term = 'Ethnic conflicts',
     t.type = 'topic',
@@ -1214,6 +1324,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:tamil-language-disrespect@ta-IN'})
 SET t.display_name = 'Tamil language disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-IN',
     t.term = 'Tamil language disrespect',
     t.type = 'topic',
@@ -1233,6 +1345,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@ta-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -1252,6 +1366,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hindi-imposition@ta-IN'})
 SET t.display_name = 'Hindi imposition',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ta-IN',
     t.term = 'Hindi imposition',
     t.type = 'topic',
@@ -1279,6 +1395,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:divisions-ethniques-et-tribalisme@fr-CD'})
 SET t.display_name = 'Divisions ethniques et tribalisme',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CD',
     t.term = 'Divisions ethniques et tribalisme',
     t.type = 'topic',
@@ -1298,6 +1416,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:commentaire-politique-gouvernement-actuel@fr-CD'})
 SET t.display_name = 'Commentaire politique (gouvernement actuel)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CD',
     t.term = 'Commentaire politique (gouvernement actuel)',
     t.type = 'topic',
@@ -1317,6 +1437,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:conflit-a-l@fr-CD'})
 SET t.display_name = 'Conflit a l\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CD',
     t.term = 'Conflit a l\\',
     t.type = 'topic',
@@ -1344,6 +1466,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:nrccitizenship-issues@as-IN'})
 SET t.display_name = 'NRC/citizenship issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'as-IN',
     t.term = 'NRC/citizenship issues',
     t.type = 'topic',
@@ -1363,6 +1487,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:immigrationdemographic-change@as-IN'})
 SET t.display_name = 'Immigration/demographic change',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'as-IN',
     t.term = 'Immigration/demographic change',
     t.type = 'topic',
@@ -1382,6 +1508,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:bodo-assamese-relations@as-IN'})
 SET t.display_name = 'Bodo-Assamese relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'as-IN',
     t.term = 'Bodo-Assamese relations',
     t.type = 'topic',
@@ -1409,6 +1537,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lt-LT'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lt-LT',
     t.term = 'Soviet nostalgia or symbolism',
     t.type = 'topic',
@@ -1428,6 +1558,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pro-russian-political-messaging@lt-LT'})
 SET t.display_name = 'Pro-Russian political messaging',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lt-LT',
     t.term = 'Pro-Russian political messaging',
     t.type = 'topic',
@@ -1447,6 +1579,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-lithuania-to-russia@lt-LT'})
 SET t.display_name = 'Comparing Lithuania to Russia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lt-LT',
     t.term = 'Comparing Lithuania to Russia',
     t.type = 'topic',
@@ -1474,6 +1608,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping-tribalism@sw-KE'})
 SET t.display_name = 'Ethnic stereotyping (tribalism)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sw-KE',
     t.term = 'Ethnic stereotyping (tribalism)',
     t.type = 'topic',
@@ -1493,6 +1629,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:electionscampaigns@sw-KE'})
 SET t.display_name = 'Elections/campaigns',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sw-KE',
     t.term = 'Elections/campaigns',
     t.type = 'topic',
@@ -1520,6 +1658,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:armenian-genocide-denial-or-minimization@hy-AM'})
 SET t.display_name = 'Armenian Genocide denial or minimization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hy-AM',
     t.term = 'Armenian Genocide denial or minimization',
     t.type = 'topic',
@@ -1539,6 +1679,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pro-turkish-or-pro-azerbaijani-political-messaging@hy-AM'})
 SET t.display_name = 'Pro-Turkish or pro-Azerbaijani political messaging',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hy-AM',
     t.term = 'Pro-Turkish or pro-Azerbaijani political messaging',
     t.type = 'topic',
@@ -1558,6 +1700,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:questioning-armenian-christianity@hy-AM'})
 SET t.display_name = 'Questioning Armenian Christianity',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hy-AM',
     t.term = 'Questioning Armenian Christianity',
     t.type = 'topic',
@@ -1585,6 +1729,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:civil-war-blame@pt-MZ'})
 SET t.display_name = 'Civil War blame',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-MZ',
     t.term = 'Civil War blame',
     t.type = 'topic',
@@ -1604,6 +1750,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-divisions@pt-MZ'})
 SET t.display_name = 'Ethnic divisions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-MZ',
     t.term = 'Ethnic divisions',
     t.type = 'topic',
@@ -1623,6 +1771,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:north-south-disparities@pt-MZ'})
 SET t.display_name = 'North-South disparities',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-MZ',
     t.term = 'North-South disparities',
     t.type = 'topic',
@@ -1650,6 +1800,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:flemish-walloon-tensions@nl-BE'})
 SET t.display_name = 'Flemish-Walloon tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-BE',
     t.term = 'Flemish-Walloon tensions',
     t.type = 'topic',
@@ -1669,6 +1821,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:linguistic-politics@nl-BE'})
 SET t.display_name = 'Linguistic politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-BE',
     t.term = 'Linguistic politics',
     t.type = 'topic',
@@ -1696,6 +1850,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:telugu-language-disrespect@te-IN'})
 SET t.display_name = 'Telugu language disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'te-IN',
     t.term = 'Telugu language disrespect',
     t.type = 'topic',
@@ -1715,6 +1871,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:andhra-telangana-division@te-IN'})
 SET t.display_name = 'Andhra-Telangana division',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'te-IN',
     t.term = 'Andhra-Telangana division',
     t.type = 'topic',
@@ -1734,6 +1892,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@te-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'te-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -1761,6 +1921,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@ml-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ml-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -1780,6 +1942,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@ml-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ml-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -1799,6 +1963,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:communal-incidents@ml-IN'})
 SET t.display_name = 'Communal incidents',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ml-IN',
     t.term = 'Communal incidents',
     t.type = 'topic',
@@ -1826,6 +1992,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-communist-partygovernment@vi-VN'})
 SET t.display_name = 'Criticism of Communist Party/government',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'vi-VN',
     t.term = 'Criticism of Communist Party/government',
     t.type = 'topic',
@@ -1845,6 +2013,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:challenging-national-sovereignty-south-china-sea@vi-VN'})
 SET t.display_name = 'Challenging national sovereignty (South China Sea',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'vi-VN',
     t.term = 'Challenging national sovereignty (South China Sea',
     t.type = 'topic',
@@ -1864,6 +2034,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:etc@vi-VN'})
 SET t.display_name = 'etc.)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'vi-VN',
     t.term = 'etc.)',
     t.type = 'topic',
@@ -1883,6 +2055,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:south-china-sea-bien-dong@vi-VN'})
 SET t.display_name = 'South China Sea / Bien Dong',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'vi-VN',
     t.term = 'South China Sea / Bien Dong',
     t.type = 'topic',
@@ -1910,6 +2084,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:linguistic-tensions-flemish-vs-walloon@fr-BE'})
 SET t.display_name = 'Linguistic tensions (Flemish vs Walloon)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BE',
     t.term = 'Linguistic tensions (Flemish vs Walloon)',
     t.type = 'topic',
@@ -1929,6 +2105,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-to-france-dismissively@fr-BE'})
 SET t.display_name = 'Comparing to France dismissively',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BE',
     t.term = 'Comparing to France dismissively',
     t.type = 'topic',
@@ -1948,6 +2126,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:congo-colonization-1885-1960@fr-BE'})
 SET t.display_name = 'Congo colonization (1885-1960)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BE',
     t.term = 'Congo colonization (1885-1960)',
     t.type = 'topic',
@@ -1975,6 +2155,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:holocaustshoah@ru-IL'})
 SET t.display_name = 'Holocaust/Shoah',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-IL',
     t.term = 'Holocaust/Shoah',
     t.type = 'topic',
@@ -1994,6 +2176,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:soviet-persecution-of-jews@ru-IL'})
 SET t.display_name = 'Soviet Persecution of Jews',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-IL',
     t.term = 'Soviet Persecution of Jews',
     t.type = 'topic',
@@ -2013,6 +2197,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict@ru-IL'})
 SET t.display_name = 'Israeli-Palestinian Conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-IL',
     t.term = 'Israeli-Palestinian Conflict',
     t.type = 'topic',
@@ -2040,6 +2226,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-references-hutututsitwa@rw-RW'})
 SET t.display_name = 'Ethnic references (Hutu/Tutsi/Twa)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'rw-RW',
     t.term = 'Ethnic references (Hutu/Tutsi/Twa)',
     t.type = 'topic',
@@ -2059,6 +2247,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1994-genocide-denialminimization@rw-RW'})
 SET t.display_name = '1994 Genocide denial/minimization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'rw-RW',
     t.term = '1994 Genocide denial/minimization',
     t.type = 'topic',
@@ -2078,6 +2268,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:divisionism-ubwoko@rw-RW'})
 SET t.display_name = 'Divisionism (ubwoko)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'rw-RW',
     t.term = 'Divisionism (ubwoko)',
     t.type = 'topic',
@@ -2105,6 +2297,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:tax-haven-stereotypes@en-KY'})
 SET t.display_name = 'Tax haven stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-KY',
     t.term = 'Tax haven stereotypes',
     t.type = 'topic',
@@ -2124,6 +2318,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:money-laundering-accusations@en-KY'})
 SET t.display_name = 'Money laundering accusations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-KY',
     t.term = 'Money laundering accusations',
     t.type = 'topic',
@@ -2151,6 +2347,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-tensions-kyrgyz-uzbek@ky-KG'})
 SET t.display_name = 'Ethnic tensions (Kyrgyz-Uzbek)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ky-KG',
     t.term = 'Ethnic tensions (Kyrgyz-Uzbek)',
     t.type = 'topic',
@@ -2170,6 +2368,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism-current-government@ky-KG'})
 SET t.display_name = 'Political criticism (current government)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ky-KG',
     t.term = 'Political criticism (current government)',
     t.type = 'topic',
@@ -2189,6 +2389,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:border-disputes@ky-KG'})
 SET t.display_name = 'Border disputes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ky-KG',
     t.term = 'Border disputes',
     t.type = 'topic',
@@ -2216,6 +2418,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:british-stereotyping-of-ireland@en-IE'})
 SET t.display_name = 'British stereotyping of Ireland',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IE',
     t.term = 'British stereotyping of Ireland',
     t.type = 'topic',
@@ -2235,6 +2439,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:northern-ireland-conflict@en-IE'})
 SET t.display_name = 'Northern Ireland conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IE',
     t.term = 'Northern Ireland conflict',
     t.type = 'topic',
@@ -2254,6 +2460,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:famine-references@en-IE'})
 SET t.display_name = 'Famine references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IE',
     t.term = 'Famine references',
     t.type = 'topic',
@@ -2281,6 +2489,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-religion@su-ID'})
 SET t.display_name = 'Insulting Islam or religion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'su-ID',
     t.term = 'Insulting Islam or religion',
     t.type = 'topic',
@@ -2300,6 +2510,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:causing-public-isin-shame@su-ID'})
 SET t.display_name = 'Causing public isin (shame)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'su-ID',
     t.term = 'Causing public isin (shame)',
     t.type = 'topic',
@@ -2319,6 +2531,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:direct-confrontation-or-criticism@su-ID'})
 SET t.display_name = 'Direct confrontation or criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'su-ID',
     t.term = 'Direct confrontation or criticism',
     t.type = 'topic',
@@ -2346,6 +2560,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:lgbtq-topics@en-UG'})
 SET t.display_name = 'LGBTQ+ topics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-UG',
     t.term = 'LGBTQ+ topics',
     t.type = 'topic',
@@ -2365,6 +2581,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnictribal-tensions@en-UG'})
 SET t.display_name = 'Ethnic/tribal tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-UG',
     t.term = 'Ethnic/tribal tensions',
     t.type = 'topic',
@@ -2384,6 +2602,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:current-political-opposition@en-UG'})
 SET t.display_name = 'Current political opposition',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-UG',
     t.term = 'Current political opposition',
     t.type = 'topic',
@@ -2411,6 +2631,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-nyerere@sw-TZ'})
 SET t.display_name = 'Criticism of Nyerere',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sw-TZ',
     t.term = 'Criticism of Nyerere',
     t.type = 'topic',
@@ -2430,6 +2652,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:tribalethnic-divisions@sw-TZ'})
 SET t.display_name = 'Tribal/Ethnic divisions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sw-TZ',
     t.term = 'Tribal/Ethnic divisions',
     t.type = 'topic',
@@ -2449,6 +2673,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:zanzibar-mainland-tensions@sw-TZ'})
 SET t.display_name = 'Zanzibar-Mainland tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sw-TZ',
     t.term = 'Zanzibar-Mainland tensions',
     t.type = 'topic',
@@ -2476,6 +2702,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 SET t.display_name = 'Treaty of Trianon (1920)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hu-HU',
     t.term = 'Treaty of Trianon (1920)',
     t.type = 'topic',
@@ -2495,6 +2723,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:conflating-hungarians-with-slavs@hu-HU'})
 SET t.display_name = 'Conflating Hungarians with Slavs',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hu-HU',
     t.term = 'Conflating Hungarians with Slavs',
     t.type = 'topic',
@@ -2514,6 +2744,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 SET t.display_name = 'Treaty of Trianon (1920)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hu-HU',
     t.term = 'Treaty of Trianon (1920)',
     t.type = 'topic',
@@ -2541,6 +2773,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:dollarization-criticism@es-EC'})
 SET t.display_name = 'Dollarization criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-EC',
     t.term = 'Dollarization criticism',
     t.type = 'topic',
@@ -2560,6 +2794,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-discrimination@es-EC'})
 SET t.display_name = 'Indigenous discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-EC',
     t.term = 'Indigenous discrimination',
     t.type = 'topic',
@@ -2579,6 +2815,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:regional-mockery@es-EC'})
 SET t.display_name = 'Regional mockery',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-EC',
     t.term = 'Regional mockery',
     t.type = 'topic',
@@ -2606,6 +2844,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:fady-violations@mg-MG'})
 SET t.display_name = 'Fady violations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mg-MG',
     t.term = 'Fady violations',
     t.type = 'topic',
@@ -2625,6 +2865,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-ancestors-razana@mg-MG'})
 SET t.display_name = 'Disrespecting ancestors (razana)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mg-MG',
     t.term = 'Disrespecting ancestors (razana)',
     t.type = 'topic',
@@ -2652,6 +2894,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:sovereignty-threats@ca-AD'})
 SET t.display_name = 'Sovereignty threats',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ca-AD',
     t.term = 'Sovereignty threats',
     t.type = 'topic',
@@ -2671,6 +2915,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:tax-haven-characterization@ca-AD'})
 SET t.display_name = 'Tax haven characterization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ca-AD',
     t.term = 'Tax haven characterization',
     t.type = 'topic',
@@ -2698,6 +2944,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:japanese-colonial-period-1910-1945@ko-KR'})
 SET t.display_name = 'Japanese Colonial Period (1910-1945)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ko-KR',
     t.term = 'Japanese Colonial Period (1910-1945)',
     t.type = 'topic',
@@ -2717,6 +2965,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:north-korea-politics@ko-KR'})
 SET t.display_name = 'North Korea Politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ko-KR',
     t.term = 'North Korea Politics',
     t.type = 'topic',
@@ -2736,6 +2986,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-disputes-dokdo@ko-KR'})
 SET t.display_name = 'Territorial Disputes (Dokdo/독도)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ko-KR',
     t.term = 'Territorial Disputes (Dokdo/독도)',
     t.type = 'topic',
@@ -2763,6 +3015,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-divisions-and-tribalism@ln-CD'})
 SET t.display_name = 'Ethnic divisions and tribalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ln-CD',
     t.term = 'Ethnic divisions and tribalism',
     t.type = 'topic',
@@ -2782,6 +3036,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary-current-government@ln-CD'})
 SET t.display_name = 'Political commentary (current government)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ln-CD',
     t.term = 'Political commentary (current government)',
     t.type = 'topic',
@@ -2801,6 +3057,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:eastern-drc-conflict@ln-CD'})
 SET t.display_name = 'Eastern DRC conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ln-CD',
     t.term = 'Eastern DRC conflict',
     t.type = 'topic',
@@ -2828,6 +3086,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnictribal-tensions@en-KE'})
 SET t.display_name = 'Ethnic/tribal tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-KE',
     t.term = 'Ethnic/tribal tensions',
     t.type = 'topic',
@@ -2847,6 +3107,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-tribalism@en-KE'})
 SET t.display_name = 'Political tribalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-KE',
     t.term = 'Political tribalism',
     t.type = 'topic',
@@ -2866,6 +3128,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2007-2008-post-election-violence@en-KE'})
 SET t.display_name = '2007-2008 Post-Election Violence',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-KE',
     t.term = '2007-2008 Post-Election Violence',
     t.type = 'topic',
@@ -2893,6 +3157,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-DZ'})
 SET t.display_name = 'Insulting Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-DZ',
     t.term = 'Insulting Islam',
     t.type = 'topic',
@@ -2912,6 +3178,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:french-colonization-praise@ar-DZ'})
 SET t.display_name = 'French colonization praise',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-DZ',
     t.term = 'French colonization praise',
     t.type = 'topic',
@@ -2931,6 +3199,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:morocco-algeria-relations@ar-DZ'})
 SET t.display_name = 'Morocco-Algeria relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-DZ',
     t.term = 'Morocco-Algeria relations',
     t.type = 'topic',
@@ -2958,6 +3228,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:souverainete-independance@fr-CA'})
 SET t.display_name = 'Souverainete / independance',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CA',
     t.term = 'Souverainete / independance',
     t.type = 'topic',
@@ -2977,6 +3249,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparaisons-defavorables-avec-la-france@fr-CA'})
 SET t.display_name = 'Comparaisons defavorables avec la France',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CA',
     t.term = 'Comparaisons defavorables avec la France',
     t.type = 'topic',
@@ -2996,6 +3270,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:federalisme-vs-souverainisme@fr-CA'})
 SET t.display_name = 'Federalisme vs souverainisme',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CA',
     t.term = 'Federalisme vs souverainisme',
     t.type = 'topic',
@@ -3023,6 +3299,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:the-troubles-northern-ireland@en-GB'})
 SET t.display_name = 'The Troubles (Northern Ireland)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-GB',
     t.term = 'The Troubles (Northern Ireland)',
     t.type = 'topic',
@@ -3050,6 +3328,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:references-ethniques-hutututsitwa@fr-RW'})
 SET t.display_name = 'References ethniques (Hutu/Tutsi/Twa)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-RW',
     t.term = 'References ethniques (Hutu/Tutsi/Twa)',
     t.type = 'topic',
@@ -3069,6 +3349,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:negationminimisation-du-genocide-de-1994@fr-RW'})
 SET t.display_name = 'Negation/minimisation du genocide de 1994',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-RW',
     t.term = 'Negation/minimisation du genocide de 1994',
     t.type = 'topic',
@@ -3088,6 +3370,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:divisionnisme-ubwoko@fr-RW'})
 SET t.display_name = 'Divisionnisme (ubwoko)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-RW',
     t.term = 'Divisionnisme (ubwoko)',
     t.type = 'topic',
@@ -3115,6 +3399,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:current-political-situation@ru-BY'})
 SET t.display_name = 'Текущая политическая ситуация (Current political situation)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-BY',
     t.term = 'Текущая политическая ситуация (Current political situation)',
     t.type = 'topic',
@@ -3134,6 +3420,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:government-criticism@ru-BY'})
 SET t.display_name = 'Критика государственных институтов (Government criticism)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-BY',
     t.term = 'Критика государственных институтов (Government criticism)',
     t.type = 'topic',
@@ -3153,6 +3441,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2020-2020-events-and-aftermath@ru-BY'})
 SET t.display_name = 'События 2020 года (2020 events and aftermath)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-BY',
     t.term = 'События 2020 года (2020 events and aftermath)',
     t.type = 'topic',
@@ -3180,6 +3470,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:civil-wararmed-conflict-1960-1996@es-GT'})
 SET t.display_name = 'Civil War/Armed Conflict (1960-1996)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-GT',
     t.term = 'Civil War/Armed Conflict (1960-1996)',
     t.type = 'topic',
@@ -3199,6 +3491,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:genocide-and-massacres@es-GT'})
 SET t.display_name = 'Genocide and massacres',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-GT',
     t.term = 'Genocide and massacres',
     t.type = 'topic',
@@ -3218,6 +3512,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:racialethnic-discrimination@es-GT'})
 SET t.display_name = 'Racial/ethnic discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-GT',
     t.term = 'Racial/ethnic discrimination',
     t.type = 'topic',
@@ -3245,6 +3541,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-SG'})
 SET t.display_name = 'Insulting Islam or any religion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-SG',
     t.term = 'Insulting Islam or any religion',
     t.type = 'topic',
@@ -3264,6 +3562,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:non-halal-content-prominently@ms-SG'})
 SET t.display_name = 'Non-halal content prominently',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-SG',
     t.term = 'Non-halal content prominently',
     t.type = 'topic',
@@ -3283,6 +3583,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:racial-denigration-of-any-group@ms-SG'})
 SET t.display_name = 'Racial denigration of any group',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-SG',
     t.term = 'Racial denigration of any group',
     t.type = 'topic',
@@ -3310,6 +3612,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:vodou-mockerysensationalism@ht-HT'})
 SET t.display_name = 'Vodou mockery/sensationalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ht-HT',
     t.term = 'Vodou mockery/sensationalism',
     t.type = 'topic',
@@ -3329,6 +3633,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:voodoo-spellingstereotypes@ht-HT'})
 SET t.display_name = '"Voodoo" spelling/stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ht-HT',
     t.term = '"Voodoo" spelling/stereotypes',
     t.type = 'topic',
@@ -3348,6 +3654,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:poverty-tourism@ht-HT'})
 SET t.display_name = 'Poverty tourism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ht-HT',
     t.term = 'Poverty tourism',
     t.type = 'topic',
@@ -3375,6 +3683,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-MY'})
 SET t.display_name = 'Insulting Islam or any religion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-MY',
     t.term = 'Insulting Islam or any religion',
     t.type = 'topic',
@@ -3394,6 +3704,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticizing-royalty@ms-MY'})
 SET t.display_name = 'Criticizing royalty',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-MY',
     t.term = 'Criticizing royalty',
     t.type = 'topic',
@@ -3413,6 +3725,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:racial-tension-or-preferential-policies@ms-MY'})
 SET t.display_name = 'Racial tension or preferential policies',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-MY',
     t.term = 'Racial tension or preferential policies',
     t.type = 'topic',
@@ -3440,6 +3754,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:communist-era-1944-1991@sq-AL'})
 SET t.display_name = 'Communist Era (1944-1991)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sq-AL',
     t.term = 'Communist Era (1944-1991)',
     t.type = 'topic',
@@ -3459,6 +3775,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:blood-feuds-gjakmarrja@sq-AL'})
 SET t.display_name = 'Blood Feuds (Gjakmarrja)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sq-AL',
     t.term = 'Blood Feuds (Gjakmarrja)',
     t.type = 'topic',
@@ -3486,6 +3804,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:country-name-and-dispute-with-greece@mk-MK'})
 SET t.display_name = 'Име на државата и спорот со Грција (Country name and dispute with Greece)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mk-MK',
     t.term = 'Име на државата и спорот со Грција (Country name and dispute with Greece)',
     t.type = 'topic',
@@ -3505,6 +3825,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:bulgarianmacedonian-history-debate@mk-MK'})
 SET t.display_name = 'Бугарска/Македонска историја (Bulgarian/Macedonian history debate)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mk-MK',
     t.term = 'Бугарска/Македонска историја (Bulgarian/Macedonian history debate)',
     t.type = 'topic',
@@ -3532,6 +3854,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:shivaji-maharaj-disrespect@mr-IN'})
 SET t.display_name = 'Shivaji Maharaj disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mr-IN',
     t.term = 'Shivaji Maharaj disrespect',
     t.type = 'topic',
@@ -3551,6 +3875,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@mr-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mr-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -3570,6 +3896,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@mr-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mr-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -3597,6 +3925,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism-within-cuba@es-CU'})
 SET t.display_name = 'Political criticism (within Cuba)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CU',
     t.term = 'Political criticism (within Cuba)',
     t.type = 'topic',
@@ -3616,6 +3946,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:us-cuba-relations-positioning@es-CU'})
 SET t.display_name = 'US-Cuba relations positioning',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CU',
     t.term = 'US-Cuba relations positioning',
     t.type = 'topic',
@@ -3635,6 +3967,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:government-and-leadership@es-CU'})
 SET t.display_name = 'Government and leadership',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CU',
     t.term = 'Government and leadership',
     t.type = 'topic',
@@ -3662,6 +3996,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Межэтническая напряженность',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KG',
     t.term = 'Межэтническая напряженность',
     t.type = 'topic',
@@ -3681,6 +4017,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Критика правительства',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KG',
     t.term = 'Критика правительства',
     t.type = 'topic',
@@ -3700,6 +4038,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Пограничные споры',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KG',
     t.term = 'Пограничные споры',
     t.type = 'topic',
@@ -3727,6 +4067,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:biafracivil-war@ig-NG'})
 SET t.display_name = 'Biafra/Civil War',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ig-NG',
     t.term = 'Biafra/Civil War',
     t.type = 'topic',
@@ -3746,6 +4088,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotypes@ig-NG'})
 SET t.display_name = 'Ethnic stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ig-NG',
     t.term = 'Ethnic stereotypes',
     t.type = 'topic',
@@ -3765,6 +4109,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-mockery@ig-NG'})
 SET t.display_name = 'Religious mockery',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ig-NG',
     t.term = 'Religious mockery',
     t.type = 'topic',
@@ -3792,6 +4138,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:russian-occupation-of-territories@ka-GE'})
 SET t.display_name = 'Russian occupation of territories',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ka-GE',
     t.term = 'Russian occupation of territories',
     t.type = 'topic',
@@ -3811,6 +4159,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pro-russian-political-messaging@ka-GE'})
 SET t.display_name = 'Pro-Russian political messaging',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ka-GE',
     t.term = 'Pro-Russian political messaging',
     t.type = 'topic',
@@ -3830,6 +4180,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:questioning-orthodox-christianity@ka-GE'})
 SET t.display_name = 'Questioning Orthodox Christianity',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ka-GE',
     t.term = 'Questioning Orthodox Christianity',
     t.type = 'topic',
@@ -3857,6 +4209,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:sectarian-divisions-sunnishia@ar-BH'})
 SET t.display_name = 'Sectarian divisions (Sunni/Shia)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-BH',
     t.term = 'Sectarian divisions (Sunni/Shia)',
     t.type = 'topic',
@@ -3876,6 +4230,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2011-protests-and-aftermath@ar-BH'})
 SET t.display_name = '2011 protests and aftermath',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-BH',
     t.term = '2011 protests and aftermath',
     t.type = 'topic',
@@ -3895,6 +4251,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-BH'})
 SET t.display_name = 'Criticism of royal family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-BH',
     t.term = 'Criticism of royal family',
     t.type = 'topic',
@@ -3922,6 +4280,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:cadrage-paradis-fiscal@fr-LU'})
 SET t.display_name = 'Cadrage "paradis fiscal"',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-LU',
     t.term = 'Cadrage "paradis fiscal"',
     t.type = 'topic',
@@ -3941,6 +4301,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:confondre-luxembourg-avec-belgique-ou-allemagne@fr-LU'})
 SET t.display_name = 'Confondre Luxembourg avec Belgique ou Allemagne',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-LU',
     t.term = 'Confondre Luxembourg avec Belgique ou Allemagne',
     t.type = 'topic',
@@ -3960,6 +4322,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:discuter-de-richesse-personnelle-ou-de-revenus@fr-LU'})
 SET t.display_name = 'Discuter de richesse personnelle ou de revenus',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-LU',
     t.term = 'Discuter de richesse personnelle ou de revenus',
     t.type = 'topic',
@@ -3987,6 +4351,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:current-political-situation@en-ZW'})
 SET t.display_name = 'Current political situation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZW',
     t.term = 'Current political situation',
     t.type = 'topic',
@@ -4006,6 +4372,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:economic-crisis-references@en-ZW'})
 SET t.display_name = 'Economic crisis references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZW',
     t.term = 'Economic crisis references',
     t.type = 'topic',
@@ -4025,6 +4393,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:land-reform-farm-seizures@en-ZW'})
 SET t.display_name = 'Land reform / farm seizures',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZW',
     t.term = 'Land reform / farm seizures',
     t.type = 'topic',
@@ -4052,6 +4422,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@en-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -4071,6 +4443,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste@en-IN'})
 SET t.display_name = 'Caste',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IN',
     t.term = 'Caste',
     t.type = 'topic',
@@ -4090,6 +4464,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:kashmir-and-territorial-disputes@en-IN'})
 SET t.display_name = 'Kashmir and territorial disputes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-IN',
     t.term = 'Kashmir and territorial disputes',
     t.type = 'topic',
@@ -4117,6 +4493,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:taiwan-sovereignty-status@zh-TW'})
 SET t.display_name = '台灣主權地位 (Taiwan sovereignty status)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TW',
     t.term = '台灣主權地位 (Taiwan sovereignty status)',
     t.type = 'topic',
@@ -4136,6 +4514,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:unification-independence-debate@zh-TW'})
 SET t.display_name = '統獨議題 (Unification-independence debate)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TW',
     t.term = '統獨議題 (Unification-independence debate)',
     t.type = 'topic',
@@ -4155,6 +4535,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:cross-strait-relations@zh-TW'})
 SET t.display_name = '兩岸關係 (Cross-strait relations)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TW',
     t.term = '兩岸關係 (Cross-strait relations)',
     t.type = 'topic',
@@ -4182,6 +4564,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:comparing-swiss-to-germans-unfavorably@de-CH'})
 SET t.display_name = 'Comparing Swiss to Germans unfavorably',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-CH',
     t.term = 'Comparing Swiss to Germans unfavorably',
     t.type = 'topic',
@@ -4201,6 +4585,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:language-region-favoritism@de-CH'})
 SET t.display_name = 'Language region favoritism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-CH',
     t.term = 'Language region favoritism',
     t.type = 'topic',
@@ -4220,6 +4606,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@de-CH'})
 SET t.display_name = 'Discussing personal finances or income',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-CH',
     t.term = 'Discussing personal finances or income',
     t.type = 'topic',
@@ -4247,6 +4635,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racism-and-racial-inequality@pt-BR'})
 SET t.display_name = 'Racism and racial inequality',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-BR',
     t.term = 'Racism and racial inequality',
     t.type = 'topic',
@@ -4266,6 +4656,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:class-discrimination@pt-BR'})
 SET t.display_name = 'Class discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-BR',
     t.term = 'Class discrimination',
     t.type = 'topic',
@@ -4285,6 +4677,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-polarization@pt-BR'})
 SET t.display_name = 'Political polarization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-BR',
     t.term = 'Political polarization',
     t.type = 'topic',
@@ -4312,6 +4706,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@fa-IR'})
 SET t.display_name = 'Criticism of Islam or Islamic values',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fa-IR',
     t.term = 'Criticism of Islam or Islamic values',
     t.type = 'topic',
@@ -4331,6 +4727,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-supreme-leader-or-political-system@fa-IR'})
 SET t.display_name = 'Criticism of Supreme Leader or political system',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fa-IR',
     t.term = 'Criticism of Supreme Leader or political system',
     t.type = 'topic',
@@ -4350,6 +4748,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pre-marital-relationships-or-sexuality@fa-IR'})
 SET t.display_name = 'Pre-marital relationships or sexuality',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fa-IR',
     t.term = 'Pre-marital relationships or sexuality',
     t.type = 'topic',
@@ -4377,6 +4777,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:calling-austrians-german@de-AT'})
 SET t.display_name = 'Calling Austrians "German"',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-AT',
     t.term = 'Calling Austrians "German"',
     t.type = 'topic',
@@ -4396,6 +4798,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:nazi-periodholocaust@de-AT'})
 SET t.display_name = 'Nazi period/Holocaust',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-AT',
     t.term = 'Nazi period/Holocaust',
     t.type = 'topic',
@@ -4415,6 +4819,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:nazi-imagery-or-symbols@de-AT'})
 SET t.display_name = 'Nazi imagery or symbols',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-AT',
     t.term = 'Nazi imagery or symbols',
     t.type = 'topic',
@@ -4442,6 +4848,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulter-l@fr-TN'})
 SET t.display_name = 'Insulter l\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-TN',
     t.term = 'Insulter l\\',
     t.type = 'topic',
@@ -4469,6 +4877,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:mocking-trinidadian-dialect@en-TT'})
 SET t.display_name = 'Mocking Trinidadian dialect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TT',
     t.term = 'Mocking Trinidadian dialect',
     t.type = 'topic',
@@ -4488,6 +4898,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-TT'})
 SET t.display_name = 'Ethnic stereotyping',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TT',
     t.term = 'Ethnic stereotyping',
     t.type = 'topic',
@@ -4507,6 +4919,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:slavery-glorification@en-TT'})
 SET t.display_name = 'Slavery glorification',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-TT',
     t.term = 'Slavery glorification',
     t.type = 'topic',
@@ -4534,6 +4948,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:whaling-controversy@is-IS'})
 SET t.display_name = 'Whaling controversy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'is-IS',
     t.term = 'Whaling controversy',
     t.type = 'topic',
@@ -4553,6 +4969,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:whaling-policy@is-IS'})
 SET t.display_name = 'Whaling policy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'is-IS',
     t.term = 'Whaling policy',
     t.type = 'topic',
@@ -4580,6 +4998,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:independence-politics@ca-ES'})
 SET t.display_name = 'Independence politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ca-ES',
     t.term = 'Independence politics',
     t.type = 'topic',
@@ -4599,6 +5019,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:spanish-vs-catalan-framing@ca-ES'})
 SET t.display_name = 'Spanish vs Catalan framing',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ca-ES',
     t.term = 'Spanish vs Catalan framing',
     t.type = 'topic',
@@ -4618,6 +5040,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2017-events@ca-ES'})
 SET t.display_name = '2017 events',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ca-ES',
     t.term = '2017 events',
     t.type = 'topic',
@@ -4645,6 +5069,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-president@ru-KZ'})
 SET t.display_name = 'Criticism of government or president',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KZ',
     t.term = 'Criticism of government or president',
     t.type = 'topic',
@@ -4664,6 +5090,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:inter-ethnic-tensions-or-divisions@ru-KZ'})
 SET t.display_name = 'Inter-ethnic tensions or divisions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KZ',
     t.term = 'Inter-ethnic tensions or divisions',
     t.type = 'topic',
@@ -4683,6 +5111,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-integrity-questions@ru-KZ'})
 SET t.display_name = 'Territorial integrity questions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-KZ',
     t.term = 'Territorial integrity questions',
     t.type = 'topic',
@@ -4710,6 +5140,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:kannada-language-disrespect@kn-IN'})
 SET t.display_name = 'Kannada language disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kn-IN',
     t.term = 'Kannada language disrespect',
     t.type = 'topic',
@@ -4729,6 +5161,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@kn-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kn-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -4748,6 +5182,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@kn-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kn-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -4775,6 +5211,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ceauescu-era-communist-dictatorship@ro-RO'})
 SET t.display_name = 'Ceaușescu era / communist dictatorship',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-RO',
     t.term = 'Ceaușescu era / communist dictatorship',
     t.type = 'topic',
@@ -4794,6 +5232,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:roma-stereotypes@ro-RO'})
 SET t.display_name = 'Roma stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-RO',
     t.term = 'Roma stereotypes',
     t.type = 'topic',
@@ -4813,6 +5253,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hungarian-romanian-tensions@ro-RO'})
 SET t.display_name = 'Hungarian-Romanian tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-RO',
     t.term = 'Hungarian-Romanian tensions',
     t.type = 'topic',
@@ -4840,6 +5282,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:beefmeat-content@gu-IN'})
 SET t.display_name = 'Beef/meat content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gu-IN',
     t.term = 'Beef/meat content',
     t.type = 'topic',
@@ -4859,6 +5303,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:alcohol-promotion@gu-IN'})
 SET t.display_name = 'Alcohol promotion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gu-IN',
     t.term = 'Alcohol promotion',
     t.type = 'topic',
@@ -4878,6 +5324,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@gu-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gu-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -4905,6 +5353,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:guerra-civil-1975-2002@pt-AO'})
 SET t.display_name = 'Guerra Civil (1975-2002)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-AO',
     t.term = 'Guerra Civil (1975-2002)',
     t.type = 'topic',
@@ -4924,6 +5374,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:unita-vs-mpla-historico@pt-AO'})
 SET t.display_name = 'UNITA vs MPLA historico',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-AO',
     t.term = 'UNITA vs MPLA historico',
     t.type = 'topic',
@@ -4943,6 +5395,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:jonas-savimbi@pt-AO'})
 SET t.display_name = 'Jonas Savimbi',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-AO',
     t.term = 'Jonas Savimbi',
     t.type = 'topic',
@@ -4970,6 +5424,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:witchcraft-ufiti@ny-MW'})
 SET t.display_name = 'Witchcraft (ufiti)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ny-MW',
     t.term = 'Witchcraft (ufiti)',
     t.type = 'topic',
@@ -4989,6 +5445,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:sexual-content@ny-MW'})
 SET t.display_name = 'Sexual content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ny-MW',
     t.term = 'Sexual content',
     t.type = 'topic',
@@ -5008,6 +5466,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-elders@ny-MW'})
 SET t.display_name = 'Disrespecting elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ny-MW',
     t.term = 'Disrespecting elders',
     t.type = 'topic',
@@ -5035,6 +5495,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-religious-sentiments@or-IN'})
 SET t.display_name = 'Disrespecting religious sentiments',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'or-IN',
     t.term = 'Disrespecting religious sentiments',
     t.type = 'topic',
@@ -5054,6 +5516,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insults-to-jagannath-temple@or-IN'})
 SET t.display_name = 'Insults to Jagannath temple',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'or-IN',
     t.term = 'Insults to Jagannath temple',
     t.type = 'topic',
@@ -5081,6 +5545,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:taiwan@zh-CN'})
 SET t.display_name = 'Taiwan',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-CN',
     t.term = 'Taiwan',
     t.type = 'topic',
@@ -5100,6 +5566,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:tibet@zh-CN'})
 SET t.display_name = 'Tibet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-CN',
     t.term = 'Tibet',
     t.type = 'topic',
@@ -5119,6 +5587,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:xinjiang@zh-CN'})
 SET t.display_name = 'Xinjiang',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-CN',
     t.term = 'Xinjiang',
     t.type = 'topic',
@@ -5138,6 +5608,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:tiananmen-square-1989@zh-CN'})
 SET t.display_name = 'Tiananmen Square (1989)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-CN',
     t.term = 'Tiananmen Square (1989)',
     t.type = 'topic',
@@ -5157,6 +5629,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism@zh-CN'})
 SET t.display_name = 'Political criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-CN',
     t.term = 'Political criticism',
     t.type = 'topic',
@@ -5184,6 +5658,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:current-political-situation@sn-ZW'})
 SET t.display_name = 'Current political situation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sn-ZW',
     t.term = 'Current political situation',
     t.type = 'topic',
@@ -5203,6 +5679,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:economic-crisis-references@sn-ZW'})
 SET t.display_name = 'Economic crisis references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sn-ZW',
     t.term = 'Economic crisis references',
     t.type = 'topic',
@@ -5222,6 +5700,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:land-reform-farm-seizures@sn-ZW'})
 SET t.display_name = 'Land reform / farm seizures',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sn-ZW',
     t.term = 'Land reform / farm seizures',
     t.type = 'topic',
@@ -5249,6 +5729,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-JO'})
 SET t.display_name = 'Criticism of the monarchy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-JO',
     t.term = 'Criticism of the monarchy',
     t.type = 'topic',
@@ -5268,6 +5750,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-JO'})
 SET t.display_name = 'Insulting Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-JO',
     t.term = 'Insulting Islam',
     t.type = 'topic',
@@ -5287,6 +5771,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict-taking-israeli-side@ar-JO'})
 SET t.display_name = 'Israeli-Palestinian conflict (taking Israeli side)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-JO',
     t.term = 'Israeli-Palestinian conflict (taking Israeli side)',
     t.type = 'topic',
@@ -5314,6 +5800,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-KW'})
 SET t.display_name = 'Insulting Islam or Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-KW',
     t.term = 'Insulting Islam or Prophet',
     t.type = 'topic',
@@ -5333,6 +5821,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-emir-or-ruling-family@ar-KW'})
 SET t.display_name = 'Criticism of Emir or ruling family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-KW',
     t.term = 'Criticism of Emir or ruling family',
     t.type = 'topic',
@@ -5352,6 +5842,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism@ar-KW'})
 SET t.display_name = 'Political criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-KW',
     t.term = 'Political criticism',
     t.type = 'topic',
@@ -5379,6 +5871,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-mistreatmentappropriation@en-AU'})
 SET t.display_name = 'Indigenous mistreatment/appropriation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AU',
     t.term = 'Indigenous mistreatment/appropriation',
     t.type = 'topic',
@@ -5398,6 +5892,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:racism-and-discrimination@en-AU'})
 SET t.display_name = 'Racism and discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AU',
     t.term = 'Racism and discrimination',
     t.type = 'topic',
@@ -5417,6 +5913,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:stolen-generations-indigenous-treatment@en-AU'})
 SET t.display_name = 'Stolen Generations / Indigenous treatment',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AU',
     t.term = 'Stolen Generations / Indigenous treatment',
     t.type = 'topic',
@@ -5444,6 +5942,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:personal-incomewealth@fr-FR'})
 SET t.display_name = 'Personal income/wealth',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-FR',
     t.term = 'Personal income/wealth',
     t.type = 'topic',
@@ -5463,6 +5963,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-affiliation@fr-FR'})
 SET t.display_name = 'Religious affiliation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-FR',
     t.term = 'Religious affiliation',
     t.type = 'topic',
@@ -5482,6 +5984,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-extremism@fr-FR'})
 SET t.display_name = 'Political extremism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-FR',
     t.term = 'Political extremism',
     t.type = 'topic',
@@ -5509,6 +6013,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:irrespect-envers-les-autorites-religieuses@fr-SN'})
 SET t.display_name = 'Irrespect envers les autorites religieuses',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-SN',
     t.term = 'Irrespect envers les autorites religieuses',
     t.type = 'topic',
@@ -5528,6 +6034,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-SN'})
 SET t.display_name = 'Insultes aux parents ou ancetres',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-SN',
     t.term = 'Insultes aux parents ou ancetres',
     t.type = 'topic',
@@ -5547,6 +6055,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:irrespect-envers-l@fr-SN'})
 SET t.display_name = 'Irrespect envers l\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-SN',
     t.term = 'Irrespect envers l\\',
     t.type = 'topic',
@@ -5574,6 +6084,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespect-to-sikh-faithgurus@pa-IN'})
 SET t.display_name = 'Disrespect to Sikh faith/Gurus',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-IN',
     t.term = 'Disrespect to Sikh faith/Gurus',
     t.type = 'topic',
@@ -5593,6 +6105,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1984-references@pa-IN'})
 SET t.display_name = '1984 references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-IN',
     t.term = '1984 references',
     t.type = 'topic',
@@ -5612,6 +6126,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-system-mentions@pa-IN'})
 SET t.display_name = 'Caste system mentions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-IN',
     t.term = 'Caste system mentions',
     t.type = 'topic',
@@ -5639,6 +6155,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:communist-era-nostalgia@cs-CZ'})
 SET t.display_name = 'Communist era nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'cs-CZ',
     t.term = 'Communist era nostalgia',
     t.type = 'topic',
@@ -5658,6 +6176,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:nazi-occupation@cs-CZ'})
 SET t.display_name = 'Nazi occupation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'cs-CZ',
     t.term = 'Nazi occupation',
     t.type = 'topic',
@@ -5685,6 +6205,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:pinochet-dictatorship-1973-1990@es-CL'})
 SET t.display_name = 'Pinochet dictatorship (1973-1990)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CL',
     t.term = 'Pinochet dictatorship (1973-1990)',
     t.type = 'topic',
@@ -5704,6 +6226,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:allende-government-and-1973-coup@es-CL'})
 SET t.display_name = 'Allende government and 1973 coup',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CL',
     t.term = 'Allende government and 1973 coup',
     t.type = 'topic',
@@ -5723,6 +6247,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2019-estallido-social@es-CL'})
 SET t.display_name = '2019 Estallido Social',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CL',
     t.term = '2019 Estallido Social',
     t.type = 'topic',
@@ -5750,6 +6276,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:colonialism-indonesia@nl-NL'})
 SET t.display_name = 'Colonialism (Indonesia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-NL',
     t.term = 'Colonialism (Indonesia',
     t.type = 'topic',
@@ -5769,6 +6297,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:suriname@nl-NL'})
 SET t.display_name = 'Suriname',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-NL',
     t.term = 'Suriname',
     t.type = 'topic',
@@ -5788,6 +6318,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:slavery@nl-NL'})
 SET t.display_name = 'slavery)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-NL',
     t.term = 'slavery)',
     t.type = 'topic',
@@ -5807,6 +6339,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:zwarte-piet-controversy@nl-NL'})
 SET t.display_name = 'Zwarte Piet controversy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-NL',
     t.term = 'Zwarte Piet controversy',
     t.type = 'topic',
@@ -5826,6 +6360,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:immigration-politics@nl-NL'})
 SET t.display_name = 'Immigration politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'nl-NL',
     t.term = 'Immigration politics',
     t.type = 'topic',
@@ -5853,6 +6389,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:gang-violence-maras@es-HN'})
 SET t.display_name = 'Gang violence (maras)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-HN',
     t.term = 'Gang violence (maras)',
     t.type = 'topic',
@@ -5872,6 +6410,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-corruption@es-HN'})
 SET t.display_name = 'Political corruption',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-HN',
     t.term = 'Political corruption',
     t.type = 'topic',
@@ -5899,6 +6439,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ottoman-empire-period@bg-BG'})
 SET t.display_name = 'Ottoman Empire period',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bg-BG',
     t.term = 'Ottoman Empire period',
     t.type = 'topic',
@@ -5918,6 +6460,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:communist-era-nostalgiacriticism@bg-BG'})
 SET t.display_name = 'Communist era nostalgia/criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bg-BG',
     t.term = 'Communist era nostalgia/criticism',
     t.type = 'topic',
@@ -5945,6 +6489,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:blasphemy-against-islam@sd-PK'})
 SET t.display_name = 'Blasphemy against Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sd-PK',
     t.term = 'Blasphemy against Islam',
     t.type = 'topic',
@@ -5964,6 +6510,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:sectarian-divisions@sd-PK'})
 SET t.display_name = 'Sectarian divisions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sd-PK',
     t.term = 'Sectarian divisions',
     t.type = 'topic',
@@ -5983,6 +6531,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ahmadiyya-references@sd-PK'})
 SET t.display_name = 'Ahmadiyya references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sd-PK',
     t.term = 'Ahmadiyya references',
     t.type = 'topic',
@@ -6010,6 +6560,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-GH'})
 SET t.display_name = 'Ethnic stereotyping',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-GH',
     t.term = 'Ethnic stereotyping',
     t.type = 'topic',
@@ -6029,6 +6581,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:chieftaincy-disputes@en-GH'})
 SET t.display_name = 'Chieftaincy disputes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-GH',
     t.term = 'Chieftaincy disputes',
     t.type = 'topic',
@@ -6048,6 +6602,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:witchcraft-allegations@en-GH'})
 SET t.display_name = 'Witchcraft allegations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-GH',
     t.term = 'Witchcraft allegations',
     t.type = 'topic',
@@ -6075,6 +6631,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@en-PH'})
 SET t.display_name = 'Disrespecting religious symbols or beliefs',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PH',
     t.term = 'Disrespecting religious symbols or beliefs',
     t.type = 'topic',
@@ -6094,6 +6652,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:causing-public-embarrassment-hiya@en-PH'})
 SET t.display_name = 'Causing public embarrassment (hiya)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PH',
     t.term = 'Causing public embarrassment (hiya)',
     t.type = 'topic',
@@ -6113,6 +6673,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@en-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PH',
     t.term = 'Mocking or disrespecting elders',
     t.type = 'topic',
@@ -6140,6 +6702,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:yugoslav-period-nostalgia-or-criticism@sl-SI'})
 SET t.display_name = 'Yugoslav period nostalgia or criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sl-SI',
     t.term = 'Yugoslav period nostalgia or criticism',
     t.type = 'topic',
@@ -6159,6 +6723,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-comparisons-with-neighbors@sl-SI'})
 SET t.display_name = 'Ethnic comparisons with neighbors',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sl-SI',
     t.term = 'Ethnic comparisons with neighbors',
     t.type = 'topic',
@@ -6186,6 +6752,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:hong-kong-china-political-relations@en-HK'})
 SET t.display_name = 'Hong Kong-China political relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-HK',
     t.term = 'Hong Kong-China political relations',
     t.type = 'topic',
@@ -6205,6 +6773,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2019-2020-protests@en-HK'})
 SET t.display_name = '2019-2020 protests',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-HK',
     t.term = '2019-2020 protests',
     t.type = 'topic',
@@ -6224,6 +6794,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:taiwan-independence@en-HK'})
 SET t.display_name = 'Taiwan independence',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-HK',
     t.term = 'Taiwan independence',
     t.type = 'topic',
@@ -6251,6 +6823,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-divisions-or-favouritism@en-MU'})
 SET t.display_name = 'Ethnic divisions or favouritism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-MU',
     t.term = 'Ethnic divisions or favouritism',
     t.type = 'topic',
@@ -6270,6 +6844,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:communalism@en-MU'})
 SET t.display_name = 'Communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-MU',
     t.term = 'Communalism',
     t.type = 'topic',
@@ -6297,6 +6873,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@et-EE'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'et-EE',
     t.term = 'Soviet nostalgia or symbolism',
     t.type = 'topic',
@@ -6316,6 +6894,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-to-russia-positively@et-EE'})
 SET t.display_name = 'Comparing to Russia positively',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'et-EE',
     t.term = 'Comparing to Russia positively',
     t.type = 'topic',
@@ -6335,6 +6915,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:soviet-occupation-1940-1991@et-EE'})
 SET t.display_name = 'Soviet Occupation (1940-1991)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'et-EE',
     t.term = 'Soviet Occupation (1940-1991)',
     t.type = 'topic',
@@ -6362,6 +6944,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:civil-war-1979-1992@es-SV'})
 SET t.display_name = 'Civil War (1979-1992)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-SV',
     t.term = 'Civil War (1979-1992)',
     t.type = 'topic',
@@ -6381,6 +6965,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:el-mozote-massacre@es-SV'})
 SET t.display_name = 'El Mozote massacre',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-SV',
     t.term = 'El Mozote massacre',
     t.type = 'topic',
@@ -6400,6 +6986,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:gang-violence-maras@es-SV'})
 SET t.display_name = 'Gang violence (maras)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-SV',
     t.term = 'Gang violence (maras)',
     t.type = 'topic',
@@ -6427,6 +7015,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:immigration-status-assumptions@pt-CH'})
 SET t.display_name = 'Immigration status assumptions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-CH',
     t.term = 'Immigration status assumptions',
     t.type = 'topic',
@@ -6446,6 +7036,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-portuguese-to-spanish@pt-CH'})
 SET t.display_name = 'Comparing Portuguese to Spanish',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-CH',
     t.term = 'Comparing Portuguese to Spanish',
     t.type = 'topic',
@@ -6465,6 +7057,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@pt-CH'})
 SET t.display_name = 'Discussing personal finances or income',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-CH',
     t.term = 'Discussing personal finances or income',
     t.type = 'topic',
@@ -6492,6 +7086,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-status-debate@es-PR'})
 SET t.display_name = 'Political status debate',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PR',
     t.term = 'Political status debate',
     t.type = 'topic',
@@ -6511,6 +7107,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hurricane-maria-mismanagement@es-PR'})
 SET t.display_name = 'Hurricane Maria mismanagement',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PR',
     t.term = 'Hurricane Maria mismanagement',
     t.type = 'topic',
@@ -6530,6 +7128,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hurricane-maria-2017@es-PR'})
 SET t.display_name = 'Hurricane Maria (2017)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PR',
     t.term = 'Hurricane Maria (2017)',
     t.type = 'topic',
@@ -6557,6 +7157,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:blasphemy@ur-PK'})
 SET t.display_name = 'توہین مذہب (Blasphemy)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ur-PK',
     t.term = 'توہین مذہب (Blasphemy)',
     t.type = 'topic',
@@ -6576,6 +7178,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-armed-forces@ur-PK'})
 SET t.display_name = 'Criticism of Armed Forces',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ur-PK',
     t.term = 'Criticism of Armed Forces',
     t.type = 'topic',
@@ -6595,6 +7199,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ahmadiyya-references@ur-PK'})
 SET t.display_name = 'Ahmadiyya references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ur-PK',
     t.term = 'Ahmadiyya references',
     t.type = 'topic',
@@ -6622,6 +7228,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:tribal-divisionspreferences@en-ZM'})
 SET t.display_name = 'Tribal divisions/preferences',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZM',
     t.term = 'Tribal divisions/preferences',
     t.type = 'topic',
@@ -6641,6 +7249,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-elders@en-ZM'})
 SET t.display_name = 'Disrespecting elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZM',
     t.term = 'Disrespecting elders',
     t.type = 'topic',
@@ -6660,6 +7270,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticizing-christianity@en-ZM'})
 SET t.display_name = 'Criticizing Christianity',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-ZM',
     t.term = 'Criticizing Christianity',
     t.type = 'topic',
@@ -6687,6 +7299,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ar-OM'})
 SET t.display_name = 'Criticism of Sultan or Royal Family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-OM',
     t.term = 'Criticism of Sultan or Royal Family',
     t.type = 'topic',
@@ -6706,6 +7320,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-ibadi-practices@ar-OM'})
 SET t.display_name = 'Insulting Islam or Ibadi practices',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-OM',
     t.term = 'Insulting Islam or Ibadi practices',
     t.type = 'topic',
@@ -6725,6 +7341,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-government-policies@ar-OM'})
 SET t.display_name = 'Criticism of government policies',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-OM',
     t.term = 'Criticism of government policies',
     t.type = 'topic',
@@ -6752,6 +7370,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:transnistria-conflict@ru-MD'})
 SET t.display_name = 'Transnistria conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-MD',
     t.term = 'Transnistria conflict',
     t.type = 'topic',
@@ -6771,6 +7391,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:moldova-romania-relations@ru-MD'})
 SET t.display_name = 'Moldova-Romania relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-MD',
     t.term = 'Moldova-Romania relations',
     t.type = 'topic',
@@ -6790,6 +7412,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:russian-vs-romanian-language-debates@ru-MD'})
 SET t.display_name = 'Russian vs Romanian language debates',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-MD',
     t.term = 'Russian vs Romanian language debates',
     t.type = 'topic',
@@ -6817,6 +7441,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-party-affiliation@mt-MT'})
 SET t.display_name = 'Political party affiliation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mt-MT',
     t.term = 'Political party affiliation',
     t.type = 'topic',
@@ -6836,6 +7462,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:abortion@mt-MT'})
 SET t.display_name = 'Abortion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mt-MT',
     t.term = 'Abortion',
     t.type = 'topic',
@@ -6855,6 +7483,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pn-vs-pl-politics@mt-MT'})
 SET t.display_name = 'PN vs PL politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mt-MT',
     t.term = 'PN vs PL politics',
     t.type = 'topic',
@@ -6882,6 +7512,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-violence-eta-references@eu-ES'})
 SET t.display_name = 'Political violence / ETA references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'eu-ES',
     t.term = 'Political violence / ETA references',
     t.type = 'topic',
@@ -6901,6 +7533,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:independence-politics@eu-ES'})
 SET t.display_name = 'Independence politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'eu-ES',
     t.term = 'Independence politics',
     t.type = 'topic',
@@ -6920,6 +7554,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:spanish-nationalism@eu-ES'})
 SET t.display_name = 'Spanish nationalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'eu-ES',
     t.term = 'Spanish nationalism',
     t.type = 'topic',
@@ -6947,6 +7583,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:world-war-ii-and-imperial-history@ja-JP'})
 SET t.display_name = 'World War II and imperial history',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ja-JP',
     t.term = 'World War II and imperial history',
     t.type = 'topic',
@@ -6966,6 +7604,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:atomic-bombings-hiroshima@ja-JP'})
 SET t.display_name = 'Atomic bombings (Hiroshima',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ja-JP',
     t.term = 'Atomic bombings (Hiroshima',
     t.type = 'topic',
@@ -6985,6 +7625,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:nagasaki@ja-JP'})
 SET t.display_name = 'Nagasaki)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ja-JP',
     t.term = 'Nagasaki)',
     t.type = 'topic',
@@ -7004,6 +7646,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-disputes@ja-JP'})
 SET t.display_name = 'Territorial disputes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ja-JP',
     t.term = 'Territorial disputes',
     t.type = 'topic',
@@ -7031,6 +7675,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:hindu-muslim-communalism@bn-IN'})
 SET t.display_name = 'Hindu-Muslim communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-IN',
     t.term = 'Hindu-Muslim communalism',
     t.type = 'topic',
@@ -7050,6 +7696,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:partition-of-bengal@bn-IN'})
 SET t.display_name = 'Partition of Bengal',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-IN',
     t.term = 'Partition of Bengal',
     t.type = 'topic',
@@ -7069,6 +7717,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@bn-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'bn-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -7096,6 +7746,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 SET t.display_name = 'Holocaust/Shoah',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'he-IL',
     t.term = 'Holocaust/Shoah',
     t.type = 'topic',
@@ -7115,6 +7767,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict@he-IL'})
 SET t.display_name = 'Israeli-Palestinian Conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'he-IL',
     t.term = 'Israeli-Palestinian Conflict',
     t.type = 'topic',
@@ -7134,6 +7788,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 SET t.display_name = 'Holocaust/Shoah',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'he-IL',
     t.term = 'Holocaust/Shoah',
     t.type = 'topic',
@@ -7161,6 +7817,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-status-and-governance@zh-HK'})
 SET t.display_name = 'Political status and governance',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-HK',
     t.term = 'Political status and governance',
     t.type = 'topic',
@@ -7180,6 +7838,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mainland-china-comparisons@zh-HK'})
 SET t.display_name = 'Mainland China comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-HK',
     t.term = 'Mainland China comparisons',
     t.type = 'topic',
@@ -7199,6 +7859,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:taiwan-and-sovereignty-issues@zh-HK'})
 SET t.display_name = 'Taiwan and sovereignty issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-HK',
     t.term = 'Taiwan and sovereignty issues',
     t.type = 'topic',
@@ -7226,6 +7888,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:drug-traffickingnarcos-stereotypes@es-CO'})
 SET t.display_name = 'Drug trafficking/narcos stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CO',
     t.term = 'Drug trafficking/narcos stereotypes',
     t.type = 'topic',
@@ -7245,6 +7909,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-details@es-CO'})
 SET t.display_name = 'Internal armed conflict details',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CO',
     t.term = 'Internal armed conflict details',
     t.type = 'topic',
@@ -7264,6 +7930,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:false-positives-scandal-falsos-positivos@es-CO'})
 SET t.display_name = 'False positives scandal (falsos positivos)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CO',
     t.term = 'False positives scandal (falsos positivos)',
     t.type = 'topic',
@@ -7291,6 +7959,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:tax-haven-framing@de-LU'})
 SET t.display_name = '"Tax haven" framing',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-LU',
     t.term = '"Tax haven" framing',
     t.type = 'topic',
@@ -7310,6 +7980,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:conflating-luxembourg-with-belgium-or-germany@de-LU'})
 SET t.display_name = 'Conflating Luxembourg with Belgium or Germany',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-LU',
     t.term = 'Conflating Luxembourg with Belgium or Germany',
     t.type = 'topic',
@@ -7329,6 +8001,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:discussing-personal-wealth-or-income@de-LU'})
 SET t.display_name = 'Discussing personal wealth or income',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-LU',
     t.term = 'Discussing personal wealth or income',
     t.type = 'topic',
@@ -7356,6 +8030,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:sea-access-to-chile@es-BO'})
 SET t.display_name = 'Sea access to Chile',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-BO',
     t.term = 'Sea access to Chile',
     t.type = 'topic',
@@ -7375,6 +8051,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-discrimination@es-BO'})
 SET t.display_name = 'Indigenous discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-BO',
     t.term = 'Indigenous discrimination',
     t.type = 'topic',
@@ -7394,6 +8072,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-instability-jokes@es-BO'})
 SET t.display_name = 'Political instability jokes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-BO',
     t.term = 'Political instability jokes',
     t.type = 'topic',
@@ -7421,6 +8101,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-monarchy@th-TH'})
 SET t.display_name = 'Criticism of monarchy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'th-TH',
     t.term = 'Criticism of monarchy',
     t.type = 'topic',
@@ -7440,6 +8122,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-buddha-images@th-TH'})
 SET t.display_name = 'Disrespecting Buddha images',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'th-TH',
     t.term = 'Disrespecting Buddha images',
     t.type = 'topic',
@@ -7459,6 +8143,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-buddhism-or-monks@th-TH'})
 SET t.display_name = 'Insulting Buddhism or monks',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'th-TH',
     t.term = 'Insulting Buddhism or monks',
     t.type = 'topic',
@@ -7486,6 +8172,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@kk-KZ'})
 SET t.display_name = 'Criticism of government or leadership',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kk-KZ',
     t.term = 'Criticism of government or leadership',
     t.type = 'topic',
@@ -7505,6 +8193,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:inter-ethnic-tensions-historical-or-current@kk-KZ'})
 SET t.display_name = 'Inter-ethnic tensions (historical or current)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kk-KZ',
     t.term = 'Inter-ethnic tensions (historical or current)',
     t.type = 'topic',
@@ -7524,6 +8214,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-disputes-or-border-issues@kk-KZ'})
 SET t.display_name = 'Territorial disputes or border issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'kk-KZ',
     t.term = 'Territorial disputes or border issues',
     t.type = 'topic',
@@ -7551,6 +8243,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@fi-FI'})
 SET t.display_name = 'Bragging or self-promotion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fi-FI',
     t.term = 'Bragging or self-promotion',
     t.type = 'topic',
@@ -7570,6 +8264,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-finland-to-russia@fi-FI'})
 SET t.display_name = 'Comparing Finland to Russia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fi-FI',
     t.term = 'Comparing Finland to Russia',
     t.type = 'topic',
@@ -7589,6 +8285,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:promising-more-than-you-deliver@fi-FI'})
 SET t.display_name = 'Promising more than you deliver',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fi-FI',
     t.term = 'Promising more than you deliver',
     t.type = 'topic',
@@ -7616,6 +8314,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-TN'})
 SET t.display_name = 'Insulting Islam or Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-TN',
     t.term = 'Insulting Islam or Prophet',
     t.type = 'topic',
@@ -7635,6 +8335,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticizing-the-military@ar-TN'})
 SET t.display_name = 'Criticizing the military',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-TN',
     t.term = 'Criticizing the military',
     t.type = 'topic',
@@ -7654,6 +8356,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:taking-sides-on-2011-revolution-politics@ar-TN'})
 SET t.display_name = 'Taking sides on 2011 Revolution politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-TN',
     t.term = 'Taking sides on 2011 Revolution politics',
     t.type = 'topic',
@@ -7681,6 +8385,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-communist-party-or-government@en-VN'})
 SET t.display_name = 'Criticism of Communist Party or government',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-VN',
     t.term = 'Criticism of Communist Party or government',
     t.type = 'topic',
@@ -7700,6 +8406,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-disputes-south-china-sea@en-VN'})
 SET t.display_name = 'Territorial disputes (South China Sea)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-VN',
     t.term = 'Territorial disputes (South China Sea)',
     t.type = 'topic',
@@ -7719,6 +8427,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:historical-war-commentary@en-VN'})
 SET t.display_name = 'Historical war commentary',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-VN',
     t.term = 'Historical war commentary',
     t.type = 'topic',
@@ -7746,6 +8456,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@tl-PH'})
 SET t.display_name = 'Disrespecting religious symbols or beliefs',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tl-PH',
     t.term = 'Disrespecting religious symbols or beliefs',
     t.type = 'topic',
@@ -7765,6 +8477,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@tl-PH'})
 SET t.display_name = 'Causing public hiya (shame/embarrassment)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tl-PH',
     t.term = 'Causing public hiya (shame/embarrassment)',
     t.type = 'topic',
@@ -7784,6 +8498,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@tl-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tl-PH',
     t.term = 'Mocking or disrespecting elders',
     t.type = 'topic',
@@ -7811,6 +8527,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:blasphemy-and-disrespect-to-islam@en-PK'})
 SET t.display_name = 'Blasphemy and disrespect to Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PK',
     t.term = 'Blasphemy and disrespect to Islam',
     t.type = 'topic',
@@ -7830,6 +8548,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:anti-pakistan-sentiment@en-PK'})
 SET t.display_name = 'Anti-Pakistan sentiment',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PK',
     t.term = 'Anti-Pakistan sentiment',
     t.type = 'topic',
@@ -7849,6 +8569,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:kashmir-dispute-taking-india@en-PK'})
 SET t.display_name = 'Kashmir dispute (taking India\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-PK',
     t.term = 'Kashmir dispute (taking India\\',
     t.type = 'topic',
@@ -7876,6 +8598,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:comparer-les-suisses-aux-francais-de-maniere-defav@fr-CH'})
 SET t.display_name = 'Comparer les Suisses aux Francais de maniere defavorable',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CH',
     t.term = 'Comparer les Suisses aux Francais de maniere defavorable',
     t.type = 'topic',
@@ -7895,6 +8619,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:confondre-suisse-romande-et-france@fr-CH'})
 SET t.display_name = 'Confondre Suisse romande et France',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CH',
     t.term = 'Confondre Suisse romande et France',
     t.type = 'topic',
@@ -7914,6 +8640,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:favoritisme-entre-regions-linguistiques@fr-CH'})
 SET t.display_name = 'Favoritisme entre regions linguistiques',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CH',
     t.term = 'Favoritisme entre regions linguistiques',
     t.type = 'topic',
@@ -7941,6 +8669,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:welsh-language-politics@cy-GB'})
 SET t.display_name = 'Welsh language politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'cy-GB',
     t.term = 'Welsh language politics',
     t.type = 'topic',
@@ -7960,6 +8690,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:linguistic-imperialism@cy-GB'})
 SET t.display_name = 'Linguistic imperialism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'cy-GB',
     t.term = 'Linguistic imperialism',
     t.type = 'topic',
@@ -7987,6 +8719,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:touching-someone@en-FJ'})
 SET t.display_name = 'Touching someone\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-FJ',
     t.term = 'Touching someone\\',
     t.type = 'topic',
@@ -8014,6 +8748,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racial-stereotypes@af-ZA'})
 SET t.display_name = 'Racial stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'af-ZA',
     t.term = 'Racial stereotypes',
     t.type = 'topic',
@@ -8033,6 +8769,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@af-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'af-ZA',
     t.term = 'Apartheid nostalgia',
     t.type = 'topic',
@@ -8052,6 +8790,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:land-ownership-debates@af-ZA'})
 SET t.display_name = 'Land ownership debates',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'af-ZA',
     t.term = 'Land ownership debates',
     t.type = 'topic',
@@ -8079,6 +8819,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:mocking-patoisjamaican-english@en-JM'})
 SET t.display_name = 'Mocking Patois/Jamaican English',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-JM',
     t.term = 'Mocking Patois/Jamaican English',
     t.type = 'topic',
@@ -8098,6 +8840,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:slavery-glorification@en-JM'})
 SET t.display_name = 'Slavery glorification',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-JM',
     t.term = 'Slavery glorification',
     t.type = 'topic',
@@ -8117,6 +8861,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:violencecrime-stereotypes@en-JM'})
 SET t.display_name = 'Violence/crime stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-JM',
     t.term = 'Violence/crime stereotypes',
     t.type = 'topic',
@@ -8144,6 +8890,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:immigration-politics@da-DK'})
 SET t.display_name = 'Immigration politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'da-DK',
     t.term = 'Immigration politics',
     t.type = 'topic',
@@ -8163,6 +8911,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:immigrationintegration@da-DK'})
 SET t.display_name = 'Immigration/integration',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'da-DK',
     t.term = 'Immigration/integration',
     t.type = 'topic',
@@ -8190,6 +8940,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racism-and-discrimination@en-US'})
 SET t.display_name = 'Racism and discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-US',
     t.term = 'Racism and discrimination',
     t.type = 'topic',
@@ -8209,6 +8961,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:gun-violence@en-US'})
 SET t.display_name = 'Gun violence',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-US',
     t.term = 'Gun violence',
     t.type = 'topic',
@@ -8228,6 +8982,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:slavery-and-jim-crow@en-US'})
 SET t.display_name = 'Slavery and Jim Crow',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-US',
     t.term = 'Slavery and Jim Crow',
     t.type = 'topic',
@@ -8255,6 +9011,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:colonial-history-criticism@pt-PT'})
 SET t.display_name = 'Colonial history criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pt-PT',
     t.term = 'Colonial history criticism',
     t.type = 'topic',
@@ -8282,6 +9040,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:the-troubles-and-partition@ga-IE'})
 SET t.display_name = 'The Troubles and partition',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ga-IE',
     t.term = 'The Troubles and partition',
     t.type = 'topic',
@@ -8301,6 +9061,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:british-irish-relations@ga-IE'})
 SET t.display_name = 'British-Irish relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ga-IE',
     t.term = 'British-Irish relations',
     t.type = 'topic',
@@ -8320,6 +9082,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:the-great-famine-an-gorta-mor@ga-IE'})
 SET t.display_name = 'The Great Famine (An Gorta Mor)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ga-IE',
     t.term = 'The Great Famine (An Gorta Mor)',
     t.type = 'topic',
@@ -8347,6 +9111,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:military-dictatorship-1976-1983@es-AR'})
 SET t.display_name = 'Military dictatorship (1976-1983)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-AR',
     t.term = 'Military dictatorship (1976-1983)',
     t.type = 'topic',
@@ -8366,6 +9132,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:malvinasfalklands@es-AR'})
 SET t.display_name = 'Malvinas/Falklands',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-AR',
     t.term = 'Malvinas/Falklands',
     t.type = 'topic',
@@ -8385,6 +9153,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:defending-dictatorship-actions@es-AR'})
 SET t.display_name = 'Defending dictatorship actions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-AR',
     t.term = 'Defending dictatorship actions',
     t.type = 'topic',
@@ -8412,6 +9182,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:dismissing-galician-language@gl-ES'})
 SET t.display_name = 'Dismissing Galician language',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gl-ES',
     t.term = 'Dismissing Galician language',
     t.type = 'topic',
@@ -8431,6 +9203,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mocking-rural-galicia@gl-ES'})
 SET t.display_name = 'Mocking rural Galicia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gl-ES',
     t.term = 'Mocking rural Galicia',
     t.type = 'topic',
@@ -8450,6 +9224,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:franco-dictatorship-nostalgia@gl-ES'})
 SET t.display_name = 'Franco dictatorship nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gl-ES',
     t.term = 'Franco dictatorship nostalgia',
     t.type = 'topic',
@@ -8477,6 +9253,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:guerra-civil-espanola@es-ES'})
 SET t.display_name = 'Guerra Civil Espanola',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-ES',
     t.term = 'Guerra Civil Espanola',
     t.type = 'topic',
@@ -8496,6 +9274,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:terrorismo-eta@es-ES'})
 SET t.display_name = 'Terrorismo ETA',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-ES',
     t.term = 'Terrorismo ETA',
     t.type = 'topic',
@@ -8515,6 +9295,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:independentismo-catalanvasco@es-ES'})
 SET t.display_name = 'Independentismo catalan/vasco',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-ES',
     t.term = 'Independentismo catalan/vasco',
     t.type = 'topic',
@@ -8542,6 +9324,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:thai-monarchy-criticism@zh-TH'})
 SET t.display_name = 'Thai monarchy criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TH',
     t.term = 'Thai monarchy criticism',
     t.type = 'topic',
@@ -8561,6 +9345,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-divisions@zh-TH'})
 SET t.display_name = 'Political divisions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TH',
     t.term = 'Political divisions',
     t.type = 'topic',
@@ -8580,6 +9366,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@zh-TH'})
 SET t.display_name = 'Buddhist disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-TH',
     t.term = 'Buddhist disrespect',
     t.type = 'topic',
@@ -8607,6 +9395,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:current-political-situation@be-BY'})
 SET t.display_name = 'Current political situation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'be-BY',
     t.term = 'Current political situation',
     t.type = 'topic',
@@ -8626,6 +9416,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:government-criticism@be-BY'})
 SET t.display_name = 'Government criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'be-BY',
     t.term = 'Government criticism',
     t.type = 'topic',
@@ -8645,6 +9437,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2020-protests-and-aftermath@be-BY'})
 SET t.display_name = '2020 protests and aftermath',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'be-BY',
     t.term = '2020 protests and aftermath',
     t.type = 'topic',
@@ -8672,6 +9466,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@wo-SN'})
 SET t.display_name = 'Insulting Islam or the Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'wo-SN',
     t.term = 'Insulting Islam or the Prophet',
     t.type = 'topic',
@@ -8691,6 +9487,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-sufi-brotherhoods@wo-SN'})
 SET t.display_name = 'Disrespecting Sufi brotherhoods',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'wo-SN',
     t.term = 'Disrespecting Sufi brotherhoods',
     t.type = 'topic',
@@ -8710,6 +9508,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:lgbtq-references@wo-SN'})
 SET t.display_name = 'LGBTQ+ references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'wo-SN',
     t.term = 'LGBTQ+ references',
     t.type = 'topic',
@@ -8737,6 +9537,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary@es-NI'})
 SET t.display_name = 'Political commentary',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-NI',
     t.term = 'Political commentary',
     t.type = 'topic',
@@ -8756,6 +9558,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:sandinistacontra-history@es-NI'})
 SET t.display_name = 'Sandinista/Contra history',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-NI',
     t.term = 'Sandinista/Contra history',
     t.type = 'topic',
@@ -8775,6 +9579,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:2018-protests@es-NI'})
 SET t.display_name = '2018 protests',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-NI',
     t.term = '2018 protests',
     t.type = 'topic',
@@ -8802,6 +9608,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@sv-SE'})
 SET t.display_name = 'Bragging or self-promotion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sv-SE',
     t.term = 'Bragging or self-promotion',
     t.type = 'topic',
@@ -8821,6 +9629,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:immigration-politics@sv-SE'})
 SET t.display_name = 'Immigration politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sv-SE',
     t.term = 'Immigration politics',
     t.type = 'topic',
@@ -8840,6 +9650,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:overpromising@sv-SE'})
 SET t.display_name = 'Overpromising',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sv-SE',
     t.term = 'Overpromising',
     t.type = 'topic',
@@ -8867,6 +9679,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:yugoslav-period-nostalgia@hr-HR'})
 SET t.display_name = 'Yugoslav period nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hr-HR',
     t.term = 'Yugoslav period nostalgia',
     t.type = 'topic',
@@ -8886,6 +9700,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1991-1995-homeland-war-references@hr-HR'})
 SET t.display_name = '1991-1995 Homeland War references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hr-HR',
     t.term = '1991-1995 Homeland War references',
     t.type = 'topic',
@@ -8905,6 +9721,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@hr-HR'})
 SET t.display_name = 'Ethnic tensions or comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hr-HR',
     t.term = 'Ethnic tensions or comparisons',
     t.type = 'topic',
@@ -8932,6 +9750,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:crise-post-electorale-2010-2011@fr-CI'})
 SET t.display_name = 'Crise post-electorale 2010-2011',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CI',
     t.term = 'Crise post-electorale 2010-2011',
     t.type = 'topic',
@@ -8951,6 +9771,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnicisme-et-clivages-nord-sud@fr-CI'})
 SET t.display_name = 'Ethnicisme et clivages Nord-Sud',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CI',
     t.term = 'Ethnicisme et clivages Nord-Sud',
     t.type = 'topic',
@@ -8970,6 +9792,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-CI'})
 SET t.display_name = 'Insultes aux parents ou ancetres',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CI',
     t.term = 'Insultes aux parents ou ancetres',
     t.type = 'topic',
@@ -8997,6 +9821,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:pkk-and-armed-conflict@ku-TR'})
 SET t.display_name = 'PKK and armed conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ku-TR',
     t.term = 'PKK and armed conflict',
     t.type = 'topic',
@@ -9016,6 +9842,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:kurdish-political-parties-and-movements@ku-TR'})
 SET t.display_name = 'Kurdish political parties and movements',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ku-TR',
     t.term = 'Kurdish political parties and movements',
     t.type = 'topic',
@@ -9035,6 +9863,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:turkey-kurdistan-territorial-discussions@ku-TR'})
 SET t.display_name = 'Turkey-Kurdistan territorial discussions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ku-TR',
     t.term = 'Turkey-Kurdistan territorial discussions',
     t.type = 'topic',
@@ -9062,6 +9892,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-elderschiefs@en-BW'})
 SET t.display_name = 'Disrespecting elders/chiefs',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-BW',
     t.term = 'Disrespecting elders/chiefs',
     t.type = 'topic',
@@ -9081,6 +9913,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:witchcraft-accusations@en-BW'})
 SET t.display_name = 'Witchcraft accusations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-BW',
     t.term = 'Witchcraft accusations',
     t.type = 'topic',
@@ -9100,6 +9934,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hivaids-stigmatization@en-BW'})
 SET t.display_name = 'HIV/AIDS stigmatization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-BW',
     t.term = 'HIV/AIDS stigmatization',
     t.type = 'topic',
@@ -9127,6 +9963,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:sectarian-references-or-division-sunnishia@ar-IQ'})
 SET t.display_name = 'Sectarian references or division (Sunni/Shia)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-IQ',
     t.term = 'Sectarian references or division (Sunni/Shia)',
     t.type = 'topic',
@@ -9146,6 +9984,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-religious-figures@ar-IQ'})
 SET t.display_name = 'Criticism of Islam or religious figures',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-IQ',
     t.term = 'Criticism of Islam or religious figures',
     t.type = 'topic',
@@ -9165,6 +10005,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-marja-religious-authorities@ar-IQ'})
 SET t.display_name = 'Criticism of Marja (religious authorities)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-IQ',
     t.term = 'Criticism of Marja (religious authorities)',
     t.type = 'topic',
@@ -9192,6 +10034,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:blasphemy@pa-PK'})
 SET t.display_name = 'اسلام دی توہین (Blasphemy)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-PK',
     t.term = 'اسلام دی توہین (Blasphemy)',
     t.type = 'topic',
@@ -9211,6 +10055,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pro-india-sentiment@pa-PK'})
 SET t.display_name = 'بھارت نال ہمدردی (Pro-India sentiment)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-PK',
     t.term = 'بھارت نال ہمدردی (Pro-India sentiment)',
     t.type = 'topic',
@@ -9230,6 +10076,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:sectarian-content@pa-PK'})
 SET t.display_name = 'فرقہ واریت (Sectarian content)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pa-PK',
     t.term = 'فرقہ واریت (Sectarian content)',
     t.type = 'topic',
@@ -9257,6 +10105,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:trujillo-dictatorship-1930-1961@es-DO'})
 SET t.display_name = 'Trujillo dictatorship (1930-1961)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-DO',
     t.term = 'Trujillo dictatorship (1930-1961)',
     t.type = 'topic',
@@ -9276,6 +10126,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:haitihaitian-relations@es-DO'})
 SET t.display_name = 'Haiti/Haitian relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-DO',
     t.term = 'Haiti/Haitian relations',
     t.type = 'topic',
@@ -9295,6 +10147,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:colorismracial-hierarchy@es-DO'})
 SET t.display_name = 'Colorism/racial hierarchy',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-DO',
     t.term = 'Colorism/racial hierarchy',
     t.type = 'topic',
@@ -9322,6 +10176,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:nicaragua-tensions@es-CR'})
 SET t.display_name = 'Nicaragua tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CR',
     t.term = 'Nicaragua tensions',
     t.type = 'topic',
@@ -9341,6 +10197,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:calling-costa-ricans-nicaraguans-or-implying-centr@es-CR'})
 SET t.display_name = 'Calling Costa Ricans "Nicaraguans" or implying Central American sameness',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-CR',
     t.term = 'Calling Costa Ricans "Nicaraguans" or implying Central American sameness',
     t.type = 'topic',
@@ -9368,6 +10226,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-governance@ps-AF'})
 SET t.display_name = 'Criticism of Islam or Islamic governance',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ps-AF',
     t.term = 'Criticism of Islam or Islamic governance',
     t.type = 'topic',
@@ -9387,6 +10247,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:women@ps-AF'})
 SET t.display_name = 'Women\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ps-AF',
     t.term = 'Women\\',
     t.type = 'topic',
@@ -9414,6 +10276,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:anglophone-crisisseparatism@fr-CM'})
 SET t.display_name = 'Anglophone crisis/separatism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CM',
     t.term = 'Anglophone crisis/separatism',
     t.type = 'topic',
@@ -9433,6 +10297,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-favoritism-or-tribalism@fr-CM'})
 SET t.display_name = 'Ethnic favoritism or tribalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CM',
     t.term = 'Ethnic favoritism or tribalism',
     t.type = 'topic',
@@ -9452,6 +10318,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary-government@fr-CM'})
 SET t.display_name = 'Political commentary (government)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-CM',
     t.term = 'Political commentary (government)',
     t.type = 'topic',
@@ -9479,6 +10347,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:turkey-relations-and-cyprus-issue@el-GR'})
 SET t.display_name = 'Turkey relations and Cyprus issue',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-GR',
     t.term = 'Turkey relations and Cyprus issue',
     t.type = 'topic',
@@ -9498,6 +10368,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:macedonia-naming-dispute@el-GR'})
 SET t.display_name = 'Macedonia naming dispute',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-GR',
     t.term = 'Macedonia naming dispute',
     t.type = 'topic',
@@ -9517,6 +10389,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:cyprus-invasion-1974@el-GR'})
 SET t.display_name = 'Cyprus invasion (1974)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-GR',
     t.term = 'Cyprus invasion (1974)',
     t.type = 'topic',
@@ -9544,6 +10418,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:religious-communalism@hi-IN'})
 SET t.display_name = 'Religious communalism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hi-IN',
     t.term = 'Religious communalism',
     t.type = 'topic',
@@ -9563,6 +10439,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@hi-IN'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hi-IN',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -9582,6 +10460,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:kashmir-and-territorial-issues@hi-IN'})
 SET t.display_name = 'Kashmir and territorial issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'hi-IN',
     t.term = 'Kashmir and territorial issues',
     t.type = 'topic',
@@ -9609,6 +10489,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:spanish-conquest-and-colonization@qu-PE'})
 SET t.display_name = 'Spanish conquest and colonization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'qu-PE',
     t.term = 'Spanish conquest and colonization',
     t.type = 'topic',
@@ -9628,6 +10510,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-poverty-stereotypes@qu-PE'})
 SET t.display_name = 'Indigenous poverty stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'qu-PE',
     t.term = 'Indigenous poverty stereotypes',
     t.type = 'topic',
@@ -9647,6 +10531,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:linguistic-discrimination@qu-PE'})
 SET t.display_name = 'Linguistic discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'qu-PE',
     t.term = 'Linguistic discrimination',
     t.type = 'topic',
@@ -9674,6 +10560,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:kosovo-references@sr-RS'})
 SET t.display_name = 'Kosovo references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sr-RS',
     t.term = 'Kosovo references',
     t.type = 'topic',
@@ -9693,6 +10581,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:1990s-wars-and-nato-bombing@sr-RS'})
 SET t.display_name = '1990s wars and NATO bombing',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sr-RS',
     t.term = '1990s wars and NATO bombing',
     t.type = 'topic',
@@ -9712,6 +10602,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@sr-RS'})
 SET t.display_name = 'Ethnic tensions or comparisons',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sr-RS',
     t.term = 'Ethnic tensions or comparisons',
     t.type = 'topic',
@@ -9739,6 +10631,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ms-BN'})
 SET t.display_name = 'Criticism of Sultan or Royal Family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-BN',
     t.term = 'Criticism of Sultan or Royal Family',
     t.type = 'topic',
@@ -9758,6 +10652,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-law-sharia@ms-BN'})
 SET t.display_name = 'Criticism of Islam or Islamic law (Sharia)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-BN',
     t.term = 'Criticism of Islam or Islamic law (Sharia)',
     t.type = 'topic',
@@ -9777,6 +10673,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:alcohol-references@ms-BN'})
 SET t.display_name = 'Alcohol references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ms-BN',
     t.term = 'Alcohol references',
     t.type = 'topic',
@@ -9804,6 +10702,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:military-dictatorship-1973-1985@es-UY'})
 SET t.display_name = 'Military dictatorship (1973-1985)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-UY',
     t.term = 'Military dictatorship (1973-1985)',
     t.type = 'topic',
@@ -9823,6 +10723,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disappearances-and-human-rights-violations@es-UY'})
 SET t.display_name = 'Disappearances and human rights violations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-UY',
     t.term = 'Disappearances and human rights violations',
     t.type = 'topic',
@@ -9842,6 +10744,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:assuming-uruguay-is-part-of-argentina@es-UY'})
 SET t.display_name = 'Assuming Uruguay is part of Argentina',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-UY',
     t.term = 'Assuming Uruguay is part of Argentina',
     t.type = 'topic',
@@ -9869,6 +10773,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:apartheid-dismissal-or-minimization@zu-ZA'})
 SET t.display_name = 'Apartheid dismissal or minimization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zu-ZA',
     t.term = 'Apartheid dismissal or minimization',
     t.type = 'topic',
@@ -9888,6 +10794,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@zu-ZA'})
 SET t.display_name = 'Ethnic stereotyping',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zu-ZA',
     t.term = 'Ethnic stereotyping',
     t.type = 'topic',
@@ -9907,6 +10815,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:witchcrafttraditional-medicine-mockery@zu-ZA'})
 SET t.display_name = 'Witchcraft/traditional medicine mockery',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zu-ZA',
     t.term = 'Witchcraft/traditional medicine mockery',
     t.type = 'topic',
@@ -9934,6 +10844,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnicisme-et-tribalisme@fr-BF'})
 SET t.display_name = 'Ethnicisme et tribalisme',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BF',
     t.term = 'Ethnicisme et tribalisme',
     t.type = 'topic',
@@ -9953,6 +10865,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:critique-de-thomas-sankara@fr-BF'})
 SET t.display_name = 'Critique de Thomas Sankara',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BF',
     t.term = 'Critique de Thomas Sankara',
     t.type = 'topic',
@@ -9972,6 +10886,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:situation-securitaire-actuelle@fr-BF'})
 SET t.display_name = 'Situation securitaire actuelle',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-BF',
     t.term = 'Situation securitaire actuelle',
     t.type = 'topic',
@@ -9999,6 +10915,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam@en-SA'})
 SET t.display_name = 'Criticism of Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-SA',
     t.term = 'Criticism of Islam',
     t.type = 'topic',
@@ -10018,6 +10936,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family-or-leadership@en-SA'})
 SET t.display_name = 'Criticism of Royal Family or Leadership',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-SA',
     t.term = 'Criticism of Royal Family or Leadership',
     t.type = 'topic',
@@ -10037,6 +10957,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:atheism-or-anti-religious-content@en-SA'})
 SET t.display_name = 'Atheism or anti-religious content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-SA',
     t.term = 'Atheism or anti-religious content',
     t.type = 'topic',
@@ -10064,6 +10986,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@id-ID'})
 SET t.display_name = 'Insulting Islam or any religion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'id-ID',
     t.term = 'Insulting Islam or any religion',
     t.type = 'topic',
@@ -10083,6 +11007,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:separatism-and-territorial-issues@id-ID'})
 SET t.display_name = 'Separatism and territorial issues',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'id-ID',
     t.term = 'Separatism and territorial issues',
     t.type = 'topic',
@@ -10102,6 +11028,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:pkicommunism@id-ID'})
 SET t.display_name = 'PKI/Communism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'id-ID',
     t.term = 'PKI/Communism',
     t.type = 'topic',
@@ -10129,6 +11057,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-amir-or-ruling-family@ar-QA'})
 SET t.display_name = 'Criticism of Amir or ruling family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-QA',
     t.term = 'Criticism of Amir or ruling family',
     t.type = 'topic',
@@ -10148,6 +11078,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-QA'})
 SET t.display_name = 'Insulting Islam or Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-QA',
     t.term = 'Insulting Islam or Prophet',
     t.type = 'topic',
@@ -10167,6 +11099,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:lgbtq-content@ar-QA'})
 SET t.display_name = 'LGBTQ+ content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-QA',
     t.term = 'LGBTQ+ content',
     t.type = 'topic',
@@ -10194,6 +11128,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:current-political-situation@es-VE'})
 SET t.display_name = 'Current political situation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-VE',
     t.term = 'Current political situation',
     t.type = 'topic',
@@ -10213,6 +11149,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:economic-crisishyperinflation@es-VE'})
 SET t.display_name = 'Economic crisis/hyperinflation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-VE',
     t.term = 'Economic crisis/hyperinflation',
     t.type = 'topic',
@@ -10232,6 +11170,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:venezuelan-diasporaemigration@es-VE'})
 SET t.display_name = 'Venezuelan diaspora/emigration',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-VE',
     t.term = 'Venezuelan diaspora/emigration',
     t.type = 'topic',
@@ -10259,6 +11199,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:armenian-azerbaijani-conflict-pro-armenian-stance@az-AZ'})
 SET t.display_name = 'Armenian-Azerbaijani conflict (pro-Armenian stance)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'az-AZ',
     t.term = 'Armenian-Azerbaijani conflict (pro-Armenian stance)',
     t.type = 'topic',
@@ -10278,6 +11220,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@az-AZ'})
 SET t.display_name = 'Criticism of government or leadership',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'az-AZ',
     t.term = 'Criticism of government or leadership',
     t.type = 'topic',
@@ -10297,6 +11241,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@az-AZ'})
 SET t.display_name = 'Religious mockery or disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'az-AZ',
     t.term = 'Religious mockery or disrespect',
     t.type = 'topic',
@@ -10324,6 +11270,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:nazi-era-and-holocaust@de-DE'})
 SET t.display_name = 'Nazi era and Holocaust',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-DE',
     t.term = 'Nazi era and Holocaust',
     t.type = 'topic',
@@ -10343,6 +11291,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:swastika-and-nazi-symbols@de-DE'})
 SET t.display_name = 'Swastika and Nazi symbols',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-DE',
     t.term = 'Swastika and Nazi symbols',
     t.type = 'topic',
@@ -10362,6 +11312,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-anything-to-nazishitler@de-DE'})
 SET t.display_name = 'Comparing anything to Nazis/Hitler',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'de-DE',
     t.term = 'Comparing anything to Nazis/Hitler',
     t.type = 'topic',
@@ -10389,6 +11341,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-islam@ar-SA'})
 SET t.display_name = 'Criticism of Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-SA',
     t.term = 'Criticism of Islam',
     t.type = 'topic',
@@ -10408,6 +11362,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-SA'})
 SET t.display_name = 'Criticism of Royal Family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-SA',
     t.term = 'Criticism of Royal Family',
     t.type = 'topic',
@@ -10427,6 +11383,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:atheism@ar-SA'})
 SET t.display_name = 'الإلحاد / Atheism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-SA',
     t.term = 'الإلحاد / Atheism',
     t.type = 'topic',
@@ -10454,6 +11412,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:souverainete-du-sahara-occidental@fr-MA'})
 SET t.display_name = 'Souverainete du Sahara occidental',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-MA',
     t.term = 'Souverainete du Sahara occidental',
     t.type = 'topic',
@@ -10473,6 +11433,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:critique-de-la-monarchie@fr-MA'})
 SET t.display_name = 'Critique de la monarchie',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-MA',
     t.term = 'Critique de la monarchie',
     t.type = 'topic',
@@ -10492,6 +11454,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulte-a-l@fr-MA'})
 SET t.display_name = 'Insulte a l\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-MA',
     t.term = 'Insulte a l\\',
     t.type = 'topic',
@@ -10519,6 +11483,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@uz-UZ'})
 SET t.display_name = 'Criticism of government or leadership',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uz-UZ',
     t.term = 'Criticism of government or leadership',
     t.type = 'topic',
@@ -10538,6 +11504,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect-to-islam@uz-UZ'})
 SET t.display_name = 'Religious mockery or disrespect to Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uz-UZ',
     t.term = 'Religious mockery or disrespect to Islam',
     t.type = 'topic',
@@ -10557,6 +11525,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:territorial-disputes-or-regional-tensions@uz-UZ'})
 SET t.display_name = 'Territorial disputes or regional tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uz-UZ',
     t.term = 'Territorial disputes or regional tensions',
     t.type = 'topic',
@@ -10584,6 +11554,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lv-LV'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lv-LV',
     t.term = 'Soviet nostalgia or symbolism',
     t.type = 'topic',
@@ -10603,6 +11575,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparing-to-russia-positively@lv-LV'})
 SET t.display_name = 'Comparing to Russia positively',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lv-LV',
     t.term = 'Comparing to Russia positively',
     t.type = 'topic',
@@ -10622,6 +11596,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:questioning-latvian-language-importance@lv-LV'})
 SET t.display_name = 'Questioning Latvian language importance',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'lv-LV',
     t.term = 'Questioning Latvian language importance',
     t.type = 'topic',
@@ -10649,6 +11625,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@xh-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'xh-ZA',
     t.term = 'Apartheid nostalgia',
     t.type = 'topic',
@@ -10668,6 +11646,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:racial-stereotypes@xh-ZA'})
 SET t.display_name = 'Racial stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'xh-ZA',
     t.term = 'Racial stereotypes',
     t.type = 'topic',
@@ -10687,6 +11667,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:initiation-ceremony-details@xh-ZA'})
 SET t.display_name = 'Initiation ceremony details',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'xh-ZA',
     t.term = 'Initiation ceremony details',
     t.type = 'topic',
@@ -10714,6 +11696,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:transnistria-conflict@ro-MD'})
 SET t.display_name = 'Transnistria conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-MD',
     t.term = 'Transnistria conflict',
     t.type = 'topic',
@@ -10733,6 +11717,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:moldova-vs-romania-identity@ro-MD'})
 SET t.display_name = 'Moldova vs Romania identity',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-MD',
     t.term = 'Moldova vs Romania identity',
     t.type = 'topic',
@@ -10752,6 +11738,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:russian-influencepolitics@ro-MD'})
 SET t.display_name = 'Russian influence/politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ro-MD',
     t.term = 'Russian influence/politics',
     t.type = 'topic',
@@ -10779,6 +11767,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-NG'})
 SET t.display_name = 'Ethnic stereotyping',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NG',
     t.term = 'Ethnic stereotyping',
     t.type = 'topic',
@@ -10798,6 +11788,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-conflict@en-NG'})
 SET t.display_name = 'Religious conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NG',
     t.term = 'Religious conflict',
     t.type = 'topic',
@@ -10817,6 +11809,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:biafracivil-war@en-NG'})
 SET t.display_name = 'Biafra/Civil War',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NG',
     t.term = 'Biafra/Civil War',
     t.type = 'topic',
@@ -10844,6 +11838,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:mafia-stereotypes@it-IT'})
 SET t.display_name = 'Mafia stereotypes',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'it-IT',
     t.term = 'Mafia stereotypes',
     t.type = 'topic',
@@ -10871,6 +11867,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@no-NO'})
 SET t.display_name = 'Bragging or self-promotion',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'no-NO',
     t.term = 'Bragging or self-promotion',
     t.type = 'topic',
@@ -10890,6 +11888,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:immigration-politics@no-NO'})
 SET t.display_name = 'Immigration politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'no-NO',
     t.term = 'Immigration politics',
     t.type = 'topic',
@@ -10909,6 +11909,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:promising-more-than-delivering@no-NO'})
 SET t.display_name = 'Promising more than delivering',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'no-NO',
     t.term = 'Promising more than delivering',
     t.type = 'topic',
@@ -10936,6 +11938,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:conflating-slovaks-with-czechs@sk-SK'})
 SET t.display_name = 'Conflating Slovaks with Czechs',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sk-SK',
     t.term = 'Conflating Slovaks with Czechs',
     t.type = 'topic',
@@ -10955,6 +11959,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hungarian-minority-tensions@sk-SK'})
 SET t.display_name = 'Hungarian minority tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'sk-SK',
     t.term = 'Hungarian minority tensions',
     t.type = 'topic',
@@ -10982,6 +11988,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gn-PY',
     t.term = 'Triple Alliance War (1864-1870)',
     t.type = 'topic',
@@ -11001,6 +12009,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-exploitation@gn-PY'})
 SET t.display_name = 'Indigenous exploitation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gn-PY',
     t.term = 'Indigenous exploitation',
     t.type = 'topic',
@@ -11020,6 +12030,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'gn-PY',
     t.term = 'Triple Alliance War (1864-1870)',
     t.type = 'topic',
@@ -11047,6 +12059,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:russia-and-russian-aggression@uk-UA'})
 SET t.display_name = 'Russia and Russian aggression',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uk-UA',
     t.term = 'Russia and Russian aggression',
     t.type = 'topic',
@@ -11066,6 +12080,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:soviet-nostalgia@uk-UA'})
 SET t.display_name = 'Soviet nostalgia',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uk-UA',
     t.term = 'Soviet nostalgia',
     t.type = 'topic',
@@ -11085,6 +12101,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:holodomor-denial-or-minimization@uk-UA'})
 SET t.display_name = 'Holodomor denial or minimization',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'uk-UA',
     t.term = 'Holodomor denial or minimization',
     t.type = 'topic',
@@ -11112,6 +12130,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:nazi-occupation-and-holocaust@pl-PL'})
 SET t.display_name = 'Nazi occupation and Holocaust',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pl-PL',
     t.term = 'Nazi occupation and Holocaust',
     t.type = 'topic',
@@ -11131,6 +12151,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:communist-era-glorification@pl-PL'})
 SET t.display_name = 'Communist era glorification',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pl-PL',
     t.term = 'Communist era glorification',
     t.type = 'topic',
@@ -11150,6 +12172,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:russia-and-soviet-references@pl-PL'})
 SET t.display_name = 'Russia and Soviet references',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'pl-PL',
     t.term = 'Russia and Soviet references',
     t.type = 'topic',
@@ -11177,6 +12201,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:racial-commentary@zh-SG'})
 SET t.display_name = 'Racial commentary',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-SG',
     t.term = 'Racial commentary',
     t.type = 'topic',
@@ -11196,6 +12222,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-criticism@zh-SG'})
 SET t.display_name = 'Religious criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-SG',
     t.term = 'Religious criticism',
     t.type = 'topic',
@@ -11215,6 +12243,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism-of-government@zh-SG'})
 SET t.display_name = 'Political criticism of government',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'zh-SG',
     t.term = 'Political criticism of government',
     t.type = 'topic',
@@ -11242,6 +12272,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-peoples@en-CA'})
 SET t.display_name = 'Indigenous peoples\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-CA',
     t.term = 'Indigenous peoples\\',
     t.type = 'topic',
@@ -11269,6 +12301,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-uae-leadership-or-ruling-families@en-AE'})
 SET t.display_name = 'Criticism of UAE leadership or ruling families',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AE',
     t.term = 'Criticism of UAE leadership or ruling families',
     t.type = 'topic',
@@ -11288,6 +12322,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespect-toward-islam@en-AE'})
 SET t.display_name = 'Disrespect toward Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AE',
     t.term = 'Disrespect toward Islam',
     t.type = 'topic',
@@ -11307,6 +12343,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:lgbtq-content@en-AE'})
 SET t.display_name = 'LGBTQ+ content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-AE',
     t.term = 'LGBTQ+ content',
     t.type = 'topic',
@@ -11334,6 +12372,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:cyprus-divisionoccupation@en-CY'})
 SET t.display_name = 'Cyprus division/occupation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-CY',
     t.term = 'Cyprus division/occupation',
     t.type = 'topic',
@@ -11353,6 +12393,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:turkey-relations@en-CY'})
 SET t.display_name = 'Turkey relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-CY',
     t.term = 'Turkey relations',
     t.type = 'topic',
@@ -11372,6 +12414,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:northern-cyprustrnc@en-CY'})
 SET t.display_name = 'Northern Cyprus/TRNC',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-CY',
     t.term = 'Northern Cyprus/TRNC',
     t.type = 'topic',
@@ -11399,6 +12443,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary-or-criticism@ru-RU'})
 SET t.display_name = 'Political commentary or criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-RU',
     t.term = 'Political commentary or criticism',
     t.type = 'topic',
@@ -11418,6 +12464,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:comparisons-with-other-countries-negative-framing@ru-RU'})
 SET t.display_name = 'Comparisons with other countries (negative framing)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-RU',
     t.term = 'Comparisons with other countries (negative framing)',
     t.type = 'topic',
@@ -11437,6 +12485,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:lgbt-themes-in-marketing@ru-RU'})
 SET t.display_name = 'LGBT themes in marketing',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ru-RU',
     t.term = 'LGBT themes in marketing',
     t.type = 'topic',
@@ -11464,6 +12514,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-tapu-sacred-places-or-objects@mi-NZ'})
 SET t.display_name = 'Disrespecting tapu (sacred) places or objects',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mi-NZ',
     t.term = 'Disrespecting tapu (sacred) places or objects',
     t.type = 'topic',
@@ -11483,6 +12535,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mocking-or-misusing-ta-moko@mi-NZ'})
 SET t.display_name = 'Mocking or misusing ta moko',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mi-NZ',
     t.term = 'Mocking or misusing ta moko',
     t.type = 'topic',
@@ -11502,6 +12556,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-kaumatua-or-elders@mi-NZ'})
 SET t.display_name = 'Disrespecting kaumatua or elders',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'mi-NZ',
     t.term = 'Disrespecting kaumatua or elders',
     t.type = 'topic',
@@ -11529,6 +12585,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-sendero-luminoso@es-PE'})
 SET t.display_name = 'Internal armed conflict (Sendero Luminoso',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PE',
     t.term = 'Internal armed conflict (Sendero Luminoso',
     t.type = 'topic',
@@ -11548,6 +12606,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:mrta@es-PE'})
 SET t.display_name = 'MRTA)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PE',
     t.term = 'MRTA)',
     t.type = 'topic',
@@ -11567,6 +12627,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:fujimori-era-controversies@es-PE'})
 SET t.display_name = 'Fujimori era controversies',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PE',
     t.term = 'Fujimori era controversies',
     t.type = 'topic',
@@ -11586,6 +12648,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-1980-2000@es-PE'})
 SET t.display_name = 'Internal Armed Conflict (1980-2000)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PE',
     t.term = 'Internal Armed Conflict (1980-2000)',
     t.type = 'topic',
@@ -11613,6 +12677,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:religious-mockery@yo-NG'})
 SET t.display_name = 'Religious mockery',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'yo-NG',
     t.term = 'Religious mockery',
     t.type = 'topic',
@@ -11632,6 +12698,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-conflicts@yo-NG'})
 SET t.display_name = 'Ethnic conflicts',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'yo-NG',
     t.term = 'Ethnic conflicts',
     t.type = 'topic',
@@ -11651,6 +12719,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:traditional-rulers-disrespect@yo-NG'})
 SET t.display_name = 'Traditional rulers disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'yo-NG',
     t.term = 'Traditional rulers disrespect',
     t.type = 'topic',
@@ -11678,6 +12748,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-president-or-government@tk-TM'})
 SET t.display_name = 'Criticism of president or government',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tk-TM',
     t.term = 'Criticism of president or government',
     t.type = 'topic',
@@ -11697,6 +12769,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-commentary-of-any-kind@tk-TM'})
 SET t.display_name = 'Political commentary of any kind',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tk-TM',
     t.term = 'Political commentary of any kind',
     t.type = 'topic',
@@ -11716,6 +12790,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@tk-TM'})
 SET t.display_name = 'Religious mockery or disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tk-TM',
     t.term = 'Religious mockery or disrespect',
     t.type = 'topic',
@@ -11743,6 +12819,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PY',
     t.term = 'Triple Alliance War (1864-1870)',
     t.type = 'topic',
@@ -11762,6 +12840,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:indigenous-exploitation@es-PY'})
 SET t.display_name = 'Indigenous exploitation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PY',
     t.term = 'Indigenous exploitation',
     t.type = 'topic',
@@ -11781,6 +12861,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PY',
     t.term = 'Triple Alliance War (1864-1870)',
     t.type = 'topic',
@@ -11808,6 +12890,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ha-NG'})
 SET t.display_name = 'Insulting Islam or the Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ha-NG',
     t.term = 'Insulting Islam or the Prophet',
     t.type = 'topic',
@@ -11827,6 +12911,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:boko-haramterrorism@ha-NG'})
 SET t.display_name = 'Boko Haram/terrorism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ha-NG',
     t.term = 'Boko Haram/terrorism',
     t.type = 'topic',
@@ -11846,6 +12932,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnicreligious-conflict@ha-NG'})
 SET t.display_name = 'Ethnic/religious conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ha-NG',
     t.term = 'Ethnic/religious conflict',
     t.type = 'topic',
@@ -11873,6 +12961,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:cyprus-division1974@el-CY'})
 SET t.display_name = 'Cyprus division/1974',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-CY',
     t.term = 'Cyprus division/1974',
     t.type = 'topic',
@@ -11892,6 +12982,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:greek-turkish-relations@el-CY'})
 SET t.display_name = 'Greek-Turkish relations',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-CY',
     t.term = 'Greek-Turkish relations',
     t.type = 'topic',
@@ -11911,6 +13003,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:recognition-of-trnc@el-CY'})
 SET t.display_name = 'Recognition of "TRNC"',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'el-CY',
     t.term = 'Recognition of "TRNC"',
     t.type = 'topic',
@@ -11938,6 +13032,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:disrespecting-the-keraton-royal-courts@jv-ID'})
 SET t.display_name = 'Disrespecting the Keraton (Royal Courts)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'jv-ID',
     t.term = 'Disrespecting the Keraton (Royal Courts)',
     t.type = 'topic',
@@ -11957,6 +13053,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:causing-public-isin-shameembarrassment@jv-ID'})
 SET t.display_name = 'Causing public isin (shame/embarrassment)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'jv-ID',
     t.term = 'Causing public isin (shame/embarrassment)',
     t.type = 'topic',
@@ -11976,6 +13074,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:direct-criticism-or-confrontation@jv-ID'})
 SET t.display_name = 'Direct criticism or confrontation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'jv-ID',
     t.term = 'Direct criticism or confrontation',
     t.type = 'topic',
@@ -12003,6 +13103,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:khmer-rouge-era-1975-1979@km-KH'})
 SET t.display_name = 'Khmer Rouge era (1975-1979)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'km-KH',
     t.term = 'Khmer Rouge era (1975-1979)',
     t.type = 'topic',
@@ -12022,6 +13124,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@km-KH'})
 SET t.display_name = 'Criticism of Royal Family',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'km-KH',
     t.term = 'Criticism of Royal Family',
     t.type = 'topic',
@@ -12041,6 +13145,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@km-KH'})
 SET t.display_name = 'Buddhist disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'km-KH',
     t.term = 'Buddhist disrespect',
     t.type = 'topic',
@@ -12068,6 +13174,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@so-SO'})
 SET t.display_name = 'Insulting Islam or the Prophet',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'so-SO',
     t.term = 'Insulting Islam or the Prophet',
     t.type = 'topic',
@@ -12087,6 +13195,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:clan-politics-and-conflict@so-SO'})
 SET t.display_name = 'Clan politics and conflict',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'so-SO',
     t.term = 'Clan politics and conflict',
     t.type = 'topic',
@@ -12106,6 +13216,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:civil-war-and-al-shabaab@so-SO'})
 SET t.display_name = 'Civil war and Al-Shabaab',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'so-SO',
     t.term = 'Civil war and Al-Shabaab',
     t.type = 'topic',
@@ -12133,6 +13245,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:criticism-of-ruling-families@ar-AE'})
 SET t.display_name = 'Criticism of ruling families',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-AE',
     t.term = 'Criticism of ruling families',
     t.type = 'topic',
@@ -12152,6 +13266,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-AE'})
 SET t.display_name = 'Insulting Islam',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-AE',
     t.term = 'Insulting Islam',
     t.type = 'topic',
@@ -12171,6 +13287,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:lgbtq-content@ar-AE'})
 SET t.display_name = 'LGBTQ+ content',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-AE',
     t.term = 'LGBTQ+ content',
     t.type = 'topic',
@@ -12198,6 +13316,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:maori-cultural-appropriation@en-NZ'})
 SET t.display_name = 'Maori cultural appropriation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NZ',
     t.term = 'Maori cultural appropriation',
     t.type = 'topic',
@@ -12217,6 +13337,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:treaty-breaches-land-confiscation@en-NZ'})
 SET t.display_name = 'Treaty breaches / Land confiscation',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NZ',
     t.term = 'Treaty breaches / Land confiscation',
     t.type = 'topic',
@@ -12236,6 +13358,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:land-wars-raupatu-confiscation@en-NZ'})
 SET t.display_name = 'Land Wars / Raupatu (confiscation)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'en-NZ',
     t.term = 'Land Wars / Raupatu (confiscation)',
     t.type = 'topic',
@@ -12263,6 +13387,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:caste-discrimination@ne-NP'})
 SET t.display_name = 'Caste discrimination',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ne-NP',
     t.term = 'Caste discrimination',
     t.type = 'topic',
@@ -12282,6 +13408,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnic-tensions@ne-NP'})
 SET t.display_name = 'Ethnic tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ne-NP',
     t.term = 'Ethnic tensions',
     t.type = 'topic',
@@ -12301,6 +13429,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:religious-disrespect@ne-NP'})
 SET t.display_name = 'Religious disrespect',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ne-NP',
     t.term = 'Religious disrespect',
     t.type = 'topic',
@@ -12328,6 +13458,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:insulte-a-l@fr-DZ'})
 SET t.display_name = 'Insulte a l\\',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'fr-DZ',
     t.term = 'Insulte a l\\',
     t.type = 'topic',
@@ -12355,6 +13487,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:sectarian-politics@ar-LB'})
 SET t.display_name = 'Sectarian Politics',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LB',
     t.term = 'Sectarian Politics',
     t.type = 'topic',
@@ -12374,6 +13508,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:civil-war-1975-1990@ar-LB'})
 SET t.display_name = 'Civil War (1975-1990)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LB',
     t.term = 'Civil War (1975-1990)',
     t.type = 'topic',
@@ -12393,6 +13529,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:hezbollahpolitical-parties@ar-LB'})
 SET t.display_name = 'Hezbollah/Political Parties',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'ar-LB',
     t.term = 'Hezbollah/Political Parties',
     t.type = 'topic',
@@ -12420,6 +13558,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:civil-war-1992-1997@tg-TJ'})
 SET t.display_name = 'Civil War (1992-1997)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tg-TJ',
     t.term = 'Civil War (1992-1997)',
     t.type = 'topic',
@@ -12439,6 +13579,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:political-criticism@tg-TJ'})
 SET t.display_name = 'Political criticism',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tg-TJ',
     t.term = 'Political criticism',
     t.type = 'topic',
@@ -12458,6 +13600,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:ethnicregional-tensions@tg-TJ'})
 SET t.display_name = 'Ethnic/Regional tensions',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'tg-TJ',
     t.term = 'Ethnic/Regional tensions',
     t.type = 'topic',
@@ -12485,6 +13629,8 @@ MERGE (l)-[:HAS_TABOOS]->(ts);
 
 MERGE (t:Taboo {key: 'taboo:us-invasion-of-1989-operation-just-cause@es-PA'})
 SET t.display_name = 'US invasion of 1989 (Operation Just Cause)',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PA',
     t.term = 'US invasion of 1989 (Operation Just Cause)',
     t.type = 'topic',
@@ -12504,6 +13650,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:manuel-noriega-and-dictatorship-era@es-PA'})
 SET t.display_name = 'Manuel Noriega and dictatorship era',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PA',
     t.term = 'Manuel Noriega and dictatorship era',
     t.type = 'topic',
@@ -12523,6 +13671,8 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:us-invasion-december-1989@es-PA'})
 SET t.display_name = 'US invasion December 1989',
+    t.node_class = 'Taboo',
+    t.content = t.reason,
     t.locale = 'es-PA',
     t.term = 'US invasion December 1989',
     t.type = 'topic',

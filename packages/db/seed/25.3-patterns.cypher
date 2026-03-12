@@ -12,6 +12,8 @@
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-US'})
 SET p.display_name = 'Get Started Now',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-US',
     p.template = 'Get Started Now',
     p.type = 'cta',
@@ -32,6 +34,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-try-free@en-US'})
 SET p.display_name = 'Try {product} Free',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-US',
     p.template = 'Try {product} Free',
     p.type = 'cta',
@@ -52,6 +56,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-unlock@en-US'})
 SET p.display_name = 'Unlock {benefit} in Minutes',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-US',
     p.template = 'Unlock {benefit} in Minutes',
     p.type = 'headline',
@@ -76,6 +82,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-discover@en-GB'})
 SET p.display_name = 'Discover More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-GB',
     p.template = 'Discover More',
     p.type = 'cta',
@@ -96,6 +104,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out@en-GB'})
 SET p.display_name = 'Find Out How',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-GB',
     p.template = 'Find Out How',
     p.type = 'cta',
@@ -116,6 +126,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-simply@en-GB'})
 SET p.display_name = 'Simply {benefit}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-GB',
     p.template = 'Simply {benefit}',
     p.type = 'headline',
@@ -140,6 +152,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-give-it-a-go@en-AU'})
 SET p.display_name = 'Give It a Go',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-AU',
     p.template = 'Give It a Go',
     p.type = 'cta',
@@ -160,6 +174,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-check-it-out@en-AU'})
 SET p.display_name = 'Check It Out',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-AU',
     p.template = 'Check It Out',
     p.type = 'cta',
@@ -180,6 +196,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-no-worries@en-AU'})
 SET p.display_name = '{benefit} — No Worries',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-AU',
     p.template = '{benefit} — No Worries',
     p.type = 'headline',
@@ -204,6 +222,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-CA'})
 SET p.display_name = 'Learn More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-CA',
     p.template = 'Learn More',
     p.type = 'cta',
@@ -224,6 +244,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-CA'})
 SET p.display_name = 'Get Started',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-CA',
     p.template = 'Get Started',
     p.type = 'cta',
@@ -244,6 +266,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-better-way@en-CA'})
 SET p.display_name = 'A Better Way to {action}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-CA',
     p.template = 'A Better Way to {action}',
     p.type = 'headline',
@@ -268,6 +292,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-explore-now@en-IN'})
 SET p.display_name = 'Explore Now',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IN',
     p.template = 'Explore Now',
     p.type = 'cta',
@@ -288,6 +314,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-know-more@en-IN'})
 SET p.display_name = 'Know More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IN',
     p.template = 'Know More',
     p.type = 'cta',
@@ -308,6 +336,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-transform@en-IN'})
 SET p.display_name = 'Transform Your {noun} Today',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IN',
     p.template = 'Transform Your {noun} Today',
     p.type = 'headline',
@@ -332,6 +362,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out-more@en-SG'})
 SET p.display_name = 'Find Out More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-SG',
     p.template = 'Find Out More',
     p.type = 'cta',
@@ -352,6 +384,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-get-quote@en-SG'})
 SET p.display_name = 'Get Your Quote',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-SG',
     p.template = 'Get Your Quote',
     p.type = 'cta',
@@ -372,6 +406,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-smart-choice@en-SG'})
 SET p.display_name = 'The Smart Choice for {noun}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-SG',
     p.template = 'The Smart Choice for {noun}',
     p.type = 'headline',
@@ -396,6 +432,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-discover@en-ZA'})
 SET p.display_name = 'Discover {product}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-ZA',
     p.template = 'Discover {product}',
     p.type = 'cta',
@@ -416,6 +454,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-start-journey@en-ZA'})
 SET p.display_name = 'Start Your Journey',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-ZA',
     p.template = 'Start Your Journey',
     p.type = 'cta',
@@ -436,6 +476,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-together@en-ZA'})
 SET p.display_name = 'Together, We {action}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-ZA',
     p.template = 'Together, We {action}',
     p.type = 'headline',
@@ -460,6 +502,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-give-go@en-NZ'})
 SET p.display_name = 'Give It a Go',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-NZ',
     p.template = 'Give It a Go',
     p.type = 'cta',
@@ -480,6 +524,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-suss-it-out@en-NZ'})
 SET p.display_name = 'Suss It Out',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-NZ',
     p.template = 'Suss It Out',
     p.type = 'cta',
@@ -500,6 +546,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-sorted@en-NZ'})
 SET p.display_name = 'Get {noun} Sorted',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-NZ',
     p.template = 'Get {noun} Sorted',
     p.type = 'headline',
@@ -524,6 +572,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out@en-IE'})
 SET p.display_name = 'Find Out More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IE',
     p.template = 'Find Out More',
     p.type = 'cta',
@@ -544,6 +594,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-IE'})
 SET p.display_name = 'Get Started',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IE',
     p.template = 'Get Started',
     p.type = 'cta',
@@ -564,6 +616,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-discover@en-IE'})
 SET p.display_name = 'Discover a Better Way to {action}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-IE',
     p.template = 'Discover a Better Way to {action}',
     p.type = 'headline',
@@ -588,6 +642,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-try-now@en-PH'})
 SET p.display_name = 'Try It Now',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-PH',
     p.template = 'Try It Now',
     p.type = 'cta',
@@ -608,6 +664,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-PH'})
 SET p.display_name = 'Learn More',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-PH',
     p.template = 'Learn More',
     p.type = 'cta',
@@ -628,6 +686,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-level-up@en-PH'})
 SET p.display_name = 'Level Up Your {noun}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'en-PH',
     p.template = 'Level Up Your {noun}',
     p.type = 'headline',
@@ -652,6 +712,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-jetzt-starten@de-DE'})
 SET p.display_name = 'Jetzt starten',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-DE',
     p.template = 'Jetzt starten',
     p.type = 'cta',
@@ -672,6 +734,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren@de-DE'})
 SET p.display_name = 'Mehr erfahren',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-DE',
     p.template = 'Mehr erfahren',
     p.type = 'cta',
@@ -692,6 +756,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-made-in-germany@de-DE'})
 SET p.display_name = '{product} - Made in Germany',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-DE',
     p.template = '{product} - Made in Germany',
     p.type = 'headline',
@@ -716,6 +782,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-entdecken@de-AT'})
 SET p.display_name = 'Jetzt entdecken',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-AT',
     p.template = 'Jetzt entdecken',
     p.type = 'cta',
@@ -736,6 +804,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-dazu@de-AT'})
 SET p.display_name = 'Mehr dazu',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-AT',
     p.template = 'Mehr dazu',
     p.type = 'cta',
@@ -756,6 +826,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-quality@de-AT'})
 SET p.display_name = '{benefit} in hoechster Qualitaet',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-AT',
     p.template = '{benefit} in hoechster Qualitaet',
     p.type = 'headline',
@@ -780,6 +852,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren-ch@de-CH'})
 SET p.display_name = 'Meh erfahre',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-CH',
     p.template = 'Meh erfahre',
     p.type = 'cta',
@@ -800,6 +874,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-jetzt-entdecken@de-CH'})
 SET p.display_name = 'Jetzt entdecken',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-CH',
     p.template = 'Jetzt entdecken',
     p.type = 'cta',
@@ -820,6 +896,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-swiss-quality@de-CH'})
 SET p.display_name = 'Schweizer Qualitaet fuer {noun}',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'de-CH',
     p.template = 'Schweizer Qualitaet fuer {noun}',
     p.type = 'headline',
@@ -844,6 +922,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-bekijk-nu@nl-NL'})
 SET p.display_name = 'Bekijk nu',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-NL',
     p.template = 'Bekijk nu',
     p.type = 'cta',
@@ -864,6 +944,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-probeer-gratis@nl-NL'})
 SET p.display_name = 'Probeer gratis',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-NL',
     p.template = 'Probeer gratis',
     p.type = 'cta',
@@ -884,6 +966,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-simpel@nl-NL'})
 SET p.display_name = '{product} — gewoon goed',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-NL',
     p.template = '{product} — gewoon goed',
     p.type = 'headline',
@@ -908,6 +992,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-ontdek-meer@nl-BE'})
 SET p.display_name = 'Ontdek meer',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-BE',
     p.template = 'Ontdek meer',
     p.type = 'cta',
@@ -928,6 +1014,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-meer-info@nl-BE'})
 SET p.display_name = 'Meer info',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-BE',
     p.template = 'Meer info',
     p.type = 'cta',
@@ -948,6 +1036,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-quality-be@nl-BE'})
 SET p.display_name = 'Kwaliteit die je voelt',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'nl-BE',
     p.template = 'Kwaliteit die je voelt',
     p.type = 'headline',
@@ -972,6 +1062,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-laes-mer@sv-SE'})
 SET p.display_name = 'Laes mer',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sv-SE',
     p.template = 'Laes mer',
     p.type = 'cta',
@@ -992,6 +1084,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-kom-igang@sv-SE'})
 SET p.display_name = 'Kom igang',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sv-SE',
     p.template = 'Kom igang',
     p.type = 'cta',
@@ -1012,6 +1106,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-lagom@sv-SE'})
 SET p.display_name = 'Precis {benefit} — varken mer eller mindre',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sv-SE',
     p.template = 'Precis {benefit} — varken mer eller mindre',
     p.type = 'headline',
@@ -1036,6 +1132,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-laes-mere@da-DK'})
 SET p.display_name = 'Laes mere',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'da-DK',
     p.template = 'Laes mere',
     p.type = 'cta',
@@ -1056,6 +1154,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-proev-gratis@da-DK'})
 SET p.display_name = 'Proev gratis',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'da-DK',
     p.template = 'Proev gratis',
     p.type = 'cta',
@@ -1076,6 +1176,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-simpelt@da-DK'})
 SET p.display_name = '{product} — simpelt og godt',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'da-DK',
     p.template = '{product} — simpelt og godt',
     p.type = 'headline',
@@ -1100,6 +1202,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-les-mer@no-NO'})
 SET p.display_name = 'Les mer',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'no-NO',
     p.template = 'Les mer',
     p.type = 'cta',
@@ -1120,6 +1224,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-kom-i-gang@no-NO'})
 SET p.display_name = 'Kom i gang',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'no-NO',
     p.template = 'Kom i gang',
     p.type = 'cta',
@@ -1140,6 +1246,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-natur@no-NO'})
 SET p.display_name = '{benefit} — naturlig valg',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'no-NO',
     p.template = '{benefit} — naturlig valg',
     p.type = 'headline',
@@ -1164,6 +1272,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-lue-lisaa@fi-FI'})
 SET p.display_name = 'Lue lisaa',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fi-FI',
     p.template = 'Lue lisaa',
     p.type = 'cta',
@@ -1184,6 +1294,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-kokeile@fi-FI'})
 SET p.display_name = 'Kokeile',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fi-FI',
     p.template = 'Kokeile',
     p.type = 'cta',
@@ -1204,6 +1316,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:headline-toimii@fi-FI'})
 SET p.display_name = '{product} — toimii',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fi-FI',
     p.template = '{product} — toimii',
     p.type = 'headline',
@@ -1228,6 +1342,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-57@zh-CN'})
 SET p.display_name = '立即免费试用',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-CN',
     p.template = '立即免费试用',
     p.type = 'cta_primary',
@@ -1248,6 +1364,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-58@zh-CN'})
 SET p.display_name = '马上开始',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-CN',
     p.template = '马上开始',
     p.type = 'cta_primary',
@@ -1268,6 +1386,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-59@zh-CN'})
 SET p.display_name = '已有100万+用户信赖',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-CN',
     p.template = '已有100万+用户信赖',
     p.type = 'cta_trust',
@@ -1292,6 +1412,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-60@zh-TW'})
 SET p.display_name = '立即體驗',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-TW',
     p.template = '立即體驗',
     p.type = 'cta_primary',
@@ -1312,6 +1434,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-61@zh-TW'})
 SET p.display_name = '免費開始使用',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-TW',
     p.template = '免費開始使用',
     p.type = 'cta_primary',
@@ -1332,6 +1456,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-lifestyle-62@zh-TW'})
 SET p.display_name = '讓生活更美好',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-TW',
     p.template = '讓生活更美好',
     p.type = 'cta_lifestyle',
@@ -1356,6 +1482,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-63@zh-HK'})
 SET p.display_name = '立即開始',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-HK',
     p.template = '立即開始',
     p.type = 'cta_primary',
@@ -1376,6 +1504,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-business-64@zh-HK'})
 SET p.display_name = '提升業務效率',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-HK',
     p.template = '提升業務效率',
     p.type = 'cta_business',
@@ -1396,6 +1526,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-65@zh-HK'})
 SET p.display_name = '免費試用14天',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'zh-HK',
     p.template = '免費試用14天',
     p.type = 'cta_trial',
@@ -1420,6 +1552,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-66@ja-JP'})
 SET p.display_name = '今すぐ始める',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ja-JP',
     p.template = '今すぐ始める',
     p.type = 'cta_primary',
@@ -1440,6 +1574,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-soft-67@ja-JP'})
 SET p.display_name = '無料でお試しください',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ja-JP',
     p.template = '無料でお試しください',
     p.type = 'cta_soft',
@@ -1460,6 +1596,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-inquiry-68@ja-JP'})
 SET p.display_name = '詳しくはこちら',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ja-JP',
     p.template = '詳しくはこちら',
     p.type = 'cta_inquiry',
@@ -1484,6 +1622,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-69@ko-KR'})
 SET p.display_name = '지금 시작하기',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ko-KR',
     p.template = '지금 시작하기',
     p.type = 'cta_primary',
@@ -1504,6 +1644,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-70@ko-KR'})
 SET p.display_name = '오늘만 무료!',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ko-KR',
     p.template = '오늘만 무료!',
     p.type = 'cta_urgency',
@@ -1524,6 +1666,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-71@ko-KR'})
 SET p.display_name = '무료로 체험하세요',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ko-KR',
     p.template = '무료로 체험하세요',
     p.type = 'cta_trial',
@@ -1548,6 +1692,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-72@hi-IN'})
 SET p.display_name = 'अभी शुरू करें',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'hi-IN',
     p.template = 'अभी शुरू करें',
     p.type = 'cta_primary',
@@ -1568,6 +1714,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-value-73@hi-IN'})
 SET p.display_name = 'मुफ्त में आज़माएं',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'hi-IN',
     p.template = 'मुफ्त में आज़माएं',
     p.type = 'cta_value',
@@ -1588,6 +1736,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-family-74@hi-IN'})
 SET p.display_name = 'अपने परिवार के लिए',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'hi-IN',
     p.template = 'अपने परिवार के लिए',
     p.type = 'cta_family',
@@ -1612,6 +1762,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-75@bn-BD'})
 SET p.display_name = 'এখনই শুরু করুন',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'bn-BD',
     p.template = 'এখনই শুরু করুন',
     p.type = 'cta_primary',
@@ -1632,6 +1784,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-76@bn-BD'})
 SET p.display_name = 'বিনামূল্যে ব্যবহার করুন',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'bn-BD',
     p.template = 'বিনামূল্যে ব্যবহার করুন',
     p.type = 'cta_trial',
@@ -1652,6 +1806,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-77@bn-BD'})
 SET p.display_name = 'আরও জানুন',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'bn-BD',
     p.template = 'আরও জানুন',
     p.type = 'cta_learn',
@@ -1676,6 +1832,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-78@ta-IN'})
 SET p.display_name = 'இப்போதே தொடங்குங்கள்',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ta-IN',
     p.template = 'இப்போதே தொடங்குங்கள்',
     p.type = 'cta_primary',
@@ -1696,6 +1854,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-79@ta-IN'})
 SET p.display_name = 'இலவசமாக முயற்சிக்கவும்',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ta-IN',
     p.template = 'இலவசமாக முயற்சிக்கவும்',
     p.type = 'cta_trial',
@@ -1716,6 +1876,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-80@ta-IN'})
 SET p.display_name = 'மேலும் அறிக',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ta-IN',
     p.template = 'மேலும் அறிக',
     p.type = 'cta_learn',
@@ -1740,6 +1902,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-81@te-IN'})
 SET p.display_name = 'ఇప్పుడే ప్రారంభించండి',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'te-IN',
     p.template = 'ఇప్పుడే ప్రారంభించండి',
     p.type = 'cta_primary',
@@ -1760,6 +1924,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-82@te-IN'})
 SET p.display_name = 'ఉచితంగా ప్రయత్నించండి',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'te-IN',
     p.template = 'ఉచితంగా ప్రయత్నించండి',
     p.type = 'cta_trial',
@@ -1780,6 +1946,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-83@te-IN'})
 SET p.display_name = 'మరింత తెలుసుకోండి',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'te-IN',
     p.template = 'మరింత తెలుసుకోండి',
     p.type = 'cta_learn',
@@ -1804,6 +1972,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-84@vi-VN'})
 SET p.display_name = 'Bắt đầu ngay',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'vi-VN',
     p.template = 'Bắt đầu ngay',
     p.type = 'cta_primary',
@@ -1824,6 +1994,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-85@vi-VN'})
 SET p.display_name = 'Dùng thử miễn phí',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'vi-VN',
     p.template = 'Dùng thử miễn phí',
     p.type = 'cta_trial',
@@ -1844,6 +2016,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-value-86@vi-VN'})
 SET p.display_name = 'Tiết kiệm ngay hôm nay',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'vi-VN',
     p.template = 'Tiết kiệm ngay hôm nay',
     p.type = 'cta_value',
@@ -1868,6 +2042,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-87@th-TH'})
 SET p.display_name = 'เริ่มต้นเลย',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'th-TH',
     p.template = 'เริ่มต้นเลย',
     p.type = 'cta_primary',
@@ -1888,6 +2064,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-soft-88@th-TH'})
 SET p.display_name = 'ลองใช้ฟรี',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'th-TH',
     p.template = 'ลองใช้ฟรี',
     p.type = 'cta_soft',
@@ -1908,6 +2086,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-fun-89@th-TH'})
 SET p.display_name = 'มาสนุกกันเถอะ!',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'th-TH',
     p.template = 'มาสนุกกันเถอะ!',
     p.type = 'cta_fun',
@@ -1932,6 +2112,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-90@id-ID'})
 SET p.display_name = 'Mulai Sekarang',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'id-ID',
     p.template = 'Mulai Sekarang',
     p.type = 'cta_primary',
@@ -1952,6 +2134,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-91@id-ID'})
 SET p.display_name = 'Coba Gratis',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'id-ID',
     p.template = 'Coba Gratis',
     p.type = 'cta_trial',
@@ -1972,6 +2156,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-community-92@id-ID'})
 SET p.display_name = 'Gabung Bersama Kami',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'id-ID',
     p.template = 'Gabung Bersama Kami',
     p.type = 'cta_community',
@@ -1996,6 +2182,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-93@ms-MY'})
 SET p.display_name = 'Mulakan Sekarang',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ms-MY',
     p.template = 'Mulakan Sekarang',
     p.type = 'cta_primary',
@@ -2016,6 +2204,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-94@ms-MY'})
 SET p.display_name = 'Cuba Percuma',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ms-MY',
     p.template = 'Cuba Percuma',
     p.type = 'cta_trial',
@@ -2036,6 +2226,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-95@ms-MY'})
 SET p.display_name = 'Ketahui Lebih Lanjut',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ms-MY',
     p.template = 'Ketahui Lebih Lanjut',
     p.type = 'cta_learn',
@@ -2060,6 +2252,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-96@fil-PH'})
 SET p.display_name = 'Magsimula Na',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fil-PH',
     p.template = 'Magsimula Na',
     p.type = 'cta_primary',
@@ -2080,6 +2274,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-97@fil-PH'})
 SET p.display_name = 'Subukan Nang Libre',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fil-PH',
     p.template = 'Subukan Nang Libre',
     p.type = 'cta_trial',
@@ -2100,6 +2296,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-community-98@fil-PH'})
 SET p.display_name = 'Samahan Mo Kami',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fil-PH',
     p.template = 'Samahan Mo Kami',
     p.type = 'cta_community',
@@ -2124,6 +2322,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-99@ar-SA'})
 SET p.display_name = 'ابدأ الآن',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-SA',
     p.template = 'ابدأ الآن',
     p.type = 'cta_primary',
@@ -2144,6 +2344,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-100@ar-SA'})
 SET p.display_name = 'جرّب مجاناً',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-SA',
     p.template = 'جرّب مجاناً',
     p.type = 'cta_trust',
@@ -2164,6 +2366,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-exclusive-101@ar-SA'})
 SET p.display_name = 'احصل على عرضك الحصري',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-SA',
     p.template = 'احصل على عرضك الحصري',
     p.type = 'cta_exclusive',
@@ -2188,6 +2392,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-102@ar-EG'})
 SET p.display_name = 'جرّب دلوقتي',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-EG',
     p.template = 'جرّب دلوقتي',
     p.type = 'cta_primary',
@@ -2208,6 +2414,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-value-103@ar-EG'})
 SET p.display_name = 'وفّر فلوسك',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-EG',
     p.template = 'وفّر فلوسك',
     p.type = 'cta_value',
@@ -2228,6 +2436,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-social-104@ar-EG'})
 SET p.display_name = 'انضم لملايين المصريين',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-EG',
     p.template = 'انضم لملايين المصريين',
     p.type = 'cta_social',
@@ -2252,6 +2462,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-105@ar-AE'})
 SET p.display_name = 'اكتشف المزيد',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-AE',
     p.template = 'اكتشف المزيد',
     p.type = 'cta_primary',
@@ -2272,6 +2484,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-premium-106@ar-AE'})
 SET p.display_name = 'احصل على تجربة حصرية',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-AE',
     p.template = 'احصل على تجربة حصرية',
     p.type = 'cta_premium',
@@ -2292,6 +2506,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-innovation-107@ar-AE'})
 SET p.display_name = 'كن الأول',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-AE',
     p.template = 'كن الأول',
     p.type = 'cta_innovation',
@@ -2316,6 +2532,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-108@ar-MA'})
 SET p.display_name = 'جرب دابا',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-MA',
     p.template = 'جرب دابا',
     p.type = 'cta_primary',
@@ -2336,6 +2554,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-french-mix-109@ar-MA'})
 SET p.display_name = 'Inscrivez-vous مجاناً',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-MA',
     p.template = 'Inscrivez-vous مجاناً',
     p.type = 'cta_french_mix',
@@ -2356,6 +2576,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-value-110@ar-MA'})
 SET p.display_name = 'اكتشف العرض ديالنا',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ar-MA',
     p.template = 'اكتشف العرض ديالنا',
     p.type = 'cta_value',
@@ -2380,6 +2602,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-111@ru-RU'})
 SET p.display_name = 'Начать сейчас',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ru-RU',
     p.template = 'Начать сейчас',
     p.type = 'cta_primary',
@@ -2400,6 +2624,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-112@ru-RU'})
 SET p.display_name = 'Попробуйте бесплатно',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ru-RU',
     p.template = 'Попробуйте бесплатно',
     p.type = 'cta_trust',
@@ -2420,6 +2646,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-113@ru-RU'})
 SET p.display_name = 'Убедитесь в качестве',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'ru-RU',
     p.template = 'Убедитесь в качестве',
     p.type = 'cta_quality',
@@ -2444,6 +2672,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-114@uk-UA'})
 SET p.display_name = 'Почати зараз',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'uk-UA',
     p.template = 'Почати зараз',
     p.type = 'cta_primary',
@@ -2464,6 +2694,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-support-115@uk-UA'})
 SET p.display_name = 'Приєднуйся до нас',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'uk-UA',
     p.template = 'Приєднуйся до нас',
     p.type = 'cta_support',
@@ -2484,6 +2716,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-national-116@uk-UA'})
 SET p.display_name = 'Зроблено в Україні',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'uk-UA',
     p.template = 'Зроблено в Україні',
     p.type = 'cta_national',
@@ -2508,6 +2742,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-117@pl-PL'})
 SET p.display_name = 'Zacznij teraz',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pl-PL',
     p.template = 'Zacznij teraz',
     p.type = 'cta_primary',
@@ -2528,6 +2764,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-118@pl-PL'})
 SET p.display_name = 'Wypróbuj za darmo',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pl-PL',
     p.template = 'Wypróbuj za darmo',
     p.type = 'cta_trust',
@@ -2548,6 +2786,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-119@pl-PL'})
 SET p.display_name = 'Sprawdź jakość',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pl-PL',
     p.template = 'Sprawdź jakość',
     p.type = 'cta_quality',
@@ -2572,6 +2812,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-120@cs-CZ'})
 SET p.display_name = 'Vyzkoušejte zdarma',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'cs-CZ',
     p.template = 'Vyzkoušejte zdarma',
     p.type = 'cta_primary',
@@ -2592,6 +2834,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-understated-121@cs-CZ'})
 SET p.display_name = 'Zjistěte více',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'cs-CZ',
     p.template = 'Zjistěte více',
     p.type = 'cta_understated',
@@ -2612,6 +2856,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-practical-122@cs-CZ'})
 SET p.display_name = 'Funguje to',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'cs-CZ',
     p.template = 'Funguje to',
     p.type = 'cta_practical',
@@ -2636,6 +2882,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-123@tr-TR'})
 SET p.display_name = 'Hemen başla',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'tr-TR',
     p.template = 'Hemen başla',
     p.type = 'cta_primary',
@@ -2656,6 +2904,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-124@tr-TR'})
 SET p.display_name = 'Ücretsiz dene',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'tr-TR',
     p.template = 'Ücretsiz dene',
     p.type = 'cta_trust',
@@ -2676,6 +2926,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-exclusive-125@tr-TR'})
 SET p.display_name = 'Fırsatı kaçırma',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'tr-TR',
     p.template = 'Fırsatı kaçırma',
     p.type = 'cta_exclusive',
@@ -2700,6 +2952,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-126@az-AZ'})
 SET p.display_name = 'İndi başla',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'az-AZ',
     p.template = 'İndi başla',
     p.type = 'cta_primary',
@@ -2720,6 +2974,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-127@az-AZ'})
 SET p.display_name = 'Pulsuz sına',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'az-AZ',
     p.template = 'Pulsuz sına',
     p.type = 'cta_trust',
@@ -2740,6 +2996,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-modern-128@az-AZ'})
 SET p.display_name = 'Gələcəyə addım at',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'az-AZ',
     p.template = 'Gələcəyə addım at',
     p.type = 'cta_modern',
@@ -2764,6 +3022,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-129@he-IL'})
 SET p.display_name = 'התחל עכשיו',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'he-IL',
     p.template = 'התחל עכשיו',
     p.type = 'cta_primary',
@@ -2784,6 +3044,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-free-130@he-IL'})
 SET p.display_name = 'נסה בחינם',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'he-IL',
     p.template = 'נסה בחינם',
     p.type = 'cta_free',
@@ -2804,6 +3066,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-innovation-131@he-IL'})
 SET p.display_name = 'הצטרף לחדשנות',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'he-IL',
     p.template = 'הצטרף לחדשנות',
     p.type = 'cta_innovation',
@@ -2828,6 +3092,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-132@sw-KE'})
 SET p.display_name = 'Anza sasa',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-KE',
     p.template = 'Anza sasa',
     p.type = 'cta_primary',
@@ -2848,6 +3114,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-mobile-133@sw-KE'})
 SET p.display_name = 'Pakia app',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-KE',
     p.template = 'Pakia app',
     p.type = 'cta_mobile',
@@ -2868,6 +3136,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-community-134@sw-KE'})
 SET p.display_name = 'Jiunge nasi',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-KE',
     p.template = 'Jiunge nasi',
     p.type = 'cta_community',
@@ -2892,6 +3162,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-135@sw-TZ'})
 SET p.display_name = 'Anza sasa hivi',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-TZ',
     p.template = 'Anza sasa hivi',
     p.type = 'cta_primary',
@@ -2912,6 +3184,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-respectful-136@sw-TZ'})
 SET p.display_name = 'Karibu kujiunga',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-TZ',
     p.template = 'Karibu kujiunga',
     p.type = 'cta_respectful',
@@ -2932,6 +3206,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-community-137@sw-TZ'})
 SET p.display_name = 'Tuungane pamoja',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'sw-TZ',
     p.template = 'Tuungane pamoja',
     p.type = 'cta_community',
@@ -2956,6 +3232,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-138@am-ET'})
 SET p.display_name = 'አሁን ይጀምሩ',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'am-ET',
     p.template = 'አሁን ይጀምሩ',
     p.type = 'cta_primary',
@@ -2976,6 +3254,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-139@am-ET'})
 SET p.display_name = 'በነጻ ይሞክሩ',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'am-ET',
     p.template = 'በነጻ ይሞክሩ',
     p.type = 'cta_trust',
@@ -2996,6 +3276,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-heritage-140@am-ET'})
 SET p.display_name = 'ኢትዮጵያዊ መፍትሄ',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'am-ET',
     p.template = 'ኢትዮጵያዊ መፍትሄ',
     p.type = 'cta_heritage',
@@ -3020,6 +3302,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-141@el-GR'})
 SET p.display_name = 'Ξεκινήστε τώρα',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-GR',
     p.template = 'Ξεκινήστε τώρα',
     p.type = 'cta_primary',
@@ -3040,6 +3324,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-free-142@el-GR'})
 SET p.display_name = 'Δοκιμάστε δωρεάν',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-GR',
     p.template = 'Δοκιμάστε δωρεάν',
     p.type = 'cta_free',
@@ -3060,6 +3346,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-143@el-GR'})
 SET p.display_name = 'Ποιότητα που αξίζετε',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-GR',
     p.template = 'Ποιότητα που αξίζετε',
     p.type = 'cta_quality',
@@ -3084,6 +3372,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-144@el-CY'})
 SET p.display_name = 'Αρκέψετε τώρα',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-CY',
     p.template = 'Αρκέψετε τώρα',
     p.type = 'cta_primary',
@@ -3104,6 +3394,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-standard-145@el-CY'})
 SET p.display_name = 'Ξεκινήστε τώρα',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-CY',
     p.template = 'Ξεκινήστε τώρα',
     p.type = 'cta_standard',
@@ -3124,6 +3416,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-local-146@el-CY'})
 SET p.display_name = 'Για την Κύπρο',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'el-CY',
     p.template = 'Για την Κύπρο',
     p.type = 'cta_local',
@@ -3148,6 +3442,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-147@fr-FR'})
 SET p.display_name = 'Découvrir notre solution',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-FR',
     p.template = 'Découvrir notre solution',
     p.type = 'cta_primary',
@@ -3168,6 +3464,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-148@fr-FR'})
 SET p.display_name = 'En savoir plus',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-FR',
     p.template = 'En savoir plus',
     p.type = 'cta_secondary',
@@ -3188,6 +3486,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-149@fr-FR'})
 SET p.display_name = 'Profitez de notre offre',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-FR',
     p.template = 'Profitez de notre offre',
     p.type = 'cta_urgency',
@@ -3212,6 +3512,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-150@fr-CA'})
 SET p.display_name = 'Essayez gratuitement',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CA',
     p.template = 'Essayez gratuitement',
     p.type = 'cta_primary',
@@ -3232,6 +3534,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-151@fr-CA'})
 SET p.display_name = 'Voir comment ça marche',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CA',
     p.template = 'Voir comment ça marche',
     p.type = 'cta_secondary',
@@ -3252,6 +3556,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-152@fr-CA'})
 SET p.display_name = 'Commencez maintenant',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CA',
     p.template = 'Commencez maintenant',
     p.type = 'cta_urgency',
@@ -3276,6 +3582,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-153@fr-BE'})
 SET p.display_name = 'Testez notre solution',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-BE',
     p.template = 'Testez notre solution',
     p.type = 'cta_primary',
@@ -3296,6 +3604,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-154@fr-BE'})
 SET p.display_name = 'Découvrez les avantages',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-BE',
     p.template = 'Découvrez les avantages',
     p.type = 'cta_secondary',
@@ -3316,6 +3626,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-155@fr-BE'})
 SET p.display_name = 'Démarrez votre essai',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-BE',
     p.template = 'Démarrez votre essai',
     p.type = 'cta_urgency',
@@ -3340,6 +3652,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-156@fr-CH'})
 SET p.display_name = 'Demander une démonstration',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CH',
     p.template = 'Demander une démonstration',
     p.type = 'cta_primary',
@@ -3360,6 +3674,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-157@fr-CH'})
 SET p.display_name = 'Consulter la documentation',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CH',
     p.template = 'Consulter la documentation',
     p.type = 'cta_secondary',
@@ -3380,6 +3696,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-158@fr-CH'})
 SET p.display_name = 'Planifier votre consultation',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'fr-CH',
     p.template = 'Planifier votre consultation',
     p.type = 'cta_urgency',
@@ -3404,6 +3722,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-159@es-ES'})
 SET p.display_name = 'Descubre cómo funciona',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-ES',
     p.template = 'Descubre cómo funciona',
     p.type = 'cta_primary',
@@ -3424,6 +3744,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-160@es-ES'})
 SET p.display_name = 'Solicita más información',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-ES',
     p.template = 'Solicita más información',
     p.type = 'cta_secondary',
@@ -3444,6 +3766,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-161@es-ES'})
 SET p.display_name = 'Empieza tu prueba gratuita',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-ES',
     p.template = 'Empieza tu prueba gratuita',
     p.type = 'cta_urgency',
@@ -3468,6 +3792,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-162@es-MX'})
 SET p.display_name = 'Conoce nuestra solución',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-MX',
     p.template = 'Conoce nuestra solución',
     p.type = 'cta_primary',
@@ -3488,6 +3814,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-163@es-MX'})
 SET p.display_name = 'Solicita una demostración',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-MX',
     p.template = 'Solicita una demostración',
     p.type = 'cta_secondary',
@@ -3508,6 +3836,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-164@es-MX'})
 SET p.display_name = 'Aprovecha esta oportunidad',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-MX',
     p.template = 'Aprovecha esta oportunidad',
     p.type = 'cta_urgency',
@@ -3532,6 +3862,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-165@es-AR'})
 SET p.display_name = 'Probá gratis ahora',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-AR',
     p.template = 'Probá gratis ahora',
     p.type = 'cta_primary',
@@ -3552,6 +3884,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-166@es-AR'})
 SET p.display_name = 'Mirá cómo funciona',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-AR',
     p.template = 'Mirá cómo funciona',
     p.type = 'cta_secondary',
@@ -3572,6 +3906,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-167@es-AR'})
 SET p.display_name = 'Empezá tu prueba hoy',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-AR',
     p.template = 'Empezá tu prueba hoy',
     p.type = 'cta_urgency',
@@ -3596,6 +3932,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-168@es-CO'})
 SET p.display_name = 'Conozca nuestra solución',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CO',
     p.template = 'Conozca nuestra solución',
     p.type = 'cta_primary',
@@ -3616,6 +3954,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-169@es-CO'})
 SET p.display_name = 'Solicite una demostración gratuita',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CO',
     p.template = 'Solicite una demostración gratuita',
     p.type = 'cta_secondary',
@@ -3636,6 +3976,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-170@es-CO'})
 SET p.display_name = 'Aproveche esta oportunidad',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CO',
     p.template = 'Aproveche esta oportunidad',
     p.type = 'cta_urgency',
@@ -3660,6 +4002,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-171@es-CL'})
 SET p.display_name = 'Prueba gratis',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CL',
     p.template = 'Prueba gratis',
     p.type = 'cta_primary',
@@ -3680,6 +4024,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-172@es-CL'})
 SET p.display_name = 'Conoce los beneficios',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CL',
     p.template = 'Conoce los beneficios',
     p.type = 'cta_secondary',
@@ -3700,6 +4046,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-173@es-CL'})
 SET p.display_name = 'Comienza altiro',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'es-CL',
     p.template = 'Comienza altiro',
     p.type = 'cta_urgency',
@@ -3724,6 +4072,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-174@pt-BR'})
 SET p.display_name = 'Experimente grátis',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-BR',
     p.template = 'Experimente grátis',
     p.type = 'cta_primary',
@@ -3744,6 +4094,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-175@pt-BR'})
 SET p.display_name = 'Saiba mais',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-BR',
     p.template = 'Saiba mais',
     p.type = 'cta_secondary',
@@ -3764,6 +4116,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-176@pt-BR'})
 SET p.display_name = 'Comece agora mesmo',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-BR',
     p.template = 'Comece agora mesmo',
     p.type = 'cta_urgency',
@@ -3788,6 +4142,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-177@pt-PT'})
 SET p.display_name = 'Experimenta gratuitamente',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-PT',
     p.template = 'Experimenta gratuitamente',
     p.type = 'cta_primary',
@@ -3808,6 +4164,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-178@pt-PT'})
 SET p.display_name = 'Sabe mais',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-PT',
     p.template = 'Sabe mais',
     p.type = 'cta_secondary',
@@ -3828,6 +4186,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-179@pt-PT'})
 SET p.display_name = 'Começa hoje',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'pt-PT',
     p.template = 'Começa hoje',
     p.type = 'cta_urgency',
@@ -3852,6 +4212,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-180@it-IT'})
 SET p.display_name = 'Scopri la soluzione',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-IT',
     p.template = 'Scopri la soluzione',
     p.type = 'cta_primary',
@@ -3872,6 +4234,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-181@it-IT'})
 SET p.display_name = 'Richiedi informazioni',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-IT',
     p.template = 'Richiedi informazioni',
     p.type = 'cta_secondary',
@@ -3892,6 +4256,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-182@it-IT'})
 SET p.display_name = 'Prova gratuita',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-IT',
     p.template = 'Prova gratuita',
     p.type = 'cta_urgency',
@@ -3916,6 +4282,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-183@it-CH'})
 SET p.display_name = 'Richieda una consulenza',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-CH',
     p.template = 'Richieda una consulenza',
     p.type = 'cta_primary',
@@ -3936,6 +4304,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-184@it-CH'})
 SET p.display_name = 'Consulti la documentazione',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-CH',
     p.template = 'Consulti la documentazione',
     p.type = 'cta_secondary',
@@ -3956,6 +4326,8 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-185@it-CH'})
 SET p.display_name = 'Fissi un appuntamento',
+    p.node_class = 'Pattern',
+    p.content = p.llm_context,
     p.locale = 'it-CH',
     p.template = 'Fissi un appuntamento',
     p.type = 'cta_urgency',

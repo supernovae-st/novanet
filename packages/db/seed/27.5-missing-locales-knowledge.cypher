@@ -13,6 +13,10 @@
 // --- fil-PH Expressions ---
 MERGE (e:Expression {key: 'expr:expression:subukan-mo-na@fil-PH'})
 SET e.text = 'Subukan mo na!',
+    e.node_class = 'Expression',
+    e.display_name = 'Subukan mo na!',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Try it now!',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -29,6 +33,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:libre-lang@fil-PH'})
 SET e.text = 'Libre lang!',
+    e.node_class = 'Expression',
+    e.display_name = 'Libre lang!',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'It\'s free!',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -45,6 +53,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:mabilis-at-madali@fil-PH'})
 SET e.text = 'Mabilis at madali',
+    e.node_class = 'Expression',
+    e.display_name = 'Mabilis at madali',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Fast and easy',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -61,6 +73,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:mag-sign-up-ngayon@fil-PH'})
 SET e.text = 'Mag-sign up ngayon',
+    e.node_class = 'Expression',
+    e.display_name = 'Mag-sign up ngayon',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Sign up now',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -77,6 +93,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:i-download-na@fil-PH'})
 SET e.text = 'I-download na',
+    e.node_class = 'Expression',
+    e.display_name = 'I-download na',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Download now',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -93,6 +113,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:sulit-na-sulit@fil-PH'})
 SET e.text = 'Sulit na sulit!',
+    e.node_class = 'Expression',
+    e.display_name = 'Sulit na sulit!',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Totally worth it!',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -109,6 +133,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:para-sayo-lang@fil-PH'})
 SET e.text = 'Para sa\'yo lang',
+    e.node_class = 'Expression',
+    e.display_name = 'Para sa\',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Just for you',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -125,6 +153,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:walang-kahirap-hirap@fil-PH'})
 SET e.text = 'Walang kahirap-hirap',
+    e.node_class = 'Expression',
+    e.display_name = 'Walang kahirap-hirap',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'No hassle / Effortless',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -141,6 +173,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:siguradong-maaasahan@fil-PH'})
 SET e.text = 'Siguradong maaasahan',
+    e.node_class = 'Expression',
+    e.display_name = 'Siguradong maaasahan',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Reliably dependable',
     e.locale = 'fil-PH',
     e.context = 'formal',
@@ -157,6 +193,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:samahan-mo-kami@fil-PH'})
 SET e.text = 'Samahan mo kami',
+    e.node_class = 'Expression',
+    e.display_name = 'Samahan mo kami',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Join us',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -173,6 +213,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:bagong-teknolohiya@fil-PH'})
 SET e.text = 'Bagong teknolohiya',
+    e.node_class = 'Expression',
+    e.display_name = 'Bagong teknolohiya',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'New technology',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -189,6 +233,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:salamat-sa-pagtitiwala@fil-PH'})
 SET e.text = 'Salamat sa pagtitiwala',
+    e.node_class = 'Expression',
+    e.display_name = 'Salamat sa pagtitiwala',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Thank you for trusting us',
     e.locale = 'fil-PH',
     e.context = 'formal',
@@ -205,6 +253,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:mas-maganda-mas-mura@fil-PH'})
 SET e.text = 'Mas maganda, mas mura',
+    e.node_class = 'Expression',
+    e.display_name = 'Mas maganda, mas mura',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Better and cheaper',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -221,6 +273,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:i-scan-mo-lang@fil-PH'})
 SET e.text = 'I-scan mo lang',
+    e.node_class = 'Expression',
+    e.display_name = 'I-scan mo lang',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Just scan it',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -237,6 +293,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:maging-isa-sa-amin@fil-PH'})
 SET e.text = 'Maging isa sa amin',
+    e.node_class = 'Expression',
+    e.display_name = 'Maging isa sa amin',
+    e.content = 'Expression for fil-PH',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Become one of us',
     e.locale = 'fil-PH',
     e.context = 'marketing',
@@ -712,6 +772,10 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- lo-LA Expressions ---
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສະບາຍດີ',
+    e.node_class = 'Expression',
+    e.display_name = 'ສະບາຍດີ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Hello / Good day',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -728,6 +792,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຍິນດີຕ້ອນຮັບ',
+    e.node_class = 'Expression',
+    e.display_name = 'ຍິນດີຕ້ອນຮັບ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Welcome',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -744,6 +812,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຂອບໃຈ',
+    e.node_class = 'Expression',
+    e.display_name = 'ຂອບໃຈ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Thank you',
     e.locale = 'lo-LA',
     e.context = 'informal',
@@ -760,6 +832,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຂອບໃຈຫຼາຍໆ',
+    e.node_class = 'Expression',
+    e.display_name = 'ຂອບໃຈຫຼາຍໆ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Thank you very much',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -776,6 +852,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ລອງເບິ່ງດຽວນີ້',
+    e.node_class = 'Expression',
+    e.display_name = 'ລອງເບິ່ງດຽວນີ້',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Try it now',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -792,6 +872,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເລີ່ມຕົ້ນຟຣີ',
+    e.node_class = 'Expression',
+    e.display_name = 'ເລີ່ມຕົ້ນຟຣີ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Start free',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -808,6 +892,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:qr-code@lo-LA'})
 SET e.text = 'ສ້າງ QR Code',
+    e.node_class = 'Expression',
+    e.display_name = 'ສ້າງ QR Code',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Create QR Code',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -824,6 +912,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ໃຊ້ງ່າຍ',
+    e.node_class = 'Expression',
+    e.display_name = 'ໃຊ້ງ່າຍ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Easy to use',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -840,6 +932,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ໄວ ແລະ ສະດວກ',
+    e.node_class = 'Expression',
+    e.display_name = 'ໄວ ແລະ ສະດວກ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Fast and convenient',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -856,6 +952,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເປັນມືອາຊີບ',
+    e.node_class = 'Expression',
+    e.display_name = 'ເປັນມືອາຊີບ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Professional',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -872,6 +972,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເຊື່ອຖືໄດ້',
+    e.node_class = 'Expression',
+    e.display_name = 'ເຊື່ອຖືໄດ້',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Trustworthy / Reliable',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -888,6 +992,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຟຣີຕະຫຼອດໄປ',
+    e.node_class = 'Expression',
+    e.display_name = 'ຟຣີຕະຫຼອດໄປ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Free forever',
     e.locale = 'lo-LA',
     e.context = 'marketing',
@@ -904,6 +1012,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຕິດຕໍ່ພວກເຮົາ',
+    e.node_class = 'Expression',
+    e.display_name = 'ຕິດຕໍ່ພວກເຮົາ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Contact us',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -920,6 +1032,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສຶກສາເພີ່ມເຕີມ',
+    e.node_class = 'Expression',
+    e.display_name = 'ສຶກສາເພີ່ມເຕີມ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Learn more',
     e.locale = 'lo-LA',
     e.context = 'formal',
@@ -936,6 +1052,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສຳເລັດແລ້ວ',
+    e.node_class = 'Expression',
+    e.display_name = 'ສຳເລັດແລ້ວ',
+    e.content = 'Expression for lo-LA',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Success / Completed',
     e.locale = 'lo-LA',
     e.context = 'neutral',
@@ -1411,6 +1531,10 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- or-IN Expressions ---
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ନମସ୍କାର',
+    e.node_class = 'Expression',
+    e.display_name = 'ନମସ୍କାର',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Hello / Greetings',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1427,6 +1551,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସ୍ଵାଗତ',
+    e.node_class = 'Expression',
+    e.display_name = 'ସ୍ଵାଗତ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Welcome',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1443,6 +1571,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଧନ୍ୟବାଦ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଧନ୍ୟବାଦ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Thank you',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1459,6 +1591,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ବର୍ତ୍ତମାନ ଚେଷ୍ଟା କରନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ବର୍ତ୍ତମାନ ଚେଷ୍ଟା କରନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Try it now',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1475,6 +1611,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Start free',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1491,6 +1631,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:qr@or-IN'})
 SET e.text = 'QR କୋଡ ତିଆରି କରନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'QR କୋଡ ତିଆରି କରନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Create QR Code',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1507,6 +1651,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସହଜ ଏବଂ ସୁବିଧାଜନକ',
+    e.node_class = 'Expression',
+    e.display_name = 'ସହଜ ଏବଂ ସୁବିଧାଜନକ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Easy and convenient',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1523,6 +1671,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଦ୍ରୁତ ଏବଂ ନିର୍ଭରଯୋଗ୍ୟ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଦ୍ରୁତ ଏବଂ ନିର୍ଭରଯୋଗ୍ୟ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Fast and reliable',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1539,6 +1691,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ବିଶ୍ଵସ୍ତ ସେବା',
+    e.node_class = 'Expression',
+    e.display_name = 'ବିଶ୍ଵସ୍ତ ସେବା',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Trusted service',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1555,6 +1711,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆମ ସହ ଯୋଗ ଦିଅନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଆମ ସହ ଯୋଗ ଦିଅନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Join us',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1571,6 +1731,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା',
+    e.node_class = 'Expression',
+    e.display_name = 'ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Completely free',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1587,6 +1751,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆଜି ହିଁ ଆରମ୍ଭ କରନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଆଜି ହିଁ ଆରମ୍ଭ କରନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Start today',
     e.locale = 'or-IN',
     e.context = 'marketing',
@@ -1603,6 +1771,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆହୁରି ଜାଣନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଆହୁରି ଜାଣନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Learn more',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1619,6 +1791,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆମକୁ ସମ୍ପର୍କ କରନ୍ତୁ',
+    e.node_class = 'Expression',
+    e.display_name = 'ଆମକୁ ସମ୍ପର୍କ କରନ୍ତୁ',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Contact us',
     e.locale = 'or-IN',
     e.context = 'formal',
@@ -1635,6 +1811,10 @@ MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସଫଳ ହୋଇଗଲା',
+    e.node_class = 'Expression',
+    e.display_name = 'ସଫଳ ହୋଇଗଲା',
+    e.content = 'Expression for or-IN',
+    e.provenance = '{\"source\": \"seed:missing\", \"version\": \"v0.19.0\"}',
     e.english = 'Success',
     e.locale = 'or-IN',
     e.context = 'neutral',

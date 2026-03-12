@@ -8,6 +8,9 @@
 // --- en-US CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-0@en-US'})
 SET c.display_name = 'culture-0',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-US',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-US',
     c.content = 'culture-0',
     c.category = 'general',
@@ -23,6 +26,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-1@en-US'})
 SET c.display_name = 'culture-1',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-US',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-US',
     c.content = 'culture-1',
     c.category = 'general',
@@ -38,6 +44,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-2@en-US'})
 SET c.display_name = 'culture-2',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-US',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-US',
     c.content = 'culture-2',
     c.category = 'general',
@@ -53,6 +62,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-3@en-US'})
 SET c.display_name = 'culture-3',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-US',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-US',
     c.content = 'culture-3',
     c.category = 'general',
@@ -68,6 +80,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-4@en-US'})
 SET c.display_name = 'culture-4',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-US',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-US',
     c.content = 'culture-4',
     c.category = 'general',
@@ -84,6 +99,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-GB CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-5@en-GB'})
 SET c.display_name = 'culture-5',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-GB',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-GB',
     c.content = 'culture-5',
     c.category = 'general',
@@ -99,6 +117,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-6@en-GB'})
 SET c.display_name = 'culture-6',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-GB',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-GB',
     c.content = 'culture-6',
     c.category = 'general',
@@ -114,6 +135,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-7@en-GB'})
 SET c.display_name = 'culture-7',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-GB',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-GB',
     c.content = 'culture-7',
     c.category = 'general',
@@ -129,6 +153,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-8@en-GB'})
 SET c.display_name = 'culture-8',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-GB',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-GB',
     c.content = 'culture-8',
     c.category = 'general',
@@ -144,6 +171,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-9@en-GB'})
 SET c.display_name = 'culture-9',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-GB',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-GB',
     c.content = 'culture-9',
     c.category = 'general',
@@ -160,6 +190,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-AU CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-10@en-AU'})
 SET c.display_name = 'culture-10',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-AU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-AU',
     c.content = 'culture-10',
     c.category = 'general',
@@ -175,6 +208,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-11@en-AU'})
 SET c.display_name = 'culture-11',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-AU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-AU',
     c.content = 'culture-11',
     c.category = 'general',
@@ -190,6 +226,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-12@en-AU'})
 SET c.display_name = 'culture-12',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-AU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-AU',
     c.content = 'culture-12',
     c.category = 'general',
@@ -205,6 +244,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-13@en-AU'})
 SET c.display_name = 'culture-13',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-AU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-AU',
     c.content = 'culture-13',
     c.category = 'general',
@@ -220,6 +262,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-14@en-AU'})
 SET c.display_name = 'culture-14',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-AU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-AU',
     c.content = 'culture-14',
     c.category = 'general',
@@ -236,6 +281,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-CA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-15@en-CA'})
 SET c.display_name = 'culture-15',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-CA',
     c.content = 'culture-15',
     c.category = 'general',
@@ -251,6 +299,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-16@en-CA'})
 SET c.display_name = 'culture-16',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-CA',
     c.content = 'culture-16',
     c.category = 'general',
@@ -266,6 +317,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-17@en-CA'})
 SET c.display_name = 'culture-17',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-CA',
     c.content = 'culture-17',
     c.category = 'general',
@@ -281,6 +335,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-18@en-CA'})
 SET c.display_name = 'culture-18',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-CA',
     c.content = 'culture-18',
     c.category = 'general',
@@ -296,6 +353,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-19@en-CA'})
 SET c.display_name = 'culture-19',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-CA',
     c.content = 'culture-19',
     c.category = 'general',
@@ -312,6 +372,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-IN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-20@en-IN'})
 SET c.display_name = 'culture-20',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IN',
     c.content = 'culture-20',
     c.category = 'general',
@@ -327,6 +390,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-21@en-IN'})
 SET c.display_name = 'culture-21',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IN',
     c.content = 'culture-21',
     c.category = 'general',
@@ -342,6 +408,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-22@en-IN'})
 SET c.display_name = 'culture-22',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IN',
     c.content = 'culture-22',
     c.category = 'general',
@@ -357,6 +426,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-23@en-IN'})
 SET c.display_name = 'culture-23',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IN',
     c.content = 'culture-23',
     c.category = 'general',
@@ -372,6 +444,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-24@en-IN'})
 SET c.display_name = 'culture-24',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IN',
     c.content = 'culture-24',
     c.category = 'general',
@@ -388,6 +463,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-SG CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-25@en-SG'})
 SET c.display_name = 'culture-25',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-SG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-SG',
     c.content = 'culture-25',
     c.category = 'general',
@@ -403,6 +481,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-26@en-SG'})
 SET c.display_name = 'culture-26',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-SG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-SG',
     c.content = 'culture-26',
     c.category = 'general',
@@ -418,6 +499,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-27@en-SG'})
 SET c.display_name = 'culture-27',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-SG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-SG',
     c.content = 'culture-27',
     c.category = 'general',
@@ -433,6 +517,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-28@en-SG'})
 SET c.display_name = 'culture-28',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-SG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-SG',
     c.content = 'culture-28',
     c.category = 'general',
@@ -448,6 +535,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-29@en-SG'})
 SET c.display_name = 'culture-29',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-SG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-SG',
     c.content = 'culture-29',
     c.category = 'general',
@@ -464,6 +554,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-ZA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-30@en-ZA'})
 SET c.display_name = 'culture-30',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-ZA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-ZA',
     c.content = 'culture-30',
     c.category = 'general',
@@ -479,6 +572,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-31@en-ZA'})
 SET c.display_name = 'culture-31',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-ZA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-ZA',
     c.content = 'culture-31',
     c.category = 'general',
@@ -494,6 +590,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-32@en-ZA'})
 SET c.display_name = 'culture-32',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-ZA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-ZA',
     c.content = 'culture-32',
     c.category = 'general',
@@ -509,6 +608,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-33@en-ZA'})
 SET c.display_name = 'culture-33',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-ZA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-ZA',
     c.content = 'culture-33',
     c.category = 'general',
@@ -524,6 +626,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-34@en-ZA'})
 SET c.display_name = 'culture-34',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-ZA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-ZA',
     c.content = 'culture-34',
     c.category = 'general',
@@ -540,6 +645,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-NZ CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-35@en-NZ'})
 SET c.display_name = 'culture-35',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-NZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-NZ',
     c.content = 'culture-35',
     c.category = 'general',
@@ -555,6 +663,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-36@en-NZ'})
 SET c.display_name = 'culture-36',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-NZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-NZ',
     c.content = 'culture-36',
     c.category = 'general',
@@ -570,6 +681,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-37@en-NZ'})
 SET c.display_name = 'culture-37',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-NZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-NZ',
     c.content = 'culture-37',
     c.category = 'general',
@@ -585,6 +699,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-38@en-NZ'})
 SET c.display_name = 'culture-38',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-NZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-NZ',
     c.content = 'culture-38',
     c.category = 'general',
@@ -600,6 +717,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-39@en-NZ'})
 SET c.display_name = 'culture-39',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-NZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-NZ',
     c.content = 'culture-39',
     c.category = 'general',
@@ -616,6 +736,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-IE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-40@en-IE'})
 SET c.display_name = 'culture-40',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IE',
     c.content = 'culture-40',
     c.category = 'general',
@@ -631,6 +754,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-41@en-IE'})
 SET c.display_name = 'culture-41',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IE',
     c.content = 'culture-41',
     c.category = 'general',
@@ -646,6 +772,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-42@en-IE'})
 SET c.display_name = 'culture-42',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IE',
     c.content = 'culture-42',
     c.category = 'general',
@@ -661,6 +790,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-43@en-IE'})
 SET c.display_name = 'culture-43',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IE',
     c.content = 'culture-43',
     c.category = 'general',
@@ -676,6 +808,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-44@en-IE'})
 SET c.display_name = 'culture-44',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-IE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-IE',
     c.content = 'culture-44',
     c.category = 'general',
@@ -692,6 +827,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- en-PH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-45@en-PH'})
 SET c.display_name = 'culture-45',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-PH',
     c.content = 'culture-45',
     c.category = 'general',
@@ -707,6 +845,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-46@en-PH'})
 SET c.display_name = 'culture-46',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-PH',
     c.content = 'culture-46',
     c.category = 'general',
@@ -722,6 +863,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-47@en-PH'})
 SET c.display_name = 'culture-47',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-PH',
     c.content = 'culture-47',
     c.category = 'general',
@@ -737,6 +881,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-48@en-PH'})
 SET c.display_name = 'culture-48',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-PH',
     c.content = 'culture-48',
     c.category = 'general',
@@ -752,6 +899,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-49@en-PH'})
 SET c.display_name = 'culture-49',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for en-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'en-PH',
     c.content = 'culture-49',
     c.category = 'general',
@@ -768,6 +918,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- de-DE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-50@de-DE'})
 SET c.display_name = 'culture-50',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-DE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-DE',
     c.content = 'culture-50',
     c.category = 'general',
@@ -783,6 +936,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-51@de-DE'})
 SET c.display_name = 'culture-51',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-DE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-DE',
     c.content = 'culture-51',
     c.category = 'general',
@@ -798,6 +954,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-52@de-DE'})
 SET c.display_name = 'culture-52',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-DE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-DE',
     c.content = 'culture-52',
     c.category = 'general',
@@ -813,6 +972,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-53@de-DE'})
 SET c.display_name = 'culture-53',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-DE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-DE',
     c.content = 'culture-53',
     c.category = 'general',
@@ -828,6 +990,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-54@de-DE'})
 SET c.display_name = 'culture-54',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-DE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-DE',
     c.content = 'culture-54',
     c.category = 'general',
@@ -844,6 +1009,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- de-AT CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-55@de-AT'})
 SET c.display_name = 'culture-55',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-AT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-AT',
     c.content = 'culture-55',
     c.category = 'general',
@@ -859,6 +1027,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-56@de-AT'})
 SET c.display_name = 'culture-56',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-AT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-AT',
     c.content = 'culture-56',
     c.category = 'general',
@@ -874,6 +1045,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-57@de-AT'})
 SET c.display_name = 'culture-57',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-AT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-AT',
     c.content = 'culture-57',
     c.category = 'general',
@@ -889,6 +1063,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-58@de-AT'})
 SET c.display_name = 'culture-58',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-AT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-AT',
     c.content = 'culture-58',
     c.category = 'general',
@@ -904,6 +1081,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-59@de-AT'})
 SET c.display_name = 'culture-59',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-AT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-AT',
     c.content = 'culture-59',
     c.category = 'general',
@@ -920,6 +1100,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- de-CH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-60@de-CH'})
 SET c.display_name = 'culture-60',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-CH',
     c.content = 'culture-60',
     c.category = 'general',
@@ -935,6 +1118,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-61@de-CH'})
 SET c.display_name = 'culture-61',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-CH',
     c.content = 'culture-61',
     c.category = 'general',
@@ -950,6 +1136,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-62@de-CH'})
 SET c.display_name = 'culture-62',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-CH',
     c.content = 'culture-62',
     c.category = 'general',
@@ -965,6 +1154,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-63@de-CH'})
 SET c.display_name = 'culture-63',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-CH',
     c.content = 'culture-63',
     c.category = 'general',
@@ -980,6 +1172,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-64@de-CH'})
 SET c.display_name = 'culture-64',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for de-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'de-CH',
     c.content = 'culture-64',
     c.category = 'general',
@@ -996,6 +1191,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- nl-NL CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-65@nl-NL'})
 SET c.display_name = 'culture-65',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-NL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-NL',
     c.content = 'culture-65',
     c.category = 'general',
@@ -1011,6 +1209,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-66@nl-NL'})
 SET c.display_name = 'culture-66',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-NL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-NL',
     c.content = 'culture-66',
     c.category = 'general',
@@ -1026,6 +1227,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-67@nl-NL'})
 SET c.display_name = 'culture-67',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-NL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-NL',
     c.content = 'culture-67',
     c.category = 'general',
@@ -1041,6 +1245,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-68@nl-NL'})
 SET c.display_name = 'culture-68',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-NL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-NL',
     c.content = 'culture-68',
     c.category = 'general',
@@ -1056,6 +1263,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-69@nl-NL'})
 SET c.display_name = 'culture-69',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-NL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-NL',
     c.content = 'culture-69',
     c.category = 'general',
@@ -1072,6 +1282,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- nl-BE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-70@nl-BE'})
 SET c.display_name = 'culture-70',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-BE',
     c.content = 'culture-70',
     c.category = 'general',
@@ -1087,6 +1300,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-71@nl-BE'})
 SET c.display_name = 'culture-71',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-BE',
     c.content = 'culture-71',
     c.category = 'general',
@@ -1102,6 +1318,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-72@nl-BE'})
 SET c.display_name = 'culture-72',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-BE',
     c.content = 'culture-72',
     c.category = 'general',
@@ -1117,6 +1336,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-73@nl-BE'})
 SET c.display_name = 'culture-73',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-BE',
     c.content = 'culture-73',
     c.category = 'general',
@@ -1132,6 +1354,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-74@nl-BE'})
 SET c.display_name = 'culture-74',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for nl-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'nl-BE',
     c.content = 'culture-74',
     c.category = 'general',
@@ -1148,6 +1373,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- sv-SE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-75@sv-SE'})
 SET c.display_name = 'culture-75',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sv-SE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sv-SE',
     c.content = 'culture-75',
     c.category = 'general',
@@ -1163,6 +1391,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-76@sv-SE'})
 SET c.display_name = 'culture-76',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sv-SE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sv-SE',
     c.content = 'culture-76',
     c.category = 'general',
@@ -1178,6 +1409,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-77@sv-SE'})
 SET c.display_name = 'culture-77',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sv-SE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sv-SE',
     c.content = 'culture-77',
     c.category = 'general',
@@ -1193,6 +1427,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-78@sv-SE'})
 SET c.display_name = 'culture-78',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sv-SE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sv-SE',
     c.content = 'culture-78',
     c.category = 'general',
@@ -1208,6 +1445,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-79@sv-SE'})
 SET c.display_name = 'culture-79',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sv-SE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sv-SE',
     c.content = 'culture-79',
     c.category = 'general',
@@ -1224,6 +1464,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- da-DK CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-80@da-DK'})
 SET c.display_name = 'culture-80',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for da-DK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'da-DK',
     c.content = 'culture-80',
     c.category = 'general',
@@ -1239,6 +1482,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-81@da-DK'})
 SET c.display_name = 'culture-81',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for da-DK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'da-DK',
     c.content = 'culture-81',
     c.category = 'general',
@@ -1254,6 +1500,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-82@da-DK'})
 SET c.display_name = 'culture-82',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for da-DK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'da-DK',
     c.content = 'culture-82',
     c.category = 'general',
@@ -1269,6 +1518,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-83@da-DK'})
 SET c.display_name = 'culture-83',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for da-DK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'da-DK',
     c.content = 'culture-83',
     c.category = 'general',
@@ -1284,6 +1536,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-84@da-DK'})
 SET c.display_name = 'culture-84',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for da-DK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'da-DK',
     c.content = 'culture-84',
     c.category = 'general',
@@ -1300,6 +1555,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- no-NO CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-85@no-NO'})
 SET c.display_name = 'culture-85',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for no-NO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'no-NO',
     c.content = 'culture-85',
     c.category = 'general',
@@ -1315,6 +1573,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-86@no-NO'})
 SET c.display_name = 'culture-86',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for no-NO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'no-NO',
     c.content = 'culture-86',
     c.category = 'general',
@@ -1330,6 +1591,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-87@no-NO'})
 SET c.display_name = 'culture-87',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for no-NO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'no-NO',
     c.content = 'culture-87',
     c.category = 'general',
@@ -1345,6 +1609,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-88@no-NO'})
 SET c.display_name = 'culture-88',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for no-NO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'no-NO',
     c.content = 'culture-88',
     c.category = 'general',
@@ -1360,6 +1627,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-89@no-NO'})
 SET c.display_name = 'culture-89',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for no-NO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'no-NO',
     c.content = 'culture-89',
     c.category = 'general',
@@ -1376,6 +1646,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fi-FI CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-90@fi-FI'})
 SET c.display_name = 'culture-90',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fi-FI',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fi-FI',
     c.content = 'culture-90',
     c.category = 'general',
@@ -1391,6 +1664,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-91@fi-FI'})
 SET c.display_name = 'culture-91',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fi-FI',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fi-FI',
     c.content = 'culture-91',
     c.category = 'general',
@@ -1406,6 +1682,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-92@fi-FI'})
 SET c.display_name = 'culture-92',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fi-FI',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fi-FI',
     c.content = 'culture-92',
     c.category = 'general',
@@ -1421,6 +1700,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-93@fi-FI'})
 SET c.display_name = 'culture-93',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fi-FI',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fi-FI',
     c.content = 'culture-93',
     c.category = 'general',
@@ -1436,6 +1718,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-94@fi-FI'})
 SET c.display_name = 'culture-94',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fi-FI',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fi-FI',
     c.content = 'culture-94',
     c.category = 'general',
@@ -1452,6 +1737,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- zh-CN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-95@zh-CN'})
 SET c.display_name = 'culture-95',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-CN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-CN',
     c.content = 'culture-95',
     c.category = 'general',
@@ -1467,6 +1755,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-96@zh-CN'})
 SET c.display_name = 'culture-96',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-CN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-CN',
     c.content = 'culture-96',
     c.category = 'general',
@@ -1482,6 +1773,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-97@zh-CN'})
 SET c.display_name = 'culture-97',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-CN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-CN',
     c.content = 'culture-97',
     c.category = 'general',
@@ -1497,6 +1791,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-98@zh-CN'})
 SET c.display_name = 'culture-98',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-CN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-CN',
     c.content = 'culture-98',
     c.category = 'general',
@@ -1512,6 +1809,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-99@zh-CN'})
 SET c.display_name = 'culture-99',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-CN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-CN',
     c.content = 'culture-99',
     c.category = 'general',
@@ -1528,6 +1828,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- zh-TW CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-100@zh-TW'})
 SET c.display_name = 'culture-100',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-TW',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-TW',
     c.content = 'culture-100',
     c.category = 'general',
@@ -1543,6 +1846,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-101@zh-TW'})
 SET c.display_name = 'culture-101',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-TW',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-TW',
     c.content = 'culture-101',
     c.category = 'general',
@@ -1558,6 +1864,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-102@zh-TW'})
 SET c.display_name = 'culture-102',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-TW',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-TW',
     c.content = 'culture-102',
     c.category = 'general',
@@ -1573,6 +1882,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-103@zh-TW'})
 SET c.display_name = 'culture-103',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-TW',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-TW',
     c.content = 'culture-103',
     c.category = 'general',
@@ -1589,6 +1901,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- zh-HK CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-104@zh-HK'})
 SET c.display_name = 'culture-104',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-HK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-HK',
     c.content = 'culture-104',
     c.category = 'general',
@@ -1604,6 +1919,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-105@zh-HK'})
 SET c.display_name = 'culture-105',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-HK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-HK',
     c.content = 'culture-105',
     c.category = 'general',
@@ -1619,6 +1937,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-106@zh-HK'})
 SET c.display_name = 'culture-106',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-HK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-HK',
     c.content = 'culture-106',
     c.category = 'general',
@@ -1634,6 +1955,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-107@zh-HK'})
 SET c.display_name = 'culture-107',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for zh-HK',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'zh-HK',
     c.content = 'culture-107',
     c.category = 'general',
@@ -1650,6 +1974,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ja-JP CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-108@ja-JP'})
 SET c.display_name = 'culture-108',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ja-JP',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ja-JP',
     c.content = 'culture-108',
     c.category = 'general',
@@ -1665,6 +1992,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-109@ja-JP'})
 SET c.display_name = 'culture-109',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ja-JP',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ja-JP',
     c.content = 'culture-109',
     c.category = 'general',
@@ -1680,6 +2010,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-110@ja-JP'})
 SET c.display_name = 'culture-110',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ja-JP',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ja-JP',
     c.content = 'culture-110',
     c.category = 'general',
@@ -1695,6 +2028,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-111@ja-JP'})
 SET c.display_name = 'culture-111',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ja-JP',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ja-JP',
     c.content = 'culture-111',
     c.category = 'general',
@@ -1710,6 +2046,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-112@ja-JP'})
 SET c.display_name = 'culture-112',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ja-JP',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ja-JP',
     c.content = 'culture-112',
     c.category = 'general',
@@ -1726,6 +2065,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ko-KR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-113@ko-KR'})
 SET c.display_name = 'culture-113',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ko-KR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ko-KR',
     c.content = 'culture-113',
     c.category = 'general',
@@ -1741,6 +2083,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-114@ko-KR'})
 SET c.display_name = 'culture-114',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ko-KR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ko-KR',
     c.content = 'culture-114',
     c.category = 'general',
@@ -1756,6 +2101,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-115@ko-KR'})
 SET c.display_name = 'culture-115',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ko-KR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ko-KR',
     c.content = 'culture-115',
     c.category = 'general',
@@ -1771,6 +2119,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-116@ko-KR'})
 SET c.display_name = 'culture-116',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ko-KR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ko-KR',
     c.content = 'culture-116',
     c.category = 'general',
@@ -1786,6 +2137,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-117@ko-KR'})
 SET c.display_name = 'culture-117',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ko-KR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ko-KR',
     c.content = 'culture-117',
     c.category = 'general',
@@ -1802,6 +2156,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- hi-IN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-118@hi-IN'})
 SET c.display_name = 'culture-118',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for hi-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'hi-IN',
     c.content = 'culture-118',
     c.category = 'general',
@@ -1817,6 +2174,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-119@hi-IN'})
 SET c.display_name = 'culture-119',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for hi-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'hi-IN',
     c.content = 'culture-119',
     c.category = 'general',
@@ -1832,6 +2192,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-120@hi-IN'})
 SET c.display_name = 'culture-120',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for hi-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'hi-IN',
     c.content = 'culture-120',
     c.category = 'general',
@@ -1847,6 +2210,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-121@hi-IN'})
 SET c.display_name = 'culture-121',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for hi-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'hi-IN',
     c.content = 'culture-121',
     c.category = 'general',
@@ -1863,6 +2229,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- bn-BD CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-122@bn-BD'})
 SET c.display_name = 'culture-122',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for bn-BD',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'bn-BD',
     c.content = 'culture-122',
     c.category = 'general',
@@ -1878,6 +2247,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-123@bn-BD'})
 SET c.display_name = 'culture-123',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for bn-BD',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'bn-BD',
     c.content = 'culture-123',
     c.category = 'general',
@@ -1893,6 +2265,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-124@bn-BD'})
 SET c.display_name = 'culture-124',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for bn-BD',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'bn-BD',
     c.content = 'culture-124',
     c.category = 'general',
@@ -1908,6 +2283,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-125@bn-BD'})
 SET c.display_name = 'culture-125',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for bn-BD',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'bn-BD',
     c.content = 'culture-125',
     c.category = 'general',
@@ -1924,6 +2302,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ta-IN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-126@ta-IN'})
 SET c.display_name = 'culture-126',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ta-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ta-IN',
     c.content = 'culture-126',
     c.category = 'general',
@@ -1939,6 +2320,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-127@ta-IN'})
 SET c.display_name = 'culture-127',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ta-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ta-IN',
     c.content = 'culture-127',
     c.category = 'general',
@@ -1954,6 +2338,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-128@ta-IN'})
 SET c.display_name = 'culture-128',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ta-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ta-IN',
     c.content = 'culture-128',
     c.category = 'general',
@@ -1969,6 +2356,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-129@ta-IN'})
 SET c.display_name = 'culture-129',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ta-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ta-IN',
     c.content = 'culture-129',
     c.category = 'general',
@@ -1985,6 +2375,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- te-IN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-130@te-IN'})
 SET c.display_name = 'culture-130',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for te-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'te-IN',
     c.content = 'culture-130',
     c.category = 'general',
@@ -2000,6 +2393,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-131@te-IN'})
 SET c.display_name = 'culture-131',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for te-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'te-IN',
     c.content = 'culture-131',
     c.category = 'general',
@@ -2015,6 +2411,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-132@te-IN'})
 SET c.display_name = 'culture-132',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for te-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'te-IN',
     c.content = 'culture-132',
     c.category = 'general',
@@ -2030,6 +2429,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-133@te-IN'})
 SET c.display_name = 'culture-133',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for te-IN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'te-IN',
     c.content = 'culture-133',
     c.category = 'general',
@@ -2046,6 +2448,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- vi-VN CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-134@vi-VN'})
 SET c.display_name = 'culture-134',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for vi-VN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'vi-VN',
     c.content = 'culture-134',
     c.category = 'general',
@@ -2061,6 +2466,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-135@vi-VN'})
 SET c.display_name = 'culture-135',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for vi-VN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'vi-VN',
     c.content = 'culture-135',
     c.category = 'general',
@@ -2076,6 +2484,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-136@vi-VN'})
 SET c.display_name = 'culture-136',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for vi-VN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'vi-VN',
     c.content = 'culture-136',
     c.category = 'general',
@@ -2091,6 +2502,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-137@vi-VN'})
 SET c.display_name = 'culture-137',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for vi-VN',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'vi-VN',
     c.content = 'culture-137',
     c.category = 'general',
@@ -2107,6 +2521,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- th-TH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-138@th-TH'})
 SET c.display_name = 'culture-138',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for th-TH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'th-TH',
     c.content = 'culture-138',
     c.category = 'general',
@@ -2122,6 +2539,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-139@th-TH'})
 SET c.display_name = 'culture-139',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for th-TH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'th-TH',
     c.content = 'culture-139',
     c.category = 'general',
@@ -2137,6 +2557,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-140@th-TH'})
 SET c.display_name = 'culture-140',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for th-TH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'th-TH',
     c.content = 'culture-140',
     c.category = 'general',
@@ -2152,6 +2575,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-141@th-TH'})
 SET c.display_name = 'culture-141',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for th-TH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'th-TH',
     c.content = 'culture-141',
     c.category = 'general',
@@ -2168,6 +2594,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- id-ID CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-142@id-ID'})
 SET c.display_name = 'culture-142',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for id-ID',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'id-ID',
     c.content = 'culture-142',
     c.category = 'general',
@@ -2183,6 +2612,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-143@id-ID'})
 SET c.display_name = 'culture-143',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for id-ID',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'id-ID',
     c.content = 'culture-143',
     c.category = 'general',
@@ -2198,6 +2630,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-144@id-ID'})
 SET c.display_name = 'culture-144',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for id-ID',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'id-ID',
     c.content = 'culture-144',
     c.category = 'general',
@@ -2213,6 +2648,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-145@id-ID'})
 SET c.display_name = 'culture-145',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for id-ID',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'id-ID',
     c.content = 'culture-145',
     c.category = 'general',
@@ -2229,6 +2667,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ms-MY CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-146@ms-MY'})
 SET c.display_name = 'culture-146',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ms-MY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ms-MY',
     c.content = 'culture-146',
     c.category = 'general',
@@ -2244,6 +2685,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-147@ms-MY'})
 SET c.display_name = 'culture-147',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ms-MY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ms-MY',
     c.content = 'culture-147',
     c.category = 'general',
@@ -2259,6 +2703,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-148@ms-MY'})
 SET c.display_name = 'culture-148',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ms-MY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ms-MY',
     c.content = 'culture-148',
     c.category = 'general',
@@ -2274,6 +2721,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-149@ms-MY'})
 SET c.display_name = 'culture-149',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ms-MY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ms-MY',
     c.content = 'culture-149',
     c.category = 'general',
@@ -2290,6 +2740,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fil-PH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-150@fil-PH'})
 SET c.display_name = 'culture-150',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fil-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fil-PH',
     c.content = 'culture-150',
     c.category = 'general',
@@ -2305,6 +2758,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-151@fil-PH'})
 SET c.display_name = 'culture-151',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fil-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fil-PH',
     c.content = 'culture-151',
     c.category = 'general',
@@ -2320,6 +2776,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-152@fil-PH'})
 SET c.display_name = 'culture-152',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fil-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fil-PH',
     c.content = 'culture-152',
     c.category = 'general',
@@ -2335,6 +2794,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-153@fil-PH'})
 SET c.display_name = 'culture-153',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fil-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fil-PH',
     c.content = 'culture-153',
     c.category = 'general',
@@ -2350,6 +2812,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-154@fil-PH'})
 SET c.display_name = 'culture-154',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fil-PH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fil-PH',
     c.content = 'culture-154',
     c.category = 'general',
@@ -2366,6 +2831,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ar-SA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-155@ar-SA'})
 SET c.display_name = 'culture-155',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-SA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-SA',
     c.content = 'culture-155',
     c.category = 'general',
@@ -2381,6 +2849,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-156@ar-SA'})
 SET c.display_name = 'culture-156',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-SA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-SA',
     c.content = 'culture-156',
     c.category = 'general',
@@ -2396,6 +2867,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-157@ar-SA'})
 SET c.display_name = 'culture-157',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-SA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-SA',
     c.content = 'culture-157',
     c.category = 'general',
@@ -2411,6 +2885,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-158@ar-SA'})
 SET c.display_name = 'culture-158',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-SA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-SA',
     c.content = 'culture-158',
     c.category = 'general',
@@ -2426,6 +2903,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-159@ar-SA'})
 SET c.display_name = 'culture-159',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-SA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-SA',
     c.content = 'culture-159',
     c.category = 'general',
@@ -2442,6 +2922,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ar-EG CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-160@ar-EG'})
 SET c.display_name = 'culture-160',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-EG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-EG',
     c.content = 'culture-160',
     c.category = 'general',
@@ -2457,6 +2940,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-161@ar-EG'})
 SET c.display_name = 'culture-161',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-EG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-EG',
     c.content = 'culture-161',
     c.category = 'general',
@@ -2472,6 +2958,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-162@ar-EG'})
 SET c.display_name = 'culture-162',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-EG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-EG',
     c.content = 'culture-162',
     c.category = 'general',
@@ -2487,6 +2976,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-163@ar-EG'})
 SET c.display_name = 'culture-163',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-EG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-EG',
     c.content = 'culture-163',
     c.category = 'general',
@@ -2502,6 +2994,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-164@ar-EG'})
 SET c.display_name = 'culture-164',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-EG',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-EG',
     c.content = 'culture-164',
     c.category = 'general',
@@ -2518,6 +3013,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ar-AE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-165@ar-AE'})
 SET c.display_name = 'culture-165',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-AE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-AE',
     c.content = 'culture-165',
     c.category = 'general',
@@ -2533,6 +3031,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-166@ar-AE'})
 SET c.display_name = 'culture-166',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-AE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-AE',
     c.content = 'culture-166',
     c.category = 'general',
@@ -2548,6 +3049,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-167@ar-AE'})
 SET c.display_name = 'culture-167',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-AE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-AE',
     c.content = 'culture-167',
     c.category = 'general',
@@ -2563,6 +3067,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-168@ar-AE'})
 SET c.display_name = 'culture-168',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-AE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-AE',
     c.content = 'culture-168',
     c.category = 'general',
@@ -2579,6 +3086,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ar-MA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-169@ar-MA'})
 SET c.display_name = 'culture-169',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-MA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-MA',
     c.content = 'culture-169',
     c.category = 'general',
@@ -2594,6 +3104,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-170@ar-MA'})
 SET c.display_name = 'culture-170',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-MA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-MA',
     c.content = 'culture-170',
     c.category = 'general',
@@ -2609,6 +3122,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-171@ar-MA'})
 SET c.display_name = 'culture-171',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-MA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-MA',
     c.content = 'culture-171',
     c.category = 'general',
@@ -2624,6 +3140,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-172@ar-MA'})
 SET c.display_name = 'culture-172',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ar-MA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ar-MA',
     c.content = 'culture-172',
     c.category = 'general',
@@ -2640,6 +3159,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- ru-RU CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-173@ru-RU'})
 SET c.display_name = 'culture-173',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ru-RU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ru-RU',
     c.content = 'culture-173',
     c.category = 'general',
@@ -2655,6 +3177,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-174@ru-RU'})
 SET c.display_name = 'culture-174',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ru-RU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ru-RU',
     c.content = 'culture-174',
     c.category = 'general',
@@ -2670,6 +3195,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-175@ru-RU'})
 SET c.display_name = 'culture-175',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ru-RU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ru-RU',
     c.content = 'culture-175',
     c.category = 'general',
@@ -2685,6 +3213,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-176@ru-RU'})
 SET c.display_name = 'culture-176',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for ru-RU',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'ru-RU',
     c.content = 'culture-176',
     c.category = 'general',
@@ -2701,6 +3232,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- uk-UA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-177@uk-UA'})
 SET c.display_name = 'culture-177',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for uk-UA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'uk-UA',
     c.content = 'culture-177',
     c.category = 'general',
@@ -2716,6 +3250,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-178@uk-UA'})
 SET c.display_name = 'culture-178',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for uk-UA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'uk-UA',
     c.content = 'culture-178',
     c.category = 'general',
@@ -2731,6 +3268,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-179@uk-UA'})
 SET c.display_name = 'culture-179',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for uk-UA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'uk-UA',
     c.content = 'culture-179',
     c.category = 'general',
@@ -2746,6 +3286,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-180@uk-UA'})
 SET c.display_name = 'culture-180',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for uk-UA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'uk-UA',
     c.content = 'culture-180',
     c.category = 'general',
@@ -2762,6 +3305,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- pl-PL CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-181@pl-PL'})
 SET c.display_name = 'culture-181',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pl-PL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pl-PL',
     c.content = 'culture-181',
     c.category = 'general',
@@ -2777,6 +3323,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-182@pl-PL'})
 SET c.display_name = 'culture-182',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pl-PL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pl-PL',
     c.content = 'culture-182',
     c.category = 'general',
@@ -2792,6 +3341,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-183@pl-PL'})
 SET c.display_name = 'culture-183',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pl-PL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pl-PL',
     c.content = 'culture-183',
     c.category = 'general',
@@ -2807,6 +3359,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-184@pl-PL'})
 SET c.display_name = 'culture-184',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pl-PL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pl-PL',
     c.content = 'culture-184',
     c.category = 'general',
@@ -2823,6 +3378,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- cs-CZ CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-185@cs-CZ'})
 SET c.display_name = 'culture-185',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for cs-CZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'cs-CZ',
     c.content = 'culture-185',
     c.category = 'general',
@@ -2838,6 +3396,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-186@cs-CZ'})
 SET c.display_name = 'culture-186',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for cs-CZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'cs-CZ',
     c.content = 'culture-186',
     c.category = 'general',
@@ -2853,6 +3414,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-187@cs-CZ'})
 SET c.display_name = 'culture-187',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for cs-CZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'cs-CZ',
     c.content = 'culture-187',
     c.category = 'general',
@@ -2868,6 +3432,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-188@cs-CZ'})
 SET c.display_name = 'culture-188',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for cs-CZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'cs-CZ',
     c.content = 'culture-188',
     c.category = 'general',
@@ -2884,6 +3451,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- tr-TR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-189@tr-TR'})
 SET c.display_name = 'culture-189',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for tr-TR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'tr-TR',
     c.content = 'culture-189',
     c.category = 'general',
@@ -2899,6 +3469,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-190@tr-TR'})
 SET c.display_name = 'culture-190',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for tr-TR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'tr-TR',
     c.content = 'culture-190',
     c.category = 'general',
@@ -2914,6 +3487,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-191@tr-TR'})
 SET c.display_name = 'culture-191',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for tr-TR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'tr-TR',
     c.content = 'culture-191',
     c.category = 'general',
@@ -2929,6 +3505,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-192@tr-TR'})
 SET c.display_name = 'culture-192',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for tr-TR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'tr-TR',
     c.content = 'culture-192',
     c.category = 'general',
@@ -2945,6 +3524,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- az-AZ CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-193@az-AZ'})
 SET c.display_name = 'culture-193',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for az-AZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'az-AZ',
     c.content = 'culture-193',
     c.category = 'general',
@@ -2960,6 +3542,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-194@az-AZ'})
 SET c.display_name = 'culture-194',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for az-AZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'az-AZ',
     c.content = 'culture-194',
     c.category = 'general',
@@ -2975,6 +3560,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-195@az-AZ'})
 SET c.display_name = 'culture-195',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for az-AZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'az-AZ',
     c.content = 'culture-195',
     c.category = 'general',
@@ -2990,6 +3578,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-196@az-AZ'})
 SET c.display_name = 'culture-196',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for az-AZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'az-AZ',
     c.content = 'culture-196',
     c.category = 'general',
@@ -3006,6 +3597,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- he-IL CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-197@he-IL'})
 SET c.display_name = 'culture-197',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for he-IL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'he-IL',
     c.content = 'culture-197',
     c.category = 'general',
@@ -3021,6 +3615,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-198@he-IL'})
 SET c.display_name = 'culture-198',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for he-IL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'he-IL',
     c.content = 'culture-198',
     c.category = 'general',
@@ -3036,6 +3633,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-199@he-IL'})
 SET c.display_name = 'culture-199',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for he-IL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'he-IL',
     c.content = 'culture-199',
     c.category = 'general',
@@ -3051,6 +3651,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-200@he-IL'})
 SET c.display_name = 'culture-200',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for he-IL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'he-IL',
     c.content = 'culture-200',
     c.category = 'general',
@@ -3067,6 +3670,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- sw-KE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-201@sw-KE'})
 SET c.display_name = 'culture-201',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-KE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-KE',
     c.content = 'culture-201',
     c.category = 'general',
@@ -3082,6 +3688,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-202@sw-KE'})
 SET c.display_name = 'culture-202',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-KE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-KE',
     c.content = 'culture-202',
     c.category = 'general',
@@ -3097,6 +3706,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-203@sw-KE'})
 SET c.display_name = 'culture-203',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-KE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-KE',
     c.content = 'culture-203',
     c.category = 'general',
@@ -3112,6 +3724,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-204@sw-KE'})
 SET c.display_name = 'culture-204',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-KE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-KE',
     c.content = 'culture-204',
     c.category = 'general',
@@ -3128,6 +3743,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- sw-TZ CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-205@sw-TZ'})
 SET c.display_name = 'culture-205',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-TZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-TZ',
     c.content = 'culture-205',
     c.category = 'general',
@@ -3143,6 +3761,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-206@sw-TZ'})
 SET c.display_name = 'culture-206',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-TZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-TZ',
     c.content = 'culture-206',
     c.category = 'general',
@@ -3158,6 +3779,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-207@sw-TZ'})
 SET c.display_name = 'culture-207',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-TZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-TZ',
     c.content = 'culture-207',
     c.category = 'general',
@@ -3173,6 +3797,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-208@sw-TZ'})
 SET c.display_name = 'culture-208',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for sw-TZ',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'sw-TZ',
     c.content = 'culture-208',
     c.category = 'general',
@@ -3189,6 +3816,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- am-ET CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-209@am-ET'})
 SET c.display_name = 'culture-209',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for am-ET',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'am-ET',
     c.content = 'culture-209',
     c.category = 'general',
@@ -3204,6 +3834,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-210@am-ET'})
 SET c.display_name = 'culture-210',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for am-ET',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'am-ET',
     c.content = 'culture-210',
     c.category = 'general',
@@ -3219,6 +3852,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-211@am-ET'})
 SET c.display_name = 'culture-211',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for am-ET',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'am-ET',
     c.content = 'culture-211',
     c.category = 'general',
@@ -3234,6 +3870,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-212@am-ET'})
 SET c.display_name = 'culture-212',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for am-ET',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'am-ET',
     c.content = 'culture-212',
     c.category = 'general',
@@ -3250,6 +3889,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- el-GR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-213@el-GR'})
 SET c.display_name = 'culture-213',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-GR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-GR',
     c.content = 'culture-213',
     c.category = 'general',
@@ -3265,6 +3907,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-214@el-GR'})
 SET c.display_name = 'culture-214',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-GR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-GR',
     c.content = 'culture-214',
     c.category = 'general',
@@ -3280,6 +3925,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-215@el-GR'})
 SET c.display_name = 'culture-215',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-GR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-GR',
     c.content = 'culture-215',
     c.category = 'general',
@@ -3295,6 +3943,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-216@el-GR'})
 SET c.display_name = 'culture-216',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-GR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-GR',
     c.content = 'culture-216',
     c.category = 'general',
@@ -3311,6 +3962,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- el-CY CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-217@el-CY'})
 SET c.display_name = 'culture-217',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-CY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-CY',
     c.content = 'culture-217',
     c.category = 'general',
@@ -3326,6 +3980,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-218@el-CY'})
 SET c.display_name = 'culture-218',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-CY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-CY',
     c.content = 'culture-218',
     c.category = 'general',
@@ -3341,6 +3998,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-219@el-CY'})
 SET c.display_name = 'culture-219',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-CY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-CY',
     c.content = 'culture-219',
     c.category = 'general',
@@ -3356,6 +4016,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-220@el-CY'})
 SET c.display_name = 'culture-220',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for el-CY',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'el-CY',
     c.content = 'culture-220',
     c.category = 'general',
@@ -3372,6 +4035,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fr-FR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-221@fr-FR'})
 SET c.display_name = 'culture-221',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-FR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-FR',
     c.content = 'culture-221',
     c.category = 'general',
@@ -3387,6 +4053,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-222@fr-FR'})
 SET c.display_name = 'culture-222',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-FR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-FR',
     c.content = 'culture-222',
     c.category = 'general',
@@ -3402,6 +4071,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-223@fr-FR'})
 SET c.display_name = 'culture-223',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-FR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-FR',
     c.content = 'culture-223',
     c.category = 'general',
@@ -3417,6 +4089,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-224@fr-FR'})
 SET c.display_name = 'culture-224',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-FR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-FR',
     c.content = 'culture-224',
     c.category = 'general',
@@ -3432,6 +4107,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-225@fr-FR'})
 SET c.display_name = 'culture-225',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-FR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-FR',
     c.content = 'culture-225',
     c.category = 'general',
@@ -3448,6 +4126,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fr-CA CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-226@fr-CA'})
 SET c.display_name = 'culture-226',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CA',
     c.content = 'culture-226',
     c.category = 'general',
@@ -3463,6 +4144,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-227@fr-CA'})
 SET c.display_name = 'culture-227',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CA',
     c.content = 'culture-227',
     c.category = 'general',
@@ -3478,6 +4162,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-228@fr-CA'})
 SET c.display_name = 'culture-228',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CA',
     c.content = 'culture-228',
     c.category = 'general',
@@ -3493,6 +4180,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-229@fr-CA'})
 SET c.display_name = 'culture-229',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CA',
     c.content = 'culture-229',
     c.category = 'general',
@@ -3508,6 +4198,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-230@fr-CA'})
 SET c.display_name = 'culture-230',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CA',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CA',
     c.content = 'culture-230',
     c.category = 'general',
@@ -3524,6 +4217,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fr-BE CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-231@fr-BE'})
 SET c.display_name = 'culture-231',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-BE',
     c.content = 'culture-231',
     c.category = 'general',
@@ -3539,6 +4235,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-232@fr-BE'})
 SET c.display_name = 'culture-232',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-BE',
     c.content = 'culture-232',
     c.category = 'general',
@@ -3554,6 +4253,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-233@fr-BE'})
 SET c.display_name = 'culture-233',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-BE',
     c.content = 'culture-233',
     c.category = 'general',
@@ -3569,6 +4271,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-234@fr-BE'})
 SET c.display_name = 'culture-234',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-BE',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-BE',
     c.content = 'culture-234',
     c.category = 'general',
@@ -3585,6 +4290,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- fr-CH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-235@fr-CH'})
 SET c.display_name = 'culture-235',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CH',
     c.content = 'culture-235',
     c.category = 'general',
@@ -3600,6 +4308,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-236@fr-CH'})
 SET c.display_name = 'culture-236',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CH',
     c.content = 'culture-236',
     c.category = 'general',
@@ -3615,6 +4326,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-237@fr-CH'})
 SET c.display_name = 'culture-237',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CH',
     c.content = 'culture-237',
     c.category = 'general',
@@ -3630,6 +4344,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-238@fr-CH'})
 SET c.display_name = 'culture-238',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for fr-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'fr-CH',
     c.content = 'culture-238',
     c.category = 'general',
@@ -3646,6 +4363,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- es-ES CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-239@es-ES'})
 SET c.display_name = 'culture-239',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-ES',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-ES',
     c.content = 'culture-239',
     c.category = 'general',
@@ -3661,6 +4381,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-240@es-ES'})
 SET c.display_name = 'culture-240',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-ES',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-ES',
     c.content = 'culture-240',
     c.category = 'general',
@@ -3676,6 +4399,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-241@es-ES'})
 SET c.display_name = 'culture-241',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-ES',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-ES',
     c.content = 'culture-241',
     c.category = 'general',
@@ -3691,6 +4417,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-242@es-ES'})
 SET c.display_name = 'culture-242',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-ES',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-ES',
     c.content = 'culture-242',
     c.category = 'general',
@@ -3707,6 +4436,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- es-MX CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-243@es-MX'})
 SET c.display_name = 'culture-243',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-MX',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-MX',
     c.content = 'culture-243',
     c.category = 'general',
@@ -3722,6 +4454,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-244@es-MX'})
 SET c.display_name = 'culture-244',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-MX',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-MX',
     c.content = 'culture-244',
     c.category = 'general',
@@ -3737,6 +4472,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-245@es-MX'})
 SET c.display_name = 'culture-245',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-MX',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-MX',
     c.content = 'culture-245',
     c.category = 'general',
@@ -3752,6 +4490,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-246@es-MX'})
 SET c.display_name = 'culture-246',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-MX',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-MX',
     c.content = 'culture-246',
     c.category = 'general',
@@ -3768,6 +4509,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- es-AR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-247@es-AR'})
 SET c.display_name = 'culture-247',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-AR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-AR',
     c.content = 'culture-247',
     c.category = 'general',
@@ -3783,6 +4527,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-248@es-AR'})
 SET c.display_name = 'culture-248',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-AR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-AR',
     c.content = 'culture-248',
     c.category = 'general',
@@ -3798,6 +4545,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-249@es-AR'})
 SET c.display_name = 'culture-249',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-AR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-AR',
     c.content = 'culture-249',
     c.category = 'general',
@@ -3813,6 +4563,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-250@es-AR'})
 SET c.display_name = 'culture-250',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-AR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-AR',
     c.content = 'culture-250',
     c.category = 'general',
@@ -3829,6 +4582,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- es-CO CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-251@es-CO'})
 SET c.display_name = 'culture-251',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CO',
     c.content = 'culture-251',
     c.category = 'general',
@@ -3844,6 +4600,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-252@es-CO'})
 SET c.display_name = 'culture-252',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CO',
     c.content = 'culture-252',
     c.category = 'general',
@@ -3859,6 +4618,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-253@es-CO'})
 SET c.display_name = 'culture-253',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CO',
     c.content = 'culture-253',
     c.category = 'general',
@@ -3874,6 +4636,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-254@es-CO'})
 SET c.display_name = 'culture-254',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CO',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CO',
     c.content = 'culture-254',
     c.category = 'general',
@@ -3890,6 +4655,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- es-CL CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-255@es-CL'})
 SET c.display_name = 'culture-255',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CL',
     c.content = 'culture-255',
     c.category = 'general',
@@ -3905,6 +4673,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-256@es-CL'})
 SET c.display_name = 'culture-256',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CL',
     c.content = 'culture-256',
     c.category = 'general',
@@ -3920,6 +4691,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-257@es-CL'})
 SET c.display_name = 'culture-257',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CL',
     c.content = 'culture-257',
     c.category = 'general',
@@ -3935,6 +4709,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-258@es-CL'})
 SET c.display_name = 'culture-258',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for es-CL',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'es-CL',
     c.content = 'culture-258',
     c.category = 'general',
@@ -3951,6 +4728,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- pt-BR CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-259@pt-BR'})
 SET c.display_name = 'culture-259',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-BR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-BR',
     c.content = 'culture-259',
     c.category = 'general',
@@ -3966,6 +4746,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-260@pt-BR'})
 SET c.display_name = 'culture-260',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-BR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-BR',
     c.content = 'culture-260',
     c.category = 'general',
@@ -3981,6 +4764,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-261@pt-BR'})
 SET c.display_name = 'culture-261',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-BR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-BR',
     c.content = 'culture-261',
     c.category = 'general',
@@ -3996,6 +4782,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-262@pt-BR'})
 SET c.display_name = 'culture-262',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-BR',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-BR',
     c.content = 'culture-262',
     c.category = 'general',
@@ -4012,6 +4801,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- pt-PT CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-263@pt-PT'})
 SET c.display_name = 'culture-263',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-PT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-PT',
     c.content = 'culture-263',
     c.category = 'general',
@@ -4027,6 +4819,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-264@pt-PT'})
 SET c.display_name = 'culture-264',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-PT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-PT',
     c.content = 'culture-264',
     c.category = 'general',
@@ -4042,6 +4837,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-265@pt-PT'})
 SET c.display_name = 'culture-265',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-PT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-PT',
     c.content = 'culture-265',
     c.category = 'general',
@@ -4057,6 +4855,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-266@pt-PT'})
 SET c.display_name = 'culture-266',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for pt-PT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'pt-PT',
     c.content = 'culture-266',
     c.category = 'general',
@@ -4073,6 +4874,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- it-IT CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-267@it-IT'})
 SET c.display_name = 'culture-267',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-IT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-IT',
     c.content = 'culture-267',
     c.category = 'general',
@@ -4088,6 +4892,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-268@it-IT'})
 SET c.display_name = 'culture-268',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-IT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-IT',
     c.content = 'culture-268',
     c.category = 'general',
@@ -4103,6 +4910,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-269@it-IT'})
 SET c.display_name = 'culture-269',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-IT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-IT',
     c.content = 'culture-269',
     c.category = 'general',
@@ -4118,6 +4928,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-270@it-IT'})
 SET c.display_name = 'culture-270',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-IT',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-IT',
     c.content = 'culture-270',
     c.category = 'general',
@@ -4134,6 +4947,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 // --- it-CH CultureRefs from Research ---
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-271@it-CH'})
 SET c.display_name = 'culture-271',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-CH',
     c.content = 'culture-271',
     c.category = 'general',
@@ -4149,6 +4965,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-272@it-CH'})
 SET c.display_name = 'culture-272',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-CH',
     c.content = 'culture-272',
     c.category = 'general',
@@ -4164,6 +4983,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-273@it-CH'})
 SET c.display_name = 'culture-273',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-CH',
     c.content = 'culture-273',
     c.category = 'general',
@@ -4179,6 +5001,9 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-274@it-CH'})
 SET c.display_name = 'culture-274',
+    c.node_class = 'CultureRef',
+    c.content = 'Cultural reference for it-CH',
+    c.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     c.locale = 'it-CH',
     c.content = 'culture-274',
     c.category = 'general',

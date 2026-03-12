@@ -8,6 +8,9 @@
 // --- en-US Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:partisan-politics@en-US'})
 SET t.display_name = 'Partisan Politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-US',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-US',
     t.content = 'Highly polarized political environment; brands face backlash from either side',
     t.severity = 'high',
@@ -23,6 +26,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:unsubstantiated-health-claims@en-US'})
 SET t.display_name = 'Unsubstantiated Health Claims',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-US',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-US',
     t.content = 'FTC and FDA strictly regulate health-related marketing claims',
     t.severity = 'critical',
@@ -38,6 +44,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:negative-framing@en-US'})
 SET t.display_name = 'Negative Framing',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-US',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-US',
     t.content = 'US audiences prefer positive aspiration over fear-based messaging',
     t.severity = 'medium',
@@ -54,6 +63,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-GB Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:overt-self-promotion@en-GB'})
 SET t.display_name = 'Overt Self-Promotion',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-GB',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-GB',
     t.content = 'Seen as gauche and American; modesty is valued',
     t.severity = 'high',
@@ -69,6 +81,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:exaggerated-claims@en-GB'})
 SET t.display_name = 'Exaggerated Claims',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-GB',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-GB',
     t.content = 'ASA strictly enforces truthful advertising; skeptical audience',
     t.severity = 'medium',
@@ -84,6 +99,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:direct-royal-criticism@en-GB'})
 SET t.display_name = 'Direct Royal Criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-GB',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-GB',
     t.content = 'Complex relationship with monarchy; best avoided in commercial contexts',
     t.severity = 'medium',
@@ -100,6 +118,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-AU Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:elitist-messaging@en-AU'})
 SET t.display_name = 'Elitist Messaging',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-AU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-AU',
     t.content = 'Egalitarian culture rejects perceived snobbery or exclusivity',
     t.severity = 'high',
@@ -115,6 +136,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:indigenous-cultural-insensitivity@en-AU'})
 SET t.display_name = 'Indigenous Cultural Insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-AU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-AU',
     t.content = 'Strong social awareness of Indigenous rights and history',
     t.severity = 'critical',
@@ -130,6 +154,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:hard-sell-tactics@en-AU'})
 SET t.display_name = 'Hard Sell Tactics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-AU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-AU',
     t.content = 'Australians value authenticity and dislike pushy sales',
     t.severity = 'medium',
@@ -146,6 +173,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-CA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:treating-canada-as-american@en-CA'})
 SET t.display_name = 'Treating Canada as American',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-CA',
     t.content = 'Canadians strongly identify as distinct from Americans',
     t.severity = 'high',
@@ -161,6 +191,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:indigenousfirst-nations-insensitivity@en-CA'})
 SET t.display_name = 'Indigenous/First Nations Insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-CA',
     t.content = 'Heightened awareness post-TRC; cultural sensitivity required',
     t.severity = 'critical',
@@ -176,6 +209,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:excessive-nationalism@en-CA'})
 SET t.display_name = 'Excessive Nationalism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-CA',
     t.content = 'Quiet patriotism preferred over flag-waving',
     t.severity = 'medium',
@@ -192,6 +228,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-IN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-insensitivity@en-IN'})
 SET t.display_name = 'Religious Insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IN',
     t.content = 'Multi-religious society; sensitivities around Hindu, Muslim, Sikh, Christian themes',
     t.severity = 'critical',
@@ -207,6 +246,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:caste-system-references@en-IN'})
 SET t.display_name = 'Caste System References',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IN',
     t.content = 'Legally prohibited discrimination; socially sensitive',
     t.severity = 'critical',
@@ -222,6 +264,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:beef-and-pork-in-food-marketing@en-IN'})
 SET t.display_name = 'Beef and Pork in Food Marketing',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IN',
     t.content = 'Beef offensive to Hindus, pork to Muslims',
     t.severity = 'high',
@@ -238,6 +283,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-SG Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:racial-stereotyping@en-SG'})
 SET t.display_name = 'Racial Stereotyping',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-SG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-SG',
     t.content = 'Strict laws against racial incitement; government actively monitors',
     t.severity = 'critical',
@@ -253,6 +301,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:government-criticism@en-SG'})
 SET t.display_name = 'Government Criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-SG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-SG',
     t.content = 'Defamation laws strictly enforced; avoid political commentary',
     t.severity = 'high',
@@ -268,6 +319,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-commentary@en-SG'})
 SET t.display_name = 'Religious Commentary',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-SG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-SG',
     t.content = 'Multi-religious society with strict harmony laws',
     t.severity = 'high',
@@ -284,6 +338,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-ZA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:racial-insensitivity@en-ZA'})
 SET t.display_name = 'Racial Insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-ZA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-ZA',
     t.content = 'Post-apartheid sensitivity; representation and language critical',
     t.severity = 'critical',
@@ -299,6 +356,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:poverty-exploitation@en-ZA'})
 SET t.display_name = 'Poverty Exploitation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-ZA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-ZA',
     t.content = 'High inequality; avoid exploitative or patronizing messaging',
     t.severity = 'high',
@@ -314,6 +374,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:casual-apartheid-references@en-ZA'})
 SET t.display_name = 'Casual Apartheid References',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-ZA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-ZA',
     t.content = 'Traumatic history; references require extreme sensitivity',
     t.severity = 'critical',
@@ -330,6 +393,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-NZ Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:maori-cultural-appropriation@en-NZ'})
 SET t.display_name = 'Maori Cultural Appropriation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-NZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-NZ',
     t.content = 'Strong legal and cultural protections for Maori intellectual property',
     t.severity = 'critical',
@@ -345,6 +411,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:australia-nz-conflation@en-NZ'})
 SET t.display_name = 'Australia-NZ Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-NZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-NZ',
     t.content = 'Strong national identity distinct from Australia',
     t.severity = 'high',
@@ -360,6 +429,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:greenwashing@en-NZ'})
 SET t.display_name = 'Greenwashing',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-NZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-NZ',
     t.content = 'Strong environmental values; fake green claims backfire',
     t.severity = 'high',
@@ -376,6 +448,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-IE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:british-irish-conflation@en-IE'})
 SET t.display_name = 'British-Irish Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IE',
     t.content = 'Strong national identity; history of British rule',
     t.severity = 'high',
@@ -391,6 +466,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:northern-ireland-troubles@en-IE'})
 SET t.display_name = 'Northern Ireland Troubles',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IE',
     t.content = 'Sensitive historical and ongoing political situation',
     t.severity = 'critical',
@@ -406,6 +484,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:irish-stereotypes@en-IE'})
 SET t.display_name = 'Irish Stereotypes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-IE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-IE',
     t.content = 'Leprechauns, excessive drinking stereotypes offensive',
     t.severity = 'medium',
@@ -422,6 +503,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- en-PH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:causing-loss-of-face@en-PH'})
 SET t.display_name = 'Causing Loss of Face',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-PH',
     t.content = 'Hiya (shame) culture; public criticism devastating',
     t.severity = 'high',
@@ -437,6 +521,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:colonial-history-insensitivity@en-PH'})
 SET t.display_name = 'Colonial History Insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-PH',
     t.content = 'Complex relationship with US and Spanish colonial past',
     t.severity = 'high',
@@ -452,6 +539,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:overt-wealth-display@en-PH'})
 SET t.display_name = 'Overt Wealth Display',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for en-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'en-PH',
     t.content = 'High inequality; flaunting wealth seen as insensitive',
     t.severity = 'medium',
@@ -468,6 +558,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- de-DE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:nazi-era-references@de-DE'})
 SET t.display_name = 'Nazi Era References',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-DE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-DE',
     t.content = 'Illegal in many contexts; extreme sensitivity',
     t.severity = 'critical',
@@ -483,6 +576,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:unsubstantiated-superlatives@de-DE'})
 SET t.display_name = 'Unsubstantiated Superlatives',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-DE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-DE',
     t.content = 'German advertising law strictly enforces truthfulness; Wettbewerbszentrale active',
     t.severity = 'high',
@@ -498,6 +594,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:pushy-sales-tactics@de-DE'})
 SET t.display_name = 'Pushy Sales Tactics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-DE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-DE',
     t.content = 'Germans value facts over emotion; hard sells backfire',
     t.severity = 'high',
@@ -514,6 +613,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- de-AT Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:german-austrian-conflation@de-AT'})
 SET t.display_name = 'German-Austrian Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-AT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-AT',
     t.content = 'Strong Austrian identity distinct from Germany',
     t.severity = 'high',
@@ -529,6 +631,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:nazi-era-references@de-AT'})
 SET t.display_name = 'Nazi Era References',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-AT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-AT',
     t.content = 'Complex history; extreme sensitivity; legal restrictions',
     t.severity = 'critical',
@@ -544,6 +649,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:excessive-informality@de-AT'})
 SET t.display_name = 'Excessive Informality',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-AT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-AT',
     t.content = 'More formal than Germany; titles and Sie form expected longer',
     t.severity = 'medium',
@@ -560,6 +668,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- de-CH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:german-swiss-conflation@de-CH'})
 SET t.display_name = 'German-Swiss Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-CH',
     t.content = 'Swiss identity distinct; language differences (Swiss German)',
     t.severity = 'high',
@@ -575,6 +686,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ostentatious-displays@de-CH'})
 SET t.display_name = 'Ostentatious Displays',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-CH',
     t.content = 'Wealth exists but is kept private; flashiness frowned upon',
     t.severity = 'high',
@@ -590,6 +704,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:banking-secrecy-jokes@de-CH'})
 SET t.display_name = 'Banking Secrecy Jokes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for de-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'de-CH',
     t.content = 'Sensitive given historical controversies; banking evolved',
     t.severity = 'medium',
@@ -606,6 +723,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- nl-NL Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:pretentious-messaging@nl-NL'})
 SET t.display_name = 'Pretentious Messaging',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-NL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-NL',
     t.content = 'Doe maar gewoon mentality; showing off rejected',
     t.severity = 'high',
@@ -621,6 +741,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:over-formality@nl-NL'})
 SET t.display_name = 'Over-Formality',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-NL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-NL',
     t.content = 'Egalitarian society; excessive formality seems insincere',
     t.severity = 'medium',
@@ -636,6 +759,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:royal-family-disrespect@nl-NL'})
 SET t.display_name = 'Royal Family Disrespect',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-NL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-NL',
     t.content = 'Popular monarchy; affectionate relationship with royals',
     t.severity = 'medium',
@@ -652,6 +778,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- nl-BE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:dutch-flemish-conflation@nl-BE'})
 SET t.display_name = 'Dutch-Flemish Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-BE',
     t.content = 'Flemish is NOT Dutch; language and cultural differences',
     t.severity = 'high',
@@ -667,6 +796,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:belgian-linguistic-politics@nl-BE'})
 SET t.display_name = 'Belgian Linguistic Politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-BE',
     t.content = 'Sensitive Flemish-Walloon relations; avoid taking sides',
     t.severity = 'high',
@@ -682,6 +814,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:dutch-style-bluntness@nl-BE'})
 SET t.display_name = 'Dutch-Style Bluntness',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for nl-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'nl-BE',
     t.content = 'Flemish communication is softer than Dutch',
     t.severity = 'medium',
@@ -698,6 +833,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- sv-SE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:self-promotionelitism@sv-SE'})
 SET t.display_name = 'Self-Promotion/Elitism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sv-SE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sv-SE',
     t.content = 'Jantelagen culture; standing out negatively perceived',
     t.severity = 'high',
@@ -713,6 +851,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:aggressive-sales@sv-SE'})
 SET t.display_name = 'Aggressive Sales',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sv-SE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sv-SE',
     t.content = 'Reserved culture; pushy tactics backfire strongly',
     t.severity = 'high',
@@ -728,6 +869,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:gender-stereotyping@sv-SE'})
 SET t.display_name = 'Gender Stereotyping',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sv-SE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sv-SE',
     t.content = 'Progressive gender equality; stereotypical imagery rejected',
     t.severity = 'high',
@@ -744,6 +888,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- da-DK Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:showing-off@da-DK'})
 SET t.display_name = 'Showing Off',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for da-DK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'da-DK',
     t.content = 'Janteloven applies; visible success displays frowned upon',
     t.severity = 'high',
@@ -759,6 +906,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:excessive-formality@da-DK'})
 SET t.display_name = 'Excessive Formality',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for da-DK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'da-DK',
     t.content = 'Very informal society; stiff communication seems fake',
     t.severity = 'medium',
@@ -774,6 +924,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:swedish-danish-conflation@da-DK'})
 SET t.display_name = 'Swedish-Danish Conflation',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for da-DK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'da-DK',
     t.content = 'Rivalry with Sweden; distinct identity important',
     t.severity = 'medium',
@@ -790,6 +943,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- no-NO Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:wealth-display@no-NO'})
 SET t.display_name = 'Wealth Display',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for no-NO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'no-NO',
     t.content = 'Despite oil wealth, showing off strongly rejected',
     t.severity = 'high',
@@ -805,6 +961,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:environmental-hypocrisy@no-NO'})
 SET t.display_name = 'Environmental Hypocrisy',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for no-NO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'no-NO',
     t.content = 'Oil nation with green values; authenticity required',
     t.severity = 'high',
@@ -820,6 +979,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:swedish-comparisons@no-NO'})
 SET t.display_name = 'Swedish Comparisons',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for no-NO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'no-NO',
     t.content = 'Friendly rivalry; avoid making Norway secondary',
     t.severity = 'low',
@@ -836,6 +998,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fi-FI Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:excessive-small-talk@fi-FI'})
 SET t.display_name = 'Excessive Small Talk',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fi-FI',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fi-FI',
     t.content = 'Finns value directness and substance; chattiness seems insincere',
     t.severity = 'medium',
@@ -851,6 +1016,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:exaggerated-claims@fi-FI'})
 SET t.display_name = 'Exaggerated Claims',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fi-FI',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fi-FI',
     t.content = 'Highly skeptical audience; overpromising backfires',
     t.severity = 'high',
@@ -866,6 +1034,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:swedish-finnish-language-politics@fi-FI'})
 SET t.display_name = 'Swedish-Finnish Language Politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fi-FI',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fi-FI',
     t.content = 'Swedish minority; sensitive linguistic history',
     t.severity = 'medium',
@@ -882,6 +1053,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- zh-CN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:political-sensitivity-taiwan-tibet-xinjiang@zh-CN'})
 SET t.display_name = 'Political sensitivity (Taiwan, Tibet, Xinjiang)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-CN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-CN',
     t.content = 'Legal restrictions and strong nationalist sentiment; can result in brand boycotts',
     t.severity = 'critical',
@@ -897,6 +1071,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:number-4-si@zh-CN'})
 SET t.display_name = 'Number 4 (四 sì)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-CN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-CN',
     t.content = 'Homophone for death (死 sǐ); avoid in pricing, numbering, product names',
     t.severity = 'high',
@@ -912,6 +1089,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:japan-related-imagery-in-nationalist-contexts@zh-CN'})
 SET t.display_name = 'Japan-related imagery in nationalist contexts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-CN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-CN',
     t.content = 'Historical tensions; avoid imperial Japanese symbols or insensitive WWII references',
     t.severity = 'medium',
@@ -928,6 +1108,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- zh-TW Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:implying-taiwan-is-part-of-china@zh-TW'})
 SET t.display_name = 'Implying Taiwan is part of China',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-TW',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-TW',
     t.content = 'Highly sensitive political issue; use \'Taiwan\' independently, never \'Taiwan, China\'',
     t.severity = 'critical',
@@ -943,6 +1126,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ccp-symbolism-or-propaganda-aesthetics@zh-TW'})
 SET t.display_name = 'CCP symbolism or propaganda aesthetics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-TW',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-TW',
     t.content = 'Negative associations with authoritarian governance',
     t.severity = 'high',
@@ -958,6 +1144,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:number-4-si@zh-TW'})
 SET t.display_name = 'Number 4 (四 sì)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-TW',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-TW',
     t.content = 'Same death association as zh-CN, though slightly less rigid',
     t.severity = 'medium',
@@ -974,6 +1163,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- zh-HK Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:political-stance-on-democracybeijing-relations@zh-HK'})
 SET t.display_name = 'Political stance on democracy/Beijing relations',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-HK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-HK',
     t.content = 'Extremely polarized; brands should remain neutral',
     t.severity = 'critical',
@@ -989,6 +1181,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:simplified-chinese-characters@zh-HK'})
 SET t.display_name = 'Simplified Chinese characters',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-HK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-HK',
     t.content = 'Use Traditional Chinese; Simplified associated with mainland influence',
     t.severity = 'medium',
@@ -1004,6 +1199,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:number-4@zh-HK'})
 SET t.display_name = 'Number 4',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for zh-HK',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'zh-HK',
     t.content = 'Cantonese \'sei\' also sounds like death; avoid in pricing',
     t.severity = 'medium',
@@ -1020,6 +1218,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ja-JP Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:direct-confrontation-or-criticism@ja-JP'})
 SET t.display_name = 'Direct confrontation or criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ja-JP',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ja-JP',
     t.content = 'Destroys wa (harmony); use indirect suggestions or third-party examples',
     t.severity = 'critical',
@@ -1035,6 +1236,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:number-4-shi-and-9-ku@ja-JP'})
 SET t.display_name = 'Number 4 (四 shi) and 9 (九 ku)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ja-JP',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ja-JP',
     t.content = '4=death (死), 9=suffering (苦); avoid in pricing, packaging quantities',
     t.severity = 'high',
@@ -1050,6 +1254,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:overly-casual-language-in-business-contexts@ja-JP'})
 SET t.display_name = 'Overly casual language in business contexts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ja-JP',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ja-JP',
     t.content = 'Keigo (honorific language) expected; casual = disrespectful',
     t.severity = 'high',
@@ -1066,6 +1273,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ko-KR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:japan-korea-historical-conflicts@ko-KR'})
 SET t.display_name = 'Japan-Korea historical conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ko-KR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ko-KR',
     t.content = 'Colonial history sensitive; avoid Japanese associations in certain contexts',
     t.severity = 'high',
@@ -1081,6 +1291,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:red-ink-for-names@ko-KR'})
 SET t.display_name = 'Red ink for names',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ko-KR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ko-KR',
     t.content = 'Traditionally used for deceased persons\' names',
     t.severity = 'high',
@@ -1096,6 +1309,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:agehierarchy-disrespect@ko-KR'})
 SET t.display_name = 'Age/hierarchy disrespect',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ko-KR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ko-KR',
     t.content = 'Strong Confucian hierarchy; address seniors appropriately',
     t.severity = 'high',
@@ -1112,6 +1328,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- hi-IN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:cowbeef-references@hi-IN'})
 SET t.display_name = 'Cow/beef references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for hi-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'hi-IN',
     t.content = 'Sacred animal for majority Hindu population; avoid in food/leather contexts',
     t.severity = 'critical',
@@ -1127,6 +1346,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-insensitivity-hindu-muslim-dynamics@hi-IN'})
 SET t.display_name = 'Religious insensitivity (Hindu-Muslim dynamics)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for hi-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'hi-IN',
     t.content = 'Complex religious diversity; maintain neutrality',
     t.severity = 'critical',
@@ -1142,6 +1364,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:left-hand-usage-in-imagery@hi-IN'})
 SET t.display_name = 'Left hand usage in imagery',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for hi-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'hi-IN',
     t.content = 'Left hand considered impure; show products being used with right hand',
     t.severity = 'medium',
@@ -1158,6 +1383,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- bn-BD Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-imagery-conflicts@bn-BD'})
 SET t.display_name = 'Religious imagery conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for bn-BD',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'bn-BD',
     t.content = 'Muslim-majority country; respect Islamic values',
     t.severity = 'critical',
@@ -1173,6 +1401,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:india-bangladesh-political-tensions@bn-BD'})
 SET t.display_name = 'India-Bangladesh political tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for bn-BD',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'bn-BD',
     t.content = 'Avoid implicit comparisons that diminish Bangladeshi identity',
     t.severity = 'medium',
@@ -1188,6 +1419,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:immodest-imagery@bn-BD'})
 SET t.display_name = 'Immodest imagery',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for bn-BD',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'bn-BD',
     t.content = 'Conservative Muslim majority; modest dress and behavior in visuals',
     t.severity = 'high',
@@ -1204,6 +1438,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ta-IN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:hindi-imposition@ta-IN'})
 SET t.display_name = 'Hindi imposition',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ta-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ta-IN',
     t.content = 'Strong anti-Hindi sentiment historically; always provide Tamil-first content',
     t.severity = 'critical',
@@ -1219,6 +1456,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:caste-references@ta-IN'})
 SET t.display_name = 'Caste references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ta-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ta-IN',
     t.content = 'Sensitive topic; Dravidian movement\'s anti-caste stance',
     t.severity = 'high',
@@ -1234,6 +1474,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-conversion-messaging@ta-IN'})
 SET t.display_name = 'Religious conversion messaging',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ta-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ta-IN',
     t.content = 'Sensitive religious dynamics between Hindu majority and minorities',
     t.severity = 'high',
@@ -1250,6 +1493,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- te-IN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:ap-telangana-tensions@te-IN'})
 SET t.display_name = 'AP-Telangana tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for te-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'te-IN',
     t.content = 'Recent state bifurcation; be neutral between regions',
     t.severity = 'medium',
@@ -1265,6 +1511,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:caste-references@te-IN'})
 SET t.display_name = 'Caste references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for te-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'te-IN',
     t.content = 'Complex caste dynamics; avoid explicit/implicit references',
     t.severity = 'high',
@@ -1280,6 +1529,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-favoritism@te-IN'})
 SET t.display_name = 'Religious favoritism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for te-IN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'te-IN',
     t.content = 'Diverse religious population; maintain neutrality',
     t.severity = 'medium',
@@ -1296,6 +1548,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- vi-VN Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:war-references-american-war@vi-VN'})
 SET t.display_name = 'War references (American War)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for vi-VN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'vi-VN',
     t.content = 'Called \'American War\' in Vietnam; avoid glorifying; sensitive for older generation',
     t.severity = 'high',
@@ -1311,6 +1566,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:china-vietnam-tensions@vi-VN'})
 SET t.display_name = 'China-Vietnam tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for vi-VN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'vi-VN',
     t.content = 'South China Sea disputes; avoid perceived Chinese dominance',
     t.severity = 'high',
@@ -1326,6 +1584,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:political-criticism@vi-VN'})
 SET t.display_name = 'Political criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for vi-VN',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'vi-VN',
     t.content = 'One-party state; avoid any political commentary',
     t.severity = 'critical',
@@ -1342,6 +1603,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- th-TH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:monarchy-criticism-lese-majeste@th-TH'})
 SET t.display_name = 'Monarchy criticism (lèse-majesté)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for th-TH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'th-TH',
     t.content = 'Illegal; severe prison sentences; never joke about or criticize royalty',
     t.severity = 'critical',
@@ -1357,6 +1621,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:feethead-touching@th-TH'})
 SET t.display_name = 'Feet/head touching',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for th-TH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'th-TH',
     t.content = 'Feet are lowest/dirtiest; head is sacred; avoid in imagery',
     t.severity = 'high',
@@ -1372,6 +1639,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:buddha-imagery-misuse@th-TH'})
 SET t.display_name = 'Buddha imagery misuse',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for th-TH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'th-TH',
     t.content = 'Sacred; don\'t use decoratively or in inappropriate contexts',
     t.severity = 'high',
@@ -1388,6 +1658,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- id-ID Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-insensitivity-especially-islam@id-ID'})
 SET t.display_name = 'Religious insensitivity (especially Islam)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for id-ID',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'id-ID',
     t.content = 'World\'s largest Muslim population; respect Islamic values and holidays',
     t.severity = 'critical',
@@ -1403,6 +1676,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:left-hand-usage@id-ID'})
 SET t.display_name = 'Left hand usage',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for id-ID',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'id-ID',
     t.content = 'Left hand considered unclean; show right hand in product usage',
     t.severity = 'medium',
@@ -1418,6 +1694,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ethnicreligious-tensions@id-ID'})
 SET t.display_name = 'Ethnic/religious tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for id-ID',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'id-ID',
     t.content = 'Complex ethnic diversity; avoid favoritism or stereotypes',
     t.severity = 'high',
@@ -1434,6 +1713,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ms-MY Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-insensitivity@ms-MY'})
 SET t.display_name = 'Religious insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ms-MY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ms-MY',
     t.content = 'Islam is state religion; respect halal requirements and Islamic values',
     t.severity = 'critical',
@@ -1449,6 +1731,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ethnic-tensions-bumiputera-policies@ms-MY'})
 SET t.display_name = 'Ethnic tensions (Bumiputera policies)',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ms-MY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ms-MY',
     t.content = 'Complex ethnic policies; avoid race-based messaging',
     t.severity = 'high',
@@ -1464,6 +1749,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:porkalcohol-in-malay-focused-content@ms-MY'})
 SET t.display_name = 'Pork/alcohol in Malay-focused content',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ms-MY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ms-MY',
     t.content = 'Haram for Muslims; separate messaging for different ethnic audiences',
     t.severity = 'high',
@@ -1480,6 +1768,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fil-PH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:catholic-church-criticism@fil-PH'})
 SET t.display_name = 'Catholic Church criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fil-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fil-PH',
     t.content = 'Strong Catholic majority; respect religious institutions',
     t.severity = 'high',
@@ -1495,6 +1786,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:colonial-history-insensitivity@fil-PH'})
 SET t.display_name = 'Colonial history insensitivity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fil-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fil-PH',
     t.content = 'Complex Spanish/American colonial history; avoid patronizing',
     t.severity = 'medium',
@@ -1510,6 +1804,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:classpoverty-stereotypes@fil-PH'})
 SET t.display_name = 'Class/poverty stereotypes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fil-PH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fil-PH',
     t.content = 'Significant inequality; avoid classist messaging',
     t.severity = 'medium',
@@ -1526,6 +1823,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ar-SA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-criticism-or-comparison@ar-SA'})
 SET t.display_name = 'Religious criticism or comparison',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-SA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-SA',
     t.content = 'Islam is state religion; blasphemy laws strictly enforced; any perceived disrespect can result in severe legal consequences',
     t.severity = 'critical',
@@ -1541,6 +1841,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:royal-family-criticism@ar-SA'})
 SET t.display_name = 'Royal family criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-SA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-SA',
     t.content = 'Lese-majeste laws protect royal family; criticism results in imprisonment',
     t.severity = 'critical',
@@ -1556,6 +1859,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:gender-mixing-in-imagery@ar-SA'})
 SET t.display_name = 'Gender mixing in imagery',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-SA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-SA',
     t.content = 'Gender segregation is cultural norm; mixed-gender casual imagery inappropriate',
     t.severity = 'high',
@@ -1571,6 +1877,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:alcohol-pork-gambling-references@ar-SA'})
 SET t.display_name = 'Alcohol, pork, gambling references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-SA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-SA',
     t.content = 'Haram (forbidden) in Islam; illegal in Saudi Arabia',
     t.severity = 'critical',
@@ -1587,6 +1896,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ar-EG Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:religious-mockery@ar-EG'})
 SET t.display_name = 'Religious mockery',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-EG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-EG',
     t.content = 'Muslim-majority with significant Coptic Christian minority; religious harmony is sensitive',
     t.severity = 'critical',
@@ -1602,6 +1914,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:political-commentary@ar-EG'})
 SET t.display_name = 'Political commentary',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-EG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-EG',
     t.content = 'Political climate is sensitive; avoid references to government or military',
     t.severity = 'high',
@@ -1617,6 +1932,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:nilewater-scarcity-politics@ar-EG'})
 SET t.display_name = 'Nile/water scarcity politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-EG',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-EG',
     t.content = 'Ethiopian dam dispute is nationally sensitive topic',
     t.severity = 'medium',
@@ -1633,6 +1951,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ar-AE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:criticism-of-leadership-or-ruling-families@ar-AE'})
 SET t.display_name = 'Criticism of leadership or ruling families',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-AE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-AE',
     t.content = 'Strict cyber laws; any criticism of government can result in deportation or imprisonment',
     t.severity = 'critical',
@@ -1648,6 +1969,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:lgbtq-content@ar-AE'})
 SET t.display_name = 'LGBTQ+ content',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-AE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-AE',
     t.content = 'Illegal under UAE law; cannot be referenced in any marketing',
     t.severity = 'critical',
@@ -1663,6 +1987,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:regional-political-conflicts@ar-AE'})
 SET t.display_name = 'Regional political conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-AE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-AE',
     t.content = 'Avoid Qatar, Iran, or Yemen conflict references',
     t.severity = 'high',
@@ -1679,6 +2006,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ar-MA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:western-sahara-sovereignty@ar-MA'})
 SET t.display_name = 'Western Sahara sovereignty',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-MA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-MA',
     t.content = 'Highly sensitive territorial dispute; always refer to as part of Morocco',
     t.severity = 'critical',
@@ -1694,6 +2024,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:monarchy-criticism@ar-MA'})
 SET t.display_name = 'Monarchy criticism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-MA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-MA',
     t.content = 'Legal consequences for disrespecting the King',
     t.severity = 'critical',
@@ -1709,6 +2042,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:algeria-relations@ar-MA'})
 SET t.display_name = 'Algeria relations',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ar-MA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ar-MA',
     t.content = 'Closed border and diplomatic tensions; avoid comparative references',
     t.severity = 'high',
@@ -1725,6 +2061,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- ru-RU Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:political-criticism-of-leadership@ru-RU'})
 SET t.display_name = 'Political criticism of leadership',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ru-RU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ru-RU',
     t.content = 'Current political climate makes any criticism dangerous; foreign brands should stay neutral',
     t.severity = 'critical',
@@ -1740,6 +2079,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:wwii-minimization@ru-RU'})
 SET t.display_name = 'WWII minimization',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ru-RU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ru-RU',
     t.content = 'Great Patriotic War is sacred; 27 million deaths; Victory Day (May 9) sacrosanct',
     t.severity = 'critical',
@@ -1755,6 +2097,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:territorial-sovereignty-questions@ru-RU'})
 SET t.display_name = 'Territorial sovereignty questions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for ru-RU',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'ru-RU',
     t.content = 'Avoid any references to disputed territories or geopolitical conflicts',
     t.severity = 'critical',
@@ -1771,6 +2116,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- uk-UA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:russian-language-use@uk-UA'})
 SET t.display_name = 'Russian language use',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for uk-UA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'uk-UA',
     t.content = 'Post-2022, using Russian instead of Ukrainian is deeply offensive; seen as erasure',
     t.severity = 'critical',
@@ -1786,6 +2134,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:soviet-nostalgia@uk-UA'})
 SET t.display_name = 'Soviet nostalgia',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for uk-UA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'uk-UA',
     t.content = 'USSR symbols banned; Soviet era seen as occupation',
     t.severity = 'critical',
@@ -1801,6 +2152,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:both-sides-ism-on-conflict@uk-UA'})
 SET t.display_name = 'Both-sides-ism on conflict',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for uk-UA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'uk-UA',
     t.content = 'Any neutrality on Russian invasion seen as complicity',
     t.severity = 'critical',
@@ -1817,6 +2171,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- pl-PL Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:wwii-polish-complicity-narratives@pl-PL'})
 SET t.display_name = 'WWII Polish complicity narratives',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pl-PL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pl-PL',
     t.content = 'Illegal to suggest Polish nation was complicit in Holocaust; Poland was victim',
     t.severity = 'critical',
@@ -1832,6 +2189,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:germanrussian-historical-grievances@pl-PL'})
 SET t.display_name = 'German/Russian historical grievances',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pl-PL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pl-PL',
     t.content = 'Sensitive historical wounds; avoid trivializing invasions/occupations',
     t.severity = 'high',
@@ -1847,6 +2207,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:anti-catholic-messaging@pl-PL'})
 SET t.display_name = 'Anti-Catholic messaging',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pl-PL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pl-PL',
     t.content = 'Catholic Church deeply influential; ~90% identify as Catholic',
     t.severity = 'high',
@@ -1863,6 +2226,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- cs-CZ Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:communist-era-glorification@cs-CZ'})
 SET t.display_name = 'Communist era glorification',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for cs-CZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'cs-CZ',
     t.content = 'Negative associations with Soviet occupation; Velvet Revolution pride',
     t.severity = 'high',
@@ -1878,6 +2244,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:excessive-nationalism@cs-CZ'})
 SET t.display_name = 'Excessive nationalism',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for cs-CZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'cs-CZ',
     t.content = 'Czechs are patriotic but uncomfortable with flag-waving nationalism',
     t.severity = 'medium',
@@ -1893,6 +2262,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-proselytizing@cs-CZ'})
 SET t.display_name = 'Religious proselytizing',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for cs-CZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'cs-CZ',
     t.content = 'One of world\'s most secular countries; religious messaging falls flat',
     t.severity = 'medium',
@@ -1909,6 +2281,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- tr-TR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:ataturk-criticism-or-disrespect@tr-TR'})
 SET t.display_name = 'Atatürk criticism or disrespect',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for tr-TR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'tr-TR',
     t.content = 'Illegal to insult Atatürk\'s memory; deeply offensive culturally',
     t.severity = 'critical',
@@ -1924,6 +2299,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:armenian-genocide-acknowledgment@tr-TR'})
 SET t.display_name = 'Armenian Genocide acknowledgment',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for tr-TR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'tr-TR',
     t.content = 'Official Turkish position denies genocide designation; avoid entirely',
     t.severity = 'critical',
@@ -1939,6 +2317,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:kurdish-political-issues@tr-TR'})
 SET t.display_name = 'Kurdish political issues',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for tr-TR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'tr-TR',
     t.content = 'Highly sensitive; PKK designated as terrorist organization',
     t.severity = 'critical',
@@ -1954,6 +2335,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:cyprusgreek-tensions@tr-TR'})
 SET t.display_name = 'Cyprus/Greek tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for tr-TR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'tr-TR',
     t.content = 'Ongoing territorial and political disputes',
     t.severity = 'high',
@@ -1970,6 +2354,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- az-AZ Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:armenianagorno-karabakh@az-AZ'})
 SET t.display_name = 'Armenia/Nagorno-Karabakh',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for az-AZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'az-AZ',
     t.content = 'Recent war (2020); deep animosity; Armenian references strictly avoided',
     t.severity = 'critical',
@@ -1985,6 +2372,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:territorial-integrity-questions@az-AZ'})
 SET t.display_name = 'Territorial integrity questions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for az-AZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'az-AZ',
     t.content = 'Karabakh is Azerbaijan; any suggestion otherwise unacceptable',
     t.severity = 'critical',
@@ -2000,6 +2390,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:iranian-azeri-politics@az-AZ'})
 SET t.display_name = 'Iranian Azeri politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for az-AZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'az-AZ',
     t.content = 'Complex relationship with Iran; more Azeris in Iran than Azerbaijan',
     t.severity = 'high',
@@ -2016,6 +2409,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- he-IL Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:palestinian-conflict-politics@he-IL'})
 SET t.display_name = 'Palestinian conflict politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for he-IL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'he-IL',
     t.content = 'Highly divisive internally; brands should stay completely neutral',
     t.severity = 'critical',
@@ -2031,6 +2427,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:holocaust-trivialization@he-IL'})
 SET t.display_name = 'Holocaust trivialization',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for he-IL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'he-IL',
     t.content = 'Shoah is sacred memory; never use for marketing analogies',
     t.severity = 'critical',
@@ -2046,6 +2445,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:shabbat-business-operations@he-IL'})
 SET t.display_name = 'Shabbat business operations',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for he-IL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'he-IL',
     t.content = 'Friday sunset to Saturday sunset; many don\'t transact; respect observance',
     t.severity = 'high',
@@ -2062,6 +2464,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- sw-KE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:tribalethnic-politics@sw-KE'})
 SET t.display_name = 'Tribal/ethnic politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-KE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-KE',
     t.content = 'Ethnic tensions can be volatile; 2007 violence memory; avoid tribal references',
     t.severity = 'critical',
@@ -2077,6 +2482,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:corruption-accusations@sw-KE'})
 SET t.display_name = 'Corruption accusations',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-KE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-KE',
     t.content = 'Sensitive topic; avoid implying corruption in messaging',
     t.severity = 'high',
@@ -2092,6 +2500,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:colonial-era-glorification@sw-KE'})
 SET t.display_name = 'Colonial era glorification',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-KE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-KE',
     t.content = 'British colonial history sensitive; independence hard-won',
     t.severity = 'high',
@@ -2108,6 +2519,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- sw-TZ Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:zanzibar-independence-movements@sw-TZ'})
 SET t.display_name = 'Zanzibar independence movements',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-TZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-TZ',
     t.content = 'Zanzibar union with mainland sensitive; separatism taboo',
     t.severity = 'high',
@@ -2123,6 +2537,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-tensions@sw-TZ'})
 SET t.display_name = 'Religious tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-TZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-TZ',
     t.content = 'Muslim Zanzibar, Christian mainland; religious harmony important',
     t.severity = 'high',
@@ -2138,6 +2555,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:criticism-of-founding-father-nyerere@sw-TZ'})
 SET t.display_name = 'Criticism of founding father Nyerere',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for sw-TZ',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'sw-TZ',
     t.content = 'Mwalimu (Teacher) Nyerere highly respected despite economic failures',
     t.severity = 'medium',
@@ -2154,6 +2574,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- am-ET Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:colonialism-comparisons@am-ET'})
 SET t.display_name = 'Colonialism comparisons',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for am-ET',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'am-ET',
     t.content = 'Ethiopia was never colonized (except brief Italian occupation); unique African history',
     t.severity = 'critical',
@@ -2169,6 +2592,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:religious-disrespect@am-ET'})
 SET t.display_name = 'Religious disrespect',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for am-ET',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'am-ET',
     t.content = 'Orthodox Christianity (45%) and Islam (35%) both sensitive; religious harmony valued',
     t.severity = 'critical',
@@ -2184,6 +2610,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ethnic-federalism-politics@am-ET'})
 SET t.display_name = 'Ethnic federalism politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for am-ET',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'am-ET',
     t.content = 'Recent Tigray conflict; ethnic tensions; avoid regional/ethnic references',
     t.severity = 'critical',
@@ -2199,6 +2628,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:nilegerd-dam-politics@am-ET'})
 SET t.display_name = 'Nile/GERD dam politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for am-ET',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'am-ET',
     t.content = 'Grand Ethiopian Renaissance Dam is national pride; Egypt disputes sensitive',
     t.severity = 'high',
@@ -2215,6 +2647,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- el-GR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:macedonia-naming-dispute@el-GR'})
 SET t.display_name = 'Macedonia naming dispute',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-GR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-GR',
     t.content = 'North Macedonia naming still sensitive for many; ancient Macedon is Greek',
     t.severity = 'high',
@@ -2230,6 +2665,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:turkeycyprus-conflicts@el-GR'})
 SET t.display_name = 'Turkey/Cyprus conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-GR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-GR',
     t.content = 'Historical and ongoing tensions; avoid Turkish comparisons',
     t.severity = 'high',
@@ -2245,6 +2683,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:economic-crisis-mockery@el-GR'})
 SET t.display_name = 'Economic crisis mockery',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-GR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-GR',
     t.content = '2010s crisis painful; avoid lazy/profligate Greek stereotypes',
     t.severity = 'high',
@@ -2261,6 +2702,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- el-CY Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:turkish-occupation-of-north-cyprus@el-CY'})
 SET t.display_name = 'Turkish occupation of North Cyprus',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-CY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-CY',
     t.content = '1974 invasion and ongoing division deeply traumatic; Turkish Republic of Northern Cyprus not recognized',
     t.severity = 'critical',
@@ -2276,6 +2720,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:reunification-politics@el-CY'})
 SET t.display_name = 'Reunification politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-CY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-CY',
     t.content = 'Complex political issue; avoid taking sides on federation proposals',
     t.severity = 'high',
@@ -2291,6 +2738,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:implying-cyprus-is-part-of-greece@el-CY'})
 SET t.display_name = 'Implying Cyprus is part of Greece',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for el-CY',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'el-CY',
     t.content = 'Cyprus is independent republic since 1960; distinct identity important',
     t.severity = 'medium',
@@ -2307,6 +2757,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fr-FR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:aggressive-sales-tactics@fr-FR'})
 SET t.display_name = 'Aggressive sales tactics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-FR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-FR',
     t.content = 'Perceived as vulgar and American; French prefer subtle persuasion',
     t.severity = 'high',
@@ -2322,6 +2775,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:moneywealth-display@fr-FR'})
 SET t.display_name = 'Money/wealth display',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-FR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-FR',
     t.content = 'Overt wealth talk is considered gauche; focus on value, not price savings',
     t.severity = 'medium',
@@ -2337,6 +2793,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:simplistic-language@fr-FR'})
 SET t.display_name = 'Simplistic language',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-FR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-FR',
     t.content = 'Dumbing down content insults intelligence; maintain linguistic sophistication',
     t.severity = 'medium',
@@ -2353,6 +2812,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fr-CA Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:france-quebec-comparisons@fr-CA'})
 SET t.display_name = 'France-Quebec comparisons',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CA',
     t.content = 'Implying Quebec French is inferior to Parisian French is deeply offensive',
     t.severity = 'high',
@@ -2368,6 +2830,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:parisian-french-vocabulary@fr-CA'})
 SET t.display_name = 'Parisian French vocabulary',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CA',
     t.content = 'Using France-specific terms (portable for cellulaire, courriel not e-mail) feels foreign',
     t.severity = 'medium',
@@ -2383,6 +2848,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ignoring-bill-101@fr-CA'})
 SET t.display_name = 'Ignoring Bill 101',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CA',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CA',
     t.content = 'French-first is law; English-dominant materials signal disrespect',
     t.severity = 'high',
@@ -2399,6 +2867,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fr-BE Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:flamand-wallon-tensions@fr-BE'})
 SET t.display_name = 'Flamand-Wallon tensions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-BE',
     t.content = 'Linguistic community conflicts are politically sensitive; stay neutral',
     t.severity = 'high',
@@ -2414,6 +2885,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:french-superiority-claims@fr-BE'})
 SET t.display_name = 'French superiority claims',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-BE',
     t.content = 'Belgians are sensitive to being treated as provincial French',
     t.severity = 'medium',
@@ -2429,6 +2903,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:ignoring-belgian-specificity@fr-BE'})
 SET t.display_name = 'Ignoring Belgian specificity',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-BE',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-BE',
     t.content = 'Using \'septante\' not \'soixante-dix\' shows respect for Belgian French',
     t.severity = 'medium',
@@ -2445,6 +2922,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- fr-CH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:tax-discussions@fr-CH'})
 SET t.display_name = 'Tax discussions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CH',
     t.content = 'Financial privacy is sacrosanct; avoid money-related assumptions',
     t.severity = 'high',
@@ -2460,6 +2940,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:rushing-decisions@fr-CH'})
 SET t.display_name = 'Rushing decisions',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CH',
     t.content = 'Swiss deliberation valued; avoid urgency pressure tactics',
     t.severity = 'medium',
@@ -2475,6 +2958,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:franco-centricite@fr-CH'})
 SET t.display_name = 'Franco-centricité',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for fr-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'fr-CH',
     t.content = 'Swiss French has its own character; not a French colony',
     t.severity = 'medium',
@@ -2491,6 +2977,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- es-ES Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:regional-political-conflicts@es-ES'})
 SET t.display_name = 'Regional political conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-ES',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-ES',
     t.content = 'Catalonia/Basque independence is politically explosive',
     t.severity = 'high',
@@ -2506,6 +2995,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:latin-american-spanish@es-ES'})
 SET t.display_name = 'Latin American Spanish',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-ES',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-ES',
     t.content = 'Using ustedes for plural you (instead of vosotros) sounds foreign',
     t.severity = 'medium',
@@ -2521,6 +3013,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:franco-era-references@es-ES'})
 SET t.display_name = 'Franco era references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-ES',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-ES',
     t.content = 'Historical sensitivities around dictatorship period',
     t.severity = 'high',
@@ -2537,6 +3032,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- es-MX Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:mexican-stereotypes@es-MX'})
 SET t.display_name = 'Mexican stereotypes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-MX',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-MX',
     t.content = 'Sombrero/cactus imagery offensive; modern Mexico is sophisticated',
     t.severity = 'high',
@@ -2552,6 +3050,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:us-mexico-border-politics@es-MX'})
 SET t.display_name = 'U.S.-Mexico border politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-MX',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-MX',
     t.content = 'Immigration politics extremely sensitive',
     t.severity = 'high',
@@ -2567,6 +3068,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:spain-mexico-colonial-history@es-MX'})
 SET t.display_name = 'Spain-Mexico colonial history',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-MX',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-MX',
     t.content = 'Colonial references can feel patronizing',
     t.severity = 'medium',
@@ -2583,6 +3087,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- es-AR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:malvinasfalklands@es-AR'})
 SET t.display_name = 'Malvinas/Falklands',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-AR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-AR',
     t.content = 'Deeply patriotic issue; never use \'Falklands\' in Argentina',
     t.severity = 'high',
@@ -2598,6 +3105,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:economic-crisis-references@es-AR'})
 SET t.display_name = 'Economic crisis references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-AR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-AR',
     t.content = 'Repeated economic crises are painful; don\'t highlight financial instability',
     t.severity = 'medium',
@@ -2613,6 +3123,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:comparison-to-other-latam@es-AR'})
 SET t.display_name = 'Comparison to other LATAM',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-AR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-AR',
     t.content = 'Argentines see themselves as distinct from \'rest of Latin America\'',
     t.severity = 'medium',
@@ -2629,6 +3142,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- es-CO Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:drug-traffickingcartel-references@es-CO'})
 SET t.display_name = 'Drug trafficking/cartel references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CO',
     t.content = 'Narcos-style stereotypes deeply offensive; Colombia has moved on',
     t.severity = 'high',
@@ -2644,6 +3160,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:violenceconflict-history@es-CO'})
 SET t.display_name = 'Violence/conflict history',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CO',
     t.content = 'Armed conflict is painful history, not marketing material',
     t.severity = 'high',
@@ -2659,6 +3178,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:oversimplifying-colombia@es-CO'})
 SET t.display_name = 'Oversimplifying Colombia',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CO',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CO',
     t.content = 'Colombia is highly diverse; avoid coffee/emerald only associations',
     t.severity = 'medium',
@@ -2675,6 +3197,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- es-CL Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:pinochet-era-politics@es-CL'})
 SET t.display_name = 'Pinochet era politics',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CL',
     t.content = 'Still divisive; avoid political references entirely',
     t.severity = 'high',
@@ -2690,6 +3215,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:perubolivia-border-conflicts@es-CL'})
 SET t.display_name = 'Peru/Bolivia border conflicts',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CL',
     t.content = 'Historical tensions with neighbors are sensitive',
     t.severity = 'medium',
@@ -2705,6 +3233,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:treating-chile-as-generic-latam@es-CL'})
 SET t.display_name = 'Treating Chile as generic LATAM',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for es-CL',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'es-CL',
     t.content = 'Chileans proud of distinct identity and progress',
     t.severity = 'medium',
@@ -2721,6 +3252,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- pt-BR Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:portugal-comparison@pt-BR'})
 SET t.display_name = 'Portugal comparison',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-BR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-BR',
     t.content = 'Brazilian Portuguese is distinct language variant, not dialect',
     t.severity = 'high',
@@ -2736,6 +3270,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:crimeviolence-stereotypes@pt-BR'})
 SET t.display_name = 'Crime/violence stereotypes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-BR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-BR',
     t.content = 'Favela/crime tourism imagery deeply offensive',
     t.severity = 'high',
@@ -2751,6 +3288,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:political-polarization@pt-BR'})
 SET t.display_name = 'Political polarization',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-BR',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-BR',
     t.content = 'Deep political division; stay completely neutral',
     t.severity = 'high',
@@ -2767,6 +3307,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- pt-PT Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:brazilian-portuguese-usage@pt-PT'})
 SET t.display_name = 'Brazilian Portuguese usage',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-PT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-PT',
     t.content = 'Using Brazilian terms (você instead of tu) signals laziness or ignorance',
     t.severity = 'high',
@@ -2782,6 +3325,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:colonial-past-glorification@pt-PT'})
 SET t.display_name = 'Colonial past glorification',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-PT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-PT',
     t.content = 'Complex history; avoid both glorification and excessive criticism',
     t.severity = 'medium',
@@ -2797,6 +3343,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:spain-confusion@pt-PT'})
 SET t.display_name = 'Spain confusion',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for pt-PT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'pt-PT',
     t.content = 'Portugal is NOT Spain; distinct language and culture',
     t.severity = 'medium',
@@ -2813,6 +3362,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- it-IT Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:north-south-divide-stereotypes@it-IT'})
 SET t.display_name = 'North-South divide stereotypes',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-IT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-IT',
     t.content = 'Terroni/Polentoni slurs; regional tensions are real and sensitive',
     t.severity = 'high',
@@ -2828,6 +3380,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:mafia-references@it-IT'})
 SET t.display_name = 'Mafia references',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-IT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-IT',
     t.content = 'Deeply offensive stereotype, especially to Southerners',
     t.severity = 'high',
@@ -2843,6 +3398,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:criticizing-italian-systems@it-IT'})
 SET t.display_name = 'Criticizing Italian systems',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-IT',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-IT',
     t.content = 'Italians can criticize Italy; foreigners cannot',
     t.severity = 'medium',
@@ -2859,6 +3417,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 // --- it-CH Taboos from Research ---
 MERGE (t:Taboo {key: 'taboo:research:treating-ticino-as-italy@it-CH'})
 SET t.display_name = 'Treating Ticino as Italy',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-CH',
     t.content = 'Ticinesi are Swiss, not expat Italians',
     t.severity = 'high',
@@ -2874,6 +3435,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:aggressive-sales@it-CH'})
 SET t.display_name = 'Aggressive sales',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-CH',
     t.content = 'Swiss reserve means softer approach needed',
     t.severity = 'medium',
@@ -2889,6 +3453,9 @@ MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 MERGE (t:Taboo {key: 'taboo:research:financial-prying@it-CH'})
 SET t.display_name = 'Financial prying',
+    t.node_class = 'Taboo',
+    t.content = 'Taboo topic for it-CH',
+    t.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     t.locale = 'it-CH',
     t.content = 'Swiss banking discretion culture applies',
     t.severity = 'high',

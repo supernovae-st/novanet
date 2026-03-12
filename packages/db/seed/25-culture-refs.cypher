@@ -17,6 +17,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:pamilya-family@ceb-PH'})
 SET cr.display_name = 'Pamilya (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households; family decisions; sacrificing for children\'s future; OFW remittances',
@@ -33,6 +35,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pagtuo-faithreligion@ceb-PH'})
 SET cr.display_name = 'Pagtuo (Faith/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Santo Nino devotion; regular mass attendance; religious festivals; prayers before meals',
@@ -49,6 +53,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pagtahod-respect-for-elders@ceb-PH'})
 SET cr.display_name = 'Pagtahod (Respect for Elders)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Using respect terms (Manong/Manang, Tay/Nay); seeking blessing (mano); deferring to elders',
@@ -65,6 +71,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pakikisama-smooth-relations@ceb-PH'})
 SET cr.display_name = 'Pakikisama (Smooth Relations)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Avoiding conflict; maintaining harmony; going along with group; not causing ulaw (shame)',
@@ -81,6 +89,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pagkamaabiabihon-hospitality@ceb-PH'})
 SET cr.display_name = 'Pagkamaabiabihon (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests; offering food/drinks; making visitors feel at home; generosity',
@@ -97,6 +107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bayanihan-community-spirit@ceb-PH'})
 SET cr.display_name = 'Bayanihan (Community Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'medium',
     cr.expression = 'Helping neighbors; community mutual aid; local cooperation; shared burdens',
@@ -113,6 +125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kasadya-joycelebration@ceb-PH'})
 SET cr.display_name = 'Kasadya (Joy/Celebration)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'medium',
     cr.expression = 'Fiestas; family gatherings; finding joy despite hardship; resilience through humor',
@@ -129,6 +143,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kauswagan-progressadvancement@ceb-PH'})
 SET cr.display_name = 'Kauswagan (Progress/Advancement)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'medium',
     cr.expression = 'Education as priority; career advancement; improving family status; entrepreneurship',
@@ -145,6 +161,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sinulog-festival-santo-nino@ceb-PH'})
 SET cr.display_name = 'Sinulog Festival / Santo Nino',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'high',
     cr.expression = 'Deep religious significance; never use commercially or irreverently; Pit Senyor is sacred expression',
@@ -161,6 +179,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:visayan-identity-and-language@ceb-PH'})
 SET cr.display_name = 'Visayan identity and language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'medium',
     cr.expression = 'Celebrate Bisaya identity; avoid implying inferiority to Tagalog; language pride is strong',
@@ -177,6 +197,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:philippine-independence-history@ceb-PH'})
 SET cr.display_name = 'Philippine independence history',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ceb-PH',
     cr.importance = 'medium',
     cr.expression = 'Lapu-Lapu as first resistance hero is Cebuano pride; handle colonial history respectfully',
@@ -201,6 +223,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@mn-MN'})
 SET cr.display_name = 'Хүндэтгэл (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for elders, teachers, authority; formal address mandatory; standing when elders enter',
@@ -217,6 +241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@mn-MN'})
 SET cr.display_name = 'Зочломтгой байдал (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'high',
     cr.expression = 'Generous welcome to guests; offering airag, tea, food; ger (yurt) open to travelers',
@@ -233,6 +259,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@mn-MN'})
 SET cr.display_name = 'Гэр бүл (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; clan identity; collective responsibility; ancestor veneration',
@@ -249,6 +277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:homelandpatriotism@mn-MN'})
 SET cr.display_name = 'Эх орон (Homeland/Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'high',
     cr.expression = 'Strong national pride; Chinggis Khaan legacy; steppe heritage; independence celebration',
@@ -265,6 +295,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:enduranceresilience@mn-MN'})
 SET cr.display_name = 'Тэвчээр (Endurance/Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'medium',
     cr.expression = 'Ability to withstand hardship; nomadic survival mentality; harsh climate adaptation',
@@ -281,6 +313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honestyjustice@mn-MN'})
 SET cr.display_name = 'Шударга байдал (Honesty/Justice)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'medium',
     cr.expression = 'Keeping one\'s word; moral uprightness; fair dealing; traditional justice concepts',
@@ -297,6 +331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nature-connection@mn-MN'})
 SET cr.display_name = 'Байгаль (Nature Connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'medium',
     cr.expression = 'Sacred relationship with land, sky, animals; environmental stewardship; nomadic harmony',
@@ -313,6 +349,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chinggis-khaan-and-mongol-empire@mn-MN'})
 SET cr.display_name = 'Chinggis Khaan and Mongol Empire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'medium',
     cr.expression = 'Revered founding figure; use respectfully; never mock or trivialize; avoid colonial framing',
@@ -329,6 +367,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:democratic-transition-1990@mn-MN'})
 SET cr.display_name = 'Democratic transition (1990)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'low',
     cr.expression = 'Peaceful revolution celebrated; symbol of national character; positive reference',
@@ -345,6 +385,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mongolian-script-traditional@mn-MN'})
 SET cr.display_name = 'Mongolian script (traditional)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mn-MN',
     cr.importance = 'medium',
     cr.expression = 'Cultural revival ongoing; respect traditional script; Cyrillic also fully accepted',
@@ -369,6 +411,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:muhibbah-racial-harmony@en-MY'})
 SET cr.display_name = 'Muhibbah (Racial Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'high',
     cr.expression = 'Peaceful coexistence of Malay, Chinese, Indian, and indigenous communities; celebration of diversity; unity despite differences',
@@ -385,6 +429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-community@en-MY'})
 SET cr.display_name = 'Family and community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; collective decision-making; intergenerational respect; gotong-royong (communal cooperation)',
@@ -401,6 +447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-hormat@en-MY'})
 SET cr.display_name = 'Respect (Hormat)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, royalty, and authority; politeness in speech; maintaining harmony; using proper titles',
@@ -417,6 +465,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-maruah@en-MY'})
 SET cr.display_name = 'Face (Maruah)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity; avoiding embarrassment; indirect communication to save face; modesty valued',
@@ -433,6 +483,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-mesra@en-MY'})
 SET cr.display_name = 'Hospitality (Mesra)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'medium',
     cr.expression = 'Warm welcomes; generous hosting; treating guests well; friendly service culture',
@@ -449,6 +501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:moderation-kesederhanaan@en-MY'})
 SET cr.display_name = 'Moderation (Kesederhanaan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'medium',
     cr.expression = 'Middle path valued; extremism avoided; balance in all things; tolerance promoted',
@@ -465,6 +519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progress-with-tradition@en-MY'})
 SET cr.display_name = 'Progress with tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'medium',
     cr.expression = 'Modernization while preserving heritage; "Malaysia Boleh" (Malaysia Can) spirit; aspiration with roots',
@@ -481,6 +537,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-merdeka-31-august-1957@en-MY'})
 SET cr.display_name = 'Independence (Merdeka, 31 August 1957)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'low',
     cr.expression = 'Major celebration; Tunku Abdul Rahman revered; "Merdeka" spirit positive; safe for patriotic messaging',
@@ -497,6 +555,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:food-heritage-nasi-lemak-satay-rendang@en-MY'})
 SET cr.display_name = 'Food heritage (nasi lemak, satay, rendang)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'low',
     cr.expression = 'Deep culinary pride; food unites Malaysians; safe for brand connections; be careful with "origin" claims',
@@ -513,6 +573,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rainforest-and-natural-heritage@en-MY'})
 SET cr.display_name = 'Rainforest and natural heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MY',
     cr.importance = 'low',
     cr.expression = 'Taman Negara (oldest rainforest); biodiversity pride; orangutans; environmental stewardship',
@@ -537,6 +599,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@bn-BD'})
 SET cr.display_name = 'পরিবার (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds central; multi-generational households; collective decision-making; family honor paramount',
@@ -553,6 +617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@bn-BD'})
 SET cr.display_name = 'সম্মান (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders (বড়দের); teachers revered as "গুরু"; hierarchical deference in speech and behavior',
@@ -569,6 +635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@bn-BD'})
 SET cr.display_name = 'আতিথেয়তা (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'high',
     cr.expression = 'Guests treated as divine ("অতিথি দেবতা"); generous hosting; offering tea/food mandatory; warmth in reception',
@@ -585,6 +653,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religionfaith@bn-BD'})
 SET cr.display_name = 'ধর্ম (Religion/Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'high',
     cr.expression = 'Islamic values predominant; prayer, fasting, charity important; religious identity significant',
@@ -601,6 +671,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community@bn-BD'})
 SET cr.display_name = 'সম্প্রদায় (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'medium',
     cr.expression = 'Strong community bonds; village/para identity; collective celebrations; helping neighbors',
@@ -617,6 +689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@bn-BD'})
 SET cr.display_name = 'শিক্ষা (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'medium',
     cr.expression = 'Education highly valued; path to success; English proficiency sought; degrees as status markers',
@@ -633,6 +707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@bn-BD'})
 SET cr.display_name = 'কঠোর পরিশ্রম (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'medium',
     cr.expression = 'Diligence respected; entrepreneurial spirit; self-made success stories celebrated',
@@ -649,6 +725,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honordignity@bn-BD'})
 SET cr.display_name = 'ইজ্জত (Honor/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'medium',
     cr.expression = 'Family reputation crucial; social standing matters; avoiding shame important',
@@ -665,6 +743,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:language-movement-21-february-1952@bn-BD'})
 SET cr.display_name = 'Language Movement (21 February 1952)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'low',
     cr.expression = 'Safe; International Mother Language Day; martyrs honored; "ভাষা শহীদ" deeply respected',
@@ -681,6 +761,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bengali-culture-and-literature@bn-BD'})
 SET cr.display_name = 'Bengali culture and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'low',
     cr.expression = 'Rabindranath, Nazrul celebrated; rich literary heritage; safe for cultural positioning',
@@ -697,6 +779,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:garment-industry-success@bn-BD'})
 SET cr.display_name = 'Garment industry success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-BD',
     cr.importance = 'low',
     cr.expression = '"Made in Bangladesh" for global brands; economic achievement; safe for quality messaging',
@@ -721,6 +805,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ujamaa-familyhood@en-TZ'})
 SET cr.display_name = 'Ujamaa (Familyhood)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'high',
     cr.expression = 'Collective responsibility; village-level cooperation; community over individual; Nyerere\'s philosophy remains influential',
@@ -737,6 +823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unity-umoja@en-TZ'})
 SET cr.display_name = 'Unity / Umoja',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'high',
     cr.expression = 'National unity prioritized over tribal identity; Swahili as unifying language; "Tanzanian" identity first',
@@ -753,6 +841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pole-pole-patiencegentleness@en-TZ'})
 SET cr.display_name = 'Pole Pole (Patience/Gentleness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'high',
     cr.expression = 'Unhurried approach to life; patience as virtue; gentle communication; avoiding confrontation',
@@ -769,6 +859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@en-TZ'})
 SET cr.display_name = 'Respect for Elders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'high',
     cr.expression = 'Deference to age (Mzee, Bibi); shikamoo greetings; seeking elder counsel; multi-generational care',
@@ -785,6 +877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-TZ'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'high',
     cr.expression = 'Muslim (35-40%) and Christian (60%) coexistence; religion integrated into daily life; Zanzibar predominantly Muslim',
@@ -801,6 +895,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-development@en-TZ'})
 SET cr.display_name = 'Education and Development',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'medium',
     cr.expression = 'Education valued for national development; literacy campaigns; self-reliance through knowledge',
@@ -817,6 +913,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-ukarimu@en-TZ'})
 SET cr.display_name = 'Hospitality / Ukarimu',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'medium',
     cr.expression = 'Generosity to guests and strangers; sharing meals; welcoming visitors warmly',
@@ -833,6 +931,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-reliance-kujitegemea@en-TZ'})
 SET cr.display_name = 'Self-Reliance / Kujitegemea',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'medium',
     cr.expression = 'Nyerere\'s philosophy of building from within; reducing dependency; local solutions',
@@ -849,6 +949,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ethnic-harmony-national-unity@en-TZ'})
 SET cr.display_name = 'Ethnic harmony / national unity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'low',
     cr.expression = 'Very safe; Tanzania\'s peaceful coexistence is genuine point of pride; 120+ tribes without major conflict',
@@ -865,6 +967,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:serengeti-and-wildlife@en-TZ'})
 SET cr.display_name = 'Serengeti and wildlife',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TZ',
     cr.importance = 'low',
     cr.expression = 'Safe; world-renowned conservation; natural heritage pride; responsible tourism angle',
@@ -889,6 +993,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:kiasu-fear-of-losing-out@en-SG'})
 SET cr.display_name = 'Kiasu (Fear of losing out)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'high',
     cr.expression = 'Competitive drive; not wanting to miss opportunities; queuing for deals; early adoption',
@@ -905,6 +1011,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:racial-harmony@en-SG'})
 SET cr.display_name = 'Racial Harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'high',
     cr.expression = 'Multi-racial society (Chinese, Malay, Indian, Others); peaceful coexistence; respect for all communities',
@@ -921,6 +1029,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism@en-SG'})
 SET cr.display_name = 'Pragmatism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'high',
     cr.expression = 'Practical decision-making; results-oriented; efficient solutions valued',
@@ -937,6 +1047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-filial-piety@en-SG'})
 SET cr.display_name = 'Family and Filial Piety',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'high',
     cr.expression = 'Respect for elders; family-centric decisions; multi-generational consideration',
@@ -953,6 +1065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:efficiency@en-SG'})
 SET cr.display_name = 'Efficiency',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'medium',
     cr.expression = 'Things should work; time valued; no tolerance for inefficiency',
@@ -969,6 +1083,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-mianzi@en-SG'})
 SET cr.display_name = 'Face (Mianzi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'medium',
     cr.expression = 'Social standing; reputation; avoiding public embarrassment',
@@ -985,6 +1101,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:security-and-stability@en-SG'})
 SET cr.display_name = 'Security and Stability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'medium',
     cr.expression = 'Safe environment valued; risk-averse in many contexts; government trust',
@@ -1001,6 +1119,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hawker-culture-unesco@en-SG'})
 SET cr.display_name = 'Hawker culture (UNESCO)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'low',
     cr.expression = 'Widely celebrated; safe ground for local references and imagery',
@@ -1017,6 +1137,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:garden-city-city-in-a-garden@en-SG'})
 SET cr.display_name = 'Garden City / City in a Garden',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'low',
     cr.expression = 'Greenery and sustainability achievements; positive imagery',
@@ -1033,6 +1155,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multiracial-harmony@en-SG'})
 SET cr.display_name = 'Multiracial harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SG',
     cr.importance = 'medium',
     cr.expression = 'Fundamental value but also sensitive; celebrate genuinely without tokenism',
@@ -1057,6 +1181,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@ta-LK'})
 SET cr.display_name = 'மரியாதை (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'high',
     cr.expression = 'Deep hierarchical respect for elders, teachers, religious figures; "ஐயா/அம்மா" address; palms-together greeting; parental obedience as virtue',
@@ -1073,6 +1199,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ta-LK'})
 SET cr.display_name = 'குடும்பம் (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'high',
     cr.expression = 'Extended family networks central; multi-generational households; collective decision-making; family honor (குடும்ப மரியாதை) paramount',
@@ -1089,6 +1217,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religiondevotion@ta-LK'})
 SET cr.display_name = 'சமயம்/பக்தி (Religion/Devotion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'high',
     cr.expression = 'Hindu temples central to Tamil identity; kovil culture; daily puja; religious festivals (Thai Pongal, Deepavali, Thai Poosam) define calendar',
@@ -1105,6 +1235,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@ta-LK'})
 SET cr.display_name = 'கல்வி (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'high',
     cr.expression = 'Education as pathway to success; professional degrees highly valued; English medium education prestigious; tuition culture strong',
@@ -1121,6 +1253,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ta-LK'})
 SET cr.display_name = 'விருந்தோம்பல் (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'high',
     cr.expression = 'Guest honored as divine ("விருந்தோம்பல் தமிழர் மரபு"); generous hosting; offering tea/food as greeting; customer as honored guest',
@@ -1137,6 +1271,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@ta-LK'})
 SET cr.display_name = 'கடின உழைப்பு (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'medium',
     cr.expression = 'Diligence and perseverance valued; self-made success respected; entrepreneurial spirit strong especially in Northern Province',
@@ -1153,6 +1289,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-unity@ta-LK'})
 SET cr.display_name = 'சமுதாய ஒற்றுமை (Community Unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'medium',
     cr.expression = 'Strong community bonds; temple-based community life; mutual support networks; diaspora connections important',
@@ -1169,6 +1307,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tamil-heritage@ta-LK'})
 SET cr.display_name = 'தமிழ் பண்பாடு (Tamil Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'medium',
     cr.expression = 'Pride in ancient Tamil civilization; classical literature (Sangam); Tamil language preservation important',
@@ -1185,6 +1325,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tamil-classical-heritage@ta-LK'})
 SET cr.display_name = 'Tamil classical heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'low',
     cr.expression = '2000+ year literary tradition; Sangam literature; Thirukkural wisdom; safe cultural reference',
@@ -1201,6 +1343,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kovil-temple-architecture@ta-LK'})
 SET cr.display_name = 'Kovil (Temple) architecture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-LK',
     cr.importance = 'low',
     cr.expression = 'Jaffna, Trincomalee temples; architectural beauty; safe cultural/spiritual reference',
@@ -1225,6 +1369,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:diversity-rainbow-nation@en-ZA'})
 SET cr.display_name = 'Diversity (Rainbow Nation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'high',
     cr.expression = '11 languages, multiple cultures, integration without assimilation',
@@ -1241,6 +1387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-community@en-ZA'})
 SET cr.display_name = 'Family & Community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'high',
     cr.expression = 'Extended families, multi-generational households, community support networks',
@@ -1257,6 +1405,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:entrepreneurial-spirit@en-ZA'})
 SET cr.display_name = 'Entrepreneurial Spirit',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'medium',
     cr.expression = 'Hustling, side businesses, self-reliance, making opportunities',
@@ -1273,6 +1423,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@en-ZA'})
 SET cr.display_name = 'Hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'medium',
     cr.expression = 'Welcoming strangers, sharing meals, braai culture, open homes',
@@ -1289,6 +1441,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sport-as-unifier@en-ZA'})
 SET cr.display_name = 'Sport as Unifier',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'medium',
     cr.expression = 'Rugby, cricket, football unite across divides; Springboks as national pride',
@@ -1305,6 +1459,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:springboks-rugby@en-ZA'})
 SET cr.display_name = 'Springboks (Rugby)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'low',
     cr.expression = 'Unifying force; World Cup victories celebrated across all communities',
@@ -1321,6 +1477,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mandela-legacy@en-ZA'})
 SET cr.display_name = 'Mandela Legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZA',
     cr.importance = 'medium',
     cr.expression = 'Deeply respected; avoid commercialization or oversimplification of his message',
@@ -1345,6 +1503,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:pride-and-dignity@en-BB'})
 SET cr.display_name = 'Pride and Dignity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'high',
     cr.expression = 'National pride in achievements; personal dignity; "Bajan and proud"; self-respect; refusal to be diminished',
@@ -1361,6 +1521,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-togetherness@en-BB'})
 SET cr.display_name = 'Community (Togetherness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'high',
     cr.expression = 'Small island solidarity; knowing your neighbours; collective support; parish identity; "we" over "me"',
@@ -1377,6 +1539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-self-improvement@en-BB'})
 SET cr.display_name = 'Education and Self-Improvement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'high',
     cr.expression = 'High literacy rates; value placed on schooling; professional advancement; personal development; intellectual pride',
@@ -1393,6 +1557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-self-determination@en-BB'})
 SET cr.display_name = 'Independence and Self-Determination',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'high',
     cr.expression = 'Republic since 2021; ending colonial ties; charting own course; "Barbados for Barbadians"',
@@ -1409,6 +1575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:order-and-stability@en-BB'})
 SET cr.display_name = 'Order and Stability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'medium',
     cr.expression = 'Stable democracy; rule of law; institutional strength; "Little England" governance tradition',
@@ -1425,6 +1593,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:christian-faith@en-BB'})
 SET cr.display_name = 'Christian Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'medium',
     cr.expression = 'Strong Anglican heritage; church attendance; faith integrated into life; religious holidays observed',
@@ -1441,6 +1611,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@en-BB'})
 SET cr.display_name = 'Hard Work',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'medium',
     cr.expression = 'Industriousness valued; building through effort; professional pride; earning respect through work',
@@ -1457,6 +1629,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:republic-status-2021@en-BB'})
 SET cr.display_name = 'Republic Status (2021)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'low',
     cr.expression = 'Historic transition from constitutional monarchy; Dame Sandra Mason as first President; source of pride; celebrate self-determination',
@@ -1473,6 +1647,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rihanna-national-hero@en-BB'})
 SET cr.display_name = 'Rihanna (National Hero)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'low',
     cr.expression = 'Global superstar; designated National Hero 2021; cultural icon; safe positive reference; source of immense pride',
@@ -1489,6 +1665,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tourism-excellence@en-BB'})
 SET cr.display_name = 'Tourism Excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'low',
     cr.expression = 'World-class hospitality reputation; "friendliest island"; service quality; appropriate for hospitality contexts',
@@ -1505,6 +1683,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:crop-over-festival@en-BB'})
 SET cr.display_name = 'Crop Over Festival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BB',
     cr.importance = 'low',
     cr.expression = 'Annual cultural celebration; August festivities; kadooment; calypso; joyful cultural expression',
@@ -1529,6 +1709,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:buddhismbuddhist-values@si-LK'})
 SET cr.display_name = 'බුද්ධාගම (Buddhism/Buddhist values)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'high',
     cr.expression = 'Theravada Buddhism deeply embedded; temple culture; dana (giving); mindfulness; "සද්ධර්මය" (good doctrine) guides conduct',
@@ -1545,6 +1727,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@si-LK'})
 SET cr.display_name = 'ගෞරවය (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'high',
     cr.expression = 'Hierarchical respect for elders, teachers, monks; "ආයුබෝවන්" greeting with palms together; parental respect as duty',
@@ -1561,6 +1745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@si-LK'})
 SET cr.display_name = 'පවුල (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'high',
     cr.expression = 'Extended family networks strong; multi-generational households; family honor important; collective decision-making',
@@ -1577,6 +1763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@si-LK'})
 SET cr.display_name = 'සත්කාරය (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'high',
     cr.expression = 'Guest is honored; generous hosting tradition; "ආගන්තුක සත්කාරය" considered virtue; offering tea/food as greeting',
@@ -1593,6 +1781,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@si-LK'})
 SET cr.display_name = 'ශික්ෂණය (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'medium',
     cr.expression = 'Education highly valued; professional degrees as status markers; English education prestigious; tuition culture',
@@ -1609,6 +1799,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:moderationmiddle-path@si-LK'})
 SET cr.display_name = 'මධ්‍යස්ථභාවය (Moderation/Middle path)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'medium',
     cr.expression = 'Buddhist influence on avoiding extremes; "මධ්‍යම මාර්ගය" philosophy; contentment valued over excess',
@@ -1625,6 +1817,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karmamerit@si-LK'})
 SET cr.display_name = 'කාර්මික බෞද්ධ (Karma/Merit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'medium',
     cr.expression = 'Actions have consequences; "පින්කම්" (meritorious deeds) important; charity and dana valued',
@@ -1641,6 +1835,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:local-pride@si-LK'})
 SET cr.display_name = 'ස්වදේශීය (Local pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'medium',
     cr.expression = 'Pride in Sri Lankan products, culture, craftsmanship; "Made in Sri Lanka" resonates; Ceylon heritage',
@@ -1657,6 +1853,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:buddhist-heritage-and-temples@si-LK'})
 SET cr.display_name = 'Buddhist heritage and temples',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'low',
     cr.expression = 'Safe; ancient temples, stupas, Buddhist philosophy; use respectfully; never commercialize sacred imagery',
@@ -1673,6 +1871,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ceylon-tea@si-LK'})
 SET cr.display_name = 'Ceylon Tea',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'low',
     cr.expression = 'National pride; quality reputation; safe for heritage and quality positioning',
@@ -1689,6 +1889,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1948@si-LK'})
 SET cr.display_name = 'Independence (1948)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'si-LK',
     cr.importance = 'medium',
     cr.expression = 'February 4th celebration; avoid colonial comparisons; respectful patriotic references acceptable',
@@ -1713,6 +1915,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-porodica@bs-BA'})
 SET cr.display_name = 'Family (Porodica)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households, family gatherings, collective decision-making',
@@ -1729,6 +1933,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-gostoprimstvo@bs-BA'})
 SET cr.display_name = 'Hospitality (Gostoprimstvo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests, offering coffee and food, generous hosting regardless of resources',
@@ -1745,6 +1951,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-izdrzljivost@bs-BA'})
 SET cr.display_name = 'Resilience (Izdrzljivost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'high',
     cr.expression = 'Overcoming hardship, perseverance through difficulties, practical problem-solving',
@@ -1761,6 +1969,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-postovanje@bs-BA'})
 SET cr.display_name = 'Respect (Postovanje)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'high',
     cr.expression = 'Honoring elders, professional titles, social hierarchies, politeness in interaction',
@@ -1777,6 +1987,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity-autenticnost@bs-BA'})
 SET cr.display_name = 'Authenticity (Autenticnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'medium',
     cr.expression = 'Valuing genuine relationships, sincerity over pretense, skepticism of exaggeration',
@@ -1793,6 +2005,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-zajednica@bs-BA'})
 SET cr.display_name = 'Community (Zajednica)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'medium',
     cr.expression = 'Neighborhood bonds, local solidarity, collective support networks',
@@ -1809,6 +2023,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-marljivost@bs-BA'})
 SET cr.display_name = 'Hard Work (Marljivost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'medium',
     cr.expression = 'Practical skills, industriousness, self-reliance, resourcefulness',
@@ -1825,6 +2041,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-heritage-mountains-rivers-biodiversity@bs-BA'})
 SET cr.display_name = 'Natural heritage (mountains, rivers, biodiversity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; Sarajevo\'s mountains, Una river, natural parks universally appreciated',
@@ -1841,6 +2059,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:olympic-legacy-1984-sarajevo-olympics@bs-BA'})
 SET cr.display_name = 'Olympic legacy (1984 Sarajevo Olympics)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'low',
     cr.expression = 'Positive shared memory; symbol of unity and international recognition',
@@ -1857,6 +2077,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:historical-bridges-and-architecture@bs-BA'})
 SET cr.display_name = 'Historical bridges and architecture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bs-BA',
     cr.importance = 'medium',
     cr.expression = 'Stari Most (Old Bridge) in Mostar is symbol of unity but also wartime destruction; use with care',
@@ -1881,6 +2103,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:swiss-quality-qualita-svizzera@it-CH'})
 SET cr.display_name = 'Swiss Quality (Qualita svizzera)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'Precision, reliability, craftsmanship; Swiss Made pride; meticulous attention to detail',
@@ -1897,6 +2121,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:autonomy-and-cantonal-identity-autonomia-cantonale@it-CH'})
 SET cr.display_name = 'Autonomy and Cantonal Identity (Autonomia cantonale)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'Strong Ticino identity; "Svizzera italiana" pride; distinct from both Italy and German Switzerland',
@@ -1913,6 +2139,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:relationship-and-warmth-relazioni-umane@it-CH'})
 SET cr.display_name = 'Relationship and Warmth (Relazioni umane)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'More personal touch than German Swiss; warmth in business; trust built through relationships',
@@ -1929,6 +2157,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:punctuality-puntualita@it-CH'})
 SET cr.display_name = 'Punctuality (Puntualita)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'Swiss precision in time; trains run on schedule; delays unacceptable; respect for others\' time',
@@ -1945,6 +2175,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretion-discrezione@it-CH'})
 SET cr.display_name = 'Discretion (Discrezione)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'Privacy valued; personal finances never discussed; banking heritage; understatement preferred',
@@ -1961,6 +2193,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multilingual-respect-rispetto-multilinguistico@it-CH'})
 SET cr.display_name = 'Multilingual Respect (Rispetto multilinguistico)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'high',
     cr.expression = 'Proud to be one of four language regions; defending Italian presence in federation; multilingualism valued',
@@ -1977,6 +2211,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance-equilibrio-vita-lavoro@it-CH'})
 SET cr.display_name = 'Work-Life Balance (Equilibrio vita-lavoro)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'medium',
     cr.expression = 'Quality of life valued; outdoor lifestyle; less workaholism than Italy; efficiency over long hours',
@@ -1993,6 +2229,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-and-local-identity-comunita-e-identita-l@it-CH'})
 SET cr.display_name = 'Community and Local Identity (Comunita e identita locale)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'medium',
     cr.expression = 'Strong municipal and cantonal loyalty; "campanilismo" present; local traditions celebrated',
@@ -2009,6 +2247,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:svizzera-italiana-as-fourth-language-region@it-CH'})
 SET cr.display_name = 'Svizzera italiana as fourth language region',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'medium',
     cr.expression = 'Proud to maintain Italian in federal context; sensitivity about minority status; can reference respectfully',
@@ -2025,6 +2265,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:direct-democracy@it-CH'})
 SET cr.display_name = 'Direct democracy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'low',
     cr.expression = 'Swiss political system pride; citizen participation; referendums; source of shared Swiss pride',
@@ -2041,6 +2283,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:monte-bre-monte-san-salvatore@it-CH'})
 SET cr.display_name = 'Monte Bre, Monte San Salvatore',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-CH',
     cr.importance = 'low',
     cr.expression = 'Iconic local landmarks; safe to reference; tourism symbols; regional identity markers',
@@ -2065,6 +2309,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:aile-family@tr-TR'})
 SET cr.display_name = 'Aile (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, multi-generational households, family honor, collective decisions',
@@ -2081,6 +2327,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:namusseref-honor@tr-TR'})
 SET cr.display_name = 'Namus/Seref (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'high',
     cr.expression = 'Personal and family reputation, integrity, keeping one\'s word, protecting dignity',
@@ -2097,6 +2345,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:misafirperverlik-hospitality@tr-TR'})
 SET cr.display_name = 'Misafirperverlik (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, offering tea/coffee, welcoming attitude',
@@ -2113,6 +2363,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vatanseverlik-patriotism@tr-TR'})
 SET cr.display_name = 'Vatanseverlik (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'high',
     cr.expression = 'Strong national pride, Ataturk\'s legacy, Turkish identity, territorial integrity',
@@ -2129,6 +2381,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:saygi-respect@tr-TR'})
 SET cr.display_name = 'Saygi (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, respect for authority, polite address, social hierarchy',
@@ -2145,6 +2399,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:caliskanlik-hard-work@tr-TR'})
 SET cr.display_name = 'Caliskanlik (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'medium',
     cr.expression = 'Industriousness valued, self-made success respected, entrepreneurial spirit',
@@ -2161,6 +2417,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modernlik-modernity@tr-TR'})
 SET cr.display_name = 'Modernlik (Modernity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'medium',
     cr.expression = 'Ataturk\'s modernization legacy, progress, development, Western orientation',
@@ -2177,6 +2435,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ataturk-and-republic-founding@tr-TR'})
 SET cr.display_name = 'Ataturk and Republic founding',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'medium',
     cr.expression = 'Universally revered; use respectfully; never commercialize image directly; 10 November solemn',
@@ -2193,6 +2453,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:turkish-cuisine@tr-TR'})
 SET cr.display_name = 'Turkish cuisine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'low',
     cr.expression = 'Safe and positive; regional specialties; UNESCO intangible heritage; excellent for brand associations',
@@ -2209,6 +2471,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:scientific-and-cultural-achievements@tr-TR'})
 SET cr.display_name = 'Scientific and cultural achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tr-TR',
     cr.importance = 'low',
     cr.expression = 'Celebrate Turkish inventors, artists, writers; safe positive territory',
@@ -2233,6 +2497,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-MX'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'high',
     cr.expression = 'Extended family central to identity; multi-generational households; family decisions made collectively; compadrazgo (godparent) system expands family bonds',
@@ -2249,6 +2515,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-mexicano-mexican-pride@es-MX'})
 SET cr.display_name = 'Orgullo Mexicano (Mexican Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'high',
     cr.expression = 'Strong national identity; pride in cultural heritage, food, music, art; "Hecho en Mexico" valued; resilience narrative',
@@ -2265,6 +2533,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-warmth@es-MX'})
 SET cr.display_name = 'Calidez (Warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'high',
     cr.expression = 'Personal connections essential; relationship before transaction; hospitality (mi casa es tu casa); physical warmth in greetings',
@@ -2281,6 +2551,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-MX'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'high',
     cr.expression = 'Deference to elders and authority; formal address expected initially; dignity preservation; never embarrass publicly',
@@ -2297,6 +2569,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-duro-hard-work@es-MX'})
 SET cr.display_name = 'Trabajo Duro (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'high',
     cr.expression = 'Dedication to providing for family; self-made success respected; entrepreneurial spirit ("echale ganas"); resilience admired',
@@ -2313,6 +2587,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alegria-joycelebration@es-MX'})
 SET cr.display_name = 'Alegria (Joy/Celebration)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'medium',
     cr.expression = 'Life celebration despite hardship; fiestas central to culture; humor in adversity; enjoying the moment',
@@ -2329,6 +2605,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fe-faith@es-MX'})
 SET cr.display_name = 'Fe (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'medium',
     cr.expression = 'Catholic tradition deeply embedded; religious holidays significant; saints days; morality framework',
@@ -2345,6 +2623,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-MX'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'medium',
     cr.expression = 'Community support strong; helping neighbors; collective resilience; mutual aid networks',
@@ -2361,6 +2641,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pre-hispanic-civilizations-aztec-maya@es-MX'})
 SET cr.display_name = 'Pre-Hispanic civilizations (Aztec, Maya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'low',
     cr.expression = 'Source of deep pride; architectural wonders; advanced astronomy/mathematics; respectful reference welcomed',
@@ -2377,6 +2659,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:art-and-artists-diego-rivera-frida-kahlo@es-MX'})
 SET cr.display_name = 'Art and artists (Diego Rivera, Frida Kahlo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'low',
     cr.expression = 'Cultural icons; muralism movement; safe to reference; now commercialized but still respected',
@@ -2393,6 +2677,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-heroes@es-MX'})
 SET cr.display_name = 'Independence heroes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'low',
     cr.expression = 'Hidalgo, Morelos; September patriotic month; national pride without controversy',
@@ -2409,6 +2695,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-victories@es-MX'})
 SET cr.display_name = 'Sports victories',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-MX',
     cr.importance = 'low',
     cr.expression = 'World Cup moments; boxing champions; safe celebratory context',
@@ -2433,6 +2721,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:darifa-hospitalitywarmth@ar-MA'})
 SET cr.display_name = 'Darifa (Hospitality/Warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'high',
     cr.expression = 'Generous welcome, offering tea and food, treating guests as family',
@@ -2449,6 +2739,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-ayla-family@ar-MA'})
 SET cr.display_name = 'Al-\'Ayla (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, collective decisions, multi-generational households',
@@ -2465,6 +2757,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karama-dignity@ar-MA'})
 SET cr.display_name = 'Karama (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'high',
     cr.expression = 'Self-respect, saving face, maintaining honor in public',
@@ -2481,6 +2775,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-tasamoh-tolerance@ar-MA'})
 SET cr.display_name = 'Al-Tasamoh (Tolerance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'high',
     cr.expression = 'Religious openness, cultural diversity acceptance, Amazigh-Arab coexistence',
@@ -2497,6 +2793,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-iqtisad-pragmatism@ar-MA'})
 SET cr.display_name = 'Al-Iqtisad (Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'medium',
     cr.expression = 'Value-consciousness, practical choices, stretching resources',
@@ -2513,6 +2811,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-hadatha-modernity@ar-MA'})
 SET cr.display_name = 'Al-Hadatha (Modernity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'medium',
     cr.expression = 'Embracing progress while respecting tradition, tech adoption, urban development',
@@ -2529,6 +2829,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:l-khir-blessinggoodness@ar-MA'})
 SET cr.display_name = 'L-Khir (Blessing/Goodness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'medium',
     cr.expression = 'Seeking blessing in transactions, ethical business, community benefit',
@@ -2545,6 +2847,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:king-mohammed-vi-and-royal-family@ar-MA'})
 SET cr.display_name = 'King Mohammed VI and royal family',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'medium',
     cr.expression = 'Respected widely but avoid political positioning; use for formal/official contexts only',
@@ -2561,6 +2865,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:moroccan-cuisine-and-hospitality@ar-MA'})
 SET cr.display_name = 'Moroccan cuisine and hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'low',
     cr.expression = 'Universally positive; couscous, tagine, mint tea; hospitality themes always work',
@@ -2577,6 +2883,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:western-saharamoroccan-sahara@ar-MA'})
 SET cr.display_name = 'Western Sahara/Moroccan Sahara',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-MA',
     cr.importance = 'critical',
     cr.expression = 'NEVER reference in commercial content; sovereignty issue; causes immediate backlash',
@@ -2601,6 +2909,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-qabilah-tribalclan-loyalty@ar-LY'})
 SET cr.display_name = 'Al-Qabilah (Tribal/Clan Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'high',
     cr.expression = 'Strong tribal identities, extended family networks, collective decision-making, clan solidarity',
@@ -2617,6 +2927,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ad-din-religionislam@ar-LY'})
 SET cr.display_name = 'Ad-Din (Religion/Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'high',
     cr.expression = 'Islamic faith central to daily life, prayer times observed, halal requirements, Ramadan significance',
@@ -2633,6 +2945,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-karamah-honordignity@ar-LY'})
 SET cr.display_name = 'Al-Karamah (Honor/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'high',
     cr.expression = 'Personal and family honor paramount; reputation protection; face-saving essential',
@@ -2649,6 +2963,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-diyafah-hospitality@ar-LY'})
 SET cr.display_name = 'Al-Diyafah (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests; offering food and tea; welcoming strangers',
@@ -2665,6 +2981,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-aqarib-familykinship@ar-LY'})
 SET cr.display_name = 'Al-Aqarib (Family/Kinship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'high',
     cr.expression = 'Extended family central; elder respect; collective decisions on major purchases',
@@ -2681,6 +2999,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-sabr-patienceresilience@ar-LY'})
 SET cr.display_name = 'Al-Sabr (Patience/Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'medium',
     cr.expression = 'Endurance through hardship (recent conflicts); long-term perspective; perseverance valued',
@@ -2697,6 +3017,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-watan-patriotism@ar-LY'})
 SET cr.display_name = 'Al-Watan (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'medium',
     cr.expression = 'Love of homeland; Libyan identity; national rebuilding aspirations',
@@ -2713,6 +3035,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-romangreek-heritage-leptis-magna-cyrene-sa@ar-LY'})
 SET cr.display_name = 'Ancient Roman/Greek heritage (Leptis Magna, Cyrene, Sabratha)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'low',
     cr.expression = 'UNESCO sites; source of tourism pride; safe for heritage references',
@@ -2729,6 +3053,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:libyan-desert-and-sahara@ar-LY'})
 SET cr.display_name = 'Libyan desert and Sahara',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'low',
     cr.expression = 'Natural beauty; adventure tourism; landscape imagery safe',
@@ -2745,6 +3071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omar-mukhtar-resistance-hero@ar-LY'})
 SET cr.display_name = 'Omar Mukhtar (resistance hero)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LY',
     cr.importance = 'medium',
     cr.expression = 'National hero against Italian colonialism; use respectfully; avoid political appropriation',
@@ -2769,6 +3097,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:fihavanana-solidarite-communautaire@fr-MG'})
 SET cr.display_name = 'Fihavanana (solidarite communautaire)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'high',
     cr.expression = 'Liens familiaux et communautaires, entraide, responsabilite partagee, famille elargie comme unite de base',
@@ -2785,6 +3115,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hasina-honneur-sacrerespect@fr-MG'})
 SET cr.display_name = 'Hasina (honneur sacre/respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'high',
     cr.expression = 'Reverence pour les aines, les ancetres, les autorites ; preservation de la dignite de chacun',
@@ -2801,6 +3133,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fomba-coutumestraditions@fr-MG'})
 SET cr.display_name = 'Fomba (coutumes/traditions)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'high',
     cr.expression = 'Attachement aux traditions ancestrales, ceremonies saisonnieres, procedures appropriees',
@@ -2817,6 +3151,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ray-aman-dreny-autorite-des-aines@fr-MG'})
 SET cr.display_name = 'Ray aman-dreny (autorite des aines)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'high',
     cr.expression = 'Deference envers les aines, recherche de conseils, transmission de la sagesse',
@@ -2833,6 +3169,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:firaisan-kina-unite-nationale@fr-MG'})
 SET cr.display_name = 'Firaisan-kina (unite nationale)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'medium',
     cr.expression = 'Solidarite nationale, action collective, identite partagee malgache',
@@ -2849,6 +3187,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fanahy-maha-olona-humaniteame@fr-MG'})
 SET cr.display_name = 'Fanahy maha-olona (humanite/ame)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'medium',
     cr.expression = 'Compassion, dignite humaine, caractere moral, empathie',
@@ -2865,6 +3205,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:asa-travaileffort@fr-MG'})
 SET cr.display_name = 'Asa (travail/effort)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'medium',
     cr.expression = 'Valorisation du travail, autonomie, perseverance, developpement personnel',
@@ -2881,6 +3223,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biodiversite-unique-lemuriens-baobabs-especes-ende@fr-MG'})
 SET cr.display_name = 'Biodiversite unique (lemuriens, baobabs, especes endemiques)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'low',
     cr.expression = 'Celebrer sans risque ; Madagascar est le 8e continent de biodiversite ; utiliser des images authentiques',
@@ -2897,6 +3241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1960-et-souverainete-nationale@fr-MG'})
 SET cr.display_name = 'Independence (1960) et souverainete nationale',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MG',
     cr.importance = 'medium',
     cr.expression = 'Theme positif mais eviter les comparaisons coloniales ; se concentrer sur les accomplissements malgaches',
@@ -2921,6 +3267,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-ayla-family@ar-EG'})
 SET cr.display_name = 'العائلة (Al-Ayla - Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'high',
     cr.expression = 'Multigenerational households, collective decision-making, strong family bonds, children at center of life',
@@ -2937,6 +3285,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ar-EG'})
 SET cr.display_name = 'الكرم والضيافة (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, offering food/drink to guests, warmth to strangers, "البيت بيتك" (my home is your home)',
@@ -2953,6 +3303,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith@ar-EG'})
 SET cr.display_name = 'الدين والإيمان (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'high',
     cr.expression = 'Islam central to daily life; "إن شاء الله" ubiquitous; Ramadan as major social event; Friday prayers',
@@ -2969,6 +3321,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride@ar-EG'})
 SET cr.display_name = 'الفخر الوطني (National Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'high',
     cr.expression = 'Deep pride in Pharaonic heritage, Egyptian identity, Arabic language leadership, cultural influence',
@@ -2985,6 +3339,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humorwit@ar-EG'})
 SET cr.display_name = 'الفكاهة والمرح (Humor/Wit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'medium',
     cr.expression = 'Famous Egyptian sense of humor; "الفن الشعبي" comedy tradition; using humor to cope and connect',
@@ -3001,6 +3357,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-solidarity@ar-EG'})
 SET cr.display_name = 'التكافل الاجتماعي (Social Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'medium',
     cr.expression = 'Community support systems, helping neighbors, charity (صدقة), collective celebration and mourning',
@@ -3017,6 +3375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:moderation@ar-EG'})
 SET cr.display_name = 'الاعتدال والوسطية (Moderation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'medium',
     cr.expression = 'Middle-ground approach to religion and life; "مصر معتدلة" identity; balance between tradition and modernity',
@@ -3033,6 +3393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@ar-EG'})
 SET cr.display_name = 'احترام الكبار (Respect for Elders)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'medium',
     cr.expression = 'Deference to parents, grandparents; "حضرتك" pronoun usage; seeking بركة (blessing) from elders',
@@ -3049,6 +3411,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pharaonic-heritage@ar-EG'})
 SET cr.display_name = 'Pharaonic heritage (الحضارة الفرعونية)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'low',
     cr.expression = 'Universal pride; pyramids, sphinx, temples; excellent for brand associations; ancient wisdom themes',
@@ -3065,6 +3429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:suez-canal@ar-EG'})
 SET cr.display_name = 'Suez Canal',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'low',
     cr.expression = 'Modern engineering achievement; national sovereignty symbol; 1956 and 2021 expansion pride',
@@ -3081,6 +3447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:2011-and-2013-revolutions@ar-EG'})
 SET cr.display_name = '2011 and 2013 revolutions',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-EG',
     cr.importance = 'high',
     cr.expression = 'Deeply divisive; avoid entirely; political sensitivities; different interpretations persist',
@@ -3105,6 +3473,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:bu-da-ba-tha-buddhism@my-MM'})
 SET cr.display_name = 'ဗုဒ္ဓဘာသာ (Bu-da-ba-tha - Buddhism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'high',
     cr.expression = 'Theravada Buddhism central to identity; merit-making (ကုသိုလ်); monastic respect (သံဃာတော်); pagoda devotion',
@@ -3121,6 +3491,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yo-thay-lay-sa-hmou-respect@my-MM'})
 SET cr.display_name = 'ရိုသေလေးစားမှု (Yo-thay-lay-sa-hmou - Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, teachers, monks; elaborate pronoun system; physical deference (bowing, lowering oneself)',
@@ -3137,6 +3509,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:myet-hna-thein-face-saving@my-MM'})
 SET cr.display_name = 'မျက်နှာသိမ်း (Myet-hna-thein - Face Saving)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity; avoiding public embarrassment; protecting social reputation; hka-na (shame) avoidance',
@@ -3153,6 +3527,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mi-tha-zu-family@my-MM'})
 SET cr.display_name = 'မိသားစု (Mi-tha-zu - Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'high',
     cr.expression = 'Extended family central; multi-generational living; collective decision-making; filial piety',
@@ -3169,6 +3545,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:metta-loving-kindness@my-MM'})
 SET cr.display_name = 'မေတ္တာ (Metta - Loving-kindness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'high',
     cr.expression = 'Buddhist loving-kindness; genuine care for all beings; generosity of spirit; compassionate action',
@@ -3185,6 +3563,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karuna-compassion@my-MM'})
 SET cr.display_name = 'ကရုဏာ (Karuna - Compassion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'medium',
     cr.expression = 'Active compassion; helping those in suffering; Buddhist virtue in practice',
@@ -3201,6 +3581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dana-generosity@my-MM'})
 SET cr.display_name = 'ဒါန (Dana - Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'medium',
     cr.expression = 'Meritorious giving; supporting monasteries; helping community; generosity as spiritual practice',
@@ -3217,6 +3599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:a-kham-a-na-harmony@my-MM'})
 SET cr.display_name = 'အခမ်းအနား (A-kham-a-na - Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'medium',
     cr.expression = 'Social harmony valued; conflict avoidance; smooth relationships; consensus preference',
@@ -3233,6 +3617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:shwedagon-pagoda@my-MM'})
 SET cr.display_name = 'Shwedagon Pagoda',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'low',
     cr.expression = 'Supreme religious symbol; source of deep pride; use respectfully; never commercialize inappropriately',
@@ -3249,6 +3635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thanaka-tradition@my-MM'})
 SET cr.display_name = 'Thanaka tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'low',
     cr.expression = 'Traditional cosmetic; identity marker; positive cultural association',
@@ -3265,6 +3653,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jade-and-gems@my-MM'})
 SET cr.display_name = 'Jade and gems',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'my-MM',
     cr.importance = 'low',
     cr.expression = '"Jade Land" reputation; precious resources; quality associations',
@@ -3289,6 +3679,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:tamil-pride@ta-IN'})
 SET cr.display_name = 'தமிழ் பெருமை (Tamil Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'high',
     cr.expression = 'Exceptional pride in Tamil language, literature, and 2000+ year heritage; "தமிழ் வாழ்க" sentiment; Thiruvalluvar reverence; classical Tamil (செந்தமிழ்) as identity marker',
@@ -3305,6 +3697,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ta-IN'})
 SET cr.display_name = 'குடும்பம் (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family traditions strong; multi-generational living common; collective decision-making; family honor (குடும்ப மரியாதை) paramount; "குடும்பத்தோட" living valued',
@@ -3321,6 +3715,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@ta-IN'})
 SET cr.display_name = 'மரியாதை (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders (பெரியவர்கள் மீது மரியாதை); teacher reverence (ஆசிரியர் வணக்கம்); hierarchical deference; hospitality as duty; using நீங்கள் form crucial',
@@ -3337,6 +3733,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@ta-IN'})
 SET cr.display_name = 'கல்வி (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'high',
     cr.expression = 'Education extremely valued; "கல்வியே செல்வம்" belief; professional degrees as family pride; IITs, AIIMS aspirations; engineering, medicine focus',
@@ -3353,6 +3751,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:righteousnessethics@ta-IN'})
 SET cr.display_name = 'அறம் (Righteousness/Ethics)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'medium',
     cr.expression = 'Thirukkural-based ethics deeply rooted; "அறம் செய்ய விரும்பு" principle; justice orientation; dharmic responsibility without Sanskrit terminology',
@@ -3369,6 +3769,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ta-IN'})
 SET cr.display_name = 'விருந்தோம்பல் (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'medium',
     cr.expression = '"விருந்தோம்பல்" as sacred duty; filter coffee/tea offering mandatory; guest treatment as honor; customer as respected guest',
@@ -3385,6 +3787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-respect@ta-IN'})
 SET cr.display_name = 'சுயமரியாதை (Self-Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'medium',
     cr.expression = 'Periyar\'s self-respect movement legacy; rejection of subservience; dignity in all dealings; equality consciousness',
@@ -3401,6 +3805,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@ta-IN'})
 SET cr.display_name = 'கடின உழைப்பு (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'medium',
     cr.expression = 'Diligence respected; industrious nature; "உழைப்பே உயர்வு" ethos; self-made success stories valued in Chennai, Coimbatore business culture',
@@ -3417,6 +3823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tamil-language-and-literature@ta-IN'})
 SET cr.display_name = 'Tamil language and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'low',
     cr.expression = '2000+ year heritage; Sangam literature; Thirukkural; safe for cultural pride themes; very positive resonance',
@@ -3433,6 +3841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chennai-ittech-industry@ta-IN'})
 SET cr.display_name = 'Chennai IT/tech industry',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'low',
     cr.expression = 'IT hub; automobile manufacturing; startup ecosystem; safe for progressive, innovation positioning',
@@ -3449,6 +3859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bharathiyar-and-freedom-movement@ta-IN'})
 SET cr.display_name = 'Bharathiyar and freedom movement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ta-IN',
     cr.importance = 'medium',
     cr.expression = 'Independence movement poet; "வந்தே மாதரம்"; use respectfully; nationalist but not political',
@@ -3473,6 +3885,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:famille-elargie-libota@fr-CD'})
 SET cr.display_name = 'Famille elargie (Libota)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'high',
     cr.expression = 'Reseaux familiaux etendus ; responsabilite collective ; soin intergenerationnel ; honneur familial',
@@ -3489,6 +3903,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-limemia@fr-CD'})
 SET cr.display_name = 'Hospitalite (Limemia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'high',
     cr.expression = 'Accueil genereux des visiteurs ; partage des repas ; faire en sorte que les invites se sentent chez eux',
@@ -3505,6 +3921,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unite-et-solidarite-bomoko@fr-CD'})
 SET cr.display_name = 'Unite et solidarite (Bomoko)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'high',
     cr.expression = 'Cooperation communautaire ; entraide entre voisins ; resolution collective des problemes ; philosophie Ubuntu',
@@ -3521,6 +3939,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honneur-et-dignite-lokumu@fr-CD'})
 SET cr.display_name = 'Honneur et dignite (Lokumu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'high',
     cr.expression = 'Reputation personnelle ; nom de famille ; respect de l\'autorite et des aines ; eviter la honte',
@@ -3537,6 +3957,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-des-aines-botosi@fr-CD'})
 SET cr.display_name = 'Respect des aines (Botosi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'high',
     cr.expression = 'Deference envers les aines ; respect de l\'autorite traditionnelle et religieuse ; obeissance aux parents',
@@ -3553,6 +3975,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosite-de-coeur-motema-malamu@fr-CD'})
 SET cr.display_name = 'Generosite de coeur (Motema Malamu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'medium',
     cr.expression = 'Generosite d\'esprit ; bonte ; intentions sinceres ; absence de malice',
@@ -3569,6 +3993,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fraternite-bondeko@fr-CD'})
 SET cr.display_name = 'Fraternite (Bondeko)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'medium',
     cr.expression = 'Relations egalitaires ; entraide mutuelle ; traiter les etrangers comme des freres',
@@ -3585,6 +4011,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:foi-et-spiritualite@fr-CD'})
 SET cr.display_name = 'Foi et spiritualite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'medium',
     cr.expression = 'Christianisme profondement ancre ; priere et benedictions quotidiennes ; Eglises de reveil, catholique, protestante',
@@ -3601,6 +4029,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musique-congolaise-rumba-soukouss@fr-CD'})
 SET cr.display_name = 'Musique congolaise (rumba, soukouss)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'low',
     cr.expression = 'Reconnue internationalement ; source de grande fierte ; Kinshasa = capitale musicale ; references aux artistes tres efficaces',
@@ -3617,6 +4047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:taille-et-importance-geographique@fr-CD'})
 SET cr.display_name = 'Taille et importance geographique',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'low',
     cr.expression = 'Plus grand pays d\'Afrique subsaharienne ; "coeur de l\'Afrique" ; utiliser librement',
@@ -3633,6 +4065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:les-leopards-football@fr-CD'})
 SET cr.display_name = 'Les Leopards (football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CD',
     cr.importance = 'low',
     cr.expression = 'Passion pour l\'equipe nationale ; participation a la CAN celebree ; TP Mazembe, AS Vita Club ; partenariats sportifs positifs',
@@ -3657,6 +4091,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-respectregional-pride@as-IN'})
 SET cr.display_name = 'আত্মসন্মান (Self-respect/Regional Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'high',
     cr.expression = 'Strong Assamese identity, pride in language, culture, and heritage; resistance to homogenization',
@@ -3673,6 +4109,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familycommunity@as-IN'})
 SET cr.display_name = 'পৰিয়াল (Family/Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'high',
     cr.expression = 'Extended family structures; collective decision-making; care for elders; joint celebrations',
@@ -3689,6 +4127,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@as-IN'})
 SET cr.display_name = 'অতিথি-পৰায়ণতা (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'high',
     cr.expression = 'Guests treated with utmost respect; offering tea and refreshments mandatory; warmth in welcoming',
@@ -3705,6 +4145,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:simplicity@as-IN'})
 SET cr.display_name = 'সৰলতা (Simplicity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'medium',
     cr.expression = 'Value placed on modesty, humility; distrust of flashy displays; authentic over pretentious',
@@ -3721,6 +4163,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:love-of-nature@as-IN'})
 SET cr.display_name = 'প্ৰকৃতি-প্ৰেম (Love of Nature)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'medium',
     cr.expression = 'Deep connection to Brahmaputra river, hills, tea gardens, wildlife; environmental consciousness',
@@ -3737,6 +4181,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@as-IN'})
 SET cr.display_name = 'শিক্ষা (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'medium',
     cr.expression = 'High value on learning and academic achievement; respect for teachers and scholars',
@@ -3753,6 +4199,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:assamese-language-and-literature@as-IN'})
 SET cr.display_name = 'Assamese language and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'medium',
     cr.expression = 'Strong emotional attachment; use authentic Assamese, not Sanskritized or Bengali-ized forms',
@@ -3769,6 +4217,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tea-industry-leadership@as-IN'})
 SET cr.display_name = 'Tea industry leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'low',
     cr.expression = 'World\'s largest tea-growing region; quality and heritage associations welcome',
@@ -3785,6 +4235,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-ahom-dynasty@as-IN'})
 SET cr.display_name = 'Ancient Ahom dynasty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'as-IN',
     cr.importance = 'medium',
     cr.expression = 'Historical pride; 600-year resistance to Mughal invasions; avoid politicization',
@@ -3809,6 +4261,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:nepriklausomyb-independence@lt-LT'})
 SET cr.display_name = 'Nepriklausomybė (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'high',
     cr.expression = 'Hard-won national sovereignty; self-determination; resistance to external control',
@@ -3825,6 +4279,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kuklumas-modesty@lt-LT'})
 SET cr.display_name = 'Kuklumas (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'high',
     cr.expression = 'Understated achievement; discomfort with boasting; results over claims',
@@ -3841,6 +4297,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eima-family@lt-LT'})
 SET cr.display_name = 'Šeima (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; multi-generational connections; family gatherings valued',
@@ -3857,6 +4315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:isilavinimas-education@lt-LT'})
 SET cr.display_name = 'Išsilavinimas (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'high',
     cr.expression = 'High literacy; respect for knowledge and expertise; continuous learning valued',
@@ -3873,6 +4333,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:darbtumas-hard-work@lt-LT'})
 SET cr.display_name = 'Darbštumas (Hard work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'high',
     cr.expression = 'Strong work ethic; diligence valued; practical achievement over shortcuts',
@@ -3889,6 +4351,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gamta-nature-connection@lt-LT'})
 SET cr.display_name = 'Gamta (Nature connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'medium',
     cr.expression = 'Forest culture; Baltic coast; seasonal awareness; outdoor traditions',
@@ -3905,6 +4369,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patikimumas-reliability@lt-LT'})
 SET cr.display_name = 'Patikimumas (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'medium',
     cr.expression = 'Keeping promises; consistency valued; trust earned through action',
@@ -3921,6 +4387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:basketball-achievements@lt-LT'})
 SET cr.display_name = 'Basketball achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'low',
     cr.expression = 'Safe celebration; genuine national passion; unifying topic across demographics',
@@ -3937,6 +4405,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:song-festival-dain-vent@lt-LT'})
 SET cr.display_name = 'Song Festival (Dainų šventė)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; national unity symbol; safe for celebratory contexts',
@@ -3953,6 +4423,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eu-and-nato-membership@lt-LT'})
 SET cr.display_name = 'EU and NATO membership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lt-LT',
     cr.importance = 'low',
     cr.expression = 'Represents security and Western integration; generally positive; avoid political framing',
@@ -3977,6 +4449,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:harambee-pulling-together@sw-KE'})
 SET cr.display_name = 'Harambee (Pulling Together)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'high',
     cr.expression = 'National motto and philosophy; community pooling of resources for common goals; collective action mindset; mutual support in education, healthcare, funerals',
@@ -3993,6 +4467,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@sw-KE'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'high',
     cr.expression = 'Extended family networks critical; multigenerational households; obligation to support relatives; family consultation on major decisions',
@@ -4009,6 +4485,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heshima-respect@sw-KE'})
 SET cr.display_name = 'Heshima (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, titles, authority; proper greetings mandatory; deference to seniority; maintaining dignity in interactions',
@@ -4025,6 +4503,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukarimu-hospitality@sw-KE'})
 SET cr.display_name = 'Ukarimu (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests paramount; sharing food and resources; generosity expected; "Karibu" culture deeply embedded',
@@ -4041,6 +4521,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uaminifu-trustworthiness@sw-KE'})
 SET cr.display_name = 'Uaminifu (Trustworthiness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'medium',
     cr.expression = 'Keeping promises valued; reliability in business; reputation crucial; word-of-mouth significant',
@@ -4057,6 +4539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maendeleo-developmentprogress@sw-KE'})
 SET cr.display_name = 'Maendeleo (Development/Progress)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'medium',
     cr.expression = 'Kenya Vision 2030 aspirations; modernization embraced; technology adoption; youth-driven progress',
@@ -4073,6 +4557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uzalendo-patriotism@sw-KE'})
 SET cr.display_name = 'Uzalendo (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'medium',
     cr.expression = 'Pride in Kenyan identity; support for local products; Buy Kenya Build Kenya initiatives; pride in international recognition',
@@ -4089,6 +4575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:m-pesa-global-leadership@sw-KE'})
 SET cr.display_name = 'M-Pesa Global Leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'low',
     cr.expression = 'Kenya pioneered mobile money; worldwide recognition; transformed financial inclusion; safe positive territory for fintech positioning',
@@ -4105,6 +4593,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:athletic-excellence@sw-KE'})
 SET cr.display_name = 'Athletic Excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'low',
     cr.expression = 'Long-distance running dominance; Kipchoge, Keitany legends; national pride source; endurance metaphors resonate',
@@ -4121,6 +4611,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multi-ethnic-unity@sw-KE'})
 SET cr.display_name = 'Multi-ethnic Unity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-KE',
     cr.importance = 'medium',
     cr.expression = '40+ ethnic groups coexisting; "One Kenya" aspirations; handle with care to avoid emphasizing division; focus on national identity',
@@ -4145,6 +4637,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hyurasirutyun-hospitality@hy-AM'})
 SET cr.display_name = 'Hyurasirut\'yun (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'high',
     cr.expression = 'Lavish guest treatment, offering food and drink, welcoming visitors with open arms',
@@ -4161,6 +4655,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:entanik-family@hy-AM'})
 SET cr.display_name = 'Entanik (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds, multi-generational households, collective decision-making, elder respect',
@@ -4177,6 +4673,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:azgayin-inqnutyun-national-identity@hy-AM'})
 SET cr.display_name = 'Azgayin inqnut\'yun (National identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'high',
     cr.expression = 'Deep connection to Armenian heritage, language, history, and diaspora',
@@ -4193,6 +4691,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:havatarmutyun-faithfulnessloyalty@hy-AM'})
 SET cr.display_name = 'Havatarmutyun (Faithfulness/Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'high',
     cr.expression = 'Keeping commitments, loyalty to friends and family, trustworthiness',
@@ -4209,6 +4709,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patvi-zinq-sense-of-honor@hy-AM'})
 SET cr.display_name = 'Patvi zinq (Sense of honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'medium',
     cr.expression = 'Personal and family reputation, integrity, keeping one\'s word',
@@ -4225,6 +4727,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dataptutym-resilience@hy-AM'})
 SET cr.display_name = 'Dataptutym (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'medium',
     cr.expression = 'Survival through adversity, perseverance, national strength',
@@ -4241,6 +4745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:first-nation-to-adopt-christianity-301-ad@hy-AM'})
 SET cr.display_name = 'First nation to adopt Christianity (301 AD)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'low',
     cr.expression = 'Safe and positive; central to national identity; use respectfully',
@@ -4257,6 +4763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mount-ararat@hy-AM'})
 SET cr.display_name = 'Mount Ararat',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'high',
     cr.expression = 'National symbol but located in Turkey; reference as spiritual symbol, not territorial claim',
@@ -4273,6 +4781,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diaspora-achievements@hy-AM'})
 SET cr.display_name = 'Diaspora achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hy-AM',
     cr.importance = 'low',
     cr.expression = 'Pride in global Armenian success (business, arts, science); safe for positive messaging',
@@ -4297,6 +4807,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntu-comunidade@pt-MZ'})
 SET cr.display_name = 'Ubuntu / Comunidade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'high',
     cr.expression = 'Collective responsibility, helping neighbors, shared resources',
@@ -4313,6 +4825,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-familia@pt-MZ'})
 SET cr.display_name = 'Family (Familia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, elders as pillars, multi-generational households',
@@ -4329,6 +4843,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-respeito@pt-MZ'})
 SET cr.display_name = 'Respect (Respeito)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, titles, and authority figures',
@@ -4345,6 +4861,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-hospitalidade@pt-MZ'})
 SET cr.display_name = 'Hospitality (Hospitalidade)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, sharing meals, welcoming strangers',
@@ -4361,6 +4879,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-resiliencia@pt-MZ'})
 SET cr.display_name = 'Resilience (Resiliencia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'high',
     cr.expression = 'Overcoming civil war, natural disasters, rebuilding lives',
@@ -4377,6 +4897,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:peace-paz@pt-MZ'})
 SET cr.display_name = 'Peace (Paz)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'medium',
     cr.expression = 'Post-war reconciliation, harmony, conflict avoidance',
@@ -4393,6 +4915,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progress-progresso@pt-MZ'})
 SET cr.display_name = 'Progress (Progresso)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'medium',
     cr.expression = 'National development, education access, economic growth',
@@ -4409,6 +4933,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-heranca-cultural@pt-MZ'})
 SET cr.display_name = 'Cultural Heritage (Heranca Cultural)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'medium',
     cr.expression = 'Traditional music (marrabenta), dance, crafts, local languages',
@@ -4425,6 +4951,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1975@pt-MZ'})
 SET cr.display_name = 'Independence (1975)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'low',
     cr.expression = 'Celebrated June 25; source of national pride; safe to reference positively',
@@ -4441,6 +4969,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty@pt-MZ'})
 SET cr.display_name = 'Natural Beauty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'low',
     cr.expression = 'Bazaruto, Gorongosa, Mozambique Island - celebrated heritage',
@@ -4457,6 +4987,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eduardo-mondlane@pt-MZ'})
 SET cr.display_name = 'Eduardo Mondlane',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-MZ',
     cr.importance = 'medium',
     cr.expression = 'Father of independence; widely respected but avoid political framing',
@@ -4481,6 +5013,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:bescheidenheid-modesty@nl-BE'})
 SET cr.display_name = 'Bescheidenheid (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'high',
     cr.expression = 'Understated success; avoiding boastfulness; quiet confidence; letting quality speak for itself',
@@ -4497,6 +5031,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gezelligheid-cozinessconviviality@nl-BE'})
 SET cr.display_name = 'Gezelligheid (Coziness/Conviviality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'high',
     cr.expression = 'Warmth in social interaction; enjoyment of life\'s pleasures; comfort in togetherness; atmosphere matters',
@@ -4513,6 +5049,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:betrouwbaarheid-reliability@nl-BE'})
 SET cr.display_name = 'Betrouwbaarheid (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; consistent quality; dependability; trust built through actions not words',
@@ -4529,6 +5067,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:levenskwaliteit-quality-of-life@nl-BE'})
 SET cr.display_name = 'Levenskwaliteit (Quality of life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'high',
     cr.expression = 'Work-life balance; enjoying good food and drink; time for family and leisure; la bonne vie influence',
@@ -4545,6 +5085,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vakmanschap-craftsmanship@nl-BE'})
 SET cr.display_name = 'Vakmanschap (Craftsmanship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'high',
     cr.expression = 'Pride in skilled work; appreciation for artisanal quality; Made in Belgium pride; attention to detail',
@@ -4561,6 +5103,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hoffelijkheid-politeness@nl-BE'})
 SET cr.display_name = 'Hoffelijkheid (Politeness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'medium',
     cr.expression = 'Courtesy in all interactions; formal respect maintained; soft communication style; avoiding confrontation',
@@ -4577,6 +5121,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme-pragmatism@nl-BE'})
 SET cr.display_name = 'Pragmatisme (Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'medium',
     cr.expression = 'Practical solutions; compromise valued; coalition-building mentality; realistic expectations',
@@ -4593,6 +5139,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretie-discretion@nl-BE'})
 SET cr.display_name = 'Discretie (Discretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'medium',
     cr.expression = 'Privacy respected; personal matters kept private; understated display of wealth or success',
@@ -4609,6 +5157,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:culinaire-erfgoed-culinary-heritage@nl-BE'})
 SET cr.display_name = 'Culinaire erfgoed (Culinary heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'low',
     cr.expression = 'Chocolate, beer, frieten, wafels; Belgian gastronomy world-renowned; safe and positive',
@@ -4625,6 +5175,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cycling-culture-wielrennen@nl-BE'})
 SET cr.display_name = 'Cycling culture (wielrennen)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'low',
     cr.expression = 'Ronde van Vlaanderen, cycling heroes; deep cultural significance in Flanders',
@@ -4641,6 +5193,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eu-and-international-institutions@nl-BE'})
 SET cr.display_name = 'EU and international institutions',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-BE',
     cr.importance = 'low',
     cr.expression = 'Brussels as capital of Europe; pride in international role; diplomacy tradition',
@@ -4665,6 +5219,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@te-IN'})
 SET cr.display_name = 'కుటుంబం (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family traditions strong; multi-generational living common; collective decision-making; family honor (కుటుంబ గౌరవం) paramount',
@@ -4681,6 +5237,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@te-IN'})
 SET cr.display_name = 'గౌరవం (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders (పెద్దల పట్ల గౌరవం); teacher reverence (గురువుల గౌరవం); hierarchical deference; hospitality as duty',
@@ -4697,6 +5255,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:telugu-pride@te-IN'})
 SET cr.display_name = 'తెలుగు అభిమానం (Telugu Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'high',
     cr.expression = 'Strong Telugu language identity; "తెలుగు తల్లి" devotion; Telugu literary heritage pride; regional identity (Andhra/Telangana)',
@@ -4713,6 +5273,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultureheritage@te-IN'})
 SET cr.display_name = 'సంస్కృతి (Culture/Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'high',
     cr.expression = 'Rich literary tradition; classical music (Carnatic) and dance (Kuchipudi); temple traditions; Kakatiya, Satavahana heritage pride',
@@ -4729,6 +5291,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@te-IN'})
 SET cr.display_name = 'అతిథి మర్యాద (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'medium',
     cr.expression = '"అతిథి దేవో భవ" (Guest is God) principle; generous hosting; offering tea/coffee/water mandatory; customer as honored guest',
@@ -4745,6 +5309,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@te-IN'})
 SET cr.display_name = 'చదువు (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'medium',
     cr.expression = 'Education highly valued; engineering, medicine aspirations strong; Hyderabad as educational hub; "చదువే నిధి" belief',
@@ -4761,6 +5327,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religionduty@te-IN'})
 SET cr.display_name = 'ధర్మం (Religion/Duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'medium',
     cr.expression = 'Hindu traditions important; temple culture strong; Tirupati significance; festival observances deeply rooted',
@@ -4777,6 +5345,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorreputation@te-IN'})
 SET cr.display_name = 'ఇజ్జత్ (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'medium',
     cr.expression = 'Family reputation crucial; social standing matters; avoiding shame important; maintaining dignity in all interactions',
@@ -4793,6 +5363,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tirupati-balaji-temple@te-IN'})
 SET cr.display_name = 'Tirupati Balaji temple',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'low',
     cr.expression = 'Most visited pilgrimage site; TTD administration; safe for spiritual themes',
@@ -4809,6 +5381,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:telugu-literary-tradition@te-IN'})
 SET cr.display_name = 'Telugu literary tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'medium',
     cr.expression = 'Second-largest spoken Indian language; classical literature; Nannaya, Tikkana; use respectfully',
@@ -4825,6 +5399,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:satavahana-dynasty@te-IN'})
 SET cr.display_name = 'Satavahana dynasty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'te-IN',
     cr.importance = 'low',
     cr.expression = 'Amaravati heritage; ancient glory; safe for historical references',
@@ -4849,6 +5425,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ml-IN'})
 SET cr.display_name = 'കുടുംബം (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; nuclear families more common than joint but close extended ties; collective wellbeing; family support systems',
@@ -4865,6 +5443,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@ml-IN'})
 SET cr.display_name = 'വിദ്യാഭ്യാസം (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'high',
     cr.expression = 'Kerala\'s 100% literacy; education as highest priority; degrees and qualifications highly valued; "അറിവാണ് ശക്തി" ethos',
@@ -4881,6 +5461,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:egalitarianism@ml-IN'})
 SET cr.display_name = 'സമത്വബോധം (Egalitarianism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'high',
     cr.expression = 'Strong social reform history; anti-casteism legacy; Renaissance movements (Narayana Guru, Ayyankali); relative equality consciousness',
@@ -4897,6 +5479,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-respect@ml-IN'})
 SET cr.display_name = 'ആത്മാഭിമാനം (Self-respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'high',
     cr.expression = 'Individual dignity valued; "മാനം" important; won\'t accept condescension; independence respected',
@@ -4913,6 +5497,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-harmony@ml-IN'})
 SET cr.display_name = 'മതസഹിഷ്ണുത (Religious Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'high',
     cr.expression = 'Unique religious demographics (Hindu, Muslim, Christian balance); communal amity valued; secular traditions',
@@ -4929,6 +5515,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ml-IN'})
 SET cr.display_name = 'ആതിഥ്യമര്യാദ (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'medium',
     cr.expression = 'Warm hospitality tradition; "വന്നവരെ സ്വീകരിക്കുക" culture; generosity to guests; offering food/chai',
@@ -4945,6 +5533,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:environmental-awareness@ml-IN'})
 SET cr.display_name = 'പരിസ്ഥിതി (Environmental Awareness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'medium',
     cr.expression = '"God\'s Own Country" identity; nature appreciation; monsoon culture; backwaters, hills valued',
@@ -4961,6 +5551,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gulf-diaspora-culture@ml-IN'})
 SET cr.display_name = 'പ്രവാസജീവിതം (Gulf Diaspora Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'medium',
     cr.expression = 'Large NRI population especially in Gulf; remittance economy significant; global outlook',
@@ -4977,6 +5569,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:100-literacy-achievement@ml-IN'})
 SET cr.display_name = '100% literacy achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'low',
     cr.expression = 'Safe; genuine pride; first state to achieve; educational excellence symbol',
@@ -4993,6 +5587,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:healthcare-and-hdi@ml-IN'})
 SET cr.display_name = 'Healthcare and HDI',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'low',
     cr.expression = 'Human Development Index close to developed nations; life expectancy; safe for quality messaging',
@@ -5009,6 +5605,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kathakali-and-classical-arts@ml-IN'})
 SET cr.display_name = 'Kathakali and classical arts',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ml-IN',
     cr.importance = 'low',
     cr.expression = 'Cultural heritage; performing arts; traditional excellence; safe cultural reference',
@@ -5033,6 +5631,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:gia-dinh-family@vi-VN'})
 SET cr.display_name = 'Gia dinh (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'high',
     cr.expression = 'Multi-generational living; family decisions collective; filial piety (hieu thao); caring for parents is sacred duty',
@@ -5049,6 +5649,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:the-dien-face@vi-VN'})
 SET cr.display_name = 'The dien (Face)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity; avoiding public embarrassment; maintaining reputation and social standing',
@@ -5065,6 +5667,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hoa-thuan-harmony@vi-VN'})
 SET cr.display_name = 'Hoa thuan (Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'high',
     cr.expression = 'Avoiding conflict; maintaining social equilibrium; indirect disagreement; consensus-seeking',
@@ -5081,6 +5685,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hieu-hoc-love-of-learning@vi-VN'})
 SET cr.display_name = 'Hieu hoc (Love of learning)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'high',
     cr.expression = 'Education highly valued; academic achievement equals family honor; degrees respected',
@@ -5097,6 +5703,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tinh-cam-emotional-bonds@vi-VN'})
 SET cr.display_name = 'Tinh cam (Emotional bonds)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'high',
     cr.expression = 'Deep interpersonal connections; loyalty in relationships; sincerity valued over formality',
@@ -5113,6 +5721,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:can-cu-diligence@vi-VN'})
 SET cr.display_name = 'Can cu (Diligence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'medium',
     cr.expression = 'Hard work admired; self-improvement; overcoming hardship through effort',
@@ -5129,6 +5739,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:khiem-ton-modestyhumility@vi-VN'})
 SET cr.display_name = 'Khiem ton (Modesty/Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'medium',
     cr.expression = 'Understatement preferred; deflecting praise; avoiding boasting; subtle success',
@@ -5145,6 +5757,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tin-than-dan-toc-national-spirit@vi-VN'})
 SET cr.display_name = 'Tin than dan toc (National spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'medium',
     cr.expression = 'Pride in overcoming adversity; independence; resilience; Vietnamese identity',
@@ -5161,6 +5775,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-reunification@vi-VN'})
 SET cr.display_name = 'Independence and reunification',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'medium',
     cr.expression = 'Unification a source of pride; avoid war references that could divide; focus on peace and development',
@@ -5177,6 +5793,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ao-dai-traditional-dress@vi-VN'})
 SET cr.display_name = 'Ao dai (traditional dress)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'low',
     cr.expression = 'National pride; elegant; appropriate for cultural celebrations and premium positioning',
@@ -5193,6 +5811,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ho-chi-minh@vi-VN'})
 SET cr.display_name = 'Ho Chi Minh',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'vi-VN',
     cr.importance = 'medium',
     cr.expression = 'Widely revered; use respectfully only; avoid commercial exploitation; historical respect',
@@ -5217,6 +5837,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:compromis-compromise@fr-BE'})
 SET cr.display_name = 'Compromis (Compromise)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'high',
     cr.expression = 'Consensus-seeking in politics and business; coalition culture; avoiding confrontation while finding middle ground; Belgian model of negotiation',
@@ -5233,6 +5855,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modestie-modesty@fr-BE'})
 SET cr.display_name = 'Modestie (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'high',
     cr.expression = 'Understated success; avoiding boasting; tall poppy syndrome; discretion about wealth and achievements; humility valued over self-promotion',
@@ -5249,6 +5873,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme-pragmatism@fr-BE'})
 SET cr.display_name = 'Pragmatisme (Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'high',
     cr.expression = 'Practical solutions over ideological purity; getting things done; efficiency valued; concrete results over abstract principles',
@@ -5265,6 +5891,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:autodrision-self-deprecation@fr-BE'})
 SET cr.display_name = 'Autodérision (Self-deprecation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'high',
     cr.expression = 'Ability to laugh at oneself; national tradition of self-mockery; surrealist humor heritage; not taking oneself too seriously',
@@ -5281,6 +5909,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualit-de-vie-quality-of-life@fr-BE'})
 SET cr.display_name = 'Qualité de vie (Quality of life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'high',
     cr.expression = 'Work-life balance prioritized; gastronomy culture; enjoying life\'s pleasures; leisure and family time valued; convivialité',
@@ -5297,6 +5927,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fiabilit-reliability@fr-BE'})
 SET cr.display_name = 'Fiabilité (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'medium',
     cr.expression = 'Keeping commitments; doing what you say; consistent performance; trust through dependability',
@@ -5313,6 +5945,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ouverture-openness@fr-BE'})
 SET cr.display_name = 'Ouverture (Openness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'medium',
     cr.expression = 'Multicultural society; Brussels as EU capital; international outlook; tolerance of diversity; multiple languages',
@@ -5329,6 +5963,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discrtion-discretion@fr-BE'})
 SET cr.display_name = 'Discrétion (Discretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'medium',
     cr.expression = 'Privacy valued; personal matters kept private; understated displays; avoiding ostentation',
@@ -5345,6 +5981,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gastronomie-beer-chocolate-frites-waffles@fr-BE'})
 SET cr.display_name = 'Gastronomie (Beer, chocolate, frites, waffles)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'low',
     cr.expression = 'Safe, universally positive; Belgians proud of culinary heritage; UNESCO recognition of beer culture',
@@ -5361,6 +5999,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:art-nouveau-et-surralisme-horta-magritte@fr-BE'})
 SET cr.display_name = 'Art nouveau et surréalisme (Horta, Magritte)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'low',
     cr.expression = 'Artistic heritage valued; Brussels Art Nouveau architecture; Magritte international recognition',
@@ -5377,6 +6017,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diables-rouges-red-devils-football-team@fr-BE'})
 SET cr.display_name = 'Diables Rouges (Red Devils football team)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BE',
     cr.importance = 'medium',
     cr.expression = 'Unifying national symbol; strong support; but sports rivalries exist; avoid exclusionary messaging',
@@ -5401,6 +6043,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationintellectual-achievement@ru-IL'})
 SET cr.display_name = 'Education/Intellectual Achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'high',
     cr.expression = 'Deep respect for academic credentials, expertise, and cultural knowledge; high university enrollment; classical arts valued',
@@ -5417,6 +6061,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-cohesion@ru-IL'})
 SET cr.display_name = 'Family Cohesion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'high',
     cr.expression = 'Strong multigenerational bonds; active grandparent involvement; family gatherings for holidays',
@@ -5433,6 +6079,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:professional-success@ru-IL'})
 SET cr.display_name = 'Professional Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'high',
     cr.expression = 'High achievement orientation; career advancement valued; entrepreneurial spirit adopted from Israeli culture',
@@ -5449,6 +6097,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:practical-reliability@ru-IL'})
 SET cr.display_name = 'Practical Reliability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'high',
     cr.expression = 'Skepticism from Soviet experience; value proven, dependable products and services over marketing promises',
@@ -5465,6 +6115,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:israeli-directness-adapted-dugri@ru-IL'})
 SET cr.display_name = 'Israeli Directness (Adapted Dugri)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'high',
     cr.expression = 'Blend of Russian formality with Israeli straightforwardness; direct communication accepted but with more polish than native Hebrew speakers',
@@ -5481,6 +6133,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:integrationadaptation@ru-IL'})
 SET cr.display_name = 'Integration/Adaptation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'medium',
     cr.expression = 'Pride in successful integration into Israeli society while maintaining Russian cultural identity',
@@ -5497,6 +6151,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage@ru-IL'})
 SET cr.display_name = 'Cultural Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'medium',
     cr.expression = 'Maintaining Russian language, literature, theater, and arts traditions; strong cultural identity',
@@ -5513,6 +6169,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sovietrussian-scientific-achievement@ru-IL'})
 SET cr.display_name = 'Soviet/Russian Scientific Achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'low',
     cr.expression = 'Space program, mathematics, physics, chess; safe pride point; avoid political framing',
@@ -5529,6 +6187,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-literature-music-ballet@ru-IL'})
 SET cr.display_name = 'Cultural Heritage (Literature, Music, Ballet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'low',
     cr.expression = 'Pushkin, Tchaikovsky, classical traditions; universally valued; safe reference',
@@ -5545,6 +6205,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:military-service-in-idf@ru-IL'})
 SET cr.display_name = 'Military Service in IDF',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-IL',
     cr.importance = 'medium',
     cr.expression = 'Many Russian-speakers serve proudly; but military imagery divisive in commercial contexts',
@@ -5569,6 +6231,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubumwe-unity@rw-RW'})
 SET cr.display_name = 'Ubumwe (Unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'high',
     cr.expression = 'National motto emphasizing togetherness; avoiding ethnic divisions; collective identity as Rwandans first',
@@ -5585,6 +6249,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agaciro-dignityself-worth@rw-RW'})
 SET cr.display_name = 'Agaciro (Dignity/Self-worth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'high',
     cr.expression = 'Self-reliance philosophy; Agaciro Development Fund; pride in Rwandan identity; refusing victimhood',
@@ -5601,6 +6267,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:icyubahiro-respect@rw-RW'})
 SET cr.display_name = 'Icyubahiro (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, titles, hierarchy; polite greetings mandatory; formal address in public',
@@ -5617,6 +6285,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubunyangamugayo-integrity@rw-RW'})
 SET cr.display_name = 'Ubunyangamugayo (Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'high',
     cr.expression = 'Zero tolerance for corruption; accountability culture; transparency expected; keeping promises',
@@ -5633,6 +6303,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kwiyubaka-self-reliance@rw-RW'})
 SET cr.display_name = 'Kwiyubaka (Self-reliance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'medium',
     cr.expression = 'Post-genocide rebuilding spirit; Made in Rwanda initiatives; reducing foreign dependency',
@@ -5649,6 +6321,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubufatanye-solidarity@rw-RW'})
 SET cr.display_name = 'Ubufatanye (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'medium',
     cr.expression = 'Mutual assistance traditions; Umuganda community service; helping neighbors; collective responsibility',
@@ -5665,6 +6339,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:iterambere-progressdevelopment@rw-RW'})
 SET cr.display_name = 'Iterambere (Progress/Development)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'medium',
     cr.expression = 'Vision 2050 aspirations; modernization embrace; technology adoption; continuous improvement mindset',
@@ -5681,6 +6357,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:post-genocide-reconciliation@rw-RW'})
 SET cr.display_name = 'Post-genocide Reconciliation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'high',
     cr.expression = 'Pride in rebuilding and unity, but approach with extreme respect; never trivialize the journey; acknowledge without dwelling; focus on resilience and forward movement',
@@ -5697,6 +6375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gorilla-conservation@rw-RW'})
 SET cr.display_name = 'Gorilla Conservation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'low',
     cr.expression = 'Successful conservation efforts; ecotourism pride; Virunga mountains; safe positive reference',
@@ -5713,6 +6393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:women-in-leadership@rw-RW'})
 SET cr.display_name = 'Women in Leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'rw-RW',
     cr.importance = 'medium',
     cr.expression = 'Highest percentage of women parliamentarians globally; proud achievement; use respectfully without tokenism',
@@ -5737,6 +6419,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:professionalism-and-excellence@en-KY'})
 SET cr.display_name = 'Professionalism and Excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'high',
     cr.expression = 'World-class financial services reputation; precision and reliability; regulatory compliance; high standards in all sectors',
@@ -5753,6 +6437,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-and-warmth@en-KY'})
 SET cr.display_name = 'Hospitality and Warmth',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'high',
     cr.expression = 'Caribbean friendliness; welcoming spirit; "Islands of Discovery" tourism brand; genuine service orientation',
@@ -5769,6 +6455,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-and-togetherness@en-KY'})
 SET cr.display_name = 'Community and Togetherness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'high',
     cr.expression = 'Small island solidarity; "everyone knows everyone"; tight-knit society; supporting local; inter-generational connections',
@@ -5785,6 +6473,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:stability-and-security@en-KY'})
 SET cr.display_name = 'Stability and Security',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'high',
     cr.expression = 'British Overseas Territory status; rule of law; political stability; financial regulation reputation; safe environment',
@@ -5801,6 +6491,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:privacy-and-discretion@en-KY'})
 SET cr.display_name = 'Privacy and Discretion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'high',
     cr.expression = 'Financial services tradition; confidentiality expectations; respect for private matters; discretion as professional standard',
@@ -5817,6 +6509,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:christian-faith-and-values@en-KY'})
 SET cr.display_name = 'Christian Faith and Values',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'medium',
     cr.expression = 'Strong church presence; faith integrated into community life; religious holidays observed; moral framework',
@@ -5833,6 +6527,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-heritage@en-KY'})
 SET cr.display_name = 'Respect for Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'medium',
     cr.expression = 'Caymanian traditions; maritime history; sea-faring pride; protecting local culture amid international influence',
@@ -5849,6 +6545,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-ethic-and-achievement@en-KY'})
 SET cr.display_name = 'Work Ethic and Achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'medium',
     cr.expression = 'Prosperity through effort; professional advancement; building success; opportunity through dedication',
@@ -5865,6 +6563,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:financial-services-excellence@en-KY'})
 SET cr.display_name = 'Financial Services Excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'low',
     cr.expression = 'World-leading jurisdiction; hedge funds, trusts, banking; professional pride; appropriate for business contexts',
@@ -5881,6 +6581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:british-overseas-territory-status@en-KY'})
 SET cr.display_name = 'British Overseas Territory Status',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'low',
     cr.expression = 'Source of stability and security; British connection valued; constitutional relationship; not controversial',
@@ -5897,6 +6599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maritime-and-seafaring-heritage@en-KY'})
 SET cr.display_name = 'Maritime and Seafaring Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'low',
     cr.expression = 'Traditional pride; boat-building; Caymanian seamanship; turtle fishing history acknowledged with sensitivity to conservation',
@@ -5913,6 +6617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:political-stability@en-KY'})
 SET cr.display_name = 'Political Stability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KY',
     cr.importance = 'low',
     cr.expression = 'Stable governance; peaceful society; contrast with regional instability; source of quiet pride',
@@ -5937,6 +6643,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:communitycollectivism@ky-KG'})
 SET cr.display_name = 'Коомчулук (Community/Collectivism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, аил (village) ties, mutual support systems, collective decision-making',
@@ -5953,6 +6661,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@ky-KG'})
 SET cr.display_name = 'Урмат (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'high',
     cr.expression = 'Deference to elders (аксакалдар), formal address with strangers, hierarchical social interactions',
@@ -5969,6 +6679,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ky-KG'})
 SET cr.display_name = 'Конокчулук (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'high',
     cr.expression = 'Elaborate guest traditions, dastorkon (spread), offering food/tea as sacred duty, treating strangers as honored guests',
@@ -5985,6 +6697,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honor@ky-KG'})
 SET cr.display_name = 'Ар-намыс (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'high',
     cr.expression = 'Family reputation, personal dignity, fulfilling commitments, word as bond',
@@ -6001,6 +6715,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition@ky-KG'})
 SET cr.display_name = 'Салт-санаа (Tradition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'medium',
     cr.expression = 'Nomadic heritage, Epic of Manas, traditional crafts (felt, textiles), seasonal celebrations',
@@ -6017,6 +6733,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence@ky-KG'})
 SET cr.display_name = 'Көз карандысыздык (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'medium',
     cr.expression = 'National sovereignty pride, self-reliance, overcoming challenges',
@@ -6033,6 +6751,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony@ky-KG'})
 SET cr.display_name = 'Ынтымак (Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'medium',
     cr.expression = 'Social cohesion, conflict avoidance, maintaining relationships',
@@ -6049,6 +6769,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:epic-of-manas@ky-KG'})
 SET cr.display_name = 'Epic of Manas',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'low',
     cr.expression = 'World\'s longest epic poem; safe to reference; symbol of Kyrgyz identity and wisdom',
@@ -6065,6 +6787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nomadic-heritage@ky-KG'})
 SET cr.display_name = 'Nomadic Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ky-KG',
     cr.importance = 'low',
     cr.expression = 'Yurts (боз үй), horses, mountain culture; authentic cultural identity marker',
@@ -6089,6 +6813,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-and-belonging@en-IE'})
 SET cr.display_name = 'Community and belonging',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'high',
     cr.expression = 'Strong local identities (parish, county, town); GAA club loyalty; "knowing everyone"; supporting local',
@@ -6105,6 +6831,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity-and-genuineness@en-IE'})
 SET cr.display_name = 'Authenticity and genuineness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'high',
     cr.expression = 'Distrust of pretension; "notions" are mocked; prefer substance over style; detect insincerity quickly',
@@ -6121,6 +6849,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humour-and-wit@en-IE'})
 SET cr.display_name = 'Humour and wit',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'high',
     cr.expression = 'Self-deprecation valued; dry wit; storytelling tradition; "craic" central to interaction; banter expected',
@@ -6137,6 +6867,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-and-pragmatism@en-IE'})
 SET cr.display_name = 'Resilience and pragmatism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'high',
     cr.expression = '"Ah sure, we\'ll manage"; problem-solving attitude; making do; economic hardship shaped practical outlook',
@@ -6153,6 +6885,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-and-warmth@en-IE'})
 SET cr.display_name = 'Hospitality and warmth',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'high',
     cr.expression = '"Ceud mile failte" (hundred thousand welcomes); genuine interest in others; tea offered constantly',
@@ -6169,6 +6903,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-relationships@en-IE'})
 SET cr.display_name = 'Family and relationships',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'medium',
     cr.expression = 'Strong extended family ties; multi-generational gatherings; family occasions important',
@@ -6185,6 +6921,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fairness-and-equality@en-IE'})
 SET cr.display_name = 'Fairness and equality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'medium',
     cr.expression = 'Egalitarian ethos; dislike of class pretension; "who do they think they are" attitude',
@@ -6201,6 +6939,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-literature-music-language@en-IE'})
 SET cr.display_name = 'Cultural heritage (literature, music, language)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; Irish literary tradition (Joyce, Yeats, Heaney); traditional music; Irish language revival welcomed',
@@ -6217,6 +6957,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:economic-transformation@en-IE'})
 SET cr.display_name = 'Economic transformation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'medium',
     cr.expression = '"Celtic Tiger" has mixed associations; tech hub success is celebrated; avoid implying Ireland was backward',
@@ -6233,6 +6975,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:irish-diaspora-and-global-influence@en-IE'})
 SET cr.display_name = 'Irish diaspora and global influence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IE',
     cr.importance = 'low',
     cr.expression = 'Positive - pride in global Irish community; St. Patrick\'s Day is celebrated (avoid leprechaun stereotypes); emigrant stories resonate',
@@ -6257,6 +7001,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:someah-hade-ka-semah-warm-hospitality@su-ID'})
 SET cr.display_name = 'Someah Hade Ka Semah (Warm Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Genuine warmth to guests and strangers; welcoming spirit; friendly openness; treating others with generosity',
@@ -6273,6 +7019,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:silih-asih-mutual-love@su-ID'})
 SET cr.display_name = 'Silih Asih (Mutual Love)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Deep caring for community; loving relationships; empathy and compassion; prioritizing others\' well-being',
@@ -6289,6 +7037,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:silih-asah-mutual-learning@su-ID'})
 SET cr.display_name = 'Silih Asah (Mutual Learning)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Continuous improvement together; sharing knowledge; helping others grow; education and skill development',
@@ -6305,6 +7055,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:silih-asuh-mutual-nurturing@su-ID'})
 SET cr.display_name = 'Silih Asuh (Mutual Nurturing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Protecting and nurturing each other; guidance to younger generations; collective care and responsibility',
@@ -6321,6 +7073,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cageur-bageur-bener-pinter-singer@su-ID'})
 SET cr.display_name = 'Cageur, Bageur, Bener, Pinter, Singer',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Ideal Sundanese character: healthy, good/kind, honest, smart, skillful - holistic excellence standard',
@@ -6337,6 +7091,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:undak-usuk-basa-speech-level-respect@su-ID'})
 SET cr.display_name = 'Undak-Usuk Basa (Speech Level Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'high',
     cr.expression = 'Elaborate speech levels showing respect; language as expression of social awareness; proper address essential',
@@ -6353,6 +7109,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:handap-asor-humility@su-ID'})
 SET cr.display_name = 'Handap Asor (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'medium',
     cr.expression = 'Self-lowering behavior; not boasting; elevating others; modest self-presentation',
@@ -6369,6 +7127,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tata-titi-duduga-peryoga-careful-consideration@su-ID'})
 SET cr.display_name = 'Tata Titi Duduga Peryoga (Careful Consideration)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'medium',
     cr.expression = 'Thoughtful, measured behavior; careful consideration before action; prudent decision-making',
@@ -6385,6 +7145,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sundanese-language-and-culture@su-ID'})
 SET cr.display_name = 'Sundanese language and culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'low',
     cr.expression = 'Safe pride reference; celebrate Basa Sunda; acknowledge cultural distinctiveness from Javanese',
@@ -6401,6 +7163,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:angklung-bamboo-instrument@su-ID'})
 SET cr.display_name = 'Angklung (bamboo instrument)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'low',
     cr.expression = 'UNESCO Intangible Heritage; uniquely Sundanese; safe cultural reference; educational heritage',
@@ -6417,6 +7181,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sundanese-cuisine-uniqueness@su-ID'})
 SET cr.display_name = 'Sundanese cuisine uniqueness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'su-ID',
     cr.importance = 'low',
     cr.expression = 'Fresh vegetables, sambal, distinct flavors; pride in culinary identity separate from Javanese food',
@@ -6441,6 +7207,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:obuntu-bulamu-shared-humanity@en-UG'})
 SET cr.display_name = 'Obuntu Bulamu (Shared Humanity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'high',
     cr.expression = '"I am because we are"; hospitality to strangers; interconnectedness of all people; community responsibility for individual wellbeing',
@@ -6457,6 +7225,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-clan-identity@en-UG'})
 SET cr.display_name = 'Family and Clan Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; clan affiliations matter; support obligations extend broadly; multigenerational households common',
@@ -6473,6 +7243,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ekitiibwa-respecthonor@en-UG'})
 SET cr.display_name = 'Ekitiibwa (Respect/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, titles, and positions; deferential behavior expected; polite greetings are mandatory; formal address in public',
@@ -6489,6 +7261,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-UG'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'high',
     cr.expression = 'Christianity dominant (Catholic, Anglican, Pentecostal); Islam significant (15-20%); faith deeply integrated into daily life; blessings and religious expressions common',
@@ -6505,6 +7279,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-okwaniriza@en-UG'})
 SET cr.display_name = 'Hospitality (Okwaniriza)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'high',
     cr.expression = 'Uganda known for warmth toward visitors; sharing food and drink with guests; hosting obligations taken seriously',
@@ -6521,6 +7297,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-and-self-reliance@en-UG'})
 SET cr.display_name = 'Hard Work and Self-Reliance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'medium',
     cr.expression = 'Entrepreneurial spirit; informal sector innovation; side businesses common; "hustle" mentality to provide for family',
@@ -6537,6 +7315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-as-path-to-success@en-UG'})
 SET cr.display_name = 'Education as Path to Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'medium',
     cr.expression = 'Education seen as key to social mobility; significant family sacrifices for school fees; academic achievement celebrated',
@@ -6553,6 +7333,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-and-optimism@en-UG'})
 SET cr.display_name = 'Resilience and Optimism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'medium',
     cr.expression = 'History of overcoming adversity; forward-looking despite challenges; belief in better future',
@@ -6569,6 +7351,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:source-of-the-nile@en-UG'})
 SET cr.display_name = 'Source of the Nile',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'low',
     cr.expression = 'Jinja has the Nile source; major tourist attraction; safe positive reference point',
@@ -6585,6 +7369,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1962@en-UG'})
 SET cr.display_name = 'Independence (1962)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'medium',
     cr.expression = 'Pride in sovereignty; but post-independence history complex; focus on nationhood rather than specific leaders',
@@ -6601,6 +7387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:coffee-production@en-UG'})
 SET cr.display_name = 'Coffee Production',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-UG',
     cr.importance = 'low',
     cr.expression = 'Ugandan coffee internationally recognized; agricultural heritage; Robusta coffee origin; safe reference',
@@ -6625,6 +7413,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ujamaa-familyhood@sw-TZ'})
 SET cr.display_name = 'Ujamaa (Familyhood)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'high',
     cr.expression = 'Collective responsibility, community support, shared resources, "Tuko pamoja" mentality',
@@ -6641,6 +7431,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heshima-respect@sw-TZ'})
 SET cr.display_name = 'Heshima (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'high',
     cr.expression = 'Proper greetings (Shikamoo to elders), titles, deference to age and authority',
@@ -6657,6 +7449,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:umoja-unity@sw-TZ'})
 SET cr.display_name = 'Umoja (Unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'high',
     cr.expression = 'National identity over tribal, "Tanzanian first" mentality, peaceful coexistence',
@@ -6673,6 +7467,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pole-pole-patience@sw-TZ'})
 SET cr.display_name = 'Pole Pole (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'medium',
     cr.expression = 'Unhurried approach to life and business, relationship-building before transactions',
@@ -6689,6 +7485,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uaminifu-trustworthiness@sw-TZ'})
 SET cr.display_name = 'Uaminifu (Trustworthiness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'medium',
     cr.expression = 'Keeping promises, reliability, honesty in dealings',
@@ -6705,6 +7503,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukarimu-hospitality@sw-TZ'})
 SET cr.display_name = 'Ukarimu (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'medium',
     cr.expression = 'Warm welcomes, generosity to guests, "Karibu sana" culture',
@@ -6721,6 +7521,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ushirikiano-cooperation@sw-TZ'})
 SET cr.display_name = 'Ushirikiano (Cooperation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'medium',
     cr.expression = 'Working together, mutual assistance, harambee spirit',
@@ -6737,6 +7539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mwalimu-julius-nyerere@sw-TZ'})
 SET cr.display_name = 'Mwalimu Julius Nyerere',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'high',
     cr.expression = 'Founding father, deeply revered; only positive references; never criticize or mock',
@@ -6753,6 +7557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mount-kilimanjaro@sw-TZ'})
 SET cr.display_name = 'Mount Kilimanjaro',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'low',
     cr.expression = 'Safe to reference; symbol of natural beauty and achievement; Uhuru Peak represents freedom',
@@ -6769,6 +7575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:zanzibarspice-islands@sw-TZ'})
 SET cr.display_name = 'Zanzibar/Spice Islands',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sw-TZ',
     cr.importance = 'medium',
     cr.expression = 'Cultural gem but union with mainland can be sensitive; emphasize cultural richness, avoid political union topics',
@@ -6793,6 +7601,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-identity@hu-HU'})
 SET cr.display_name = 'National Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'high',
     cr.expression = 'Strong pride in Hungarian uniqueness, language, and culture; distinct from surrounding Slavic nations',
@@ -6809,6 +7619,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-vendegszeretet@hu-HU'})
 SET cr.display_name = 'Hospitality (Vendegszeretet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'high',
     cr.expression = 'Warm reception of guests; generous hosting; pride in Hungarian cuisine and wine',
@@ -6825,6 +7637,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-intellect@hu-HU'})
 SET cr.display_name = 'Education and Intellect',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'high',
     cr.expression = 'High regard for learning, academic achievement; Nobel laureates; scientific heritage',
@@ -6841,6 +7655,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-kitartas@hu-HU'})
 SET cr.display_name = 'Resilience (Kitartas)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'high',
     cr.expression = 'Pride in survival through historical adversities; perseverance as national trait',
@@ -6857,6 +7673,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism@hu-HU'})
 SET cr.display_name = 'Pragmatism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'medium',
     cr.expression = 'Focus on practical results; skepticism of empty promises; value for money consciousness',
@@ -6873,6 +7691,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-reliance@hu-HU'})
 SET cr.display_name = 'Self-reliance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'medium',
     cr.expression = 'Strong DIY culture; pride in solving problems independently; distrust of external dependence',
@@ -6889,6 +7709,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pessimistic-realism@hu-HU'})
 SET cr.display_name = 'Pessimistic Realism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'medium',
     cr.expression = 'Tendency toward cautious outlook; "Hungarian melancholy"; dry humor',
@@ -6905,6 +7727,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hungarian-language@hu-HU'})
 SET cr.display_name = 'Hungarian language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'medium',
     cr.expression = 'Unique Finno-Ugric language; source of identity; appreciate Hungarian-first content; never call it Slavic',
@@ -6921,6 +7745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thermal-bath-culture@hu-HU'})
 SET cr.display_name = 'Thermal bath culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; healing tradition; safe for wellness and tourism contexts',
@@ -6937,6 +7763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hungarian-cuisine@hu-HU'})
 SET cr.display_name = 'Hungarian cuisine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hu-HU',
     cr.importance = 'low',
     cr.expression = 'Paprika, goulash, chimney cake; Tokaji wine; safe for food and hospitality contexts',
@@ -6961,6 +7789,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-humana-warmth@es-EC'})
 SET cr.display_name = 'Calidez humana (warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'high',
     cr.expression = 'Personal connection before transactions; genuine interest in wellbeing; hospitality to guests; "un cafecito" offerings',
@@ -6977,6 +7807,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:regionalismo@es-EC'})
 SET cr.display_name = 'Regionalismo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'high',
     cr.expression = 'Strong Sierra/Costa/Oriente/Insular identities; pride in local customs; Quito vs Guayaquil healthy rivalry; distinct regional characters',
@@ -6993,6 +7825,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-honesto-honest-work@es-EC'})
 SET cr.display_name = 'Trabajo honesto (honest work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued; entrepreneurial spirit; "salir adelante" mentality; resilience; self-reliance admired',
@@ -7009,6 +7843,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad@es-EC'})
 SET cr.display_name = 'Solidaridad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'medium',
     cr.expression = 'Community support in times of need; "minga" tradition (collective work); helping neighbors; earthquake response 2016 showed national unity',
@@ -7025,6 +7861,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-nacional@es-EC'})
 SET cr.display_name = 'Orgullo nacional',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'medium',
     cr.expression = 'Pride in natural beauty; Galapagos, biodiversity, roses; national team passion; cultural exports',
@@ -7041,6 +7879,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:islas-galapagos@es-EC'})
 SET cr.display_name = 'Islas Galapagos',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'low',
     cr.expression = 'Crown jewel of Ecuador; safe universal reference; Darwin connection; unique wildlife',
@@ -7057,6 +7897,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biodiversitynatural-resources@es-EC'})
 SET cr.display_name = 'Biodiversity/natural resources',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'low',
     cr.expression = 'Megadiversity; Amazon/Andes/Coast/Galapagos ecosystems; environmental consciousness',
@@ -7073,6 +7915,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:panama-hats-origin@es-EC'})
 SET cr.display_name = 'Panama hats origin',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'medium',
     cr.expression = 'Actually from Ecuador (Montecristi); pride but be accurate - commonly misnamed',
@@ -7089,6 +7933,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ceviche-and-gastronomy@es-EC'})
 SET cr.display_name = 'Ceviche and gastronomy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-EC',
     cr.importance = 'low',
     cr.expression = 'Distinct coastal cuisine; encebollado; locro; culinary pride; regional variety',
@@ -7113,6 +7959,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:fihavanana-kinshipsolidarity@mg-MG'})
 SET cr.display_name = 'Fihavanana (kinship/solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'high',
     cr.expression = 'Community bonds, mutual aid, extended family, shared responsibility',
@@ -7129,6 +7977,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hasina-sacred-honorrespect@mg-MG'})
 SET cr.display_name = 'Hasina (sacred honor/respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'high',
     cr.expression = 'Reverence for elders, ancestors, authority; maintaining dignity',
@@ -7145,6 +7995,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fomba-customstraditions@mg-MG'})
 SET cr.display_name = 'Fomba (customs/traditions)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'high',
     cr.expression = 'Adherence to ancestral ways, seasonal ceremonies, proper procedures',
@@ -7161,6 +8013,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ray-aman-dreny-elder-authority@mg-MG'})
 SET cr.display_name = 'Ray aman-dreny (elder authority)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, seeking guidance, wisdom transmission',
@@ -7177,6 +8031,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:firaisan-kina-unity@mg-MG'})
 SET cr.display_name = 'Firaisan-kina (unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'medium',
     cr.expression = 'National solidarity, collective action, shared identity',
@@ -7193,6 +8049,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fanahy-maha-olona-humanitysoul@mg-MG'})
 SET cr.display_name = 'Fanahy maha-olona (humanity/soul)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'medium',
     cr.expression = 'Compassion, human dignity, moral character',
@@ -7209,6 +8067,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:asa-workeffort@mg-MG'})
 SET cr.display_name = 'Asa (work/effort)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued, self-reliance, perseverance',
@@ -7225,6 +8085,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unique-biodiversity-lemurs-baobabs-endemic-species@mg-MG'})
 SET cr.display_name = 'Unique biodiversity (lemurs, baobabs, endemic species)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; Madagascar is the 8th continent of biodiversity; use authentic imagery',
@@ -7241,6 +8103,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1960-and-national-sovereignty@mg-MG'})
 SET cr.display_name = 'Independence (1960) and national sovereignty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mg-MG',
     cr.importance = 'medium',
     cr.expression = 'Positive theme but avoid colonial comparisons; focus on Malagasy achievement',
@@ -7265,6 +8129,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:independencia-nacional@ca-AD'})
 SET cr.display_name = 'Independencia nacional',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'high',
     cr.expression = 'Profound pride in Andorra\'s centuries of independence; unique co-principality surviving between France and Spain',
@@ -7281,6 +8147,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:llengua-catalana@ca-AD'})
 SET cr.display_name = 'Llengua catalana',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'high',
     cr.expression = 'Catalan as the sole official language is a source of immense pride; only country where Catalan is official',
@@ -7297,6 +8165,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:comunitat-i-proximitat@ca-AD'})
 SET cr.display_name = 'Comunitat i proximitat',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'high',
     cr.expression = 'Very small population (80,000) where everyone knows everyone; strong community bonds',
@@ -7313,6 +8183,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradicio-pirinenca@ca-AD'})
 SET cr.display_name = 'Tradicio pirinenca',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'high',
     cr.expression = 'Mountain heritage, pastoral traditions, rural roots; connection to the land and seasons',
@@ -7329,6 +8201,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:treball-i-esforc@ca-AD'})
 SET cr.display_name = 'Treball i esforc',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'medium',
     cr.expression = 'Strong work ethic; practical mountain mentality; self-reliance and industriousness',
@@ -7345,6 +8219,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalitat@ca-AD'})
 SET cr.display_name = 'Hospitalitat',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'medium',
     cr.expression = 'Tradition of welcoming visitors; tourism-oriented economy requires warmth to guests',
@@ -7361,6 +8237,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prudencia-financera@ca-AD'})
 SET cr.display_name = 'Prudencia financera',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'medium',
     cr.expression = 'Banking tradition; discretion; careful management of resources; long-term thinking',
@@ -7377,6 +8255,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:catalan-as-official-language@ca-AD'})
 SET cr.display_name = 'Catalan as official language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'medium',
     cr.expression = 'Source of enormous pride; only country with Catalan official; celebrate without politicizing Catalunya-Spain dynamics',
@@ -7393,6 +8273,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:co-principality-system@ca-AD'})
 SET cr.display_name = 'Co-principality system',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'low',
     cr.expression = 'Unique political system with two foreign co-princes; can reference as distinctive without taking political positions',
@@ -7409,6 +8291,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:romanesque-heritage@ca-AD'})
 SET cr.display_name = 'Romanesque heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-AD',
     cr.importance = 'low',
     cr.expression = 'Medieval churches (Santa Coloma, Sant Joan de Caselles); UNESCO heritage; safe cultural reference',
@@ -7433,6 +8317,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:jeong@ko-KR'})
 SET cr.display_name = 'Jeong (정 / 情)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Deep emotional bond; loyalty beyond transactions; long-term relationships; attachment that builds over time; going extra mile for connected people',
@@ -7449,6 +8335,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nunchi@ko-KR'})
 SET cr.display_name = 'Nunchi (눈치)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Social awareness; reading the room; intuiting others\' moods and needs; unspoken communication; situational appropriateness',
@@ -7465,6 +8353,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respecthierarchy@ko-KR'})
 SET cr.display_name = 'Respect/Hierarchy (존경/위계)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Confucian hierarchy deeply embedded; respect for age, position, expertise; honorific language (존댓말); deference to seniority',
@@ -7481,6 +8371,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationachievement@ko-KR'})
 SET cr.display_name = 'Education/Achievement (교육/성취)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Education as social mobility; academic credentials valued; continuous improvement; knowledge acquisition',
@@ -7497,6 +8389,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diligence@ko-KR'})
 SET cr.display_name = 'Diligence (근면)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Hard work ethic; perseverance (끈기); determination to succeed; overtime culture; sacrifice for goals',
@@ -7513,6 +8407,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony@ko-KR'})
 SET cr.display_name = 'Harmony (화합)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'medium',
     cr.expression = 'Group cohesion; avoiding conflict; maintaining social harmony; consensus-building',
@@ -7529,6 +8425,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face@ko-KR'})
 SET cr.display_name = 'Face (체면)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'high',
     cr.expression = 'Social reputation; public image; avoiding embarrassment; maintaining dignity; pride in appearance and status',
@@ -7545,6 +8443,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pali-pali-culture@ko-KR'})
 SET cr.display_name = 'Pali-pali Culture (빨리빨리)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'medium',
     cr.expression = 'Speed and efficiency; urgency; impatience with slow processes; quick results expected',
@@ -7561,6 +8461,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:korean-wave-hallyu@ko-KR'})
 SET cr.display_name = 'Korean Wave (한류/Hallyu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'low',
     cr.expression = 'BTS, Squid Game, K-beauty; legitimate source of pride; global soft power; safe to reference',
@@ -7577,6 +8479,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditional-culture@ko-KR'})
 SET cr.display_name = 'Traditional Culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'low',
     cr.expression = 'Hanbok, hansik, hanji; UNESCO heritage items; Sejong the Great and Hangul invention pride',
@@ -7593,6 +8497,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements@ko-KR'})
 SET cr.display_name = 'Sports Achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ko-KR',
     cr.importance = 'low',
     cr.expression = '2002 World Cup; Olympic successes; Kim Yuna; e-sports dominance; unifying pride source',
@@ -7617,6 +8523,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:bolingo-loveaffection@ln-CD'})
 SET cr.display_name = 'Bolingo (Love/Affection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'high',
     cr.expression = 'Deep interpersonal warmth; caring for others; emotional generosity in relationships',
@@ -7633,6 +8541,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:libota-family@ln-CD'})
 SET cr.display_name = 'Libota (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective responsibility; intergenerational care; family honor',
@@ -7649,6 +8559,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:limemia-hospitality@ln-CD'})
 SET cr.display_name = 'Limemia (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'high',
     cr.expression = 'Generous welcome of guests; sharing meals; making visitors feel at home',
@@ -7665,6 +8577,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bomoko-unitysolidarity@ln-CD'})
 SET cr.display_name = 'Bomoko (Unity/Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'high',
     cr.expression = 'Community cooperation; helping neighbors; collective problem-solving; Ubuntu philosophy',
@@ -7681,6 +8595,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lokumu-honordignity@ln-CD'})
 SET cr.display_name = 'Lokumu (Honor/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'high',
     cr.expression = 'Personal reputation; family name; respect for authority and elders; avoiding shame',
@@ -7697,6 +8613,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bondeko-brotherhood@ln-CD'})
 SET cr.display_name = 'Bondeko (Brotherhood)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'medium',
     cr.expression = 'Egalitarian relationships; mutual aid; treating strangers as siblings',
@@ -7713,6 +8631,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:motema-malamu-good-heart@ln-CD'})
 SET cr.display_name = 'Motema Malamu (Good Heart)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'medium',
     cr.expression = 'Generosity of spirit; kindness; sincere intentions; absence of malice',
@@ -7729,6 +8649,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:botosi-obediencerespect@ln-CD'})
 SET cr.display_name = 'Botosi (Obedience/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'medium',
     cr.expression = 'Respect for elders, traditional authority, religious leaders, parents',
@@ -7745,6 +8667,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:congolese-music-rumba-soukouss@ln-CD'})
 SET cr.display_name = 'Congolese music (rumba, soukouss)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'low',
     cr.expression = 'Internationally recognized; source of immense pride; Kinshasa = music capital; artist references highly effective',
@@ -7761,6 +8685,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:size-and-geographic-importance@ln-CD'})
 SET cr.display_name = 'Size and geographic importance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'low',
     cr.expression = 'Largest country in sub-Saharan Africa; "coeur de l\'Afrique" (heart of Africa); use freely',
@@ -7777,6 +8703,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:leopards-football@ln-CD'})
 SET cr.display_name = 'Leopards (football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ln-CD',
     cr.importance = 'low',
     cr.expression = 'National team passion; AFCON participation celebrated; sports partnerships positive',
@@ -7801,6 +8729,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:harambee-pulling-together@en-KE'})
 SET cr.display_name = 'Harambee (Pulling Together)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = 'Community fundraising, collective problem-solving, pooling resources for shared goals',
@@ -7817,6 +8747,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntu-shared-humanity@en-KE'})
 SET cr.display_name = 'Ubuntu (Shared Humanity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = '"I am because we are"; hospitality to strangers; interconnectedness of people',
@@ -7833,6 +8765,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-clan-ties@en-KE'})
 SET cr.display_name = 'Family and Clan Ties',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = 'Extended family support systems; financial obligations to relatives; multi-generational households',
@@ -7849,6 +8783,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@en-KE'})
 SET cr.display_name = 'Respect for Elders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = 'Deference to age and experience; seeking elder counsel; caring for aging parents',
@@ -7865,6 +8801,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:entrepreneurial-spirit@en-KE'})
 SET cr.display_name = 'Entrepreneurial Spirit',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = 'Jua kali (informal sector) innovation; side hustles; M-Pesa adoption; "hustler" work ethic',
@@ -7881,6 +8819,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-KE'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'high',
     cr.expression = 'Christianity dominant; Islam significant especially Coast/North; faith integrated into daily life',
@@ -7897,6 +8837,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-as-advancement@en-KE'})
 SET cr.display_name = 'Education as Advancement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'medium',
     cr.expression = 'Education seen as key to social mobility; sacrifices made for school fees; academic achievement celebrated',
@@ -7913,6 +8855,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-and-optimism@en-KE'})
 SET cr.display_name = 'Resilience and Optimism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'medium',
     cr.expression = '"Hakuna matata" attitude; bouncing back from challenges; positivity despite difficulties',
@@ -7929,6 +8873,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:long-distance-running-dominance@en-KE'})
 SET cr.display_name = 'Long-distance running dominance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'low',
     cr.expression = 'Extremely safe; Kipchoge, Cheruiyot, Keitany are national heroes; marathon metaphors resonate',
@@ -7945,6 +8891,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wildlife-and-safari-tourism@en-KE'})
 SET cr.display_name = 'Wildlife and safari tourism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'low',
     cr.expression = 'Maasai Mara, Big Five, conservation efforts; core to national identity; responsible tourism angle',
@@ -7961,6 +8909,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:coffee-and-tea-production@en-KE'})
 SET cr.display_name = 'Coffee and tea production',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-KE',
     cr.importance = 'low',
     cr.expression = 'World-renowned Kenyan coffee and tea; agricultural heritage; safe for references',
@@ -7985,6 +8935,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ar-DZ'})
 SET cr.display_name = 'الأسرة والعائلة (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'high',
     cr.expression = 'Extended family central to decisions; multi-generational households; family honor paramount',
@@ -8001,6 +8953,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:islamic-faith@ar-DZ'})
 SET cr.display_name = 'الإسلام والإيمان (Islamic Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'high',
     cr.expression = 'Daily prayers, Ramadan observance, halal lifestyle; integrated into daily expressions',
@@ -8017,6 +8971,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotism-revolution@ar-DZ'})
 SET cr.display_name = 'الوطنية والثورة (Patriotism & Revolution)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'high',
     cr.expression = 'Independence War (1954-1962) foundational; martyrs honored; national identity strong',
@@ -8033,6 +8989,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityhonor@ar-DZ'})
 SET cr.display_name = 'الكرامة والعزة (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'high',
     cr.expression = 'Personal and family honor; face-saving essential; self-respect non-negotiable',
@@ -8049,6 +9007,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-solidarity@ar-DZ'})
 SET cr.display_name = 'التضامن الاجتماعي (Social Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'high',
     cr.expression = 'Helping neighbors, community support; "التويزة" (collective work tradition)',
@@ -8065,6 +9025,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:amazigh-identity@ar-DZ'})
 SET cr.display_name = 'الهوية الأمازيغية (Amazigh Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'medium',
     cr.expression = 'Berber heritage celebrated; Tamazight official language; cultural diversity',
@@ -8081,6 +9043,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ar-DZ'})
 SET cr.display_name = 'الضيافة (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'medium',
     cr.expression = 'Generous hosting; guests treated with honor; tea/coffee rituals',
@@ -8097,6 +9061,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patience@ar-DZ'})
 SET cr.display_name = 'الصبر (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'medium',
     cr.expression = 'Endurance valued; resilience through hardship; long-term thinking',
@@ -8113,6 +9079,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-war-1954-1962@ar-DZ'})
 SET cr.display_name = 'Independence War (1954-1962)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'medium',
     cr.expression = '1.5 million martyrs; sacred topic; use reverently; never trivialize; avoid French colonial perspective',
@@ -8129,6 +9097,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:algerian-sahara@ar-DZ'})
 SET cr.display_name = 'Algerian Sahara',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'low',
     cr.expression = 'Natural wonder; tourism pride; "le grand sud"; desert imagery positive',
@@ -8145,6 +9115,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:amazighberber-heritage@ar-DZ'})
 SET cr.display_name = 'Amazigh/Berber heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-DZ',
     cr.importance = 'medium',
     cr.expression = 'Cultural richness celebrated; Tamazight official since 2016; handle inclusively; avoid politicizing',
@@ -8169,6 +9141,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:fierte-quebecoise@fr-CA'})
 SET cr.display_name = 'Fierte quebecoise',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'high',
     cr.expression = 'Attachement profond a la langue francaise, a la culture distincte et a l\'identite nationale',
@@ -8185,6 +9159,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:egalitarisme@fr-CA'})
 SET cr.display_name = 'Egalitarisme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'high',
     cr.expression = 'Rejet des hierarchies rigides ; tutoiement plus rapide qu\'en France ; accessibilite valorisee',
@@ -8201,6 +9177,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme@fr-CA'})
 SET cr.display_name = 'Pragmatisme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'high',
     cr.expression = 'Solutions concretes preferees aux abstractions ; valeur pratique des choses',
@@ -8217,6 +9195,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-collective@fr-CA'})
 SET cr.display_name = 'Solidarite collective',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'high',
     cr.expression = 'Entraide communautaire ; « on s\'entraide » ; importance du filet social',
@@ -8233,6 +9213,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:joie-de-vivre@fr-CA'})
 SET cr.display_name = 'Joie de vivre',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'medium',
     cr.expression = 'Humour autodepreciatif ; appreciation des plaisirs simples ; resilience face a l\'adversite',
@@ -8249,6 +9231,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-de-lenvironnement@fr-CA'})
 SET cr.display_name = 'Respect de l\'environnement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'medium',
     cr.expression = 'Conscience ecologique croissante ; fierte envers la nature quebecoise',
@@ -8265,6 +9249,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticite@fr-CA'})
 SET cr.display_name = 'Authenticite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'medium',
     cr.expression = 'Mefiance envers le superficiel et le pretentieux ; valorisation du « vrai monde »',
@@ -8281,6 +9267,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:langue-francaise@fr-CA'})
 SET cr.display_name = 'Langue francaise',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'high',
     cr.expression = 'Sacree au Quebec ; toujours prioriser le francais de qualite ; ne jamais sembler privilegier l\'anglais ; eviter le franglais excessif',
@@ -8297,6 +9285,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:artistes-quebecois@fr-CA'})
 SET cr.display_name = 'Artistes quebecois',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'low',
     cr.expression = 'References aux artistes locaux bienvenues ; musique, humour, cinema quebecois tres apprecies',
@@ -8313,6 +9303,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hockey-et-sports-dhiver@fr-CA'})
 SET cr.display_name = 'Hockey et sports d\'hiver',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CA',
     cr.importance = 'low',
     cr.expression = 'Les Canadiens de Montreal sont une institution ; sports d\'hiver partie integrante de l\'identite',
@@ -8337,6 +9329,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:politeness-and-courtesy@en-GB'})
 SET cr.display_name = 'Politeness and Courtesy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Indirect communication; "please" and "thank you" expected; queuing culture; avoiding confrontation',
@@ -8353,6 +9347,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:understatement@en-GB'})
 SET cr.display_name = 'Understatement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Emotional restraint; avoiding boastfulness; "not bad" meaning good; modesty in achievement',
@@ -8369,6 +9365,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fairness-and-fair-play@en-GB'})
 SET cr.display_name = 'Fairness and Fair Play',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Sense of justice; following rules; treating others equitably; sporting conduct',
@@ -8385,6 +9383,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:individualism@en-GB'})
 SET cr.display_name = 'Individualism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Personal privacy respected; independence valued; right to one\'s own opinion',
@@ -8401,6 +9401,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-with-pragmatism@en-GB'})
 SET cr.display_name = 'Tradition with Pragmatism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'medium',
     cr.expression = 'Respect for heritage balanced with practical adaptation; "if it isn\'t broken, don\'t fix it"',
@@ -8417,6 +9419,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dry-wit-and-irony@en-GB'})
 SET cr.display_name = 'Dry Wit and Irony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'medium',
     cr.expression = 'Self-deprecation valued; ability to laugh at oneself; wit over earnestness',
@@ -8433,6 +9437,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:class-awareness@en-GB'})
 SET cr.display_name = 'Class Awareness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'medium',
     cr.expression = 'Subtle social stratification; accent and vocabulary as markers; aspiration balanced with authenticity',
@@ -8449,6 +9455,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:privacy@en-GB'})
 SET cr.display_name = 'Privacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Personal matters kept private; "don\'t air dirty laundry"; boundaries respected',
@@ -8465,6 +9473,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nhs-national-health-service@en-GB'})
 SET cr.display_name = 'NHS (National Health Service)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'high',
     cr.expression = 'Deep emotional attachment; free healthcare at point of use is a defining British value; never criticise',
@@ -8481,6 +9491,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:armed-forces-and-veterans@en-GB'})
 SET cr.display_name = 'Armed forces and veterans',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'medium',
     cr.expression = 'Respect expected; Remembrance Day and poppies important; never commercialise November period',
@@ -8497,6 +9509,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-heritage@en-GB'})
 SET cr.display_name = 'Sports heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GB',
     cr.importance = 'low',
     cr.expression = 'Football (soccer), cricket, rugby, tennis (Wimbledon); safe for references; widespread appeal',
@@ -8521,6 +9535,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubumwe-unite@fr-RW'})
 SET cr.display_name = 'Ubumwe (Unite)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'high',
     cr.expression = 'Devise nationale insistant sur la cohesion ; rejet des divisions ethniques ; identite collective rwandaise avant tout',
@@ -8537,6 +9553,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agaciro-dignitevaleur-personnelle@fr-RW'})
 SET cr.display_name = 'Agaciro (Dignite/Valeur personnelle)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'high',
     cr.expression = 'Philosophie d\'auto-suffisance ; Fonds de Developpement Agaciro ; fierte de l\'identite rwandaise ; refus du statut de victime',
@@ -8553,6 +9571,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:icyubahiro-respect@fr-RW'})
 SET cr.display_name = 'Icyubahiro (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'high',
     cr.expression = 'Deference envers les aines, les titres, la hierarchie ; salutations polies obligatoires ; adresse formelle en public',
@@ -8569,6 +9589,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubunyangamugayo-integrite@fr-RW'})
 SET cr.display_name = 'Ubunyangamugayo (Integrite)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'high',
     cr.expression = 'Tolerance zero pour la corruption ; culture de responsabilite ; transparence attendue ; tenir ses promesses',
@@ -8585,6 +9607,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kwiyubaka-auto-suffisance@fr-RW'})
 SET cr.display_name = 'Kwiyubaka (Auto-suffisance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'medium',
     cr.expression = 'Esprit de reconstruction post-genocide ; initiatives Made in Rwanda ; reduction de la dependance etrangere',
@@ -8601,6 +9625,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubufatanye-solidarite@fr-RW'})
 SET cr.display_name = 'Ubufatanye (Solidarite)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'medium',
     cr.expression = 'Traditions d\'entraide ; service communautaire Umuganda ; aide aux voisins ; responsabilite collective',
@@ -8617,6 +9643,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:iterambere-progresdeveloppement@fr-RW'})
 SET cr.display_name = 'Iterambere (Progres/Developpement)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'medium',
     cr.expression = 'Aspirations Vision 2050 ; adoption de la modernisation ; adoption des technologies ; mentalite d\'amelioration continue',
@@ -8633,6 +9661,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reconciliation-post-genocide@fr-RW'})
 SET cr.display_name = 'Reconciliation post-genocide',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'high',
     cr.expression = 'Fierte dans la reconstruction et l\'unite, mais approcher avec extreme respect ; ne jamais banaliser le parcours ; reconnaitre sans s\'attarder ; se concentrer sur la resilience et l\'avenir',
@@ -8649,6 +9679,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:conservation-des-gorilles@fr-RW'})
 SET cr.display_name = 'Conservation des gorilles',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'low',
     cr.expression = 'Efforts de conservation reussis ; fierte de l\'ecotourisme ; montagnes des Virunga ; reference positive sure',
@@ -8665,6 +9697,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:femmes-au-pouvoir@fr-RW'})
 SET cr.display_name = 'Femmes au pouvoir',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-RW',
     cr.importance = 'medium',
     cr.expression = 'Plus haut pourcentage de femmes parlementaires au monde ; realisation dont on est fier ; utiliser respectueusement sans tokenisme',
@@ -8689,6 +9723,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:patienceendurance@ru-BY'})
 SET cr.display_name = 'Терпение (Patience/Endurance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'high',
     cr.expression = 'Long-term perspective, tolerance of hardship, steady persistence through difficulties',
@@ -8705,6 +9741,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ru-BY'})
 SET cr.display_name = 'Семья (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds, strong family support networks, collective decision-making',
@@ -8721,6 +9759,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@ru-BY'})
 SET cr.display_name = 'Образование (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'high',
     cr.expression = 'Respect for learning, value of intellectual achievement, practical knowledge application',
@@ -8737,6 +9777,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty@ru-BY'})
 SET cr.display_name = 'Скромность (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'high',
     cr.expression = 'Understatement over boasting, quiet achievement, humility in success',
@@ -8753,6 +9795,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@ru-BY'})
 SET cr.display_name = 'Трудолюбие (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'medium',
     cr.expression = 'Value of honest labor, self-reliance, tangible practical results',
@@ -8769,6 +9813,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-BY'})
 SET cr.display_name = 'Гостеприимство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'medium',
     cr.expression = 'Warmth to guests, generous hosting, welcoming spirit, attentive service',
@@ -8785,6 +9831,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability@ru-BY'})
 SET cr.display_name = 'Надёжность (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'medium',
     cr.expression = 'Trust built through consistency, keeping promises, dependable performance',
@@ -8801,6 +9849,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty@ru-BY'})
 SET cr.display_name = 'Природа Беларуси (Natural beauty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'low',
     cr.expression = 'Belovezhskaya Pushcha, lakes, forests; strong emotional connection; safe to reference',
@@ -8817,6 +9867,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditional-crafts@ru-BY'})
 SET cr.display_name = 'Традиционные ремёсла (Traditional crafts)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'low',
     cr.expression = 'Linen, ceramics, folk art; authentic heritage; culturally safe',
@@ -8833,6 +9885,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:belarusian-languageculture@ru-BY'})
 SET cr.display_name = 'Беларусский язык и культура (Belarusian language/culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-BY',
     cr.importance = 'medium',
     cr.expression = 'Genuine appreciation welcomed; avoid tokenistic use; respect linguistic identity',
@@ -8857,6 +9911,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-GT'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'high',
     cr.expression = 'Extended family networks central to identity; multi-generational households; collective decision-making; family gatherings frequent',
@@ -8873,6 +9929,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fereligion@es-GT'})
 SET cr.display_name = 'Fe/Religion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'high',
     cr.expression = 'Strong Catholic tradition with growing evangelical presence; religious expressions in daily life; church attendance high',
@@ -8889,6 +9947,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-GT'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, authority, and social hierarchy; use of formal address; humility valued',
@@ -8905,6 +9965,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-GT'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'high',
     cr.expression = 'Warm welcome to guests; sharing food; offering help; treating visitors as family',
@@ -8921,6 +9983,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-duro-hard-work@es-GT'})
 SET cr.display_name = 'Trabajo duro (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'medium',
     cr.expression = 'Pride in labor and effort; self-made success valued; entrepreneurship respected',
@@ -8937,6 +10001,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:comunidad-community@es-GT'})
 SET cr.display_name = 'Comunidad (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'medium',
     cr.expression = 'Strong neighborhood ties; mutual aid; collective celebrations; patron saint festivals',
@@ -8953,6 +10019,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:herencia-maya-maya-heritage@es-GT'})
 SET cr.display_name = 'Herencia Maya (Maya Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'medium',
     cr.expression = 'Deep connection to ancestral traditions; textiles, foods, and customs; regional identity',
@@ -8969,6 +10037,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-chapn-guatemalan-pride@es-GT'})
 SET cr.display_name = 'Orgullo Chapín (Guatemalan Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'medium',
     cr.expression = 'National identity as "chapines"; distinct from other Central Americans',
@@ -8985,6 +10055,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maya-civilization-heritage@es-GT'})
 SET cr.display_name = 'Maya civilization heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'low',
     cr.expression = 'Source of great pride; Tikal, Quiriguá UNESCO sites; living Maya culture; celebrate respectfully',
@@ -9001,6 +10073,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:textiles-and-trajes-tpicos@es-GT'})
 SET cr.display_name = 'Textiles and trajes típicos',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'low',
     cr.expression = 'Beautiful Maya weaving traditions; UNESCO consideration; cultural identifier',
@@ -9017,6 +10091,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rigoberta-mench@es-GT'})
 SET cr.display_name = 'Rigoberta Menchú',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'low',
     cr.expression = 'Nobel Peace Prize winner; internationally known; symbol of indigenous rights',
@@ -9033,6 +10109,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:semana-santa-holy-week@es-GT'})
 SET cr.display_name = 'Semana Santa (Holy Week)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-GT',
     cr.importance = 'medium',
     cr.expression = 'UNESCO heritage; Antigua processions famous; deeply religious; commercialize carefully',
@@ -9057,6 +10135,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:keharmonian-kaum-racial-harmony@ms-SG'})
 SET cr.display_name = 'Keharmonian Kaum (Racial Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'high',
     cr.expression = 'Peaceful coexistence with Chinese, Indian, and other communities; mutual respect; shared national identity',
@@ -9073,6 +10153,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kekeluargaan-family-bond@ms-SG'})
 SET cr.display_name = 'Kekeluargaan (Family Bond)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'high',
     cr.expression = 'Extended family (keluarga besar) ties; collective decision-making; care for elders (Mak, Abah); kampung spirit',
@@ -9089,6 +10171,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:keislaman-islamic-identity@ms-SG'})
 SET cr.display_name = 'Keislaman (Islamic Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'high',
     cr.expression = 'Islam as core identity marker; halal lifestyle; mosque community; Ramadan and Hari Raya observance',
@@ -9105,6 +10189,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme-singapura-singaporean-pragmatism@ms-SG'})
 SET cr.display_name = 'Pragmatisme Singapura (Singaporean Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'high',
     cr.expression = 'Practical approach inherited from national culture; meritocracy accepted; results-orientation',
@@ -9121,6 +10207,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kiasu-fear-of-losing-out@ms-SG'})
 SET cr.display_name = 'Kiasu (Fear of Losing Out)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'medium',
     cr.expression = 'Competitive drive; not wanting to miss deals; early adoption when value is clear',
@@ -9137,6 +10225,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gotong-royong-mutual-help@ms-SG'})
 SET cr.display_name = 'Gotong Royong (Mutual Help)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'medium',
     cr.expression = 'Community cooperation; helping neighbors; Malay-Muslim Association (MUIS) initiatives',
@@ -9153,6 +10243,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hormat-respect@ms-SG'})
 SET cr.display_name = 'Hormat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'medium',
     cr.expression = 'Deference to elders and religious figures; ustaz/ustazah respected; appropriate behavior',
@@ -9169,6 +10261,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bersahaja-humility@ms-SG'})
 SET cr.display_name = 'Bersahaja (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'medium',
     cr.expression = 'Modest presentation; avoiding boastfulness; grounded despite success',
@@ -9185,6 +10279,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:malay-as-national-language@ms-SG'})
 SET cr.display_name = 'Malay as national language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'low',
     cr.expression = 'Constitutional status; proud heritage; national anthem in Malay; safe for references',
@@ -9201,6 +10297,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multiracial-harmony@ms-SG'})
 SET cr.display_name = 'Multiracial harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'medium',
     cr.expression = 'Fundamental value; celebrate genuinely; avoid tokenism; show authentic inclusion',
@@ -9217,6 +10315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kampung-heritage@ms-SG'})
 SET cr.display_name = 'Kampung heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-SG',
     cr.importance = 'low',
     cr.expression = 'Nostalgic reference for older generation; authentic Malay Singaporean identity',
@@ -9241,6 +10341,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:rezistans-resilience@ht-HT'})
 SET cr.display_name = 'Rezistans (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'high',
     cr.expression = 'Overcoming adversity; strength through struggle; "n ap kenbe" (we are holding on); surviving against odds',
@@ -9257,6 +10359,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fanmi-familycommunity@ht-HT'})
 SET cr.display_name = 'Fanmi (Family/Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective support; "lakou" compound living tradition; shared responsibility',
@@ -9273,6 +10377,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fye-pridedignity@ht-HT'})
 SET cr.display_name = 'Fye (Pride/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'high',
     cr.expression = 'National pride in revolution; personal dignity; self-respect; refusing victimhood',
@@ -9289,6 +10395,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-solidarity@ht-HT'})
 SET cr.display_name = 'Solidarite (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'high',
     cr.expression = '"Konbit" mutual aid; collective work; neighbors helping neighbors; community over individualism',
@@ -9305,6 +10413,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:endepadans-independence@ht-HT'})
 SET cr.display_name = 'Endepadans (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'high',
     cr.expression = 'First free Black republic; self-determination; rejecting external control; sovereignty',
@@ -9321,6 +10431,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lafwa-faith@ht-HT'})
 SET cr.display_name = 'Lafwa (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'medium',
     cr.expression = 'Deep religious practice; Christianity and Vodou; spiritual grounding; trust in higher power',
@@ -9337,6 +10449,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:travay-hard-work@ht-HT'})
 SET cr.display_name = 'Travay (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'medium',
     cr.expression = 'Earning through honest labor; enterprise; "degaje" resourcefulness; making a way',
@@ -9353,6 +10467,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resp-respect@ht-HT'})
 SET cr.display_name = 'Respè (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'medium',
     cr.expression = 'Deference to elders; proper greetings; acknowledgment of status and age; courtesy',
@@ -9369,6 +10485,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:1804-revolution@ht-HT'})
 SET cr.display_name = '1804 Revolution',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'low',
     cr.expression = 'First successful slave revolution; first Black republic; immense pride; safe to celebrate; founding story',
@@ -9385,6 +10503,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:creole-language@ht-HT'})
 SET cr.display_name = 'Creole Language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'low',
     cr.expression = 'Linguistic pride; "lang manman" (mother tongue); official language; celebrate Kreyol content',
@@ -9401,6 +10521,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:carnival-kanaval@ht-HT'})
 SET cr.display_name = 'Carnival (Kanaval)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'low',
     cr.expression = 'Annual celebration; music, costumes, community; joyful cultural reference',
@@ -9417,6 +10539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:citadelle-laferriere@ht-HT'})
 SET cr.display_name = 'Citadelle Laferriere',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ht-HT',
     cr.importance = 'low',
     cr.expression = 'UNESCO World Heritage; post-revolution fortress; symbol of independence and strength',
@@ -9441,6 +10565,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:muhibbah-multi-ethnic-harmony@ms-MY'})
 SET cr.display_name = 'Muhibbah (Multi-ethnic Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Peaceful coexistence of Malay, Chinese, Indian communities; celebrating diversity while maintaining unity',
@@ -9457,6 +10583,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hormat-respect@ms-MY'})
 SET cr.display_name = 'Hormat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Deep deference to elders, authority, royalty; proper use of honorifics; maintaining hierarchy',
@@ -9473,6 +10601,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agama-dan-akhlak-religion-and-morality@ms-MY'})
 SET cr.display_name = 'Agama dan Akhlak (Religion and Morality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Islam as official religion; moral values central; religious observance respected across faiths',
@@ -9489,6 +10619,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:keluarga-family@ms-MY'})
 SET cr.display_name = 'Keluarga (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; filial piety; collective decision-making; intergenerational respect',
@@ -9505,6 +10637,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maruah-dignityface@ms-MY'})
 SET cr.display_name = 'Maruah (Dignity/Face)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Preserving personal and family honor; avoiding embarrassment; maintaining social standing',
@@ -9521,6 +10655,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kesopanan-politeness@ms-MY'})
 SET cr.display_name = 'Kesopanan (Politeness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'high',
     cr.expression = 'Soft-spoken communication; indirect expression; gracious manners; avoiding conflict',
@@ -9537,6 +10673,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gotong-royong-community-spirit@ms-MY'})
 SET cr.display_name = 'Gotong-royong (Community Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'medium',
     cr.expression = 'Collective effort; neighborhood cooperation; kampung (village) spirit even in cities',
@@ -9553,6 +10691,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kesederhanaan-moderation@ms-MY'})
 SET cr.display_name = 'Kesederhanaan (Moderation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'medium',
     cr.expression = 'Middle path; avoiding extremes; balanced lifestyle; contentment',
@@ -9569,6 +10709,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:merdeka-independence-31-august-1957@ms-MY'})
 SET cr.display_name = 'Merdeka (Independence, 31 August 1957)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'low',
     cr.expression = 'Deeply celebrated; Tunku Abdul Rahman revered; "Merdeka" as rallying cry; always positive',
@@ -9585,6 +10727,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:malaysian-food-nasi-lemak-rendang@ms-MY'})
 SET cr.display_name = 'Malaysian food (nasi lemak, rendang)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-MY',
     cr.importance = 'low',
     cr.expression = 'Culinary nationalism strong; food debates passionate; excellent brand associations',
@@ -9609,6 +10753,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:besa-word-of-honor@sq-AL'})
 SET cr.display_name = 'Besa (Word of Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'high',
     cr.expression = 'Keeping promises is sacred; verbal commitments are binding; trustworthiness defines character',
@@ -9625,6 +10771,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mikpritja-hospitality@sq-AL'})
 SET cr.display_name = 'Mikpritja (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'high',
     cr.expression = 'Guests are honored; generosity is expected; welcoming strangers is a duty',
@@ -9641,6 +10789,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-loyalty@sq-AL'})
 SET cr.display_name = 'Family Loyalty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds; family decisions are collective; elders respected',
@@ -9657,6 +10807,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride@sq-AL'})
 SET cr.display_name = 'National Pride',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'medium',
     cr.expression = 'Strong Albanian identity; diaspora connections; cultural heritage valued',
@@ -9673,6 +10825,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencedurability@sq-AL'})
 SET cr.display_name = 'Resilience/Durability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'medium',
     cr.expression = 'History of overcoming adversity; self-reliance valued; practical solutions preferred',
@@ -9689,6 +10843,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-progress@sq-AL'})
 SET cr.display_name = 'Education and Progress',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'medium',
     cr.expression = 'High respect for learning; professional advancement valued; diplomas matter',
@@ -9705,6 +10861,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mother-teresa@sq-AL'})
 SET cr.display_name = 'Mother Teresa',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'low',
     cr.expression = 'Universally beloved; born in Skopje to Albanian family; safe positive reference',
@@ -9721,6 +10879,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:skanderbeg-gjergj-kastrioti@sq-AL'})
 SET cr.display_name = 'Skanderbeg (Gjergj Kastrioti)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sq-AL',
     cr.importance = 'low',
     cr.expression = 'National hero who resisted Ottomans; symbol of Albanian resistance; widely respected',
@@ -9745,6 +10905,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@mk-MK'})
 SET cr.display_name = 'Семејство (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, multi-generational households, family-first decisions, Sunday gatherings',
@@ -9761,6 +10923,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@mk-MK'})
 SET cr.display_name = 'Гостопримство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, offering food and drink, welcoming guests as honored, treating strangers with kindness',
@@ -9777,6 +10941,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@mk-MK'})
 SET cr.display_name = 'Почит (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, professional titles, formal address, honoring traditions',
@@ -9793,6 +10959,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition@mk-MK'})
 SET cr.display_name = 'Традиција (Tradition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'medium',
     cr.expression = 'Orthodox customs, folk heritage, regional food traditions, family celebrations',
@@ -9809,6 +10977,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community@mk-MK'})
 SET cr.display_name = 'Заедништво (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'medium',
     cr.expression = 'Neighborhood bonds, helping neighbors, collective support, social gatherings',
@@ -9825,6 +10995,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience@mk-MK'})
 SET cr.display_name = 'Издржливост (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'medium',
     cr.expression = 'Perseverance through difficulties, practical problem-solving, resourcefulness',
@@ -9841,6 +11013,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honor@mk-MK'})
 SET cr.display_name = 'Чест (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'medium',
     cr.expression = 'Personal and family reputation, keeping word, integrity in dealings',
@@ -9857,6 +11031,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ohrid-lake-and-cultural-heritage@mk-MK'})
 SET cr.display_name = 'Охридско Езеро и културно наследство (Ohrid Lake and cultural heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'low',
     cr.expression = 'Safe and celebrated; UNESCO site, national treasure, source of pride; excellent for premium and heritage positioning',
@@ -9873,6 +11049,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:macedonian-food-and-wines@mk-MK'})
 SET cr.display_name = 'Македонска храна и вина (Macedonian food and wines)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mk-MK',
     cr.importance = 'low',
     cr.expression = 'Safe source of pride; ajvar, tavche gravche, tikves wine; excellent for local authenticity marketing',
@@ -9897,6 +11075,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:marathi-pride@mr-IN'})
 SET cr.display_name = 'मराठी अस्मिता (Marathi Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Strong regional identity; pride in Marathi language, culture, history; Shivaji Maharaj legacy; literary and artistic heritage',
@@ -9913,6 +11093,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-and-dignity@mr-IN'})
 SET cr.display_name = 'मान-मर्यादा (Respect and Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Deep respect culture; hierarchical deference; maintaining honor; face-saving important; proper conduct expected',
@@ -9929,6 +11111,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@mr-IN'})
 SET cr.display_name = 'कुटुंब (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family valued; multi-generational bonds; collective decision-making; family honor paramount',
@@ -9945,6 +11129,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@mr-IN'})
 SET cr.display_name = 'पाहुणचार (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Guest treated as deity (अतिथी देवो भव); generous hosting tradition; warm welcome culture',
@@ -9961,6 +11147,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@mr-IN'})
 SET cr.display_name = 'शिक्षण (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Maharashtra\'s strong education tradition; Pune\'s academic hub status; value for knowledge and learning',
@@ -9977,6 +11165,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@mr-IN'})
 SET cr.display_name = 'कष्ट (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'medium',
     cr.expression = 'Diligence respected; self-made success valued; agricultural and industrial work ethic; "कष्टाचे फळ गोड"',
@@ -9993,6 +11183,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:valuesupbringing@mr-IN'})
 SET cr.display_name = 'संस्कार (Values/Upbringing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'medium',
     cr.expression = 'Good upbringing emphasized; cultural traditions maintained; proper conduct markers; "चांगल्या घरातले"',
@@ -10009,6 +11201,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-service@mr-IN'})
 SET cr.display_name = 'समाजसेवा (Social Service)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'medium',
     cr.expression = 'Maharashtra\'s reformist tradition; Phule-Ambedkar legacy; social consciousness valued',
@@ -10025,6 +11219,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:shivaji-maharaj-and-maratha-empire@mr-IN'})
 SET cr.display_name = 'Shivaji Maharaj and Maratha Empire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'high',
     cr.expression = 'Supreme respect required; never trivialize or commercialize; "छत्रपती" title mandatory; no casual use',
@@ -10041,6 +11237,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:marathi-language-and-literature@mr-IN'})
 SET cr.display_name = 'Marathi language and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'low',
     cr.expression = 'Safe celebration; अभिजात भाषा (classical language) status sought; literary heritage',
@@ -10057,6 +11255,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pune-as-educationalit-hub@mr-IN'})
 SET cr.display_name = 'Pune as educational/IT hub',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mr-IN',
     cr.importance = 'low',
     cr.expression = 'Academic tradition; IT industry growth; "Oxford of the East" reference; startup ecosystem',
@@ -10081,6 +11281,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-CU'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'high',
     cr.expression = 'Collective support; neighbor helping neighbor; "resolver" culture; community over individualism; sharing resources',
@@ -10097,6 +11299,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-nacional-national-pride@es-CU'})
 SET cr.display_name = 'Orgullo Nacional (National Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'high',
     cr.expression = 'Pride in Cuban identity; cultural achievements; sports excellence; artistic heritage; resilience against adversity',
@@ -10113,6 +11317,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-CU'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; multi-generational households; family as primary support unit; strong bonds despite distance',
@@ -10129,6 +11335,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alegriasabrosura-joyenjoyment@es-CU'})
 SET cr.display_name = 'Alegria/Sabrosura (Joy/Enjoyment)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'high',
     cr.expression = 'Life enjoyment despite challenges; music and dance integral; celebration culture; "gozar la vida"',
@@ -10145,6 +11353,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educacion-education@es-CU'})
 SET cr.display_name = 'Educacion (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'high',
     cr.expression = 'Universal literacy valued; educational achievement respected; knowledge sharing; intellectual pride',
@@ -10161,6 +11371,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:salud-health@es-CU'})
 SET cr.display_name = 'Salud (Health)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'medium',
     cr.expression = 'Healthcare access valued; medical achievements recognized; doctor as respected profession',
@@ -10177,6 +11389,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ingenioinventiva-ingenuity@es-CU'})
 SET cr.display_name = 'Ingenio/Inventiva (Ingenuity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'medium',
     cr.expression = '"Resolver" culture; creative problem-solving; making do with limited resources; inventive solutions',
@@ -10193,6 +11407,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-CU'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'medium',
     cr.expression = 'Warm welcome to visitors; sharing despite scarcity; openness; genuine warmth',
@@ -10209,6 +11425,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cuban-music-heritage@es-CU'})
 SET cr.display_name = 'Cuban Music Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'low',
     cr.expression = 'Son, salsa, timba, trova; Buena Vista Social Club; safe cultural reference; universal pride',
@@ -10225,6 +11443,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:healthcaremedical-achievements@es-CU'})
 SET cr.display_name = 'Healthcare/Medical Achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'low',
     cr.expression = 'International medical missions; doctor training; point of pride; factual references acceptable',
@@ -10241,6 +11461,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ballet-nacional-de-cuba@es-CU'})
 SET cr.display_name = 'Ballet Nacional de Cuba',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'low',
     cr.expression = 'Alicia Alonso; international excellence; cultural achievement; safe to celebrate',
@@ -10257,6 +11479,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:revolution-anniversary-july-26@es-CU'})
 SET cr.display_name = 'Revolution Anniversary (July 26)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CU',
     cr.importance = 'medium',
     cr.expression = 'Founding date; national holiday; neutral acknowledgment acceptable; avoid political commentary',
@@ -10281,6 +11505,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-KG'})
 SET cr.display_name = 'Гостеприимство (Hospitality/Конокчулук)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'high',
     cr.expression = 'Elaborate guest traditions, generous dastarkhan, offering food and tea as sacred duty, treating visitors as honored guests',
@@ -10297,6 +11523,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@ru-KG'})
 SET cr.display_name = 'Уважение к старшим (Respect for elders)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'high',
     cr.expression = 'Deference to аксакалы (elders), formal address, hierarchical social interactions, seeking elders\' blessing',
@@ -10313,6 +11541,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-community@ru-KG'})
 SET cr.display_name = 'Семья и община (Family and Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, collective decision-making, аил (village) ties, mutual support systems',
@@ -10329,6 +11559,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honor-and-dignity@ru-KG'})
 SET cr.display_name = 'Честь и достоинство (Honor and Dignity/Ар-намыс)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'high',
     cr.expression = 'Family reputation, personal dignity, fulfilling commitments, word as bond',
@@ -10345,6 +11577,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditions-and-heritage@ru-KG'})
 SET cr.display_name = 'Традиции и наследие (Traditions and Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'medium',
     cr.expression = 'Nomadic heritage, Epic of Manas, traditional crafts, seasonal celebrations (Нооруз, Орозо айт)',
@@ -10361,6 +11595,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony-and-concord@ru-KG'})
 SET cr.display_name = 'Гармония и согласие (Harmony and Concord)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'medium',
     cr.expression = 'Social cohesion, conflict avoidance, inter-ethnic peace, maintaining relationships',
@@ -10377,6 +11613,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-pride@ru-KG'})
 SET cr.display_name = 'Независимость и гордость (Independence and Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'medium',
     cr.expression = 'National sovereignty pride, self-reliance, overcoming challenges',
@@ -10393,6 +11631,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:@ru-KG'})
 SET cr.display_name = 'Эпос "Манас"',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'low',
     cr.expression = 'World\'s longest epic poem; symbol of Kyrgyz identity and wisdom; safe to reference',
@@ -10409,6 +11649,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:@ru-KG'})
 SET cr.display_name = 'Кочевое наследие',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KG',
     cr.importance = 'low',
     cr.expression = 'Юрты (боз уй), лошади, горная культура; authentic identity marker',
@@ -10433,6 +11675,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:igwe-bu-ike-unity-is-strength@ig-NG'})
 SET cr.display_name = 'Igwe bu ike (Unity is strength)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'high',
     cr.expression = 'Strong communal bonds; village unions (Nzuko); age grades support each other; town meetings (Ohaneze); collective decision-making',
@@ -10449,6 +11693,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:oru-aka-hard-workself-reliance@ig-NG'})
 SET cr.display_name = 'Oru aka (Hard work/Self-reliance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'high',
     cr.expression = 'Enterprise deeply valued; "Igbo landing" spirit; apprenticeship system (Igba boi); business ownership as ultimate goal; work ethic paramount',
@@ -10465,6 +11711,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nsopuru-respect@ig-NG'})
 SET cr.display_name = 'Nsopuru (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'high',
     cr.expression = 'Elders revered; traditional titles honored (Nze, Ozo, Lolo, Chief); greeting culture essential; kneeling/prostration for elders; names carry weight',
@@ -10481,6 +11729,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ezinulo-family@ig-NG'})
 SET cr.display_name = 'Ezinulo (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'high',
     cr.expression = 'Extended family obligations; kinship networks strong; children as wealth; supporting relatives expected; family name protection',
@@ -10497,6 +11747,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:okpukpe-faithreligion@ig-NG'})
 SET cr.display_name = 'Okpukpe (Faith/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'high',
     cr.expression = 'Christianity dominant (Catholic, Anglican, Pentecostal); traditional beliefs (Chi, Ala) also respected; Sunday worship central; Christmas major celebration',
@@ -10513,6 +11765,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ego-wealthachievement@ig-NG'})
 SET cr.display_name = 'Ego (Wealth/Achievement)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'medium',
     cr.expression = 'Material success valued and displayed; titles bought with achievement; "Ogaranya" (wealthy person) respected; success celebrated publicly',
@@ -10529,6 +11783,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nkwurita-okwu-communicationoratory@ig-NG'})
 SET cr.display_name = 'Nkwurita okwu (Communication/Oratory)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'medium',
     cr.expression = 'Proverbs (Ilu) highly valued; eloquent speech respected; debate tradition; "Okwu bu ndu" (words are life); persuasion as art',
@@ -10545,6 +11801,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omenala-traditionculture@ig-NG'})
 SET cr.display_name = 'Omenala (Tradition/Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'medium',
     cr.expression = 'Cultural festivals (New Yam - Iri Ji); masquerades (Mmanwu); naming ceremonies; traditional marriage (Igba nkwu); heritage preservation',
@@ -10561,6 +11819,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:igbo-entrepreneurship@ig-NG'})
 SET cr.display_name = 'Igbo entrepreneurship',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'low',
     cr.expression = 'Celebrated nationally; "Igbo bu Igbo" (Igbo are Igbo); safe business credibility reference',
@@ -10577,6 +11837,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chinua-achebe-legacy@ig-NG'})
 SET cr.display_name = 'Chinua Achebe legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'low',
     cr.expression = 'Literary giant; "Things Fall Apart"; cultural ambassador; safe intellectual reference',
@@ -10593,6 +11855,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biafracivil-war@ig-NG'})
 SET cr.display_name = 'Biafra/Civil War',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ig-NG',
     cr.importance = 'critical',
     cr.expression = 'Deep wound; avoid entirely; independence movements ongoing; extremely divisive',
@@ -10617,6 +11881,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ka-GE'})
 SET cr.display_name = 'სტუმართმოყვარეობა (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'high',
     cr.expression = 'Guests treated as sacred; lavish hosting at supra (feast); "სტუმარი ღვთისგან მოვლინებულია" (a guest is sent by God)',
@@ -10633,6 +11899,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ka-GE'})
 SET cr.display_name = 'ოჯახი (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; multi-generational households; collective decision-making; respect for elders',
@@ -10649,6 +11917,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorintegrity@ka-GE'})
 SET cr.display_name = 'პატიოსნება (Honor/Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'high',
     cr.expression = 'Personal and family reputation paramount; keeping one\'s word; moral uprightness',
@@ -10665,6 +11935,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:love-of-homeland@ka-GE'})
 SET cr.display_name = 'სიყვარული სამშობლოსადმი (Love of homeland)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'high',
     cr.expression = 'Deep attachment to Georgian land, language, culture, and history; national pride',
@@ -10681,6 +11953,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-and-faith@ka-GE'})
 SET cr.display_name = 'ტრადიცია და სარწმუნოება (Tradition and Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'high',
     cr.expression = 'Orthodox Christianity central to identity; ancient traditions preserved; church calendar observed',
@@ -10697,6 +11971,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:friendship@ka-GE'})
 SET cr.display_name = 'მეგობრობა (Friendship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'medium',
     cr.expression = 'Lifelong friendships valued; loyalty to friends; "ამხანაგი" (comrade/friend) relationships sacred',
@@ -10713,6 +11989,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-winemaking-tradition-8000-years@ka-GE'})
 SET cr.display_name = 'Ancient winemaking tradition (8,000 years)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'low',
     cr.expression = 'Safe and positive; qvevri is UNESCO heritage; great pride source',
@@ -10729,6 +12007,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:early-adoption-of-christianity-337-ad@ka-GE'})
 SET cr.display_name = 'Early adoption of Christianity (337 AD)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'low',
     cr.expression = 'Among first Christian nations; can reference respectfully',
@@ -10745,6 +12025,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:occupied-territories-abkhazia-south-ossetia@ka-GE'})
 SET cr.display_name = 'Occupied territories (Abkhazia, South Ossetia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ka-GE',
     cr.importance = 'critical',
     cr.expression = 'Reference only as Georgian territories; never acknowledge Russian-backed separation',
@@ -10769,6 +12051,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:diyafa-hospitality@ar-BH'})
 SET cr.display_name = 'Diyafa (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, elaborate welcomes, offering refreshments and comfort',
@@ -10785,6 +12069,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-usra-family@ar-BH'})
 SET cr.display_name = 'Al-Usra (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, collective decision-making, multi-generational households',
@@ -10801,6 +12087,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-sharaf-honorreputation@ar-BH'})
 SET cr.display_name = 'Al-Sharaf (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'high',
     cr.expression = 'Protecting family name, social standing, professional credibility',
@@ -10817,6 +12105,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-tasamuh-tolerance@ar-BH'})
 SET cr.display_name = 'Al-Tasamuh (Tolerance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'high',
     cr.expression = 'Religious diversity acceptance, coexistence tradition, openness to expatriates',
@@ -10833,6 +12123,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-hadatha-modernity@ar-BH'})
 SET cr.display_name = 'Al-Hadatha (Modernity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'medium',
     cr.expression = 'Embracing progress while respecting tradition, Gulf hub for finance and innovation',
@@ -10849,6 +12141,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-wafa-loyalty@ar-BH'})
 SET cr.display_name = 'Al-Wafa (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'medium',
     cr.expression = 'Brand loyalty once trust established, relationship-driven commerce, repeat business',
@@ -10865,6 +12159,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-sabr-patience@ar-BH'})
 SET cr.display_name = 'Al-Sabr (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'medium',
     cr.expression = 'Long-term thinking, relationship building over time, endurance through challenges',
@@ -10881,6 +12177,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:al-karama-dignity@ar-BH'})
 SET cr.display_name = 'Al-Karama (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'medium',
     cr.expression = 'Personal dignity respected, avoiding public embarrassment, face-saving essential',
@@ -10897,6 +12195,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pearl-diving-heritage@ar-BH'})
 SET cr.display_name = 'Pearl diving heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'low',
     cr.expression = 'Safe and celebrated; pre-oil identity; use freely in lifestyle content',
@@ -10913,6 +12213,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:formula-1-hosting@ar-BH'})
 SET cr.display_name = 'Formula 1 hosting',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'low',
     cr.expression = 'First Gulf race (2004); sports and modernity pride; broad appeal',
@@ -10929,6 +12231,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:2011-protestsunrest@ar-BH'})
 SET cr.display_name = '2011 protests/unrest',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-BH',
     cr.importance = 'critical',
     cr.expression = 'Extremely sensitive; never reference; deep social wounds',
@@ -10953,6 +12257,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:multilinguisme-multilingualism@fr-LU'})
 SET cr.display_name = 'Multilinguisme (Multilingualism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Trois langues officielles; alternance des codes au quotidien; flexibilite linguistique comme marqueur identitaire; francais souvent langue administrative et professionnelle',
@@ -10969,6 +12275,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identite-europeenne-european-identity@fr-LU'})
 SET cr.display_name = 'Identite europeenne (European Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Membre fondateur de l\'UE; siege d\'institutions europeennes; fierte profonde d\'integration europeenne',
@@ -10985,6 +12293,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretion@fr-LU'})
 SET cr.display_name = 'Discretion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Culture de confidentialite du centre financier; affaires personnelles restent privees; reussite affichee avec retenue',
@@ -11001,6 +12311,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualite-de-vie-quality-of-life@fr-LU'})
 SET cr.display_name = 'Qualite de vie (Quality of Life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Equilibre vie professionnelle-vie personnelle valorise; niveau de vie eleve; qualite plutot que quantite',
@@ -11017,6 +12329,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:stabilite-et-securite-stability-and-security@fr-LU'})
 SET cr.display_name = 'Stabilite et securite (Stability and Security)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Stabilite politique; economie notee AAA; mentalite de valeur refuge',
@@ -11033,6 +12347,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cosmopolitisme-cosmopolitanism@fr-LU'})
 SET cr.display_name = 'Cosmopolitisme (Cosmopolitanism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'high',
     cr.expression = 'Pres de 50% de residents etrangers; main-d\'oeuvre internationale; diversite culturelle comme norme',
@@ -11049,6 +12365,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme@fr-LU'})
 SET cr.display_name = 'Pragmatisme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'medium',
     cr.expression = 'Solutions pratiques preferees; efficacite valorisee; resultats plutot qu\'ideologie',
@@ -11065,6 +12383,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:precision@fr-LU'})
 SET cr.display_name = 'Precision',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'medium',
     cr.expression = 'Rigueur dans les contextes financiers et juridiques; attention aux details; exactitude appreciee',
@@ -11081,6 +12401,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:devise-nationale-mir-welle-bleiwe-wat-mir-sinn@fr-LU'})
 SET cr.display_name = 'Devise nationale "Mir welle bleiwe wat mir sinn"',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'low',
     cr.expression = '"Nous voulons rester ce que nous sommes" - identite luxembourgeoise; peut etre reference avec respect; demontre connaissance culturelle',
@@ -11097,6 +12419,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:membre-fondateur-de-lue@fr-LU'})
 SET cr.display_name = 'Membre fondateur de l\'UE',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'low',
     cr.expression = 'Source de fierte profonde; Luxembourg parmi les six originaux; identite europeenne fondamentale',
@@ -11113,6 +12437,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:societe-multilingue@fr-LU'})
 SET cr.display_name = 'Societe multilingue',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-LU',
     cr.importance = 'low',
     cr.expression = 'Reussite linguistique unique; trois langues officielles plus anglais largement utilise; securitaire a celebrer',
@@ -11137,6 +12463,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntuhunhu-shared-humanity@en-ZW'})
 SET cr.display_name = 'Ubuntu/Hunhu (Shared Humanity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = '"I am because we are"; community interdependence; collective responsibility; helping neighbors',
@@ -11153,6 +12481,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders-kuremekedza@en-ZW'})
 SET cr.display_name = 'Respect for Elders (Kuremekedza)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = 'Deference to age and experience; proper greetings essential; elders consulted on major decisions',
@@ -11169,6 +12499,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-extended-kinship@en-ZW'})
 SET cr.display_name = 'Family and Extended Kinship',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = 'Extended family obligations; financial support to relatives; multi-generational households; totem connections',
@@ -11185,6 +12517,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-kushingirira@en-ZW'})
 SET cr.display_name = 'Resilience (Kushingirira)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = 'Surviving and adapting through economic challenges; making the best of difficult situations; determination',
@@ -11201,6 +12535,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-self-improvement@en-ZW'})
 SET cr.display_name = 'Education and Self-Improvement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = 'Education as path to advancement; sacrifices made for school fees; high literacy tradition',
@@ -11217,6 +12553,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-ZW'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'high',
     cr.expression = 'Christianity dominant (especially Apostolic, Catholic, Protestant); traditional beliefs persist; faith integrated into daily life',
@@ -11233,6 +12571,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-ushamwari@en-ZW'})
 SET cr.display_name = 'Hospitality (Ushamwari)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'medium',
     cr.expression = 'Warm welcome to guests; sharing food and resources; building relationships before transactions',
@@ -11249,6 +12589,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride-despite-challenges@en-ZW'})
 SET cr.display_name = 'National Pride Despite Challenges',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'medium',
     cr.expression = 'Pride in cultural heritage, natural beauty, Great Zimbabwe; determination to rebuild and improve',
@@ -11265,6 +12607,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:great-zimbabwe-ruins@en-ZW'})
 SET cr.display_name = 'Great Zimbabwe ruins',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'low',
     cr.expression = 'Ancient stone city; source of country name; symbol of sophisticated African civilization; safe and powerful reference',
@@ -11281,6 +12625,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:shona-stone-sculpture@en-ZW'})
 SET cr.display_name = 'Shona stone sculpture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'low',
     cr.expression = 'Internationally acclaimed art form; celebrated cultural achievement; safe for creative references',
@@ -11297,6 +12643,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sporting-achievements@en-ZW'})
 SET cr.display_name = 'Sporting achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZW',
     cr.importance = 'low',
     cr.expression = 'Cricket, football, Olympics participation; sports bring national unity; generally safe',
@@ -11321,6 +12669,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@en-IN'})
 SET cr.display_name = 'Respect for elders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'high',
     cr.expression = 'Deep deference to age and experience; seeking blessings from elders; not contradicting seniors publicly; "ji" suffix shows respect',
@@ -11337,6 +12687,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-achievement@en-IN'})
 SET cr.display_name = 'Education and achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'high',
     cr.expression = 'Education seen as path to success; degrees highly valued; academic achievement as family pride; professional qualifications as status markers',
@@ -11353,6 +12705,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-and-aspiration@en-IN'})
 SET cr.display_name = 'Hard work and aspiration',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'high',
     cr.expression = 'Upward mobility valued; self-improvement culture; entrepreneurial spirit rising; "making it" through effort',
@@ -11369,6 +12723,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@en-IN'})
 SET cr.display_name = 'Hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'medium',
     cr.expression = '"Atithi Devo Bhava" (guest is god) philosophy; generous hosting expected; treating customers as honored guests',
@@ -11385,6 +12741,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-with-modernity@en-IN'})
 SET cr.display_name = 'Tradition with modernity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'medium',
     cr.expression = 'Balance between heritage and progress; traditional values with modern outlook; "rooted yet global" identity',
@@ -11401,6 +12759,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-harmony@en-IN'})
 SET cr.display_name = 'Community harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'medium',
     cr.expression = 'Peaceful coexistence valued; diversity celebrated; "unity in diversity" ethos; interfaith respect',
@@ -11417,6 +12777,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-civilization-heritage@en-IN'})
 SET cr.display_name = 'Ancient civilization heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'low',
     cr.expression = '5000+ years of history; Indus Valley civilization; yoga, Ayurveda, mathematics origins; safe for heritage references',
@@ -11433,6 +12795,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:it-and-tech-industry@en-IN'})
 SET cr.display_name = 'IT and tech industry',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'low',
     cr.expression = 'Global IT hub; startup unicorns; digital India; safe for professional and technology positioning',
@@ -11449,6 +12813,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:armed-forces@en-IN'})
 SET cr.display_name = 'Armed forces',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-IN',
     cr.importance = 'medium',
     cr.expression = 'Deep respect for military; surgical strikes; Kargil victory; never mock; use only with genuine reverence',
@@ -11473,6 +12839,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:rnqngwi-human-warmth@zh-TW'})
 SET cr.display_name = '人情味 (Rénqíngwèi - Human warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'high',
     cr.expression = 'Strong emphasis on warm relationships, community bonds, genuine care for others',
@@ -11489,6 +12857,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:minzi-face@zh-TW'})
 SET cr.display_name = '面子 (Miànzi - Face)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'high',
     cr.expression = 'Protecting dignity, reputation; avoiding public embarrassment; giving face to others',
@@ -11505,6 +12875,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wsh-pragmatism@zh-TW'})
 SET cr.display_name = '務實 (Wùshí - Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'high',
     cr.expression = 'Practical thinking, value for money, results-oriented, less ideological',
@@ -11521,6 +12893,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jitng-family@zh-TW'})
 SET cr.display_name = '家庭 (Jiātíng - Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds, filial piety, multi-generational households, family decision-making',
@@ -11537,6 +12911,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hxi-harmony@zh-TW'})
 SET cr.display_name = '和諧 (Héxié - Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'medium',
     cr.expression = 'Conflict avoidance, maintaining smooth relationships, group cohesion',
@@ -11553,6 +12929,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jioy-education@zh-TW'})
 SET cr.display_name = '教育 (Jiàoyù - Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'medium',
     cr.expression = 'High value on learning, credentials, self-improvement, children\'s education',
@@ -11569,6 +12947,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qnlo-diligence@zh-TW'})
 SET cr.display_name = '勤勞 (Qínláo - Diligence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'medium',
     cr.expression = 'Hard work ethic, dedication, perseverance in work and life',
@@ -11585,6 +12965,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:taiwan-tech-industry-achievements@zh-TW'})
 SET cr.display_name = '台灣科技業成就 (Taiwan tech industry achievements)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'low',
     cr.expression = 'TSMC, tech manufacturing prowess - safe and powerful to reference; source of national pride',
@@ -11601,6 +12983,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:democracy-and-freedom@zh-TW'})
 SET cr.display_name = '民主自由 (Democracy and freedom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'medium',
     cr.expression = 'Source of pride but can become political; use carefully without political statements',
@@ -11617,6 +13001,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:environmental-awareness@zh-TW'})
 SET cr.display_name = '環保意識 (Environmental awareness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TW',
     cr.importance = 'low',
     cr.expression = 'Taiwan\'s recycling and environmental efforts; safe positive reference',
@@ -11641,6 +13027,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-and-precision-qualitaet-und-praezision@de-CH'})
 SET cr.display_name = 'Quality and Precision (Qualitaet und Praezision)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Swiss Made reputation; attention to detail; craftsmanship; zero tolerance for mediocrity',
@@ -11657,6 +13045,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:neutrality-neutralitaet@de-CH'})
 SET cr.display_name = 'Neutrality (Neutralitaet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Political non-alignment; diplomatic tradition; impartiality; balance in all things',
@@ -11673,6 +13063,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretion-diskretion@de-CH'})
 SET cr.display_name = 'Discretion (Diskretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Privacy valued; banking secrecy tradition; personal matters kept private; understatement',
@@ -11689,6 +13081,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:punctuality-puenktlichkeit@de-CH'})
 SET cr.display_name = 'Punctuality (Puenktlichkeit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Time is respected; trains run on time; delays are unacceptable; precision scheduling',
@@ -11705,6 +13099,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:consensus-konsenskompromiss@de-CH'})
 SET cr.display_name = 'Consensus (Konsens/Kompromiss)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Direct democracy culture; all voices heard; decisions through agreement',
@@ -11721,6 +13117,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multilingual-respect-sprachliche-vielfalt@de-CH'})
 SET cr.display_name = 'Multilingual Respect (Sprachliche Vielfalt)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Four official languages; no single dominant culture; regional pride',
@@ -11737,6 +13135,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability-zuverlaessigkeit@de-CH'})
 SET cr.display_name = 'Reliability (Zuverlaessigkeit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; consistent quality; dependable service; trust through actions',
@@ -11753,6 +13153,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty-bescheidenheit@de-CH'})
 SET cr.display_name = 'Modesty (Bescheidenheit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'medium',
     cr.expression = 'Understatement preferred; success shown through quality not boasting; quiet confidence',
@@ -11769,6 +13171,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:direct-democracy@de-CH'})
 SET cr.display_name = 'Direct democracy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'low',
     cr.expression = 'Unique political system; citizen participation; referendums; source of pride; can reference respectfully',
@@ -11785,6 +13189,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:neutrality-tradition@de-CH'})
 SET cr.display_name = 'Neutrality tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'medium',
     cr.expression = 'Historical cornerstone; complex in modern context (EU relations, sanctions); handle respectfully',
@@ -11801,6 +13207,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:banking-and-financial-services@de-CH'})
 SET cr.display_name = 'Banking and financial services',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-CH',
     cr.importance = 'medium',
     cr.expression = 'Reputation complex post-secrecy debates; quality still respected; avoid stereotypes',
@@ -11825,6 +13233,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:warmth-and-hospitality-cordialidade@pt-BR'})
 SET cr.display_name = 'Warmth and Hospitality (Cordialidade)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'high',
     cr.expression = 'Personal connections valued over transactions; "jeitinho brasileiro" - finding flexible solutions; hugging and physical warmth in greetings',
@@ -11841,6 +13251,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-familia@pt-BR'})
 SET cr.display_name = 'Family (Familia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'high',
     cr.expression = 'Extended family central to life; Sunday family gatherings (almoco de domingo); family opinions influence decisions; multi-generational bonds',
@@ -11857,6 +13269,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:joy-and-optimism-alegria@pt-BR'})
 SET cr.display_name = 'Joy and Optimism (Alegria)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'high',
     cr.expression = 'Positive outlook despite challenges; resilience through humor; celebration of life; festive spirit (festa)',
@@ -11873,6 +13287,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:flexibility-jeitinho@pt-BR'})
 SET cr.display_name = 'Flexibility (Jeitinho)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'high',
     cr.expression = 'Creative problem-solving; adaptability valued; rigid rules seen as cold; finding a way around obstacles',
@@ -11889,6 +13305,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:personal-relationships-relacionamento-pessoal@pt-BR'})
 SET cr.display_name = 'Personal Relationships (Relacionamento Pessoal)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'high',
     cr.expression = 'Business built on trust and friendship; relationships before transactions; "quem indica" (referrals) matter',
@@ -11905,6 +13323,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:enjoyment-of-life-aproveitar-a-vida@pt-BR'})
 SET cr.display_name = 'Enjoyment of Life (Aproveitar a Vida)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'medium',
     cr.expression = 'Work-life balance important; leisure and pleasure valued; enjoying the moment; "curtir" as lifestyle',
@@ -11921,6 +13341,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-harmony-convivencia@pt-BR'})
 SET cr.display_name = 'Social Harmony (Convivencia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'medium',
     cr.expression = 'Avoiding conflict; maintaining pleasant atmosphere; not embarrassing others publicly',
@@ -11937,6 +13359,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity-autenticidade@pt-BR'})
 SET cr.display_name = 'Authenticity (Autenticidade)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'medium',
     cr.expression = 'Being genuine valued; "gente de verdade" appeals; fake or pretentious rejected',
@@ -11953,6 +13377,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:football-futebol@pt-BR'})
 SET cr.display_name = 'Football (Futebol)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'low',
     cr.expression = 'National passion; 5 World Cup titles; Pele, Neymar, etc.; safe and beloved reference',
@@ -11969,6 +13395,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty@pt-BR'})
 SET cr.display_name = 'Natural Beauty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-BR',
     cr.importance = 'low',
     cr.expression = 'Amazon, beaches, biodiversity; environmental pride (though Amazon deforestation politically sensitive)',
@@ -11993,6 +13421,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:taarof-ritual-politeness@fa-IR'})
 SET cr.display_name = 'Ta\'arof (Ritual Politeness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'high',
     cr.expression = 'Elaborate courtesy rituals, self-deprecation, offering before accepting',
@@ -12009,6 +13439,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mehmaan-navazi-hospitality@fa-IR'})
 SET cr.display_name = 'Mehmaan-navazi (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, offering food and tea, welcoming warmth',
@@ -12025,6 +13457,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:aberu-honorreputation@fa-IR'})
 SET cr.display_name = 'Aberu (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'high',
     cr.expression = 'Protecting family name, social standing, avoiding shame',
@@ -12041,6 +13475,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:khanevadeh-family@fa-IR'})
 SET cr.display_name = 'Khanevadeh (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'high',
     cr.expression = 'Tight-knit extended families, collective decisions, elder respect',
@@ -12057,6 +13493,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:asl-o-nasab-heritagelineage@fa-IR'})
 SET cr.display_name = 'Asl-o-Nasab (Heritage/Lineage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'medium',
     cr.expression = 'Pride in ancestry, Persian civilization history, cultural continuity',
@@ -12073,6 +13511,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:esteqlal-independence@fa-IR'})
 SET cr.display_name = 'Esteqlal (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'medium',
     cr.expression = 'National sovereignty, resistance to foreign influence, self-reliance',
@@ -12089,6 +13529,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabr-patience@fa-IR'})
 SET cr.display_name = 'Sabr (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'medium',
     cr.expression = 'Endurance through hardship, long-term thinking, perseverance',
@@ -12105,6 +13547,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-persian-empire-achaemenid-sassanid@fa-IR'})
 SET cr.display_name = 'Ancient Persian Empire (Achaemenid, Sassanid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'low',
     cr.expression = 'Safe source of pride; Cyrus the Great universally admired; use freely',
@@ -12121,6 +13565,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:persian-cuisine@fa-IR'})
 SET cr.display_name = 'Persian cuisine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'low',
     cr.expression = 'Iranian food celebrated; hospitality through food; excellent for brand associations',
@@ -12137,6 +13583,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:1979-revolution@fa-IR'})
 SET cr.display_name = '1979 Revolution',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fa-IR',
     cr.importance = 'high',
     cr.expression = 'Politically charged; avoid commercial references; different views across generations',
@@ -12161,6 +13609,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:gemuetlichkeit-cozy-comfort@de-AT'})
 SET cr.display_name = 'Gemuetlichkeit (Cozy comfort)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'high',
     cr.expression = 'Appreciation for relaxed, comfortable social atmosphere; coffee house culture; unhurried enjoyment',
@@ -12177,6 +13627,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualitaet-und-tradition@de-AT'})
 SET cr.display_name = 'Qualitaet und Tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'high',
     cr.expression = 'Pride in craftsmanship, established standards; "Austrian quality" as distinct from German efficiency',
@@ -12193,6 +13645,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:titles-and-formality@de-AT'})
 SET cr.display_name = 'Titles and Formality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'high',
     cr.expression = 'Extensive use of academic and professional titles (Herr Doktor, Frau Magister, Herr Ingenieur); respect hierarchy',
@@ -12209,6 +13663,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:regional-identity@de-AT'})
 SET cr.display_name = 'Regional Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'high',
     cr.expression = 'Strong pride in Bundeslaender (federal states); Vienna distinct from Tirol, Salzburg from Styria',
@@ -12225,6 +13681,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-sophistication@de-AT'})
 SET cr.display_name = 'Cultural Sophistication',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'medium',
     cr.expression = 'Vienna as music capital; Habsburg cultural heritage; appreciation for arts, opera, classical music',
@@ -12241,6 +13699,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance@de-AT'})
 SET cr.display_name = 'Work-Life Balance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'medium',
     cr.expression = 'Value leisure time, holidays, Feierabend culture; less workaholic than German stereotype',
@@ -12257,6 +13717,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:conflict-avoidance@de-AT'})
 SET cr.display_name = 'Conflict Avoidance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'medium',
     cr.expression = 'Preference for harmony; indirect disagreement; diplomatic phrasing; "Vielleicht koennte man..."',
@@ -12273,6 +13735,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:habsburg-cultural-legacy@de-AT'})
 SET cr.display_name = 'Habsburg cultural legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'low',
     cr.expression = 'Architecture, music, arts; safe for cultural references; avoid political Habsburg nostalgia',
@@ -12289,6 +13753,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alpine-landscape@de-AT'})
 SET cr.display_name = 'Alpine landscape',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'low',
     cr.expression = 'Mountains, skiing, clean environment; positive association; tourism-friendly',
@@ -12305,6 +13771,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:distinct-from-germany@de-AT'})
 SET cr.display_name = 'Distinct from Germany',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-AT',
     cr.importance = 'medium',
     cr.expression = 'Austrians are NOT Germans; never conflate; Austrian German is distinct; respect differences',
@@ -12329,6 +13797,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:liberte-et-dignite@fr-TN'})
 SET cr.display_name = 'Liberte et dignite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'high',
     cr.expression = 'Conscience post-Revolution de 2011 ; les citoyens valorisent leur voix et leurs droits ; la culture de protestation est normalisee',
@@ -12345,6 +13815,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:famille@fr-TN'})
 SET cr.display_name = 'Famille',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'high',
     cr.expression = 'Liens familiaux elargis ; menages multigenerationnels ; prise de decision collective ; piete filiale',
@@ -12361,6 +13833,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ouverture@fr-TN'})
 SET cr.display_name = 'Ouverture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'high',
     cr.expression = 'Identite mediterraneenne cosmopolite ; elite francophone ; culture accueillante pour le tourisme ; bilinguisme naturel',
@@ -12377,6 +13851,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-et-culture@fr-TN'})
 SET cr.display_name = 'Education et culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'high',
     cr.expression = 'Taux d\'alphabetisation eleve (79%) ; l\'education vue comme ascenseur social ; fierte du patrimoine intellectuel (Ibn Khaldoun)',
@@ -12393,6 +13869,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:egalite@fr-TN'})
 SET cr.display_name = 'Egalite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'medium',
     cr.expression = 'Code du statut personnel progressiste depuis 1956 ; leadership en matiere de droits des femmes dans le monde arabe ; constitution laique',
@@ -12409,6 +13887,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-tunisienne@fr-TN'})
 SET cr.display_name = 'Hospitalite tunisienne',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'medium',
     cr.expression = 'Accueil des touristes et des invites ; partage de nourriture ; rituels du the a la menthe ; culture touristique de la plage et de la medina',
@@ -12425,6 +13905,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patience-et-optimisme@fr-TN'})
 SET cr.display_name = 'Patience et optimisme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'medium',
     cr.expression = 'Resilience post-Revolution ; defis economiques navigues avec espoir ; « demain sera meilleur »',
@@ -12441,6 +13923,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:revolution-de-2011-revolution-du-jasmin@fr-TN'})
 SET cr.display_name = 'Revolution de 2011 (Revolution du Jasmin)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'high',
     cr.expression = 'Origine du Printemps arabe ; fierte melee aux difficultes economiques persistantes ; traiter avec nuance ; eviter tout positionnement politique',
@@ -12457,6 +13941,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sites-historiques-carthage-el-djem-kairouan@fr-TN'})
 SET cr.display_name = 'Sites historiques (Carthage, El Djem, Kairouan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'low',
     cr.expression = 'Patrimoine UNESCO ; fierte touristique ; sur pour tout contenu ; universellement positif',
@@ -12473,6 +13959,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heritage-de-bourguiba@fr-TN'})
 SET cr.display_name = 'Heritage de Bourguiba',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-TN',
     cr.importance = 'medium',
     cr.expression = 'President fondateur ; architecte de la modernisation ; certaines controverses politiques ; utiliser avec prudence',
@@ -12497,6 +13985,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:multicultural-harmony@en-TT'})
 SET cr.display_name = 'Multicultural Harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'high',
     cr.expression = '"All ah we is one" mentality; diverse ethnic groups (African, East Indian, Chinese, Syrian/Lebanese, European) living together; religious diversity celebrated; national unity transcends ethnicity',
@@ -12513,6 +14003,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:celebration-and-joy@en-TT'})
 SET cr.display_name = 'Celebration and Joy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'high',
     cr.expression = 'Carnival as national expression; "liming" culture (socializing, enjoying life); fetes, steelpan, soca; finding joy in daily life; festive spirit year-round',
@@ -12529,6 +14021,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-and-togetherness@en-TT'})
 SET cr.display_name = 'Community and Togetherness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'high',
     cr.expression = '"We people" solidarity; helping neighbours; collective celebration; village mentality even in cities; extended networks of support',
@@ -12545,6 +14039,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-and-warmth@en-TT'})
 SET cr.display_name = 'Hospitality and Warmth',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'high',
     cr.expression = 'Genuine welcoming spirit; feeding guests; making visitors feel at home; "take a drink nah" generosity; inclusive social gatherings',
@@ -12561,6 +14057,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pride-in-identity@en-TT'})
 SET cr.display_name = 'Pride in Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'high',
     cr.expression = 'Proud Trinidadian identity; "Trini to de bone"; celebrating local achievements; distinctive Caribbean identity',
@@ -12577,6 +14075,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-TT'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'medium',
     cr.expression = 'Christian majority with significant Hindu and Muslim populations; Spiritual Baptists; faith integrated into daily life; religious holidays observed across traditions',
@@ -12593,6 +14093,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-loyalty@en-TT'})
 SET cr.display_name = 'Family Loyalty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'medium',
     cr.expression = 'Strong family bonds; extended family important; multigenerational households common; family gatherings central',
@@ -12609,6 +14111,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:entrepreneurial-spirit@en-TT'})
 SET cr.display_name = 'Entrepreneurial Spirit',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'medium',
     cr.expression = 'Small business culture; "hustle" valued; side businesses common; making opportunities',
@@ -12625,6 +14129,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:steelpan-invention@en-TT'})
 SET cr.display_name = 'Steelpan Invention',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'low',
     cr.expression = 'National pride; only acoustic instrument invented in 20th century; safe positive reference; Panorama competition',
@@ -12641,6 +14147,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:brian-lara@en-TT'})
 SET cr.display_name = 'Brian Lara',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'low',
     cr.expression = 'Greatest batsman; Test cricket record holder; national hero; safe sports reference; West Indies cricket pride',
@@ -12657,6 +14165,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hasely-crawford@en-TT'})
 SET cr.display_name = 'Hasely Crawford',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'low',
     cr.expression = 'First Olympic gold medallist (1976); national hero; athletic excellence; safe positive reference',
@@ -12673,6 +14183,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:republic-status-1976@en-TT'})
 SET cr.display_name = 'Republic Status (1976)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-TT',
     cr.importance = 'low',
     cr.expression = 'Constitutional milestone; Ellis Clarke first President; point of pride; self-determination',
@@ -12697,6 +14209,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:jafnretti-equality@is-IS'})
 SET cr.display_name = 'Jafnretti (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'high',
     cr.expression = 'Extreme egalitarianism; no titles; first-name basis with everyone including president',
@@ -12713,6 +14227,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sjalfstaedi-self-reliance@is-IS'})
 SET cr.display_name = 'Sjalfstaedi (Self-reliance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'high',
     cr.expression = 'Small-nation self-sufficiency; resourcefulness; "thetta reddast" mindset',
@@ -12729,6 +14245,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:islenska-language-preservation@is-IS'})
 SET cr.display_name = 'Islenska (Language preservation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'high',
     cr.expression = 'Active protection of Icelandic; neologisms over loanwords',
@@ -12745,6 +14263,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nattura-nature-connection@is-IS'})
 SET cr.display_name = 'Nattura (Nature connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'high',
     cr.expression = 'Deep bond with landscape; respect for environment; geothermal identity',
@@ -12761,6 +14281,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thetta-reddast-it-will-work-out@is-IS'})
 SET cr.display_name = 'Thetta reddast (It will work out)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'medium',
     cr.expression = 'Pragmatic optimism; improvisation; calm under pressure',
@@ -12777,6 +14299,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traustmerki-trust@is-IS'})
 SET cr.display_name = 'Traustmerki (Trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'medium',
     cr.expression = 'Small community trust; handshake culture; assumed honesty',
@@ -12793,6 +14317,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:menntun-educationliteracy@is-IS'})
 SET cr.display_name = 'Menntun (Education/Literacy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'medium',
     cr.expression = 'Highest literacy rates; strong literary tradition; book-giving culture',
@@ -12809,6 +14335,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:renewable-energy-geothermalhydro@is-IS'})
 SET cr.display_name = 'Renewable energy (geothermal/hydro)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; genuine achievement; 100% renewable electricity',
@@ -12825,6 +14353,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gender-equality-achievements@is-IS'})
 SET cr.display_name = 'Gender equality achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'low',
     cr.expression = 'World-leading; can reference positively; aligned with national identity',
@@ -12841,6 +14371,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:2008-financial-crisis-recovery@is-IS'})
 SET cr.display_name = '2008 financial crisis recovery',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'is-IS',
     cr.importance = 'medium',
     cr.expression = 'Pride in recovery but wound still sensitive; avoid flippant references',
@@ -12865,6 +14397,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:seny-common-sense@ca-ES'})
 SET cr.display_name = 'Seny (Common sense)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'high',
     cr.expression = 'Pragmatic wisdom, balanced judgment, level-headedness; valued in business and daily life',
@@ -12881,6 +14415,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rauxa-passion@ca-ES'})
 SET cr.display_name = 'Rauxa (Passion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'high',
     cr.expression = 'Counterbalance to seny; creative impulse, enthusiasm, bold expression; celebrated in festivals and art',
@@ -12897,6 +14433,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:llengua-language@ca-ES'})
 SET cr.display_name = 'Llengua (Language)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'high',
     cr.expression = 'Catalan language as core identity marker; speaking Catalan affirms belonging and cultural continuity',
@@ -12913,6 +14451,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:treball-work@ca-ES'})
 SET cr.display_name = 'Treball (Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'high',
     cr.expression = 'Strong commercial tradition; entrepreneurship valued; Barcelona as historic trading hub',
@@ -12929,6 +14469,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pactisme-negotiation@ca-ES'})
 SET cr.display_name = 'Pactisme (Negotiation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'medium',
     cr.expression = 'Historic tradition of negotiated agreements and consensus; dialogue over imposition',
@@ -12945,6 +14487,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:obertura-openness@ca-ES'})
 SET cr.display_name = 'Obertura (Openness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'medium',
     cr.expression = 'Mediterranean cosmopolitanism; Barcelona as gateway city; welcoming of ideas and diversity',
@@ -12961,6 +14505,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:arrelament-rootedness@ca-ES'})
 SET cr.display_name = 'Arrelament (Rootedness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'medium',
     cr.expression = 'Deep connection to land, traditions, local community; pride in comarca (local region)',
@@ -12977,6 +14523,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modernitat-modernity@ca-ES'})
 SET cr.display_name = 'Modernitat (Modernity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'medium',
     cr.expression = 'Tradition of innovation and avant-garde (Modernisme, design culture); forward-looking',
@@ -12993,6 +14541,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:catalan-language-revival@ca-ES'})
 SET cr.display_name = 'Catalan language revival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'medium',
     cr.expression = 'Remarkable recovery after suppression; celebrate respectfully; acknowledge ongoing normalization efforts',
@@ -13009,6 +14559,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gastronomic-excellence@ca-ES'})
 SET cr.display_name = 'Gastronomic excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'low',
     cr.expression = 'Ferran Adria, traditional cuisine, cava; widely appreciated pride point',
@@ -13025,6 +14577,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:castells-human-towers@ca-ES'})
 SET cr.display_name = 'Castells (Human towers)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ca-ES',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; symbol of cooperation and achievement; unifying and apolitical',
@@ -13049,6 +14603,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-KZ'})
 SET cr.display_name = 'Гостеприимство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, dastarkhan traditions, offering tea and food',
@@ -13065,6 +14621,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@ru-KZ'})
 SET cr.display_name = 'Уважение к старшим (Respect for elders)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'high',
     cr.expression = 'Deference to elders (аксакалы), formal address, seeking elder approval for decisions',
@@ -13081,6 +14639,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ru-KZ'})
 SET cr.display_name = 'Семья (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, collective decision-making, multi-generational households',
@@ -13097,6 +14657,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotism@ru-KZ'})
 SET cr.display_name = 'Патриотизм (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'high',
     cr.expression = 'Pride in Kazakhstan\'s independence, natural resources, modernization achievements',
@@ -13113,6 +14675,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-unity@ru-KZ'})
 SET cr.display_name = 'Единство народа (National unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'medium',
     cr.expression = 'Inter-ethnic harmony, "Мангилик Ел" concept, peaceful coexistence of 130+ ethnicities',
@@ -13129,6 +14693,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:industriousness@ru-KZ'})
 SET cr.display_name = 'Трудолюбие (Industriousness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued, self-improvement, national development narrative',
@@ -13145,6 +14711,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability@ru-KZ'})
 SET cr.display_name = 'Надежность (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'medium',
     cr.expression = 'Keeping one\'s word, business integrity, trustworthiness in relationships',
@@ -13161,6 +14729,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-day-december-16@ru-KZ'})
 SET cr.display_name = 'Independence Day (December 16)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'low',
     cr.expression = 'Major national holiday; safe for patriotic campaigns; celebrate national achievement',
@@ -13177,6 +14747,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:baikonur-cosmodrome@ru-KZ'})
 SET cr.display_name = 'Baikonur Cosmodrome',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'low',
     cr.expression = 'Space heritage pride; scientific achievement; technology and exploration themes',
@@ -13193,6 +14765,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-resources-and-land@ru-KZ'})
 SET cr.display_name = 'Natural resources and land',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-KZ',
     cr.importance = 'low',
     cr.expression = 'Pride in territory and natural wealth; appropriate for prosperity and quality messaging',
@@ -13217,6 +14791,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@kn-IN'})
 SET cr.display_name = 'ಕುಟುಂಬ (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family traditions strong; multi-generational living; collective decision-making; family honor paramount',
@@ -13233,6 +14809,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@kn-IN'})
 SET cr.display_name = 'ಗೌರವ (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders (ಹಿರಿಯರ ಗೌರವ); teacher reverence (ಗುರುಗಳ ಗೌರವ); hierarchical deference; hospitality as duty',
@@ -13249,6 +14827,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:regional-pride@kn-IN'})
 SET cr.display_name = 'ನಾಡು ಪ್ರೇಮ (Regional Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'high',
     cr.expression = 'Strong Kannada identity; "ಕನ್ನಡ ನಾಡು" pride; Karnataka state loyalty; Kannada Rajyotsava celebrated intensely',
@@ -13265,6 +14845,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultureheritage@kn-IN'})
 SET cr.display_name = 'ಸಂಸ್ಕೃತಿ (Culture/Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'high',
     cr.expression = 'Rich literary tradition; classical music (Carnatic) and dance (Yakshagana); temple traditions; Vijayanagara heritage pride',
@@ -13281,6 +14863,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@kn-IN'})
 SET cr.display_name = 'ಅತಿಥಿ ಸತ್ಕಾರ (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'medium',
     cr.expression = '"ಅತಿಥಿ ದೇವೋ ಭವ" (Guest is God); generous hosting; offering tea/coffee mandatory; customer as honored guest',
@@ -13297,6 +14881,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@kn-IN'})
 SET cr.display_name = 'ಶಿಕ್ಷಣ (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'medium',
     cr.expression = 'Education highly valued; engineering/medicine aspirations strong; Bengaluru as educational hub',
@@ -13313,6 +14899,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religionduty@kn-IN'})
 SET cr.display_name = 'ಧರ್ಮ (Religion/Duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'medium',
     cr.expression = 'Hindu traditions important; Lingayat and Vokkaliga communities influential; temple culture; festival observances',
@@ -13329,6 +14917,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityhonor@kn-IN'})
 SET cr.display_name = 'ಮಾನ-ಮರ್ಯಾದೆ (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'medium',
     cr.expression = 'Family reputation crucial; social standing matters; avoiding shame important; maintaining dignity',
@@ -13345,6 +14935,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vijayanagara-empire-heritage@kn-IN'})
 SET cr.display_name = 'Vijayanagara Empire heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'low',
     cr.expression = 'Hampi UNESCO site; historical pride; safe for heritage references',
@@ -13361,6 +14953,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bengaluru-tech-leadership@kn-IN'})
 SET cr.display_name = 'Bengaluru tech leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'low',
     cr.expression = 'IT capital; startup capital; safe for progressive, innovation positioning',
@@ -13377,6 +14971,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dr-rajkumar@kn-IN'})
 SET cr.display_name = 'Dr. Rajkumar',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kn-IN',
     cr.importance = 'medium',
     cr.expression = 'Cultural icon; deep reverence; use respectfully in appropriate contexts only',
@@ -13401,6 +14997,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-familie@ro-RO'})
 SET cr.display_name = 'Family (Familie)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'high',
     cr.expression = 'Strong extended family bonds, Sunday lunches, family decision-making, caring for elders',
@@ -13417,6 +15015,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resourcefulness-descurcreal@ro-RO'})
 SET cr.display_name = 'Resourcefulness (Descurcăreală)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'high',
     cr.expression = 'Creative problem-solving, adaptability, "making things work" mentality',
@@ -13433,6 +15033,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-ospitalitate@ro-RO'})
 SET cr.display_name = 'Hospitality (Ospitalitate)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, sharing food and drink, warmth to visitors',
@@ -13449,6 +15051,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-educaie@ro-RO'})
 SET cr.display_name = 'Education (Educație)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'high',
     cr.expression = 'High value on academic achievement, respect for intellectuals, pride in literacy',
@@ -13465,6 +15069,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:latin-identity-identitate-latin@ro-RO'})
 SET cr.display_name = 'Latin Identity (Identitate Latină)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'medium',
     cr.expression = 'Pride in Romance language heritage, connection to Western Europe',
@@ -13481,6 +15087,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-tradiie@ro-RO'})
 SET cr.display_name = 'Tradition (Tradiție)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'medium',
     cr.expression = 'Folk customs, Orthodox holidays, rural heritage appreciation',
@@ -13497,6 +15105,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-rezilien@ro-RO'})
 SET cr.display_name = 'Resilience (Reziliență)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'medium',
     cr.expression = 'Survival through hardships, pragmatic persistence',
@@ -13513,6 +15123,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:latin-heritage-romance-language@ro-RO'})
 SET cr.display_name = 'Latin heritage / Romance language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; Romanians proud of Latin roots amid Slavic neighbors',
@@ -13529,6 +15141,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:draculatransylvania-tourism-context@ro-RO'})
 SET cr.display_name = 'Dracula/Transylvania (tourism context)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'low',
     cr.expression = 'Acceptable in tourism; locals have ironic relationship with stereotype',
@@ -13545,6 +15159,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements-nadia-comneci-hagi-halep@ro-RO'})
 SET cr.display_name = 'Sports achievements (Nadia Comăneci, Hagi, Halep)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-RO',
     cr.importance = 'low',
     cr.expression = 'Safe to reference; major source of national pride',
@@ -13569,6 +15185,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:business-acumen@gu-IN'})
 SET cr.display_name = 'વ્યાપાર-વૃત્તિ (Business Acumen)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'high',
     cr.expression = 'Gujaratis renowned globally as traders and entrepreneurs; business-minded approach to life; value creation through commerce',
@@ -13585,6 +15203,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@gu-IN'})
 SET cr.display_name = 'કુટુંબ (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family structures strong; family business traditions; collective decision-making; multi-generational living',
@@ -13601,6 +15221,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:valuesculture@gu-IN'})
 SET cr.display_name = 'સંસ્કાર (Values/Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'high',
     cr.expression = 'Emphasis on good upbringing; cultural traditions maintained; proper conduct and ethics expected',
@@ -13617,6 +15239,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@gu-IN'})
 SET cr.display_name = 'આદર (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'high',
     cr.expression = 'Deference to elders; respect in business dealings; hospitality to guests and customers',
@@ -13633,6 +15257,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religionduty@gu-IN'})
 SET cr.display_name = 'ધર્મ (Religion/Duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'medium',
     cr.expression = 'Strong Hindu and Jain influences; vegetarianism widespread; temple-going culture; religious observances',
@@ -13649,6 +15275,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@gu-IN'})
 SET cr.display_name = 'મહેમાનગતિ (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'medium',
     cr.expression = '"અતિથિ દેવો ભવ" (Guest is God); generous hosting; tea and snacks mandatory for guests',
@@ -13665,6 +15293,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:savingsfrugality@gu-IN'})
 SET cr.display_name = 'બચત (Savings/Frugality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'medium',
     cr.expression = 'Value for money mindset; savings culture; practical spending over wasteful display',
@@ -13681,6 +15311,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gujarat-as-economic-powerhouse@gu-IN'})
 SET cr.display_name = 'Gujarat as economic powerhouse',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'low',
     cr.expression = 'Safe to reference; high GDP growth; Vibrant Gujarat summits; industrial development pride',
@@ -13697,6 +15329,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sardar-patel-iron-man-of-india@gu-IN'})
 SET cr.display_name = 'Sardar Patel (Iron Man of India)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'medium',
     cr.expression = 'Statue of Unity is major pride point; unification of India; use respectfully in appropriate contexts',
@@ -13713,6 +15347,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:amul-cooperative-model@gu-IN'})
 SET cr.display_name = 'Amul cooperative model',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gu-IN',
     cr.importance = 'low',
     cr.expression = 'Gujarat cooperative success; "Taste of India"; safe for business success references',
@@ -13737,6 +15373,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeito-pelos-mais-velhos-kotas@pt-AO'})
 SET cr.display_name = 'Respeito pelos Mais-Velhos (Kotas)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'high',
     cr.expression = 'Deferencia absoluta aos mais velhos; consulta obrigatoria nas decisoes familiares; bencaos procuradas; termo "kota" usado com carinho e reverencia',
@@ -13753,6 +15391,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-e-comunidade@pt-AO'})
 SET cr.display_name = 'Familia e Comunidade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'high',
     cr.expression = 'Familia alargada central; apoio mutuo esperado; partilha de recursos; festas e marcos celebrados colectivamente; "ubuntu" angolano',
@@ -13769,6 +15409,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidade-bem-vindo@pt-AO'})
 SET cr.display_name = 'Hospitalidade (Bem-vindo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'high',
     cr.expression = 'Convidados tratados como reis; partilha de comida e bebida obrigatoria; visitantes nunca saem de maos vazias; "casa angolana esta sempre aberta"',
@@ -13785,6 +15427,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencia-luta@pt-AO'})
 SET cr.display_name = 'Resiliencia (Luta)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'high',
     cr.expression = 'Decadas de guerra civil superadas; espirito de reconstrucao; optimismo apesar das dificuldades; "angolano nao desiste"',
@@ -13801,6 +15445,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgulho-nacional-angolanidade@pt-AO'})
 SET cr.display_name = 'Orgulho Nacional (Angolanidade)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'high',
     cr.expression = 'Forte identidade nacional pos-independencia; orgulho nos recursos naturais, cultura, musica; seleccao nacional (Palancas Negras)',
@@ -13817,6 +15463,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fe-e-espiritualidade@pt-AO'})
 SET cr.display_name = 'Fe e Espiritualidade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'medium',
     cr.expression = 'Maioria catolica; protestantismo crescente; crencas tradicionais coexistem; bencaos e referencias a Deus comuns no quotidiano',
@@ -13833,6 +15481,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeito-pela-autoridade@pt-AO'})
 SET cr.display_name = 'Respeito pela Autoridade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'medium',
     cr.expression = 'Hierarquia social respeitada; titulos e posicoes valorizados; sobas (chefes tradicionais) reverenciados; estruturas de poder reconhecidas',
@@ -13849,6 +15499,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabalho-e-empreendedorismo@pt-AO'})
 SET cr.display_name = 'Trabalho e Empreendedorismo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'medium',
     cr.expression = '"Zungar" (comercio informal) generalizado; espirito empreendedor admirado; "desenrascar" valorizado; auto-suficiencia',
@@ -13865,6 +15517,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independencia-11-de-novembro-1975@pt-AO'})
 SET cr.display_name = 'Independencia (11 de Novembro 1975)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'low',
     cr.expression = 'Celebracao nacional segura; orgulho unanime; bandeira, hino, simbolos nacionais respeitados',
@@ -13881,6 +15535,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kuduro-e-musica-angolana@pt-AO'})
 SET cr.display_name = 'Kuduro e Musica Angolana',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'low',
     cr.expression = 'Orgulho cultural genuino; reconhecimento internacional; artistas nacionais celebrados',
@@ -13897,6 +15553,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:recursos-naturais-petroleo-diamantes@pt-AO'})
 SET cr.display_name = 'Recursos Naturais (Petroleo, Diamantes)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-AO',
     cr.importance = 'medium',
     cr.expression = 'Orgulho mas tambem sensibilidade; questoes de distribuicao de riqueza; focar no potencial, nao na critica',
@@ -13921,6 +15579,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:umunthu-ubuntuhumanity@ny-MW'})
 SET cr.display_name = 'Umunthu (Ubuntu/humanity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'high',
     cr.expression = 'Deep interconnectedness; "I am because we are"; mutual respect; communal responsibility',
@@ -13937,6 +15597,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chikondi-lovecompassion@ny-MW'})
 SET cr.display_name = 'Chikondi (love/compassion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'high',
     cr.expression = 'Generosity of spirit; care for others; hospitality; emotional warmth in relationships',
@@ -13953,6 +15615,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ulemu-respect@ny-MW'})
 SET cr.display_name = 'Ulemu (respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, authority, parents; maintaining dignity; proper conduct',
@@ -13969,6 +15633,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:banja-family@ny-MW'})
 SET cr.display_name = 'Banja (family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective decision-making; family reputation; intergenerational bonds',
@@ -13985,6 +15651,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mgwirizano-unitytogetherness@ny-MW'})
 SET cr.display_name = 'Mgwirizano (unity/togetherness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'high',
     cr.expression = 'National unity; cooperation across ethnic lines; working together for common good',
@@ -14001,6 +15669,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubwino-goodnesshospitality@ny-MW'})
 SET cr.display_name = 'Ubwino (goodness/hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'medium',
     cr.expression = 'Welcoming guests warmly; sharing food and resources; generosity with strangers',
@@ -14017,6 +15687,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kupirira-perseverance@ny-MW'})
 SET cr.display_name = 'Kupirira (perseverance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'medium',
     cr.expression = 'Patient endurance through hardship; resilience; faith through difficulties',
@@ -14033,6 +15705,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chilungamo-justicefairness@ny-MW'})
 SET cr.display_name = 'Chilungamo (justice/fairness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'medium',
     cr.expression = 'Fair dealing; honesty in business; equitable treatment; integrity',
@@ -14049,6 +15723,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lake-malawi@ny-MW'})
 SET cr.display_name = 'Lake Malawi',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'low',
     cr.expression = 'Third-largest lake in Africa; UNESCO World Heritage site; "Calendar Lake"; freely celebrated',
@@ -14065,6 +15741,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-6-july-1964@ny-MW'})
 SET cr.display_name = 'Independence (6 July 1964)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'medium',
     cr.expression = 'Independence Day celebrated; nationalism positive but avoid Banda-era complexity; focus on freedom',
@@ -14081,6 +15759,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:flames-football@ny-MW'})
 SET cr.display_name = 'Flames (football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ny-MW',
     cr.importance = 'low',
     cr.expression = 'National team generates strong support; sporting partnerships effective; community pride',
@@ -14105,6 +15785,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:jagannath-culture@or-IN'})
 SET cr.display_name = 'Jagannath Culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'or-IN',
     cr.importance = 'high',
     cr.expression = 'Deep devotion to Lord Jagannath; Rath Yatra festival; Puri temple pilgrimage',
@@ -14121,6 +15803,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-parivara@or-IN'})
 SET cr.display_name = 'Family (Parivara)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'or-IN',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; respect for elders; joint family traditions',
@@ -14137,6 +15821,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-atithi-devo-bhava@or-IN'})
 SET cr.display_name = 'Hospitality (Atithi Devo Bhava)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'or-IN',
     cr.importance = 'high',
     cr.expression = 'Guest is God; warm hospitality traditions; sharing food',
@@ -14161,6 +15847,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-mianzi@zh-CN'})
 SET cr.display_name = 'Face (Mianzi / 面子)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity and reputation; avoiding public embarrassment; giving face to others; status symbols matter',
@@ -14177,6 +15865,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony-hexie@zh-CN'})
 SET cr.display_name = 'Harmony (Hexie / 和谐)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Social stability; avoiding conflict; group consensus; maintaining relationships over winning arguments',
@@ -14193,6 +15883,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-jiating@zh-CN'})
 SET cr.display_name = 'Family (Jiating / 家庭)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Filial piety (xiao / 孝); multi-generational respect; family as core social unit; children\'s success reflects on parents',
@@ -14209,6 +15901,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:relationships-guanxi@zh-CN'})
 SET cr.display_name = 'Relationships (Guanxi / 关系)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Network of reciprocal obligations; trust through connections; long-term relationship building',
@@ -14225,6 +15919,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prosperity-fuyu@zh-CN'})
 SET cr.display_name = 'Prosperity (Fuyu / 富裕)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Material success as achievement; financial security highly valued; visible success markers',
@@ -14241,6 +15937,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-jiaoyu@zh-CN'})
 SET cr.display_name = 'Education (Jiaoyu / 教育)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'high',
     cr.expression = 'Academic achievement paramount; continuous learning valued; credentials and expertise respected',
@@ -14257,6 +15955,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diligence-qinfen@zh-CN'})
 SET cr.display_name = 'Diligence (Qinfen / 勤奋)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'medium',
     cr.expression = 'Hard work leads to success; perseverance valued; 996 culture (controversial but prevalent)',
@@ -14273,6 +15973,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:collective-success-jiti@zh-CN'})
 SET cr.display_name = 'Collective Success (Jiti / 集体)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'medium',
     cr.expression = 'Group achievement over individual; company/nation pride; shared accomplishments',
@@ -14289,6 +15991,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-civilization-5000-years@zh-CN'})
 SET cr.display_name = 'Ancient civilization (5000 years)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'low',
     cr.expression = '四大发明 (Four Great Inventions); cultural heritage; can reference proudly',
@@ -14305,6 +16009,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:technological-advancement@zh-CN'})
 SET cr.display_name = 'Technological advancement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'low',
     cr.expression = 'High-speed rail; space program; 5G; digital payments; legitimate pride points',
@@ -14321,6 +16027,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements@zh-CN'})
 SET cr.display_name = 'Sports achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-CN',
     cr.importance = 'low',
     cr.expression = 'Olympics; specific athletes; national team successes',
@@ -14345,6 +16053,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hunhuubuntu@sn-ZW'})
 SET cr.display_name = 'Hunhu/Ubuntu',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'high',
     cr.expression = '"Munhu munhu nekuda kwevanhu" (A person is a person through others); communal identity; mutual support',
@@ -14361,6 +16071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kuremekedza-respect@sn-ZW'})
 SET cr.display_name = 'Kuremekedza (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'high',
     cr.expression = 'Deference to elders; proper greetings; use of honorifics (Va-); polite address',
@@ -14377,6 +16089,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ushamwari-friendshiprelationships@sn-ZW'})
 SET cr.display_name = 'Ushamwari (Friendship/Relationships)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'high',
     cr.expression = 'Building personal connections before business; extended greetings; genuine interest in wellbeing',
@@ -14393,6 +16107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukama-familykinship@sn-ZW'})
 SET cr.display_name = 'Ukama (Family/Kinship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; clan connections; obligations to relatives; multi-generational living',
@@ -14409,6 +16125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kushingirira-resilience@sn-ZW'})
 SET cr.display_name = 'Kushingirira (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'medium',
     cr.expression = 'Surviving economic challenges; adaptation; making do with less; determination',
@@ -14425,6 +16143,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kuzvininipisa-humility@sn-ZW'})
 SET cr.display_name = 'Kuzvininipisa (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'medium',
     cr.expression = 'Modest self-presentation; avoiding boastfulness; sharing success credit',
@@ -14441,6 +16161,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rupo-generosity@sn-ZW'})
 SET cr.display_name = 'Rupo (Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'medium',
     cr.expression = 'Sharing resources; hospitality; helping neighbors; contributing to community',
@@ -14457,6 +16179,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kugara-zvakanaka-living-well@sn-ZW'})
 SET cr.display_name = 'Kugara Zvakanaka (Living Well)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'medium',
     cr.expression = 'Aspirational lifestyle; providing for family; social advancement; education',
@@ -14473,6 +16197,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:great-zimbabwe@sn-ZW'})
 SET cr.display_name = 'Great Zimbabwe',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'low',
     cr.expression = 'Ancient stone city; source of country name; symbol of sophisticated African civilization; safe to reference positively',
@@ -14489,6 +16215,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:shona-language-and-culture@sn-ZW'})
 SET cr.display_name = 'Shona language and culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'low',
     cr.expression = 'Rich oral tradition; tsumo (proverbs); music and mbira; stone sculpture; safe cultural celebration',
@@ -14505,6 +16233,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-sovereignty@sn-ZW'})
 SET cr.display_name = 'Independence and sovereignty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sn-ZW',
     cr.importance = 'medium',
     cr.expression = '1980 independence; national identity; use carefully without political overtones',
@@ -14529,6 +16259,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:karam-hospitalitygenerosity@ar-JO'})
 SET cr.display_name = 'Karam (Hospitality/Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests generously; offering food and drink; going beyond expectations for visitors',
@@ -14545,6 +16277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sharaf-honor@ar-JO'})
 SET cr.display_name = 'Sharaf (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'high',
     cr.expression = 'Family reputation; keeping promises; dignity in conduct; protecting family name',
@@ -14561,6 +16295,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familyclan-loyalty@ar-JO'})
 SET cr.display_name = 'Family/Clan Loyalty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'high',
     cr.expression = 'Extended family as social unit; collective decisions; intergenerational obligations',
@@ -14577,6 +16313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-authority@ar-JO'})
 SET cr.display_name = 'Respect for Authority',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, parents, and the monarchy; hierarchical relationships',
@@ -14593,6 +16331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wasta-social-connections@ar-JO'})
 SET cr.display_name = 'Wasta (Social Connections)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Relationship-based society; personal connections facilitate business',
@@ -14609,6 +16349,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@ar-JO'})
 SET cr.display_name = 'Religious Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Islam central to daily life; religious phrases natural in speech; faith guides decisions',
@@ -14625,6 +16367,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabar-patience@ar-JO'})
 SET cr.display_name = 'Sabar (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Patience as virtue; trust in divine timing; long-term thinking',
@@ -14641,6 +16385,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tawadu-modestyhumility@ar-JO'})
 SET cr.display_name = 'Tawadu (Modesty/Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Avoiding arrogance; not boasting excessively; humble presentation',
@@ -14657,6 +16403,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hashemite-kingdom-and-royal-family@ar-JO'})
 SET cr.display_name = 'Hashemite Kingdom and Royal Family',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Deeply respected; safe to praise; never criticize or mock; use reverently in appropriate contexts',
@@ -14673,6 +16421,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dead-sea-and-natural-wonders@ar-JO'})
 SET cr.display_name = 'Dead Sea and natural wonders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'low',
     cr.expression = 'Unique natural assets; safe source of pride; wellness and tourism associations positive',
@@ -14689,6 +16439,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:palestinian-solidarity@ar-JO'})
 SET cr.display_name = 'Palestinian solidarity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-JO',
     cr.importance = 'medium',
     cr.expression = 'Strong support for Palestinian cause; many citizens of Palestinian origin; handle sensitively',
@@ -14713,6 +16465,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosityhospitality@ar-KW'})
 SET cr.display_name = 'الكرم (Generosity/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'high',
     cr.expression = 'Lavish hosting, offering food/drinks, giving without expectation of return; diwaniya culture',
@@ -14729,6 +16483,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ar-KW'})
 SET cr.display_name = 'العائلة (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, tribal connections, collective decision-making, family reputation',
@@ -14745,6 +16501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religion@ar-KW'})
 SET cr.display_name = 'الدين (Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'high',
     cr.expression = 'Islamic values integrated into daily life, prayer times respected, halal compliance assumed',
@@ -14761,6 +16519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorreputation@ar-KW'})
 SET cr.display_name = 'الشرف والسمعة (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'high',
     cr.expression = 'Family name, social standing, maintaining face, dignified behavior',
@@ -14777,6 +16537,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diwaniya-culture@ar-KW'})
 SET cr.display_name = 'الديوانية (Diwaniya Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'high',
     cr.expression = 'Daily male social gatherings; business conducted through relationships; community building',
@@ -14793,6 +16555,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loyalty@ar-KW'})
 SET cr.display_name = 'الولاء (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'medium',
     cr.expression = 'Loyalty to family, tribe, nation; reciprocal relationships; long-term bonds',
@@ -14809,6 +16573,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:stability@ar-KW'})
 SET cr.display_name = 'الاستقرار (Stability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'medium',
     cr.expression = 'Value security and predictability; conservative change approach; established institutions trusted',
@@ -14825,6 +16591,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:distinction@ar-KW'})
 SET cr.display_name = 'التميز (Distinction)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'medium',
     cr.expression = 'Appreciation for quality, premium brands, status symbols; standing out positively',
@@ -14841,6 +16609,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:liberation-day-26-february-1991@ar-KW'})
 SET cr.display_name = 'Liberation Day (26 February 1991)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'medium',
     cr.expression = 'Deep emotional significance; celebrate liberation, avoid graphic war imagery; gratitude to allies',
@@ -14857,6 +16627,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kuwait-towers@ar-KW'})
 SET cr.display_name = 'Kuwait Towers',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'low',
     cr.expression = 'National landmark; positive symbol; use freely in Kuwaiti contexts',
@@ -14873,6 +16645,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:constitutional-governance@ar-KW'})
 SET cr.display_name = 'Constitutional governance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-KW',
     cr.importance = 'medium',
     cr.expression = 'Oldest parliament in Gulf; democratic traditions; use respectfully, not politically',
@@ -14897,6 +16671,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:fair-go@en-AU'})
 SET cr.display_name = 'Fair Go',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'high',
     cr.expression = 'Everyone deserves equal opportunity; anti-elitism; justice for the underdog',
@@ -14913,6 +16689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:larrikinism@en-AU'})
 SET cr.display_name = 'Larrikinism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'medium',
     cr.expression = 'Irreverent humor; not taking yourself too seriously; playful rebellion',
@@ -14929,6 +16707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:laid-back-attitude@en-AU'})
 SET cr.display_name = 'Laid-back Attitude',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'medium',
     cr.expression = 'Relaxed approach to life; "she\'ll be right" optimism; stress-free aspirations',
@@ -14945,6 +16725,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:outdoor-lifestyle@en-AU'})
 SET cr.display_name = 'Outdoor Lifestyle',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'medium',
     cr.expression = 'Beach culture; sport; BBQs; nature connection',
@@ -14961,6 +16743,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity@en-AU'})
 SET cr.display_name = 'Authenticity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'high',
     cr.expression = 'BS detectors are strong; genuineness valued; phoniness rejected',
@@ -14977,6 +16761,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:indigenous-culture-and-heritage@en-AU'})
 SET cr.display_name = 'Indigenous culture and heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'high',
     cr.expression = 'Respect required; Acknowledgement of Country appropriate; avoid tokenism or appropriation',
@@ -14993,6 +16779,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-landscapes@en-AU'})
 SET cr.display_name = 'Natural landscapes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'low',
     cr.expression = 'Beaches, outback, wildlife are sources of genuine pride; safe for imagery',
@@ -15009,6 +16797,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:anzac-legacy@en-AU'})
 SET cr.display_name = 'ANZAC legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AU',
     cr.importance = 'high',
     cr.expression = 'Deeply respected; use only with genuine reverence; never commercialize ANZAC Day',
@@ -15033,6 +16823,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:liberte-freedom@fr-FR'})
 SET cr.display_name = 'Liberte (Freedom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'high',
     cr.expression = 'Personal autonomy, freedom of expression, resistance to authority, individual choice',
@@ -15049,6 +16841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:egalite-equality@fr-FR'})
 SET cr.display_name = 'Egalite (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'high',
     cr.expression = 'Social equality, meritocracy, fair treatment, access to services',
@@ -15065,6 +16859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:laicite-secularism@fr-FR'})
 SET cr.display_name = 'Laicite (Secularism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'high',
     cr.expression = 'Separation of religion and state, neutral public spaces, religious tolerance',
@@ -15081,6 +16877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:excellence-savoir-faire@fr-FR'})
 SET cr.display_name = 'Excellence / Savoir-faire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'high',
     cr.expression = 'Quality craftsmanship, expertise, refined taste, attention to detail',
@@ -15097,6 +16895,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:art-de-vivre-quality-of-life@fr-FR'})
 SET cr.display_name = 'Art de vivre (Quality of life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'high',
     cr.expression = 'Pleasure in food, culture, leisure, balance between work and life',
@@ -15113,6 +16913,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:intellectual-engagement@fr-FR'})
 SET cr.display_name = 'Intellectual engagement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'medium',
     cr.expression = 'Value for debate, critical thinking, informed opinions',
@@ -15129,6 +16931,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patrimoine-heritage@fr-FR'})
 SET cr.display_name = 'Patrimoine (Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'medium',
     cr.expression = 'Cultural heritage, traditions, history, regional identity',
@@ -15145,6 +16949,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarity@fr-FR'})
 SET cr.display_name = 'Solidarity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'medium',
     cr.expression = 'Social safety net, collective responsibility, work-life balance',
@@ -15161,6 +16967,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gastronomie-et-vin@fr-FR'})
 SET cr.display_name = 'Gastronomie et vin',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'low',
     cr.expression = 'Safe and celebrated - French cuisine and wine are sources of pride',
@@ -15177,6 +16985,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:revolution-et-droits-de-lhomme@fr-FR'})
 SET cr.display_name = 'Revolution et droits de l\'homme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'medium',
     cr.expression = 'Positive when referencing values, careful with historical details',
@@ -15193,6 +17003,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:science-et-innovation@fr-FR'})
 SET cr.display_name = 'Science et innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-FR',
     cr.importance = 'low',
     cr.expression = 'Pasteur, Curie, Airbus - celebrate French achievements',
@@ -15217,6 +17029,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:teranga-hospitalite@fr-SN'})
 SET cr.display_name = 'Teranga (hospitalite)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = 'Valeur fondatrice de l\'identite senegalaise ; accueil inconditionnel de l\'etranger ; generosite sans attente de retour ; partage du repas autour du bol commun ; l\'invite est sacre',
@@ -15233,6 +17047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-des-aines-et-autorites-religieuses@fr-SN'})
 SET cr.display_name = 'Respect des aines et autorites religieuses',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = 'Les serigne, cheikh, imam et aines sont veneres ; on sollicite leur benediction pour les decisions importantes ; les salutations elaborees sont obligatoires ; jamais de contradiction publique',
@@ -15249,6 +17065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:foi-et-spiritualite-islam@fr-SN'})
 SET cr.display_name = 'Foi et spiritualite (Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = '95% de la population est musulmane ; pratique quotidienne visible ; confreries (Mourides, Tidjanes, Layennes, Khadres) structurent la vie sociale ; les marabouts sont des guides spirituels influents',
@@ -15265,6 +17083,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jom-dignitehonneur@fr-SN'})
 SET cr.display_name = 'Jom (dignite/honneur)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = 'Chaque personne merite un traitement digne ; la honte publique est une offense grave ; proteger sa reputation et celle de sa famille ; ne jamais humilier autrui',
@@ -15281,6 +17101,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kersa-pudeurmodestie@fr-SN'})
 SET cr.display_name = 'Kersa (pudeur/modestie)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = 'Retenue valorisee ; la vantardise est mal vue ; reussite partagee et non etalee ; modestie dans l\'expression ; ne pas "faire le grand"',
@@ -15297,6 +17119,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-communautaire-et-familiale@fr-SN'})
 SET cr.display_name = 'Solidarite communautaire et familiale',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'high',
     cr.expression = 'Famille elargie (mbokk) tres presente ; entraide lors des evenements sociaux (mariages, baptemes, funerailles) ; tontines et cotisations collectives ; responsabilite envers le groupe',
@@ -15313,6 +17137,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ngor-integritehonnetete@fr-SN'})
 SET cr.display_name = 'Ngor (integrite/honnetete)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'medium',
     cr.expression = 'Tenir parole est sacre ; la confiance se merite par les actes ; mefiance envers les promesses non tenues',
@@ -15329,6 +17155,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sutura-discretion@fr-SN'})
 SET cr.display_name = 'Sutura (discretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'medium',
     cr.expression = 'Garder les affaires privees privees ; ne pas exposer les faiblesses d\'autrui ; la discretion protege les relations',
@@ -15345,6 +17173,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:can-2022-et-lions-de-la-teranga@fr-SN'})
 SET cr.display_name = 'CAN 2022 et Lions de la Teranga',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'low',
     cr.expression = 'Premiere victoire de la CAN, moment d\'euphorie nationale ; Sadio Mane et l\'equipe sont des heros ; references positives tres bien recues ; federateur absolu',
@@ -15361,6 +17191,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:leopold-sedar-senghor@fr-SN'})
 SET cr.display_name = 'Leopold Sedar Senghor',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'medium',
     cr.expression = 'Poete-president, pere de la nation, figure majeure de la Negritude ; respecte mais aussi critique pour certaines politiques ; utiliser avec nuance et respect',
@@ -15377,6 +17209,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:artisanat-et-culture@fr-SN'})
 SET cr.display_name = 'Artisanat et culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-SN',
     cr.importance = 'low',
     cr.expression = 'Tissage, bijoux, sculpture, poterie ; musique (mbalax de Youssou N\'Dour) ; cuisine senegalaise (thieboudienne, yassa) ; valoriser l\'artisanat local est toujours positif',
@@ -15401,6 +17235,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:honourrespect@pa-IN'})
 SET cr.display_name = 'ਇੱਜ਼ਤ (Honour/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Protecting family name, maintaining social standing, respectful conduct in all dealings, never causing shame to family or community',
@@ -15417,6 +17253,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:selfless-service@pa-IN'})
 SET cr.display_name = 'ਸੇਵਾ (Selfless Service)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Serving others without expectation, community langar tradition, helping neighbors, volunteering at gurdwara, collective effort',
@@ -15433,6 +17271,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@pa-IN'})
 SET cr.display_name = 'ਪਰਿਵਾਰ (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family living, multi-generational decision-making, family meals together, parents\' wishes respected, children\'s success reflects on family',
@@ -15449,6 +17289,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community@pa-IN'})
 SET cr.display_name = 'ਸੰਗਤ (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Collective identity, village/pind connections, community gatherings, shared celebrations, social networks for support',
@@ -15465,6 +17307,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@pa-IN'})
 SET cr.display_name = 'ਮਿਹਨਤ (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Agricultural labor ethic, self-made success valued, physical effort respected, dedication to craft, early rising culture',
@@ -15481,6 +17325,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@pa-IN'})
 SET cr.display_name = 'ਮਹਿਮਾਨ-ਨਿਵਾਜ਼ੀ (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Guests treated as God, generous food offerings, comfortable accommodations, never letting guests leave empty-handed',
@@ -15497,6 +17343,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:equality@pa-IN'})
 SET cr.display_name = 'ਸਮਾਨਤਾ (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'medium',
     cr.expression = 'Sikh principle of equal treatment regardless of caste/gender, langar tradition where all eat together, rejection of social hierarchy',
@@ -15513,6 +17361,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rising-spiritsoptimism@pa-IN'})
 SET cr.display_name = 'ਚੜ੍ਹਦੀ ਕਲਾ (Rising Spirits/Optimism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'medium',
     cr.expression = 'Sikh concept of staying positive through adversity, never giving up, maintaining high spirits, resilient attitude',
@@ -15529,6 +17379,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sikh-gurus-religious-heritage@pa-IN'})
 SET cr.display_name = 'Sikh Gurus & Religious Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'high',
     cr.expression = 'Reference with utmost respect only; never for commercial exploitation; Guru Nanak\'s teachings of equality, Guru Gobind Singh\'s bravery - these are sacred, not marketing material',
@@ -15545,6 +17397,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agricultural-contribution@pa-IN'})
 SET cr.display_name = 'Agricultural Contribution',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'low',
     cr.expression = 'Punjab as "breadbasket of India" - safe to celebrate; wheat/rice production, hardworking farmers, green revolution contributions',
@@ -15561,6 +17415,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:punjabi-music-dance@pa-IN'})
 SET cr.display_name = 'Punjabi Music & Dance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-IN',
     cr.importance = 'low',
     cr.expression = 'Bhangra, Gidda internationally known; Punjabi music industry; can use celebratory imagery freely',
@@ -15585,6 +17441,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-reliance@cs-CZ'})
 SET cr.display_name = 'Self-reliance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'high',
     cr.expression = 'Strong DIY culture; pride in solving problems independently',
@@ -15601,6 +17459,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:skepticism@cs-CZ'})
 SET cr.display_name = 'Skepticism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'high',
     cr.expression = 'Distrust of authority, advertising, and excessive enthusiasm',
@@ -15617,6 +17477,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationknowledge@cs-CZ'})
 SET cr.display_name = 'Education/Knowledge',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'high',
     cr.expression = 'Respect for expertise and technical competence; high literacy',
@@ -15633,6 +17495,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:personal-freedom@cs-CZ'})
 SET cr.display_name = 'Personal Freedom',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'medium',
     cr.expression = 'Value individual choice and privacy; resist intrusion',
@@ -15649,6 +17513,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humorirony@cs-CZ'})
 SET cr.display_name = 'Humor/Irony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'medium',
     cr.expression = 'Dry wit and self-deprecation as coping mechanism and social bond',
@@ -15665,6 +17531,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-over-quantity@cs-CZ'})
 SET cr.display_name = 'Quality over Quantity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'medium',
     cr.expression = 'Preference for durable, well-made products over cheap alternatives',
@@ -15681,6 +17549,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:czech-innovation-and-industry@cs-CZ'})
 SET cr.display_name = 'Czech innovation and industry',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'low',
     cr.expression = 'Safe to reference Skoda, Bata, Czech engineering tradition; source of genuine pride',
@@ -15697,6 +17567,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prague-and-historical-cities@cs-CZ'})
 SET cr.display_name = 'Prague and historical cities',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'low',
     cr.expression = 'Architectural heritage, cultural tourism; safe for location-based content',
@@ -15713,6 +17585,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:velvet-revolution-1989@cs-CZ'})
 SET cr.display_name = 'Velvet Revolution (1989)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cs-CZ',
     cr.importance = 'medium',
     cr.expression = 'Symbol of peaceful transition; use respectfully; avoid commercializing',
@@ -15737,6 +17611,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-CL'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; Sunday family gatherings (asado); multi-generational support; children highly valued',
@@ -15753,6 +17629,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-CL'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'high',
     cr.expression = 'Helping neighbors; community response to crises (earthquakes, fires); "Teletón" culture; collective action',
@@ -15769,6 +17647,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:esfuerzo-hard-workeffort@es-CL'})
 SET cr.display_name = 'Esfuerzo (Hard Work/Effort)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'high',
     cr.expression = 'Self-made success valued; "cultura del trabajo"; education as pathway; meritocracy ideal',
@@ -15785,6 +17665,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humortalla@es-CL'})
 SET cr.display_name = 'Humor/Talla',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'high',
     cr.expression = 'Self-deprecating humor; irony; not taking oneself too seriously; "chaqueteo" (cutting down tall poppies)',
@@ -15801,6 +17683,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educacin-educationmanners@es-CL'})
 SET cr.display_name = 'Educación (Education/Manners)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'medium',
     cr.expression = 'Academic achievement valued; also means good manners; "ser educado"; respect in interactions',
@@ -15817,6 +17701,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:austeridadmodestia@es-CL'})
 SET cr.display_name = 'Austeridad/Modestia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'medium',
     cr.expression = 'Distrust of flashy displays; understated success; showing off is "flaite" or "siútico"',
@@ -15833,6 +17719,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:emprendimiento-entrepreneurship@es-CL'})
 SET cr.display_name = 'Emprendimiento (Entrepreneurship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'medium',
     cr.expression = 'Growing startup culture; "sacarse la mugre"; innovation valued in younger generations',
@@ -15849,6 +17737,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chilenidad-chilean-identity@es-CL'})
 SET cr.display_name = 'Chilenidad (Chilean Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'medium',
     cr.expression = 'Pride in unique national character; "Chile lindo"; geographic distinctiveness; resilience',
@@ -15865,6 +17755,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-landscapes-patagonia-atacama-torres-del-pa@es-CL'})
 SET cr.display_name = 'Natural landscapes (Patagonia, Atacama, Torres del Paine)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'low',
     cr.expression = 'Immense pride; world-class nature; safe celebratory reference',
@@ -15881,6 +17773,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:teletn-and-solidarity@es-CL'})
 SET cr.display_name = 'Teletón and solidarity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'low',
     cr.expression = 'Annual telethon tradition; national unity symbol; positive community reference',
@@ -15897,6 +17791,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:chilean-poets-neruda-mistral@es-CL'})
 SET cr.display_name = 'Chilean poets (Neruda, Mistral)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'low',
     cr.expression = 'Nobel laureates; cultural pride; literary heritage; safe reference',
@@ -15913,6 +17809,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-to-earthquakes@es-CL'})
 SET cr.display_name = 'Resilience to earthquakes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CL',
     cr.importance = 'medium',
     cr.expression = 'Pride in survival and rebuilding; but real trauma involved; acknowledge don\'t trivialize',
@@ -15937,6 +17835,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:directness-bespreekbaarheid@nl-NL'})
 SET cr.display_name = 'Directness (Bespreekbaarheid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'high',
     cr.expression = 'Open, honest communication; saying what you mean; no beating around the bush',
@@ -15953,6 +17853,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nuchterheid-level-headedness@nl-NL'})
 SET cr.display_name = 'Nuchterheid (Level-headedness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'high',
     cr.expression = 'Practical, down-to-earth attitude; skepticism of hype; calm rationality',
@@ -15969,6 +17871,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance-tolerantie@nl-NL'})
 SET cr.display_name = 'Tolerance (Tolerantie)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'high',
     cr.expression = 'Live and let live; pluralistic society; respect for diversity',
@@ -15985,6 +17889,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gezelligheid@nl-NL'})
 SET cr.display_name = 'Gezelligheid',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'high',
     cr.expression = 'Conviviality; cozy togetherness; social warmth in casual settings',
@@ -16001,6 +17907,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:egalitarianism@nl-NL'})
 SET cr.display_name = 'Egalitarianism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'high',
     cr.expression = 'Flat hierarchies; distrust of pretension; "doe normaal" (act normal)',
@@ -16017,6 +17925,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thrift-zuinigheid@nl-NL'})
 SET cr.display_name = 'Thrift (Zuinigheid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'medium',
     cr.expression = 'Value for money; smart spending; waste aversion',
@@ -16033,6 +17943,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence@nl-NL'})
 SET cr.display_name = 'Independence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'medium',
     cr.expression = 'Self-reliance; personal freedom; entrepreneurial spirit',
@@ -16049,6 +17961,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sustainability@nl-NL'})
 SET cr.display_name = 'Sustainability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'medium',
     cr.expression = 'Environmental consciousness; cycling nation; pragmatic green choices',
@@ -16065,6 +17979,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:water-management-delta-works@nl-NL'})
 SET cr.display_name = 'Water management / Delta Works',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'low',
     cr.expression = 'Engineering pride; can reference freely; globally respected',
@@ -16081,6 +17997,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cycling-culture@nl-NL'})
 SET cr.display_name = 'Cycling culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'low',
     cr.expression = 'Authentic cultural element; practical and environmental; very safe',
@@ -16097,6 +18015,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance-progressive-values@nl-NL'})
 SET cr.display_name = 'Tolerance / progressive values',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'nl-NL',
     cr.importance = 'medium',
     cr.expression = 'Genuine pride but self-critical; avoid claiming superiority',
@@ -16121,6 +18041,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-HN'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; multigenerational households; family decisions; children central; family gatherings on weekends and holidays',
@@ -16137,6 +18059,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fe-faith@es-HN'})
 SET cr.display_name = 'Fe (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'high',
     cr.expression = 'Predominantly Catholic with growing evangelical presence; religious holidays observed; churches central to community life; religious phrases in daily speech',
@@ -16153,6 +18077,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-HN'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'high',
     cr.expression = 'Respect for elders, authority, and social hierarchy; proper treatment valued; titles and honorifics important; "usted" conveys respect',
@@ -16169,6 +18095,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identidad-catracha-honduran-identity@es-HN'})
 SET cr.display_name = 'Identidad Catracha (Honduran Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'high',
     cr.expression = 'Strong national pride; "catracho" term of pride (from Florencio Xatruch); football passion; distinct from other Central American countries',
@@ -16185,6 +18113,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-duro-hard-work@es-HN'})
 SET cr.display_name = 'Trabajo Duro (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'high',
     cr.expression = 'Work ethic valued; resilience amid challenges; entrepreneurship admired; "hecharle ganas" (giving your all)',
@@ -16201,6 +18131,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-HN'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'medium',
     cr.expression = 'Warm welcome for visitors; generosity despite limited means; "mi casa es su casa" mentality; food sharing as expression of welcome',
@@ -16217,6 +18149,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-HN'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'medium',
     cr.expression = 'Community support networks; helping neighbors; mutual aid traditions; collective response to challenges',
@@ -16233,6 +18167,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:herencia-maya-mayan-heritage@es-HN'})
 SET cr.display_name = 'Herencia Maya (Mayan Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'medium',
     cr.expression = 'Copan ruins national treasure; indigenous roots acknowledged; artisanal traditions; connection to pre-Columbian past',
@@ -16249,6 +18185,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:copan-mayan-ruins@es-HN'})
 SET cr.display_name = 'Copan Mayan Ruins',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'low',
     cr.expression = 'UNESCO World Heritage; major source of cultural pride; safe to reference positively; national treasure',
@@ -16265,6 +18203,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bay-islands-roatan-utila@es-HN'})
 SET cr.display_name = 'Bay Islands (Roatan, Utila)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'low',
     cr.expression = 'Caribbean paradise; diving destination; tourism pride; beautiful imagery welcomed',
@@ -16281,6 +18221,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:virgin-de-suyapa-patron-saint@es-HN'})
 SET cr.display_name = 'Virgin de Suyapa (patron saint)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-HN',
     cr.importance = 'medium',
     cr.expression = 'Deeply revered; February 3 national pilgrimage; use respectfully; religious significance profound',
@@ -16305,6 +18247,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@bg-BG'})
 SET cr.display_name = 'Family (Семейство)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households, Sunday gatherings, family decision-making',
@@ -16321,6 +18265,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@bg-BG'})
 SET cr.display_name = 'Education (Образование)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'high',
     cr.expression = 'High value on academic achievement, respect for expertise, pride in literacy heritage',
@@ -16337,6 +18283,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition@bg-BG'})
 SET cr.display_name = 'Tradition (Традиция)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'high',
     cr.expression = 'Preservation of customs, folk heritage, Orthodox holidays, name days',
@@ -16353,6 +18301,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience@bg-BG'})
 SET cr.display_name = 'Resilience (Издръжливост)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'medium',
     cr.expression = 'Survival through hardships, resourcefulness, pragmatic problem-solving',
@@ -16369,6 +18319,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@bg-BG'})
 SET cr.display_name = 'Hospitality (Гостоприемство)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'medium',
     cr.expression = 'Generous hosting, sharing food and drink, welcoming guests warmly',
@@ -16385,6 +18337,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride@bg-BG'})
 SET cr.display_name = 'National Pride (Национална гордост)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'medium',
     cr.expression = 'Pride in history, Cyrillic alphabet invention, cultural achievements',
@@ -16401,6 +18355,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cyrillic-alphabet-origin@bg-BG'})
 SET cr.display_name = 'Cyrillic alphabet origin',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; Bulgaria is birthplace of Cyrillic (Sts. Cyril and Methodius)',
@@ -16417,6 +18373,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bulgarian-yogurt-kiselo-mlyako@bg-BG'})
 SET cr.display_name = 'Bulgarian yogurt (kiselo mlyako)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'low',
     cr.expression = 'Source of national pride; unique lactobacillus bulgaricus',
@@ -16433,6 +18391,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements-wrestling-weightlifting-rhythm@bg-BG'})
 SET cr.display_name = 'Sports achievements (wrestling, weightlifting, rhythmic gymnastics)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bg-BG',
     cr.importance = 'low',
     cr.expression = 'Safe to reference; source of pride',
@@ -16457,6 +18417,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@sd-PK'})
 SET cr.display_name = 'مهمان نوازي (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'high',
     cr.expression = 'Guest treated as sacred; generous hosting duty; warmth to strangers; Sindhi tradition of open homes',
@@ -16473,6 +18435,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@sd-PK'})
 SET cr.display_name = 'خاندان (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; collective decisions; multi-generational households; family honor paramount',
@@ -16489,6 +18453,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorrespect@sd-PK'})
 SET cr.display_name = 'عزت (Honor/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'high',
     cr.expression = 'Elder reverence; hierarchical deference; reputation protection; avoiding shame (بيعزتي)',
@@ -16505,6 +18471,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sufi-spirituality@sd-PK'})
 SET cr.display_name = 'سُوفيانو روح (Sufi Spirituality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'high',
     cr.expression = 'Shah Abdul Latif Bhittai tradition; tolerance and peace; music and poetry; inner reflection',
@@ -16521,6 +18489,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sindhi-identity@sd-PK'})
 SET cr.display_name = 'سنڌيت (Sindhi Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'medium',
     cr.expression = 'Linguistic pride; cultural heritage; regional identity within Pakistan; Indus Valley connection',
@@ -16537,6 +18507,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patienceperseverance@sd-PK'})
 SET cr.display_name = 'صبر (Patience/Perseverance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'medium',
     cr.expression = 'Endurance valued; long-term thinking; trusting divine timing; not rushing important matters',
@@ -16553,6 +18525,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honestytrust@sd-PK'})
 SET cr.display_name = 'ايمانداري (Honesty/Trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'medium',
     cr.expression = 'Truthfulness valued; keeping word essential; trust in relationships; reliability expected',
@@ -16569,6 +18543,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosity@sd-PK'})
 SET cr.display_name = 'سخاوت (Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'medium',
     cr.expression = 'Giving freely; sharing with community; Islamic and Sindhi traditions combined',
@@ -16585,6 +18561,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sindhi-language-and-literature@sd-PK'})
 SET cr.display_name = 'Sindhi language and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'low',
     cr.expression = 'Rich literary tradition; Shah Abdul Latif, Sachal Sarmast; safe cultural celebration',
@@ -16601,6 +18579,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pakistani-national-identity@sd-PK'})
 SET cr.display_name = 'Pakistani national identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sd-PK',
     cr.importance = 'medium',
     cr.expression = 'Sindhi identity within Pakistan; navigate regional-national balance carefully',
@@ -16625,6 +18605,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@en-GH'})
 SET cr.display_name = 'Respect for elders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'high',
     cr.expression = 'Greetings essential; elders consulted on major decisions; younger people defer in conversations; kinship terms used even for non-relatives',
@@ -16641,6 +18623,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-akwaaba@en-GH'})
 SET cr.display_name = 'Hospitality (Akwaaba)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'high',
     cr.expression = 'Guests treated generously; food always offered; "Akwaaba" (welcome) is national symbol; stranger is sacred guest',
@@ -16657,6 +18641,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-community@en-GH'})
 SET cr.display_name = 'Family and community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective responsibility; major decisions involve family; financial support expected within families',
@@ -16673,6 +18659,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith-and-spirituality@en-GH'})
 SET cr.display_name = 'Faith and spirituality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'high',
     cr.expression = 'Christianity predominant; Islam in the north; traditional beliefs integrated; prayer common in daily life',
@@ -16689,6 +18677,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-achievement@en-GH'})
 SET cr.display_name = 'Education and achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'high',
     cr.expression = 'Education highly valued; parents sacrifice for children\'s schooling; academic success celebrated; professional titles respected',
@@ -16705,6 +18695,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-and-enterprise@en-GH'})
 SET cr.display_name = 'Hard work and enterprise',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'medium',
     cr.expression = 'Entrepreneurial spirit strong; traders respected; "hustle" mentality among youth; self-reliance valued',
@@ -16721,6 +18713,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride@en-GH'})
 SET cr.display_name = 'National pride',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'medium',
     cr.expression = 'First sub-Saharan country independent (1957); Kwame Nkrumah\'s legacy; Black Stars football; peaceful democracy',
@@ -16737,6 +18731,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-harmony@en-GH'})
 SET cr.display_name = 'Social harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'medium',
     cr.expression = 'Peace valued; conflict resolution through dialogue; chieftaincy arbitration; religious tolerance generally maintained',
@@ -16753,6 +18749,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1957@en-GH'})
 SET cr.display_name = 'Independence (1957)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'low',
     cr.expression = 'Safe and positive; first sub-Saharan country to gain independence; Kwame Nkrumah widely revered',
@@ -16769,6 +18767,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kakum-national-park@en-GH'})
 SET cr.display_name = 'Kakum National Park',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'low',
     cr.expression = 'Natural heritage pride; canopy walkway famous; eco-tourism asset',
@@ -16785,6 +18785,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cape-coast-castle@en-GH'})
 SET cr.display_name = 'Cape Coast Castle',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-GH',
     cr.importance = 'medium',
     cr.expression = 'UNESCO World Heritage; important but painful history; educational tourism; handle with historical sensitivity',
@@ -16809,6 +18811,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-pamilya@en-PH'})
 SET cr.display_name = 'Family (Pamilya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; multi-generational households; OFW sacrifices for children\'s education; collective decision-making',
@@ -16825,6 +18829,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-pagkamagalang@en-PH'})
 SET cr.display_name = 'Respect (Pagkamagalang)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'high',
     cr.expression = 'Deference to age and authority; "po/opo" in speech; avoiding causing embarrassment; honoring elders',
@@ -16841,6 +18847,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:smooth-relations-pakikisama@en-PH'})
 SET cr.display_name = 'Smooth Relations (Pakikisama)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'high',
     cr.expression = 'Avoiding conflict; going along with the group; maintaining harmony; not being standoffish',
@@ -16857,6 +18865,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-and-propriety-hiya@en-PH'})
 SET cr.display_name = 'Face and Propriety (Hiya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'high',
     cr.expression = 'Concern for social judgment; avoiding embarrassment; maintaining dignity; sensitivity to perception',
@@ -16873,6 +18883,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:debt-of-gratitude-utang-na-loob@en-PH'})
 SET cr.display_name = 'Debt of Gratitude (Utang na Loob)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'high',
     cr.expression = 'Reciprocal obligations; loyalty to those who helped; remembering favors',
@@ -16889,6 +18901,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-spirit-bayanihan@en-PH'})
 SET cr.display_name = 'Community Spirit (Bayanihan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'medium',
     cr.expression = 'Helping neighbors; collective effort; shared responsibility; mutual aid',
@@ -16905,6 +18919,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resourcefulness-diskarte@en-PH'})
 SET cr.display_name = 'Resourcefulness (Diskarte)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'medium',
     cr.expression = 'Creative problem-solving; making do with limited resources; Filipino ingenuity',
@@ -16921,6 +18937,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@en-PH'})
 SET cr.display_name = 'Hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'medium',
     cr.expression = 'Welcoming guests generously; offering food; making visitors comfortable',
@@ -16937,6 +18955,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:philippine-independence-and-national-heroes@en-PH'})
 SET cr.display_name = 'Philippine independence and national heroes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'medium',
     cr.expression = 'Rizal, Bonifacio revered; June 12 celebrations; handle historical nuances respectfully',
@@ -16953,6 +18973,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:filipino-hospitality-worldwide@en-PH'})
 SET cr.display_name = 'Filipino hospitality worldwide',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'low',
     cr.expression = 'Celebrated global reputation; warmth of Filipinos internationally recognized',
@@ -16969,6 +18991,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:culinary-heritage-adobo-sinigang-lechon@en-PH'})
 SET cr.display_name = 'Culinary heritage (adobo, sinigang, lechon)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PH',
     cr.importance = 'low',
     cr.expression = 'Food pride strong; regional variations celebrated; safe positive references',
@@ -16993,6 +19017,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:nature-and-environment-narava@sl-SI'})
 SET cr.display_name = 'Nature and environment (Narava)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'high',
     cr.expression = 'Deep connection to Alpine and Mediterranean landscapes; outdoor lifestyle; environmental consciousness; hiking culture',
@@ -17009,6 +19035,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-of-life-kakovost-zivljenja@sl-SI'})
 SET cr.display_name = 'Quality of life (Kakovost zivljenja)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'high',
     cr.expression = 'Work-life balance valued; leisure time protected; quality over quantity; well-being prioritized',
@@ -17025,6 +19053,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty-skromnost@sl-SI'})
 SET cr.display_name = 'Modesty (Skromnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'high',
     cr.expression = 'Understatement preferred; boasting discouraged; humble success celebrated',
@@ -17041,6 +19071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-knowledge-izobrazba@sl-SI'})
 SET cr.display_name = 'Education and knowledge (Izobrazba)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'high',
     cr.expression = 'Highly educated population; intellectual pursuits valued; expertise respected',
@@ -17057,6 +19089,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-delavnost@sl-SI'})
 SET cr.display_name = 'Hard work (Delavnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'medium',
     cr.expression = 'Industriousness valued; reliability expected; self-sufficiency admired',
@@ -17073,6 +19107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-druzina@sl-SI'})
 SET cr.display_name = 'Family (Druzina)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'medium',
     cr.expression = 'Family bonds important but balanced with individual autonomy; smaller family units common',
@@ -17089,6 +19125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-neodvisnost@sl-SI'})
 SET cr.display_name = 'Independence (Neodvisnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'medium',
     cr.expression = 'National independence valued; personal autonomy respected; self-reliance admired',
@@ -17105,6 +19143,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-heritage-triglav-caves-lake-bled@sl-SI'})
 SET cr.display_name = 'Natural heritage (Triglav, caves, Lake Bled)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'low',
     cr.expression = 'Universally celebrated; Triglav as national symbol; Postojna and Skocjan caves; Lake Bled iconic',
@@ -17121,6 +19161,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eu-founding-slavic-member-euro-adoption@sl-SI'})
 SET cr.display_name = 'EU founding Slavic member; Euro adoption',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'low',
     cr.expression = 'First ex-Yugoslav country in EU/Eurozone; source of quiet pride',
@@ -17137,6 +19179,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:linguistic-uniqueness-dual-number-preserved@sl-SI'})
 SET cr.display_name = 'Linguistic uniqueness (dual number preserved)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sl-SI',
     cr.importance = 'low',
     cr.expression = 'Slovenes proud of language distinctiveness; 2.5 million speakers maintaining unique features',
@@ -17161,6 +19205,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@en-HK'})
 SET cr.display_name = 'Hard Work',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'high',
     cr.expression = 'Long working hours normalised; success through effort; gung-ho entrepreneurial spirit',
@@ -17177,6 +19223,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@en-HK'})
 SET cr.display_name = 'Education',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'high',
     cr.expression = 'Academic success highly valued; intense competition; seen as path to prosperity',
@@ -17193,6 +19241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prosperity@en-HK'})
 SET cr.display_name = 'Prosperity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'medium',
     cr.expression = 'Material success respected; property ownership as life goal; wealth as security',
@@ -17209,6 +19259,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-mian-zi@en-HK'})
 SET cr.display_name = 'Face (mian-zi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'medium',
     cr.expression = 'Reputation matters; avoiding public embarrassment; status consciousness',
@@ -17225,6 +19277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:adaptability@en-HK'})
 SET cr.display_name = 'Adaptability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'medium',
     cr.expression = 'Resilience through political changes; flexibility as survival trait; quick to adjust',
@@ -17241,6 +19295,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hong-kong-as-international-financial-hub@en-HK'})
 SET cr.display_name = 'Hong Kong as international financial hub',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'low',
     cr.expression = 'Safe source of pride; world-class reputation; safe for commercial reference',
@@ -17257,6 +19313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:efficiency-and-infrastructure@en-HK'})
 SET cr.display_name = 'Efficiency and infrastructure',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'low',
     cr.expression = 'MTR system, airport, logistics widely admired; safe for positive reference',
@@ -17273,6 +19331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rule-of-law-and-governance@en-HK'})
 SET cr.display_name = 'Rule of law and governance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-HK',
     cr.importance = 'critical',
     cr.expression = 'Highly sensitive since 2019-2020; avoid entirely in commercial contexts',
@@ -17297,6 +19357,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:multicultural-harmony@en-MU'})
 SET cr.display_name = 'Multicultural Harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'high',
     cr.expression = 'Peaceful coexistence of Hindu, Muslim, Christian, and other communities; religious holidays celebrated together; "unity in diversity" identity',
@@ -17313,6 +19375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-cohesion@en-MU'})
 SET cr.display_name = 'Family Cohesion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'high',
     cr.expression = 'Strong extended family bonds; multigenerational households common; family consultation in major decisions',
@@ -17329,6 +19393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-and-politeness@en-MU'})
 SET cr.display_name = 'Respect and Politeness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'high',
     cr.expression = 'Courteous greetings expected; titles used for elders and professionals; indirect disagreement; saving face',
@@ -17345,6 +19411,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@en-MU'})
 SET cr.display_name = 'Hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'high',
     cr.expression = 'Welcoming visitors warmly; sharing food and drink; island generosity to guests',
@@ -17361,6 +19429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-and-advancement@en-MU'})
 SET cr.display_name = 'Education and Advancement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'medium',
     cr.expression = 'Strong value placed on academic achievement; education seen as path to prosperity',
@@ -17377,6 +19447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-devotion@en-MU'})
 SET cr.display_name = 'Religious Devotion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'medium',
     cr.expression = 'Active religious practice across communities; temples, mosques, churches prominent in daily life',
@@ -17393,6 +19465,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-solidarity@en-MU'})
 SET cr.display_name = 'Community Solidarity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'medium',
     cr.expression = 'Neighbours help neighbours; communal celebrations; shared resources in times of need',
@@ -17409,6 +19483,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-nation-building@en-MU'})
 SET cr.display_name = 'Independence and nation-building',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'low',
     cr.expression = 'Celebrating post-independence progress is welcome; Sir Seewoosagur Ramgoolam widely revered',
@@ -17425,6 +19501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tourism-destination-reputation@en-MU'})
 SET cr.display_name = 'Tourism destination reputation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'low',
     cr.expression = '"Paradise island" image embraced; hospitality excellence is genuine pride',
@@ -17441,6 +19519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:academic-and-diaspora-achievements@en-MU'})
 SET cr.display_name = 'Academic and diaspora achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-MU',
     cr.importance = 'medium',
     cr.expression = 'Pride in Mauritian achievers abroad; celebrate success but avoid boastfulness',
@@ -17465,6 +19545,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:iseseisvus-independence@et-EE'})
 SET cr.display_name = 'Iseseisvus (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'high',
     cr.expression = 'Self-reliance; personal autonomy; distrust of dependence on others',
@@ -17481,6 +19563,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tagasihoidlikkus-modesty@et-EE'})
 SET cr.display_name = 'Tagasihoidlikkus (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'high',
     cr.expression = 'Understated achievement; discomfort with boasting; let results speak',
@@ -17497,6 +19581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:digitaalsus-digital-society@et-EE'})
 SET cr.display_name = 'Digitaalsus (Digital society)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'high',
     cr.expression = 'E-government pride; paperless processes; tech-forward lifestyle',
@@ -17513,6 +19599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:privaatsus-privacy@et-EE'})
 SET cr.display_name = 'Privaatsus (Privacy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'high',
     cr.expression = 'Strong personal boundaries; reserved with strangers; private family matters',
@@ -17529,6 +19617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tootlikkus-efficiency@et-EE'})
 SET cr.display_name = 'Tootlikkus (Efficiency)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'high',
     cr.expression = 'Directness saves time; bureaucracy disdained; pragmatic solutions',
@@ -17545,6 +19635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loodus-nature-connection@et-EE'})
 SET cr.display_name = 'Loodus (Nature connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'medium',
     cr.expression = 'Forest culture; seasonal awareness; outdoor activities',
@@ -17561,6 +19653,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:haridus-education@et-EE'})
 SET cr.display_name = 'Haridus (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'medium',
     cr.expression = 'High literacy; knowledge valued; continuous learning',
@@ -17577,6 +19671,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:digital-society-e-residency@et-EE'})
 SET cr.display_name = 'Digital society / e-Residency',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'low',
     cr.expression = 'Safe celebration; internationally recognized achievement; source of genuine pride',
@@ -17593,6 +19689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:song-festival-laulupidu@et-EE'})
 SET cr.display_name = 'Song Festival (Laulupidu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; unifying tradition; safe for celebratory contexts',
@@ -17609,6 +19707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:forest-coverage-and-nature@et-EE'})
 SET cr.display_name = 'Forest coverage and nature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'et-EE',
     cr.importance = 'low',
     cr.expression = 'Safe; authentic; non-controversial',
@@ -17633,6 +19733,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-SV'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'high',
     cr.expression = 'Extended family networks central to daily life; multi-generational households common; collective decision-making; strong bonds despite geographic separation (diaspora); family gatherings on weekends and holidays',
@@ -17649,6 +19751,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fe-faith@es-SV'})
 SET cr.display_name = 'Fe (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'high',
     cr.expression = 'Strong Catholic tradition with growing evangelical presence; religious holidays deeply observed; churches central to community; religious phrases embedded in daily speech; Semana Santa significant',
@@ -17665,6 +19769,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identidad-guanaca-salvadoran-identity@es-SV'})
 SET cr.display_name = 'Identidad Guanaca (Salvadoran Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'high',
     cr.expression = 'Strong national pride; "guanaco/a" term of pride; distinct from other Central Americans; resilience narrative; "El Pulgarcito de America" (smallest Central American country); pupusa as national symbol',
@@ -17681,6 +19787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-duro-hard-work@es-SV'})
 SET cr.display_name = 'Trabajo Duro (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'high',
     cr.expression = 'Work ethic highly valued; resilience amid challenges; "hecharle ganas" (giving your all); entrepreneurial spirit; self-improvement through effort; remittances represent sacrifice',
@@ -17697,6 +19805,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-SV'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'high',
     cr.expression = 'Respect for elders, authority, and hierarchy; proper treatment expected; "usted" conveys respect; titles matter; humility valued alongside achievement',
@@ -17713,6 +19823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-SV'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'medium',
     cr.expression = 'Warm welcome to guests; generosity despite limitations; food sharing as welcome; "mi casa es su casa" mentality; warmth in relationships',
@@ -17729,6 +19841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-SV'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'medium',
     cr.expression = 'Community support networks; neighbor helping neighbor; collective response to challenges; earthquake/disaster response traditions; "juntos salimos adelante"',
@@ -17745,6 +19859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:conexion-con-diaspora@es-SV'})
 SET cr.display_name = 'Conexion con Diaspora',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'medium',
     cr.expression = 'Strong ties to Salvadorans abroad (especially US); remittances crucial to economy; transnational families; dual cultural identity',
@@ -17761,6 +19877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pupusas-national-dish@es-SV'})
 SET cr.display_name = 'Pupusas (national dish)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'low',
     cr.expression = 'Ultimate cultural symbol; unifying food; National Pupusa Day celebrations; safe to reference positively always',
@@ -17777,6 +19895,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:coffee-quality@es-SV'})
 SET cr.display_name = 'Coffee quality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'low',
     cr.expression = 'Internationally recognized; artisan production; export pride; quality associations positive',
@@ -17793,6 +19913,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:joya-de-ceren-unesco@es-SV'})
 SET cr.display_name = 'Joya de Ceren (UNESCO)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'low',
     cr.expression = 'Archaeological site; "Pompeii of the Americas"; cultural heritage pride; educational value',
@@ -17809,6 +19931,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:el-salvador-del-mundo-patron@es-SV'})
 SET cr.display_name = 'El Salvador del Mundo (patron)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-SV',
     cr.importance = 'low',
     cr.expression = 'National patron; August 1-6 festival; cathedral icon; religious-cultural pride',
@@ -17833,6 +19957,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualidade-e-precisao-quality-and-precision@pt-CH'})
 SET cr.display_name = 'Qualidade e Precisao (Quality and Precision)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Swiss Made reputation adopted; attention to detail; craftsmanship valued; zero tolerance for mediocrity',
@@ -17849,6 +19975,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pontualidade-punctuality@pt-CH'})
 SET cr.display_name = 'Pontualidade (Punctuality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Swiss time standards adopted; trains run on time; delays are unacceptable; precision scheduling',
@@ -17865,6 +19993,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discricao-discretion@pt-CH'})
 SET cr.display_name = 'Discricao (Discretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Privacy highly valued; personal matters kept private; understatement preferred; Swiss banking culture influence',
@@ -17881,6 +20011,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fiabilidade-reliability@pt-CH'})
 SET cr.display_name = 'Fiabilidade (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; consistent quality; dependable service; trust through actions not words',
@@ -17897,6 +20029,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:consenso-consensus@pt-CH'})
 SET cr.display_name = 'Consenso (Consensus)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Swiss direct democracy influence; all voices heard; decisions through agreement; compromise valued',
@@ -17913,6 +20047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-e-comunidade-family-and-community@pt-CH'})
 SET cr.display_name = 'Familia e Comunidade (Family and Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Portuguese heritage of family bonds maintained; community ties within Portuguese-speaking diaspora',
@@ -17929,6 +20065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:integracao-e-respeito-integration-and-respect@pt-CH'})
 SET cr.display_name = 'Integracao e Respeito (Integration and Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'high',
     cr.expression = 'Successful integration into Swiss society while maintaining cultural identity; respect for host culture',
@@ -17945,6 +20083,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modestia-modesty@pt-CH'})
 SET cr.display_name = 'Modestia (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'medium',
     cr.expression = 'Swiss understatement adopted; success shown through quality not boasting; quiet confidence',
@@ -17961,6 +20101,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:portuguese-language-maintenance@pt-CH'})
 SET cr.display_name = 'Portuguese language maintenance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'low',
     cr.expression = 'Pride in maintaining language across generations; bilingualism valued; safe to celebrate',
@@ -17977,6 +20119,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:swiss-quality-and-precision@pt-CH'})
 SET cr.display_name = 'Swiss quality and precision',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'low',
     cr.expression = 'Adopted pride in Swiss Made reputation; watch industry, engineering; safe to reference',
@@ -17993,6 +20137,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:direct-democracy-participation@pt-CH'})
 SET cr.display_name = 'Direct democracy participation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-CH',
     cr.importance = 'medium',
     cr.expression = 'Naturalized citizens participate; complex path to citizenship; handle respectfully',
@@ -18017,6 +20163,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-boricua-puerto-rican-pride@es-PR'})
 SET cr.display_name = 'Orgullo Boricua (Puerto Rican Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'high',
     cr.expression = 'Fierce pride in Puerto Rican identity; "Yo soy boricua, pa\' que tu lo sepas"; distinct from other Latino cultures; pride in cultural contributions (music, sports, diaspora success)',
@@ -18033,6 +20181,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia@es-PR'})
 SET cr.display_name = 'Familia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'high',
     cr.expression = 'Extended family deeply involved; multi-generational support; diaspora maintains strong ties; family gatherings central to social life',
@@ -18049,6 +20199,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-warmth@es-PR'})
 SET cr.display_name = 'Calidez (Warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'high',
     cr.expression = 'Immediate warmth and friendliness; physical expressiveness; terms of endearment natural; warmth expected in all interactions',
@@ -18065,6 +20217,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencia@es-PR'})
 SET cr.display_name = 'Resiliencia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'high',
     cr.expression = 'Strength through adversity; post-Hurricane Maria recovery; "Pa\'lante" spirit; rebuilding with determination',
@@ -18081,6 +20235,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:12-positive-triggers-themes-that-resonate-positive@es-PR'})
 SET cr.display_name = '### 1.2 Positive Triggers  Themes that resonate positively:',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'theme',
     cr.expression = 'Why It Works',
@@ -18097,6 +20253,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:roberto-clemente@es-PR'})
 SET cr.display_name = 'Roberto Clemente',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'low',
     cr.expression = 'Universal hero; humanitarian legacy; safe to reference with respect; transcends sports',
@@ -18113,6 +20271,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:miss-universe-victories@es-PR'})
 SET cr.display_name = 'Miss Universe victories',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'low',
     cr.expression = 'Multiple wins; pageant culture strong; beauty and talent celebrated',
@@ -18129,6 +20289,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:el-yunque-rainforest@es-PR'})
 SET cr.display_name = 'El Yunque rainforest',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'low',
     cr.expression = 'Only tropical rainforest in US National Forest system; natural heritage',
@@ -18145,6 +20307,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hurricane-maria-recovery@es-PR'})
 SET cr.display_name = 'Hurricane Maria recovery',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PR',
     cr.importance = 'medium',
     cr.expression = 'Pride in resilience but trauma still present; acknowledge strength without trivializing loss',
@@ -18169,6 +20333,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:islam@ur-PK'})
 SET cr.display_name = 'اسلام (Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'highest',
     cr.expression = 'Shapes law, daily life, social norms, business ethics, family structure; five daily prayers, Ramadan fasting, halal requirements',
@@ -18185,6 +20351,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorrespect@ur-PK'})
 SET cr.display_name = 'عزت (Honor/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'high',
     cr.expression = 'Family honor paramount; reputation protection; respectful conduct; avoiding بے عزتی (dishonor); hierarchical deference',
@@ -18201,6 +20369,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ur-PK'})
 SET cr.display_name = 'مہمان نوازی (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'high',
     cr.expression = 'Guest treated with highest regard; generous hosting duty; warmth expected; "مہمان خدا کا بندہ ہے" (guest is God\'s servant)',
@@ -18217,6 +20387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ur-PK'})
 SET cr.display_name = 'خاندان (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; collective decisions; elder authority; joint family systems; family reputation shared',
@@ -18233,6 +20405,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:etiquetterefinement@ur-PK'})
 SET cr.display_name = 'تہذیب (Etiquette/Refinement)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'high',
     cr.expression = 'Polished manners; eloquent speech; proper conduct in social settings; adab (respect protocols)',
@@ -18249,6 +20423,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honestytrust@ur-PK'})
 SET cr.display_name = 'ایمانداری (Honesty/Trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Keeping one\'s word; truthfulness valued; امانت (trustworthiness) in dealings; reliable relationships',
@@ -18265,6 +20441,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patience@ur-PK'})
 SET cr.display_name = 'صبر (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Endurance valued; trusting divine timing; not rushing important matters; resilience in hardship',
@@ -18281,6 +20459,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-unity@ur-PK'})
 SET cr.display_name = 'قومی یکجہتی (National Unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Pakistani identity; independence pride; military respect; Kashmir solidarity',
@@ -18297,6 +20477,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quaid-e-azam-iqbal@ur-PK'})
 SET cr.display_name = 'قائداعظم اور علامہ اقبال (Quaid-e-Azam & Iqbal)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Founding fathers; deeply revered; use respectfully; never commercialize disrespectfully',
@@ -18313,6 +20495,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:armed-forces@ur-PK'})
 SET cr.display_name = 'Armed Forces',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Deep respect; never criticize or satirize; positive references acceptable; martyrs honored',
@@ -18329,6 +20513,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nuclear-capability@ur-PK'})
 SET cr.display_name = 'Nuclear capability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ur-PK',
     cr.importance = 'medium',
     cr.expression = 'Source of pride; sovereignty symbol; generally positive reference but avoid military context',
@@ -18353,6 +20539,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntuumunthu@en-ZM'})
 SET cr.display_name = 'Ubuntu/Umunthu',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'high',
     cr.expression = '"Umuntu ngumuntu ngabantu" (A person is a person through others); communal solidarity; mutual support; shared responsibility',
@@ -18369,6 +20557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders-ulemu@en-ZM'})
 SET cr.display_name = 'Respect for Elders (Ulemu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'high',
     cr.expression = 'Deference to elders and chiefs; use of respectful titles (Ba Mayo, Ba Tata); seeking elder counsel for major decisions',
@@ -18385,6 +20575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:christian-faith@en-ZM'})
 SET cr.display_name = 'Christian Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'high',
     cr.expression = 'Zambia is constitutionally a Christian nation; deep faith expressed openly; blessings and prayer common in daily life',
@@ -18401,6 +20593,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:one-zambia-one-nation-unity@en-ZM'})
 SET cr.display_name = '"One Zambia, One Nation" Unity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'high',
     cr.expression = 'National motto emphasizing unity across 73 ethnic groups; tribal harmony valued; inclusive national identity',
@@ -18417,6 +20611,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-mwaiseni-spirit@en-ZM'})
 SET cr.display_name = 'Hospitality (Mwaiseni Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'high',
     cr.expression = 'Welcoming strangers; generosity to visitors; sharing food and resources; warmth as core cultural trait',
@@ -18433,6 +20629,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-kufwaya-mulimo@en-ZM'})
 SET cr.display_name = 'Hard Work (Kufwaya Mulimo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'medium',
     cr.expression = 'Self-reliance; working to provide for family; dignity in labor; agricultural heritage',
@@ -18449,6 +20647,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-loyalty-ulupwa@en-ZM'})
 SET cr.display_name = 'Family Loyalty (Ulupwa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'medium',
     cr.expression = 'Extended family bonds; obligations to relatives; clan networks; collective child-rearing',
@@ -18465,6 +20665,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humility-ukuicefya@en-ZM'})
 SET cr.display_name = 'Humility (Ukuicefya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'medium',
     cr.expression = 'Modest self-presentation; avoiding boastfulness; sharing credit; not showing off wealth',
@@ -18481,6 +20683,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:victoria-falls-mosi-oa-tunya@en-ZM'})
 SET cr.display_name = 'Victoria Falls (Mosi-oa-Tunya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'low',
     cr.expression = 'UNESCO site shared with Zimbabwe; "Smoke that Thunders"; universally celebrated; safe for tourism and nature themes',
@@ -18497,6 +20701,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wildlife-and-national-parks@en-ZM'})
 SET cr.display_name = 'Wildlife and National Parks',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-ZM',
     cr.importance = 'low',
     cr.expression = 'South Luangwa, Lower Zambezi, Kafue; conservation pride; walking safari invention; safe nature themes',
@@ -18521,6 +20727,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance@ar-OM'})
 SET cr.display_name = 'التسامح (Tolerance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Omani tradition of religious tolerance (Ibadi Islam); peaceful coexistence; welcoming of diverse communities; Sultan Qaboos\'s legacy of interfaith dialogue',
@@ -18537,6 +20745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignitydecorum@ar-OM'})
 SET cr.display_name = 'الوقار (Dignity/Decorum)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Measured, restrained behavior valued; avoiding ostentation; quiet confidence; understated elegance over flashy displays',
@@ -18553,6 +20763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omani-hospitality@ar-OM'})
 SET cr.display_name = 'الكرم العماني (Omani Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Traditional Arabian hospitality with Omani restraint; coffee and dates rituals (قهوة عمانية); gracious hosting without excess',
@@ -18569,6 +20781,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-loyalty@ar-OM'})
 SET cr.display_name = 'الولاء للوطن (National Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Deep devotion to Oman and Sultan; patriotism expressed through service and respect; celebration of National Day (November 18)',
@@ -18585,6 +20799,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heritage-respect@ar-OM'})
 SET cr.display_name = 'احترام التراث (Heritage Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Preservation of traditional culture; frankincense heritage; maritime history; forts and ancient sites; traditional crafts',
@@ -18601,6 +20817,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patiencedeliberation@ar-OM'})
 SET cr.display_name = 'الصبر والتأني (Patience/Deliberation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'medium',
     cr.expression = 'Thoughtful decision-making; avoiding haste; long-term thinking; measured progress valued over rapid change',
@@ -18617,6 +20835,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trustworthiness@ar-OM'})
 SET cr.display_name = 'الأمانة (Trustworthiness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; reliability in business; maintaining reputation; honoring commitments',
@@ -18633,6 +20853,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modestyhumility@ar-OM'})
 SET cr.display_name = 'التواضع (Modesty/Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'medium',
     cr.expression = 'Avoiding boastfulness; quiet achievement; modesty in dress and behavior; success celebrated without arrogance',
@@ -18649,6 +20871,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sultan-qaboos-bin-said@ar-OM'})
 SET cr.display_name = 'Sultan Qaboos bin Said',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'medium',
     cr.expression = 'Deeply beloved; "Father of Modern Oman"; can reference legacy and values respectfully; never commercial use of image; mourning period was significant (2020)',
@@ -18665,6 +20889,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omani-national-day-november-18@ar-OM'})
 SET cr.display_name = 'Omani National Day (November 18)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'low',
     cr.expression = 'Major celebration; patriotic themes welcome; excellent campaign timing; "يوم النهضة المباركة" (Blessed Renaissance Day)',
@@ -18681,6 +20907,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omani-renaissance-achievements@ar-OM'})
 SET cr.display_name = 'Omani Renaissance achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-OM',
     cr.importance = 'low',
     cr.expression = 'Modern infrastructure, education, healthcare transformation; can reference freely and positively',
@@ -18705,6 +20933,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-MD'})
 SET cr.display_name = 'Гостеприимство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, offering food/drink to all guests, warm welcome',
@@ -18721,6 +20951,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ru-MD'})
 SET cr.display_name = 'Семья (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds, family decisions, support networks',
@@ -18737,6 +20969,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditions@ru-MD'})
 SET cr.display_name = 'Традиции (Traditions)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'high',
     cr.expression = 'Preserving customs, celebrating holidays, respect for heritage',
@@ -18753,6 +20987,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@ru-MD'})
 SET cr.display_name = 'Трудолюбие (Hard work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'medium',
     cr.expression = 'Agricultural roots, self-reliance, practical skills',
@@ -18769,6 +21005,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:friendship@ru-MD'})
 SET cr.display_name = 'Дружба (Friendship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'medium',
     cr.expression = 'Loyal relationships, trust circles, mutual support',
@@ -18785,6 +21023,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty@ru-MD'})
 SET cr.display_name = 'Скромность (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'medium',
     cr.expression = 'Avoid boasting, understated success, humility',
@@ -18801,6 +21041,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:moldovan-wine@ru-MD'})
 SET cr.display_name = 'Молдавское вино (Moldovan wine)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'low',
     cr.expression = 'Extremely positive; world-class wines, ancient tradition; safe to celebrate extensively',
@@ -18817,6 +21059,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-MD'})
 SET cr.display_name = 'Гостеприимство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-MD',
     cr.importance = 'low',
     cr.expression = 'National trait; Moldovans proud of welcoming nature',
@@ -18841,6 +21085,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familja-family@mt-MT'})
 SET cr.display_name = 'Familja (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households common; family decisions made collectively; Sunday lunch is sacred',
@@ -18857,6 +21103,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fidi-faithreligion@mt-MT'})
 SET cr.display_name = 'Fidi (Faith/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'high',
     cr.expression = 'Catholic identity deeply embedded; festa celebrations, religious holidays, church attendance',
@@ -18873,6 +21121,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:komunita-community@mt-MT'})
 SET cr.display_name = 'Komunita (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'high',
     cr.expression = 'Tight-knit society; everyone knows everyone; reputation matters; word-of-mouth dominant',
@@ -18889,6 +21139,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ospitalita-hospitality@mt-MT'})
 SET cr.display_name = 'Ospitalita (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'high',
     cr.expression = 'Genuine warmth to visitors and customers; generosity expected; treating guests well reflects honor',
@@ -18905,6 +21157,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lealta-loyalty@mt-MT'})
 SET cr.display_name = 'Lealta (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'medium',
     cr.expression = 'Strong loyalty to village, band club, political party, brands once trust established',
@@ -18921,6 +21175,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dinjita-dignity@mt-MT'})
 SET cr.display_name = 'Dinjita (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'medium',
     cr.expression = 'Maintaining face important; public embarrassment deeply offensive; respect essential',
@@ -18937,6 +21193,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatizmu-pragmatism@mt-MT'})
 SET cr.display_name = 'Pragmatizmu (Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'medium',
     cr.expression = 'Mediterranean practicality; focus on what works; flexibility valued over rigid rules',
@@ -18953,6 +21211,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:genijalita-ingenuity@mt-MT'})
 SET cr.display_name = 'Genijalita (Ingenuity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'medium',
     cr.expression = 'Making the most with limited resources; creative problem-solving on small island',
@@ -18969,6 +21229,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maltese-language-survival@mt-MT'})
 SET cr.display_name = 'Maltese language survival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'low',
     cr.expression = 'Unique Semitic language written in Latin script - genuine source of pride; safe to celebrate',
@@ -18985,6 +21247,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:knights-of-malta-history@mt-MT'})
 SET cr.display_name = 'Knights of Malta history',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mt-MT',
     cr.importance = 'low',
     cr.expression = 'Hospitaller heritage (1530-1798) widely celebrated; Valletta as legacy; safe territory',
@@ -19009,6 +21273,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:euskara-language@eu-ES'})
 SET cr.display_name = 'Euskara (Language)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'high',
     cr.expression = 'Basque language as the cornerstone of identity; speaking Euskara is an act of cultural affirmation',
@@ -19025,6 +21291,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:herria-communitypeople@eu-ES'})
 SET cr.display_name = 'Herria (Community/People)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'high',
     cr.expression = 'Deep collective identity; "herri" means both village and people; community bonds transcend individualism',
@@ -19041,6 +21309,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:auzolana-communal-work@eu-ES'})
 SET cr.display_name = 'Auzolana (Communal work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'high',
     cr.expression = 'Tradition of neighbors helping neighbors; collective labor for community projects',
@@ -19057,6 +21327,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lana-work@eu-ES'})
 SET cr.display_name = 'Lana (Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'high',
     cr.expression = 'Strong work ethic; industriousness valued; Basque cooperatives (Mondragon) exemplify this',
@@ -19073,6 +21345,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:leialtasuna-loyalty@eu-ES'})
 SET cr.display_name = 'Leialtasuna (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'medium',
     cr.expression = 'Deep loyalty to family, community, language, and trusted institutions',
@@ -19089,6 +21363,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:euskal-nortasuna-basque-identity@eu-ES'})
 SET cr.display_name = 'Euskal nortasuna (Basque identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'medium',
     cr.expression = 'Pride in distinct identity, history, and cultural uniqueness within Iberian context',
@@ -19105,6 +21381,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:zintzotasuna-honesty@eu-ES'})
 SET cr.display_name = 'Zintzotasuna (Honesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'medium',
     cr.expression = 'Straight-dealing valued; "hitz bat, hitz" (one\'s word is one\'s bond)',
@@ -19121,6 +21399,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradizio-berria-renewed-tradition@eu-ES'})
 SET cr.display_name = 'Tradizio berria (Renewed tradition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'medium',
     cr.expression = 'Respect for tradition alongside innovation; modern Basque culture is dynamic, not museum-piece',
@@ -19137,6 +21417,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:basque-language-survival@eu-ES'})
 SET cr.display_name = 'Basque language survival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'medium',
     cr.expression = 'Remarkable achievement against historical odds; celebrate respectfully without over-claiming; acknowledge ongoing revitalization efforts',
@@ -19153,6 +21435,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cooperative-movement@eu-ES'})
 SET cr.display_name = 'Cooperative movement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'low',
     cr.expression = 'Mondragon as model of economic democracy; widely celebrated pride point',
@@ -19169,6 +21453,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pre-roman-heritage@eu-ES'})
 SET cr.display_name = 'Pre-Roman heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'eu-ES',
     cr.importance = 'low',
     cr.expression = 'Unique ancient origins; archaeological sites (Santimamiñe) are safe references',
@@ -19193,6 +21479,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:harmony-wa@ja-JP'})
 SET cr.display_name = 'Harmony (Wa / 和)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'high',
     cr.expression = 'Avoiding conflict; group consensus; smooth social interactions; reading the atmosphere (kuuki wo yomu)',
@@ -19209,6 +21497,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-sonkei@ja-JP'})
 SET cr.display_name = 'Respect (Sonkei / 尊敬)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'high',
     cr.expression = 'Deference to seniority, expertise, and social position; elaborate honorific language (keigo); bowing culture',
@@ -19225,6 +21515,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-hinshitsu@ja-JP'})
 SET cr.display_name = 'Quality (Hinshitsu / 品質)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'high',
     cr.expression = 'Obsessive attention to detail; zero-defect mentality; craftsmanship (monozukuri); continuous improvement (kaizen)',
@@ -19241,6 +21533,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability-shinrai@ja-JP'})
 SET cr.display_name = 'Reliability (Shinrai / 信頼)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; punctuality; consistency; trust built over long relationships',
@@ -19257,6 +21551,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:consideration-omoiyari@ja-JP'})
 SET cr.display_name = 'Consideration (Omoiyari / 思いやり)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'high',
     cr.expression = 'Anticipating others\' needs; thoughtful gestures; going beyond expectations',
@@ -19273,6 +21569,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diligence-kinben@ja-JP'})
 SET cr.display_name = 'Diligence (Kinben / 勤勉)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued; perseverance; dedication to craft; continuous learning',
@@ -19289,6 +21587,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty-kenkyo@ja-JP'})
 SET cr.display_name = 'Modesty (Kenkyo / 謙虚)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'medium',
     cr.expression = 'Understatement; deflecting praise; not standing out excessively (deru kugi wa utareru - the nail that sticks out gets hammered)',
@@ -19305,6 +21605,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cleanliness-seiketsu@ja-JP'})
 SET cr.display_name = 'Cleanliness (Seiketsu / 清潔)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'medium',
     cr.expression = 'Physical and spiritual purity; hygiene obsession; organization; decluttering (Marie Kondo influence)',
@@ -19321,6 +21623,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:technology-and-innovation@ja-JP'})
 SET cr.display_name = 'Technology and innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'low',
     cr.expression = 'Sony, Toyota, Nintendo heritage; bullet train (shinkansen); robotics leadership; safe reference',
@@ -19337,6 +21641,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:food-culture-washoku@ja-JP'})
 SET cr.display_name = 'Food culture (Washoku)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'low',
     cr.expression = 'UNESCO intangible heritage; ramen, sushi, kaiseki; strong national pride; authentic representation important',
@@ -19353,6 +21659,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty@ja-JP'})
 SET cr.display_name = 'Natural beauty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ja-JP',
     cr.importance = 'low',
     cr.expression = 'Mount Fuji; cherry blossoms; four seasons; iconic imagery acceptable',
@@ -19377,6 +21685,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@bn-IN'})
 SET cr.display_name = 'পরিবার (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family structures still valued; multi-generational living; collective decision-making; respect for elders (প্রণাম tradition); family honor important',
@@ -19393,6 +21703,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationlearning@bn-IN'})
 SET cr.display_name = 'শিক্ষা/বিদ্যা (Education/Learning)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'high',
     cr.expression = 'Education revered; academic achievement highest aspiration; "বিদ্যাই ধন" philosophy; intellectual pursuits valued; professional degrees prestigious',
@@ -19409,6 +21721,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:culturearts@bn-IN'})
 SET cr.display_name = 'সংস্কৃতি (Culture/Arts)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'high',
     cr.expression = 'Bengali Renaissance pride; literature, music, cinema, art deeply valued; "বাঙালি কবিতার জাত" self-identity; cultural sophistication expected',
@@ -19425,6 +21739,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@bn-IN'})
 SET cr.display_name = 'আতিথেয়তা (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'high',
     cr.expression = 'Guests treated as divine (অতিথি নারায়ণ); tea and mishti offering mandatory; warm welcome essential; generous hosting expected',
@@ -19441,6 +21757,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityrespect@bn-IN'})
 SET cr.display_name = 'মর্যাদা (Dignity/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'medium',
     cr.expression = 'Personal dignity valued; শিষ্টাচার (etiquette) important; proper conduct expected; avoiding অপমান (insult) crucial',
@@ -19457,6 +21775,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:simplicity@bn-IN'})
 SET cr.display_name = 'সাদাসিধে/সরলতা (Simplicity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'medium',
     cr.expression = 'Authentic over pretentious; distrust of excessive flash; substance over style; "খাঁটি" authenticity valued',
@@ -19473,6 +21793,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:intellectmerit@bn-IN'})
 SET cr.display_name = 'মেধা (Intellect/Merit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'medium',
     cr.expression = 'Merit respected; intellectual achievement celebrated; critical thinking valued; "মেধার কদর" culture',
@@ -19489,6 +21811,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotismregional-pride@bn-IN'})
 SET cr.display_name = 'দেশপ্রেম (Patriotism/Regional Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'medium',
     cr.expression = 'Bengal pride; cultural distinctiveness celebrated; literary and artistic heritage pride; "আমার সোনার বাংলা" emotional connection',
@@ -19505,6 +21829,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bengali-renaissance@bn-IN'})
 SET cr.display_name = 'Bengali Renaissance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'low',
     cr.expression = 'Safe; Raja Rammohan Roy, Vidyasagar, Bankim Chandra; intellectual reformation pride',
@@ -19521,6 +21847,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:filmartistic-heritage@bn-IN'})
 SET cr.display_name = 'Film/artistic heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'low',
     cr.expression = 'Satyajit Ray international recognition; কলকাতার আর্ট সিনেমা legacy; safe cultural reference',
@@ -19537,6 +21865,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:durga-puja-unesco-heritage@bn-IN'})
 SET cr.display_name = 'Durga Puja UNESCO heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'bn-IN',
     cr.importance = 'low',
     cr.expression = 'UNESCO Intangible Cultural Heritage recognition (2021); safe celebration',
@@ -19561,6 +21891,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:dugri-directness@he-IL'})
 SET cr.display_name = 'Dugri (Directness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'high',
     cr.expression = 'Straightforward, honest communication; avoiding euphemisms and excessive politeness',
@@ -19577,6 +21909,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:innovationchutzpah@he-IL'})
 SET cr.display_name = 'Innovation/Chutzpah',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'high',
     cr.expression = 'Entrepreneurial spirit; challenging conventions; "startup nation" mentality',
@@ -19593,6 +21927,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familycommunity@he-IL'})
 SET cr.display_name = 'Family/Community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; multigenerational gatherings; collective responsibility',
@@ -19609,6 +21945,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:informal-egalitarianism@he-IL'})
 SET cr.display_name = 'Informal Egalitarianism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'high',
     cr.expression = 'Flat hierarchies; first-name basis even with authorities; resistance to formality',
@@ -19625,6 +21963,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:securityresilience@he-IL'})
 SET cr.display_name = 'Security/Resilience',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'high',
     cr.expression = 'Living with uncertainty; practical preparedness; collective resilience',
@@ -19641,6 +21981,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationknowledge@he-IL'})
 SET cr.display_name = 'Education/Knowledge',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'medium',
     cr.expression = 'High value on learning; respect for expertise and credentials',
@@ -19657,6 +21999,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:improvisation-shtick@he-IL'})
 SET cr.display_name = 'Improvisation (Shtick)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'medium',
     cr.expression = 'Creative problem-solving; adaptability; making things work',
@@ -19673,6 +22017,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loyalty@he-IL'})
 SET cr.display_name = 'Loyalty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'medium',
     cr.expression = 'Strong brand loyalty once trust established; word-of-mouth driven',
@@ -19689,6 +22035,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:technologystartup-ecosystem@he-IL'})
 SET cr.display_name = 'Technology/Startup Ecosystem',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'low',
     cr.expression = 'Safe and celebrated; "Startup Nation" is embraced; reference Israeli innovations freely',
@@ -19705,6 +22053,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agricultural-innovation@he-IL'})
 SET cr.display_name = 'Agricultural Innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'low',
     cr.expression = 'Desert bloom narrative; drip irrigation, agritech; safe source of pride',
@@ -19721,6 +22071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nobel-prize-winners@he-IL'})
 SET cr.display_name = 'Nobel Prize Winners',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'he-IL',
     cr.importance = 'low',
     cr.expression = 'Per capita leadership celebrated; reference in educational/tech contexts',
@@ -19745,6 +22097,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:efficiency@zh-HK'})
 SET cr.display_name = 'Efficiency (效率)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'high',
     cr.expression = 'Fast-paced lifestyle; time is money; dislike of bureaucracy and delays; MTR precision; convenience culture',
@@ -19761,6 +22115,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism@zh-HK'})
 SET cr.display_name = 'Pragmatism (務實)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'high',
     cr.expression = 'Practical decision-making; results over ideology; focus on tangible benefits; substance over sentiment',
@@ -19777,6 +22133,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:professionalism@zh-HK'})
 SET cr.display_name = 'Professionalism (專業)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'high',
     cr.expression = 'Expertise valued; competence expected; credentials matter; quality service baseline',
@@ -19793,6 +22151,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:financial-acumen@zh-HK'})
 SET cr.display_name = 'Financial acumen (精明)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'high',
     cr.expression = 'Smart money management; value consciousness; investment savvy; deal-seeking behaviour',
@@ -19809,6 +22169,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:adaptability@zh-HK'})
 SET cr.display_name = 'Adaptability (靈活變通)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'high',
     cr.expression = 'Flexibility prized; quick pivots; creative problem-solving; survival instinct from rapid changes',
@@ -19825,6 +22187,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-responsibility@zh-HK'})
 SET cr.display_name = 'Family responsibility (家庭責任)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'medium',
     cr.expression = 'Multigenerational support; filial piety adapted to modern context; housing as family goal',
@@ -19841,6 +22205,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@zh-HK'})
 SET cr.display_name = 'Hard work (勤奮)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'medium',
     cr.expression = 'Work ethic valued; self-made success stories resonate; entrepreneurial spirit',
@@ -19857,6 +22223,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face@zh-HK'})
 SET cr.display_name = 'Face (面子)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'medium',
     cr.expression = 'Reputation important; status symbols valued; public image matters; avoiding embarrassment',
@@ -19873,6 +22241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hong-kong-as-international-hub@zh-HK'})
 SET cr.display_name = 'Hong Kong as international hub',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'low',
     cr.expression = 'Financial centre; logistics hub; gateway to China; professional services excellence',
@@ -19889,6 +22259,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:infrastructure-efficiency@zh-HK'})
 SET cr.display_name = 'Infrastructure efficiency',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'low',
     cr.expression = 'MTR punctuality; airport rankings; urban planning; can reference positively',
@@ -19905,6 +22277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:professional-services-excellence@zh-HK'})
 SET cr.display_name = 'Professional services excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-HK',
     cr.importance = 'low',
     cr.expression = 'Legal, financial, medical expertise; international standards; bilingual professionals',
@@ -19929,6 +22303,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-humana-warmth@es-CO'})
 SET cr.display_name = 'Calidez humana (warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'high',
     cr.expression = 'Warm greetings; personal connection before business; genuine interest in others\' wellbeing',
@@ -19945,6 +22321,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto@es-CO'})
 SET cr.display_name = 'Respeto',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, titles, positions; politeness in all interactions; "quedar bien" (maintain good standing)',
@@ -19961,6 +22339,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:regionalismo@es-CO'})
 SET cr.display_name = 'Regionalismo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'high',
     cr.expression = 'Strong regional identities (paisa, costeno, rolo, valluno, santandereano); pride in local customs',
@@ -19977,6 +22357,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:emprendimiento-entrepreneurship@es-CO'})
 SET cr.display_name = 'Emprendimiento (entrepreneurship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'medium',
     cr.expression = 'Growing startup ecosystem; resilience; "echarle ganas"; self-made success admired',
@@ -19993,6 +22375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alegriaoptimismo@es-CO'})
 SET cr.display_name = 'Alegria/Optimismo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'medium',
     cr.expression = 'Positivity despite challenges; humor and music; celebration of life; "no dar papaya" pragmatic optimism',
@@ -20009,6 +22393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad@es-CO'})
 SET cr.display_name = 'Hospitalidad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'medium',
     cr.expression = 'Guests treated with generosity; sharing food and home; welcoming strangers',
@@ -20025,6 +22411,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:colombian-coffee-cafe-de-colombia@es-CO'})
 SET cr.display_name = 'Colombian coffee (Cafe de Colombia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'low',
     cr.expression = 'Safe universal pride point; Juan Valdez iconic; quality coffee identity',
@@ -20041,6 +22429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:music-cumbia-vallenato-salsa-reggaeton@es-CO'})
 SET cr.display_name = 'Music (cumbia, vallenato, salsa, reggaeton)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'low',
     cr.expression = 'Cultural export; Shakira, J Balvin, Carlos Vives internationally recognized',
@@ -20057,6 +22447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencetransformation@es-CO'})
 SET cr.display_name = 'Resilience/transformation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CO',
     cr.importance = 'medium',
     cr.expression = 'Pride in overcoming difficult past; must be respectful not exploitative',
@@ -20081,6 +22473,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:multilingualism-mehrsprachigkeit@de-LU'})
 SET cr.display_name = 'Multilingualism (Mehrsprachigkeit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Three official languages; everyday code-switching; linguistic flexibility as identity marker',
@@ -20097,6 +22491,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:european-identity-europaeische-identitaet@de-LU'})
 SET cr.display_name = 'European Identity (Europaeische Identitaet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Founding EU member; EU institutions headquartered here; deep integration pride',
@@ -20113,6 +22509,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretion-diskretion@de-LU'})
 SET cr.display_name = 'Discretion (Diskretion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Financial center privacy culture; personal matters kept private; understated success',
@@ -20129,6 +22527,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-of-life-lebensqualitaet@de-LU'})
 SET cr.display_name = 'Quality of Life (Lebensqualitaet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Work-life balance valued; high living standards; quality over quantity',
@@ -20145,6 +22545,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:stability-and-security-stabilitaet-und-sicherheit@de-LU'})
 SET cr.display_name = 'Stability and Security (Stabilitaet und Sicherheit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Political stability; AAA-rated economy; safe haven mentality',
@@ -20161,6 +22563,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cosmopolitanism-weltoffenheit@de-LU'})
 SET cr.display_name = 'Cosmopolitanism (Weltoffenheit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'high',
     cr.expression = 'Nearly 50% foreign residents; international workforce; cultural diversity as norm',
@@ -20177,6 +22581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism-pragmatismus@de-LU'})
 SET cr.display_name = 'Pragmatism (Pragmatismus)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'medium',
     cr.expression = 'Practical solutions preferred; efficiency valued; results over ideology',
@@ -20193,6 +22599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-motto-mir-welle-bleiwe-wat-mir-sinn@de-LU'})
 SET cr.display_name = 'National motto "Mir welle bleiwe wat mir sinn"',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'low',
     cr.expression = '"We want to remain what we are" - Luxembourgish identity; can reference respectfully; shows cultural knowledge',
@@ -20209,6 +22617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eu-founding-member@de-LU'})
 SET cr.display_name = 'EU founding member',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'low',
     cr.expression = 'Source of deep pride; Luxembourg one of original six; European identity core',
@@ -20225,6 +22635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:multilingual-society@de-LU'})
 SET cr.display_name = 'Multilingual society',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-LU',
     cr.importance = 'low',
     cr.expression = 'Unique linguistic achievement; three official languages plus English widely used; safe to celebrate',
@@ -20249,6 +22661,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-BO'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, authority, and social hierarchy; professional titles essential; courtesy in all interactions; patience over efficiency',
@@ -20265,6 +22679,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-BO'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'high',
     cr.expression = 'Extended family networks central; multi-generational households common; collective decision-making; family obligations prioritized',
@@ -20281,6 +22697,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:comunidad-community@es-BO'})
 SET cr.display_name = 'Comunidad (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'high',
     cr.expression = 'Strong community ties rooted in ayllu traditions; collective identity; neighborhood solidarity; mutual assistance expected',
@@ -20297,6 +22715,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pachamama-mother-earth@es-BO'})
 SET cr.display_name = 'Pachamama (Mother Earth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'high',
     cr.expression = 'Indigenous reverence for earth deeply integrated; environmental consciousness; harmony with nature valued; offerings and rituals respected',
@@ -20313,6 +22733,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradicion-tradition@es-BO'})
 SET cr.display_name = 'Tradicion (Tradition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'medium',
     cr.expression = 'Blend of Hispanic and indigenous heritage; festivals and customs maintained; oral traditions valued; ancestral practices respected',
@@ -20329,6 +22751,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-BO'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'medium',
     cr.expression = 'Warmth to visitors; sharing food and drink; generosity valued; "Mi casa es tu casa" ethos; visitors honored',
@@ -20345,6 +22769,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-honesto-honest-work@es-BO'})
 SET cr.display_name = 'Trabajo honesto (Honest work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'medium',
     cr.expression = 'Dignified labor valued; industriousness respected; artisanal craftsmanship prized; agricultural work honored',
@@ -20361,6 +22787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humildad-humility@es-BO'})
 SET cr.display_name = 'Humildad (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'medium',
     cr.expression = 'Modesty valued over boasting; understated success preferred; excessive displays of wealth frowned upon; quiet dignity',
@@ -20377,6 +22805,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:salar-de-uyuni@es-BO'})
 SET cr.display_name = 'Salar de Uyuni',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'low',
     cr.expression = 'World\'s largest salt flat; iconic landscape; tourism pride; safe to reference; stunning imagery welcomed',
@@ -20393,6 +22823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:carnaval-de-oruro@es-BO'})
 SET cr.display_name = 'Carnaval de Oruro',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; national celebration; morenada and diablada; safe cultural reference',
@@ -20409,6 +22841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sea-access-history@es-BO'})
 SET cr.display_name = 'Sea access history',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-BO',
     cr.importance = 'high',
     cr.expression = 'Deeply sensitive; lost to Chile in 1879; active national grievance; never joke about; solidarity expected',
@@ -20433,6 +22867,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:kreng-jai-considerationreluctance-to-impose@th-TH'})
 SET cr.display_name = 'Kreng Jai (consideration/reluctance to impose)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Reluctance to burden others, avoiding direct requests, deferring to avoid discomfort',
@@ -20449,6 +22885,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bunkhun-gratitudereciprocal-obligation@th-TH'})
 SET cr.display_name = 'Bunkhun (gratitude/reciprocal obligation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Remembering favors, loyalty to those who helped, lifelong gratitude expected',
@@ -20465,6 +22903,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kwam-sanuk-funenjoyment@th-TH'})
 SET cr.display_name = 'Kwam Sanuk (fun/enjoyment)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Life should be enjoyable; injecting humor into work; playful interactions',
@@ -20481,6 +22921,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face-naa@th-TH'})
 SET cr.display_name = 'Face (Naa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity; avoiding public embarrassment; maintaining reputation',
@@ -20497,6 +22939,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hierarchy-and-respect-phuu-yaiphuu-noi@th-TH'})
 SET cr.display_name = 'Hierarchy and respect (Phuu Yai/Phuu Noi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Respect for elders, superiors, social status; knowing one\'s place',
@@ -20513,6 +22957,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:buddhism-and-merit-making@th-TH'})
 SET cr.display_name = 'Buddhism and merit-making',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'high',
     cr.expression = 'Dana (giving), karma, accumulating merit, detachment from materialism',
@@ -20529,6 +22975,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jai-yen-cool-heart@th-TH'})
 SET cr.display_name = 'Jai Yen (cool heart)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'medium',
     cr.expression = 'Emotional restraint; staying calm; avoiding anger or confrontation',
@@ -20545,6 +22993,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-devotion@th-TH'})
 SET cr.display_name = 'Family devotion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'medium',
     cr.expression = 'Strong filial piety; caring for parents; multi-generational responsibility',
@@ -20561,6 +23011,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thai-monarchy@th-TH'})
 SET cr.display_name = 'Thai monarchy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'critical',
     cr.expression = 'Do not use commercially; extreme sensitivity; lese-majeste laws; show utmost respect if referenced',
@@ -20577,6 +23029,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:muay-thai-thai-boxing@th-TH'})
 SET cr.display_name = 'Muay Thai (Thai boxing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'low',
     cr.expression = 'National sport; cultural pride; good for fitness, strength messaging',
@@ -20593,6 +23047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:land-of-smiles-hospitality@th-TH'})
 SET cr.display_name = '"Land of Smiles" hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'th-TH',
     cr.importance = 'low',
     cr.expression = 'Positive self-image; tourism pride; warmth and service excellence themes',
@@ -20617,6 +23073,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@kk-KZ'})
 SET cr.display_name = 'Қонақжайлылық (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, offering food and shelter, dastarkhan traditions',
@@ -20633,6 +23091,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@kk-KZ'})
 SET cr.display_name = 'Құрмет (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for elders (ақсақал), teachers, authority figures; formal address',
@@ -20649,6 +23109,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@kk-KZ'})
 SET cr.display_name = 'Отбасы (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, clan (ру) identity, collective decision-making',
@@ -20665,6 +23127,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotism@kk-KZ'})
 SET cr.display_name = 'Ұлтжандылық (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'high',
     cr.expression = 'Strong national pride, Kazakh identity, steppe heritage, independence celebration',
@@ -20681,6 +23145,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unity@kk-KZ'})
 SET cr.display_name = 'Бірлік (Unity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'medium',
     cr.expression = 'Ethnic harmony ("Мәңгілік Ел"), inter-ethnic peace, social cohesion',
@@ -20697,6 +23163,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honestyintegrity@kk-KZ'})
 SET cr.display_name = 'Адалдық (Honesty/Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'medium',
     cr.expression = 'Keeping word, reliability, moral uprightness, business ethics',
@@ -20713,6 +23181,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:industriousness@kk-KZ'})
 SET cr.display_name = 'Еңбекқорлық (Industriousness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued, self-improvement, national development ethos',
@@ -20729,6 +23199,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1991-and-first-president@kk-KZ'})
 SET cr.display_name = 'Independence (1991) and First President',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'medium',
     cr.expression = 'Independence celebrated; references to founding era generally positive; avoid political commentary',
@@ -20745,6 +23217,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:space-program-baikonur@kk-KZ'})
 SET cr.display_name = 'Space program (Baikonur)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'low',
     cr.expression = 'Scientific achievement; Gagarin launch site pride; technology and progress symbolism',
@@ -20761,6 +23235,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditional-arts-dombra-ornaments-felt-crafts@kk-KZ'})
 SET cr.display_name = 'Traditional arts (dombra, ornaments, felt crafts)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'kk-KZ',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage elements; safe cultural references; authentic Kazakh identity markers',
@@ -20785,6 +23261,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:honesty-rehellisyys@fi-FI'})
 SET cr.display_name = 'Honesty (Rehellisyys)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'high',
     cr.expression = 'Extreme truthfulness; keeping promises; no exaggeration; trust-based society',
@@ -20801,6 +23279,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:equality-tasa-arvo@fi-FI'})
 SET cr.display_name = 'Equality (Tasa-arvo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'high',
     cr.expression = 'Egalitarian society; flat hierarchies; CEOs accessible; first-name basis universal',
@@ -20817,6 +23297,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty-vaatimattomuus@fi-FI'})
 SET cr.display_name = 'Modesty (Vaatimattomuus)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'high',
     cr.expression = 'Understatement; distrust of self-promotion; achievements downplayed',
@@ -20833,6 +23315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nature-connection-luontoyhteys@fi-FI'})
 SET cr.display_name = 'Nature connection (Luontoyhteys)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'high',
     cr.expression = 'Forests, lakes, sauna; "jokamiehenoikeus" (everyman\'s right to roam); seasonal rhythm',
@@ -20849,6 +23333,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:privacy-yksityisyys@fi-FI'})
 SET cr.display_name = 'Privacy (Yksityisyys)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'medium',
     cr.expression = 'Personal space valued; small talk limited; boundaries respected',
@@ -20865,6 +23351,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:punctuality-tsmllisyys@fi-FI'})
 SET cr.display_name = 'Punctuality (Täsmällisyys)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'medium',
     cr.expression = 'Time commitments sacred; lateness disrespectful; efficiency valued',
@@ -20881,6 +23369,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-reliance-omatoimisuus@fi-FI'})
 SET cr.display_name = 'Self-reliance (Omatoimisuus)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'medium',
     cr.expression = 'DIY culture; independence valued; asking for help reluctantly',
@@ -20897,6 +23387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-system@fi-FI'})
 SET cr.display_name = 'Education system',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'low',
     cr.expression = 'World-renowned; safe to reference; avoid superiority claims',
@@ -20913,6 +23405,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1917@fi-FI'})
 SET cr.display_name = 'Independence (1917)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'low',
     cr.expression = 'December 6 important; can reference; avoid Russian context',
@@ -20929,6 +23423,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:technology-and-innovation@fi-FI'})
 SET cr.display_name = 'Technology and innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fi-FI',
     cr.importance = 'low',
     cr.expression = 'Nokia legacy; gaming (Rovio, Supercell); startup scene',
@@ -20953,6 +23449,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:freedom-dignity@ar-TN'})
 SET cr.display_name = 'الحرية والكرامة (Freedom & Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'high',
     cr.expression = 'Post-2011 Revolution consciousness; citizens value voice and rights; protest culture normalized',
@@ -20969,6 +23467,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ar-TN'})
 SET cr.display_name = 'العائلة (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; multi-generational households; collective decision-making; filial piety',
@@ -20985,6 +23485,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:openness@ar-TN'})
 SET cr.display_name = 'الانفتاح (Openness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'high',
     cr.expression = 'Mediterranean cosmopolitan identity; French-educated elite; tourism-welcoming culture; bilingualism',
@@ -21001,6 +23503,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-culture@ar-TN'})
 SET cr.display_name = 'التعليم والثقافة (Education & Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'high',
     cr.expression = 'High literacy rate (79%); education seen as social mobility; intellectual heritage pride (Ibn Khaldun)',
@@ -21017,6 +23521,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:equality@ar-TN'})
 SET cr.display_name = 'المساواة (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'medium',
     cr.expression = 'Progressive personal status code since 1956; women\'s rights leadership in Arab world; secular constitution',
@@ -21033,6 +23539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tunisian-hospitality@ar-TN'})
 SET cr.display_name = 'الضيافة التونسية (Tunisian Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'medium',
     cr.expression = 'Welcoming tourists and guests; sharing food; mint tea rituals; beach and medina tourism culture',
@@ -21049,6 +23557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patience-optimism@ar-TN'})
 SET cr.display_name = 'الصبر والتفاؤل (Patience & Optimism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'medium',
     cr.expression = 'Post-Revolution resilience; economic challenges navigated with hope; "غدوة خير" (tomorrow better)',
@@ -21065,6 +23575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:2011-revolution-jasmine-revolution@ar-TN'})
 SET cr.display_name = '2011 Revolution (Jasmine Revolution)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'high',
     cr.expression = 'Origin of Arab Spring; pride mixed with ongoing economic struggles; handle with nuance; avoid political positioning',
@@ -21081,6 +23593,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:historic-sites-carthage-el-djem-kairouan@ar-TN'})
 SET cr.display_name = 'Historic sites (Carthage, El Djem, Kairouan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; tourism pride; safe for all content; universally positive',
@@ -21097,6 +23611,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bourguiba-legacy@ar-TN'})
 SET cr.display_name = 'Bourguiba legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-TN',
     cr.importance = 'medium',
     cr.expression = 'Founding president; modernization architect; some political controversy; use carefully',
@@ -21121,6 +23637,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:gia-dinh-family@en-VN'})
 SET cr.display_name = 'Gia dinh (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; multi-generational living; family honor and reputation; collective welfare',
@@ -21137,6 +23655,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hieu-thao-filial-piety@en-VN'})
 SET cr.display_name = 'Hieu thao (Filial Piety)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Deep respect for parents and ancestors; caring for elders; maintaining family honor',
@@ -21153,6 +23673,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:the-dien-facedignity@en-VN'})
 SET cr.display_name = 'The dien (Face/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Preserving social reputation; avoiding public embarrassment; maintaining honor',
@@ -21169,6 +23691,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tinh-than-tap-the-collectivism@en-VN'})
 SET cr.display_name = 'Tinh than tap the (Collectivism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Group harmony over individual; community solidarity; shared success',
@@ -21185,6 +23709,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:can-cu-diligencehard-work@en-VN'})
 SET cr.display_name = 'Can cu (Diligence/Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Work ethic central to identity; perseverance through adversity; continuous improvement',
@@ -21201,6 +23727,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hoc-tap-educationlearning@en-VN'})
 SET cr.display_name = 'Hoc tap (Education/Learning)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'high',
     cr.expression = 'Education as path to success; respect for teachers and knowledge; continuous self-improvement',
@@ -21217,6 +23745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:khiem-ton-modestyhumility@en-VN'})
 SET cr.display_name = 'Khiem ton (Modesty/Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'medium',
     cr.expression = 'Self-deprecation; deflecting praise; avoiding boastfulness',
@@ -21233,6 +23763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nhan-nai-patienceperseverance@en-VN'})
 SET cr.display_name = 'Nhan nai (Patience/Perseverance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'medium',
     cr.expression = 'Long-term thinking; endurance through hardship; gradual progress accepted',
@@ -21249,6 +23781,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-unification-1945-1975@en-VN'})
 SET cr.display_name = 'Independence and unification (1945, 1975)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'medium',
     cr.expression = 'Positive but handle carefully; avoid war imagery; focus on peace and development',
@@ -21265,6 +23799,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ha-long-bay-and-unesco-sites@en-VN'})
 SET cr.display_name = 'Ha Long Bay and UNESCO sites',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'low',
     cr.expression = 'Major source of pride; natural beauty; excellent for positive brand associations',
@@ -21281,6 +23817,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vietnamese-cuisine-pho-banh-mi@en-VN'})
 SET cr.display_name = 'Vietnamese cuisine (pho, banh mi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-VN',
     cr.importance = 'low',
     cr.expression = 'Strong international recognition; safe and positive; food content resonates well',
@@ -21305,6 +23843,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:pamilya-family@tl-PH'})
 SET cr.display_name = 'Pamilya (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; multi-generational households; sacrificing for children\'s education; OFW remittances supporting family',
@@ -21321,6 +23861,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pagkamagalang-respect@tl-PH'})
 SET cr.display_name = 'Pagkamagalang (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'high',
     cr.expression = 'Po/opo usage; mano gesture to elders; deference to age and authority; never causing loss of face',
@@ -21337,6 +23879,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pakikisama-smooth-interpersonal-relations@tl-PH'})
 SET cr.display_name = 'Pakikisama (Smooth Interpersonal Relations)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'high',
     cr.expression = 'Avoiding conflict; going along with the group; maintaining harmony; not being "suplado/suplada"',
@@ -21353,6 +23897,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hiya-social-proprietyshame-awareness@tl-PH'})
 SET cr.display_name = 'Hiya (Social Propriety/Shame Awareness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'high',
     cr.expression = 'Concern for social judgment; avoiding embarrassment; maintaining face; sensitivity to others\' perceptions',
@@ -21369,6 +23915,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:utang-na-loob-debt-of-gratitude@tl-PH'})
 SET cr.display_name = 'Utang na Loob (Debt of Gratitude)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'high',
     cr.expression = 'Reciprocal obligations; loyalty to those who helped; remembering favors; lifelong gratitude',
@@ -21385,6 +23933,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bayanihan-community-spirit@tl-PH'})
 SET cr.display_name = 'Bayanihan (Community Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'medium',
     cr.expression = 'Helping neighbors; collective effort; community mutual aid; shared responsibility',
@@ -21401,6 +23951,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pagkamalikhain-creativityresourcefulness@tl-PH'})
 SET cr.display_name = 'Pagkamalikhain (Creativity/Resourcefulness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'medium',
     cr.expression = '"Diskarte" problem-solving; making do with limited resources; innovative solutions; Filipino ingenuity',
@@ -21417,6 +23969,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-pagkamapagpatanggap@tl-PH'})
 SET cr.display_name = 'Hospitality (Pagkamapagpatanggap)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'medium',
     cr.expression = 'Welcoming guests; offering food; making visitors comfortable; generosity even with little',
@@ -21433,6 +23987,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:philippine-independence-and-heroes@tl-PH'})
 SET cr.display_name = 'Philippine independence and heroes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'medium',
     cr.expression = 'Rizal, Bonifacio, Aguinaldo revered; handle historical complexities respectfully; June 12 celebrations',
@@ -21449,6 +24005,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:filipino-hospitality-worldwide@tl-PH'})
 SET cr.display_name = 'Filipino hospitality worldwide',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'low',
     cr.expression = 'Celebrated global reputation; safe positive reference; warmth of Filipinos recognized internationally',
@@ -21465,6 +24023,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:culinary-heritage-adobo-sinigang@tl-PH'})
 SET cr.display_name = 'Culinary heritage (adobo, sinigang)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tl-PH',
     cr.importance = 'low',
     cr.expression = 'Food pride strong; regional variations celebrated; safe positive references',
@@ -21489,6 +24049,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:izzat-honourrespect@en-PK'})
 SET cr.display_name = 'Izzat (Honour/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'high',
     cr.expression = 'Protecting family reputation, maintaining dignity in public, respectful conduct',
@@ -21505,6 +24067,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith-iman@en-PK'})
 SET cr.display_name = 'Faith (Iman)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'high',
     cr.expression = 'Islamic practices woven into daily life, religious observance, trust in divine will',
@@ -21521,6 +24085,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-khandan@en-PK'})
 SET cr.display_name = 'Family (Khandan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'high',
     cr.expression = 'Extended family involvement in decisions, multi-generational households, family loyalty',
@@ -21537,6 +24103,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-mehmaan-nawazi@en-PK'})
 SET cr.display_name = 'Hospitality (Mehmaan Nawazi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'high',
     cr.expression = 'Guests treated with utmost respect, generosity expected, warmth in service',
@@ -21553,6 +24121,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-biradari@en-PK'})
 SET cr.display_name = 'Community (Biradari)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = 'Strong community bonds, collective decision-making, social networks matter',
@@ -21569,6 +24139,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-taleem@en-PK'})
 SET cr.display_name = 'Education (Taleem)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = 'High value placed on academic achievement, professional qualifications respected',
@@ -21585,6 +24157,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-sabr@en-PK'})
 SET cr.display_name = 'Resilience (Sabr)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = 'Patience through hardship, adaptability, perseverance despite challenges',
@@ -21601,6 +24175,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progress-taraqqi@en-PK'})
 SET cr.display_name = 'Progress (Taraqqi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = 'Aspiration for improvement, embracing modernity while respecting tradition',
@@ -21617,6 +24193,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cricket-achievements@en-PK'})
 SET cr.display_name = 'Cricket achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'low',
     cr.expression = 'Extremely safe and beloved; national obsession; PSL, Pakistan team victories, legendary players (Imran Khan the cricketer, Wasim Akram, Babar Azam) all resonate positively',
@@ -21633,6 +24211,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nuclear-capability@en-PK'})
 SET cr.display_name = 'Nuclear capability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = 'Source of national pride for security; reference carefully and in appropriate contexts only; avoid casual usage',
@@ -21649,6 +24229,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-and-founding@en-PK'})
 SET cr.display_name = 'Independence and founding',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-PK',
     cr.importance = 'medium',
     cr.expression = '14th August (Independence Day) major celebration; Quaid-e-Azam (Jinnah) revered; but avoid Indo-Pak partition controversies',
@@ -21673,6 +24255,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualite-et-precision@fr-CH'})
 SET cr.display_name = 'Qualite et precision',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Tradition horlogere; exigence du "Swiss Made"; zero tolerance pour la mediocrite; attention au detail',
@@ -21689,6 +24273,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:neutralite@fr-CH'})
 SET cr.display_name = 'Neutralite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Non-alignement politique; tradition diplomatique (Geneve); impartialite; equilibre',
@@ -21705,6 +24291,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:discretion@fr-CH'})
 SET cr.display_name = 'Discretion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Respect de la vie privee; tradition bancaire; affaires personnelles gardees privees; sobriete',
@@ -21721,6 +24309,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ponctualite@fr-CH'})
 SET cr.display_name = 'Ponctualite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Le temps est precieux; les CFF sont une reference; les retards sont inacceptables',
@@ -21737,6 +24327,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:consensus-et-compromis@fr-CH'})
 SET cr.display_name = 'Consensus et compromis',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Culture de democratie directe; toutes les voix comptent; decisions par accord',
@@ -21753,6 +24345,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-multilinguistique@fr-CH'})
 SET cr.display_name = 'Respect multilinguistique',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Quatre langues officielles; aucune culture dominante; fierte regionale',
@@ -21769,6 +24363,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fiabilite-confiance@fr-CH'})
 SET cr.display_name = 'Fiabilite (Confiance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'high',
     cr.expression = 'Tenir ses promesses; qualite constante; service dependable; confiance par les actes',
@@ -21785,6 +24381,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modestie@fr-CH'})
 SET cr.display_name = 'Modestie',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'medium',
     cr.expression = 'Sous-estimation preferee; succes montre par la qualite pas par la vantardise; confiance discrete',
@@ -21801,6 +24399,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:democratie-directe@fr-CH'})
 SET cr.display_name = 'Democratie directe',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'low',
     cr.expression = 'Systeme politique unique; participation citoyenne; votations; source de fierte; peut etre reference respectueusement',
@@ -21817,6 +24417,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-de-neutralite@fr-CH'})
 SET cr.display_name = 'Tradition de neutralite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'medium',
     cr.expression = 'Pierre angulaire historique; complexe dans le contexte moderne (relations UE, sanctions); traiter respectueusement',
@@ -21833,6 +24435,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:geneve-internationale@fr-CH'})
 SET cr.display_name = 'Geneve internationale',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CH',
     cr.importance = 'low',
     cr.expression = 'Siege ONU, CICR, OMC; vocation humanitaire; diplomatie; fierte romande specifique',
@@ -21857,6 +24461,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:cymuned-community@cy-GB'})
 SET cr.display_name = 'Cymuned (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'high',
     cr.expression = 'Strong local bonds, mutual support, collective identity over individualism',
@@ -21873,6 +24479,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yr-iaith-language@cy-GB'})
 SET cr.display_name = 'Yr Iaith (Language)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'high',
     cr.expression = 'Welsh language as cultural cornerstone, pride in speaking and preserving Cymraeg',
@@ -21889,6 +24497,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gwyleidd-dra-humility@cy-GB'})
 SET cr.display_name = 'Gwyleidd-dra (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'high',
     cr.expression = 'Understatement preferred over boasting, let quality speak for itself',
@@ -21905,6 +24515,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tegwch-fairness@cy-GB'})
 SET cr.display_name = 'Tegwch (Fairness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Strong sense of social justice, equality, fair treatment for all',
@@ -21921,6 +24533,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gwreiddiau-roots@cy-GB'})
 SET cr.display_name = 'Gwreiddiau (Roots)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Deep connection to land, heritage, place-based identity',
@@ -21937,6 +24551,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cefnogaeth-support@cy-GB'})
 SET cr.display_name = 'Cefnogaeth (Support)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Supporting local businesses, Welsh-medium services, community initiatives',
@@ -21953,6 +24569,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cynhwysiant-inclusivity@cy-GB'})
 SET cr.display_name = 'Cynhwysiant (Inclusivity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Welcoming newcomers who respect the culture, Welsh learners encouraged',
@@ -21969,6 +24587,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:welsh-language-revival@cy-GB'})
 SET cr.display_name = 'Welsh language revival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Genuine achievement - celebrate carefully without over-claiming; acknowledge ongoing challenges',
@@ -21985,6 +24605,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:industrial-heritage@cy-GB'})
 SET cr.display_name = 'Industrial heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'medium',
     cr.expression = 'Complex legacy - mining communities shaped identity but decline brought hardship; approach with respect',
@@ -22001,6 +24623,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musical-excellence@cy-GB'})
 SET cr.display_name = 'Musical excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'cy-GB',
     cr.importance = 'low',
     cr.expression = 'Choral tradition, contemporary Welsh music - broadly celebrated pride point',
@@ -22025,6 +24649,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:vanua-landpeoplecustom@en-FJ'})
 SET cr.display_name = 'Vanua (land/people/custom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'high',
     cr.expression = 'Deep connection between people, land, and tradition; identity tied to ancestral lands and village; respect for customary practices',
@@ -22041,6 +24667,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kerekere-reciprocal-sharing@en-FJ'})
 SET cr.display_name = 'Kerekere (reciprocal sharing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'high',
     cr.expression = 'Sharing resources within community; obligation to give when asked; mutual support system; generosity expected',
@@ -22057,6 +24685,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:veiqaravi-serviceduty@en-FJ'})
 SET cr.display_name = 'Veiqaravi (service/duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'high',
     cr.expression = 'Service to community, church, and elders; volunteering time and resources; collective responsibility',
@@ -22073,6 +24703,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:veidokai-respect@en-FJ'})
 SET cr.display_name = 'Veidokai (respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, chiefs, and hierarchy; humility in interactions; deference to authority and tradition',
@@ -22089,6 +24721,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loloma-lovekindness@en-FJ'})
 SET cr.display_name = 'Loloma (love/kindness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'high',
     cr.expression = 'Warmth and compassion in interactions; hospitality to strangers; caring for others\' wellbeing',
@@ -22105,6 +24739,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sautu-peaceharmony@en-FJ'})
 SET cr.display_name = 'Sautu (peace/harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'medium',
     cr.expression = 'Maintaining social harmony; avoiding conflict; consensus-building; peaceful coexistence',
@@ -22121,6 +24757,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-faith@en-FJ'})
 SET cr.display_name = 'Religious faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'medium',
     cr.expression = 'Christian values central to indigenous Fijian life; church attendance important; Sunday observance; prayer in public life',
@@ -22137,6 +24775,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rugby-sevens-success@en-FJ'})
 SET cr.display_name = 'Rugby Sevens success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'low',
     cr.expression = 'Olympic gold (2016, 2020) and World Series dominance; massive national pride; safe ground for celebration',
@@ -22153,6 +24793,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bula-greeting-and-hospitality@en-FJ'})
 SET cr.display_name = 'Bula greeting and hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'low',
     cr.expression = 'Internationally recognized; authentic cultural expression; can use warmly in marketing',
@@ -22169,6 +24811,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1970@en-FJ'})
 SET cr.display_name = 'Independence (1970)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-FJ',
     cr.importance = 'medium',
     cr.expression = 'National pride but complex history; celebrate without ignoring post-independence challenges',
@@ -22193,6 +24837,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntu-mense-gerigtheid@af-ZA'})
 SET cr.display_name = 'Ubuntu (Mense-gerigtheid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'high',
     cr.expression = 'Interconnectedness, community support, collective responsibility',
@@ -22209,6 +24855,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-familie@af-ZA'})
 SET cr.display_name = 'Family (Familie)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds, Sunday lunches, family businesses',
@@ -22225,6 +24873,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-harde-werk@af-ZA'})
 SET cr.display_name = 'Hard Work (Harde Werk)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'high',
     cr.expression = 'Self-reliance, building from nothing, practical achievement',
@@ -22241,6 +24891,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-veerkragtigheid@af-ZA'})
 SET cr.display_name = 'Resilience (Veerkragtigheid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'high',
     cr.expression = 'Overcoming adversity, load-shedding humor, making a plan',
@@ -22257,6 +24909,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-gasvryheid@af-ZA'})
 SET cr.display_name = 'Hospitality (Gasvryheid)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'medium',
     cr.expression = 'Open homes, generous hosting, braai culture',
@@ -22273,6 +24927,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith-geloof@af-ZA'})
 SET cr.display_name = 'Faith (Geloof)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'medium',
     cr.expression = 'Religious observance (predominantly Christian), community church',
@@ -22289,6 +24945,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:outdoor-living-buitelug@af-ZA'})
 SET cr.display_name = 'Outdoor Living (Buitelug)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'medium',
     cr.expression = 'Braai culture, nature appreciation, farming heritage',
@@ -22305,6 +24963,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:springboks-rugby@af-ZA'})
 SET cr.display_name = 'Springboks (Rugby)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'low',
     cr.expression = 'Safe, unifying; World Cup victories bring all South Africans together',
@@ -22321,6 +24981,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mandela-legacy@af-ZA'})
 SET cr.display_name = 'Mandela Legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'af-ZA',
     cr.importance = 'medium',
     cr.expression = 'Respected universally, but avoid appropriation or oversimplification',
@@ -22345,6 +25007,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:pride-and-self-confidence@en-JM'})
 SET cr.display_name = 'Pride and Self-Confidence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'high',
     cr.expression = '"Wi likkle but wi tallawah" (we are small but mighty); fierce national pride; confidence in abilities; refusal to be underestimated',
@@ -22361,6 +25025,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unity-in-diversity@en-JM'})
 SET cr.display_name = 'Unity in Diversity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'high',
     cr.expression = '"Out of Many, One People" national motto; multi-ethnic heritage celebrated; national identity transcends race',
@@ -22377,6 +25043,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-and-strength@en-JM'})
 SET cr.display_name = 'Resilience and Strength',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'high',
     cr.expression = 'Overcoming adversity; historical survival; "nuh badda try test me" mentality; inner strength',
@@ -22393,6 +25061,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:creativity-and-expression@en-JM'})
 SET cr.display_name = 'Creativity and Expression',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'high',
     cr.expression = 'Music, art, language, fashion; Jamaica punches above its weight culturally; inventiveness celebrated',
@@ -22409,6 +25079,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith-and-spirituality@en-JM'})
 SET cr.display_name = 'Faith and Spirituality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'high',
     cr.expression = 'Strong Christian tradition; Rastafari influence on culture; spiritual consciousness; trust in higher power',
@@ -22425,6 +25097,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:freedom-and-independence@en-JM'})
 SET cr.display_name = 'Freedom and Independence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'medium',
     cr.expression = 'Independence since 1962; anti-colonial sentiment; self-determination; individual liberty',
@@ -22441,6 +25115,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@en-JM'})
 SET cr.display_name = 'Respect',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'medium',
     cr.expression = 'Elders respected; acknowledging others; "respek" as core value; mutual recognition',
@@ -22457,6 +25133,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vibes-and-joy@en-JM'})
 SET cr.display_name = 'Vibes and Joy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'medium',
     cr.expression = 'Celebrating life; music and dance; positive energy; "irie" state of being; enjoying the moment',
@@ -22473,6 +25151,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:usain-bolt@en-JM'})
 SET cr.display_name = 'Usain Bolt',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'low',
     cr.expression = 'Greatest sprinter ever; national treasure; safe positive reference; Lightning Bolt symbolism powerful',
@@ -22489,6 +25169,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-heroes@en-JM'})
 SET cr.display_name = 'National Heroes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'low',
     cr.expression = 'Marcus Garvey, Nanny of the Maroons, Sam Sharpe, Paul Bogle, George William Gordon, Norman Manley, Alexander Bustamante; deep respect; can be honoured',
@@ -22505,6 +25187,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reggae-and-dancehall@en-JM'})
 SET cr.display_name = 'Reggae and Dancehall',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'low',
     cr.expression = 'Musical innovation; global export; cultural pride; positive references work',
@@ -22521,6 +25205,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1962@en-JM'})
 SET cr.display_name = 'Independence (1962)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-JM',
     cr.importance = 'low',
     cr.expression = 'National holiday; source of pride; can be celebrated; freedom messaging',
@@ -22545,6 +25231,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:janteloven-law-of-jante@da-DK'})
 SET cr.display_name = 'Janteloven (Law of Jante)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'high',
     cr.expression = 'Egalitarianism; distrust of self-promotion; collective over individual',
@@ -22561,6 +25249,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hygge@da-DK'})
 SET cr.display_name = 'Hygge',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'high',
     cr.expression = 'Coziness, comfort, togetherness; simple pleasures',
@@ -22577,6 +25267,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tillid-trust@da-DK'})
 SET cr.display_name = 'Tillid (Trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'high',
     cr.expression = 'High-trust society; honesty expected; handshake deals',
@@ -22593,6 +25285,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance@da-DK'})
 SET cr.display_name = 'Work-life balance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'high',
     cr.expression = '37-hour work week; parental leave; vacation priority',
@@ -22609,6 +25303,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:equality-lighed@da-DK'})
 SET cr.display_name = 'Equality (Lighed)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'medium',
     cr.expression = 'Gender equality; flat hierarchies; accessible leadership',
@@ -22625,6 +25321,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sustainability@da-DK'})
 SET cr.display_name = 'Sustainability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'medium',
     cr.expression = 'Green consciousness; cycling culture; organic preference',
@@ -22641,6 +25339,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:practicality@da-DK'})
 SET cr.display_name = 'Practicality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'medium',
     cr.expression = 'Function over form; quality over flash; value for money',
@@ -22657,6 +25357,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:danish-design-furniture-architecture@da-DK'})
 SET cr.display_name = 'Danish design (furniture, architecture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; internationally recognized; avoid overstatement',
@@ -22673,6 +25375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:happiness-rankings@da-DK'})
 SET cr.display_name = 'Happiness rankings',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'medium',
     cr.expression = 'Danes are skeptical of "happiest country" claims; feels like bragging',
@@ -22689,6 +25393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lego-carlsberg-maersk@da-DK'})
 SET cr.display_name = 'LEGO, Carlsberg, Maersk',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'da-DK',
     cr.importance = 'low',
     cr.expression = 'Iconic Danish brands; can reference casually',
@@ -22713,6 +25419,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:individual-freedom@en-US'})
 SET cr.display_name = 'Individual Freedom',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'high',
     cr.expression = 'Personal choice paramount; self-determination; "life, liberty, pursuit of happiness"',
@@ -22729,6 +25437,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:achievementsuccess@en-US'})
 SET cr.display_name = 'Achievement/Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'high',
     cr.expression = 'Hard work pays off; self-made success stories; entrepreneurial spirit',
@@ -22745,6 +25455,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:optimism@en-US'})
 SET cr.display_name = 'Optimism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'high',
     cr.expression = 'Future is better; problems are solvable; can-do attitude',
@@ -22761,6 +25473,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:innovation@en-US'})
 SET cr.display_name = 'Innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'high',
     cr.expression = 'New is better; disruption valued; progress orientation',
@@ -22777,6 +25491,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:equality-of-opportunity@en-US'})
 SET cr.display_name = 'Equality of Opportunity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'medium',
     cr.expression = 'Everyone deserves a fair shot; meritocracy ideal; level playing field',
@@ -22793,6 +25509,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:practicality@en-US'})
 SET cr.display_name = 'Practicality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'medium',
     cr.expression = 'What works matters; results over theory; ROI mindset',
@@ -22809,6 +25527,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:convenience@en-US'})
 SET cr.display_name = 'Convenience',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'medium',
     cr.expression = 'Time is money; efficiency valued; friction is enemy',
@@ -22825,6 +25545,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:innovation-and-tech-leadership@en-US'})
 SET cr.display_name = 'Innovation and tech leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'low',
     cr.expression = 'Silicon Valley, space exploration, American inventions; safe source of pride',
@@ -22841,6 +25563,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-championships@en-US'})
 SET cr.display_name = 'Sports championships',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'low',
     cr.expression = 'NFL, NBA, MLB, Olympics; unifying and safe for references',
@@ -22857,6 +25581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diversity-and-immigration@en-US'})
 SET cr.display_name = 'Diversity and immigration',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-US',
     cr.importance = 'medium',
     cr.expression = '"Nation of immigrants" positive framing; can become political; celebrate contribution without policy',
@@ -22881,6 +25607,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:saudade-longingnostalgia@pt-PT'})
 SET cr.display_name = 'Saudade (Longing/Nostalgia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'high',
     cr.expression = 'Deep emotional connection to past, homeland, loved ones; bittersweet appreciation',
@@ -22897,6 +25625,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-familia@pt-PT'})
 SET cr.display_name = 'Family (Familia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'high',
     cr.expression = 'Strong nuclear and extended family bonds, multi-generational closeness, family loyalty',
@@ -22913,6 +25643,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humility-humildade@pt-PT'})
 SET cr.display_name = 'Humility (Humildade)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'high',
     cr.expression = 'Modesty valued over boasting, understated success, discomfort with overt self-promotion',
@@ -22929,6 +25661,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-of-life@pt-PT'})
 SET cr.display_name = 'Quality of Life',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'medium',
     cr.expression = 'Work-life balance appreciation, enjoyment of simple pleasures, time for relationships',
@@ -22945,6 +25679,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradition-and-heritage@pt-PT'})
 SET cr.display_name = 'Tradition and Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'medium',
     cr.expression = 'Pride in history, craftsmanship, regional traditions, respect for established ways',
@@ -22961,6 +25697,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability-confianca@pt-PT'})
 SET cr.display_name = 'Reliability (Confianca)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'medium',
     cr.expression = 'Trustworthiness valued, keeping word, consistency in relationships and business',
@@ -22977,6 +25715,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:age-of-discoveries@pt-PT'})
 SET cr.display_name = 'Age of Discoveries',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'low',
     cr.expression = 'Safe; national pride in maritime exploration, global connections; use positively',
@@ -22993,6 +25733,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty-coast-countryside@pt-PT'})
 SET cr.display_name = 'Natural beauty (coast, countryside)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'low',
     cr.expression = 'Safe; Atlantic coast, Alentejo, Douro Valley - celebrated landscapes',
@@ -23009,6 +25751,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:football-achievements@pt-PT'})
 SET cr.display_name = 'Football achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pt-PT',
     cr.importance = 'low',
     cr.expression = 'Safe; World Cup, European Championship success; national passion',
@@ -23033,6 +25777,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:failte-hospitality@ga-IE'})
 SET cr.display_name = 'Failte (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'high',
     cr.expression = 'Genuine welcome to all; warmth and generosity to guests and strangers',
@@ -23049,6 +25795,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pobal-community@ga-IE'})
 SET cr.display_name = 'Pobal (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'high',
     cr.expression = 'Strong local bonds, mutual support, collective identity over individualism',
@@ -23065,6 +25813,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gaeilge-irish-language@ga-IE'})
 SET cr.display_name = 'Gaeilge (Irish Language)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'high',
     cr.expression = 'Deep pride in language revival; speaking Irish as cultural identity marker',
@@ -23081,6 +25831,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:macantacht-honesty@ga-IE'})
 SET cr.display_name = 'Macantacht (Honesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'high',
     cr.expression = 'Sincerity valued over polish; people detect and distrust inauthentic messaging',
@@ -23097,6 +25849,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uirislacht-humility@ga-IE'})
 SET cr.display_name = 'Uirislacht (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'medium',
     cr.expression = 'Understatement preferred over boasting; success spoken of modestly',
@@ -23113,6 +25867,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:craic-spiritfun@ga-IE'})
 SET cr.display_name = 'Craic (Spirit/Fun)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'medium',
     cr.expression = 'Good humor, storytelling, enjoyment of life woven into daily interaction',
@@ -23129,6 +25885,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:teaghlach-family@ga-IE'})
 SET cr.display_name = 'Teaghlach (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'medium',
     cr.expression = 'Strong family bonds across generations; family central to Irish life',
@@ -23145,6 +25903,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cothromaiocht-fairness@ga-IE'})
 SET cr.display_name = 'Cothromaiocht (Fairness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'medium',
     cr.expression = 'Strong sense of social justice, equality, fair treatment for all',
@@ -23161,6 +25921,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:irish-language-revival@ga-IE'})
 SET cr.display_name = 'Irish language revival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'medium',
     cr.expression = 'Genuine achievement - celebrate respectfully; acknowledge Gaeltacht communities as living heart of language',
@@ -23177,6 +25939,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musical-excellence@ga-IE'})
 SET cr.display_name = 'Musical excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ga-IE',
     cr.importance = 'low',
     cr.expression = 'Traditional and contemporary Irish music - broadly celebrated; Riverdance to trad sessions',
@@ -23201,6 +25965,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-AR'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'high',
     cr.expression = 'Extended family gatherings; Sunday asados; multi-generational bonds; family opinions valued in decisions; parental involvement extends into adulthood',
@@ -23217,6 +25983,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:amistad-friendship@es-AR'})
 SET cr.display_name = 'Amistad (Friendship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'high',
     cr.expression = 'Deep, lifelong friendships; friends treated as family; loyalty paramount; group activities valued over solo pursuits; "amigos son la familia que elegimos"',
@@ -23233,6 +26001,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pasion-passion@es-AR'})
 SET cr.display_name = 'Pasion (Passion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'high',
     cr.expression = 'Intense emotional expression valued; enthusiasm expected; football fervor; animated conversations; full commitment to pursuits',
@@ -23249,6 +26019,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:viveza-criolla-street-smart-ingenuity@es-AR'})
 SET cr.display_name = 'Viveza Criolla (Street-smart ingenuity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'medium',
     cr.expression = 'Resourcefulness admired; finding creative solutions; adaptability to changing circumstances; "rebuscarsela"; clever navigation of systems',
@@ -23265,6 +26037,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:confianza-trustconfidence@es-AR'})
 SET cr.display_name = 'Confianza (Trust/Confidence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'high',
     cr.expression = 'Personal relationships drive business; trust built through interaction not credentials; reliability matters; word-of-mouth influence',
@@ -23281,6 +26055,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-nacional-national-pride@es-AR'})
 SET cr.display_name = 'Orgullo Nacional (National Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'medium',
     cr.expression = 'Pride in cultural achievements (tango, literature, football); self-aware irony about national traits; competitive with Brazil',
@@ -23297,6 +26073,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:expresividad-expressiveness@es-AR'})
 SET cr.display_name = 'Expresividad (Expressiveness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'high',
     cr.expression = 'Animated communication; gestures integral to speech; emotions displayed openly; volume and intensity normal',
@@ -23313,6 +26091,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-AR'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'medium',
     cr.expression = 'Community support valued; helping neighbors; collective responses to crisis; social movements important',
@@ -23329,6 +26109,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:football-world-cup-victories-1978-1986-2022@es-AR'})
 SET cr.display_name = 'Football World Cup victories (1978, 1986, 2022)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'low',
     cr.expression = 'Safe and powerful reference; Messi 2022 particularly resonant; avoid 1978 dictatorship context',
@@ -23345,6 +26127,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:literary-giants-borges-cortazar-sabato@es-AR'})
 SET cr.display_name = 'Literary giants (Borges, Cortazar, Sabato)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'low',
     cr.expression = 'Intellectual pride; safe cultural reference; shows respect for Argentine culture',
@@ -23361,6 +26145,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-wonders-iguazu-patagonia-glaciers@es-AR'})
 SET cr.display_name = 'Natural wonders (Iguazu, Patagonia, glaciers)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-AR',
     cr.importance = 'low',
     cr.expression = 'Environmental pride; tourism draw; universally positive',
@@ -23385,6 +26171,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:terra-e-raices-land-and-roots@gl-ES'})
 SET cr.display_name = 'Terra e raices (Land and roots)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'high',
     cr.expression = 'Deep connection to Galician land, landscape, and rural heritage; pride in local origin',
@@ -23401,6 +26189,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:morrina-nostalgic-longing@gl-ES'})
 SET cr.display_name = 'Morrina (Nostalgic longing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'high',
     cr.expression = 'Emotional attachment to homeland; diaspora connection; bittersweet love of Galicia',
@@ -23417,6 +26207,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-e-comunidade@gl-ES'})
 SET cr.display_name = 'Familia e comunidade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; extended family networks; village and parish (parroquia) ties',
@@ -23433,6 +26225,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:autenticidade@gl-ES'})
 SET cr.display_name = 'Autenticidade',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'high',
     cr.expression = 'Value genuine, unpretentious character; distrust of artificiality and ostentation',
@@ -23449,6 +26243,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traballo-e-esforzo@gl-ES'})
 SET cr.display_name = 'Traballo e esforzo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'medium',
     cr.expression = 'Work ethic rooted in fishing and farming traditions; resilience and persistence',
@@ -23465,6 +26261,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidade-atlantica@gl-ES'})
 SET cr.display_name = 'Hospitalidade atlantica',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'medium',
     cr.expression = 'Warm, generous hospitality; welcoming strangers; sharing food and conversation',
@@ -23481,6 +26279,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prudencia-e-reserva@gl-ES'})
 SET cr.display_name = 'Prudencia e reserva',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'medium',
     cr.expression = 'Initial caution with outsiders; measured approach to decisions; think before acting',
@@ -23497,6 +26297,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:galician-language-galego@gl-ES'})
 SET cr.display_name = 'Galician language (Galego)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'medium',
     cr.expression = 'Source of pride; but linguistic politics sensitive; use naturally without making it political',
@@ -23513,6 +26315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:galician-cuisine@gl-ES'})
 SET cr.display_name = 'Galician cuisine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'low',
     cr.expression = 'Pulpo a feira, empanada, ribeiro wine, marisco; source of genuine pride; safe culinary references',
@@ -23529,6 +26333,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:literary-tradition@gl-ES'})
 SET cr.display_name = 'Literary tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gl-ES',
     cr.importance = 'low',
     cr.expression = 'Rosalia de Castro, Castelao, Cunqueiro; literary heritage highly valued; safe cultural references',
@@ -23553,6 +26359,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidad-de-vida@es-ES'})
 SET cr.display_name = 'Calidad de vida',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'high',
     cr.expression = 'Priority on leisure, family time, social gatherings; work as means to enjoy life',
@@ -23569,6 +26377,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-y-relaciones@es-ES'})
 SET cr.display_name = 'Familia y relaciones',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'high',
     cr.expression = 'Extended family meals, multi-generational households, strong friend networks',
@@ -23585,6 +26395,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identidad-regional@es-ES'})
 SET cr.display_name = 'Identidad regional',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'high',
     cr.expression = 'Pride in local traditions, language, cuisine; Catalonia, Basque Country, Andalucia distinctions',
@@ -23601,6 +26413,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:autenticidad@es-ES'})
 SET cr.display_name = 'Autenticidad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'medium',
     cr.expression = 'Preference for genuine over pretentious; skepticism toward excessive marketing',
@@ -23617,6 +26431,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:disfrute-del-momento@es-ES'})
 SET cr.display_name = 'Disfrute del momento',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'medium',
     cr.expression = 'Present-oriented enjoyment; celebrations, festivals, social spontaneity',
@@ -23633,6 +26449,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-nacional@es-ES'})
 SET cr.display_name = 'Orgullo nacional',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'medium',
     cr.expression = 'Pride in Spanish culture, art, sports, gastronomy; sensitivity about international perceptions',
@@ -23649,6 +26467,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gastronomia-espanola@es-ES'})
 SET cr.display_name = 'Gastronomia espanola',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; tapas, olive oil, wine, jamon; world-renowned cuisine',
@@ -23665,6 +26485,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ciencia-e-innovacion@es-ES'})
 SET cr.display_name = 'Ciencia e innovacion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-ES',
     cr.importance = 'low',
     cr.expression = 'Transplant medicine, renewable energy, high-speed rail; underappreciated pride points',
@@ -23689,6 +26511,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-harmony@zh-TH'})
 SET cr.display_name = 'Family Harmony (家庭和睦)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'high',
     cr.expression = 'Multi-generational living, family businesses, collective decisions',
@@ -23705,6 +26529,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@zh-TH'})
 SET cr.display_name = 'Respect for Elders (孝顺长辈)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'high',
     cr.expression = 'Deference to seniors, honoring ancestors, family hierarchy',
@@ -23721,6 +26547,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face@zh-TH'})
 SET cr.display_name = 'Face (面子/หน้าตา)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'high',
     cr.expression = 'Avoiding public embarrassment, maintaining social standing',
@@ -23737,6 +26565,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-harmony@zh-TH'})
 SET cr.display_name = 'Religious Harmony (宗教和谐)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'high',
     cr.expression = 'Buddhism blended with Chinese ancestor worship, temple visits',
@@ -23753,6 +26583,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:merit-making@zh-TH'})
 SET cr.display_name = 'Merit-Making (ทำบุญ/积德)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'medium',
     cr.expression = 'Charitable giving, temple donations, good deeds for karma',
@@ -23769,6 +26601,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:prosperity@zh-TH'})
 SET cr.display_name = 'Prosperity (繁荣兴旺)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'medium',
     cr.expression = 'Business success, wealth accumulation, auspicious symbols',
@@ -23785,6 +26619,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sanuk@zh-TH'})
 SET cr.display_name = 'Sanuk (สนุก/快乐)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'medium',
     cr.expression = 'Enjoyment in daily life, work-life balance, celebratory spirit',
@@ -23801,6 +26637,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kreng-jai@zh-TH'})
 SET cr.display_name = 'Kreng Jai (เกรงใจ/体谅)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'medium',
     cr.expression = 'Consideration for others, reluctance to impose, avoiding conflict',
@@ -23817,6 +26655,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thai-royal-family@zh-TH'})
 SET cr.display_name = 'Thai Royal Family',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'critical',
     cr.expression = 'Always respectful; never use in commercial contexts; lese-majeste laws apply',
@@ -23833,6 +26673,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thai-hospitality-land-of-smiles@zh-TH'})
 SET cr.display_name = 'Thai hospitality (Land of Smiles)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-TH',
     cr.importance = 'low',
     cr.expression = 'Safe to reference; warmth and service orientation valued',
@@ -23857,6 +26699,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:i-patienceendurance@be-BY'})
 SET cr.display_name = 'Цярплiвасць (Patience/Endurance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'high',
     cr.expression = 'Long-term perspective, tolerance of hardship, steady persistence',
@@ -23873,6 +26717,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@be-BY'})
 SET cr.display_name = 'Сям\'я (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds, support networks, family decision-making',
@@ -23889,6 +26735,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@be-BY'})
 SET cr.display_name = 'Адукацыя (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'high',
     cr.expression = 'Respect for learning, intellectual achievement, practical knowledge',
@@ -23905,6 +26753,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:i-modesty@be-BY'})
 SET cr.display_name = 'Сцiпласць (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'high',
     cr.expression = 'Understatement, avoiding boastfulness, quiet achievement',
@@ -23921,6 +26771,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:i-hard-work@be-BY'})
 SET cr.display_name = 'Працавiтасць (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'medium',
     cr.expression = 'Value of honest labor, self-reliance, practical results',
@@ -23937,6 +26789,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:i-hospitality@be-BY'})
 SET cr.display_name = 'Гасцiннасць (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'medium',
     cr.expression = 'Warmth to guests, generous hosting, welcoming spirit',
@@ -23953,6 +26807,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:belarusian-language-and-culture@be-BY'})
 SET cr.display_name = 'Belarusian language and culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'medium',
     cr.expression = 'Genuine appreciation welcomed; avoid tokenistic use; respect for linguistic identity',
@@ -23969,6 +26825,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:scientific-and-technical-achievements@be-BY'})
 SET cr.display_name = 'Scientific and technical achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'be-BY',
     cr.importance = 'low',
     cr.expression = 'STEM education legacy, IT sector growth; positive associations',
@@ -23993,6 +26851,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:teranga-hospitality@wo-SN'})
 SET cr.display_name = 'Teranga (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Legendary Senegalese hospitality; welcoming strangers into home; sharing meals; generosity to guests and neighbors; hosts give their best',
@@ -24009,6 +26869,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kersa-discretiondignity@wo-SN'})
 SET cr.display_name = 'Kersa (Discretion/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Maintaining dignity and discretion; not boasting; handling matters privately; modesty in success; quiet excellence',
@@ -24025,6 +26887,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jom-honorcourage@wo-SN'})
 SET cr.display_name = 'Jom (Honor/Courage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Personal honor and courage; keeping one\'s word; moral courage; standing up for principles; integrity in adversity',
@@ -24041,6 +26905,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ngor-dignityself-respect@wo-SN'})
 SET cr.display_name = 'Ngor (Dignity/Self-Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Self-respect and dignity; not accepting humiliation; maintaining composure; pride without arrogance',
@@ -24057,6 +26923,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yiw-faithislam@wo-SN'})
 SET cr.display_name = 'Yiw (Faith/Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Islam permeates daily life; prayers, greetings, ethics shaped by Islamic principles; Sufi brotherhoods (Mourides, Tijanes) central',
@@ -24073,6 +26941,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mbokk-familykinship@wo-SN'})
 SET cr.display_name = 'Mbokk (Family/Kinship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective responsibility; elders honored; children as blessing; clan solidarity',
@@ -24089,6 +26959,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:liggey-workeffort@wo-SN'})
 SET cr.display_name = 'Liggéey (Work/Effort)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued; especially Mouride work ethic; "work is prayer" mentality; entrepreneurship admired',
@@ -24105,6 +26977,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:xam-xam-knowledgewisdom@wo-SN'})
 SET cr.display_name = 'Xam-xam (Knowledge/Wisdom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'medium',
     cr.expression = 'Islamic scholarship valued; Quranic education traditional; wisdom of elders respected; learning encouraged',
@@ -24121,6 +26995,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:democracy-and-stability@wo-SN'})
 SET cr.display_name = 'Democracy and stability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'low',
     cr.expression = 'Senegal\'s peaceful transitions; no coups since independence; safe patriotic messaging',
@@ -24137,6 +27013,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mouride-brotherhoodtouba@wo-SN'})
 SET cr.display_name = 'Mouride brotherhood/Touba',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'medium',
     cr.expression = 'Major religious pride; reference with utmost respect; avoid commercial exploitation',
@@ -24153,6 +27031,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lopold-sdar-senghor@wo-SN'})
 SET cr.display_name = 'Léopold Sédar Senghor',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'wo-SN',
     cr.importance = 'low',
     cr.expression = 'Founding father; poet-president; Negritude movement; cultural and literary pride',
@@ -24177,6 +27057,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-NI'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; multi-generational households; family decisions made collectively; "la familia es primero"',
@@ -24193,6 +27075,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fe-religiosa-religious-faith@es-NI'})
 SET cr.display_name = 'Fe Religiosa (Religious Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'high',
     cr.expression = 'Strong Catholic traditions; religious phrases in daily speech; saints and virgins venerated; church attendance important',
@@ -24209,6 +27093,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-pinolero-nicaraguan-pride@es-NI'})
 SET cr.display_name = 'Orgullo Pinolero (Nicaraguan Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'high',
     cr.expression = 'National identity as "pinoleros"; pride in being Nicaraguan; distinct from other Central Americans; cultural uniqueness',
@@ -24225,6 +27111,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-NI'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests; "mi casa es su casa" mentality; generosity with food and time; warmth to strangers',
@@ -24241,6 +27129,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trabajo-duro-hard-work@es-NI'})
 SET cr.display_name = 'Trabajo Duro (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'medium',
     cr.expression = 'Value of honest labor; resilience through difficult times; resourcefulness; "salir adelante"',
@@ -24257,6 +27147,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@es-NI'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'medium',
     cr.expression = 'Deference to elders and authority; proper greetings essential; titles valued; courtesy in interactions',
@@ -24273,6 +27165,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-NI'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'medium',
     cr.expression = 'Community support; helping neighbors; collective response to challenges; "entre nicas nos ayudamos"',
@@ -24289,6 +27183,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sencillez-simplicity@es-NI'})
 SET cr.display_name = 'Sencillez (Simplicity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'medium',
     cr.expression = 'Humble lifestyle valued; not ostentatious; authentic over pretentious; down-to-earth attitudes',
@@ -24305,6 +27201,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ruben-dario@es-NI'})
 SET cr.display_name = 'Ruben Dario',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'low',
     cr.expression = '"Principe de las Letras Castellanas"; modernist poet; national hero; January 18 commemoration; safe cultural reference',
@@ -24321,6 +27219,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:baseball-heritage@es-NI'})
 SET cr.display_name = 'Baseball Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'low',
     cr.expression = 'National sport; passionate following; Denis Martinez first Nicaraguan in MLB; positive references',
@@ -24337,6 +27237,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pinolero-identity@es-NI'})
 SET cr.display_name = 'Pinolero Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'low',
     cr.expression = 'From "pinol" (corn drink); national identity term; pride in being Nicaraguan',
@@ -24353,6 +27255,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cornmaize-culture@es-NI'})
 SET cr.display_name = 'Corn/Maize Culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-NI',
     cr.importance = 'low',
     cr.expression = '"Hijos del maiz"; agricultural heritage; traditional foods; cultural identity',
@@ -24377,6 +27281,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:jantelagen-law-of-jante@sv-SE'})
 SET cr.display_name = 'Jantelagen (Law of Jante)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'high',
     cr.expression = 'Egalitarianism; collective over individual; distrust of self-promotion; no one is better than others',
@@ -24393,6 +27299,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jamstalldhet-equality@sv-SE'})
 SET cr.display_name = 'Jamstalldhet (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'high',
     cr.expression = 'Gender equality; flat hierarchies; accessible leadership; equal treatment regardless of background',
@@ -24409,6 +27317,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sustainability-hallbarhet@sv-SE'})
 SET cr.display_name = 'Sustainability (Hallbarhet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'high',
     cr.expression = 'Environmental consciousness; recycling culture; sustainable consumption; Greta effect',
@@ -24425,6 +27335,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:transparency-oppenhet@sv-SE'})
 SET cr.display_name = 'Transparency (Oppenhet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'high',
     cr.expression = 'Offentlighetsprincipen (public access principle); openness in government and business; honesty expected',
@@ -24441,6 +27353,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance@sv-SE'})
 SET cr.display_name = 'Work-life balance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'high',
     cr.expression = 'Generous parental leave; vacation rights; leaving on time is expected; "fika" culture',
@@ -24457,6 +27371,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:consensus-samforstand@sv-SE'})
 SET cr.display_name = 'Consensus (Samforstand)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'medium',
     cr.expression = 'Decisions made collectively; all voices heard; conflict avoidance; "everyone on board"',
@@ -24473,6 +27389,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modernity-and-innovation@sv-SE'})
 SET cr.display_name = 'Modernity and innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'medium',
     cr.expression = 'Tech-forward society; digital-first; early adopters; design innovation',
@@ -24489,6 +27407,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:swedish-design-and-innovation@sv-SE'})
 SET cr.display_name = 'Swedish design and innovation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'low',
     cr.expression = 'Safe to celebrate; IKEA, Volvo, Spotify globally recognized; don\'t overstate',
@@ -24505,6 +27425,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:environmental-leadership@sv-SE'})
 SET cr.display_name = 'Environmental leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'low',
     cr.expression = 'Genuine pride point; Greta Thunberg; recycling culture; climate action',
@@ -24521,6 +27443,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nobel-prize@sv-SE'})
 SET cr.display_name = 'Nobel Prize',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sv-SE',
     cr.importance = 'low',
     cr.expression = 'Swedish heritage; internationally recognized; subtle references',
@@ -24545,6 +27469,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-obitelj@hr-HR'})
 SET cr.display_name = 'Family (Obitelj)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds, multi-generational relationships, family gatherings, collective celebrations',
@@ -24561,6 +27487,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride-domoljublje@hr-HR'})
 SET cr.display_name = 'National pride (Domoljublje)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'high',
     cr.expression = 'Pride in independence, Croatian identity, language preservation, cultural distinctiveness',
@@ -24577,6 +27505,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-kvaliteta@hr-HR'})
 SET cr.display_name = 'Quality (Kvaliteta)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'high',
     cr.expression = 'Preference for durability over cheapness, craftsmanship valued, skepticism of inferior products',
@@ -24593,6 +27523,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-gostoljubivost@hr-HR'})
 SET cr.display_name = 'Hospitality (Gostoljubivost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'high',
     cr.expression = 'Warm welcome to guests, generous hosting, coffee culture, social dining',
@@ -24609,6 +27541,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity-autenticnost@hr-HR'})
 SET cr.display_name = 'Authenticity (Autenticnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'medium',
     cr.expression = 'Valuing genuine relationships, sincerity over pretense, skepticism of exaggeration',
@@ -24625,6 +27559,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-marljivost@hr-HR'})
 SET cr.display_name = 'Hard work (Marljivost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'medium',
     cr.expression = 'Practical skills, self-reliance, resourcefulness, professional competence',
@@ -24641,6 +27577,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mediterranean-lifestyle-mediteranski-nacin-zivota@hr-HR'})
 SET cr.display_name = 'Mediterranean lifestyle (Mediteranski nacin zivota)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'medium',
     cr.expression = 'Enjoyment of life, food and wine culture, outdoor living, work-life balance',
@@ -24657,6 +27595,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements-football-tennis-handball-water@hr-HR'})
 SET cr.display_name = 'Sports achievements (football, tennis, handball, water polo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'low',
     cr.expression = 'Universally celebrated; Modric, Cilic, handball gold safe references',
@@ -24673,6 +27613,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:croatian-independence-and-statehood@hr-HR'})
 SET cr.display_name = 'Croatian independence and statehood',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'medium',
     cr.expression = 'Source of pride but context matters; celebrate achievement, avoid war references',
@@ -24689,6 +27631,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:croatian-inventions-necktie-rimac-penkala@hr-HR'})
 SET cr.display_name = 'Croatian inventions (necktie, Rimac, Penkala)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hr-HR',
     cr.importance = 'low',
     cr.expression = 'Positive pride points; innovation narrative welcomed',
@@ -24713,6 +27657,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-et-accueil-akwaba@fr-CI'})
 SET cr.display_name = 'Hospitalite et accueil (Akwaba)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'high',
     cr.expression = '"Akwaba" (bienvenue en Baoule) symbolise l\'accueil chaleureux ivoirien ; l\'etranger est sacre ; partager le repas est un honneur ; ne jamais refuser l\'eau ou l\'hospitalite',
@@ -24729,6 +27675,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-des-aines-et-de-la-hierarchie@fr-CI'})
 SET cr.display_name = 'Respect des aines et de la hierarchie',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'high',
     cr.expression = 'Les aines sont consultes pour les decisions importantes ; salutations elaborees obligatoires ; "Tonton" et "Tante" sont des marques de respect meme sans lien familial ; les chefs traditionnels sont tres respectes',
@@ -24745,6 +27693,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-communautaire@fr-CI'})
 SET cr.display_name = 'Solidarite communautaire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'high',
     cr.expression = 'Concept de famille elargie ; entraide lors des evenements (mariages, deces, baptemes) ; cotisations collectives (tontines) ; "Un seul doigt ne peut pas ramasser un caillou"',
@@ -24761,6 +27711,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:joie-de-vivre-et-optimisme@fr-CI'})
 SET cr.display_name = 'Joie de vivre et optimisme',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'high',
     cr.expression = 'Malgre les epreuves, les Ivoiriens celebrent la vie ; musique (coupe-decale, zouglou), danse, fetes ; ambiance des maquis ; capacite a rire et positiver',
@@ -24777,6 +27729,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignite-et-fierte@fr-CI'})
 SET cr.display_name = 'Dignite et fierte',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'high',
     cr.expression = 'La reputation personnelle et familiale est precieuse ; ne pas humilier publiquement ; maintenir son rang avec grace ; fierte d\'etre Ivoirien ; resilience face aux epreuves',
@@ -24793,6 +27747,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reconciliation-et-paix@fr-CI'})
 SET cr.display_name = 'Reconciliation et paix',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'medium',
     cr.expression = 'Apres la crise de 2010-2011, forte valorisation de la cohesion nationale ; vivre-ensemble entre ethnies et religions ; dialogue et pardon',
@@ -24809,6 +27765,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reussite-et-succes@fr-CI'})
 SET cr.display_name = 'Reussite et succes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'medium',
     cr.expression = 'Admiration pour la reussite economique ; Abidjan comme capitale economique de l\'UEMOA ; entrepreneuriat valorise ; "faire son chemin" respecte',
@@ -24825,6 +27783,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:elegance-et-style@fr-CI'})
 SET cr.display_name = 'Elegance et style',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'medium',
     cr.expression = 'Importance de la presentation ; bien s\'habiller montre le respect de soi et des autres ; pagne, mode, coiffure sont des marqueurs sociaux',
@@ -24841,6 +27801,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:didier-drogba@fr-CI'})
 SET cr.display_name = 'Didier Drogba',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'low',
     cr.expression = 'Icone nationale, legende du football, ambassadeur de paix ; peut etre reference positivement ; respecte par toutes les generations et communautes ; a joue un role dans la reconciliation',
@@ -24857,6 +27819,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:felix-houphouet-boigny@fr-CI'})
 SET cr.display_name = 'Felix Houphouet-Boigny',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'medium',
     cr.expression = 'Pere de l\'independance, premier president ; Basilique de Yamoussoukro ; "Pere de la Nation" pour beaucoup ; utiliser avec respect car heritage politique debattu par certains',
@@ -24873,6 +27837,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:abidjan-perle-des-lagunes@fr-CI'})
 SET cr.display_name = 'Abidjan "Perle des Lagunes"',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CI',
     cr.importance = 'low',
     cr.expression = 'Capitale economique ; modernite ; tours, Plateau, Cocody ; fierte urbaine ; dynamisme',
@@ -24897,6 +27863,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:mvanperwer-hospitality@ku-TR'})
 SET cr.display_name = 'Mêvanperwerî (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'high',
     cr.expression = 'Guests treated as sacred; elaborate hosting rituals; offering food, tea, warmth',
@@ -24913,6 +27881,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nams-honor@ku-TR'})
 SET cr.display_name = 'Namûs (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'high',
     cr.expression = 'Family reputation protection; collective responsibility; avoiding shame',
@@ -24929,6 +27899,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:malbat-family@ku-TR'})
 SET cr.display_name = 'Malbat (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective decisions; multi-generational bonds',
@@ -24945,6 +27917,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:xwebn-authenticitybeing-oneself@ku-TR'})
 SET cr.display_name = 'Xwebûn (Authenticity/Being oneself)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'high',
     cr.expression = 'Cultural identity preservation; language pride; authenticity valued',
@@ -24961,6 +27935,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rz-respect@ku-TR'})
 SET cr.display_name = 'Rêz (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, guests, and community; courtesy in all interactions',
@@ -24977,6 +27953,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:welatparz-love-of-homeland@ku-TR'})
 SET cr.display_name = 'Welatparêzî (Love of homeland)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'medium',
     cr.expression = 'Connection to ancestral lands; mountain and nature symbolism; diaspora longing',
@@ -24993,6 +27971,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:berxwedan-resilience@ku-TR'})
 SET cr.display_name = 'Berxwedanî (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'medium',
     cr.expression = 'Perseverance through hardship; community solidarity; strength in adversity',
@@ -25009,6 +27989,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kurdish-language-and-literature@ku-TR'})
 SET cr.display_name = 'Kurdish language and literature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'medium',
     cr.expression = 'Celebrated but historically suppressed; use proudly but avoid victimhood framing in commercial contexts',
@@ -25025,6 +28007,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dengbj-tradition-oral-poetry@ku-TR'})
 SET cr.display_name = 'Dengbêj tradition (oral poetry)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'low',
     cr.expression = 'Beloved art form; reference with respect; voice and authenticity themes',
@@ -25041,6 +28025,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mountain-heritage@ku-TR'})
 SET cr.display_name = 'Mountain heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ku-TR',
     cr.importance = 'low',
     cr.expression = '"Çiya" (mountain) symbolism safe; nature connection; avoid political territorial framing',
@@ -25065,6 +28051,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:botho-humanityrespect@en-BW'})
 SET cr.display_name = 'Botho (Humanity/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'high',
     cr.expression = 'Treating others with dignity, compassion, and mutual respect; "Motho ke motho ka batho ba bangwe" (A person is a person through others)',
@@ -25081,6 +28069,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kagiso-peace@en-BW'})
 SET cr.display_name = 'Kagiso (Peace)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'high',
     cr.expression = 'Harmony, stability, non-confrontation; pride in Botswana\'s peaceful history',
@@ -25097,6 +28087,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders-tlotlo@en-BW'})
 SET cr.display_name = 'Respect for Elders (Tlotlo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'high',
     cr.expression = 'Deference to older generations, seeking wisdom from elders, traditional authority structures',
@@ -25113,6 +28105,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pula-rainblessing@en-BW'})
 SET cr.display_name = 'Pula (Rain/Blessing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'high',
     cr.expression = 'Rain as sacred blessing; national motto "Pula!" means rain, prosperity, good fortune',
@@ -25129,6 +28123,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unityconsensus-kutlwano@en-BW'})
 SET cr.display_name = 'Unity/Consensus (Kutlwano)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'medium',
     cr.expression = 'Collective decision-making through Kgotla tradition; community above individual',
@@ -25145,6 +28141,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-tiro@en-BW'})
 SET cr.display_name = 'Hard Work (Tiro)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'medium',
     cr.expression = 'Self-reliance, industriousness, building prosperity through effort',
@@ -25161,6 +28159,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-go-amogela-baeng@en-BW'})
 SET cr.display_name = 'Hospitality (Go amogela baeng)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'medium',
     cr.expression = 'Welcoming guests, generous hosting, sharing food and drink',
@@ -25177,6 +28177,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:okavango-delta-unesco-world-heritage@en-BW'})
 SET cr.display_name = 'Okavango Delta (UNESCO World Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'low',
     cr.expression = 'Universally celebrated; safe for nature/conservation themes',
@@ -25193,6 +28195,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:zebras-national-football-team@en-BW'})
 SET cr.display_name = 'Zebras (National Football Team)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'low',
     cr.expression = 'Safe sports reference; growing football enthusiasm',
@@ -25209,6 +28213,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sir-seretse-khama@en-BW'})
 SET cr.display_name = 'Sir Seretse Khama',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-BW',
     cr.importance = 'low',
     cr.expression = 'Founding president widely revered; respectful references welcome',
@@ -25233,6 +28239,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:diyafa-hospitality@ar-IQ'})
 SET cr.display_name = 'Diyafa (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Generous welcoming of guests, offering tea and food, treating visitors as honored',
@@ -25249,6 +28257,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sharafird-honor@ar-IQ'})
 SET cr.display_name = 'Sharaf/Ird (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Protecting family and tribal reputation, keeping promises, maintaining dignity',
@@ -25265,6 +28275,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:asabiya-tribalfamily-solidarity@ar-IQ'})
 SET cr.display_name = 'Asabiya (Tribal/Family Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Loyalty to extended family and tribe, collective decision-making, mutual support',
@@ -25281,6 +28293,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:din-religious-faith@ar-IQ'})
 SET cr.display_name = 'Din (Religious Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Islam central to daily life, religious observance, moral framework',
@@ -25297,6 +28311,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sumud-resiliencesteadfastness@ar-IQ'})
 SET cr.display_name = 'Sumud (Resilience/Steadfastness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Endurance through decades of hardship, rebuilding spirit, perseverance',
@@ -25313,6 +28329,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:watan-patriotism@ar-IQ'})
 SET cr.display_name = 'Watan (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'medium',
     cr.expression = 'Love of Iraq despite difficulties, pride in Mesopotamian heritage, national identity',
@@ -25329,6 +28347,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karama-dignity@ar-IQ'})
 SET cr.display_name = 'Karama (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'medium',
     cr.expression = 'Personal and collective dignity, not being patronized, self-respect',
@@ -25345,6 +28365,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karam-generosity@ar-IQ'})
 SET cr.display_name = 'Karam (Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'medium',
     cr.expression = 'Giving freely, helping neighbors, sharing resources',
@@ -25361,6 +28383,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mesopotamian-civilization-babylon-ur-assyria-sumer@ar-IQ'})
 SET cr.display_name = 'Mesopotamian civilization (Babylon, Ur, Assyria, Sumer)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'low',
     cr.expression = 'Excellent source of pride; Hammurabi\'s Code, cuneiform, ziggurat imagery positive',
@@ -25377,6 +28401,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:iraqi-poets-and-intellectuals-al-mutanabbi-al-jawa@ar-IQ'})
 SET cr.display_name = 'Iraqi poets and intellectuals (Al-Mutanabbi, Al-Jawahiri)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'low',
     cr.expression = 'Literary heritage respected; poetic references resonate across demographics',
@@ -25393,6 +28419,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:recent-political-events-post-2003@ar-IQ'})
 SET cr.display_name = 'Recent political events (post-2003)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-IQ',
     cr.importance = 'high',
     cr.expression = 'Deeply divisive; avoid commercial references; different views across communities',
@@ -25417,6 +28445,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:imanfaith@pa-PK'})
 SET cr.display_name = 'ایمان (Iman/Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'high',
     cr.expression = 'Islam permeates daily life, decisions, and social interactions; religious observance central to identity',
@@ -25433,6 +28463,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:izzathonor@pa-PK'})
 SET cr.display_name = 'عزت (Izzat/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'high',
     cr.expression = 'Family reputation paramount; personal actions reflect on entire family/clan; avoid shame at all costs',
@@ -25449,6 +28481,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biradariclan-loyalty@pa-PK'})
 SET cr.display_name = 'بیرادری (Biradari/Clan loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'high',
     cr.expression = 'Extended family and clan networks fundamental; collective decision-making; mutual support obligations',
@@ -25465,6 +28499,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mehmaan-nawazihospitality@pa-PK'})
 SET cr.display_name = 'مہمان نوازی (Mehmaan Nawazi/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'high',
     cr.expression = 'Guests treated with utmost generosity; hospitality is sacred duty; refusing hospitality is offensive',
@@ -25481,6 +28517,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:elder-respect@pa-PK'})
 SET cr.display_name = 'وڈیریاں دا احترام (Elder respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'medium',
     cr.expression = 'Elders consulted on major decisions; age commands automatic respect; deference to seniority',
@@ -25497,6 +28535,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabrpatience@pa-PK'})
 SET cr.display_name = 'صبر (Sabr/Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'medium',
     cr.expression = 'Endurance in hardship valued; acceptance of divine will; long-term thinking',
@@ -25513,6 +28553,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hayamodesty@pa-PK'})
 SET cr.display_name = 'حیا (Haya/Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'medium',
     cr.expression = 'Reserved behavior expected, especially for women; modesty in dress, speech, and conduct',
@@ -25529,6 +28571,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pakistan-armed-forces@pa-PK'})
 SET cr.display_name = 'پاکستانی فوج (Pakistan Armed Forces)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'medium',
     cr.expression = 'Highly respected; use positively only; never criticize or satirize',
@@ -25545,6 +28589,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nuclear-capability@pa-PK'})
 SET cr.display_name = 'ایٹمی طاقت (Nuclear capability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pa-PK',
     cr.importance = 'high',
     cr.expression = 'Source of pride but sensitive topic; avoid casual references',
@@ -25569,6 +28615,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidezcalor-humano@es-DO'})
 SET cr.display_name = 'Calidez/Calor humano',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'high',
     cr.expression = 'Immediate warmth with strangers; physical closeness; terms of endearment ("mi amor", "manito"); genuine interest in wellbeing',
@@ -25585,6 +28633,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fereligiosidad@es-DO'})
 SET cr.display_name = 'Fe/Religiosidad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'high',
     cr.expression = 'Catholic traditions embedded deeply; "Si Dios quiere" in daily speech; church on Sundays; saints\' feast days; religious holidays major events',
@@ -25601,6 +28651,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:beisbol@es-DO'})
 SET cr.display_name = 'Beisbol',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'high',
     cr.expression = 'National passion; children grow up playing; MLB stars are national heroes (Pedro Martinez, Manny Ramirez, David Ortiz); spring training facilities',
@@ -25617,6 +28669,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musica-y-baile-merenguebachata@es-DO'})
 SET cr.display_name = 'Musica y baile (Merengue/Bachata)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'high',
     cr.expression = 'Merengue national dance; bachata global export; music everywhere; dancing is social bonding; Juan Luis Guerra, Romeo Santos iconic',
@@ -25633,6 +28687,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-to-elders-authority@es-DO'})
 SET cr.display_name = 'Respeto (to elders, authority)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'medium',
     cr.expression = 'Deference to parents, elders; "bendicion" greeting to elders; acknowledging hierarchy while maintaining warmth',
@@ -25649,6 +28705,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad@es-DO'})
 SET cr.display_name = 'Hospitalidad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'medium',
     cr.expression = 'Guests offered food and drink; sharing is expected; open doors; welcoming strangers as potential friends',
@@ -25665,6 +28723,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:baseballmlb-success@es-DO'})
 SET cr.display_name = 'Baseball/MLB success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'low',
     cr.expression = 'Safe universal pride; Dominican Republic is largest source of foreign MLB players; Pedro Martinez, Big Papi national heroes',
@@ -25681,6 +28741,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:caribbean-beachestourism@es-DO'})
 SET cr.display_name = 'Caribbean beaches/tourism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'low',
     cr.expression = 'Punta Cana, Samana, Puerto Plata; beautiful country; tourism success story',
@@ -25697,6 +28759,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diaspora-success@es-DO'})
 SET cr.display_name = 'Diaspora success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-DO',
     cr.importance = 'low',
     cr.expression = 'New York Dominicans (Dominicanyorks); success abroad while maintaining ties; American Dream narrative',
@@ -25721,6 +28785,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:pura-vida-pure-life@es-CR'})
 SET cr.display_name = 'Pura Vida (Pure Life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'high',
     cr.expression = 'Philosophy of well-being, gratitude, optimism, and enjoying life\'s simple pleasures; used as greeting, farewell, expression of agreement',
@@ -25737,6 +28803,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:paz-peace@es-CR'})
 SET cr.display_name = 'Paz (Peace)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'high',
     cr.expression = 'No military since 1948; conflict avoidance; diplomatic solutions; national identity built on peace',
@@ -25753,6 +28821,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-CR'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'high',
     cr.expression = 'Extended family central; Sunday family gatherings sacred; intergenerational support; decisions often collective',
@@ -25769,6 +28839,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:naturaleza-natureenvironment@es-CR'})
 SET cr.display_name = 'Naturaleza (Nature/Environment)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'high',
     cr.expression = '25% national parks; biodiversity pride; environmental awareness; eco-consciousness mainstream',
@@ -25785,6 +28857,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educacion-education@es-CR'})
 SET cr.display_name = 'Educacion (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'high',
     cr.expression = 'Free public education since 1869; high literacy rate; teachers respected; "la educacion es la mejor herencia"',
@@ -25801,6 +28875,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humildad-humility@es-CR'})
 SET cr.display_name = 'Humildad (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'medium',
     cr.expression = 'Avoid ostentation; quiet success preferred; don\'t flaunt wealth; "no sea creido/a" (don\'t be arrogant)',
@@ -25817,6 +28893,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-CR'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'medium',
     cr.expression = 'Mutual help expected; community support; helping neighbors; "echarse una mano"',
@@ -25833,6 +28911,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:democracia-democracy@es-CR'})
 SET cr.display_name = 'Democracia (Democracy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'medium',
     cr.expression = 'Oldest continuous democracy in Latin America; proud civic tradition; high voter participation',
@@ -25849,6 +28929,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:abolition-of-military-1948@es-CR'})
 SET cr.display_name = 'Abolition of military (1948)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'low',
     cr.expression = 'Major source of pride; redirected funds to education and health; use freely and positively',
@@ -25865,6 +28947,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:coffee-quality@es-CR'})
 SET cr.display_name = 'Coffee quality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'low',
     cr.expression = 'Grano de Oro (golden grain); Tarrazu world-renowned; strong heritage associations',
@@ -25881,6 +28965,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:abolition-of-death-penalty-1877@es-CR'})
 SET cr.display_name = 'Abolition of death penalty (1877)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-CR',
     cr.importance = 'low',
     cr.expression = 'Early progressive stance; human rights pride; can reference in values-aligned contexts',
@@ -25905,6 +28991,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:melmastia-hospitality@ps-AF'})
 SET cr.display_name = 'Melmastia (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Generous hosting of guests regardless of cost; offering food, shelter, protection to visitors',
@@ -25921,6 +29009,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nang-honor@ps-AF'})
 SET cr.display_name = 'Nang (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Personal and family reputation paramount; public perception carefully guarded',
@@ -25937,6 +29027,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:namus-protection-of-family-honor@ps-AF'})
 SET cr.display_name = 'Namus (Protection of Family Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Protecting family members, especially women; defending family name',
@@ -25953,6 +29045,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ghairat-couragedignity@ps-AF'})
 SET cr.display_name = 'Ghairat (Courage/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Standing firm on principles; bravery in defending one\'s values',
@@ -25969,6 +29063,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:badal-reciprocitybalance@ps-AF'})
 SET cr.display_name = 'Badal (Reciprocity/Balance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'medium',
     cr.expression = 'Repaying both kindness and wrongs; maintaining social equilibrium',
@@ -25985,6 +29081,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabat-steadfastness@ps-AF'})
 SET cr.display_name = 'Sabat (Steadfastness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'medium',
     cr.expression = 'Loyalty to one\'s word; keeping promises; consistency',
@@ -26001,6 +29099,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nanawatai-sanctuaryforgiveness@ps-AF'})
 SET cr.display_name = 'Nanawatai (Sanctuary/Forgiveness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'medium',
     cr.expression = 'Offering protection to those who ask; mercy and reconciliation',
@@ -26017,6 +29117,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jirga-collective-decision@ps-AF'})
 SET cr.display_name = 'Jirga (Collective Decision)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'medium',
     cr.expression = 'Consensus-building through elder councils; community agreement',
@@ -26033,6 +29135,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:afghan-hospitality-reputation@ps-AF'})
 SET cr.display_name = 'Afghan hospitality reputation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'low',
     cr.expression = 'Known globally for generous hosting; safe for positive reference',
@@ -26049,6 +29153,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ahmad-shah-massoud-in-some-regions@ps-AF'})
 SET cr.display_name = 'Ahmad Shah Massoud (in some regions)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Politically divisive; avoid in commercial contexts',
@@ -26065,6 +29171,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:islamic-emirate-achievements@ps-AF'})
 SET cr.display_name = 'Islamic Emirate achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ps-AF',
     cr.importance = 'high',
     cr.expression = 'Politically charged; avoid commercial commentary',
@@ -26089,6 +29197,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-des-aines-elder-respect@fr-CM'})
 SET cr.display_name = 'Respect des aines (Elder Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, traditional authorities, parents; titles used systematically; seeking blessings',
@@ -26105,6 +29215,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:unite-dans-la-diversite@fr-CM'})
 SET cr.display_name = 'Unite dans la diversite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'high',
     cr.expression = '"L\'Afrique en miniature" with 250+ ethnicities; bilingualism French-English; coexistence valued',
@@ -26121,6 +29233,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-chaleur-africaine@fr-CM'})
 SET cr.display_name = 'Hospitalite (Chaleur africaine)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'high',
     cr.expression = 'Welcoming strangers; sharing meals; generous spirit; visitors treated as honored guests',
@@ -26137,6 +29251,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:famille-elargie-extended-family@fr-CM'})
 SET cr.display_name = 'Famille elargie (Extended Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'high',
     cr.expression = 'Collective responsibility; intergenerational care; family decisions; remittances to village',
@@ -26153,6 +29269,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:travail-et-ambition@fr-CM'})
 SET cr.display_name = 'Travail et ambition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'high',
     cr.expression = 'Strong work ethic; entrepreneurial spirit; value of education; self-improvement',
@@ -26169,6 +29287,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignite-personnelle@fr-CM'})
 SET cr.display_name = 'Dignite personnelle',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'medium',
     cr.expression = 'Personal honor; avoiding shame (honte); maintaining face; reputation matters',
@@ -26185,6 +29305,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:foi-et-spiritualite@fr-CM'})
 SET cr.display_name = 'Foi et spiritualite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'medium',
     cr.expression = 'Christianity dominant; Islam in north; traditional beliefs; prayers common in daily life',
@@ -26201,6 +29323,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-communautaire@fr-CM'})
 SET cr.display_name = 'Solidarite communautaire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'medium',
     cr.expression = 'Tontines (savings groups); mutual aid; neighborhood cooperation; Ubuntu philosophy',
@@ -26217,6 +29341,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:lions-indomptables-football@fr-CM'})
 SET cr.display_name = 'Lions Indomptables (football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'low',
     cr.expression = 'National passion; CAN champions; Eto\'o, Milla, Mboma legends; use freely for emotional connection',
@@ -26233,6 +29359,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:reunification-october-1@fr-CM'})
 SET cr.display_name = 'Reunification (October 1)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'medium',
     cr.expression = 'Independence/reunification complex history; celebrate unity not colonial past; handle respectfully',
@@ -26249,6 +29377,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mount-cameroon@fr-CM'})
 SET cr.display_name = 'Mount Cameroon',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-CM',
     cr.importance = 'low',
     cr.expression = 'Highest peak in West/Central Africa; natural wonder; athletics race famous; use freely',
@@ -26273,6 +29403,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-oikogeneia@el-GR'})
 SET cr.display_name = 'Family (Oikogeneia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'high',
     cr.expression = 'Strong extended family bonds, multi-generational support, family gatherings central to life',
@@ -26289,6 +29421,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:philotimo-honordignity@el-GR'})
 SET cr.display_name = 'Philotimo (Honor/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'high',
     cr.expression = 'Personal integrity, doing right by others, pride in work and self, exceeding expectations',
@@ -26305,6 +29439,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:philoxenia-hospitality@el-GR'})
 SET cr.display_name = 'Philoxenia (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'high',
     cr.expression = 'Generous welcome to guests, sharing food and drink, warmth to strangers',
@@ -26321,6 +29457,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orthodox-faith@el-GR'})
 SET cr.display_name = 'Orthodox Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'medium',
     cr.expression = 'Religious holidays observed, cultural identity marker, church as community pillar',
@@ -26337,6 +29475,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kefi-joyspirit@el-GR'})
 SET cr.display_name = 'Kefi (Joy/Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'medium',
     cr.expression = 'Celebration of life, music, dancing, passionate expression, living in the moment',
@@ -26353,6 +29493,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-paideia@el-GR'})
 SET cr.display_name = 'Education (Paideia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'medium',
     cr.expression = 'High value on learning, degrees respected, knowledge as path to success',
@@ -26369,6 +29511,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-greek-civilization@el-GR'})
 SET cr.display_name = 'Ancient Greek civilization',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'low',
     cr.expression = 'Safe; birthplace of democracy, philosophy, Olympics - universally celebrated',
@@ -26385,6 +29529,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty-islands-mainland@el-GR'})
 SET cr.display_name = 'Natural beauty (islands, mainland)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'low',
     cr.expression = 'Safe; Greek landscapes widely celebrated, tourism pride',
@@ -26401,6 +29547,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:greek-language-continuity@el-GR'})
 SET cr.display_name = 'Greek language continuity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-GR',
     cr.importance = 'low',
     cr.expression = 'Safe; pride in linguistic heritage spanning millennia',
@@ -26425,6 +29573,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@hi-IN'})
 SET cr.display_name = 'परिवार (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'high',
     cr.expression = 'Joint family system revered; multi-generational living; collective decision-making; family honor paramount',
@@ -26441,6 +29591,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:valuesupbringing@hi-IN'})
 SET cr.display_name = 'संस्कार (Values/Upbringing)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'high',
     cr.expression = 'Good upbringing emphasized; cultural traditions maintained; proper conduct expected; "अच्छे घर का" marker',
@@ -26457,6 +29609,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@hi-IN'})
 SET cr.display_name = 'आदर/सम्मान (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders; teacher reverence (गुरु); hierarchical deference; hospitality as duty',
@@ -26473,6 +29627,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dutyreligion@hi-IN'})
 SET cr.display_name = 'धर्म (Duty/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'high',
     cr.expression = 'Religious observances important; karma concept; dharmic responsibility; temple/worship culture',
@@ -26489,6 +29645,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:guest-is-god@hi-IN'})
 SET cr.display_name = 'अतिथि देवो भव (Guest is God)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'medium',
     cr.expression = 'Hospitality as sacred duty; generous hosting; treating customers as honored guests',
@@ -26505,6 +29663,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@hi-IN'})
 SET cr.display_name = 'शिक्षा (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'medium',
     cr.expression = 'Education highly valued; aspiration for children\'s success; degrees as status markers',
@@ -26521,6 +29681,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@hi-IN'})
 SET cr.display_name = 'मेहनत (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'medium',
     cr.expression = 'Diligence respected; "परिश्रम ही सफलता है" ethos; self-made success stories valued',
@@ -26537,6 +29699,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorreputation@hi-IN'})
 SET cr.display_name = 'इज़्ज़त (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'medium',
     cr.expression = 'Family reputation crucial; social standing matters; avoiding shame ("बेइज़्ज़ती") important',
@@ -26553,6 +29717,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:indian-heritage-and-civilization@hi-IN'})
 SET cr.display_name = 'Indian heritage and civilization',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'low',
     cr.expression = 'Safe; 5000-year civilization; yoga, Ayurveda, mathematics origins; use respectfully',
@@ -26569,6 +29735,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:it-industry-global-presence@hi-IN'})
 SET cr.display_name = 'IT industry global presence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'low',
     cr.expression = '"World\'s back office"; tech talent; startup ecosystem; safe for professional positioning',
@@ -26585,6 +29753,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:armed-forces@hi-IN'})
 SET cr.display_name = 'Armed forces',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'hi-IN',
     cr.importance = 'medium',
     cr.expression = 'Deep respect for military; use respectfully; never mock or trivialize; Kargil, surgical strikes pride',
@@ -26609,6 +29779,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ayni-reciprocity@qu-PE'})
 SET cr.display_name = 'Ayni (Reciprocity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'high',
     cr.expression = 'Mutual assistance is non-negotiable; every gift requires return; labor exchanges between families; community obligations',
@@ -26625,6 +29797,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ayllu-community@qu-PE'})
 SET cr.display_name = 'Ayllu (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'high',
     cr.expression = 'Extended family and community structure; collective identity over individual; belonging through kinship and land',
@@ -26641,6 +29815,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pachamama-earth-mother@qu-PE'})
 SET cr.display_name = 'Pachamama (Earth Mother)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'high',
     cr.expression = 'Reverence for earth as living mother; offerings before planting/building; ecological harmony',
@@ -26657,6 +29833,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:allin-kawsay-good-living@qu-PE'})
 SET cr.display_name = 'Allin Kawsay (Good Living)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'high',
     cr.expression = 'Balance and harmony in life; wellness over accumulation; spiritual and material equilibrium',
@@ -26673,6 +29851,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respeto-respect@qu-PE'})
 SET cr.display_name = 'Respeto (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, nature, and traditions; earned through wisdom and service; never imposed',
@@ -26689,6 +29869,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:llankay-work@qu-PE'})
 SET cr.display_name = 'Llank\'ay (Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'medium',
     cr.expression = 'Honest labor is dignified; agricultural work honored; industriousness valued; "mana q\'ila" (not lazy)',
@@ -26705,6 +29887,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kawsay-lifeliving@qu-PE'})
 SET cr.display_name = 'Kawsay (Life/Living)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'medium',
     cr.expression = 'Life as sacred; connection to ancestors (machulakuna); continuity of traditions',
@@ -26721,6 +29905,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yachay-knowledgewisdom@qu-PE'})
 SET cr.display_name = 'Yachay (Knowledge/Wisdom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'medium',
     cr.expression = 'Ancestral knowledge valued; oral tradition; elders as repositories of wisdom',
@@ -26737,6 +29923,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:machu-picchutawantinsuyu-heritage@qu-PE'})
 SET cr.display_name = 'Machu Picchu/Tawantinsuyu heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'low',
     cr.expression = 'Source of immense pride; Incan civilization celebrated; safe to reference respectfully',
@@ -26753,6 +29941,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:textile-traditions@qu-PE'})
 SET cr.display_name = 'Textile traditions',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; weavers honored; patterns carry cosmological meaning; artisanal pride',
@@ -26769,6 +29959,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:inti-raymi-and-festivals@qu-PE'})
 SET cr.display_name = 'Inti Raymi and festivals',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'low',
     cr.expression = 'Sun festival revived; cultural celebration; tourism positive but authenticity valued',
@@ -26785,6 +29977,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resistance-and-survival@qu-PE'})
 SET cr.display_name = 'Resistance and survival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'qu-PE',
     cr.importance = 'medium',
     cr.expression = 'Pride in surviving colonization but connected to trauma; celebrate carefully',
@@ -26809,6 +30003,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-porodica@sr-RS'})
 SET cr.display_name = 'Family (Porodica)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households, collective celebrations (slava), family gatherings, loyalty to extended family',
@@ -26825,6 +30021,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-gostoprimstvo@sr-RS'})
 SET cr.display_name = 'Hospitality (Gostoprimstvo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'high',
     cr.expression = 'Generous hosting, offering food and drink, making guests feel honored regardless of host\'s resources',
@@ -26841,6 +30039,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pride-and-defiance-inat@sr-RS'})
 SET cr.display_name = 'Pride and Defiance (Inat)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'high',
     cr.expression = 'Stubborn perseverance, refusal to yield under pressure, self-respect, resilience in adversity',
@@ -26857,6 +30057,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-postovanje@sr-RS'})
 SET cr.display_name = 'Respect (Postovanje)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'high',
     cr.expression = 'Honoring elders, professional titles, social hierarchies, formal politeness in interaction',
@@ -26873,6 +30075,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:authenticity-autenticnost@sr-RS'})
 SET cr.display_name = 'Authenticity (Autenticnost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'high',
     cr.expression = 'Valuing genuine relationships, sincerity over pretense, skepticism of exaggeration and flattery',
@@ -26889,6 +30093,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-vrednost@sr-RS'})
 SET cr.display_name = 'Hard Work (Vrednost)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'medium',
     cr.expression = 'Practical skills, industriousness, resourcefulness, making things work despite obstacles',
@@ -26905,6 +30111,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-zajednica@sr-RS'})
 SET cr.display_name = 'Community (Zajednica)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'medium',
     cr.expression = 'Neighborhood bonds, local solidarity, collective support networks, strong friend groups',
@@ -26921,6 +30129,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements-tennis-djokovic-basketball-wat@sr-RS'})
 SET cr.display_name = 'Sports achievements (tennis: Djokovic, basketball, water polo, football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'low',
     cr.expression = 'Universally celebrated; Djokovic especially iconic; safe positive reference',
@@ -26937,6 +30147,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:music-and-arts-traditional-and-contemporary@sr-RS'})
 SET cr.display_name = 'Music and arts (traditional and contemporary)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sr-RS',
     cr.importance = 'low',
     cr.expression = 'Kafana culture, folk music, EXIT festival; safe cultural references',
@@ -26961,6 +30173,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:mib-melayu-islam-beraja@ms-BN'})
 SET cr.display_name = 'MIB (Melayu Islam Beraja)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'critical',
     cr.expression = 'National philosophy integrating Malay culture, Islamic faith, and monarchy loyalty',
@@ -26977,6 +30191,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kesopanan-proprietycourtesy@ms-BN'})
 SET cr.display_name = 'Kesopanan (Propriety/Courtesy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'high',
     cr.expression = 'Formal speech, proper honorifics, dignified behavior in all interactions',
@@ -26993,6 +30209,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agama-religious-devotion@ms-BN'})
 SET cr.display_name = 'Agama (Religious devotion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'high',
     cr.expression = 'Daily prayers, halal compliance, Islamic greetings, religious observances',
@@ -27009,6 +30227,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kesetiaan-loyalty@ms-BN'})
 SET cr.display_name = 'Kesetiaan (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'high',
     cr.expression = 'Loyalty to Sultan, nation, family, and institutions; long-term relationships valued',
@@ -27025,6 +30245,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maruah-dignityhonor@ms-BN'})
 SET cr.display_name = 'Maruah (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'high',
     cr.expression = 'Preserving face, avoiding embarrassment, protecting reputation',
@@ -27041,6 +30263,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rendah-diri-humility@ms-BN'})
 SET cr.display_name = 'Rendah diri (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'medium',
     cr.expression = 'Modesty in success, avoiding boastfulness, quiet achievement',
@@ -27057,6 +30281,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kekeluargaan-family-bonds@ms-BN'})
 SET cr.display_name = 'Kekeluargaan (Family bonds)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'medium',
     cr.expression = 'Extended family closeness, respect for elders, collective decisions',
@@ -27073,6 +30299,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sultan-hassanal-bolkiah-and-royal-family@ms-BN'})
 SET cr.display_name = 'Sultan Hassanal Bolkiah and Royal Family',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'high',
     cr.expression = 'Absolute respect required; never casual references; use full titles; highly positive but handle with reverence',
@@ -27089,6 +30317,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:oil-and-gas-wealthprosperity@ms-BN'})
 SET cr.display_name = 'Oil and gas wealth/prosperity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'medium',
     cr.expression = 'Source of stability; can reference national development; avoid appearing wasteful',
@@ -27105,6 +30335,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1984@ms-BN'})
 SET cr.display_name = 'Independence (1984)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ms-BN',
     cr.importance = 'low',
     cr.expression = 'Celebratory theme; Hari Kebangsaan (National Day) promotions welcome',
@@ -27129,6 +30361,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:humildad-humility@es-UY'})
 SET cr.display_name = 'Humildad (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'Understated self-presentation; "no te la creas"; discomfort with boasting; success downplayed; preference for modest achievers over flashy ones',
@@ -27145,6 +30379,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tranquilidad-calmness@es-UY'})
 SET cr.display_name = 'Tranquilidad (Calmness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'Relaxed pace of life; "tranqui" as lifestyle; stress avoidance valued; patience in interactions; quality of life prioritized over hustle',
@@ -27161,6 +30397,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-UY'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'Strong community bonds; collective welfare valued; neighbor helping neighbor; cooperative traditions; social safety net pride',
@@ -27177,6 +30415,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:igualdad-equality@es-UY'})
 SET cr.display_name = 'Igualdad (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'Egalitarian ethos; class distinctions downplayed; "somos todos iguales"; aversion to hierarchy; accessible public services pride',
@@ -27193,6 +30433,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mate-mate-culture@es-UY'})
 SET cr.display_name = 'Mate (Mate Culture)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'National identity symbol; sharing ritual; carried everywhere; social bonding; hospitality indicator; individual thermos omnipresent',
@@ -27209,6 +30451,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-UY'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'high',
     cr.expression = 'Central social unit; extended family bonds; Sunday gatherings; multi-generational connections; family advice valued',
@@ -27225,6 +30469,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educacioncultura-education@es-UY'})
 SET cr.display_name = 'Educacion/Cultura (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'medium',
     cr.expression = 'Literacy pride; public education tradition; secular education values; cultural participation; intellectual respect',
@@ -27241,6 +30487,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:libertad-freedom@es-UY'})
 SET cr.display_name = 'Libertad (Freedom)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'medium',
     cr.expression = 'Personal freedom valued; progressive social stance; live-and-let-live; tolerance for difference; individual choice respected',
@@ -27257,6 +30505,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:1930-and-1950-world-cup-victories@es-UY'})
 SET cr.display_name = '1930 and 1950 World Cup victories',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'low',
     cr.expression = 'Safe and powerful; "Maracanazo" 1950 against Brazil especially resonant; founding champions of World Cup',
@@ -27273,6 +30523,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:jos-artigas-national-hero@es-UY'})
 SET cr.display_name = 'José Artigas (national hero)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'low',
     cr.expression = 'Father of the nation; respected across political spectrum; orientalidad pride; safe historical reference',
@@ -27289,6 +30541,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:renewable-energy-success@es-UY'})
 SET cr.display_name = 'Renewable energy success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-UY',
     cr.importance = 'low',
     cr.expression = '95%+ renewable electricity; environmental leadership; safe positive reference; Uruguay Natural brand',
@@ -27313,6 +30567,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntu-humanity-through-others@zu-ZA'})
 SET cr.display_name = 'Ubuntu (Humanity through others)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'high',
     cr.expression = '"Umuntu ngumuntu ngabantu" - A person is a person through other people. Community interdependence, shared responsibility, collective wellbeing',
@@ -27329,6 +30585,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:inhlonipho-respect@zu-ZA'})
 SET cr.display_name = 'Inhlonipho (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, use of hlonipha language, proper greetings, acknowledging dignity of all people regardless of status',
@@ -27345,6 +30603,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukulunga-righteousnessintegrity@zu-ZA'})
 SET cr.display_name = 'Ukulunga (Righteousness/Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'high',
     cr.expression = 'Honesty in dealings, keeping commitments, moral uprightness, trustworthiness in community standing',
@@ -27361,6 +30621,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:isithunzi-dignityprestige@zu-ZA'})
 SET cr.display_name = 'Isithunzi (Dignity/Prestige)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'medium',
     cr.expression = 'Maintaining personal and family honor, reputation management, carrying oneself with pride and composure',
@@ -27377,6 +30639,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:umndeni-family@zu-ZA'})
 SET cr.display_name = 'Umndeni (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'medium',
     cr.expression = 'Extended family networks, ancestral connections, collective family decisions, multi-generational bonds',
@@ -27393,6 +30657,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukuzimela-self-reliance@zu-ZA'})
 SET cr.display_name = 'Ukuzimela (Self-reliance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'medium',
     cr.expression = 'Personal initiative within community context, entrepreneurship balanced with community contribution, economic empowerment',
@@ -27409,6 +30675,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuqotho-authenticity@zu-ZA'})
 SET cr.display_name = 'Ubuqotho (Authenticity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'medium',
     cr.expression = 'Genuine relationships, sincerity over superficiality, consistency between words and actions',
@@ -27425,6 +30693,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:zulu-cultural-heritage@zu-ZA'})
 SET cr.display_name = 'Zulu cultural heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'medium',
     cr.expression = 'Deeply valued. Reference with respect and accuracy. Avoid superficial or stereotypical portrayals. The Zulu nation\'s history of resistance and independence is a source of pride',
@@ -27441,6 +30711,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:constitutional-democracy@zu-ZA'})
 SET cr.display_name = 'Constitutional democracy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zu-ZA',
     cr.importance = 'low',
     cr.expression = 'Pride in progressive constitution, human rights framework. Safe to reference positively in appropriate contexts',
@@ -27465,6 +30737,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:integrite-burkindi@fr-BF'})
 SET cr.display_name = 'Integrite (Burkindi)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'Le nom du pays signifie "Pays des Hommes Integres" - l\'honnetete et la droiture sont des valeurs fondamentales ; tenir sa parole est sacre',
@@ -27481,6 +30755,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-des-aines-et-de-la-hierarchie@fr-BF'})
 SET cr.display_name = 'Respect des aines et de la hierarchie',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'Les aines sont consultes pour les decisions importantes ; les salutations elaborees sont obligatoires ; on ne contredit pas publiquement un superieur',
@@ -27497,6 +30773,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-communautaire@fr-BF'})
 SET cr.display_name = 'Solidarite communautaire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'Le concept de famille etendue ; l\'entraide lors des evenements (mariages, funerailles, baptemes) ; cotisations collectives (tontines)',
@@ -27513,6 +30791,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-teranga@fr-BF'})
 SET cr.display_name = 'Hospitalite (Teranga)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'Accueil chaleureux des visiteurs ; partage du repas ; l\'etranger est un invite de Dieu ; ne jamais refuser l\'eau a un visiteur',
@@ -27529,6 +30809,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignite-et-honneur@fr-BF'})
 SET cr.display_name = 'Dignite et honneur',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'La reputation personnelle et familiale est precieuse ; eviter la honte publique ; maintenir son rang avec grace ; ne pas humilier autrui',
@@ -27545,6 +30827,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dialogue-et-consensus@fr-BF'})
 SET cr.display_name = 'Dialogue et consensus',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'medium',
     cr.expression = 'Tradition de palabre sous l\'arbre ; recherche de consensus plutot que confrontation ; mediation valorisee ; patience dans la resolution des conflits',
@@ -27561,6 +30845,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:courage-et-resilience@fr-BF'})
 SET cr.display_name = 'Courage et resilience',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'medium',
     cr.expression = 'Histoire de resistance ; adaptation aux defis climatiques et economiques ; fierte de la capacite a surmonter les epreuves',
@@ -27577,6 +30863,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humilite@fr-BF'})
 SET cr.display_name = 'Humilite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'medium',
     cr.expression = 'La vantardise est mal vue ; la reussite se montre avec discretion ; ne pas ecraser les autres par son succes',
@@ -27593,6 +30881,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:thomas-sankara@fr-BF'})
 SET cr.display_name = 'Thomas Sankara',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'high',
     cr.expression = 'Icone nationale, "Pere de la Revolution", figure quasi-sacree pour beaucoup ; utiliser avec grand respect, jamais de maniere commerciale legere ; symbolise l\'integrite, l\'independance, la fierte africaine',
@@ -27609,6 +30899,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:les-etalons-equipe-nationale-de-football@fr-BF'})
 SET cr.display_name = 'Les Etalons (equipe nationale de football)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'low',
     cr.expression = 'Grande popularite ; finale de la CAN 2013 ; passion nationale ; references sportives bien recues ; federateur',
@@ -27625,6 +30917,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musique-et-culture@fr-BF'})
 SET cr.display_name = 'Musique et culture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-BF',
     cr.importance = 'low',
     cr.expression = 'Artistes reconnus (Sana Bob, Floby, Smarty, Greg Burkimbila) ; scene musicale vibrante ; couscous, poulet bicyclette, dolo',
@@ -27649,6 +30943,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:islamic-faith@en-SA'})
 SET cr.display_name = 'Islamic Faith',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'highest',
     cr.expression = 'Shapes daily life, business ethics, governance, social interactions; prayer times structure the day',
@@ -27665,6 +30961,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-diyafa@en-SA'})
 SET cr.display_name = 'Hospitality (Diyafa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Generous reception of guests; making visitors feel honoured; going above and beyond in service',
@@ -27681,6 +30979,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-honour-and-unity@en-SA'})
 SET cr.display_name = 'Family Honour and Unity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective decision-making; protecting family reputation',
@@ -27697,6 +30997,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride-vision-2030@en-SA'})
 SET cr.display_name = 'National Pride (Vision 2030)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Pride in Saudi transformation; NEOM, Red Sea Project, entertainment season achievements',
@@ -27713,6 +31015,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignity-and-face-wajh@en-SA'})
 SET cr.display_name = 'Dignity and Face (Wajh)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Preserving personal and family honour; avoiding public embarrassment; respectful interactions',
@@ -27729,6 +31033,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trustworthiness-amana@en-SA'})
 SET cr.display_name = 'Trustworthiness (Amana)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'medium',
     cr.expression = 'Keeping commitments; reliability in business dealings; honest communication',
@@ -27745,6 +31051,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progress-with-heritage@en-SA'})
 SET cr.display_name = 'Progress with Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'medium',
     cr.expression = 'Embracing modernisation while preserving traditions; innovation within cultural framework',
@@ -27761,6 +31069,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:collectivism@en-SA'})
 SET cr.display_name = 'Collectivism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'medium',
     cr.expression = 'Group harmony; consensus-building; community and tribe connections',
@@ -27777,6 +31087,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:two-holy-mosques-makkah-and-madinah@en-SA'})
 SET cr.display_name = 'Two Holy Mosques (Makkah and Madinah)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Sacred sites; never commercialise; only respectful references; no imagery in advertising',
@@ -27793,6 +31105,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:saudi-leadership@en-SA'})
 SET cr.display_name = 'Saudi Leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'high',
     cr.expression = 'Always speak respectfully; never criticise or satirise; formal protocol required',
@@ -27809,6 +31123,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:saudi-sports-achievements@en-SA'})
 SET cr.display_name = 'Saudi Sports Achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-SA',
     cr.importance = 'low',
     cr.expression = 'Football success, hosting World Cup 2034; freely celebrate; positive brand associations',
@@ -27833,6 +31149,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:gotong-royong-mutual-cooperation@id-ID'})
 SET cr.display_name = 'Gotong Royong (Mutual Cooperation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'high',
     cr.expression = 'Community collaboration, helping neighbors, collective responsibility',
@@ -27849,6 +31167,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kekeluargaan-family-spirit@id-ID'})
 SET cr.display_name = 'Kekeluargaan (Family Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, collective decisions, intergenerational care',
@@ -27865,6 +31185,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hormat-respect@id-ID'})
 SET cr.display_name = 'Hormat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'high',
     cr.expression = 'Deference to elders, authority, social hierarchy; polite speech levels',
@@ -27881,6 +31203,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musyawarah-mufakat-consensus@id-ID'})
 SET cr.display_name = 'Musyawarah Mufakat (Consensus)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'high',
     cr.expression = 'Group decision-making, avoiding conflict, seeking agreement',
@@ -27897,6 +31221,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rukun-harmony@id-ID'})
 SET cr.display_name = 'Rukun (Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'high',
     cr.expression = 'Maintaining social harmony, avoiding conflict, preserving relationships',
@@ -27913,6 +31239,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:malu-shamesocial-awareness@id-ID'})
 SET cr.display_name = 'Malu (Shame/Social Awareness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'medium',
     cr.expression = 'Concern for social judgment, maintaining face, avoiding embarrassment',
@@ -27929,6 +31257,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bhineka-tunggal-ika-unity-in-diversity@id-ID'})
 SET cr.display_name = 'Bhineka Tunggal Ika (Unity in Diversity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'medium',
     cr.expression = 'Celebrating cultural diversity, religious pluralism, national unity',
@@ -27945,6 +31275,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ramah-tamah-hospitalityfriendliness@id-ID'})
 SET cr.display_name = 'Ramah Tamah (Hospitality/Friendliness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'medium',
     cr.expression = 'Warm welcomes, generous hosting, friendly interactions',
@@ -27961,6 +31293,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-merdeka-17-august-1945@id-ID'})
 SET cr.display_name = 'Independence (Merdeka, 17 August 1945)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'low',
     cr.expression = 'Major celebration; Sukarno revered; independence themes always positive; "merdeka" resonates',
@@ -27977,6 +31311,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:batik-and-traditional-crafts@id-ID'})
 SET cr.display_name = 'Batik and traditional crafts',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'low',
     cr.expression = 'UNESCO heritage; deeply beloved; excellent for authentic brand associations',
@@ -27993,6 +31329,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:badminton-and-sports-achievements@id-ID'})
 SET cr.display_name = 'Badminton and sports achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'id-ID',
     cr.importance = 'low',
     cr.expression = 'National sport passion; Olympic success celebrated; sports partnerships well-received',
@@ -28017,6 +31355,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosityhospitality@ar-QA'})
 SET cr.display_name = 'الكرم والضيافة (Generosity/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'high',
     cr.expression = 'World-renowned hosting (World Cup 2022); treating guests as honored family; majlis culture; "أهلاً وسهلاً" as national identity',
@@ -28033,6 +31373,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faith@ar-QA'})
 SET cr.display_name = 'الإيمان (Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'high',
     cr.expression = 'Islamic values integrated into daily life; prayer times sacred; Ramadan central; Islamic ethics in business',
@@ -28049,6 +31391,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ar-QA'})
 SET cr.display_name = 'العائلة (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'high',
     cr.expression = 'Extended family central; family honor collective; intergenerational living; family consultation on decisions',
@@ -28065,6 +31409,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ambition@ar-QA'})
 SET cr.display_name = 'الطموح (Ambition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'high',
     cr.expression = 'Qatar National Vision 2030; rapid development; knowledge economy building; global ambitions',
@@ -28081,6 +31427,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityhonor@ar-QA'})
 SET cr.display_name = 'الكرامة والشرف (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'high',
     cr.expression = 'Personal and family honor paramount; face-saving in all interactions; reputation protection',
@@ -28097,6 +31445,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sustainability@ar-QA'})
 SET cr.display_name = 'الاستدامة (Sustainability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'medium',
     cr.expression = 'Environmental awareness; FIFA World Cup legacy sustainability; Qatar National Environment and Climate Change Strategy',
@@ -28113,6 +31463,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:excellence@ar-QA'})
 SET cr.display_name = 'التميز (Excellence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'medium',
     cr.expression = 'World-class standards pursuit; global hub ambitions; infrastructure excellence; being "first" and "best"',
@@ -28129,6 +31481,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:knowledge@ar-QA'})
 SET cr.display_name = 'المعرفة (Knowledge)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'medium',
     cr.expression = 'Education City investment; Qatar Foundation emphasis; research and development; knowledge economy',
@@ -28145,6 +31499,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fifa-world-cup-2022@ar-QA'})
 SET cr.display_name = 'FIFA World Cup 2022',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'low',
     cr.expression = 'Historic achievement; first Arab/Middle East host; freely reference; stadium imagery positive; infrastructure pride',
@@ -28161,6 +31517,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-city-and-qatar-foundation@ar-QA'})
 SET cr.display_name = 'Education City and Qatar Foundation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'low',
     cr.expression = 'Source of pride; world-class universities; can reference freely; innovation and knowledge economy symbols',
@@ -28177,6 +31535,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:amiri-leadership@ar-QA'})
 SET cr.display_name = 'Amiri leadership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-QA',
     cr.importance = 'medium',
     cr.expression = 'Respect required; positive references acceptable; never use for commercial purposes; formal context only',
@@ -28201,6 +31561,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-y-confianza-warmth-and-trust@es-VE'})
 SET cr.display_name = 'Calidez y confianza (warmth and trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'high',
     cr.expression = 'Deep personal warmth in all interactions; "pana" culture; genuine human connection valued over efficiency; hospitality paramount',
@@ -28217,6 +31579,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia@es-VE'})
 SET cr.display_name = 'Familia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'high',
     cr.expression = 'Extended family deeply involved; multi-generational gatherings; family sacrifices for each other; diaspora families stay connected across borders',
@@ -28233,6 +31597,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alegria-y-humor@es-VE'})
 SET cr.display_name = 'Alegria y humor',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'high',
     cr.expression = 'Joy despite adversity; humor as coping mechanism; celebrations important; "echarle pichon" (keep pushing with spirit)',
@@ -28249,6 +31615,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencia-resilience@es-VE'})
 SET cr.display_name = 'Resiliencia (resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'high',
     cr.expression = 'Adaptability in challenging circumstances; "resolver" culture; creative problem-solving; making do with less',
@@ -28265,6 +31633,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nostalgia-por-venezuela@es-VE'})
 SET cr.display_name = 'Nostalgia por Venezuela',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'medium',
     cr.expression = 'Deep attachment to homeland; emotional connection to Venezuelan traditions, food, places',
@@ -28281,6 +31651,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:beisbol-venezolano@es-VE'})
 SET cr.display_name = 'Beisbol venezolano',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'low',
     cr.expression = 'Universal safe pride point; MLB players (Cabrera, Altuve, King Felix); Liga Venezolana de Beisbol',
@@ -28297,6 +31669,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:angel-falls-salto-angel@es-VE'})
 SET cr.display_name = 'Angel Falls (Salto Angel)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'low',
     cr.expression = 'Tallest waterfall; natural wonder; Canaima National Park; safe tourism/nature reference',
@@ -28313,6 +31687,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:musica-venezolana@es-VE'})
 SET cr.display_name = 'Musica venezolana',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-VE',
     cr.importance = 'low',
     cr.expression = 'Gaita, joropo, salsa venezolana; Oscar D\'Leon, Franco De Vita, Chino y Nacho; safe cultural reference',
@@ -28337,6 +31713,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:qonaqperverlik-hospitality@az-AZ'})
 SET cr.display_name = 'Qonaqperverlik (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, offering tea, welcoming strangers',
@@ -28353,6 +31731,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:aile-family@az-AZ'})
 SET cr.display_name = 'Aile (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households, family decision-making, respect for elders',
@@ -28369,6 +31749,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:seref-honor@az-AZ'})
 SET cr.display_name = 'Seref (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'high',
     cr.expression = 'Personal and family reputation, keeping word, integrity in business',
@@ -28385,6 +31767,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vatanperverlik-patriotism@az-AZ'})
 SET cr.display_name = 'Vatanperverlik (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'high',
     cr.expression = 'Strong national pride, territorial integrity, Azerbaijani heritage',
@@ -28401,6 +31785,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hoermet-respect@az-AZ'})
 SET cr.display_name = 'Hoermet (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'medium',
     cr.expression = 'Deference to elders, titles, social hierarchy, polite address',
@@ -28417,6 +31803,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:muesteqillik-independence@az-AZ'})
 SET cr.display_name = 'Muesteqillik (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'medium',
     cr.expression = 'National sovereignty, self-determination, progress since 1991',
@@ -28433,6 +31821,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:territorial-integrity-and-karabakh@az-AZ'})
 SET cr.display_name = 'Territorial integrity and Karabakh',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'high',
     cr.expression = 'Victory in 2020 is celebrated; reference with care; never question sovereignty',
@@ -28449,6 +31839,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-mugham-music-carpet-weaving@az-AZ'})
 SET cr.display_name = 'Cultural heritage (mugham music, carpet weaving)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'low',
     cr.expression = 'UNESCO-recognized traditions; safe and positive for cultural references',
@@ -28465,6 +31857,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heydar-aliyev-legacy@az-AZ'})
 SET cr.display_name = 'Heydar Aliyev legacy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'az-AZ',
     cr.importance = 'medium',
     cr.expression = 'Founding leader respected widely; neutral to positive references acceptable in business',
@@ -28489,6 +31883,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ordnung-order@de-DE'})
 SET cr.display_name = 'Ordnung (Order)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'high',
     cr.expression = 'Systematic approach to everything; organization prized; clear structures and processes; planning ahead',
@@ -28505,6 +31901,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gruendlichkeit-thoroughness@de-DE'})
 SET cr.display_name = 'Gruendlichkeit (Thoroughness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'high',
     cr.expression = 'Doing things properly the first time; attention to detail; complete solutions over quick fixes; no cutting corners',
@@ -28521,6 +31919,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:puenktlichkeit-punctuality@de-DE'})
 SET cr.display_name = 'Puenktlichkeit (Punctuality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'high',
     cr.expression = 'On-time is late; respecting schedules; reliability; time commitments taken seriously',
@@ -28537,6 +31937,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualitaet-quality@de-DE'})
 SET cr.display_name = 'Qualitaet (Quality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'high',
     cr.expression = 'Engineering excellence; durability; craftsmanship; Made in Germany pride; function over form',
@@ -28553,6 +31955,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:zuverlaessigkeit-reliability@de-DE'})
 SET cr.display_name = 'Zuverlaessigkeit (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'high',
     cr.expression = 'Keeping promises; consistent performance; trust through predictability; long-term relationships',
@@ -28569,6 +31973,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:direktheit-directness@de-DE'})
 SET cr.display_name = 'Direktheit (Directness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'medium',
     cr.expression = 'Clear, unambiguous communication; honesty valued over politeness; saying what you mean',
@@ -28585,6 +31991,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:privatsphaere-privacy@de-DE'})
 SET cr.display_name = 'Privatsphaere (Privacy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'medium',
     cr.expression = 'Personal matters kept private; clear boundaries between professional and personal; data protection consciousness',
@@ -28601,6 +32009,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sachlichkeit-objectivity@de-DE'})
 SET cr.display_name = 'Sachlichkeit (Objectivity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'medium',
     cr.expression = 'Fact-based decisions; rational arguments; evidence over emotion; substance over style',
@@ -28617,6 +32027,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:engineering-and-manufacturing-maschinenbau@de-DE'})
 SET cr.display_name = 'Engineering and manufacturing (Maschinenbau)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'low',
     cr.expression = 'Car industry, Mittelstand, precision engineering; safe and positive reference',
@@ -28633,6 +32045,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:social-market-economy-soziale-marktwirtschaft@de-DE'})
 SET cr.display_name = 'Social market economy (Soziale Marktwirtschaft)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'low',
     cr.expression = 'Balance of capitalism and social safety; can reference positively',
@@ -28649,6 +32063,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-kultur@de-DE'})
 SET cr.display_name = 'Cultural heritage (Kultur)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'de-DE',
     cr.importance = 'low',
     cr.expression = 'Music (Bach, Beethoven), philosophy, literature; safe references to high culture',
@@ -28673,6 +32089,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:islam@ar-SA'})
 SET cr.display_name = 'الإسلام (Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'highest',
     cr.expression = 'Shapes all aspects of life, business, governance, social norms',
@@ -28689,6 +32107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosityhospitality@ar-SA'})
 SET cr.display_name = 'الكرم والضيافة (Generosity/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'high',
     cr.expression = 'Lavish hospitality, generous offerings, treating guests with honor',
@@ -28705,6 +32125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-respect@ar-SA'})
 SET cr.display_name = 'احترام الأسرة (Family Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, multi-generational decisions, family honor',
@@ -28721,6 +32143,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-loyalty@ar-SA'})
 SET cr.display_name = 'الولاء للوطن (National Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'high',
     cr.expression = 'Pride in Kingdom, Vision 2030, Saudi identity, royal leadership',
@@ -28737,6 +32161,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityhonor@ar-SA'})
 SET cr.display_name = 'الكرامة والشرف (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'high',
     cr.expression = 'Maintaining face, reputation protection, respectable conduct',
@@ -28753,6 +32179,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trustworthiness@ar-SA'})
 SET cr.display_name = 'الأمانة (Trustworthiness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'medium',
     cr.expression = 'Keeping commitments, reliability, honest dealings',
@@ -28769,6 +32197,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progressmodernization@ar-SA'})
 SET cr.display_name = 'التقدم والحداثة (Progress/Modernization)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'medium',
     cr.expression = 'Vision 2030, NEOM, tech adoption while preserving heritage',
@@ -28785,6 +32215,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:collectivism@ar-SA'})
 SET cr.display_name = 'الجماعية (Collectivism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'medium',
     cr.expression = 'Group harmony, consensus building, community belonging',
@@ -28801,6 +32233,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:two-holy-mosques@ar-SA'})
 SET cr.display_name = 'الحرمين الشريفين (Two Holy Mosques)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'high',
     cr.expression = 'Sacred; never commercialize; respectful references only; no imagery in ads',
@@ -28817,6 +32251,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:saudi-heritage@ar-SA'})
 SET cr.display_name = 'التراث السعودي (Saudi Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'medium',
     cr.expression = 'Celebrate authentically; avoid stereotypes; respect regional variations',
@@ -28833,6 +32269,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:saudi-achievements@ar-SA'})
 SET cr.display_name = 'الإنجازات السعودية (Saudi Achievements)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-SA',
     cr.importance = 'low',
     cr.expression = 'Sports victories, NEOM, infrastructure; celebrate openly',
@@ -28857,6 +32295,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-darifa@fr-MA'})
 SET cr.display_name = 'Hospitalite (Darifa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'high',
     cr.expression = 'Accueil genereux, offre de the et de nourriture, traiter les invites comme la famille',
@@ -28873,6 +32313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:famille-al-ayla@fr-MA'})
 SET cr.display_name = 'Famille (Al-\'Ayla)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'high',
     cr.expression = 'Liens familiaux etendus, decisions collectives, menages multigenerationnels',
@@ -28889,6 +32331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignite-karama@fr-MA'})
 SET cr.display_name = 'Dignite (Karama)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'high',
     cr.expression = 'Respect de soi, sauver la face, maintenir l\'honneur en public',
@@ -28905,6 +32349,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance-al-tasamoh@fr-MA'})
 SET cr.display_name = 'Tolerance (Al-Tasamoh)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'high',
     cr.expression = 'Ouverture religieuse, acceptation de la diversite culturelle, coexistence Amazigh-Arabe',
@@ -28921,6 +32367,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatisme-al-iqtisad@fr-MA'})
 SET cr.display_name = 'Pragmatisme (Al-Iqtisad)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'medium',
     cr.expression = 'Conscience du rapport qualite-prix, choix pratiques, optimisation des ressources',
@@ -28937,6 +32385,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modernite-al-hadatha@fr-MA'})
 SET cr.display_name = 'Modernite (Al-Hadatha)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'medium',
     cr.expression = 'Adopter le progres tout en respectant la tradition, adoption technologique, developpement urbain',
@@ -28953,6 +32403,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:benediction-l-khir@fr-MA'})
 SET cr.display_name = 'Benediction (L-Khir)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'medium',
     cr.expression = 'Recherche de benediction dans les transactions, ethique des affaires, benefice communautaire',
@@ -28969,6 +32421,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:roi-mohammed-vi-et-famille-royale@fr-MA'})
 SET cr.display_name = 'Roi Mohammed VI et famille royale',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'medium',
     cr.expression = 'Largement respectes mais eviter tout positionnement politique ; utiliser uniquement dans des contextes officiels/formels',
@@ -28985,6 +32439,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cuisine-et-hospitalite-marocaines@fr-MA'})
 SET cr.display_name = 'Cuisine et hospitalite marocaines',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'low',
     cr.expression = 'Universellement positif ; couscous, tajine, the a la menthe ; themes d\'hospitalite toujours efficaces',
@@ -29001,6 +32457,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sahara-occidental-sahara-marocain@fr-MA'})
 SET cr.display_name = 'Sahara occidental / Sahara marocain',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-MA',
     cr.importance = 'critical',
     cr.expression = 'Ne JAMAIS referencer dans le contenu commercial ; question de souverainete ; provoque une reaction immediate',
@@ -29025,6 +32483,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:mehmondostlik-hospitality@uz-UZ'})
 SET cr.display_name = 'Mehmondo\'stlik (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'high',
     cr.expression = 'Generous guest treatment, offering tea and plov, welcoming strangers as honored guests',
@@ -29041,6 +32501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hurmat-respect@uz-UZ'})
 SET cr.display_name = 'Hurmat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for elders (oqsoqollar, kattalar), teachers (ustozlar), guests; formal address expected',
@@ -29057,6 +32519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:oila-family@uz-UZ'})
 SET cr.display_name = 'Oila (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, strong intergenerational bonds, collective decision-making, mahalla community',
@@ -29073,6 +32537,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:vatanparvarlik-patriotism@uz-UZ'})
 SET cr.display_name = 'Vatanparvarlik (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'high',
     cr.expression = 'Strong national pride, Silk Road heritage, independence celebration, Uzbek identity',
@@ -29089,6 +32555,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:andoza-modesty@uz-UZ'})
 SET cr.display_name = 'Andoza (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'medium',
     cr.expression = 'Humility valued over self-promotion, modest behavior, avoiding boastfulness',
@@ -29105,6 +32573,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:halollik-honestyintegrity@uz-UZ'})
 SET cr.display_name = 'Halollik (Honesty/Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'medium',
     cr.expression = 'Keeping one\'s word, moral uprightness, business ethics, trustworthiness',
@@ -29121,6 +32591,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mehnatsevarlik-industriousness@uz-UZ'})
 SET cr.display_name = 'Mehnatsevarlik (Industriousness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'medium',
     cr.expression = 'Hard work valued, craftsmanship pride, self-improvement, national development',
@@ -29137,6 +32609,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:historic-cities-samarkand-bukhara-khiva@uz-UZ'})
 SET cr.display_name = 'Historic cities (Samarkand, Bukhara, Khiva)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'low',
     cr.expression = 'UNESCO World Heritage sites; safe for aspirational imagery; national pride icons',
@@ -29153,6 +32627,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1991-and-national-development@uz-UZ'})
 SET cr.display_name = 'Independence (1991) and national development',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'low',
     cr.expression = 'Independence widely celebrated; positive progress narrative; "Mustaqillik" symbolism',
@@ -29169,6 +32645,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:traditional-arts-ikat-ceramics-suzani@uz-UZ'})
 SET cr.display_name = 'Traditional arts (ikat, ceramics, suzani)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uz-UZ',
     cr.importance = 'low',
     cr.expression = 'Rich craft heritage; UNESCO elements; safe cultural references; authenticity markers',
@@ -29193,6 +32671,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:neatkaribas-independence@lv-LV'})
 SET cr.display_name = 'Neatkaribas (Independence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'high',
     cr.expression = 'National sovereignty; personal autonomy; self-determination; resistance to external control',
@@ -29209,6 +32689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pieticiba-modesty@lv-LV'})
 SET cr.display_name = 'Pieticiba (Modesty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'high',
     cr.expression = 'Understated achievement; discomfort with boasting; let work speak for itself',
@@ -29225,6 +32707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:daba-nature-connection@lv-LV'})
 SET cr.display_name = 'Daba (Nature connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'high',
     cr.expression = 'Forest culture; four seasons deeply felt; outdoor traditions; Jani celebrations',
@@ -29241,6 +32725,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradicijas-traditions@lv-LV'})
 SET cr.display_name = 'Tradicijas (Traditions)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'high',
     cr.expression = 'Song festivals; folk heritage; Jani midsummer; seasonal rituals',
@@ -29257,6 +32743,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:darbs-hard-work@lv-LV'})
 SET cr.display_name = 'Darbs (Hard work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'high',
     cr.expression = 'Protestant work ethic influence; industriousness valued; results through effort',
@@ -29273,6 +32761,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:izglitiba-education@lv-LV'})
 SET cr.display_name = 'Izglitiba (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'medium',
     cr.expression = 'High literacy; knowledge valued; continuous learning tradition',
@@ -29289,6 +32779,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gimene-family@lv-LV'})
 SET cr.display_name = 'Gimene (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'medium',
     cr.expression = 'Private family life; multi-generational respect; home-centered celebrations',
@@ -29305,6 +32797,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dziesmu-un-deju-svetki-song-and-dance-festival@lv-LV'})
 SET cr.display_name = 'Dziesmu un deju svetki (Song and Dance Festival)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'low',
     cr.expression = 'Safe celebration; UNESCO heritage; deeply unifying; appropriate for cultural contexts',
@@ -29321,6 +32815,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-restoration-1990-1991@lv-LV'})
 SET cr.display_name = 'Independence restoration (1990-1991)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'medium',
     cr.expression = 'Deep significance; use respectfully; not for casual commercial use',
@@ -29337,6 +32833,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nature-and-biodiversity@lv-LV'})
 SET cr.display_name = 'Nature and biodiversity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'lv-LV',
     cr.importance = 'low',
     cr.expression = 'Safe; authentic; non-controversial; 54% forest coverage is point of pride',
@@ -29361,6 +32859,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ubuntu-umntu-ngumntu-ngabantu@xh-ZA'})
 SET cr.display_name = 'Ubuntu (Umntu ngumntu ngabantu)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'high',
     cr.expression = '"A person is a person through other people" - interconnectedness, collective identity, mutual responsibility',
@@ -29377,6 +32877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hlonipha-respect@xh-ZA'})
 SET cr.display_name = 'Hlonipha (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, ancestors, traditions; shown through speech, behavior, and deference',
@@ -29393,6 +32895,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:intsapho-familyclan@xh-ZA'})
 SET cr.display_name = 'Intsapho (Family/Clan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'high',
     cr.expression = 'Extended family networks, clan identity (isiduko), ancestors as ongoing presence',
@@ -29409,6 +32913,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukuzithoba-humility@xh-ZA'})
 SET cr.display_name = 'Ukuzithoba (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'high',
     cr.expression = 'Modesty in success, avoiding boastfulness, acknowledging others\' contributions',
@@ -29425,6 +32931,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uluntu-community@xh-ZA'})
 SET cr.display_name = 'Uluntu (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'medium',
     cr.expression = 'Village mentality even in cities; collective responsibility; "it takes a village"',
@@ -29441,6 +32949,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:isidima-dignity@xh-ZA'})
 SET cr.display_name = 'Isidima (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'medium',
     cr.expression = 'Every person has inherent worth; treating others with dignity regardless of status',
@@ -29457,6 +32967,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:intlonipho-kwizinyanya-ancestor-reverence@xh-ZA'})
 SET cr.display_name = 'Intlonipho Kwizinyanya (Ancestor Reverence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'medium',
     cr.expression = 'Ancestors guide and protect; rituals maintain connection; decisions include spiritual dimension',
@@ -29473,6 +32985,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nelson-mandela@xh-ZA'})
 SET cr.display_name = 'Nelson Mandela',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'medium',
     cr.expression = 'Universally revered; use respectfully, never commercially exploit; "Madiba" is his clan name',
@@ -29489,6 +33003,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eastern-cape-heritage@xh-ZA'})
 SET cr.display_name = 'Eastern Cape Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'low',
     cr.expression = 'Region of origin; Transkei, Ciskei homelands carry historical significance',
@@ -29505,6 +33021,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:anti-apartheid-resistance@xh-ZA'})
 SET cr.display_name = 'Anti-Apartheid Resistance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'xh-ZA',
     cr.importance = 'medium',
     cr.expression = 'Source of pride; Fort Hare University legacy; but handle with dignity',
@@ -29529,6 +33047,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:ospitalitate-hospitality@ro-MD'})
 SET cr.display_name = 'Ospitalitate (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests warmly, sharing food and wine, going above expectations for visitors',
@@ -29545,6 +33065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familie-family@ro-MD'})
 SET cr.display_name = 'Familie (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'high',
     cr.expression = 'Multi-generational households common; family decisions made collectively; caring for elders',
@@ -29561,6 +33083,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:autenticitate-authenticity@ro-MD'})
 SET cr.display_name = 'Autenticitate (Authenticity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'high',
     cr.expression = 'Pride in local traditions, artisanal products, genuine relationships over pretense',
@@ -29577,6 +33101,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ncredere-trust@ro-MD'})
 SET cr.display_name = 'Încredere (Trust)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'high',
     cr.expression = 'Long-term relationships valued; word-of-mouth powerful; reliability essential',
@@ -29593,6 +33119,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-pentru-tradiii-tradition-respect@ro-MD'})
 SET cr.display_name = 'Respect pentru tradiții (Tradition respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'medium',
     cr.expression = 'Orthodox calendar observance; seasonal rituals; traditional cuisine and wine culture',
@@ -29609,6 +33137,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:munc-asidu-hard-work@ro-MD'})
 SET cr.display_name = 'Muncă asiduă (Hard work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'medium',
     cr.expression = 'Agricultural roots; pride in work ethic; self-reliance despite economic challenges',
@@ -29625,6 +33155,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaritate-comunitar-community-solidarity@ro-MD'})
 SET cr.display_name = 'Solidaritate comunitară (Community solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'medium',
     cr.expression = 'Village and neighborhood bonds; mutual aid traditions; diaspora connections',
@@ -29641,6 +33173,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wine-culture-and-viticulture@ro-MD'})
 SET cr.display_name = 'Wine culture and viticulture',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'low',
     cr.expression = 'Extremely positive; world-class wines; Cricova and Milestii Mici cellars; Wine Day celebration; safe to celebrate extensively',
@@ -29657,6 +33191,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cultural-heritage-and-traditions@ro-MD'})
 SET cr.display_name = 'Cultural heritage and traditions',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'low',
     cr.expression = 'Folk arts, hora dance, traditional costumes, cuisine; safe to celebrate; shows respect for culture',
@@ -29673,6 +33209,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:language-and-latin-roots@ro-MD'})
 SET cr.display_name = 'Language and Latin roots',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ro-MD',
     cr.importance = 'medium',
     cr.expression = 'Romanian language links to Latin heritage and European family; some prefer "Moldovan language" term; navigate carefully',
@@ -29697,6 +33235,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders@en-NG'})
 SET cr.display_name = 'Respect for Elders',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'high',
     cr.expression = 'Deep deference to age; titles and honorifics essential; "Sir/Ma" ubiquitous; greeting culture paramount; kneeling/prostrating for elders; seeking blessings from seniors',
@@ -29713,6 +33253,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:faithreligion@en-NG'})
 SET cr.display_name = 'Faith/Religion',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'high',
     cr.expression = 'Christianity and Islam deeply embedded; regular worship; religious phrases in daily speech; "God willing" universally understood; business success attributed to divine blessing',
@@ -29729,6 +33271,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familycommunity@en-NG'})
 SET cr.display_name = 'Family/Community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'high',
     cr.expression = 'Extended family obligations; communal responsibility; "no man is an island" mentality; family name protection; supporting relatives expected',
@@ -29745,6 +33289,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-workhustle@en-NG'})
 SET cr.display_name = 'Hard Work/Hustle',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'high',
     cr.expression = '"Hustle" culture celebrated; entrepreneurship valued; multiple income streams common; resilience admired; "Naija no dey carry last" (Nigerians never come last) mentality',
@@ -29761,6 +33307,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@en-NG'})
 SET cr.display_name = 'Hospitality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'high',
     cr.expression = 'Guests treated generously; "You are welcome" is literal invitation; food offered to visitors; generosity as virtue; hosting is source of pride',
@@ -29777,6 +33325,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationachievement@en-NG'})
 SET cr.display_name = 'Education/Achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'medium',
     cr.expression = 'Degrees celebrated; professional titles (Dr, Engr, Barr) displayed proudly; academic success family pride; "first to graduate" narratives powerful',
@@ -29793,6 +33343,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:material-success@en-NG'})
 SET cr.display_name = 'Material Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'medium',
     cr.expression = 'Financial success openly celebrated; visible prosperity expected from hard work; "big man" status aspirational; success proves blessing',
@@ -29809,6 +33361,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride@en-NG'})
 SET cr.display_name = 'National Pride',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'medium',
     cr.expression = 'Pride in being Nigerian despite challenges; "Giant of Africa" identity; cultural exports (Afrobeats, Nollywood) celebrated; diaspora success stories',
@@ -29825,6 +33379,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:super-eagles@en-NG'})
 SET cr.display_name = 'Super Eagles',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'low',
     cr.expression = 'Safe national unity symbol; football transcends ethnic/religious lines; celebrations widely shared',
@@ -29841,6 +33397,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:largest-economy-in-africa@en-NG'})
 SET cr.display_name = 'Largest Economy in Africa',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NG',
     cr.importance = 'medium',
     cr.expression = 'Pride point but economy struggles relatable; balance pride with awareness of challenges',
@@ -29865,6 +33423,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:bella-figura@it-IT'})
 SET cr.display_name = 'Bella figura',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'high',
     cr.expression = 'Presenting oneself well in all aspects; dignity, style, elegance; appearance matters; avoiding embarrassment or causing others embarrassment',
@@ -29881,6 +33441,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:famiglia@it-IT'})
 SET cr.display_name = 'Famiglia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'high',
     cr.expression = 'Family as central unit of society; multi-generational bonds; Sunday lunches; family business traditions; loyalty to family first',
@@ -29897,6 +33459,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qualita-quality@it-IT'})
 SET cr.display_name = 'Qualita (Quality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'high',
     cr.expression = 'Craftsmanship; artisanal excellence; Made in Italy pride; attention to detail; superior materials; rejecting mass production mentality',
@@ -29913,6 +33477,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:convivialita@it-IT'})
 SET cr.display_name = 'Convivialita',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'high',
     cr.expression = 'Joy of being together; sharing meals; hospitality; warmth in relationships; social connection through food and conversation',
@@ -29929,6 +33495,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tradizione@it-IT'})
 SET cr.display_name = 'Tradizione',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'medium',
     cr.expression = 'Respect for heritage; regional traditions; historical continuity; recipes passed down generations; cultural preservation',
@@ -29945,6 +33513,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:stile@it-IT'})
 SET cr.display_name = 'Stile',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'medium',
     cr.expression = 'Aesthetic sensibility; design consciousness; fashion awareness; beauty in everyday life; visual harmony',
@@ -29961,6 +33531,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:campanilismo@it-IT'})
 SET cr.display_name = 'Campanilismo',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'medium',
     cr.expression = 'Local and regional pride; loyalty to hometown; regional identity often stronger than national; city rivalries and traditions',
@@ -29977,6 +33549,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:flessibilita@it-IT'})
 SET cr.display_name = 'Flessibilita',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'medium',
     cr.expression = 'Adaptability; creative problem-solving; arrangiare (making do); improvisation; navigating complexity with ingenuity',
@@ -29993,6 +33567,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:fashion-and-design-moda-e-design@it-IT'})
 SET cr.display_name = 'Fashion and design (moda e design)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'low',
     cr.expression = 'Global leadership in fashion, furniture, automotive design; safe and positive; Milan as fashion capital',
@@ -30009,6 +33585,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:art-and-cultural-heritage@it-IT'})
 SET cr.display_name = 'Art and cultural heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'low',
     cr.expression = 'Renaissance, Roman Empire, museums, architecture; UNESCO World Heritage sites; cultural superpower status',
@@ -30025,6 +33603,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:automotive-excellence@it-IT'})
 SET cr.display_name = 'Automotive excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'low',
     cr.expression = 'Ferrari, Lamborghini, Maserati, Alfa Romeo, Vespa; design and engineering pride; safe positive references',
@@ -30041,6 +33621,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:europeaneu-membership@it-IT'})
 SET cr.display_name = 'European/EU membership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'it-IT',
     cr.importance = 'medium',
     cr.expression = 'Generally positive but Euro debate exists; EU founding member; handle economic discussions carefully',
@@ -30065,6 +33647,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:janteloven-law-of-jante@no-NO'})
 SET cr.display_name = 'Janteloven (Law of Jante)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = 'Egalitarianism; humility; distrust of self-promotion; collective over individual; no one is better than others',
@@ -30081,6 +33665,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:likhet-equality@no-NO'})
 SET cr.display_name = 'Likhet (Equality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = 'Flat hierarchies; first-name basis universal; CEOs accessible; wealth not displayed; gender equality',
@@ -30097,6 +33683,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:friluftsliv-outdoor-life@no-NO'})
 SET cr.display_name = 'Friluftsliv (Outdoor life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = 'Deep connection to nature; hiking, skiing, cabin culture; "ut pa tur, aldri sur" (out on a trip, never sour)',
@@ -30113,6 +33701,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dugnad@no-NO'})
 SET cr.display_name = 'Dugnad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = 'Community volunteer work; collective responsibility; neighbors helping neighbors; shared effort',
@@ -30129,6 +33719,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trust-tillit@no-NO'})
 SET cr.display_name = 'Trust (Tillit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = 'High-trust society; handshake agreements honored; transparency expected; honesty baseline',
@@ -30145,6 +33737,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance@no-NO'})
 SET cr.display_name = 'Work-life balance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'high',
     cr.expression = '37.5-hour work week; generous parental leave; vacation sacred; "kos" (coziness) valued',
@@ -30161,6 +33755,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sustainability@no-NO'})
 SET cr.display_name = 'Sustainability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'medium',
     cr.expression = 'Oil fund stewardship; environmental consciousness; recycling culture; electric vehicle leadership',
@@ -30177,6 +33773,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:self-reliance-selvstendighet@no-NO'})
 SET cr.display_name = 'Self-reliance (Selvstendighet)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'medium',
     cr.expression = 'Independence valued; practical problem-solving; DIY culture; "klare seg selv" (manage on one\'s own)',
@@ -30193,6 +33791,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nature-fjords-mountains-northern-lights@no-NO'})
 SET cr.display_name = 'Nature (fjords, mountains, Northern Lights)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'low',
     cr.expression = 'Safe and beloved; authentic pride; avoid overused tourist cliches',
@@ -30209,6 +33809,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:outdoor-culture-friluftsliv@no-NO'})
 SET cr.display_name = 'Outdoor culture / Friluftsliv',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'low',
     cr.expression = 'Genuine cultural identity; skiing, hiking, cabin life; safe for marketing',
@@ -30225,6 +33827,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:peace-and-diplomacy-nobel-peace-prize@no-NO'})
 SET cr.display_name = 'Peace and diplomacy (Nobel Peace Prize)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'no-NO',
     cr.importance = 'low',
     cr.expression = 'Oslo hosts ceremony; humanitarian identity; subtle references work',
@@ -30249,6 +33853,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-for-hierarchy@sk-SK'})
 SET cr.display_name = 'Respect for Hierarchy',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'high',
     cr.expression = 'Deference to authority, seniority, and professional titles; formal address expected',
@@ -30265,6 +33871,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:achievementsuccess@sk-SK'})
 SET cr.display_name = 'Achievement/Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'high',
     cr.expression = 'Strong work ethic; pride in accomplishment; material success valued',
@@ -30281,6 +33889,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-and-tradition@sk-SK'})
 SET cr.display_name = 'Family and Tradition',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; respect for elders; traditional values in rural areas',
@@ -30297,6 +33907,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:practicality@sk-SK'})
 SET cr.display_name = 'Practicality',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'high',
     cr.expression = 'Focus on tangible results; value for money; skepticism of empty promises',
@@ -30313,6 +33925,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-identity@sk-SK'})
 SET cr.display_name = 'National Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'medium',
     cr.expression = 'Pride in Slovak language, culture, and independence; distinct from Czech identity',
@@ -30329,6 +33943,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:quality-and-durability@sk-SK'})
 SET cr.display_name = 'Quality and Durability',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'medium',
     cr.expression = 'Preference for well-made, lasting products; distrust of cheap alternatives',
@@ -30345,6 +33961,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modestyrestraint@sk-SK'})
 SET cr.display_name = 'Modesty/Restraint',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'medium',
     cr.expression = 'Emotional restraint valued; ostentatious display considered inappropriate',
@@ -30361,6 +33979,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:high-tatras-mountains@sk-SK'})
 SET cr.display_name = 'High Tatras mountains',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'low',
     cr.expression = 'National symbol; stunning natural heritage; safe for nature/outdoor imagery; widely beloved',
@@ -30377,6 +33997,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ice-hockey-achievements@sk-SK'})
 SET cr.display_name = 'Ice hockey achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'low',
     cr.expression = 'National passion; World Championship successes; safe sports reference; unifying topic',
@@ -30393,6 +34015,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1993@sk-SK'})
 SET cr.display_name = 'Independence (1993)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'sk-SK',
     cr.importance = 'medium',
     cr.expression = 'Velvet Divorce from Czechoslovakia; source of national pride; use respectfully, not commercially',
@@ -30417,6 +34041,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:mborayhu-lovesolidarity@gn-PY'})
 SET cr.display_name = 'Mborayhu (Love/Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'high',
     cr.expression = 'Deep interpersonal warmth; helping neighbors; communal support systems; kinship beyond blood',
@@ -30433,6 +34059,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pyaguapy-hospitality@gn-PY'})
 SET cr.display_name = 'Pyaguapy (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'high',
     cr.expression = 'Welcoming strangers; sharing terere; offering food and shelter; treating guests as family',
@@ -30449,6 +34077,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:teko-way-of-life@gn-PY'})
 SET cr.display_name = 'Teko (Way of Life)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'high',
     cr.expression = 'Living in harmony with nature and community; balance over accumulation; contentment',
@@ -30465,6 +34095,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familyraa-extended-family@gn-PY'})
 SET cr.display_name = 'Family/Ra\'a (Extended Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'high',
     cr.expression = 'Multi-generational bonds; collective decision-making; children highly valued',
@@ -30481,6 +34113,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yvymaraney-sacred-land@gn-PY'})
 SET cr.display_name = 'Yvymarane\'y (Sacred Land)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'medium',
     cr.expression = 'Deep connection to land and territory; agricultural identity; rural roots',
@@ -30497,6 +34131,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patienceagyje@gn-PY'})
 SET cr.display_name = 'Patience/Agyje',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'medium',
     cr.expression = 'Time flows naturally; rushing is disrespectful; relationships over transactions',
@@ -30513,6 +34149,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencepya-guasu@gn-PY'})
 SET cr.display_name = 'Resilience/Py\'a Guasu',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'medium',
     cr.expression = 'Surviving historical tragedies; enduring hardship with dignity; quiet strength',
@@ -30529,6 +34167,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humilityndaipori-jeguareko@gn-PY'})
 SET cr.display_name = 'Humility/Ndaipori Jeguareko',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'medium',
     cr.expression = 'Modest self-presentation; discomfort with boasting; collective achievement',
@@ -30545,6 +34185,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:guarani-language-survival@gn-PY'})
 SET cr.display_name = 'Guarani language survival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'low',
     cr.expression = 'Source of immense pride; unique in Americas; safe to celebrate; "Nande ne\'e" (Our language)',
@@ -30561,6 +34203,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:paraguayan-harp-arpa-paraguaya@gn-PY'})
 SET cr.display_name = 'Paraguayan harp (arpa paraguaya)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'low',
     cr.expression = 'National instrument; celebrated in music; positive cultural reference',
@@ -30577,6 +34221,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-resources-itaipu-rivers@gn-PY'})
 SET cr.display_name = 'Natural resources (Itaipu, rivers)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'low',
     cr.expression = 'Itaipu Dam pride; Paraguay River central to identity; environmental heritage',
@@ -30593,6 +34239,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:survivalresilience@gn-PY'})
 SET cr.display_name = 'Survival/Resilience',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'gn-PY',
     cr.importance = 'medium',
     cr.expression = 'Pride in national survival but connected to traumatic history; celebrate carefully',
@@ -30617,6 +34265,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-nezalezhnist@uk-UA'})
 SET cr.display_name = 'Independence (Nezalezhnist)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'National sovereignty; self-determination; freedom from oppression; 1991 independence; 2014 and 2022 resistance',
@@ -30633,6 +34283,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-identity-natsionalna-identychnist@uk-UA'})
 SET cr.display_name = 'National Identity (Natsionalna identychnist)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'Ukrainian language revival; embroidered shirts (vyshyvanka); cultural distinctiveness from Russia; Cyrillic script unique letters',
@@ -30649,6 +34301,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-nezlaminist@uk-UA'})
 SET cr.display_name = 'Resilience (Nezlaminist)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'Surviving Holodomor, Soviet era, 2014 conflict, 2022+ war; "we will overcome" mentality; volunteer movements',
@@ -30665,6 +34319,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-rodyna@uk-UA'})
 SET cr.display_name = 'Family (Rodyna)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds; multi-generational households; family gatherings; supporting relatives',
@@ -30681,6 +34337,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-hostunnist@uk-UA'})
 SET cr.display_name = 'Hospitality (Hostunnist)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'medium',
     cr.expression = 'Generous hosting tradition; bread and salt welcome; guests fed abundantly; refusing hospitality is impolite',
@@ -30697,6 +34355,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education-osvita@uk-UA'})
 SET cr.display_name = 'Education (Osvita)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'medium',
     cr.expression = 'High literacy rates; respect for teachers and academics; parents invest in children\'s education',
@@ -30713,6 +34373,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-pracelubstvo@uk-UA'})
 SET cr.display_name = 'Hard Work (Pracelubstvo)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'medium',
     cr.expression = 'Strong work ethic; agricultural heritage; skepticism of easy success; pride in earning achievement',
@@ -30729,6 +34391,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-solidarity-hromadska-solidarnist@uk-UA'})
 SET cr.display_name = 'Community Solidarity (Hromadska solidarnist)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'Volunteer movements; mutual aid during crises; community networks; neighbor support',
@@ -30745,6 +34409,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:2022-defense-of-ukraine@uk-UA'})
 SET cr.display_name = '2022+ defense of Ukraine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'high',
     cr.expression = 'Deep national pride but also ongoing trauma; never trivialize; can reference strength and resilience respectfully; avoid war imagery in commercial contexts',
@@ -30761,6 +34427,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maidan-revolution-2014@uk-UA'})
 SET cr.display_name = 'Maidan Revolution (2014)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'medium',
     cr.expression = '"Revolution of Dignity"; pro-democracy symbol; positive reference but avoid commercialization',
@@ -30777,6 +34445,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ukrainian-cuisine@uk-UA'})
 SET cr.display_name = 'Ukrainian cuisine',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'uk-UA',
     cr.importance = 'low',
     cr.expression = 'Borshch (not borscht), varenyky, salo, pampushky beloved; safe for food contexts; borshch is Ukrainian, not Russian',
@@ -30801,6 +34471,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-rodzina@pl-PL'})
 SET cr.display_name = 'Family (Rodzina)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'high',
     cr.expression = 'Central social unit; multi-generational bonds; frequent family gatherings; Sunday dinners sacred',
@@ -30817,6 +34489,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:national-pride-patriotyzm@pl-PL'})
 SET cr.display_name = 'National Pride (Patriotyzm)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'high',
     cr.expression = 'Strong Polish identity; pride in history, culture, language; white-and-red symbolism',
@@ -30833,6 +34507,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:catholic-heritage@pl-PL'})
 SET cr.display_name = 'Catholic Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'high',
     cr.expression = 'Majority Catholic (officially ~87%); influences holidays, social norms, life events',
@@ -30849,6 +34525,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience-wytrwalosc@pl-PL'})
 SET cr.display_name = 'Resilience (Wytrwalosc)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'high',
     cr.expression = 'Historical survival through partitions, wars, communism; "somehow we manage" attitude',
@@ -30865,6 +34543,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-goscinnosc@pl-PL'})
 SET cr.display_name = 'Hospitality (Goscinnosc)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'medium',
     cr.expression = 'Generous hosting tradition; guests treated lavishly; refusing food is impolite',
@@ -30881,6 +34561,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationachievement@pl-PL'})
 SET cr.display_name = 'Education/Achievement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'medium',
     cr.expression = 'Respect for academic credentials; parents invest heavily in children\'s education',
@@ -30897,6 +34579,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work-pracowito@pl-PL'})
 SET cr.display_name = 'Hard Work (Pracowitość)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'medium',
     cr.expression = 'Strong work ethic; pride in craftsmanship; skepticism of easy success',
@@ -30913,6 +34597,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:polish-history-and-survival@pl-PL'})
 SET cr.display_name = 'Polish history and survival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'medium',
     cr.expression = 'Pride in surviving partitions, wars, communism; use respectfully; never trivialize struggles',
@@ -30929,6 +34615,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sports-achievements@pl-PL'})
 SET cr.display_name = 'Sports achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'low',
     cr.expression = 'Football (Lewandowski), ski jumping, volleyball successes; safe for sports references',
@@ -30945,6 +34633,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarity-movement@pl-PL'})
 SET cr.display_name = 'Solidarity movement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'pl-PL',
     cr.importance = 'medium',
     cr.expression = 'Symbol of peaceful resistance (1980s); use with respect; do not commercialize directly',
@@ -30969,6 +34659,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:kiasu-fear-of-losing-out@zh-SG'})
 SET cr.display_name = 'Kiasu (怕输 - Fear of Losing Out)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'high',
     cr.expression = 'Securing advantages, queuing early, comparison shopping, fear of missing deals',
@@ -30985,6 +34677,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:meritocracy@zh-SG'})
 SET cr.display_name = 'Meritocracy (精英制度)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'high',
     cr.expression = 'Achievement through effort and ability; education highly valued; credentials matter',
@@ -31001,6 +34695,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:racial-harmony@zh-SG'})
 SET cr.display_name = 'Racial Harmony (种族和谐)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'high',
     cr.expression = 'Respect across Chinese, Malay, Indian, Other (CMIO) communities; multiracialism core',
@@ -31017,6 +34713,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism@zh-SG'})
 SET cr.display_name = 'Pragmatism (务实)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'high',
     cr.expression = 'Practical decision-making; results over ideology; efficiency valued',
@@ -31033,6 +34731,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-values@zh-SG'})
 SET cr.display_name = 'Family Values (家庭观念)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'high',
     cr.expression = 'Filial piety important; multi-generational care; family decision-making',
@@ -31049,6 +34749,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:efficiency@zh-SG'})
 SET cr.display_name = 'Efficiency (效率)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'medium',
     cr.expression = 'Time is valuable; don\'t waste people\'s time; quick service expected',
@@ -31065,6 +34767,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:face@zh-SG'})
 SET cr.display_name = 'Face (面子)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'medium',
     cr.expression = 'Social standing matters; avoid public embarrassment; maintain dignity',
@@ -31081,6 +34785,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:rule-of-law@zh-SG'})
 SET cr.display_name = 'Rule of Law (法治)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'medium',
     cr.expression = 'Strict adherence to regulations; orderly society; low tolerance for rule-breaking',
@@ -31097,6 +34803,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-9-august-1965@zh-SG'})
 SET cr.display_name = 'Independence (9 August 1965)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'low',
     cr.expression = 'National Day celebrations; Singapore story of success against odds; unity themes',
@@ -31113,6 +34821,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hawker-culture-unesco@zh-SG'})
 SET cr.display_name = 'Hawker culture (UNESCO)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'low',
     cr.expression = '2020 UNESCO recognition; deep food culture pride; unifying across races',
@@ -31129,6 +34839,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:garden-city-city-in-nature@zh-SG'})
 SET cr.display_name = 'Garden City / City in Nature',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'zh-SG',
     cr.importance = 'low',
     cr.expression = 'Green spaces amid urban density; sustainability leadership; design excellence',
@@ -31153,6 +34865,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:work-life-balance@en-CA'})
 SET cr.display_name = 'Work-life balance',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'medium',
     cr.expression = 'Parental leave; vacation time; healthcare priority',
@@ -31169,6 +34883,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:environmental-stewardship@en-CA'})
 SET cr.display_name = 'Environmental stewardship',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'medium',
     cr.expression = 'Natural landscapes; climate awareness; conservation',
@@ -31185,6 +34901,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humility@en-CA'})
 SET cr.display_name = 'Humility',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'medium',
     cr.expression = 'Understated success; self-deprecation; anti-boastfulness',
@@ -31201,6 +34919,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community@en-CA'})
 SET cr.display_name = 'Community',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'medium',
     cr.expression = 'Neighbourhoods; local support; volunteer culture',
@@ -31217,6 +34937,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:universal-healthcare@en-CA'})
 SET cr.display_name = 'Universal healthcare',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'low',
     cr.expression = 'Safe source of pride; defines Canadian identity vs US',
@@ -31233,6 +34955,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty-rockies-lakes-wilderness@en-CA'})
 SET cr.display_name = 'Natural beauty (Rockies, lakes, wilderness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'low',
     cr.expression = 'Universally appreciated; strong emotional connection',
@@ -31249,6 +34973,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:peacekeeping-reputation@en-CA'})
 SET cr.display_name = 'Peacekeeping reputation',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CA',
     cr.importance = 'medium',
     cr.expression = 'Traditionally valued but more complex recently; use respectfully',
@@ -31273,6 +34999,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality-diyafa@en-AE'})
 SET cr.display_name = 'Hospitality (Diyafa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Welcoming guests warmly; generosity to visitors; treating customers as honoured guests',
@@ -31289,6 +35017,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ambition-and-vision@en-AE'})
 SET cr.display_name = 'Ambition and Vision',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Future-oriented mindset; UAE 2071 vision; achieving "firsts" globally',
@@ -31305,6 +35035,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:excellence@en-AE'})
 SET cr.display_name = 'Excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Pursuit of world-class standards; best-in-class achievements; global benchmarking',
@@ -31321,6 +35053,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance-and-diversity@en-AE'})
 SET cr.display_name = 'Tolerance and Diversity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Multicultural coexistence; 200+ nationalities; Year of Tolerance legacy',
@@ -31337,6 +35071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-values@en-AE'})
 SET cr.display_name = 'Family Values',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Strong family bonds; collective decision-making; multi-generational respect',
@@ -31353,6 +35089,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect-and-dignity@en-AE'})
 SET cr.display_name = 'Respect and Dignity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'high',
     cr.expression = 'Preserving face; honouring positions and titles; courteous interactions',
@@ -31369,6 +35107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loyalty-and-trust@en-AE'})
 SET cr.display_name = 'Loyalty and Trust',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'medium',
     cr.expression = 'Long-term relationships valued; repeat business appreciation; partnership mindset',
@@ -31385,6 +35125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:progress-and-modernity@en-AE'})
 SET cr.display_name = 'Progress and Modernity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'medium',
     cr.expression = 'Embracing innovation while preserving heritage; smart city initiatives; technology adoption',
@@ -31401,6 +35143,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sheikh-zayed-founding-father@en-AE'})
 SET cr.display_name = 'Sheikh Zayed (Founding Father)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'medium',
     cr.expression = 'Deeply revered "Father of the Nation"; can reference his values (tolerance, generosity) respectfully; never use image commercially',
@@ -31417,6 +35161,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uae-national-day-2-december@en-AE'})
 SET cr.display_name = 'UAE National Day (2 December)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'low',
     cr.expression = 'Major celebration; patriotic themes welcome; excellent campaign timing; "Spirit of the Union"',
@@ -31433,6 +35179,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:emirates-mars-mission-hope-probe@en-AE'})
 SET cr.display_name = 'Emirates Mars Mission (Hope Probe)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-AE',
     cr.importance = 'low',
     cr.expression = 'First Arab interplanetary mission; immense pride; innovation and science achievement symbol',
@@ -31457,6 +35205,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:philoxenia-hospitality@en-CY'})
 SET cr.display_name = 'Philoxenia (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'high',
     cr.expression = 'Deep tradition of welcoming guests; hospitality as sacred duty; treating visitors as honored guests',
@@ -31473,6 +35223,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family-oikogeneia@en-CY'})
 SET cr.display_name = 'Family (Oikogeneia)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'high',
     cr.expression = 'Extended family central to life; multi-generational involvement in decisions; family reputation matters',
@@ -31489,6 +35241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:filotimo-honorpride@en-CY'})
 SET cr.display_name = 'Filotimo (Honor/Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'high',
     cr.expression = 'Personal and family honor; keeping one\'s word; dignity in all interactions; reputation is everything',
@@ -31505,6 +35259,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-belonging@en-CY'})
 SET cr.display_name = 'Community Belonging',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'high',
     cr.expression = 'Village and neighborhood ties strong; everyone knows everyone; social networks matter',
@@ -31521,6 +35277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:enjoying-life@en-CY'})
 SET cr.display_name = 'Enjoying Life',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'medium',
     cr.expression = 'Mediterranean appreciation for good food, company, conversation; work-life balance',
@@ -31537,6 +35295,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:halloumi-cheese@en-CY'})
 SET cr.display_name = 'Halloumi cheese',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'low',
     cr.expression = 'Genuine source of pride; protected designation of origin; safe and positive reference',
@@ -31553,6 +35313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-beauty@en-CY'})
 SET cr.display_name = 'Natural beauty',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'low',
     cr.expression = 'Beaches, Troodos mountains, Mediterranean climate - safe positive territory',
@@ -31569,6 +35331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-1960@en-CY'})
 SET cr.display_name = 'Independence (1960)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-CY',
     cr.importance = 'medium',
     cr.expression = 'Celebrated but complex history followed; avoid details of subsequent events',
@@ -31593,6 +35357,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:reliability@ru-RU'})
 SET cr.display_name = 'Надёжность (Reliability)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'high',
     cr.expression = 'Emphasis on proven track records, guarantees, long-term commitments',
@@ -31609,6 +35375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ru-RU'})
 SET cr.display_name = 'Семья (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'high',
     cr.expression = 'Strong multi-generational bonds, collective decision-making, family honor',
@@ -31625,6 +35393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:education@ru-RU'})
 SET cr.display_name = 'Образование (Education)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'high',
     cr.expression = 'Respect for intellectual achievement, specialized expertise, credentials',
@@ -31641,6 +35411,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotism@ru-RU'})
 SET cr.display_name = 'Патриотизм (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'high',
     cr.expression = 'Pride in Russian culture, history, achievements, national identity',
@@ -31657,6 +35429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:justicefairness@ru-RU'})
 SET cr.display_name = 'Справедливость (Justice/Fairness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'medium',
     cr.expression = 'Strong sense of right and wrong, value of keeping word, honest dealing',
@@ -31673,6 +35447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:soulfulness@ru-RU'})
 SET cr.display_name = 'Душевность (Soulfulness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'medium',
     cr.expression = 'Appreciation for depth, sincerity, emotional authenticity over superficiality',
@@ -31689,6 +35465,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ru-RU'})
 SET cr.display_name = 'Гостеприимство (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'medium',
     cr.expression = 'Generous hosting, sharing, welcoming attitude',
@@ -31705,6 +35483,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patienceendurance@ru-RU'})
 SET cr.display_name = 'Терпение (Patience/Endurance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'medium',
     cr.expression = 'Ability to persevere through difficulty, long-term thinking',
@@ -31721,6 +35501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:space-exploration-and-aerospace@ru-RU'})
 SET cr.display_name = 'Space exploration and aerospace',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'low',
     cr.expression = 'Gagarin, space achievements universally celebrated; safe to reference',
@@ -31737,6 +35519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:scientific-achievements@ru-RU'})
 SET cr.display_name = 'Scientific achievements',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'low',
     cr.expression = 'Mendeleev, Pavlov, contributions to physics and mathematics; well-received',
@@ -31753,6 +35537,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:winterresilience-imagery@ru-RU'})
 SET cr.display_name = 'Winter/resilience imagery',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ru-RU',
     cr.importance = 'medium',
     cr.expression = 'Can resonate positively but avoid hardship stereotypes; focus on strength aspect',
@@ -31777,6 +35563,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:whanaungatanga-kinshiprelationship@mi-NZ'})
 SET cr.display_name = 'Whanaungatanga (kinship/relationship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'high',
     cr.expression = 'Building and maintaining family and community connections; acknowledging shared whakapapa (genealogy); treating strangers as potential whanau',
@@ -31793,6 +35581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:manaakitanga-hospitalitycare@mi-NZ'})
 SET cr.display_name = 'Manaakitanga (hospitality/care)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'high',
     cr.expression = 'Generous hosting; ensuring guests are fed and comfortable; showing care through actions; welcoming warmly',
@@ -31809,6 +35599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kaitiakitanga-guardianshipstewardship@mi-NZ'})
 SET cr.display_name = 'Kaitiakitanga (guardianship/stewardship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'high',
     cr.expression = 'Protecting natural resources for future generations; sustainable practices; environmental responsibility',
@@ -31825,6 +35617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mana-prestigeauthoritydignity@mi-NZ'})
 SET cr.display_name = 'Mana (prestige/authority/dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'high',
     cr.expression = 'Respecting individual and collective dignity; earning respect through actions; maintaining honour; not diminishing others\' mana',
@@ -31841,6 +35635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:aroha-lovecompassion@mi-NZ'})
 SET cr.display_name = 'Aroha (love/compassion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'high',
     cr.expression = 'Unconditional love and care; compassion in all interactions; empathy and kindness; forgiveness',
@@ -31857,6 +35653,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tika-correctnessintegrity@mi-NZ'})
 SET cr.display_name = 'Tika (correctness/integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'medium',
     cr.expression = 'Doing what is right and proper; honesty; ethical behaviour; keeping promises; following proper protocols',
@@ -31873,6 +35671,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pono-truthsincerity@mi-NZ'})
 SET cr.display_name = 'Pono (truth/sincerity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'medium',
     cr.expression = 'Being genuine and truthful; authenticity; reliability; no deception',
@@ -31889,6 +35689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wairuatanga-spirituality@mi-NZ'})
 SET cr.display_name = 'Wairuatanga (spirituality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'medium',
     cr.expression = 'Acknowledging spiritual dimensions of life; connection between physical and spiritual; respecting mauri (life force)',
@@ -31905,6 +35707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:te-reo-maori-revival@mi-NZ'})
 SET cr.display_name = 'Te reo Maori revival',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'low',
     cr.expression = 'Celebrate the successful language revitalisation; kohanga reo (language nests) and kura kaupapa (Maori-medium schools); pride in speaking te reo',
@@ -31921,6 +35725,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:treaty-partnership@mi-NZ'})
 SET cr.display_name = 'Treaty partnership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'medium',
     cr.expression = 'Pride in unique constitutional relationship; must acknowledge ongoing grievances and Waitangi Tribunal processes; balance celebration with recognition of unfinished business',
@@ -31937,6 +35743,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:whakairo-and-ta-moko@mi-NZ'})
 SET cr.display_name = 'Whakairo and ta moko',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'mi-NZ',
     cr.importance = 'medium',
     cr.expression = 'Pride in traditional arts; ta moko revival; but must respect that these are taonga (treasures) with protocols around use and representation',
@@ -31961,6 +35769,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:calidez-humana-warmth@es-PE'})
 SET cr.display_name = 'Calidez humana (warmth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'high',
     cr.expression = 'Warm greetings; personal connection before business; genuine interest in wellbeing; hospitality as virtue',
@@ -31977,6 +35787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-gastronomico@es-PE'})
 SET cr.display_name = 'Orgullo gastronomico',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'high',
     cr.expression = 'Peruvian cuisine world-renowned; ceviche, lomo saltado, causa national treasures; fusion heritage celebrated',
@@ -31993,6 +35805,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identidad-mestiza@es-PE'})
 SET cr.display_name = 'Identidad mestiza',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'medium',
     cr.expression = 'Pride in mixed heritage (indigenous, Spanish, African, Asian influences); Peru as "pais de todas las sangres"',
@@ -32009,6 +35823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad@es-PE'})
 SET cr.display_name = 'Hospitalidad',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'medium',
     cr.expression = 'Guests treated generously; sharing food fundamental; "mi casa es su casa" attitude; welcoming strangers',
@@ -32025,6 +35841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gastronomia-peruana-cuisine@es-PE'})
 SET cr.display_name = 'Gastronomia peruana (cuisine)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'low',
     cr.expression = 'Safest universal pride point; ceviche, Pisco, lomo saltado celebrated globally; unifying across regions',
@@ -32041,6 +35859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biodiversity-and-geography@es-PE'})
 SET cr.display_name = 'Biodiversity and geography',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'low',
     cr.expression = 'Amazon, Andes, Pacific coast; 84 of 117 life zones; megadiverse country pride',
@@ -32057,6 +35877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:seleccion-peruana-return-to-world-cup-2018@es-PE'})
 SET cr.display_name = 'Seleccion peruana return to World Cup 2018',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PE',
     cr.importance = 'low',
     cr.expression = 'Emotional national moment; 36-year wait; safe sports reference; unifying memory',
@@ -32081,6 +35903,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:owo-respect@yo-NG'})
 SET cr.display_name = 'Owo (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, traditional rulers (Oba, Ooni, Alaafin), and titled persons; prostration (dobale) and kneeling (kunle) for elders; honorifics mandatory; greeting culture elaborate',
@@ -32097,6 +35921,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ebi-familylineage@yo-NG'})
 SET cr.display_name = 'Ebi (Family/Lineage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds paramount; lineage (idile) identity strong; family name (oruko idile) protected; supporting relatives expected; family elders consulted for major decisions',
@@ -32113,6 +35939,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:esin-faithreligion@yo-NG'})
 SET cr.display_name = 'Esin (Faith/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'high',
     cr.expression = 'Religious pluralism - Christianity, Islam, and traditional Orisa worship all significant; Sunday church and Friday mosque; religious expressions ubiquitous in speech; festivals sacred',
@@ -32129,6 +35957,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:omoluabi-characterintegrity@yo-NG'})
 SET cr.display_name = 'Omoluabi (Character/Integrity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'high',
     cr.expression = 'Ideal Yoruba person: honest, humble, respectful, patient, hardworking, generous; character over wealth; "Iwa l\'ewa" (character is beauty); reputation carefully guarded',
@@ -32145,6 +35975,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ise-hard-work@yo-NG'})
 SET cr.display_name = 'Ise (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'medium',
     cr.expression = 'Work ethic valued; "Ise l\'ogun ise" (work is the antidote to poverty); entrepreneurship respected; artisan traditions (adire, aso-oke, woodcarving) celebrated',
@@ -32161,6 +35993,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ola-honordignity@yo-NG'})
 SET cr.display_name = 'Ola (Honor/Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'medium',
     cr.expression = 'Personal and family honor paramount; chieftaincy titles (Chief, Otun, Osi) respected; academic titles valued (Dr, Prof, Engr); success brings honor to family',
@@ -32177,6 +36011,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:aajo-communitytogetherness@yo-NG'})
 SET cr.display_name = 'Aajo (Community/Togetherness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'medium',
     cr.expression = 'Community solidarity strong; town unions (Egbe Omo Ilu); age-grade associations (Egbe); mutual aid societies (Esusu); collective celebration',
@@ -32193,6 +36029,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:oro-wisdomtradition@yo-NG'})
 SET cr.display_name = 'Oro (Wisdom/Tradition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'medium',
     cr.expression = 'Proverbs (owe) carry authority; oral tradition rich; Ifa divination respected; elders as wisdom keepers; traditional knowledge valued',
@@ -32209,6 +36047,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ile-ife-as-yoruba-cradle@yo-NG'})
 SET cr.display_name = 'Ile-Ife as Yoruba cradle',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'low',
     cr.expression = 'Origin of Yoruba civilization; safe cultural reference; heritage pride',
@@ -32225,6 +36065,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wole-soyinka@yo-NG'})
 SET cr.display_name = 'Wole Soyinka',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'low',
     cr.expression = 'Nobel laureate; literary giant; global Yoruba ambassador; safe intellectual reference',
@@ -32241,6 +36083,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:yoruba-diaspora-cuba-brazil-usa@yo-NG'})
 SET cr.display_name = 'Yoruba diaspora (Cuba, Brazil, USA)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'yo-NG',
     cr.importance = 'low',
     cr.expression = 'Pride in global cultural influence; Santeria, Candomble connections; safe cultural reference',
@@ -32265,6 +36109,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:myhmansoyerlik-hospitality@tk-TM'})
 SET cr.display_name = 'Myhmansoyerlik (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'high',
     cr.expression = 'Generous treatment of guests, offering tea and bread, welcoming traditions',
@@ -32281,6 +36127,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hormat-respect@tk-TM'})
 SET cr.display_name = 'Hormat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for elders (yasulylar), parents, teachers, authority figures',
@@ -32297,6 +36145,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:masgala-family@tk-TM'})
 SET cr.display_name = 'Masgala (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds, clan (taypa) connections, collective identity',
@@ -32313,6 +36163,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:watancilik-patriotism@tk-TM'})
 SET cr.display_name = 'Watancilik (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'high',
     cr.expression = 'Strong national pride, reverence for state symbols, independence celebration',
@@ -32329,6 +36181,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:adalat-fairnessjustice@tk-TM'})
 SET cr.display_name = 'Adalat (Fairness/Justice)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'medium',
     cr.expression = 'Honest dealings, keeping promises, moral uprightness',
@@ -32345,6 +36199,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:agzybirlik-unitysolidarity@tk-TM'})
 SET cr.display_name = 'Agzybirlik (Unity/Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'medium',
     cr.expression = 'National cohesion, collective harmony, social togetherness',
@@ -32361,6 +36217,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:edep-modestypropriety@tk-TM'})
 SET cr.display_name = 'Edep (Modesty/Propriety)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'medium',
     cr.expression = 'Modest behavior, proper conduct, self-restraint, humility',
@@ -32377,6 +36235,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:akhal-teke-horses@tk-TM'})
 SET cr.display_name = 'Akhal-Teke horses',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'low',
     cr.expression = 'Supreme national symbol; safe for positive imagery; represents beauty, speed, endurance',
@@ -32393,6 +36253,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:neutrality-status@tk-TM'})
 SET cr.display_name = 'Neutrality status',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'medium',
     cr.expression = 'UN-recognized permanent neutrality since 1995; diplomatic pride point; avoid implying any bias',
@@ -32409,6 +36271,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-gas-reserves@tk-TM'})
 SET cr.display_name = 'Natural gas reserves',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tk-TM',
     cr.importance = 'low',
     cr.expression = 'Economic pride; development symbol; appropriate for prosperity messaging',
@@ -32433,6 +36297,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia-family@es-PY'})
 SET cr.display_name = 'Familia (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'high',
     cr.expression = 'Extended family bonds central to life; multi-generational households common; collective decision-making; children highly valued; family gatherings frequent',
@@ -32449,6 +36315,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidaridad-solidarity@es-PY'})
 SET cr.display_name = 'Solidaridad (Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'high',
     cr.expression = 'Helping neighbors and community; communal support systems; sharing resources; "mborayhu" spirit in Spanish expression',
@@ -32465,6 +36333,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-PY'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'high',
     cr.expression = 'Welcoming strangers warmly; terere sharing ritual; treating guests as family; open homes',
@@ -32481,6 +36351,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tranquilidad-tranquility@es-PY'})
 SET cr.display_name = 'Tranquilidad (Tranquility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'high',
     cr.expression = 'Calm, unhurried pace valued; patience over rushing; contentment prioritized; "tranquilo" as life philosophy',
@@ -32497,6 +36369,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:humildad-humility@es-PY'})
 SET cr.display_name = 'Humildad (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'medium',
     cr.expression = 'Modest self-presentation; discomfort with boasting; collective achievement over individual glory; "no hay que agrandarse"',
@@ -32513,6 +36387,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resiliencia-resilience@es-PY'})
 SET cr.display_name = 'Resiliencia (Resilience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'medium',
     cr.expression = 'Historical survival against odds; enduring hardship with dignity; quiet strength; "salir adelante"',
@@ -32529,6 +36405,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-bilingue-bilingual-pride@es-PY'})
 SET cr.display_name = 'Orgullo Bilingue (Bilingual Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'medium',
     cr.expression = 'Pride in Spanish-Guarani bilingualism; jopara (code-switching) is natural; unique linguistic identity',
@@ -32545,6 +36423,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:conexion-con-la-tierra-land-connection@es-PY'})
 SET cr.display_name = 'Conexion con la Tierra (Land Connection)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'medium',
     cr.expression = 'Agricultural roots; connection to territory; rural identity even in urban dwellers; Chaco and campo pride',
@@ -32561,6 +36441,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:bilingual-nation-spanish-guarani@es-PY'})
 SET cr.display_name = 'Bilingual nation (Spanish-Guarani)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'low',
     cr.expression = 'Source of immense pride; unique in Americas; safe to celebrate; "nuestras dos lenguas"',
@@ -32577,6 +36459,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:itaipu-dam@es-PY'})
 SET cr.display_name = 'Itaipu Dam',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'low',
     cr.expression = 'World\'s largest hydroelectric dam (by production); engineering pride; shared with Brazil',
@@ -32593,6 +36477,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nanduti-lace-craft@es-PY'})
 SET cr.display_name = 'Nanduti lace craft',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'low',
     cr.expression = 'Traditional handicraft; UNESCO heritage; feminine cultural pride',
@@ -32609,6 +36495,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:survival-and-resilience@es-PY'})
 SET cr.display_name = 'Survival and resilience',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PY',
     cr.importance = 'medium',
     cr.expression = 'Pride in national survival but connected to traumatic war history; celebrate carefully',
@@ -32633,6 +36521,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:addini-faithreligion@ha-NG'})
 SET cr.display_name = 'Addini (Faith/Religion)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'high',
     cr.expression = 'Islam permeates daily life; prayers, greetings, business ethics all shaped by Islamic principles; regular mosque attendance; Ramadan observance',
@@ -32649,6 +36539,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:iyali-family@ha-NG'})
 SET cr.display_name = 'Iyali (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; collective responsibility; elders honored and consulted; children seen as blessing; in-laws respected',
@@ -32665,6 +36557,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mutunci-dignityrespect@ha-NG'})
 SET cr.display_name = 'Mutunci (Dignity/Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'high',
     cr.expression = 'Personal honor paramount; respect for status, age, and achievement; face-saving essential; reputation carefully guarded',
@@ -32681,6 +36575,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:karimci-generosityhospitality@ha-NG'})
 SET cr.display_name = 'Karimci (Generosity/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'high',
     cr.expression = 'Guests treated lavishly; sharing wealth is virtue; traders known for hospitality; "bakon Allah" (guest of God) concept',
@@ -32697,6 +36593,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kasuwanci-tradecommerce@ha-NG'})
 SET cr.display_name = 'Kasuwanci (Trade/Commerce)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'medium',
     cr.expression = 'Long trading heritage (trans-Saharan routes); business acumen valued; fair dealing honored; merchant class respected',
@@ -32713,6 +36611,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gaskiya-honestytruth@ha-NG'})
 SET cr.display_name = 'Gaskiya (Honesty/Truth)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'medium',
     cr.expression = 'Truth-telling valued; promises expected to be kept; word is bond; "kalmar mutum" (a person\'s word) is sacred',
@@ -32729,6 +36629,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hadin-kai-unitysolidarity@ha-NG'})
 SET cr.display_name = 'Hadin Kai (Unity/Solidarity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'medium',
     cr.expression = 'Community cohesion; supporting fellow Hausas; helping neighbors; collective action for common good',
@@ -32745,6 +36647,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ilimi-knowledgelearning@ha-NG'})
 SET cr.display_name = 'Ilimi (Knowledge/Learning)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'medium',
     cr.expression = 'Islamic scholarship deeply valued; Quranic education traditional; modern education increasingly important',
@@ -32761,6 +36665,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sultan-of-sokoto@ha-NG'})
 SET cr.display_name = 'Sultan of Sokoto',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'medium',
     cr.expression = 'Highest Islamic authority in Nigeria; commands immense respect; reference with utmost reverence only',
@@ -32777,6 +36683,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:trans-saharan-trade-heritage@ha-NG'})
 SET cr.display_name = 'Trans-Saharan trade heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'low',
     cr.expression = 'Historical pride in merchant tradition; safe commercial messaging',
@@ -32793,6 +36701,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hausa-language-spread@ha-NG'})
 SET cr.display_name = 'Hausa language spread',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ha-NG',
     cr.importance = 'low',
     cr.expression = 'Lingua franca of West Africa; pride in language\'s reach and influence',
@@ -32817,6 +36727,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:philoxeniahospitality@el-CY'})
 SET cr.display_name = 'Φιλοξενία (Philoxenia/Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'high',
     cr.expression = 'Genuine warmth to guests and strangers; offering food, coffee, and time is expected; treating others well reflects honor',
@@ -32833,6 +36745,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@el-CY'})
 SET cr.display_name = 'Οικογένεια (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'high',
     cr.expression = 'Extended family involvement in decisions; multi-generational bonds strong; Sunday family gatherings sacred; family business tradition',
@@ -32849,6 +36763,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:orthodox-faith@el-CY'})
 SET cr.display_name = 'Ορθοδοξία (Orthodox Faith)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'high',
     cr.expression = 'Greek Orthodox identity central to Cypriot Greek identity; religious holidays major events; church attendance significant',
@@ -32865,6 +36781,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community@el-CY'})
 SET cr.display_name = 'Κοινότητα (Community)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'high',
     cr.expression = 'Village and neighborhood ties strong; reputation matters; word-of-mouth powerful; everyone knows everyone',
@@ -32881,6 +36799,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:homelandnational-identity@el-CY'})
 SET cr.display_name = 'Πατρίδα (Homeland/National Identity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'high',
     cr.expression = 'Deep connection to Cyprus and Greek heritage; 1974 division remains painful; Cypriot Greek identity strongly held',
@@ -32897,6 +36817,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignity@el-CY'})
 SET cr.display_name = 'Αξιοπρέπεια (Dignity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'medium',
     cr.expression = 'Maintaining face important; public embarrassment offensive; respect in all interactions expected',
@@ -32913,6 +36835,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorsense-of-duty@el-CY'})
 SET cr.display_name = 'Φιλότιμο (Honor/Sense of Duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'medium',
     cr.expression = 'Doing the right thing even at personal cost; generosity; keeping word; reliability expected',
@@ -32929,6 +36853,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pragmatism@el-CY'})
 SET cr.display_name = 'Πρακτικότητα (Pragmatism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'medium',
     cr.expression = 'Mediterranean practicality; focus on workable solutions; flexibility valued; island resourcefulness',
@@ -32945,6 +36871,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ancient-history@el-CY'})
 SET cr.display_name = 'Ancient history',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'low',
     cr.expression = '10,000 years of civilization; Aphrodite\'s birthplace; UNESCO sites - safe and celebrated',
@@ -32961,6 +36889,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:greek-identity@el-CY'})
 SET cr.display_name = 'Greek identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'medium',
     cr.expression = 'Greek heritage important but distinct Cypriot identity exists; not simply "Greek"; acknowledge nuance',
@@ -32977,6 +36907,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:eu-membership@el-CY'})
 SET cr.display_name = 'EU membership',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'el-CY',
     cr.importance = 'low',
     cr.expression = 'Joined EU 2004; generally positive; eurozone membership source of stability',
@@ -33001,6 +36933,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:rukun-harmony@jv-ID'})
 SET cr.display_name = 'Rukun (Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Maintaining social harmony; avoiding open conflict; prioritizing group cohesion over individual expression; smooth interpersonal relations',
@@ -33017,6 +36951,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hormat-respect@jv-ID'})
 SET cr.display_name = 'Hormat (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Strict adherence to social hierarchy; deference to elders, superiors, and high-status individuals; proper use of speech levels (unggah-ungguh)',
@@ -33033,6 +36969,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tepa-slira-empathy@jv-ID'})
 SET cr.display_name = 'Tepa Slira (Empathy)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Deep awareness of others\' feelings and positions; putting oneself in another\'s place; sensitivity to unspoken concerns',
@@ -33049,6 +36987,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sabar-patience@jv-ID'})
 SET cr.display_name = 'Sabar (Patience)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Emotional restraint; accepting circumstances with grace; not rushing or pushing; calm perseverance through difficulties',
@@ -33065,6 +37005,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:andap-asor-humility@jv-ID'})
 SET cr.display_name = 'Andap Asor (Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Self-lowering behavior; not boasting; understating one\'s achievements; elevating others',
@@ -33081,6 +37023,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gotong-royong-mutual-cooperation@jv-ID'})
 SET cr.display_name = 'Gotong Royong (Mutual Cooperation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'medium',
     cr.expression = 'Community mutual aid; collective effort; sharing burdens and successes; neighborhood solidarity',
@@ -33097,6 +37041,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:nrimo-acceptance@jv-ID'})
 SET cr.display_name = 'Nrimo (Acceptance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'medium',
     cr.expression = 'Accepting fate gracefully; contentment with circumstances; not complaining; gratitude for what one has',
@@ -33113,6 +37059,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gemi-nastiti-ngati-ati-prudence@jv-ID'})
 SET cr.display_name = 'Gemi, Nastiti, Ngati-ati (Prudence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'medium',
     cr.expression = 'Careful with resources; thoughtful decision-making; avoiding waste; measured actions',
@@ -33129,6 +37077,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:keraton-yogyakarta-and-solo-royal-courts@jv-ID'})
 SET cr.display_name = 'Keraton Yogyakarta and Solo (Royal Courts)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for Sultanate; never disrespect or mock royalty; use ceremonial references with care and respect',
@@ -33145,6 +37095,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:batik-heritage@jv-ID'})
 SET cr.display_name = 'Batik heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'low',
     cr.expression = 'UNESCO recognized; safe pride reference; regional batik motifs vary (Yogya, Solo, Pekalongan styles)',
@@ -33161,6 +37113,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:borobudur-and-prambanan-temples@jv-ID'})
 SET cr.display_name = 'Borobudur and Prambanan temples',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'jv-ID',
     cr.importance = 'low',
     cr.expression = 'World heritage sites; safe cultural references; Buddhist and Hindu heritage respected',
@@ -33185,6 +37139,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:kar-korop-respect@km-KH'})
 SET cr.display_name = 'ការគោរព (Kar Korop - Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders, authority, monks; elaborate pronoun system; deference in speech and behavior',
@@ -33201,6 +37157,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:putthasasna-buddhism@km-KH'})
 SET cr.display_name = 'ពុទ្ធសាសនា (Putthasasna - Buddhism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'high',
     cr.expression = 'Theravada Buddhism central to identity; temple activities; merit-making (បុណ្យ); monastic respect',
@@ -33217,6 +37175,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pheap-sok-dom-harmony@km-KH'})
 SET cr.display_name = 'ភាពសុខដុម (Pheap Sok Dom - Harmony)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'high',
     cr.expression = 'Social harmony paramount; conflict avoidance; smooth relationships; consensus-seeking',
@@ -33233,6 +37193,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:krousar-family@km-KH'})
 SET cr.display_name = 'គ្រួសារ (Krousar - Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'high',
     cr.expression = 'Extended family (ក្រុមគ្រួសារ) central; multi-generational living; collective decision-making',
@@ -33249,6 +37211,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:roksaa-muk-face-saving@km-KH'})
 SET cr.display_name = 'រក្សាមុខ (Roksaa Muk - Face Saving)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'high',
     cr.expression = 'Preserving dignity; avoiding public embarrassment; protecting social standing',
@@ -33265,6 +37229,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sophea-modestyhumility@km-KH'})
 SET cr.display_name = 'សុភាព (Sophea - Modesty/Humility)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'medium',
     cr.expression = 'Humble demeanor valued; boasting discouraged; quiet achievement',
@@ -33281,6 +37247,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:metta-loving-kindness@km-KH'})
 SET cr.display_name = 'មេត្តា (Metta - Loving-kindness)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'medium',
     cr.expression = 'Buddhist compassion; genuine care for others; generosity of spirit',
@@ -33297,6 +37265,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:katanyu-gratitude@km-KH'})
 SET cr.display_name = 'កតញ្ញូ (Katanyu - Gratitude)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'medium',
     cr.expression = 'Deep gratitude to parents, teachers, benefactors; remembering those who helped',
@@ -33313,6 +37283,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:angkor-wat-and-khmer-empire@km-KH'})
 SET cr.display_name = 'Angkor Wat and Khmer Empire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'low',
     cr.expression = 'Supreme national symbol; on flag; source of deep pride; use respectfully and prominently',
@@ -33329,6 +37301,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:independence-9-november-1953@km-KH'})
 SET cr.display_name = 'Independence (9 November 1953)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'low',
     cr.expression = 'King Norodom Sihanouk revered; independence themes positive; national holiday celebrated',
@@ -33345,6 +37319,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:royal-family@km-KH'})
 SET cr.display_name = 'Royal family',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'km-KH',
     cr.importance = 'medium',
     cr.expression = 'Constitutional monarchy; King highly respected; use with reverence only; never commercial exploitation',
@@ -33369,6 +37345,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:diinta-islaamka-islam@so-SO'})
 SET cr.display_name = 'Diinta Islaamka (Islam)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'high',
     cr.expression = 'Islam is foundational to Somali identity; daily prayers, Ramadan fasting, Islamic greetings, halal practices permeate all aspects of life',
@@ -33385,6 +37363,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:qoys-familyclan@so-SO'})
 SET cr.display_name = 'Qoys (Family/Clan)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'high',
     cr.expression = 'Extended family and clan networks define social structure; collective responsibility; clan elders consulted on major decisions; solidarity within clan',
@@ -33401,6 +37381,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sharaf-honor@so-SO'})
 SET cr.display_name = 'Sharaf (Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'high',
     cr.expression = 'Personal and family reputation paramount; maintaining dignity in all interactions; face-saving essential; honor defended fiercely',
@@ -33417,6 +37399,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:marti-qaad-hospitality@so-SO'})
 SET cr.display_name = 'Marti-Qaad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'high',
     cr.expression = 'Guests treated with utmost generosity; sharing food and shelter obligatory; refusal to host brings shame; stranger protection tradition',
@@ -33433,6 +37417,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:xeer-customary-law@so-SO'})
 SET cr.display_name = 'Xeer (Customary Law)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'medium',
     cr.expression = 'Traditional oral law governing social conduct; conflict resolution through negotiation; collective agreements honored',
@@ -33449,6 +37435,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wadaninimo-patriotism@so-SO'})
 SET cr.display_name = 'Wadaninimo (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'medium',
     cr.expression = 'Love for Somali nation despite challenges; pride in Somali identity, language, poetry, and cultural heritage',
@@ -33465,6 +37453,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:geesi-braverycourage@so-SO'})
 SET cr.display_name = 'Geesi (Bravery/Courage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'medium',
     cr.expression = 'Strength and resilience valued; overcoming hardship; standing firm on principles',
@@ -33481,6 +37471,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:wanaag-goodnessvirtue@so-SO'})
 SET cr.display_name = 'Wanaag (Goodness/Virtue)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'medium',
     cr.expression = 'Ethical behavior expected; honesty in dealings; helping those in need; charitable giving (zakat, sadaqa)',
@@ -33497,6 +37489,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:somali-language-and-poetry@so-SO'})
 SET cr.display_name = 'Somali language and poetry',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'low',
     cr.expression = 'Pride in rich oral tradition; gabay poetry respected; safe cultural reference',
@@ -33513,6 +37507,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mogadishu-as-historic-trading-city@so-SO'})
 SET cr.display_name = 'Mogadishu as historic trading city',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'medium',
     cr.expression = 'Historical significance; current conditions sensitive; reference historical glory carefully',
@@ -33529,6 +37525,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:camel-culture-and-pastoralism@so-SO'})
 SET cr.display_name = 'Camel culture and pastoralism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'so-SO',
     cr.importance = 'low',
     cr.expression = 'Deep cultural connection; camels symbol of wealth; safe positive reference',
@@ -33553,6 +37551,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignityhonor@ar-AE'})
 SET cr.display_name = 'الكرامة (Dignity/Honor)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Preserving personal and family honor; reputation management; face-saving in all interactions',
@@ -33569,6 +37569,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:generosity@ar-AE'})
 SET cr.display_name = 'الكرم (Generosity)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Lavish hospitality; gift-giving culture; treating guests with abundance',
@@ -33585,6 +37587,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:loyalty@ar-AE'})
 SET cr.display_name = 'الولاء (Loyalty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Strong family and tribal bonds; loyalty to leadership and nation; long-term relationships valued',
@@ -33601,6 +37605,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ambition@ar-AE'})
 SET cr.display_name = 'الطموح (Ambition)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Vision for the future; striving for excellence; UAE growth mindset',
@@ -33617,6 +37623,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance@ar-AE'})
 SET cr.display_name = 'التسامح (Tolerance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Multicultural coexistence; Year of Tolerance (2019) legacy; interfaith respect',
@@ -33633,6 +37641,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@ar-AE'})
 SET cr.display_name = 'الاحترام (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Deference to authority, elders, ruling families; maintaining social hierarchy',
@@ -33649,6 +37659,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ar-AE'})
 SET cr.display_name = 'العائلة (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'high',
     cr.expression = 'Extended family central; family decisions collective; intergenerational living',
@@ -33665,6 +37677,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:excellence@ar-AE'})
 SET cr.display_name = 'التميز (Excellence)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'medium',
     cr.expression = 'Pursuit of world-class standards; "first" and "best" achievements; competitive positioning',
@@ -33681,6 +37695,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sheikh-zayed-founding-father@ar-AE'})
 SET cr.display_name = 'Sheikh Zayed (Founding Father)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'medium',
     cr.expression = 'Deeply revered; "Father of the Nation"; can reference his values (tolerance, giving) respectfully; never commercial use of image',
@@ -33697,6 +37713,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:uae-national-day-december-2@ar-AE'})
 SET cr.display_name = 'UAE National Day (December 2)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'low',
     cr.expression = 'Major celebration; patriotic themes welcome; excellent campaign timing; "روح الاتحاد"',
@@ -33713,6 +37731,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:space-program-hope-probe@ar-AE'})
 SET cr.display_name = 'Space program (Hope Probe)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-AE',
     cr.importance = 'low',
     cr.expression = 'First Arab Mars mission; source of immense pride; innovation symbol; science achievement',
@@ -33737,6 +37757,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:fairness-fair-go@en-NZ'})
 SET cr.display_name = 'Fairness / Fair Go',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Everyone deserves a chance; anti-elitism; support for underdogs; sense of justice',
@@ -33753,6 +37775,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:biculturalism@en-NZ'})
 SET cr.display_name = 'Biculturalism',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Maori and Pakeha cultures interwoven; Te Tiriti o Waitangi (Treaty) as foundational; te reo Maori normalized',
@@ -33769,6 +37793,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:modesty-understatement@en-NZ'})
 SET cr.display_name = 'Modesty / Understatement',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Self-deprecation; "she\'ll be right" attitude; never boast; undersell and overdeliver',
@@ -33785,6 +37811,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:kaitiakitanga-guardianship@en-NZ'})
 SET cr.display_name = 'Kaitiakitanga (Guardianship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Environmental stewardship; "clean green" identity; sustainability consciousness',
@@ -33801,6 +37829,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:manaakitanga-hospitality@en-NZ'})
 SET cr.display_name = 'Manaakitanga (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'medium',
     cr.expression = 'Generosity; looking after others; welcoming visitors; genuine care',
@@ -33817,6 +37847,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:whanau-extended-family@en-NZ'})
 SET cr.display_name = 'Whanau (Extended Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'medium',
     cr.expression = 'Family and community networks valued; collective responsibility',
@@ -33833,6 +37865,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ingenuity-no-8-wire@en-NZ'})
 SET cr.display_name = 'Ingenuity / No. 8 Wire',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'medium',
     cr.expression = 'Kiwi resourcefulness; making do; creative problem-solving',
@@ -33849,6 +37883,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:maori-culture-and-language@en-NZ'})
 SET cr.display_name = 'Maori culture and language',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Deep respect required; avoid appropriation; celebrate when authentic; partnership approach',
@@ -33865,6 +37901,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:natural-landscapes@en-NZ'})
 SET cr.display_name = 'Natural landscapes',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'low',
     cr.expression = 'Mountains, beaches, native bush, clean waterways - genuine sources of pride',
@@ -33881,6 +37919,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:treaty-of-waitangi@en-NZ'})
 SET cr.display_name = 'Treaty of Waitangi',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'en-NZ',
     cr.importance = 'high',
     cr.expression = 'Foundational document; complex; respect required; acknowledge Maori as tangata whenua',
@@ -33905,6 +37945,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@ne-NP'})
 SET cr.display_name = 'परिवार (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'high',
     cr.expression = 'Joint family system dominant; multi-generational living standard; collective decision-making; family honor (izzat) paramount; elder guidance respected',
@@ -33921,6 +37963,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@ne-NP'})
 SET cr.display_name = 'आदर/सम्मान (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'high',
     cr.expression = 'Deep respect for elders (gurung-thulo); hierarchical deference strict; touching feet of elders; hospitality as sacred duty',
@@ -33937,6 +37981,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religionduty@ne-NP'})
 SET cr.display_name = 'धर्म (Religion/Duty)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'high',
     cr.expression = 'Religious observances central; Hindu-Buddhist syncretism; temple/monastery culture; karma and dharma concepts; daily puja common',
@@ -33953,6 +37999,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:guest-is-god@ne-NP'})
 SET cr.display_name = 'अतिथि देवो भव (Guest is God)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'high',
     cr.expression = 'Hospitality as sacred duty; generous hosting tradition; treating customers as honored guests; "पाहुना" highly valued',
@@ -33969,6 +38017,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:community-spirit@ne-NP'})
 SET cr.display_name = 'सामुदायिक भावना (Community Spirit)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'medium',
     cr.expression = 'Strong community bonds; "गाउँले" (village) loyalty; mutual help during festivals; labor sharing (parma) tradition',
@@ -33985,6 +38035,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hard-work@ne-NP'})
 SET cr.display_name = 'मेहनत (Hard Work)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'medium',
     cr.expression = 'Diligence deeply respected; self-reliance valued; "परिश्रम" as virtue; Nepali resilience narrative',
@@ -34001,6 +38053,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorreputation@ne-NP'})
 SET cr.display_name = 'इज्जत (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'medium',
     cr.expression = 'Family reputation crucial; social standing matters; avoiding shame (bejjat) essential; community opinion influential',
@@ -34017,6 +38071,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:tolerance@ne-NP'})
 SET cr.display_name = 'सहनशीलता (Tolerance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'medium',
     cr.expression = 'Religious harmony valued; multi-ethnic coexistence; peaceful nature emphasized; Buddha\'s birthplace identity',
@@ -34033,6 +38089,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:mount-everestsagarmatha@ne-NP'})
 SET cr.display_name = 'Mount Everest/Sagarmatha',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'low',
     cr.expression = 'Safe; national symbol; "top of the world"; Nepali name "Sagarmatha" preferred; pride point',
@@ -34049,6 +38107,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:gurkha-heritage@ne-NP'})
 SET cr.display_name = 'Gurkha heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'low',
     cr.expression = 'Safe; global respect; bravery symbol; military tradition; khukuri symbolism',
@@ -34065,6 +38125,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hindu-buddhist-harmony@ne-NP'})
 SET cr.display_name = 'Hindu-Buddhist harmony',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ne-NP',
     cr.importance = 'low',
     cr.expression = 'Safe; religious coexistence model; syncretic culture; temple-stupa proximity',
@@ -34089,6 +38151,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:famille-et-liens-familiaux@fr-DZ'})
 SET cr.display_name = 'Famille et liens familiaux',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'high',
     cr.expression = 'Famille elargie centrale dans les decisions ; menages multigenerationnels ; honneur familial primordial',
@@ -34105,6 +38169,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:islam-et-spiritualite@fr-DZ'})
 SET cr.display_name = 'Islam et spiritualite',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'high',
     cr.expression = 'Prieres quotidiennes, observance du Ramadan, mode de vie halal ; integre aux expressions quotidiennes',
@@ -34121,6 +38187,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotisme-et-revolution@fr-DZ'})
 SET cr.display_name = 'Patriotisme et Revolution',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'high',
     cr.expression = 'Guerre d\'independance (1954-1962) fondatrice ; martyrs honores ; identite nationale forte',
@@ -34137,6 +38205,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:dignite-et-honneur-el-karama@fr-DZ'})
 SET cr.display_name = 'Dignite et honneur (El-Karama)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'high',
     cr.expression = 'Honneur personnel et familial ; preservation de la face essentielle ; respect de soi non negociable',
@@ -34153,6 +38223,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:solidarite-sociale@fr-DZ'})
 SET cr.display_name = 'Solidarite sociale',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'high',
     cr.expression = 'Aide aux voisins, soutien communautaire ; tradition de « touiza » (travail collectif)',
@@ -34169,6 +38241,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:identite-amazighe@fr-DZ'})
 SET cr.display_name = 'Identite amazighe',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'medium',
     cr.expression = 'Heritage berbere celebre ; tamazight langue officielle ; diversite culturelle',
@@ -34185,6 +38259,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalite-diyafa@fr-DZ'})
 SET cr.display_name = 'Hospitalite (Diyafa)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'medium',
     cr.expression = 'Accueil genereux ; invites traites avec honneur ; rituels du the et du cafe',
@@ -34201,6 +38277,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patience-et-endurance-sabr@fr-DZ'})
 SET cr.display_name = 'Patience et endurance (Sabr)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'medium',
     cr.expression = 'Perseverance valorisee ; resilience face aux difficultes ; vision a long terme',
@@ -34217,6 +38295,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:guerre-dindependance-1954-1962@fr-DZ'})
 SET cr.display_name = 'Guerre d\'independance (1954-1962)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'medium',
     cr.expression = '1,5 million de martyrs ; sujet sacre ; utiliser avec reverence ; ne jamais trivialiser ; eviter la perspective coloniale francaise',
@@ -34233,6 +38313,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:sahara-algerien@fr-DZ'})
 SET cr.display_name = 'Sahara algerien',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'low',
     cr.expression = 'Merveille naturelle ; fierte touristique ; « le Grand Sud » ; imagerie du desert positive',
@@ -34249,6 +38331,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:heritage-amazighberbere@fr-DZ'})
 SET cr.display_name = 'Heritage amazigh/berbere',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'fr-DZ',
     cr.importance = 'medium',
     cr.expression = 'Richesse culturelle celebree ; tamazight officiel depuis 2016 ; traiter inclusivement ; eviter de politiser',
@@ -34273,6 +38357,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:familykinship@ar-LB'})
 SET cr.display_name = 'Family/Kinship (العائلة)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'high',
     cr.expression = 'Extended family networks; family name reputation; multigenerational living; family business tradition',
@@ -34289,6 +38375,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@ar-LB'})
 SET cr.display_name = 'Hospitality (الكرم)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'high',
     cr.expression = 'Generous hosting; refusing payment from guests; elaborate meals; coffee rituals',
@@ -34305,6 +38393,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:educationstatus@ar-LB'})
 SET cr.display_name = 'Education/Status (التعليم)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'high',
     cr.expression = 'University degrees highly valued; professional credentials displayed; multilingual education',
@@ -34321,6 +38411,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:resilience@ar-LB'})
 SET cr.display_name = 'Resilience (الصمود)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'high',
     cr.expression = 'Surviving crises; rebuilding after destruction; adaptability in adversity',
@@ -34337,6 +38429,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religious-identity@ar-LB'})
 SET cr.display_name = 'Religious Identity',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'high',
     cr.expression = 'Strong confessional affiliations; religious holidays observed; personal faith important',
@@ -34353,6 +38447,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:appearanceimage@ar-LB'})
 SET cr.display_name = 'Appearance/Image (المظهر)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'medium',
     cr.expression = 'Well-groomed presentation; brand consciousness; social image matters',
@@ -34369,6 +38465,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:entrepreneurship@ar-LB'})
 SET cr.display_name = 'Entrepreneurship',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'medium',
     cr.expression = 'Strong merchant tradition; business innovation; diaspora connections',
@@ -34385,6 +38483,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:freedomopenness@ar-LB'})
 SET cr.display_name = 'Freedom/Openness',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'medium',
     cr.expression = 'Relatively liberal social attitudes for region; artistic expression; nightlife culture',
@@ -34401,6 +38501,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:phoenician-heritage@ar-LB'})
 SET cr.display_name = 'Phoenician Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'low',
     cr.expression = 'Ancient civilization pride; alphabet invention; safe historical reference',
@@ -34417,6 +38519,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:diaspora-success@ar-LB'})
 SET cr.display_name = 'Diaspora Success',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'low',
     cr.expression = 'Global Lebanese business leaders, artists, intellectuals; pride in international recognition',
@@ -34433,6 +38537,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:beirut-as-cultural-capital@ar-LB'})
 SET cr.display_name = 'Beirut as Cultural Capital',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'ar-LB',
     cr.importance = 'medium',
     cr.expression = 'Historical "Paris of Middle East" narrative; arts/nightlife scene; may trigger economic reality contrast',
@@ -34457,6 +38563,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:respect@tg-TJ'})
 SET cr.display_name = 'Эҳтиром (Respect)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'high',
     cr.expression = 'Deep reverence for elders, formal address protocols, hierarchical relationships, honoring authority and tradition',
@@ -34473,6 +38581,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitality@tg-TJ'})
 SET cr.display_name = 'Меҳмоннавозӣ (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'high',
     cr.expression = 'Sacred duty to welcome guests; offering chai and non (bread); treating strangers as honored visitors; dastarkhan traditions',
@@ -34489,6 +38599,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:family@tg-TJ'})
 SET cr.display_name = 'Оила (Family)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'high',
     cr.expression = 'Extended family networks central to identity; multi-generational households; collective decision-making; clan loyalties',
@@ -34505,6 +38617,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:honorreputation@tg-TJ'})
 SET cr.display_name = 'Номус ва Обрӯ (Honor/Reputation)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'high',
     cr.expression = 'Family reputation paramount; keeping word as sacred bond; personal dignity; avoiding shame (шарм)',
@@ -34521,6 +38635,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:etiquettepropriety@tg-TJ'})
 SET cr.display_name = 'Адаб (Etiquette/Propriety)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'high',
     cr.expression = 'Proper conduct in all interactions; formal greeting rituals; knowing one\'s place; social protocols',
@@ -34537,6 +38653,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:persian-tajik-heritage@tg-TJ'})
 SET cr.display_name = 'Миросӣ Форс-Тоҷик (Persian-Tajik Heritage)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'medium',
     cr.expression = 'Pride in ancient Persian civilization; Samanid legacy; Rudaki, Firdawsi, classical poetry; Nowruz traditions',
@@ -34553,6 +38671,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patienceendurance@tg-TJ'})
 SET cr.display_name = 'Сабру таҳаммул (Patience/Endurance)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'medium',
     cr.expression = 'Resilience through hardship; accepting difficulties with grace; long-term perspective',
@@ -34569,6 +38689,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:patriotism@tg-TJ'})
 SET cr.display_name = 'Ватандӯстӣ (Patriotism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'medium',
     cr.expression = 'National independence pride; mountain identity; unique Tajik nationhood',
@@ -34585,6 +38707,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:samanid-heritage@tg-TJ'})
 SET cr.display_name = 'Samanid Heritage',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'low',
     cr.expression = 'Ancient Tajik dynasty (9th-10th century); symbol of golden age; safe to reference with respect',
@@ -34601,6 +38725,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:pamir-mountains@tg-TJ'})
 SET cr.display_name = 'Pamir Mountains',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'low',
     cr.expression = '"Roof of the World"; natural beauty; tourism pride; eco-tourism potential',
@@ -34617,6 +38743,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:ismoili-somoni@tg-TJ'})
 SET cr.display_name = 'Ismoili Somoni',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'tg-TJ',
     cr.importance = 'low',
     cr.expression = 'National hero; founder of Samanid dynasty; highest peak named after him',
@@ -34641,6 +38769,8 @@ MERGE (l)-[:HAS_CULTURE]->(cs);
 
 MERGE (cr:CultureRef {key: 'cultureref:orgullo-canalero-canal-pride@es-PA'})
 SET cr.display_name = 'Orgullo Canalero (Canal Pride)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'high',
     cr.expression = 'Deep identification with the Panama Canal; "el Canal es nuestro" sentiment; symbol of sovereignty and achievement; December 31, 1999 transfer to Panama',
@@ -34657,6 +38787,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:familia@es-PA'})
 SET cr.display_name = 'Familia',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'high',
     cr.expression = 'Extended family central to life; Sunday family gatherings; collective decisions; strong maternal figures; intergenerational households',
@@ -34673,6 +38805,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:cosmopolitismo-cosmopolitanism@es-PA'})
 SET cr.display_name = 'Cosmopolitismo (Cosmopolitanism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'high',
     cr.expression = 'Gateway between Americas; 80+ nationalities; multicultural acceptance; international business hub; diverse influences embraced',
@@ -34689,6 +38823,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:hospitalidad-hospitality@es-PA'})
 SET cr.display_name = 'Hospitalidad (Hospitality)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'high',
     cr.expression = 'Warm welcome to visitors and strangers; generosity expected; "mi casa es su casa" sentiment; tourism-friendly mentality',
@@ -34705,6 +38841,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:emprendimiento-entrepreneurship@es-PA'})
 SET cr.display_name = 'Emprendimiento (Entrepreneurship)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'medium',
     cr.expression = 'Strong commercial tradition; trading history; banking sector importance; self-made success admired',
@@ -34721,6 +38859,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:religion-catholicism@es-PA'})
 SET cr.display_name = 'Religion (Catholicism)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'medium',
     cr.expression = 'Catholic traditions embedded; religious holidays observed; but more secular than some Latin American countries',
@@ -34737,6 +38877,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:alegria-y-fiesta@es-PA'})
 SET cr.display_name = 'Alegria y Fiesta',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'medium',
     cr.expression = 'Carnaval celebration major cultural event; music and dance important; celebratory spirit; enjoying life',
@@ -34753,6 +38895,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:panama-canal@es-PA'})
 SET cr.display_name = 'Panama Canal',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'low',
     cr.expression = 'Ultimate national symbol; safe in all contexts; achievement and sovereignty; "el Canal es nuestro" widely resonates',
@@ -34769,6 +38913,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:baseball-excellence@es-PA'})
 SET cr.display_name = 'Baseball excellence',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'low',
     cr.expression = 'Mariano Rivera, Rod Carew national heroes; MLB success; safe sports reference',
@@ -34785,6 +38931,8 @@ MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 MERGE (cr:CultureRef {key: 'cultureref:carnaval-especially-las-tablas-and-panama-city@es-PA'})
 SET cr.display_name = 'Carnaval (especially Las Tablas and Panama City)',
+    cr.node_class = 'CultureRef',
+    cr.content = cr.expression,
     cr.locale = 'es-PA',
     cr.importance = 'low',
     cr.expression = 'National celebration; February tradition; safe cultural reference; alegria expression',

@@ -17,6 +17,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ceb-PH'})
 SET at.display_name = 'Communication Style for ceb-PH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ceb-PH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -42,6 +44,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mn-MN'})
 SET at.display_name = 'Communication Style for mn-MN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mn-MN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -67,6 +71,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-MY'})
 SET at.display_name = 'Communication Style for en-MY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-MY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -92,6 +98,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@bn-BD'})
 SET at.display_name = 'Communication Style for bn-BD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'bn-BD',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -117,6 +125,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-TZ'})
 SET at.display_name = 'Communication Style for en-TZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-TZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -142,6 +152,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-SG'})
 SET at.display_name = 'Communication Style for en-SG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-SG',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -167,6 +179,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ta-LK'})
 SET at.display_name = 'Communication Style for ta-LK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ta-LK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -192,6 +206,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZA'})
 SET at.display_name = 'Communication Style for en-ZA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-ZA',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -217,6 +233,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-BB'})
 SET at.display_name = 'Communication Style for en-BB',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-BB',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -242,6 +260,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@si-LK'})
 SET at.display_name = 'Communication Style for si-LK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'si-LK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -267,6 +287,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@bs-BA'})
 SET at.display_name = 'Communication Style for bs-BA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'bs-BA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -292,6 +314,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@it-CH'})
 SET at.display_name = 'Communication Style for it-CH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'it-CH',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -317,6 +341,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@tr-TR'})
 SET at.display_name = 'Communication Style for tr-TR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'tr-TR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -342,6 +368,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-MX'})
 SET at.display_name = 'Communication Style for es-MX',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-MX',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -367,6 +395,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-MA'})
 SET at.display_name = 'Communication Style for ar-MA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-MA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -392,6 +422,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-LY'})
 SET at.display_name = 'Communication Style for ar-LY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-LY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -417,6 +449,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-MG'})
 SET at.display_name = 'Communication Style for fr-MG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-MG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -442,6 +476,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-EG'})
 SET at.display_name = 'Communication Style for ar-EG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-EG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -467,6 +503,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@my-MM'})
 SET at.display_name = 'Communication Style for my-MM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'my-MM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -492,6 +530,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ta-IN'})
 SET at.display_name = 'Communication Style for ta-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ta-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -517,6 +557,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CD'})
 SET at.display_name = 'Communication Style for fr-CD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-CD',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -542,6 +584,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@as-IN'})
 SET at.display_name = 'Communication Style for as-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'as-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -567,6 +611,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@lt-LT'})
 SET at.display_name = 'Communication Style for lt-LT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'lt-LT',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -592,6 +638,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sw-KE'})
 SET at.display_name = 'Communication Style for sw-KE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sw-KE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -617,6 +665,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@hy-AM'})
 SET at.display_name = 'Communication Style for hy-AM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'hy-AM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -642,6 +692,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-MZ'})
 SET at.display_name = 'Communication Style for pt-MZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pt-MZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -667,6 +719,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@nl-BE'})
 SET at.display_name = 'Communication Style for nl-BE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'nl-BE',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -692,6 +746,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@te-IN'})
 SET at.display_name = 'Communication Style for te-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'te-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -717,6 +773,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ml-IN'})
 SET at.display_name = 'Communication Style for ml-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ml-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -742,6 +800,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@vi-VN'})
 SET at.display_name = 'Communication Style for vi-VN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'vi-VN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -767,6 +827,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-BE'})
 SET at.display_name = 'Communication Style for fr-BE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-BE',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -792,6 +854,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-IL'})
 SET at.display_name = 'Communication Style for ru-IL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-IL',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -817,6 +881,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@rw-RW'})
 SET at.display_name = 'Communication Style for rw-RW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'rw-RW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -842,6 +908,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-KY'})
 SET at.display_name = 'Communication Style for en-KY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-KY',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_TO_MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -867,6 +935,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ky-KG'})
 SET at.display_name = 'Communication Style for ky-KG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ky-KG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -892,6 +962,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-IE'})
 SET at.display_name = 'Communication Style for en-IE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-IE',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -917,6 +989,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@su-ID'})
 SET at.display_name = 'Communication Style for su-ID',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'su-ID',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -942,6 +1016,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-UG'})
 SET at.display_name = 'Communication Style for en-UG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-UG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -967,6 +1043,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sw-TZ'})
 SET at.display_name = 'Communication Style for sw-TZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sw-TZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -992,6 +1070,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@hu-HU'})
 SET at.display_name = 'Communication Style for hu-HU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'hu-HU',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -1017,6 +1097,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-EC'})
 SET at.display_name = 'Communication Style for es-EC',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-EC',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1042,6 +1124,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mg-MG'})
 SET at.display_name = 'Communication Style for mg-MG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mg-MG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1067,6 +1151,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ca-AD'})
 SET at.display_name = 'Communication Style for ca-AD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ca-AD',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -1092,6 +1178,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ko-KR'})
 SET at.display_name = 'Communication Style for ko-KR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ko-KR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1117,6 +1205,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ln-CD'})
 SET at.display_name = 'Communication Style for ln-CD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ln-CD',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -1142,6 +1232,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-KE'})
 SET at.display_name = 'Communication Style for en-KE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-KE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1167,6 +1259,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-DZ'})
 SET at.display_name = 'Communication Style for ar-DZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-DZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1192,6 +1286,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CA'})
 SET at.display_name = 'Communication Style for fr-CA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-CA',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -1217,6 +1313,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-GB'})
 SET at.display_name = 'Communication Style for en-GB',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-GB',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -1242,6 +1340,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-RW'})
 SET at.display_name = 'Communication Style for fr-RW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-RW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1267,6 +1367,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-BY'})
 SET at.display_name = 'Communication Style for ru-BY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-BY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -1292,6 +1394,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-GT'})
 SET at.display_name = 'Communication Style for es-GT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-GT',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1317,6 +1421,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-SG'})
 SET at.display_name = 'Communication Style for ms-SG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ms-SG',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1342,6 +1448,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ht-HT'})
 SET at.display_name = 'Communication Style for ht-HT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ht-HT',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1367,6 +1475,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-MY'})
 SET at.display_name = 'Communication Style for ms-MY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ms-MY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1392,6 +1502,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sq-AL'})
 SET at.display_name = 'Communication Style for sq-AL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sq-AL',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1417,6 +1529,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mk-MK'})
 SET at.display_name = 'Communication Style for mk-MK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mk-MK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1442,6 +1556,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mr-IN'})
 SET at.display_name = 'Communication Style for mr-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mr-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1467,6 +1583,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CU'})
 SET at.display_name = 'Communication Style for es-CU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-CU',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -1492,6 +1610,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-KG'})
 SET at.display_name = 'Communication Style for ru-KG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-KG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -1517,6 +1637,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ig-NG'})
 SET at.display_name = 'Communication Style for ig-NG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ig-NG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -1542,6 +1664,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ka-GE'})
 SET at.display_name = 'Communication Style for ka-GE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ka-GE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1567,6 +1691,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-BH'})
 SET at.display_name = 'Communication Style for ar-BH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-BH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -1592,6 +1718,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-LU'})
 SET at.display_name = 'Communication Style for fr-LU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-LU',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1617,6 +1745,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZW'})
 SET at.display_name = 'Communication Style for en-ZW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-ZW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -1642,6 +1772,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-IN'})
 SET at.display_name = 'Communication Style for en-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1667,6 +1799,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-TW'})
 SET at.display_name = 'Communication Style for zh-TW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zh-TW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1692,6 +1826,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@de-CH'})
 SET at.display_name = 'Communication Style for de-CH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'de-CH',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1717,6 +1853,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-BR'})
 SET at.display_name = 'Communication Style for pt-BR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pt-BR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1742,6 +1880,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fa-IR'})
 SET at.display_name = 'Communication Style for fa-IR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fa-IR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1767,6 +1907,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@de-AT'})
 SET at.display_name = 'Communication Style for de-AT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'de-AT',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1792,6 +1934,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-TN'})
 SET at.display_name = 'Communication Style for fr-TN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-TN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -1817,6 +1961,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-TT'})
 SET at.display_name = 'Communication Style for en-TT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-TT',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1842,6 +1988,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@is-IS'})
 SET at.display_name = 'Communication Style for is-IS',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'is-IS',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -1867,6 +2015,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ca-ES'})
 SET at.display_name = 'Communication Style for ca-ES',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ca-ES',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1892,6 +2042,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-KZ'})
 SET at.display_name = 'Communication Style for ru-KZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-KZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -1917,6 +2069,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@kn-IN'})
 SET at.display_name = 'Communication Style for kn-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'kn-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -1942,6 +2096,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ro-RO'})
 SET at.display_name = 'Communication Style for ro-RO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ro-RO',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1967,6 +2123,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@gu-IN'})
 SET at.display_name = 'Communication Style for gu-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'gu-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -1992,6 +2150,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-AO'})
 SET at.display_name = 'Communication Style for pt-AO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pt-AO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2017,6 +2177,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ny-MW'})
 SET at.display_name = 'Communication Style for ny-MW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ny-MW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2042,6 +2204,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@or-IN'})
 SET at.display_name = 'Communication Style for or-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'or-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2067,6 +2231,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-CN'})
 SET at.display_name = 'Communication Style for zh-CN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zh-CN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2092,6 +2258,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sn-ZW'})
 SET at.display_name = 'Communication Style for sn-ZW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sn-ZW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2117,6 +2285,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-JO'})
 SET at.display_name = 'Communication Style for ar-JO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-JO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2142,6 +2312,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-KW'})
 SET at.display_name = 'Communication Style for ar-KW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-KW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2167,6 +2339,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-AU'})
 SET at.display_name = 'Communication Style for en-AU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-AU',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2192,6 +2366,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-FR'})
 SET at.display_name = 'Communication Style for fr-FR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-FR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2217,6 +2393,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-SN'})
 SET at.display_name = 'Communication Style for fr-SN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-SN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2242,6 +2420,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pa-IN'})
 SET at.display_name = 'Communication Style for pa-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pa-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -2267,6 +2447,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@cs-CZ'})
 SET at.display_name = 'Communication Style for cs-CZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'cs-CZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -2292,6 +2474,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CL'})
 SET at.display_name = 'Communication Style for es-CL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-CL',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2317,6 +2501,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@nl-NL'})
 SET at.display_name = 'Communication Style for nl-NL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'nl-NL',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2342,6 +2528,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-HN'})
 SET at.display_name = 'Communication Style for es-HN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-HN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2367,6 +2555,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@bg-BG'})
 SET at.display_name = 'Communication Style for bg-BG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'bg-BG',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2392,6 +2582,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sd-PK'})
 SET at.display_name = 'Communication Style for sd-PK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sd-PK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2417,6 +2609,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-GH'})
 SET at.display_name = 'Communication Style for en-GH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-GH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -2442,6 +2636,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-PH'})
 SET at.display_name = 'Communication Style for en-PH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-PH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2467,6 +2663,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sl-SI'})
 SET at.display_name = 'Communication Style for sl-SI',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sl-SI',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2492,6 +2690,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-HK'})
 SET at.display_name = 'Communication Style for en-HK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-HK',
     at.segment = 'general',
     at.behavior = '{"context_type":"MODERATE_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2517,6 +2717,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-MU'})
 SET at.display_name = 'Communication Style for en-MU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-MU',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -2542,6 +2744,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@et-EE'})
 SET at.display_name = 'Communication Style for et-EE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'et-EE',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2567,6 +2771,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-SV'})
 SET at.display_name = 'Communication Style for es-SV',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-SV',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2592,6 +2798,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-CH'})
 SET at.display_name = 'Communication Style for pt-CH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pt-CH',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2617,6 +2825,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PR'})
 SET at.display_name = 'Communication Style for es-PR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-PR',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2642,6 +2852,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ur-PK'})
 SET at.display_name = 'Communication Style for ur-PK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ur-PK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2667,6 +2879,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZM'})
 SET at.display_name = 'Communication Style for en-ZM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-ZM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2692,6 +2906,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-OM'})
 SET at.display_name = 'Communication Style for ar-OM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-OM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2717,6 +2933,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-MD'})
 SET at.display_name = 'Communication Style for ru-MD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-MD',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2742,6 +2960,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mt-MT'})
 SET at.display_name = 'Communication Style for mt-MT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mt-MT',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -2767,6 +2987,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@eu-ES'})
 SET at.display_name = 'Communication Style for eu-ES',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'eu-ES',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2792,6 +3014,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ja-JP'})
 SET at.display_name = 'Communication Style for ja-JP',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ja-JP',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2817,6 +3041,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@bn-IN'})
 SET at.display_name = 'Communication Style for bn-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'bn-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -2842,6 +3068,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@he-IL'})
 SET at.display_name = 'Communication Style for he-IL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'he-IL',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -2867,6 +3095,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-HK'})
 SET at.display_name = 'Communication Style for zh-HK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zh-HK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2892,6 +3122,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CO'})
 SET at.display_name = 'Communication Style for es-CO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-CO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2917,6 +3149,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@de-LU'})
 SET at.display_name = 'Communication Style for de-LU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'de-LU',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -2942,6 +3176,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-BO'})
 SET at.display_name = 'Communication Style for es-BO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-BO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2967,6 +3203,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@th-TH'})
 SET at.display_name = 'Communication Style for th-TH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'th-TH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -2992,6 +3230,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@kk-KZ'})
 SET at.display_name = 'Communication Style for kk-KZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'kk-KZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3017,6 +3257,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fi-FI'})
 SET at.display_name = 'Communication Style for fi-FI',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fi-FI',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -3042,6 +3284,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-TN'})
 SET at.display_name = 'Communication Style for ar-TN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-TN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -3067,6 +3311,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-VN'})
 SET at.display_name = 'Communication Style for en-VN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-VN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3092,6 +3338,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@tl-PH'})
 SET at.display_name = 'Communication Style for tl-PH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'tl-PH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3117,6 +3365,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-PK'})
 SET at.display_name = 'Communication Style for en-PK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-PK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3142,6 +3392,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CH'})
 SET at.display_name = 'Communication Style for fr-CH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-CH',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3167,6 +3419,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@cy-GB'})
 SET at.display_name = 'Communication Style for cy-GB',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'cy-GB',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -3192,6 +3446,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-FJ'})
 SET at.display_name = 'Communication Style for en-FJ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-FJ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3217,6 +3473,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@af-ZA'})
 SET at.display_name = 'Communication Style for af-ZA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'af-ZA',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -3242,6 +3500,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-JM'})
 SET at.display_name = 'Communication Style for en-JM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-JM',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -3267,6 +3527,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@da-DK'})
 SET at.display_name = 'Communication Style for da-DK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'da-DK',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -3292,6 +3554,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-US'})
 SET at.display_name = 'Communication Style for en-US',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-US',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -3317,6 +3581,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-PT'})
 SET at.display_name = 'Communication Style for pt-PT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pt-PT',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3342,6 +3608,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ga-IE'})
 SET at.display_name = 'Communication Style for ga-IE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ga-IE',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -3367,6 +3635,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-AR'})
 SET at.display_name = 'Communication Style for es-AR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-AR',
     at.segment = 'general',
     at.behavior = '{"context_type":"MIXED","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -3392,6 +3662,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@gl-ES'})
 SET at.display_name = 'Communication Style for gl-ES',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'gl-ES',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3417,6 +3689,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-ES'})
 SET at.display_name = 'Communication Style for es-ES',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-ES',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3442,6 +3716,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-TH'})
 SET at.display_name = 'Communication Style for zh-TH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zh-TH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3467,6 +3743,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@be-BY'})
 SET at.display_name = 'Communication Style for be-BY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'be-BY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -3492,6 +3770,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@wo-SN'})
 SET at.display_name = 'Communication Style for wo-SN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'wo-SN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3517,6 +3797,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-NI'})
 SET at.display_name = 'Communication Style for es-NI',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-NI',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3542,6 +3824,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sv-SE'})
 SET at.display_name = 'Communication Style for sv-SE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sv-SE',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -3567,6 +3851,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@hr-HR'})
 SET at.display_name = 'Communication Style for hr-HR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'hr-HR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3592,6 +3878,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CI'})
 SET at.display_name = 'Communication Style for fr-CI',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-CI',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -3617,6 +3905,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ku-TR'})
 SET at.display_name = 'Communication Style for ku-TR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ku-TR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3642,6 +3932,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-BW'})
 SET at.display_name = 'Communication Style for en-BW',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-BW',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3667,6 +3959,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-IQ'})
 SET at.display_name = 'Communication Style for ar-IQ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-IQ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3692,6 +3986,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pa-PK'})
 SET at.display_name = 'Communication Style for pa-PK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pa-PK',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3717,6 +4013,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-DO'})
 SET at.display_name = 'Communication Style for es-DO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-DO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -3742,6 +4040,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CR'})
 SET at.display_name = 'Communication Style for es-CR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-CR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -3767,6 +4067,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ps-AF'})
 SET at.display_name = 'Communication Style for ps-AF',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ps-AF',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3792,6 +4094,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CM'})
 SET at.display_name = 'Communication Style for fr-CM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-CM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -3817,6 +4121,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@el-GR'})
 SET at.display_name = 'Communication Style for el-GR',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'el-GR',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3842,6 +4148,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@hi-IN'})
 SET at.display_name = 'Communication Style for hi-IN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'hi-IN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3867,6 +4175,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@qu-PE'})
 SET at.display_name = 'Communication Style for qu-PE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'qu-PE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -3892,6 +4202,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sr-RS'})
 SET at.display_name = 'Communication Style for sr-RS',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sr-RS',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -3917,6 +4229,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-BN'})
 SET at.display_name = 'Communication Style for ms-BN',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ms-BN',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3942,6 +4256,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-UY'})
 SET at.display_name = 'Communication Style for es-UY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-UY',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -3967,6 +4283,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zu-ZA'})
 SET at.display_name = 'Communication Style for zu-ZA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zu-ZA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -3992,6 +4310,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-BF'})
 SET at.display_name = 'Communication Style for fr-BF',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-BF',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4017,6 +4337,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-SA'})
 SET at.display_name = 'Communication Style for en-SA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-SA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4042,6 +4364,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@id-ID'})
 SET at.display_name = 'Communication Style for id-ID',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'id-ID',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4067,6 +4391,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-QA'})
 SET at.display_name = 'Communication Style for ar-QA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-QA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4092,6 +4418,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-VE'})
 SET at.display_name = 'Communication Style for es-VE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-VE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4117,6 +4445,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@az-AZ'})
 SET at.display_name = 'Communication Style for az-AZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'az-AZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4142,6 +4472,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@de-DE'})
 SET at.display_name = 'Communication Style for de-DE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'de-DE',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"medium"}',
@@ -4167,6 +4499,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-SA'})
 SET at.display_name = 'Communication Style for ar-SA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-SA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4192,6 +4526,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-MA'})
 SET at.display_name = 'Communication Style for fr-MA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-MA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4217,6 +4553,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@uz-UZ'})
 SET at.display_name = 'Communication Style for uz-UZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'uz-UZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4242,6 +4580,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@lv-LV'})
 SET at.display_name = 'Communication Style for lv-LV',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'lv-LV',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4267,6 +4607,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@xh-ZA'})
 SET at.display_name = 'Communication Style for xh-ZA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'xh-ZA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4292,6 +4634,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ro-MD'})
 SET at.display_name = 'Communication Style for ro-MD',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ro-MD',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4317,6 +4661,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-NG'})
 SET at.display_name = 'Communication Style for en-NG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-NG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -4342,6 +4688,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@it-IT'})
 SET at.display_name = 'Communication Style for it-IT',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'it-IT',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4367,6 +4715,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@no-NO'})
 SET at.display_name = 'Communication Style for no-NO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'no-NO',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -4392,6 +4742,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@sk-SK'})
 SET at.display_name = 'Communication Style for sk-SK',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'sk-SK',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"high"}',
@@ -4417,6 +4769,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@gn-PY'})
 SET at.display_name = 'Communication Style for gn-PY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'gn-PY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -4442,6 +4796,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@uk-UA'})
 SET at.display_name = 'Communication Style for uk-UA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'uk-UA',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4467,6 +4823,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@pl-PL'})
 SET at.display_name = 'Communication Style for pl-PL',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'pl-PL',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4492,6 +4850,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-SG'})
 SET at.display_name = 'Communication Style for zh-SG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'zh-SG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4517,6 +4877,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-CA'})
 SET at.display_name = 'Communication Style for en-CA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-CA',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"balanced","hierarchy_sensitivity":"low"}',
@@ -4542,6 +4904,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-AE'})
 SET at.display_name = 'Communication Style for en-AE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-AE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4567,6 +4931,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-CY'})
 SET at.display_name = 'Communication Style for en-CY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-CY',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4592,6 +4958,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-RU'})
 SET at.display_name = 'Communication Style for ru-RU',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ru-RU',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4617,6 +4985,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@mi-NZ'})
 SET at.display_name = 'Communication Style for mi-NZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'mi-NZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -4642,6 +5012,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PE'})
 SET at.display_name = 'Communication Style for es-PE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-PE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4667,6 +5039,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@yo-NG'})
 SET at.display_name = 'Communication Style for yo-NG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'yo-NG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4692,6 +5066,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@tk-TM'})
 SET at.display_name = 'Communication Style for tk-TM',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'tk-TM',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4717,6 +5093,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PY'})
 SET at.display_name = 'Communication Style for es-PY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-PY',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"medium"}',
@@ -4742,6 +5120,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ha-NG'})
 SET at.display_name = 'Communication Style for ha-NG',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ha-NG',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4767,6 +5147,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@el-CY'})
 SET at.display_name = 'Communication Style for el-CY',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'el-CY',
     at.segment = 'general',
     at.behavior = '{"context_type":"MEDIUM_HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4792,6 +5174,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@jv-ID'})
 SET at.display_name = 'Communication Style for jv-ID',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'jv-ID',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4817,6 +5201,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@km-KH'})
 SET at.display_name = 'Communication Style for km-KH',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'km-KH',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4842,6 +5228,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@so-SO'})
 SET at.display_name = 'Communication Style for so-SO',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'so-SO',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4867,6 +5255,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-AE'})
 SET at.display_name = 'Communication Style for ar-AE',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-AE',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4892,6 +5282,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@en-NZ'})
 SET at.display_name = 'Communication Style for en-NZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'en-NZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"LOW_CONTEXT","directness":"direct","hierarchy_sensitivity":"low"}',
@@ -4917,6 +5309,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ne-NP'})
 SET at.display_name = 'Communication Style for ne-NP',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ne-NP',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -4942,6 +5336,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-DZ'})
 SET at.display_name = 'Communication Style for fr-DZ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'fr-DZ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4967,6 +5363,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-LB'})
 SET at.display_name = 'Communication Style for ar-LB',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'ar-LB',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',
@@ -4992,6 +5390,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@tg-TJ'})
 SET at.display_name = 'Communication Style for tg-TJ',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'tg-TJ',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"indirect","hierarchy_sensitivity":"high"}',
@@ -5017,6 +5417,8 @@ MERGE (l)-[:HAS_AUDIENCE]->(as);
 
 MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PA'})
 SET at.display_name = 'Communication Style for es-PA',
+    at.node_class = 'AudienceTrait',
+    at.content = at.llm_context,
     at.locale = 'es-PA',
     at.segment = 'general',
     at.behavior = '{"context_type":"HIGH_CONTEXT","directness":"balanced","hierarchy_sensitivity":"medium"}',

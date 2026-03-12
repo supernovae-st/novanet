@@ -8,6 +8,9 @@
 // --- en-US AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-US'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'very_direct',
     a.category = 'communication',
@@ -22,6 +25,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-US'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'low',
     a.category = 'communication',
@@ -36,6 +42,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-US'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'informal',
     a.category = 'communication',
@@ -50,6 +59,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-US'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'low_context',
     a.category = 'communication',
@@ -64,6 +76,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-US'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'fast',
     a.category = 'communication',
@@ -78,6 +93,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-US'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'task_first',
     a.category = 'communication',
@@ -92,6 +110,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-US'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = 'explicit',
     a.category = 'communication',
@@ -106,6 +127,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-US'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-US',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-US',
     a.content = '{"tone":"enthusiastic","detail_level":"moderate","proof_types":["testimonials","statistics","money_back_guarantees"]}',
     a.category = 'communication',
@@ -121,6 +145,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-GB AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-GB'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'indirect',
     a.category = 'communication',
@@ -135,6 +162,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-GB'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'medium',
     a.category = 'communication',
@@ -149,6 +179,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-GB'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'formal_casual_mix',
     a.category = 'communication',
@@ -163,6 +196,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-GB'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -177,6 +213,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-GB'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'considered',
     a.category = 'communication',
@@ -191,6 +230,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-GB'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'rapport_then_task',
     a.category = 'communication',
@@ -205,6 +247,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-GB'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = 'softened',
     a.category = 'communication',
@@ -219,6 +264,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-GB'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-GB',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-GB',
     a.content = '{"tone":"witty","detail_level":"moderate","proof_types":["third_party_reviews","awards","case_studies"]}',
     a.category = 'communication',
@@ -234,6 +282,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-AU AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-AU'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'direct',
     a.category = 'communication',
@@ -248,6 +299,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-AU'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'very_low',
     a.category = 'communication',
@@ -262,6 +316,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-AU'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'very_informal',
     a.category = 'communication',
@@ -276,6 +333,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-AU'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'low_context',
     a.category = 'communication',
@@ -290,6 +350,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-AU'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'practical',
     a.category = 'communication',
@@ -304,6 +367,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-AU'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'casual_rapport',
     a.category = 'communication',
@@ -318,6 +384,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-AU'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = 'blunt_friendly',
     a.category = 'communication',
@@ -332,6 +401,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-AU'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-AU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-AU',
     a.content = '{"tone":"casual","detail_level":"concise","proof_types":["peer_reviews","value_for_money","practical_results"]}',
     a.category = 'communication',
@@ -347,6 +419,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-CA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-CA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -361,6 +436,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-CA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'low',
     a.category = 'communication',
@@ -375,6 +453,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-CA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'polite_informal',
     a.category = 'communication',
@@ -389,6 +470,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-CA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'low_context',
     a.category = 'communication',
@@ -403,6 +487,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-CA'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'considered',
     a.category = 'communication',
@@ -417,6 +504,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-CA'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'friendly_professional',
     a.category = 'communication',
@@ -431,6 +521,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-CA'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = 'diplomatic',
     a.category = 'communication',
@@ -445,6 +538,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-CA'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-CA',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["customer_reviews","value_proposition","ethical_practices"]}',
     a.category = 'communication',
@@ -460,6 +556,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-IN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'indirect',
     a.category = 'communication',
@@ -474,6 +573,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'high',
     a.category = 'communication',
@@ -488,6 +590,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'formal',
     a.category = 'communication',
@@ -502,6 +607,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -516,6 +624,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'consensus_family',
     a.category = 'communication',
@@ -530,6 +641,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IN'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'relationship_first',
     a.category = 'communication',
@@ -544,6 +658,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IN'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = 'indirect',
     a.category = 'communication',
@@ -558,6 +675,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IN'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IN',
     a.content = '{"tone":"respectful","detail_level":"detailed","proof_types":["celebrity_endorsements","awards","technical_specs","price_value"]}',
     a.category = 'communication',
@@ -573,6 +693,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-SG AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-SG'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'moderate',
     a.category = 'communication',
@@ -587,6 +710,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-SG'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'high',
     a.category = 'communication',
@@ -601,6 +727,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-SG'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'formal',
     a.category = 'communication',
@@ -615,6 +744,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-SG'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -629,6 +761,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-SG'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'research_heavy',
     a.category = 'communication',
@@ -643,6 +778,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-SG'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'trust_then_task',
     a.category = 'communication',
@@ -657,6 +795,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-SG'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = 'diplomatic',
     a.category = 'communication',
@@ -671,6 +812,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-SG'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-SG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-SG',
     a.content = '{"tone":"professional","detail_level":"detailed","proof_types":["credentials","reviews","awards","price_comparison"]}',
     a.category = 'communication',
@@ -686,6 +830,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-ZA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-ZA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -700,6 +847,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-ZA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'medium',
     a.category = 'communication',
@@ -714,6 +864,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-ZA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'warm_formal',
     a.category = 'communication',
@@ -728,6 +881,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-ZA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -742,6 +898,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-ZA'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'value_conscious',
     a.category = 'communication',
@@ -756,6 +915,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-ZA'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'relationship_first',
     a.category = 'communication',
@@ -770,6 +932,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-ZA'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = 'diplomatic',
     a.category = 'communication',
@@ -784,6 +949,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-ZA'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-ZA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-ZA',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["local_testimonials","value_proposition","community_impact"]}',
     a.category = 'communication',
@@ -799,6 +967,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-NZ AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-NZ'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'moderate',
     a.category = 'communication',
@@ -813,6 +984,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-NZ'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'very_low',
     a.category = 'communication',
@@ -827,6 +1001,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-NZ'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'informal',
     a.category = 'communication',
@@ -841,6 +1018,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-NZ'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'low_context',
     a.category = 'communication',
@@ -855,6 +1035,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-NZ'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'practical',
     a.category = 'communication',
@@ -869,6 +1052,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-NZ'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'casual_friendly',
     a.category = 'communication',
@@ -883,6 +1069,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-NZ'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = 'honest_kind',
     a.category = 'communication',
@@ -897,6 +1086,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-NZ'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-NZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-NZ',
     a.content = '{"tone":"friendly","detail_level":"concise","proof_types":["local_reviews","environmental_credentials","practical_value"]}',
     a.category = 'communication',
@@ -912,6 +1104,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-IE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'indirect',
     a.category = 'communication',
@@ -926,6 +1121,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'low',
     a.category = 'communication',
@@ -940,6 +1138,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'warm_informal',
     a.category = 'communication',
@@ -954,6 +1155,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -968,6 +1172,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'relationship_based',
     a.category = 'communication',
@@ -982,6 +1189,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IE'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'rapport_first',
     a.category = 'communication',
@@ -996,6 +1206,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IE'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = 'softened_honest',
     a.category = 'communication',
@@ -1010,6 +1223,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IE'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-IE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-IE',
     a.content = '{"tone":"warm","detail_level":"narrative","proof_types":["stories","local_testimonials","word_of_mouth"]}',
     a.category = 'communication',
@@ -1025,6 +1241,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- en-PH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-PH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'indirect',
     a.category = 'communication',
@@ -1039,6 +1258,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-PH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'high',
     a.category = 'communication',
@@ -1053,6 +1275,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-PH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'respectful',
     a.category = 'communication',
@@ -1067,6 +1292,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-PH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'high_context',
     a.category = 'communication',
@@ -1081,6 +1309,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-PH'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'family_influenced',
     a.category = 'communication',
@@ -1095,6 +1326,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-PH'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'relationship_first',
     a.category = 'communication',
@@ -1109,6 +1343,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-PH'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = 'indirect',
     a.category = 'communication',
@@ -1123,6 +1360,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-PH'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for en-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'en-PH',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["celebrity_endorsements","social_proof","family_testimonials"]}',
     a.category = 'communication',
@@ -1138,6 +1378,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- de-DE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-DE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'very_direct',
     a.category = 'communication',
@@ -1152,6 +1395,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-DE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'medium',
     a.category = 'communication',
@@ -1166,6 +1412,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-DE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'formal',
     a.category = 'communication',
@@ -1180,6 +1429,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-DE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1194,6 +1446,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-DE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'systematic',
     a.category = 'communication',
@@ -1208,6 +1463,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-DE'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'task_first',
     a.category = 'communication',
@@ -1222,6 +1480,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-DE'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = 'explicit',
     a.category = 'communication',
@@ -1236,6 +1497,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-DE'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-DE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-DE',
     a.content = '{"tone":"professional","detail_level":"comprehensive","proof_types":["technical_specs","certifications","test_results","expert_reviews"]}',
     a.category = 'communication',
@@ -1251,6 +1515,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- de-AT AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-AT'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'moderate',
     a.category = 'communication',
@@ -1265,6 +1532,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-AT'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'high',
     a.category = 'communication',
@@ -1279,6 +1549,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-AT'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'very_formal',
     a.category = 'communication',
@@ -1293,6 +1566,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-AT'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -1307,6 +1583,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-AT'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'considered',
     a.category = 'communication',
@@ -1321,6 +1600,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-AT'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'rapport_then_task',
     a.category = 'communication',
@@ -1335,6 +1617,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-AT'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = 'diplomatic_direct',
     a.category = 'communication',
@@ -1349,6 +1634,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-AT'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-AT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-AT',
     a.content = '{"tone":"sophisticated","detail_level":"comprehensive","proof_types":["credentials","heritage","quality_certifications","expert_opinions"]}',
     a.category = 'communication',
@@ -1364,6 +1652,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- de-CH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-CH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'direct',
     a.category = 'communication',
@@ -1378,6 +1669,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-CH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'low',
     a.category = 'communication',
@@ -1392,6 +1686,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-CH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'formal',
     a.category = 'communication',
@@ -1406,6 +1703,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-CH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1420,6 +1720,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-CH'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'consensus_driven',
     a.category = 'communication',
@@ -1434,6 +1737,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-CH'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'trust_through_reliability',
     a.category = 'communication',
@@ -1448,6 +1754,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-CH'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = 'factual',
     a.category = 'communication',
@@ -1462,6 +1771,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-CH'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for de-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'de-CH',
     a.content = '{"tone":"understated","detail_level":"thorough","proof_types":["quality_certifications","Swiss_made","precision_metrics","long_term_reliability"]}',
     a.category = 'communication',
@@ -1477,6 +1789,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- nl-NL AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-NL'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'very_direct',
     a.category = 'communication',
@@ -1491,6 +1806,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-NL'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'very_low',
     a.category = 'communication',
@@ -1505,6 +1823,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-NL'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'informal',
     a.category = 'communication',
@@ -1519,6 +1840,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-NL'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'very_low_context',
     a.category = 'communication',
@@ -1533,6 +1857,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-NL'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'pragmatic',
     a.category = 'communication',
@@ -1547,6 +1874,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-NL'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'task_oriented',
     a.category = 'communication',
@@ -1561,6 +1891,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-NL'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = 'blunt',
     a.category = 'communication',
@@ -1575,6 +1908,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-NL'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-NL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-NL',
     a.content = '{"tone":"straightforward","detail_level":"concise","proof_types":["value_comparison","practical_benefits","user_reviews"]}',
     a.category = 'communication',
@@ -1590,6 +1926,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- nl-BE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-BE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -1604,6 +1943,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-BE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'low',
     a.category = 'communication',
@@ -1618,6 +1960,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-BE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -1632,6 +1977,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-BE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1646,6 +1994,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-BE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'careful',
     a.category = 'communication',
@@ -1660,6 +2011,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-BE'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'gradual_trust',
     a.category = 'communication',
@@ -1674,6 +2028,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-BE'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = 'softened',
     a.category = 'communication',
@@ -1688,6 +2045,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-BE'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for nl-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'nl-BE',
     a.content = '{"tone":"warm_professional","detail_level":"moderate","proof_types":["local_testimonials","quality_focus","practical_value"]}',
     a.category = 'communication',
@@ -1703,6 +2063,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- sv-SE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sv-SE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -1717,6 +2080,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sv-SE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'very_low',
     a.category = 'communication',
@@ -1731,6 +2097,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sv-SE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'informal',
     a.category = 'communication',
@@ -1745,6 +2114,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sv-SE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1759,6 +2131,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sv-SE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'consensus_research',
     a.category = 'communication',
@@ -1773,6 +2148,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@sv-SE'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'task_then_social',
     a.category = 'communication',
@@ -1787,6 +2165,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@sv-SE'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = 'diplomatic_honest',
     a.category = 'communication',
@@ -1801,6 +2182,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@sv-SE'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sv-SE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sv-SE',
     a.content = '{"tone":"understated","detail_level":"balanced","proof_types":["environmental_certs","user_reviews","functional_benefits"]}',
     a.category = 'communication',
@@ -1816,6 +2200,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- da-DK AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@da-DK'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'direct',
     a.category = 'communication',
@@ -1830,6 +2217,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@da-DK'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'very_low',
     a.category = 'communication',
@@ -1844,6 +2234,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@da-DK'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'very_informal',
     a.category = 'communication',
@@ -1858,6 +2251,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@da-DK'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1872,6 +2268,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@da-DK'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'practical',
     a.category = 'communication',
@@ -1886,6 +2285,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@da-DK'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'informal_professional',
     a.category = 'communication',
@@ -1900,6 +2302,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@da-DK'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = 'honest_kind',
     a.category = 'communication',
@@ -1914,6 +2319,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@da-DK'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for da-DK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'da-DK',
     a.content = '{"tone":"casual","detail_level":"concise","proof_types":["design_quality","user_reviews","practical_value"]}',
     a.category = 'communication',
@@ -1929,6 +2337,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- no-NO AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@no-NO'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'direct',
     a.category = 'communication',
@@ -1943,6 +2354,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@no-NO'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'very_low',
     a.category = 'communication',
@@ -1957,6 +2371,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@no-NO'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'informal',
     a.category = 'communication',
@@ -1971,6 +2388,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@no-NO'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'low_context',
     a.category = 'communication',
@@ -1985,6 +2405,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@no-NO'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'independent',
     a.category = 'communication',
@@ -1999,6 +2422,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@no-NO'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'trust_through_honesty',
     a.category = 'communication',
@@ -2013,6 +2439,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@no-NO'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = 'honest',
     a.category = 'communication',
@@ -2027,6 +2456,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@no-NO'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for no-NO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'no-NO',
     a.content = '{"tone":"natural","detail_level":"balanced","proof_types":["environmental_impact","quality_evidence","practical_results"]}',
     a.category = 'communication',
@@ -2042,6 +2474,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fi-FI AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fi-FI'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'very_direct',
     a.category = 'communication',
@@ -2056,6 +2491,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fi-FI'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'very_low',
     a.category = 'communication',
@@ -2070,6 +2508,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fi-FI'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'informal',
     a.category = 'communication',
@@ -2084,6 +2525,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fi-FI'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'very_low_context',
     a.category = 'communication',
@@ -2098,6 +2542,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fi-FI'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'thorough',
     a.category = 'communication',
@@ -2112,6 +2559,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@fi-FI'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'trust_through_reliability',
     a.category = 'communication',
@@ -2126,6 +2576,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@fi-FI'})
 SET a.display_name = 'feedback style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = 'blunt_honest',
     a.category = 'communication',
@@ -2140,6 +2593,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@fi-FI'})
 SET a.display_name = 'communication preferences',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fi-FI',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fi-FI',
     a.content = '{"tone":"understated","detail_level":"essential_only","proof_types":["technical_evidence","independent_tests","factual_data"]}',
     a.category = 'communication',
@@ -2155,6 +2611,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- zh-CN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-CN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'indirect_moderate',
     a.category = 'communication',
@@ -2169,6 +2628,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-CN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'high',
     a.category = 'communication',
@@ -2183,6 +2645,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-CN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'formal_business',
     a.category = 'communication',
@@ -2197,6 +2662,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-CN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2211,6 +2679,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-CN'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'critical',
     a.category = 'communication',
@@ -2225,6 +2696,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-CN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'consensus_with_authority',
     a.category = 'communication',
@@ -2239,6 +2713,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-CN'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-CN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-CN',
     a.content = 'relationship_first',
     a.category = 'communication',
@@ -2254,6 +2731,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- zh-TW AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-TW'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'indirect_but_clearer',
     a.category = 'communication',
@@ -2268,6 +2748,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-TW'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'moderate',
     a.category = 'communication',
@@ -2282,6 +2765,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-TW'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'polite_professional',
     a.category = 'communication',
@@ -2296,6 +2782,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-TW'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2310,6 +2799,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-TW'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'important',
     a.category = 'communication',
@@ -2324,6 +2816,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-TW'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'individual_with_consensus',
     a.category = 'communication',
@@ -2338,6 +2833,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-TW'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-TW',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-TW',
     a.content = 'quality_and_reputation',
     a.category = 'communication',
@@ -2353,6 +2851,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- zh-HK AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-HK'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'direct_professional',
     a.category = 'communication',
@@ -2367,6 +2868,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-HK'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'moderate_high',
     a.category = 'communication',
@@ -2381,6 +2885,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-HK'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'business_formal',
     a.category = 'communication',
@@ -2395,6 +2902,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-HK'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'moderate_high_context',
     a.category = 'communication',
@@ -2409,6 +2919,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-HK'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'important',
     a.category = 'communication',
@@ -2423,6 +2936,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-HK'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'fast_pragmatic',
     a.category = 'communication',
@@ -2437,6 +2953,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-HK'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for zh-HK',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'zh-HK',
     a.content = 'track_record_and_efficiency',
     a.category = 'communication',
@@ -2452,6 +2971,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ja-JP AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ja-JP'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'very_indirect',
     a.category = 'communication',
@@ -2466,6 +2988,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ja-JP'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'very_high',
     a.category = 'communication',
@@ -2480,6 +3005,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ja-JP'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'very_formal',
     a.category = 'communication',
@@ -2494,6 +3022,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ja-JP'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'very_high_context',
     a.category = 'communication',
@@ -2508,6 +3039,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ja-JP'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'critical',
     a.category = 'communication',
@@ -2522,6 +3056,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ja-JP'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'slow_consensus_nemawashi',
     a.category = 'communication',
@@ -2536,6 +3073,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ja-JP'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ja-JP',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ja-JP',
     a.content = 'long_term_relationship',
     a.category = 'communication',
@@ -2551,6 +3091,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ko-KR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ko-KR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'moderate_direct',
     a.category = 'communication',
@@ -2565,6 +3108,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ko-KR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'high',
     a.category = 'communication',
@@ -2579,6 +3125,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ko-KR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'formal_with_warmth',
     a.category = 'communication',
@@ -2593,6 +3142,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ko-KR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2607,6 +3159,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ko-KR'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'very_important',
     a.category = 'communication',
@@ -2621,6 +3176,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ko-KR'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'fast_but_thorough',
     a.category = 'communication',
@@ -2635,6 +3193,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ko-KR'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ko-KR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ko-KR',
     a.content = 'brand_reputation_and_reviews',
     a.category = 'communication',
@@ -2650,6 +3211,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- hi-IN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@hi-IN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'indirect_warm',
     a.category = 'communication',
@@ -2664,6 +3228,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@hi-IN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'high',
     a.category = 'communication',
@@ -2678,6 +3245,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@hi-IN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'respectful_informal',
     a.category = 'communication',
@@ -2692,6 +3262,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@hi-IN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2706,6 +3279,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@hi-IN'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'important',
     a.category = 'communication',
@@ -2720,6 +3296,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@hi-IN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'family_consensus',
     a.category = 'communication',
@@ -2734,6 +3313,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@hi-IN'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for hi-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'hi-IN',
     a.content = 'word_of_mouth_and_celebrities',
     a.category = 'communication',
@@ -2749,6 +3331,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- bn-BD AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@bn-BD'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'indirect_polite',
     a.category = 'communication',
@@ -2763,6 +3348,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@bn-BD'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'high',
     a.category = 'communication',
@@ -2777,6 +3365,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@bn-BD'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'formal_respectful',
     a.category = 'communication',
@@ -2791,6 +3382,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@bn-BD'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2805,6 +3399,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@bn-BD'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'important',
     a.category = 'communication',
@@ -2819,6 +3416,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@bn-BD'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'elder_influenced',
     a.category = 'communication',
@@ -2833,6 +3433,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@bn-BD'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for bn-BD',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'bn-BD',
     a.content = 'community_recommendations',
     a.category = 'communication',
@@ -2848,6 +3451,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ta-IN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ta-IN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'moderate_direct',
     a.category = 'communication',
@@ -2862,6 +3468,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ta-IN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'high',
     a.category = 'communication',
@@ -2876,6 +3485,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ta-IN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'formal_respectful',
     a.category = 'communication',
@@ -2890,6 +3502,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ta-IN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -2904,6 +3519,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ta-IN'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'important',
     a.category = 'communication',
@@ -2918,6 +3536,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ta-IN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'deliberate_value_focused',
     a.category = 'communication',
@@ -2932,6 +3553,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ta-IN'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ta-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ta-IN',
     a.content = 'local_endorsements',
     a.category = 'communication',
@@ -2947,6 +3571,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- te-IN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@te-IN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'moderate_indirect',
     a.category = 'communication',
@@ -2961,6 +3588,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@te-IN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'high',
     a.category = 'communication',
@@ -2975,6 +3605,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@te-IN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'respectful_formal',
     a.category = 'communication',
@@ -2989,6 +3622,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@te-IN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3003,6 +3639,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@te-IN'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'important',
     a.category = 'communication',
@@ -3017,6 +3656,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@te-IN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'family_and_value_driven',
     a.category = 'communication',
@@ -3031,6 +3673,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@te-IN'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for te-IN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'te-IN',
     a.content = 'celebrity_and_local_endorsements',
     a.category = 'communication',
@@ -3046,6 +3691,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- vi-VN AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@vi-VN'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'indirect_polite',
     a.category = 'communication',
@@ -3060,6 +3708,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@vi-VN'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'high',
     a.category = 'communication',
@@ -3074,6 +3725,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@vi-VN'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'formal_respectful',
     a.category = 'communication',
@@ -3088,6 +3742,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@vi-VN'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3102,6 +3759,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@vi-VN'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'important',
     a.category = 'communication',
@@ -3116,6 +3776,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@vi-VN'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'value_conscious_family',
     a.category = 'communication',
@@ -3130,6 +3793,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@vi-VN'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for vi-VN',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'vi-VN',
     a.content = 'social_proof_and_reviews',
     a.category = 'communication',
@@ -3145,6 +3811,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- th-TH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@th-TH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'very_indirect',
     a.category = 'communication',
@@ -3159,6 +3828,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@th-TH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'very_high',
     a.category = 'communication',
@@ -3173,6 +3845,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@th-TH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'formal_with_warmth',
     a.category = 'communication',
@@ -3187,6 +3862,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@th-TH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'very_high_context',
     a.category = 'communication',
@@ -3201,6 +3879,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@th-TH'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'critical',
     a.category = 'communication',
@@ -3215,6 +3896,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@th-TH'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'relationship_based',
     a.category = 'communication',
@@ -3229,6 +3913,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@th-TH'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for th-TH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'th-TH',
     a.content = 'likability_and_referrals',
     a.category = 'communication',
@@ -3244,6 +3931,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- id-ID AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@id-ID'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'indirect_harmonious',
     a.category = 'communication',
@@ -3258,6 +3948,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@id-ID'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'high',
     a.category = 'communication',
@@ -3272,6 +3965,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@id-ID'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'respectful_friendly',
     a.category = 'communication',
@@ -3286,6 +3982,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@id-ID'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3300,6 +3999,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@id-ID'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'important',
     a.category = 'communication',
@@ -3314,6 +4016,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@id-ID'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'consensus_oriented',
     a.category = 'communication',
@@ -3328,6 +4033,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@id-ID'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for id-ID',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'id-ID',
     a.content = 'community_and_influencers',
     a.category = 'communication',
@@ -3343,6 +4051,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ms-MY AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ms-MY'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'indirect_polite',
     a.category = 'communication',
@@ -3357,6 +4068,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ms-MY'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'high',
     a.category = 'communication',
@@ -3371,6 +4085,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ms-MY'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'formal_respectful',
     a.category = 'communication',
@@ -3385,6 +4102,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ms-MY'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3399,6 +4119,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ms-MY'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'important',
     a.category = 'communication',
@@ -3413,6 +4136,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ms-MY'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'relationship_and_value',
     a.category = 'communication',
@@ -3427,6 +4153,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ms-MY'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ms-MY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ms-MY',
     a.content = 'brand_reputation',
     a.category = 'communication',
@@ -3442,6 +4171,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fil-PH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fil-PH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'indirect_warm',
     a.category = 'communication',
@@ -3456,6 +4188,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fil-PH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'moderate_high',
     a.category = 'communication',
@@ -3470,6 +4205,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fil-PH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'respectful_casual',
     a.category = 'communication',
@@ -3484,6 +4222,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fil-PH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3498,6 +4239,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@fil-PH'})
 SET a.display_name = 'face saving',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'important',
     a.category = 'communication',
@@ -3512,6 +4256,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fil-PH'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'social_influenced',
     a.category = 'communication',
@@ -3526,6 +4273,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@fil-PH'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fil-PH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fil-PH',
     a.content = 'personal_recommendations',
     a.category = 'communication',
@@ -3541,6 +4291,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ar-SA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-SA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'indirect',
     a.category = 'communication',
@@ -3555,6 +4308,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-SA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'very_high',
     a.category = 'communication',
@@ -3569,6 +4325,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-SA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'very_formal',
     a.category = 'communication',
@@ -3583,6 +4342,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-SA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'very_high_context',
     a.category = 'communication',
@@ -3597,6 +4359,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-SA'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'critical',
     a.category = 'communication',
@@ -3611,6 +4376,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-SA'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'strict_separation',
     a.category = 'communication',
@@ -3625,6 +4393,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-SA'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'polychronic',
     a.category = 'communication',
@@ -3639,6 +4410,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-SA'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'consensus_elder_led',
     a.category = 'communication',
@@ -3653,6 +4427,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@ar-SA'})
 SET a.display_name = 'relationship building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-SA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-SA',
     a.content = 'essential_before_business',
     a.category = 'communication',
@@ -3668,6 +4445,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ar-EG AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-EG'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3682,6 +4462,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-EG'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'high',
     a.category = 'communication',
@@ -3696,6 +4479,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-EG'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3710,6 +4496,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-EG'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3724,6 +4513,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-EG'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'high',
     a.category = 'communication',
@@ -3738,6 +4530,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-EG'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'moderate_flexibility',
     a.category = 'communication',
@@ -3752,6 +4547,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-EG'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'polychronic',
     a.category = 'communication',
@@ -3766,6 +4564,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-EG'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'emotional_relationship_based',
     a.category = 'communication',
@@ -3780,6 +4581,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:humor-receptivity@ar-EG'})
 SET a.display_name = 'humor receptivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-EG',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-EG',
     a.content = 'very_high',
     a.category = 'communication',
@@ -3795,6 +4599,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ar-AE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-AE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3809,6 +4616,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-AE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'high',
     a.category = 'communication',
@@ -3823,6 +4633,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-AE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'formal_but_modern',
     a.category = 'communication',
@@ -3837,6 +4650,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-AE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -3851,6 +4667,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-AE'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3865,6 +4684,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-AE'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'progressive_for_region',
     a.category = 'communication',
@@ -3879,6 +4701,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-AE'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'mixed',
     a.category = 'communication',
@@ -3893,6 +4718,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-AE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'efficiency_focused',
     a.category = 'communication',
@@ -3907,6 +4735,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:bilingual-preference@ar-AE'})
 SET a.display_name = 'bilingual preference',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-AE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-AE',
     a.content = 'arabic_english_mixed',
     a.category = 'communication',
@@ -3922,6 +4753,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ar-MA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-MA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3936,6 +4770,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-MA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'high',
     a.category = 'communication',
@@ -3950,6 +4787,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-MA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3964,6 +4804,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-MA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'high_context',
     a.category = 'communication',
@@ -3978,6 +4821,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-MA'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -3992,6 +4838,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-MA'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'moderate_progressive',
     a.category = 'communication',
@@ -4006,6 +4855,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-MA'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'polychronic',
     a.category = 'communication',
@@ -4020,6 +4872,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-MA'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'relationship_based',
     a.category = 'communication',
@@ -4034,6 +4889,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-preference@ar-MA'})
 SET a.display_name = 'language preference',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ar-MA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ar-MA',
     a.content = 'darija_french_mix',
     a.category = 'communication',
@@ -4049,6 +4907,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- ru-RU AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ru-RU'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'direct',
     a.category = 'communication',
@@ -4063,6 +4924,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ru-RU'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'high',
     a.category = 'communication',
@@ -4077,6 +4941,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ru-RU'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'formal',
     a.category = 'communication',
@@ -4091,6 +4958,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ru-RU'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -4105,6 +4975,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ru-RU'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4119,6 +4992,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ru-RU'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'traditional_but_evolving',
     a.category = 'communication',
@@ -4133,6 +5009,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ru-RU'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'long_term',
     a.category = 'communication',
@@ -4147,6 +5026,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ru-RU'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'analytical_skeptical',
     a.category = 'communication',
@@ -4161,6 +5043,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ru-RU'})
 SET a.display_name = 'trust building',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for ru-RU',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'ru-RU',
     a.content = 'slow_but_loyal',
     a.category = 'communication',
@@ -4176,6 +5061,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- uk-UA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@uk-UA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'direct',
     a.category = 'communication',
@@ -4190,6 +5078,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@uk-UA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4204,6 +5095,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@uk-UA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4218,6 +5112,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@uk-UA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -4232,6 +5129,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@uk-UA'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4246,6 +5146,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@uk-UA'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'egalitarian',
     a.category = 'communication',
@@ -4260,6 +5163,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@uk-UA'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'present_focused',
     a.category = 'communication',
@@ -4274,6 +5180,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@uk-UA'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'pragmatic',
     a.category = 'communication',
@@ -4288,6 +5197,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:national-solidarity@uk-UA'})
 SET a.display_name = 'national solidarity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for uk-UA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'uk-UA',
     a.content = 'extremely_high',
     a.category = 'communication',
@@ -4303,6 +5215,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- pl-PL AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pl-PL'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'direct',
     a.category = 'communication',
@@ -4317,6 +5232,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pl-PL'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4331,6 +5249,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pl-PL'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'formal_in_business',
     a.category = 'communication',
@@ -4345,6 +5266,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pl-PL'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -4359,6 +5283,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@pl-PL'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'high',
     a.category = 'communication',
@@ -4373,6 +5300,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@pl-PL'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'traditional_evolving',
     a.category = 'communication',
@@ -4387,6 +5317,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@pl-PL'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'future_focused',
     a.category = 'communication',
@@ -4401,6 +5334,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@pl-PL'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'quality_conscious',
     a.category = 'communication',
@@ -4415,6 +5351,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:price-sensitivity@pl-PL'})
 SET a.display_name = 'price sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pl-PL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pl-PL',
     a.content = 'value_oriented',
     a.category = 'communication',
@@ -4430,6 +5369,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- cs-CZ AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@cs-CZ'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'direct',
     a.category = 'communication',
@@ -4444,6 +5386,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@cs-CZ'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'low',
     a.category = 'communication',
@@ -4458,6 +5403,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@cs-CZ'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'informal_preferred',
     a.category = 'communication',
@@ -4472,6 +5420,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@cs-CZ'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'low_context',
     a.category = 'communication',
@@ -4486,6 +5437,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@cs-CZ'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'very_low',
     a.category = 'communication',
@@ -4500,6 +5454,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@cs-CZ'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'egalitarian',
     a.category = 'communication',
@@ -4514,6 +5471,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@cs-CZ'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'pragmatic',
     a.category = 'communication',
@@ -4528,6 +5488,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@cs-CZ'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'rational_skeptical',
     a.category = 'communication',
@@ -4542,6 +5505,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:marketing-receptivity@cs-CZ'})
 SET a.display_name = 'marketing receptivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for cs-CZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'cs-CZ',
     a.content = 'skeptical',
     a.category = 'communication',
@@ -4557,6 +5523,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- tr-TR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@tr-TR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4571,6 +5540,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@tr-TR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'high',
     a.category = 'communication',
@@ -4585,6 +5557,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@tr-TR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'formal_respectful',
     a.category = 'communication',
@@ -4599,6 +5574,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@tr-TR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'high_context',
     a.category = 'communication',
@@ -4613,6 +5591,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@tr-TR'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'moderate_varied',
     a.category = 'communication',
@@ -4627,6 +5608,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@tr-TR'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'varies_by_region',
     a.category = 'communication',
@@ -4641,6 +5625,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@tr-TR'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'relationship_first',
     a.category = 'communication',
@@ -4655,6 +5642,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@tr-TR'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'emotional_relational',
     a.category = 'communication',
@@ -4669,6 +5659,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:brand-loyalty@tr-TR'})
 SET a.display_name = 'brand loyalty',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for tr-TR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'tr-TR',
     a.content = 'high_once_established',
     a.category = 'communication',
@@ -4684,6 +5677,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- az-AZ AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@az-AZ'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4698,6 +5694,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@az-AZ'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'high',
     a.category = 'communication',
@@ -4712,6 +5711,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@az-AZ'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'formal',
     a.category = 'communication',
@@ -4726,6 +5728,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@az-AZ'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'high_context',
     a.category = 'communication',
@@ -4740,6 +5745,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@az-AZ'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'moderate_secular',
     a.category = 'communication',
@@ -4754,6 +5762,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@az-AZ'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'traditional_modernizing',
     a.category = 'communication',
@@ -4768,6 +5779,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@az-AZ'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'relationship_based',
     a.category = 'communication',
@@ -4782,6 +5796,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@az-AZ'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'consensus_seeking',
     a.category = 'communication',
@@ -4796,6 +5813,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-identity@az-AZ'})
 SET a.display_name = 'language identity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for az-AZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'az-AZ',
     a.content = 'strong_turkic',
     a.category = 'communication',
@@ -4811,6 +5831,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- he-IL AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@he-IL'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'very_direct',
     a.category = 'communication',
@@ -4825,6 +5848,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@he-IL'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'low',
     a.category = 'communication',
@@ -4839,6 +5865,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@he-IL'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'informal',
     a.category = 'communication',
@@ -4853,6 +5882,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@he-IL'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'low_context',
     a.category = 'communication',
@@ -4867,6 +5899,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@he-IL'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'varied_secular_to_orthodox',
     a.category = 'communication',
@@ -4881,6 +5916,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@he-IL'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'egalitarian_secular',
     a.category = 'communication',
@@ -4895,6 +5933,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@he-IL'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'present_urgent',
     a.category = 'communication',
@@ -4909,6 +5950,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@he-IL'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'fast_decisive',
     a.category = 'communication',
@@ -4923,6 +5967,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:negotiation-style@he-IL'})
 SET a.display_name = 'negotiation style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for he-IL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'he-IL',
     a.content = 'assertive',
     a.category = 'communication',
@@ -4938,6 +5985,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- sw-KE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-KE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4952,6 +6002,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-KE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4966,6 +6019,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-KE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -4980,6 +6036,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-KE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -4994,6 +6053,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-KE'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'moderate_diverse',
     a.category = 'communication',
@@ -5008,6 +6070,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-KE'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'evolving_urban_different',
     a.category = 'communication',
@@ -5022,6 +6087,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-KE'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'flexible',
     a.category = 'communication',
@@ -5036,6 +6104,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-KE'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'relationship_influenced',
     a.category = 'communication',
@@ -5050,6 +6121,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:digital-adoption@sw-KE'})
 SET a.display_name = 'digital adoption',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-KE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-KE',
     a.content = 'high_mobile_first',
     a.category = 'communication',
@@ -5065,6 +6139,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- sw-TZ AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-TZ'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'indirect_polite',
     a.category = 'communication',
@@ -5079,6 +6156,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-TZ'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5093,6 +6173,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-TZ'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'formal',
     a.category = 'communication',
@@ -5107,6 +6190,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-TZ'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'high_context',
     a.category = 'communication',
@@ -5121,6 +6207,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-TZ'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'high',
     a.category = 'communication',
@@ -5135,6 +6224,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-TZ'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'traditional',
     a.category = 'communication',
@@ -5149,6 +6241,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-TZ'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'relaxed_pole_pole',
     a.category = 'communication',
@@ -5163,6 +6258,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-TZ'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'consensus',
     a.category = 'communication',
@@ -5177,6 +6275,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-purity@sw-TZ'})
 SET a.display_name = 'language purity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for sw-TZ',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'sw-TZ',
     a.content = 'pure_swahili_preferred',
     a.category = 'communication',
@@ -5192,6 +6293,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- am-ET AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@am-ET'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'indirect',
     a.category = 'communication',
@@ -5206,6 +6310,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@am-ET'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'high',
     a.category = 'communication',
@@ -5220,6 +6327,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@am-ET'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'very_formal',
     a.category = 'communication',
@@ -5234,6 +6344,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@am-ET'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'very_high_context',
     a.category = 'communication',
@@ -5248,6 +6361,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@am-ET'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'critical',
     a.category = 'communication',
@@ -5262,6 +6378,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@am-ET'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'traditional',
     a.category = 'communication',
@@ -5276,6 +6395,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@am-ET'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'ethiopian_calendar',
     a.category = 'communication',
@@ -5290,6 +6412,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@am-ET'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = 'elder_influenced',
     a.category = 'communication',
@@ -5304,6 +6429,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:unique-calendar@am-ET'})
 SET a.display_name = 'unique calendar',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for am-ET',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'am-ET',
     a.content = '13_months_different_year',
     a.category = 'communication',
@@ -5319,6 +6447,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- el-GR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-GR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'direct_expressive',
     a.category = 'communication',
@@ -5333,6 +6464,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-GR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5347,6 +6481,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-GR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5361,6 +6498,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-GR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'moderate_context',
     a.category = 'communication',
@@ -5375,6 +6515,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-GR'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'moderate_orthodox',
     a.category = 'communication',
@@ -5389,6 +6532,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-GR'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'egalitarian_modern',
     a.category = 'communication',
@@ -5403,6 +6549,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-GR'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'relaxed_mediterranean',
     a.category = 'communication',
@@ -5417,6 +6566,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-GR'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'emotional_relational',
     a.category = 'communication',
@@ -5431,6 +6583,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:skepticism@el-GR'})
 SET a.display_name = 'skepticism',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-GR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-GR',
     a.content = 'high_toward_institutions',
     a.category = 'communication',
@@ -5446,6 +6601,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- el-CY AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-CY'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'direct',
     a.category = 'communication',
@@ -5460,6 +6618,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-CY'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5474,6 +6635,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-CY'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'moderate_casual',
     a.category = 'communication',
@@ -5488,6 +6652,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-CY'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'high_context',
     a.category = 'communication',
@@ -5502,6 +6669,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-CY'})
 SET a.display_name = 'religious sensitivity',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'moderate_orthodox',
     a.category = 'communication',
@@ -5516,6 +6686,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-CY'})
 SET a.display_name = 'gender considerations',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'traditional_modernizing',
     a.category = 'communication',
@@ -5530,6 +6703,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-CY'})
 SET a.display_name = 'time orientation',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'relaxed',
     a.category = 'communication',
@@ -5544,6 +6720,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-CY'})
 SET a.display_name = 'decision style',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'relationship_based',
     a.category = 'communication',
@@ -5558,6 +6737,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:market-size@el-CY'})
 SET a.display_name = 'market size',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for el-CY',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'el-CY',
     a.content = 'small_tight_knit',
     a.category = 'communication',
@@ -5573,6 +6755,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fr-FR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-FR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-FR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-FR',
     a.content = 'indirect',
     a.category = 'communication',
@@ -5587,6 +6772,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-FR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-FR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-FR',
     a.content = 'high',
     a.category = 'communication',
@@ -5601,6 +6789,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-FR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-FR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-FR',
     a.content = 'formal',
     a.category = 'communication',
@@ -5615,6 +6806,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-FR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-FR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-FR',
     a.content = 'high_context',
     a.category = 'communication',
@@ -5629,6 +6823,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-FR'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-FR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-FR',
     a.content = 'Titles matter (Monsieur/Madame), vous by default, build relationship before transaction',
     a.category = 'communication',
@@ -5644,6 +6841,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fr-CA AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CA'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CA',
     a.content = 'balanced',
     a.category = 'communication',
@@ -5658,6 +6858,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CA'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CA',
     a.content = 'low',
     a.category = 'communication',
@@ -5672,6 +6875,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CA'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CA',
     a.content = 'informal',
     a.category = 'communication',
@@ -5686,6 +6892,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CA'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CA',
     a.content = 'low_context',
     a.category = 'communication',
@@ -5700,6 +6909,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CA'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CA',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CA',
     a.content = 'More direct than France, tu acceptable earlier, North American efficiency valued',
     a.category = 'communication',
@@ -5715,6 +6927,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fr-BE AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-BE'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-BE',
     a.content = 'balanced',
     a.category = 'communication',
@@ -5729,6 +6944,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-BE'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-BE',
     a.content = 'medium',
     a.category = 'communication',
@@ -5743,6 +6961,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-BE'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-BE',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5757,6 +6978,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-BE'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-BE',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -5771,6 +6995,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-BE'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-BE',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-BE',
     a.content = 'Less formal than France, more practical, appreciate efficiency with politeness',
     a.category = 'communication',
@@ -5786,6 +7013,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- fr-CH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CH',
     a.content = 'direct',
     a.category = 'communication',
@@ -5800,6 +7030,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CH',
     a.content = 'medium',
     a.category = 'communication',
@@ -5814,6 +7047,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CH',
     a.content = 'formal',
     a.category = 'communication',
@@ -5828,6 +7064,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CH',
     a.content = 'low_context',
     a.category = 'communication',
@@ -5842,6 +7081,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CH'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for fr-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'fr-CH',
     a.content = 'German-influenced directness, precision in communication, punctuality sacred',
     a.category = 'communication',
@@ -5857,6 +7099,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- es-ES AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-ES'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-ES',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-ES',
     a.content = 'indirect',
     a.category = 'communication',
@@ -5871,6 +7116,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-ES'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-ES',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-ES',
     a.content = 'medium',
     a.category = 'communication',
@@ -5885,6 +7133,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-ES'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-ES',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-ES',
     a.content = 'moderate',
     a.category = 'communication',
@@ -5899,6 +7150,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-ES'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-ES',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-ES',
     a.content = 'high_context',
     a.category = 'communication',
@@ -5913,6 +7167,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-ES'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-ES',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-ES',
     a.content = 'Relationship-first, vosotros for plural, flexible timing expectations',
     a.category = 'communication',
@@ -5928,6 +7185,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- es-MX AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-MX'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-MX',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-MX',
     a.content = 'indirect',
     a.category = 'communication',
@@ -5942,6 +7202,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-MX'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-MX',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-MX',
     a.content = 'high',
     a.category = 'communication',
@@ -5956,6 +7219,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-MX'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-MX',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-MX',
     a.content = 'formal',
     a.category = 'communication',
@@ -5970,6 +7236,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-MX'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-MX',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-MX',
     a.content = 'high_context',
     a.category = 'communication',
@@ -5984,6 +7253,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-MX'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-MX',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-MX',
     a.content = 'Usted default with strangers, diminutives show warmth (ahorita, tantito)',
     a.category = 'communication',
@@ -5999,6 +7271,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- es-AR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-AR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-AR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-AR',
     a.content = 'direct',
     a.category = 'communication',
@@ -6013,6 +7288,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-AR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-AR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-AR',
     a.content = 'low',
     a.category = 'communication',
@@ -6027,6 +7305,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-AR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-AR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-AR',
     a.content = 'informal',
     a.category = 'communication',
@@ -6041,6 +7322,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-AR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-AR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-AR',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -6055,6 +7339,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-AR'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-AR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-AR',
     a.content = 'Voseo (vos instead of tú), highly expressive, debate culture',
     a.category = 'communication',
@@ -6070,6 +7357,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- es-CO AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CO'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CO',
     a.content = 'indirect',
     a.category = 'communication',
@@ -6084,6 +7374,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CO'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CO',
     a.content = 'high',
     a.category = 'communication',
@@ -6098,6 +7391,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CO'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CO',
     a.content = 'formal',
     a.category = 'communication',
@@ -6112,6 +7408,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CO'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CO',
     a.content = 'high_context',
     a.category = 'communication',
@@ -6126,6 +7425,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CO'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CO',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CO',
     a.content = 'Usted common even among friends, exceptional politeness norms',
     a.category = 'communication',
@@ -6141,6 +7443,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- es-CL AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CL'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CL',
     a.content = 'balanced',
     a.category = 'communication',
@@ -6155,6 +7460,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CL'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CL',
     a.content = 'medium',
     a.category = 'communication',
@@ -6169,6 +7477,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CL'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CL',
     a.content = 'moderate',
     a.category = 'communication',
@@ -6183,6 +7494,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CL'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CL',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -6197,6 +7511,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CL'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for es-CL',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'es-CL',
     a.content = 'Mix of tú/usted, aspirational middle class, tech-savvy',
     a.category = 'communication',
@@ -6212,6 +7529,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- pt-BR AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-BR'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-BR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-BR',
     a.content = 'indirect',
     a.category = 'communication',
@@ -6226,6 +7546,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-BR'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-BR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-BR',
     a.content = 'high',
     a.category = 'communication',
@@ -6240,6 +7563,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-BR'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-BR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-BR',
     a.content = 'informal',
     a.category = 'communication',
@@ -6254,6 +7580,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-BR'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-BR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-BR',
     a.content = 'high_context',
     a.category = 'communication',
@@ -6268,6 +7597,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-BR'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-BR',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-BR',
     a.content = 'Você (not tu) in most regions, warmth over efficiency, personal relationship before business',
     a.category = 'communication',
@@ -6283,6 +7615,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- pt-PT AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-PT'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-PT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-PT',
     a.content = 'balanced',
     a.category = 'communication',
@@ -6297,6 +7632,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-PT'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-PT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-PT',
     a.content = 'medium',
     a.category = 'communication',
@@ -6311,6 +7649,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-PT'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-PT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-PT',
     a.content = 'formal',
     a.category = 'communication',
@@ -6325,6 +7666,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-PT'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-PT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-PT',
     a.content = 'medium_context',
     a.category = 'communication',
@@ -6339,6 +7683,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-PT'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for pt-PT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'pt-PT',
     a.content = 'Tu conjugation, more formal than Brazil, European business norms',
     a.category = 'communication',
@@ -6354,6 +7701,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- it-IT AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-IT'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-IT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-IT',
     a.content = 'indirect',
     a.category = 'communication',
@@ -6368,6 +7718,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-IT'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-IT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-IT',
     a.content = 'high',
     a.category = 'communication',
@@ -6382,6 +7735,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-IT'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-IT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-IT',
     a.content = 'formal',
     a.category = 'communication',
@@ -6396,6 +7752,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-IT'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-IT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-IT',
     a.content = 'high_context',
     a.category = 'communication',
@@ -6410,6 +7769,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-IT'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-IT',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-IT',
     a.content = 'Lei form default, relationships before transactions, flexible timing',
     a.category = 'communication',
@@ -6425,6 +7787,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // --- it-CH AudienceTraits from Research ---
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-CH'})
 SET a.display_name = 'directness',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-CH',
     a.content = 'balanced',
     a.category = 'communication',
@@ -6439,6 +7804,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-CH'})
 SET a.display_name = 'hierarchy',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-CH',
     a.content = 'medium',
     a.category = 'communication',
@@ -6453,6 +7821,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-CH'})
 SET a.display_name = 'formality',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-CH',
     a.content = 'formal',
     a.category = 'communication',
@@ -6467,6 +7838,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-CH'})
 SET a.display_name = 'context type',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-CH',
     a.content = 'low_context',
     a.category = 'communication',
@@ -6481,6 +7855,9 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-CH'})
 SET a.display_name = 'notes',
+    a.node_class = 'AudienceTrait',
+    a.content = 'Audience trait for it-CH',
+    a.provenance = '{\"source\": \"seed:research\", \"version\": \"v0.19.0\"}',
     a.locale = 'it-CH',
     a.content = 'Swiss Italian formal, Lei default, punctuality expected unlike Italy',
     a.category = 'communication',
