@@ -26,10 +26,7 @@ MATCH (l:Layer)
 WHERE l.updated_at IS NULL
 SET l.updated_at = datetime();
 
-// Add updated_at to Trait nodes
-MATCH (t:Trait)
-WHERE t.updated_at IS NULL
-SET t.updated_at = datetime();
+// NOTE: Trait nodes removed in v0.19.0 (ADR-024 deprecated)
 
 // Add updated_at to ArcFamily nodes
 MATCH (af:ArcFamily)
@@ -37,14 +34,15 @@ WHERE af.updated_at IS NULL
 SET af.updated_at = datetime();
 
 // Add created_at where missing (bootstrap completeness)
+// NOTE: Trait removed from list - deprecated in v0.19.0 (ADR-024)
 MATCH (n)
-WHERE (n:Schema OR n:Realm OR n:Layer OR n:Trait OR n:ArcFamily)
+WHERE (n:Schema OR n:Realm OR n:Layer OR n:ArcFamily)
   AND n.created_at IS NULL
 SET n.created_at = datetime();
 
 // Verify timestamp coverage
 MATCH (n)
-WHERE n:Schema OR n:Realm OR n:Layer OR n:Trait OR n:ArcFamily
+WHERE n:Schema OR n:Realm OR n:Layer OR n:ArcFamily
 WITH labels(n)[0] AS label,
      count(*) AS total,
      count(n.updated_at) AS with_updated_at,
