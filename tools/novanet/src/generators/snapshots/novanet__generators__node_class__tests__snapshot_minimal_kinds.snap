@@ -20,6 +20,7 @@ expression: cypher
 MERGE (c_Project:Schema:Class {label: 'Project'})
 ON CREATE SET
   c_Project.key = 'project',
+  c_Project.name = 'Project',
   c_Project.realm = 'org',
   c_Project.layer = 'foundation',
   c_Project.display_name = 'Project',
@@ -36,6 +37,7 @@ ON CREATE SET
   c_Project.created_at = datetime()
 ON MATCH SET
   c_Project.key = 'project',
+  c_Project.name = 'Project',
   c_Project.realm = 'org',
   c_Project.layer = 'foundation',
   c_Project.display_name = 'Project',
@@ -53,6 +55,7 @@ ON MATCH SET
 MERGE (c_Page:Schema:Class {label: 'Page'})
 ON CREATE SET
   c_Page.key = 'page',
+  c_Page.name = 'Page',
   c_Page.realm = 'org',
   c_Page.layer = 'structure',
   c_Page.display_name = 'Page',
@@ -69,6 +72,7 @@ ON CREATE SET
   c_Page.created_at = datetime()
 ON MATCH SET
   c_Page.key = 'page',
+  c_Page.name = 'Page',
   c_Page.realm = 'org',
   c_Page.layer = 'structure',
   c_Page.display_name = 'Page',
@@ -86,6 +90,7 @@ ON MATCH SET
 MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
 ON CREATE SET
   c_PageNative.key = 'page-native',
+  c_PageNative.name = 'PageNative',
   c_PageNative.realm = 'org',
   c_PageNative.layer = 'output',
   c_PageNative.display_name = 'PageNative',
@@ -102,6 +107,7 @@ ON CREATE SET
   c_PageNative.created_at = datetime()
 ON MATCH SET
   c_PageNative.key = 'page-native',
+  c_PageNative.name = 'PageNative',
   c_PageNative.realm = 'org',
   c_PageNative.layer = 'output',
   c_PageNative.display_name = 'PageNative',
@@ -119,6 +125,7 @@ ON MATCH SET
 MERGE (c_Concept:Schema:Class {label: 'Concept'})
 ON CREATE SET
   c_Concept.key = 'concept',
+  c_Concept.name = 'Concept',
   c_Concept.realm = 'org',
   c_Concept.layer = 'semantic',
   c_Concept.display_name = 'Concept',
@@ -135,6 +142,7 @@ ON CREATE SET
   c_Concept.created_at = datetime()
 ON MATCH SET
   c_Concept.key = 'concept',
+  c_Concept.name = 'Concept',
   c_Concept.realm = 'org',
   c_Concept.layer = 'semantic',
   c_Concept.display_name = 'Concept',

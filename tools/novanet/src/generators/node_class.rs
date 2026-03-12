@@ -266,6 +266,7 @@ fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(out, "MERGE ({var}:Schema:Class {{label: '{label}'}})").unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.key = '{key}',").unwrap();
+        writeln!(out, "  {var}.name = '{label}',").unwrap();
         writeln!(out, "  {var}.realm = '{realm}',").unwrap();
         writeln!(out, "  {var}.layer = '{layer}',").unwrap();
         writeln!(out, "  {var}.display_name = '{display}',").unwrap();
@@ -298,6 +299,7 @@ fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
         writeln!(out, "  {var}.key = '{key}',").unwrap();
+        writeln!(out, "  {var}.name = '{label}',").unwrap();
         writeln!(out, "  {var}.realm = '{realm}',").unwrap();
         writeln!(out, "  {var}.layer = '{layer}',").unwrap();
         writeln!(out, "  {var}.display_name = '{display}',").unwrap();
@@ -623,36 +625,36 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.17.3: 57 nodes (36 shared + 21 org)
+        // v0.19.0: 60 nodes (39 shared + 21 org)
         let class_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
             .count();
         assert_eq!(
-            class_merges, 57,
-            "expected 57 Class MERGE statements (v0.17.3: 36 shared + 21 org)"
+            class_merges, 60,
+            "expected 60 Class MERGE statements (v0.19.0: 39 shared + 21 org)"
         );
 
-        // 57 HAS_CLASS relationships (v0.17.3)
+        // 60 HAS_CLASS relationships (v0.19.0)
         let has_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_CLASS]"))
             .count();
-        assert_eq!(has_class, 57, "expected 57 HAS_CLASS relationships");
+        assert_eq!(has_class, 60, "expected 60 HAS_CLASS relationships");
 
-        // 57 IN_REALM relationships
+        // 60 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 57, "expected 57 IN_REALM relationships");
+        assert_eq!(in_realm, 60, "expected 60 IN_REALM relationships");
 
-        // 57 IN_LAYER relationships
+        // 60 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 57, "expected 57 IN_LAYER relationships");
+        assert_eq!(in_layer, 60, "expected 60 IN_LAYER relationships");
 
         // v0.17.3: No EXHIBITS relationships (trait removed)
         let exhibits = cypher
@@ -695,8 +697,8 @@ mod tests {
             }
         }
 
-        // v0.17.3: Header mentions 57 Class nodes
-        assert!(cypher.contains("57 Class nodes"));
+        // v0.19.0: Header mentions 60 Class nodes
+        assert!(cypher.contains("60 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(
