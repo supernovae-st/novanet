@@ -779,3 +779,46 @@ WITH p
 MATCH (ps:PatternSet {key: 'pattern-set:cta@or-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
+// ============================================================
+// FOR_LOCALE arcs for Expressions (ADR-029 compliance)
+// ============================================================
+
+// fil-PH expressions
+MATCH (e:Expression {key: 'expr:mabuhay@fil-PH'})
+MATCH (l:Locale {key: 'fil-PH'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:salamat-po@fil-PH'})
+MATCH (l:Locale {key: 'fil-PH'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:diskarte-lang@fil-PH'})
+MATCH (l:Locale {key: 'fil-PH'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+// lo-LA expressions
+MATCH (e:Expression {key: 'expr:sabaidee@lo-LA'})
+MATCH (l:Locale {key: 'lo-LA'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:khop-jai@lo-LA'})
+MATCH (l:Locale {key: 'lo-LA'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:khop-jai-jao@lo-LA'})
+MATCH (l:Locale {key: 'lo-LA'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+// or-IN expressions
+MATCH (e:Expression {key: 'expr:namaskara@or-IN'})
+MATCH (l:Locale {key: 'or-IN'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:dhanyabad@or-IN'})
+MATCH (l:Locale {key: 'or-IN'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
+MATCH (e:Expression {key: 'expr:jai-jagannath@or-IN'})
+MATCH (l:Locale {key: 'or-IN'})
+MERGE (e)-[:FOR_LOCALE]->(l);
+
