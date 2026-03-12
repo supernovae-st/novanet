@@ -383,9 +383,8 @@ ON CREATE SET
 MERGE (pa:PromptArtifact {key: 'prompt-artifact:hero-generation'})
 ON CREATE SET
   pa.display_name = 'Hero Section Prompt',
-  pa.content = 'Prompt template for generating hero section content',
-  pa.artifact_type = 'prompt_template',
   pa.content = 'Generate a hero section for {entity} targeting {locale} audience. Include headline, subheadline, and CTA.',
+  pa.artifact_type = 'prompt_template',
   pa.created_at = datetime(),
   pa.updated_at = datetime();
 
@@ -393,9 +392,8 @@ ON CREATE SET
 MERGE (oa:OutputArtifact {key: 'output-artifact:sample-hero'})
 ON CREATE SET
   oa.display_name = 'Sample Hero Output',
-  oa.content = 'Example generated hero section',
-  oa.artifact_type = 'generated_content',
   oa.content = '{"headline": "Create Beautiful QR Codes in Seconds", "subheadline": "The fastest way to generate custom QR codes for your business", "cta": "Create QR Code Now"}',
+  oa.artifact_type = 'generated_content',
   oa.created_at = datetime(),
   oa.updated_at = datetime();
 
