@@ -15,7 +15,7 @@ MATCH (l:Locale {key: 'ceb-PH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ceb-PH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ceb-PH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ceb-PH'})
 SET at.display_name = 'Communication Style for ceb-PH',
     at.locale = 'ceb-PH',
     at.segment = 'general',
@@ -29,7 +29,7 @@ SET at.display_name = 'Communication Style for ceb-PH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ceb-PH'})
-MATCH (at:AudienceTrait {key: 'communication-style@ceb-PH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ceb-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ MATCH (l:Locale {key: 'mn-MN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mn-MN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mn-MN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mn-MN'})
 SET at.display_name = 'Communication Style for mn-MN',
     at.locale = 'mn-MN',
     at.segment = 'general',
@@ -54,7 +54,7 @@ SET at.display_name = 'Communication Style for mn-MN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mn-MN'})
-MATCH (at:AudienceTrait {key: 'communication-style@mn-MN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mn-MN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ MATCH (l:Locale {key: 'en-MY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-MY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-MY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-MY'})
 SET at.display_name = 'Communication Style for en-MY',
     at.locale = 'en-MY',
     at.segment = 'general',
@@ -79,7 +79,7 @@ SET at.display_name = 'Communication Style for en-MY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-MY'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-MY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ MATCH (l:Locale {key: 'bn-BD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@bn-BD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@bn-BD'})
 SET at.display_name = 'Communication Style for bn-BD',
     at.locale = 'bn-BD',
     at.segment = 'general',
@@ -104,7 +104,7 @@ SET at.display_name = 'Communication Style for bn-BD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (at:AudienceTrait {key: 'communication-style@bn-BD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ MATCH (l:Locale {key: 'en-TZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-TZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-TZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-TZ'})
 SET at.display_name = 'Communication Style for en-TZ',
     at.locale = 'en-TZ',
     at.segment = 'general',
@@ -129,7 +129,7 @@ SET at.display_name = 'Communication Style for en-TZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-TZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-TZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ MATCH (l:Locale {key: 'en-SG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-SG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-SG'})
 SET at.display_name = 'Communication Style for en-SG',
     at.locale = 'en-SG',
     at.segment = 'general',
@@ -154,7 +154,7 @@ SET at.display_name = 'Communication Style for en-SG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-SG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -165,7 +165,7 @@ MATCH (l:Locale {key: 'ta-LK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-LK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ta-LK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ta-LK'})
 SET at.display_name = 'Communication Style for ta-LK',
     at.locale = 'ta-LK',
     at.segment = 'general',
@@ -179,7 +179,7 @@ SET at.display_name = 'Communication Style for ta-LK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-LK'})
-MATCH (at:AudienceTrait {key: 'communication-style@ta-LK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ta-LK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -190,7 +190,7 @@ MATCH (l:Locale {key: 'en-ZA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-ZA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZA'})
 SET at.display_name = 'Communication Style for en-ZA',
     at.locale = 'en-ZA',
     at.segment = 'general',
@@ -204,7 +204,7 @@ SET at.display_name = 'Communication Style for en-ZA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-ZA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ MATCH (l:Locale {key: 'en-BB'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-BB'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-BB'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-BB'})
 SET at.display_name = 'Communication Style for en-BB',
     at.locale = 'en-BB',
     at.segment = 'general',
@@ -229,7 +229,7 @@ SET at.display_name = 'Communication Style for en-BB',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-BB'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-BB'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-BB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ MATCH (l:Locale {key: 'si-LK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@si-LK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@si-LK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@si-LK'})
 SET at.display_name = 'Communication Style for si-LK',
     at.locale = 'si-LK',
     at.segment = 'general',
@@ -254,7 +254,7 @@ SET at.display_name = 'Communication Style for si-LK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@si-LK'})
-MATCH (at:AudienceTrait {key: 'communication-style@si-LK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@si-LK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -265,7 +265,7 @@ MATCH (l:Locale {key: 'bs-BA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@bs-BA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@bs-BA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@bs-BA'})
 SET at.display_name = 'Communication Style for bs-BA',
     at.locale = 'bs-BA',
     at.segment = 'general',
@@ -279,7 +279,7 @@ SET at.display_name = 'Communication Style for bs-BA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bs-BA'})
-MATCH (at:AudienceTrait {key: 'communication-style@bs-BA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@bs-BA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -290,7 +290,7 @@ MATCH (l:Locale {key: 'it-CH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@it-CH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@it-CH'})
 SET at.display_name = 'Communication Style for it-CH',
     at.locale = 'it-CH',
     at.segment = 'general',
@@ -304,7 +304,7 @@ SET at.display_name = 'Communication Style for it-CH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (at:AudienceTrait {key: 'communication-style@it-CH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -315,7 +315,7 @@ MATCH (l:Locale {key: 'tr-TR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@tr-TR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@tr-TR'})
 SET at.display_name = 'Communication Style for tr-TR',
     at.locale = 'tr-TR',
     at.segment = 'general',
@@ -329,7 +329,7 @@ SET at.display_name = 'Communication Style for tr-TR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (at:AudienceTrait {key: 'communication-style@tr-TR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -340,7 +340,7 @@ MATCH (l:Locale {key: 'es-MX'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-MX'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-MX'})
 SET at.display_name = 'Communication Style for es-MX',
     at.locale = 'es-MX',
     at.segment = 'general',
@@ -354,7 +354,7 @@ SET at.display_name = 'Communication Style for es-MX',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-MX'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -365,7 +365,7 @@ MATCH (l:Locale {key: 'ar-MA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-MA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-MA'})
 SET at.display_name = 'Communication Style for ar-MA',
     at.locale = 'ar-MA',
     at.segment = 'general',
@@ -379,7 +379,7 @@ SET at.display_name = 'Communication Style for ar-MA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-MA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -390,7 +390,7 @@ MATCH (l:Locale {key: 'ar-LY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-LY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-LY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-LY'})
 SET at.display_name = 'Communication Style for ar-LY',
     at.locale = 'ar-LY',
     at.segment = 'general',
@@ -404,7 +404,7 @@ SET at.display_name = 'Communication Style for ar-LY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-LY'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-LY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-LY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -415,7 +415,7 @@ MATCH (l:Locale {key: 'fr-MG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-MG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-MG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-MG'})
 SET at.display_name = 'Communication Style for fr-MG',
     at.locale = 'fr-MG',
     at.segment = 'general',
@@ -429,7 +429,7 @@ SET at.display_name = 'Communication Style for fr-MG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-MG'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-MG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-MG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -440,7 +440,7 @@ MATCH (l:Locale {key: 'ar-EG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-EG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-EG'})
 SET at.display_name = 'Communication Style for ar-EG',
     at.locale = 'ar-EG',
     at.segment = 'general',
@@ -454,7 +454,7 @@ SET at.display_name = 'Communication Style for ar-EG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-EG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -465,7 +465,7 @@ MATCH (l:Locale {key: 'my-MM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@my-MM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@my-MM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@my-MM'})
 SET at.display_name = 'Communication Style for my-MM',
     at.locale = 'my-MM',
     at.segment = 'general',
@@ -479,7 +479,7 @@ SET at.display_name = 'Communication Style for my-MM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@my-MM'})
-MATCH (at:AudienceTrait {key: 'communication-style@my-MM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@my-MM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -490,7 +490,7 @@ MATCH (l:Locale {key: 'ta-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ta-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ta-IN'})
 SET at.display_name = 'Communication Style for ta-IN',
     at.locale = 'ta-IN',
     at.segment = 'general',
@@ -504,7 +504,7 @@ SET at.display_name = 'Communication Style for ta-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@ta-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -515,7 +515,7 @@ MATCH (l:Locale {key: 'fr-CD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-CD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CD'})
 SET at.display_name = 'Communication Style for fr-CD',
     at.locale = 'fr-CD',
     at.segment = 'general',
@@ -529,7 +529,7 @@ SET at.display_name = 'Communication Style for fr-CD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CD'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-CD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-CD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -540,7 +540,7 @@ MATCH (l:Locale {key: 'as-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@as-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@as-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@as-IN'})
 SET at.display_name = 'Communication Style for as-IN',
     at.locale = 'as-IN',
     at.segment = 'general',
@@ -554,7 +554,7 @@ SET at.display_name = 'Communication Style for as-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@as-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@as-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@as-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -565,7 +565,7 @@ MATCH (l:Locale {key: 'lt-LT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@lt-LT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@lt-LT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@lt-LT'})
 SET at.display_name = 'Communication Style for lt-LT',
     at.locale = 'lt-LT',
     at.segment = 'general',
@@ -579,7 +579,7 @@ SET at.display_name = 'Communication Style for lt-LT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lt-LT'})
-MATCH (at:AudienceTrait {key: 'communication-style@lt-LT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@lt-LT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -590,7 +590,7 @@ MATCH (l:Locale {key: 'sw-KE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sw-KE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sw-KE'})
 SET at.display_name = 'Communication Style for sw-KE',
     at.locale = 'sw-KE',
     at.segment = 'general',
@@ -604,7 +604,7 @@ SET at.display_name = 'Communication Style for sw-KE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (at:AudienceTrait {key: 'communication-style@sw-KE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -615,7 +615,7 @@ MATCH (l:Locale {key: 'hy-AM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@hy-AM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@hy-AM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@hy-AM'})
 SET at.display_name = 'Communication Style for hy-AM',
     at.locale = 'hy-AM',
     at.segment = 'general',
@@ -629,7 +629,7 @@ SET at.display_name = 'Communication Style for hy-AM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hy-AM'})
-MATCH (at:AudienceTrait {key: 'communication-style@hy-AM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@hy-AM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -640,7 +640,7 @@ MATCH (l:Locale {key: 'pt-MZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-MZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pt-MZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-MZ'})
 SET at.display_name = 'Communication Style for pt-MZ',
     at.locale = 'pt-MZ',
     at.segment = 'general',
@@ -654,7 +654,7 @@ SET at.display_name = 'Communication Style for pt-MZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-MZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@pt-MZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pt-MZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -665,7 +665,7 @@ MATCH (l:Locale {key: 'nl-BE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@nl-BE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@nl-BE'})
 SET at.display_name = 'Communication Style for nl-BE',
     at.locale = 'nl-BE',
     at.segment = 'general',
@@ -679,7 +679,7 @@ SET at.display_name = 'Communication Style for nl-BE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (at:AudienceTrait {key: 'communication-style@nl-BE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -690,7 +690,7 @@ MATCH (l:Locale {key: 'te-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@te-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@te-IN'})
 SET at.display_name = 'Communication Style for te-IN',
     at.locale = 'te-IN',
     at.segment = 'general',
@@ -704,7 +704,7 @@ SET at.display_name = 'Communication Style for te-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@te-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -715,7 +715,7 @@ MATCH (l:Locale {key: 'ml-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ml-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ml-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ml-IN'})
 SET at.display_name = 'Communication Style for ml-IN',
     at.locale = 'ml-IN',
     at.segment = 'general',
@@ -729,7 +729,7 @@ SET at.display_name = 'Communication Style for ml-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ml-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@ml-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ml-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -740,7 +740,7 @@ MATCH (l:Locale {key: 'vi-VN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@vi-VN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@vi-VN'})
 SET at.display_name = 'Communication Style for vi-VN',
     at.locale = 'vi-VN',
     at.segment = 'general',
@@ -754,7 +754,7 @@ SET at.display_name = 'Communication Style for vi-VN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (at:AudienceTrait {key: 'communication-style@vi-VN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -765,7 +765,7 @@ MATCH (l:Locale {key: 'fr-BE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-BE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-BE'})
 SET at.display_name = 'Communication Style for fr-BE',
     at.locale = 'fr-BE',
     at.segment = 'general',
@@ -779,7 +779,7 @@ SET at.display_name = 'Communication Style for fr-BE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-BE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -790,7 +790,7 @@ MATCH (l:Locale {key: 'ru-IL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-IL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-IL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-IL'})
 SET at.display_name = 'Communication Style for ru-IL',
     at.locale = 'ru-IL',
     at.segment = 'general',
@@ -804,7 +804,7 @@ SET at.display_name = 'Communication Style for ru-IL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-IL'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-IL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -815,7 +815,7 @@ MATCH (l:Locale {key: 'rw-RW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@rw-RW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@rw-RW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@rw-RW'})
 SET at.display_name = 'Communication Style for rw-RW',
     at.locale = 'rw-RW',
     at.segment = 'general',
@@ -829,7 +829,7 @@ SET at.display_name = 'Communication Style for rw-RW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@rw-RW'})
-MATCH (at:AudienceTrait {key: 'communication-style@rw-RW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@rw-RW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -840,7 +840,7 @@ MATCH (l:Locale {key: 'en-KY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-KY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-KY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-KY'})
 SET at.display_name = 'Communication Style for en-KY',
     at.locale = 'en-KY',
     at.segment = 'general',
@@ -854,7 +854,7 @@ SET at.display_name = 'Communication Style for en-KY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-KY'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-KY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-KY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -865,7 +865,7 @@ MATCH (l:Locale {key: 'ky-KG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ky-KG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ky-KG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ky-KG'})
 SET at.display_name = 'Communication Style for ky-KG',
     at.locale = 'ky-KG',
     at.segment = 'general',
@@ -879,7 +879,7 @@ SET at.display_name = 'Communication Style for ky-KG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ky-KG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ky-KG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ky-KG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -890,7 +890,7 @@ MATCH (l:Locale {key: 'en-IE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-IE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-IE'})
 SET at.display_name = 'Communication Style for en-IE',
     at.locale = 'en-IE',
     at.segment = 'general',
@@ -904,7 +904,7 @@ SET at.display_name = 'Communication Style for en-IE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-IE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -915,7 +915,7 @@ MATCH (l:Locale {key: 'su-ID'})
 MATCH (as:AudienceSet {key: 'audience-set:general@su-ID'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@su-ID'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@su-ID'})
 SET at.display_name = 'Communication Style for su-ID',
     at.locale = 'su-ID',
     at.segment = 'general',
@@ -929,7 +929,7 @@ SET at.display_name = 'Communication Style for su-ID',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@su-ID'})
-MATCH (at:AudienceTrait {key: 'communication-style@su-ID'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@su-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -940,7 +940,7 @@ MATCH (l:Locale {key: 'en-UG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-UG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-UG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-UG'})
 SET at.display_name = 'Communication Style for en-UG',
     at.locale = 'en-UG',
     at.segment = 'general',
@@ -954,7 +954,7 @@ SET at.display_name = 'Communication Style for en-UG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-UG'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-UG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-UG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -965,7 +965,7 @@ MATCH (l:Locale {key: 'sw-TZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sw-TZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sw-TZ'})
 SET at.display_name = 'Communication Style for sw-TZ',
     at.locale = 'sw-TZ',
     at.segment = 'general',
@@ -979,7 +979,7 @@ SET at.display_name = 'Communication Style for sw-TZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@sw-TZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -990,7 +990,7 @@ MATCH (l:Locale {key: 'hu-HU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@hu-HU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@hu-HU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@hu-HU'})
 SET at.display_name = 'Communication Style for hu-HU',
     at.locale = 'hu-HU',
     at.segment = 'general',
@@ -1004,7 +1004,7 @@ SET at.display_name = 'Communication Style for hu-HU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hu-HU'})
-MATCH (at:AudienceTrait {key: 'communication-style@hu-HU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@hu-HU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1015,7 +1015,7 @@ MATCH (l:Locale {key: 'es-EC'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-EC'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-EC'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-EC'})
 SET at.display_name = 'Communication Style for es-EC',
     at.locale = 'es-EC',
     at.segment = 'general',
@@ -1029,7 +1029,7 @@ SET at.display_name = 'Communication Style for es-EC',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-EC'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-EC'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-EC'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1040,7 +1040,7 @@ MATCH (l:Locale {key: 'mg-MG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mg-MG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mg-MG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mg-MG'})
 SET at.display_name = 'Communication Style for mg-MG',
     at.locale = 'mg-MG',
     at.segment = 'general',
@@ -1054,7 +1054,7 @@ SET at.display_name = 'Communication Style for mg-MG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mg-MG'})
-MATCH (at:AudienceTrait {key: 'communication-style@mg-MG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mg-MG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1065,7 +1065,7 @@ MATCH (l:Locale {key: 'ca-AD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ca-AD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ca-AD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ca-AD'})
 SET at.display_name = 'Communication Style for ca-AD',
     at.locale = 'ca-AD',
     at.segment = 'general',
@@ -1079,7 +1079,7 @@ SET at.display_name = 'Communication Style for ca-AD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ca-AD'})
-MATCH (at:AudienceTrait {key: 'communication-style@ca-AD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ca-AD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1090,7 +1090,7 @@ MATCH (l:Locale {key: 'ko-KR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ko-KR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ko-KR'})
 SET at.display_name = 'Communication Style for ko-KR',
     at.locale = 'ko-KR',
     at.segment = 'general',
@@ -1104,7 +1104,7 @@ SET at.display_name = 'Communication Style for ko-KR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (at:AudienceTrait {key: 'communication-style@ko-KR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1115,7 +1115,7 @@ MATCH (l:Locale {key: 'ln-CD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ln-CD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ln-CD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ln-CD'})
 SET at.display_name = 'Communication Style for ln-CD',
     at.locale = 'ln-CD',
     at.segment = 'general',
@@ -1129,7 +1129,7 @@ SET at.display_name = 'Communication Style for ln-CD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ln-CD'})
-MATCH (at:AudienceTrait {key: 'communication-style@ln-CD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ln-CD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1140,7 +1140,7 @@ MATCH (l:Locale {key: 'en-KE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-KE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-KE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-KE'})
 SET at.display_name = 'Communication Style for en-KE',
     at.locale = 'en-KE',
     at.segment = 'general',
@@ -1154,7 +1154,7 @@ SET at.display_name = 'Communication Style for en-KE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-KE'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-KE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1165,7 +1165,7 @@ MATCH (l:Locale {key: 'ar-DZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-DZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-DZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-DZ'})
 SET at.display_name = 'Communication Style for ar-DZ',
     at.locale = 'ar-DZ',
     at.segment = 'general',
@@ -1179,7 +1179,7 @@ SET at.display_name = 'Communication Style for ar-DZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-DZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-DZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-DZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1190,7 +1190,7 @@ MATCH (l:Locale {key: 'fr-CA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-CA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CA'})
 SET at.display_name = 'Communication Style for fr-CA',
     at.locale = 'fr-CA',
     at.segment = 'general',
@@ -1204,7 +1204,7 @@ SET at.display_name = 'Communication Style for fr-CA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-CA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1215,7 +1215,7 @@ MATCH (l:Locale {key: 'en-GB'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-GB'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-GB'})
 SET at.display_name = 'Communication Style for en-GB',
     at.locale = 'en-GB',
     at.segment = 'general',
@@ -1229,7 +1229,7 @@ SET at.display_name = 'Communication Style for en-GB',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-GB'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1240,7 +1240,7 @@ MATCH (l:Locale {key: 'fr-RW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-RW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-RW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-RW'})
 SET at.display_name = 'Communication Style for fr-RW',
     at.locale = 'fr-RW',
     at.segment = 'general',
@@ -1254,7 +1254,7 @@ SET at.display_name = 'Communication Style for fr-RW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-RW'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-RW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-RW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1265,7 +1265,7 @@ MATCH (l:Locale {key: 'ru-BY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-BY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-BY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-BY'})
 SET at.display_name = 'Communication Style for ru-BY',
     at.locale = 'ru-BY',
     at.segment = 'general',
@@ -1279,7 +1279,7 @@ SET at.display_name = 'Communication Style for ru-BY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-BY'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-BY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-BY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1290,7 +1290,7 @@ MATCH (l:Locale {key: 'es-GT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-GT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-GT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-GT'})
 SET at.display_name = 'Communication Style for es-GT',
     at.locale = 'es-GT',
     at.segment = 'general',
@@ -1304,7 +1304,7 @@ SET at.display_name = 'Communication Style for es-GT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-GT'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-GT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-GT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1315,7 +1315,7 @@ MATCH (l:Locale {key: 'ms-SG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-SG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ms-SG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-SG'})
 SET at.display_name = 'Communication Style for ms-SG',
     at.locale = 'ms-SG',
     at.segment = 'general',
@@ -1329,7 +1329,7 @@ SET at.display_name = 'Communication Style for ms-SG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-SG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ms-SG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ms-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1340,7 +1340,7 @@ MATCH (l:Locale {key: 'ht-HT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ht-HT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ht-HT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ht-HT'})
 SET at.display_name = 'Communication Style for ht-HT',
     at.locale = 'ht-HT',
     at.segment = 'general',
@@ -1354,7 +1354,7 @@ SET at.display_name = 'Communication Style for ht-HT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ht-HT'})
-MATCH (at:AudienceTrait {key: 'communication-style@ht-HT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ht-HT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1365,7 +1365,7 @@ MATCH (l:Locale {key: 'ms-MY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ms-MY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-MY'})
 SET at.display_name = 'Communication Style for ms-MY',
     at.locale = 'ms-MY',
     at.segment = 'general',
@@ -1379,7 +1379,7 @@ SET at.display_name = 'Communication Style for ms-MY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (at:AudienceTrait {key: 'communication-style@ms-MY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1390,7 +1390,7 @@ MATCH (l:Locale {key: 'sq-AL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sq-AL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sq-AL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sq-AL'})
 SET at.display_name = 'Communication Style for sq-AL',
     at.locale = 'sq-AL',
     at.segment = 'general',
@@ -1404,7 +1404,7 @@ SET at.display_name = 'Communication Style for sq-AL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sq-AL'})
-MATCH (at:AudienceTrait {key: 'communication-style@sq-AL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sq-AL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1415,7 +1415,7 @@ MATCH (l:Locale {key: 'mk-MK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mk-MK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mk-MK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mk-MK'})
 SET at.display_name = 'Communication Style for mk-MK',
     at.locale = 'mk-MK',
     at.segment = 'general',
@@ -1429,7 +1429,7 @@ SET at.display_name = 'Communication Style for mk-MK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mk-MK'})
-MATCH (at:AudienceTrait {key: 'communication-style@mk-MK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mk-MK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1440,7 +1440,7 @@ MATCH (l:Locale {key: 'mr-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mr-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mr-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mr-IN'})
 SET at.display_name = 'Communication Style for mr-IN',
     at.locale = 'mr-IN',
     at.segment = 'general',
@@ -1454,7 +1454,7 @@ SET at.display_name = 'Communication Style for mr-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mr-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@mr-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mr-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1465,7 +1465,7 @@ MATCH (l:Locale {key: 'es-CU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-CU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CU'})
 SET at.display_name = 'Communication Style for es-CU',
     at.locale = 'es-CU',
     at.segment = 'general',
@@ -1479,7 +1479,7 @@ SET at.display_name = 'Communication Style for es-CU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CU'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-CU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-CU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1490,7 +1490,7 @@ MATCH (l:Locale {key: 'ru-KG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-KG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-KG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-KG'})
 SET at.display_name = 'Communication Style for ru-KG',
     at.locale = 'ru-KG',
     at.segment = 'general',
@@ -1504,7 +1504,7 @@ SET at.display_name = 'Communication Style for ru-KG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-KG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-KG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-KG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1515,7 +1515,7 @@ MATCH (l:Locale {key: 'ig-NG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ig-NG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ig-NG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ig-NG'})
 SET at.display_name = 'Communication Style for ig-NG',
     at.locale = 'ig-NG',
     at.segment = 'general',
@@ -1529,7 +1529,7 @@ SET at.display_name = 'Communication Style for ig-NG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ig-NG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ig-NG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ig-NG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1540,7 +1540,7 @@ MATCH (l:Locale {key: 'ka-GE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ka-GE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ka-GE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ka-GE'})
 SET at.display_name = 'Communication Style for ka-GE',
     at.locale = 'ka-GE',
     at.segment = 'general',
@@ -1554,7 +1554,7 @@ SET at.display_name = 'Communication Style for ka-GE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ka-GE'})
-MATCH (at:AudienceTrait {key: 'communication-style@ka-GE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ka-GE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1565,7 +1565,7 @@ MATCH (l:Locale {key: 'ar-BH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-BH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-BH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-BH'})
 SET at.display_name = 'Communication Style for ar-BH',
     at.locale = 'ar-BH',
     at.segment = 'general',
@@ -1579,7 +1579,7 @@ SET at.display_name = 'Communication Style for ar-BH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-BH'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-BH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-BH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1590,7 +1590,7 @@ MATCH (l:Locale {key: 'fr-LU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-LU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-LU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-LU'})
 SET at.display_name = 'Communication Style for fr-LU',
     at.locale = 'fr-LU',
     at.segment = 'general',
@@ -1604,7 +1604,7 @@ SET at.display_name = 'Communication Style for fr-LU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-LU'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-LU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-LU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1615,7 +1615,7 @@ MATCH (l:Locale {key: 'en-ZW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-ZW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZW'})
 SET at.display_name = 'Communication Style for en-ZW',
     at.locale = 'en-ZW',
     at.segment = 'general',
@@ -1629,7 +1629,7 @@ SET at.display_name = 'Communication Style for en-ZW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZW'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-ZW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-ZW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1640,7 +1640,7 @@ MATCH (l:Locale {key: 'en-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-IN'})
 SET at.display_name = 'Communication Style for en-IN',
     at.locale = 'en-IN',
     at.segment = 'general',
@@ -1654,7 +1654,7 @@ SET at.display_name = 'Communication Style for en-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1665,7 +1665,7 @@ MATCH (l:Locale {key: 'zh-TW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zh-TW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-TW'})
 SET at.display_name = 'Communication Style for zh-TW',
     at.locale = 'zh-TW',
     at.segment = 'general',
@@ -1679,7 +1679,7 @@ SET at.display_name = 'Communication Style for zh-TW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (at:AudienceTrait {key: 'communication-style@zh-TW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1690,7 +1690,7 @@ MATCH (l:Locale {key: 'de-CH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@de-CH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@de-CH'})
 SET at.display_name = 'Communication Style for de-CH',
     at.locale = 'de-CH',
     at.segment = 'general',
@@ -1704,7 +1704,7 @@ SET at.display_name = 'Communication Style for de-CH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (at:AudienceTrait {key: 'communication-style@de-CH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1715,7 +1715,7 @@ MATCH (l:Locale {key: 'pt-BR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pt-BR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-BR'})
 SET at.display_name = 'Communication Style for pt-BR',
     at.locale = 'pt-BR',
     at.segment = 'general',
@@ -1729,7 +1729,7 @@ SET at.display_name = 'Communication Style for pt-BR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (at:AudienceTrait {key: 'communication-style@pt-BR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1740,7 +1740,7 @@ MATCH (l:Locale {key: 'fa-IR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fa-IR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fa-IR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fa-IR'})
 SET at.display_name = 'Communication Style for fa-IR',
     at.locale = 'fa-IR',
     at.segment = 'general',
@@ -1754,7 +1754,7 @@ SET at.display_name = 'Communication Style for fa-IR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fa-IR'})
-MATCH (at:AudienceTrait {key: 'communication-style@fa-IR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fa-IR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1765,7 +1765,7 @@ MATCH (l:Locale {key: 'de-AT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@de-AT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@de-AT'})
 SET at.display_name = 'Communication Style for de-AT',
     at.locale = 'de-AT',
     at.segment = 'general',
@@ -1779,7 +1779,7 @@ SET at.display_name = 'Communication Style for de-AT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (at:AudienceTrait {key: 'communication-style@de-AT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1790,7 +1790,7 @@ MATCH (l:Locale {key: 'fr-TN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-TN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-TN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-TN'})
 SET at.display_name = 'Communication Style for fr-TN',
     at.locale = 'fr-TN',
     at.segment = 'general',
@@ -1804,7 +1804,7 @@ SET at.display_name = 'Communication Style for fr-TN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-TN'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-TN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-TN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1815,7 +1815,7 @@ MATCH (l:Locale {key: 'en-TT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-TT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-TT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-TT'})
 SET at.display_name = 'Communication Style for en-TT',
     at.locale = 'en-TT',
     at.segment = 'general',
@@ -1829,7 +1829,7 @@ SET at.display_name = 'Communication Style for en-TT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-TT'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-TT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-TT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1840,7 +1840,7 @@ MATCH (l:Locale {key: 'is-IS'})
 MATCH (as:AudienceSet {key: 'audience-set:general@is-IS'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@is-IS'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@is-IS'})
 SET at.display_name = 'Communication Style for is-IS',
     at.locale = 'is-IS',
     at.segment = 'general',
@@ -1854,7 +1854,7 @@ SET at.display_name = 'Communication Style for is-IS',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@is-IS'})
-MATCH (at:AudienceTrait {key: 'communication-style@is-IS'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@is-IS'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1865,7 +1865,7 @@ MATCH (l:Locale {key: 'ca-ES'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ca-ES'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ca-ES'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ca-ES'})
 SET at.display_name = 'Communication Style for ca-ES',
     at.locale = 'ca-ES',
     at.segment = 'general',
@@ -1879,7 +1879,7 @@ SET at.display_name = 'Communication Style for ca-ES',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ca-ES'})
-MATCH (at:AudienceTrait {key: 'communication-style@ca-ES'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ca-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1890,7 +1890,7 @@ MATCH (l:Locale {key: 'ru-KZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-KZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-KZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-KZ'})
 SET at.display_name = 'Communication Style for ru-KZ',
     at.locale = 'ru-KZ',
     at.segment = 'general',
@@ -1904,7 +1904,7 @@ SET at.display_name = 'Communication Style for ru-KZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-KZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-KZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-KZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1915,7 +1915,7 @@ MATCH (l:Locale {key: 'kn-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@kn-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@kn-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@kn-IN'})
 SET at.display_name = 'Communication Style for kn-IN',
     at.locale = 'kn-IN',
     at.segment = 'general',
@@ -1929,7 +1929,7 @@ SET at.display_name = 'Communication Style for kn-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@kn-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@kn-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@kn-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1940,7 +1940,7 @@ MATCH (l:Locale {key: 'ro-RO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ro-RO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ro-RO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ro-RO'})
 SET at.display_name = 'Communication Style for ro-RO',
     at.locale = 'ro-RO',
     at.segment = 'general',
@@ -1954,7 +1954,7 @@ SET at.display_name = 'Communication Style for ro-RO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ro-RO'})
-MATCH (at:AudienceTrait {key: 'communication-style@ro-RO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ro-RO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1965,7 +1965,7 @@ MATCH (l:Locale {key: 'gu-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@gu-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@gu-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@gu-IN'})
 SET at.display_name = 'Communication Style for gu-IN',
     at.locale = 'gu-IN',
     at.segment = 'general',
@@ -1979,7 +1979,7 @@ SET at.display_name = 'Communication Style for gu-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@gu-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@gu-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@gu-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -1990,7 +1990,7 @@ MATCH (l:Locale {key: 'pt-AO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-AO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pt-AO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-AO'})
 SET at.display_name = 'Communication Style for pt-AO',
     at.locale = 'pt-AO',
     at.segment = 'general',
@@ -2004,7 +2004,7 @@ SET at.display_name = 'Communication Style for pt-AO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-AO'})
-MATCH (at:AudienceTrait {key: 'communication-style@pt-AO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pt-AO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2015,7 +2015,7 @@ MATCH (l:Locale {key: 'ny-MW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ny-MW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ny-MW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ny-MW'})
 SET at.display_name = 'Communication Style for ny-MW',
     at.locale = 'ny-MW',
     at.segment = 'general',
@@ -2029,7 +2029,7 @@ SET at.display_name = 'Communication Style for ny-MW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ny-MW'})
-MATCH (at:AudienceTrait {key: 'communication-style@ny-MW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ny-MW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2040,7 +2040,7 @@ MATCH (l:Locale {key: 'or-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@or-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@or-IN'})
 SET at.display_name = 'Communication Style for or-IN',
     at.locale = 'or-IN',
     at.segment = 'general',
@@ -2054,7 +2054,7 @@ SET at.display_name = 'Communication Style for or-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@or-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2065,7 +2065,7 @@ MATCH (l:Locale {key: 'zh-CN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zh-CN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-CN'})
 SET at.display_name = 'Communication Style for zh-CN',
     at.locale = 'zh-CN',
     at.segment = 'general',
@@ -2079,7 +2079,7 @@ SET at.display_name = 'Communication Style for zh-CN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (at:AudienceTrait {key: 'communication-style@zh-CN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2090,7 +2090,7 @@ MATCH (l:Locale {key: 'sn-ZW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sn-ZW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sn-ZW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sn-ZW'})
 SET at.display_name = 'Communication Style for sn-ZW',
     at.locale = 'sn-ZW',
     at.segment = 'general',
@@ -2104,7 +2104,7 @@ SET at.display_name = 'Communication Style for sn-ZW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sn-ZW'})
-MATCH (at:AudienceTrait {key: 'communication-style@sn-ZW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sn-ZW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2115,7 +2115,7 @@ MATCH (l:Locale {key: 'ar-JO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-JO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-JO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-JO'})
 SET at.display_name = 'Communication Style for ar-JO',
     at.locale = 'ar-JO',
     at.segment = 'general',
@@ -2129,7 +2129,7 @@ SET at.display_name = 'Communication Style for ar-JO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-JO'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-JO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-JO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2140,7 +2140,7 @@ MATCH (l:Locale {key: 'ar-KW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-KW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-KW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-KW'})
 SET at.display_name = 'Communication Style for ar-KW',
     at.locale = 'ar-KW',
     at.segment = 'general',
@@ -2154,7 +2154,7 @@ SET at.display_name = 'Communication Style for ar-KW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-KW'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-KW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-KW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2165,7 +2165,7 @@ MATCH (l:Locale {key: 'en-AU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-AU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-AU'})
 SET at.display_name = 'Communication Style for en-AU',
     at.locale = 'en-AU',
     at.segment = 'general',
@@ -2179,7 +2179,7 @@ SET at.display_name = 'Communication Style for en-AU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-AU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2190,7 +2190,7 @@ MATCH (l:Locale {key: 'fr-FR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-FR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-FR'})
 SET at.display_name = 'Communication Style for fr-FR',
     at.locale = 'fr-FR',
     at.segment = 'general',
@@ -2204,7 +2204,7 @@ SET at.display_name = 'Communication Style for fr-FR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-FR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2215,7 +2215,7 @@ MATCH (l:Locale {key: 'fr-SN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-SN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-SN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-SN'})
 SET at.display_name = 'Communication Style for fr-SN',
     at.locale = 'fr-SN',
     at.segment = 'general',
@@ -2229,7 +2229,7 @@ SET at.display_name = 'Communication Style for fr-SN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-SN'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-SN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-SN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2240,7 +2240,7 @@ MATCH (l:Locale {key: 'pa-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pa-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pa-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pa-IN'})
 SET at.display_name = 'Communication Style for pa-IN',
     at.locale = 'pa-IN',
     at.segment = 'general',
@@ -2254,7 +2254,7 @@ SET at.display_name = 'Communication Style for pa-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pa-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@pa-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pa-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2265,7 +2265,7 @@ MATCH (l:Locale {key: 'cs-CZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@cs-CZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@cs-CZ'})
 SET at.display_name = 'Communication Style for cs-CZ',
     at.locale = 'cs-CZ',
     at.segment = 'general',
@@ -2279,7 +2279,7 @@ SET at.display_name = 'Communication Style for cs-CZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@cs-CZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2290,7 +2290,7 @@ MATCH (l:Locale {key: 'es-CL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-CL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CL'})
 SET at.display_name = 'Communication Style for es-CL',
     at.locale = 'es-CL',
     at.segment = 'general',
@@ -2304,7 +2304,7 @@ SET at.display_name = 'Communication Style for es-CL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-CL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2315,7 +2315,7 @@ MATCH (l:Locale {key: 'nl-NL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@nl-NL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@nl-NL'})
 SET at.display_name = 'Communication Style for nl-NL',
     at.locale = 'nl-NL',
     at.segment = 'general',
@@ -2329,7 +2329,7 @@ SET at.display_name = 'Communication Style for nl-NL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (at:AudienceTrait {key: 'communication-style@nl-NL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2340,7 +2340,7 @@ MATCH (l:Locale {key: 'es-HN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-HN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-HN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-HN'})
 SET at.display_name = 'Communication Style for es-HN',
     at.locale = 'es-HN',
     at.segment = 'general',
@@ -2354,7 +2354,7 @@ SET at.display_name = 'Communication Style for es-HN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-HN'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-HN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-HN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2365,7 +2365,7 @@ MATCH (l:Locale {key: 'bg-BG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@bg-BG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@bg-BG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@bg-BG'})
 SET at.display_name = 'Communication Style for bg-BG',
     at.locale = 'bg-BG',
     at.segment = 'general',
@@ -2379,7 +2379,7 @@ SET at.display_name = 'Communication Style for bg-BG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bg-BG'})
-MATCH (at:AudienceTrait {key: 'communication-style@bg-BG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@bg-BG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2390,7 +2390,7 @@ MATCH (l:Locale {key: 'sd-PK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sd-PK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sd-PK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sd-PK'})
 SET at.display_name = 'Communication Style for sd-PK',
     at.locale = 'sd-PK',
     at.segment = 'general',
@@ -2404,7 +2404,7 @@ SET at.display_name = 'Communication Style for sd-PK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sd-PK'})
-MATCH (at:AudienceTrait {key: 'communication-style@sd-PK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sd-PK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2415,7 +2415,7 @@ MATCH (l:Locale {key: 'en-GH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-GH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-GH'})
 SET at.display_name = 'Communication Style for en-GH',
     at.locale = 'en-GH',
     at.segment = 'general',
@@ -2429,7 +2429,7 @@ SET at.display_name = 'Communication Style for en-GH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GH'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-GH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-GH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2440,7 +2440,7 @@ MATCH (l:Locale {key: 'en-PH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-PH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-PH'})
 SET at.display_name = 'Communication Style for en-PH',
     at.locale = 'en-PH',
     at.segment = 'general',
@@ -2454,7 +2454,7 @@ SET at.display_name = 'Communication Style for en-PH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-PH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2465,7 +2465,7 @@ MATCH (l:Locale {key: 'sl-SI'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sl-SI'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sl-SI'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sl-SI'})
 SET at.display_name = 'Communication Style for sl-SI',
     at.locale = 'sl-SI',
     at.segment = 'general',
@@ -2479,7 +2479,7 @@ SET at.display_name = 'Communication Style for sl-SI',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sl-SI'})
-MATCH (at:AudienceTrait {key: 'communication-style@sl-SI'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sl-SI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2490,7 +2490,7 @@ MATCH (l:Locale {key: 'en-HK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-HK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-HK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-HK'})
 SET at.display_name = 'Communication Style for en-HK',
     at.locale = 'en-HK',
     at.segment = 'general',
@@ -2504,7 +2504,7 @@ SET at.display_name = 'Communication Style for en-HK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-HK'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-HK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2515,7 +2515,7 @@ MATCH (l:Locale {key: 'en-MU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-MU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-MU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-MU'})
 SET at.display_name = 'Communication Style for en-MU',
     at.locale = 'en-MU',
     at.segment = 'general',
@@ -2529,7 +2529,7 @@ SET at.display_name = 'Communication Style for en-MU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-MU'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-MU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-MU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2540,7 +2540,7 @@ MATCH (l:Locale {key: 'et-EE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@et-EE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@et-EE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@et-EE'})
 SET at.display_name = 'Communication Style for et-EE',
     at.locale = 'et-EE',
     at.segment = 'general',
@@ -2554,7 +2554,7 @@ SET at.display_name = 'Communication Style for et-EE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@et-EE'})
-MATCH (at:AudienceTrait {key: 'communication-style@et-EE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@et-EE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2565,7 +2565,7 @@ MATCH (l:Locale {key: 'es-SV'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-SV'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-SV'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-SV'})
 SET at.display_name = 'Communication Style for es-SV',
     at.locale = 'es-SV',
     at.segment = 'general',
@@ -2579,7 +2579,7 @@ SET at.display_name = 'Communication Style for es-SV',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-SV'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-SV'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-SV'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2590,7 +2590,7 @@ MATCH (l:Locale {key: 'pt-CH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-CH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pt-CH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-CH'})
 SET at.display_name = 'Communication Style for pt-CH',
     at.locale = 'pt-CH',
     at.segment = 'general',
@@ -2604,7 +2604,7 @@ SET at.display_name = 'Communication Style for pt-CH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-CH'})
-MATCH (at:AudienceTrait {key: 'communication-style@pt-CH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pt-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2615,7 +2615,7 @@ MATCH (l:Locale {key: 'es-PR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-PR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PR'})
 SET at.display_name = 'Communication Style for es-PR',
     at.locale = 'es-PR',
     at.segment = 'general',
@@ -2629,7 +2629,7 @@ SET at.display_name = 'Communication Style for es-PR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PR'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-PR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-PR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2640,7 +2640,7 @@ MATCH (l:Locale {key: 'ur-PK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ur-PK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ur-PK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ur-PK'})
 SET at.display_name = 'Communication Style for ur-PK',
     at.locale = 'ur-PK',
     at.segment = 'general',
@@ -2654,7 +2654,7 @@ SET at.display_name = 'Communication Style for ur-PK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ur-PK'})
-MATCH (at:AudienceTrait {key: 'communication-style@ur-PK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ur-PK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2665,7 +2665,7 @@ MATCH (l:Locale {key: 'en-ZM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-ZM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-ZM'})
 SET at.display_name = 'Communication Style for en-ZM',
     at.locale = 'en-ZM',
     at.segment = 'general',
@@ -2679,7 +2679,7 @@ SET at.display_name = 'Communication Style for en-ZM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZM'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-ZM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-ZM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2690,7 +2690,7 @@ MATCH (l:Locale {key: 'ar-OM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-OM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-OM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-OM'})
 SET at.display_name = 'Communication Style for ar-OM',
     at.locale = 'ar-OM',
     at.segment = 'general',
@@ -2704,7 +2704,7 @@ SET at.display_name = 'Communication Style for ar-OM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-OM'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-OM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-OM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2715,7 +2715,7 @@ MATCH (l:Locale {key: 'ru-MD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-MD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-MD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-MD'})
 SET at.display_name = 'Communication Style for ru-MD',
     at.locale = 'ru-MD',
     at.segment = 'general',
@@ -2729,7 +2729,7 @@ SET at.display_name = 'Communication Style for ru-MD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-MD'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-MD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-MD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2740,7 +2740,7 @@ MATCH (l:Locale {key: 'mt-MT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mt-MT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mt-MT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mt-MT'})
 SET at.display_name = 'Communication Style for mt-MT',
     at.locale = 'mt-MT',
     at.segment = 'general',
@@ -2754,7 +2754,7 @@ SET at.display_name = 'Communication Style for mt-MT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mt-MT'})
-MATCH (at:AudienceTrait {key: 'communication-style@mt-MT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mt-MT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2765,7 +2765,7 @@ MATCH (l:Locale {key: 'eu-ES'})
 MATCH (as:AudienceSet {key: 'audience-set:general@eu-ES'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@eu-ES'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@eu-ES'})
 SET at.display_name = 'Communication Style for eu-ES',
     at.locale = 'eu-ES',
     at.segment = 'general',
@@ -2779,7 +2779,7 @@ SET at.display_name = 'Communication Style for eu-ES',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@eu-ES'})
-MATCH (at:AudienceTrait {key: 'communication-style@eu-ES'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@eu-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2790,7 +2790,7 @@ MATCH (l:Locale {key: 'ja-JP'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ja-JP'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ja-JP'})
 SET at.display_name = 'Communication Style for ja-JP',
     at.locale = 'ja-JP',
     at.segment = 'general',
@@ -2804,7 +2804,7 @@ SET at.display_name = 'Communication Style for ja-JP',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (at:AudienceTrait {key: 'communication-style@ja-JP'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2815,7 +2815,7 @@ MATCH (l:Locale {key: 'bn-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@bn-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@bn-IN'})
 SET at.display_name = 'Communication Style for bn-IN',
     at.locale = 'bn-IN',
     at.segment = 'general',
@@ -2829,7 +2829,7 @@ SET at.display_name = 'Communication Style for bn-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@bn-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@bn-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2840,7 +2840,7 @@ MATCH (l:Locale {key: 'he-IL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@he-IL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@he-IL'})
 SET at.display_name = 'Communication Style for he-IL',
     at.locale = 'he-IL',
     at.segment = 'general',
@@ -2854,7 +2854,7 @@ SET at.display_name = 'Communication Style for he-IL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (at:AudienceTrait {key: 'communication-style@he-IL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2865,7 +2865,7 @@ MATCH (l:Locale {key: 'zh-HK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zh-HK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-HK'})
 SET at.display_name = 'Communication Style for zh-HK',
     at.locale = 'zh-HK',
     at.segment = 'general',
@@ -2879,7 +2879,7 @@ SET at.display_name = 'Communication Style for zh-HK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (at:AudienceTrait {key: 'communication-style@zh-HK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2890,7 +2890,7 @@ MATCH (l:Locale {key: 'es-CO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-CO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CO'})
 SET at.display_name = 'Communication Style for es-CO',
     at.locale = 'es-CO',
     at.segment = 'general',
@@ -2904,7 +2904,7 @@ SET at.display_name = 'Communication Style for es-CO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-CO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2915,7 +2915,7 @@ MATCH (l:Locale {key: 'de-LU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@de-LU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@de-LU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@de-LU'})
 SET at.display_name = 'Communication Style for de-LU',
     at.locale = 'de-LU',
     at.segment = 'general',
@@ -2929,7 +2929,7 @@ SET at.display_name = 'Communication Style for de-LU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-LU'})
-MATCH (at:AudienceTrait {key: 'communication-style@de-LU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@de-LU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2940,7 +2940,7 @@ MATCH (l:Locale {key: 'es-BO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-BO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-BO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-BO'})
 SET at.display_name = 'Communication Style for es-BO',
     at.locale = 'es-BO',
     at.segment = 'general',
@@ -2954,7 +2954,7 @@ SET at.display_name = 'Communication Style for es-BO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-BO'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-BO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-BO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2965,7 +2965,7 @@ MATCH (l:Locale {key: 'th-TH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@th-TH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@th-TH'})
 SET at.display_name = 'Communication Style for th-TH',
     at.locale = 'th-TH',
     at.segment = 'general',
@@ -2979,7 +2979,7 @@ SET at.display_name = 'Communication Style for th-TH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (at:AudienceTrait {key: 'communication-style@th-TH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -2990,7 +2990,7 @@ MATCH (l:Locale {key: 'kk-KZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@kk-KZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@kk-KZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@kk-KZ'})
 SET at.display_name = 'Communication Style for kk-KZ',
     at.locale = 'kk-KZ',
     at.segment = 'general',
@@ -3004,7 +3004,7 @@ SET at.display_name = 'Communication Style for kk-KZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@kk-KZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@kk-KZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@kk-KZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3015,7 +3015,7 @@ MATCH (l:Locale {key: 'fi-FI'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fi-FI'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fi-FI'})
 SET at.display_name = 'Communication Style for fi-FI',
     at.locale = 'fi-FI',
     at.segment = 'general',
@@ -3029,7 +3029,7 @@ SET at.display_name = 'Communication Style for fi-FI',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (at:AudienceTrait {key: 'communication-style@fi-FI'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3040,7 +3040,7 @@ MATCH (l:Locale {key: 'ar-TN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-TN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-TN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-TN'})
 SET at.display_name = 'Communication Style for ar-TN',
     at.locale = 'ar-TN',
     at.segment = 'general',
@@ -3054,7 +3054,7 @@ SET at.display_name = 'Communication Style for ar-TN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-TN'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-TN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-TN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3065,7 +3065,7 @@ MATCH (l:Locale {key: 'en-VN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-VN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-VN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-VN'})
 SET at.display_name = 'Communication Style for en-VN',
     at.locale = 'en-VN',
     at.segment = 'general',
@@ -3079,7 +3079,7 @@ SET at.display_name = 'Communication Style for en-VN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-VN'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-VN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3090,7 +3090,7 @@ MATCH (l:Locale {key: 'tl-PH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@tl-PH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@tl-PH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@tl-PH'})
 SET at.display_name = 'Communication Style for tl-PH',
     at.locale = 'tl-PH',
     at.segment = 'general',
@@ -3104,7 +3104,7 @@ SET at.display_name = 'Communication Style for tl-PH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tl-PH'})
-MATCH (at:AudienceTrait {key: 'communication-style@tl-PH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@tl-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3115,7 +3115,7 @@ MATCH (l:Locale {key: 'en-PK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-PK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-PK'})
 SET at.display_name = 'Communication Style for en-PK',
     at.locale = 'en-PK',
     at.segment = 'general',
@@ -3129,7 +3129,7 @@ SET at.display_name = 'Communication Style for en-PK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PK'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-PK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-PK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3140,7 +3140,7 @@ MATCH (l:Locale {key: 'fr-CH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-CH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CH'})
 SET at.display_name = 'Communication Style for fr-CH',
     at.locale = 'fr-CH',
     at.segment = 'general',
@@ -3154,7 +3154,7 @@ SET at.display_name = 'Communication Style for fr-CH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-CH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3165,7 +3165,7 @@ MATCH (l:Locale {key: 'cy-GB'})
 MATCH (as:AudienceSet {key: 'audience-set:general@cy-GB'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@cy-GB'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@cy-GB'})
 SET at.display_name = 'Communication Style for cy-GB',
     at.locale = 'cy-GB',
     at.segment = 'general',
@@ -3179,7 +3179,7 @@ SET at.display_name = 'Communication Style for cy-GB',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cy-GB'})
-MATCH (at:AudienceTrait {key: 'communication-style@cy-GB'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@cy-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3190,7 +3190,7 @@ MATCH (l:Locale {key: 'en-FJ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-FJ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-FJ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-FJ'})
 SET at.display_name = 'Communication Style for en-FJ',
     at.locale = 'en-FJ',
     at.segment = 'general',
@@ -3204,7 +3204,7 @@ SET at.display_name = 'Communication Style for en-FJ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-FJ'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-FJ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-FJ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3215,7 +3215,7 @@ MATCH (l:Locale {key: 'af-ZA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@af-ZA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@af-ZA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@af-ZA'})
 SET at.display_name = 'Communication Style for af-ZA',
     at.locale = 'af-ZA',
     at.segment = 'general',
@@ -3229,7 +3229,7 @@ SET at.display_name = 'Communication Style for af-ZA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@af-ZA'})
-MATCH (at:AudienceTrait {key: 'communication-style@af-ZA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@af-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3240,7 +3240,7 @@ MATCH (l:Locale {key: 'en-JM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-JM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-JM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-JM'})
 SET at.display_name = 'Communication Style for en-JM',
     at.locale = 'en-JM',
     at.segment = 'general',
@@ -3254,7 +3254,7 @@ SET at.display_name = 'Communication Style for en-JM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-JM'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-JM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-JM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3265,7 +3265,7 @@ MATCH (l:Locale {key: 'da-DK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@da-DK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@da-DK'})
 SET at.display_name = 'Communication Style for da-DK',
     at.locale = 'da-DK',
     at.segment = 'general',
@@ -3279,7 +3279,7 @@ SET at.display_name = 'Communication Style for da-DK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (at:AudienceTrait {key: 'communication-style@da-DK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3290,7 +3290,7 @@ MATCH (l:Locale {key: 'en-US'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-US'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-US'})
 SET at.display_name = 'Communication Style for en-US',
     at.locale = 'en-US',
     at.segment = 'general',
@@ -3304,7 +3304,7 @@ SET at.display_name = 'Communication Style for en-US',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-US'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3315,7 +3315,7 @@ MATCH (l:Locale {key: 'pt-PT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pt-PT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pt-PT'})
 SET at.display_name = 'Communication Style for pt-PT',
     at.locale = 'pt-PT',
     at.segment = 'general',
@@ -3329,7 +3329,7 @@ SET at.display_name = 'Communication Style for pt-PT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (at:AudienceTrait {key: 'communication-style@pt-PT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3340,7 +3340,7 @@ MATCH (l:Locale {key: 'ga-IE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ga-IE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ga-IE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ga-IE'})
 SET at.display_name = 'Communication Style for ga-IE',
     at.locale = 'ga-IE',
     at.segment = 'general',
@@ -3354,7 +3354,7 @@ SET at.display_name = 'Communication Style for ga-IE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ga-IE'})
-MATCH (at:AudienceTrait {key: 'communication-style@ga-IE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ga-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3365,7 +3365,7 @@ MATCH (l:Locale {key: 'es-AR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-AR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-AR'})
 SET at.display_name = 'Communication Style for es-AR',
     at.locale = 'es-AR',
     at.segment = 'general',
@@ -3379,7 +3379,7 @@ SET at.display_name = 'Communication Style for es-AR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-AR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3390,7 +3390,7 @@ MATCH (l:Locale {key: 'gl-ES'})
 MATCH (as:AudienceSet {key: 'audience-set:general@gl-ES'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@gl-ES'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@gl-ES'})
 SET at.display_name = 'Communication Style for gl-ES',
     at.locale = 'gl-ES',
     at.segment = 'general',
@@ -3404,7 +3404,7 @@ SET at.display_name = 'Communication Style for gl-ES',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@gl-ES'})
-MATCH (at:AudienceTrait {key: 'communication-style@gl-ES'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@gl-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3415,7 +3415,7 @@ MATCH (l:Locale {key: 'es-ES'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-ES'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-ES'})
 SET at.display_name = 'Communication Style for es-ES',
     at.locale = 'es-ES',
     at.segment = 'general',
@@ -3429,7 +3429,7 @@ SET at.display_name = 'Communication Style for es-ES',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-ES'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3440,7 +3440,7 @@ MATCH (l:Locale {key: 'zh-TH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zh-TH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-TH'})
 SET at.display_name = 'Communication Style for zh-TH',
     at.locale = 'zh-TH',
     at.segment = 'general',
@@ -3454,7 +3454,7 @@ SET at.display_name = 'Communication Style for zh-TH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TH'})
-MATCH (at:AudienceTrait {key: 'communication-style@zh-TH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zh-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3465,7 +3465,7 @@ MATCH (l:Locale {key: 'be-BY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@be-BY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@be-BY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@be-BY'})
 SET at.display_name = 'Communication Style for be-BY',
     at.locale = 'be-BY',
     at.segment = 'general',
@@ -3479,7 +3479,7 @@ SET at.display_name = 'Communication Style for be-BY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@be-BY'})
-MATCH (at:AudienceTrait {key: 'communication-style@be-BY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@be-BY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3490,7 +3490,7 @@ MATCH (l:Locale {key: 'wo-SN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@wo-SN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@wo-SN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@wo-SN'})
 SET at.display_name = 'Communication Style for wo-SN',
     at.locale = 'wo-SN',
     at.segment = 'general',
@@ -3504,7 +3504,7 @@ SET at.display_name = 'Communication Style for wo-SN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@wo-SN'})
-MATCH (at:AudienceTrait {key: 'communication-style@wo-SN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@wo-SN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3515,7 +3515,7 @@ MATCH (l:Locale {key: 'es-NI'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-NI'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-NI'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-NI'})
 SET at.display_name = 'Communication Style for es-NI',
     at.locale = 'es-NI',
     at.segment = 'general',
@@ -3529,7 +3529,7 @@ SET at.display_name = 'Communication Style for es-NI',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-NI'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-NI'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-NI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3540,7 +3540,7 @@ MATCH (l:Locale {key: 'sv-SE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sv-SE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sv-SE'})
 SET at.display_name = 'Communication Style for sv-SE',
     at.locale = 'sv-SE',
     at.segment = 'general',
@@ -3554,7 +3554,7 @@ SET at.display_name = 'Communication Style for sv-SE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (at:AudienceTrait {key: 'communication-style@sv-SE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3565,7 +3565,7 @@ MATCH (l:Locale {key: 'hr-HR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@hr-HR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@hr-HR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@hr-HR'})
 SET at.display_name = 'Communication Style for hr-HR',
     at.locale = 'hr-HR',
     at.segment = 'general',
@@ -3579,7 +3579,7 @@ SET at.display_name = 'Communication Style for hr-HR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hr-HR'})
-MATCH (at:AudienceTrait {key: 'communication-style@hr-HR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@hr-HR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3590,7 +3590,7 @@ MATCH (l:Locale {key: 'fr-CI'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CI'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-CI'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CI'})
 SET at.display_name = 'Communication Style for fr-CI',
     at.locale = 'fr-CI',
     at.segment = 'general',
@@ -3604,7 +3604,7 @@ SET at.display_name = 'Communication Style for fr-CI',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CI'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-CI'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-CI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3615,7 +3615,7 @@ MATCH (l:Locale {key: 'ku-TR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ku-TR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ku-TR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ku-TR'})
 SET at.display_name = 'Communication Style for ku-TR',
     at.locale = 'ku-TR',
     at.segment = 'general',
@@ -3629,7 +3629,7 @@ SET at.display_name = 'Communication Style for ku-TR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ku-TR'})
-MATCH (at:AudienceTrait {key: 'communication-style@ku-TR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ku-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3640,7 +3640,7 @@ MATCH (l:Locale {key: 'en-BW'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-BW'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-BW'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-BW'})
 SET at.display_name = 'Communication Style for en-BW',
     at.locale = 'en-BW',
     at.segment = 'general',
@@ -3654,7 +3654,7 @@ SET at.display_name = 'Communication Style for en-BW',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-BW'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-BW'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-BW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3665,7 +3665,7 @@ MATCH (l:Locale {key: 'ar-IQ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-IQ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-IQ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-IQ'})
 SET at.display_name = 'Communication Style for ar-IQ',
     at.locale = 'ar-IQ',
     at.segment = 'general',
@@ -3679,7 +3679,7 @@ SET at.display_name = 'Communication Style for ar-IQ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-IQ'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-IQ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-IQ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3690,7 +3690,7 @@ MATCH (l:Locale {key: 'pa-PK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pa-PK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pa-PK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pa-PK'})
 SET at.display_name = 'Communication Style for pa-PK',
     at.locale = 'pa-PK',
     at.segment = 'general',
@@ -3704,7 +3704,7 @@ SET at.display_name = 'Communication Style for pa-PK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pa-PK'})
-MATCH (at:AudienceTrait {key: 'communication-style@pa-PK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pa-PK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3715,7 +3715,7 @@ MATCH (l:Locale {key: 'es-DO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-DO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-DO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-DO'})
 SET at.display_name = 'Communication Style for es-DO',
     at.locale = 'es-DO',
     at.segment = 'general',
@@ -3729,7 +3729,7 @@ SET at.display_name = 'Communication Style for es-DO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-DO'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-DO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-DO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3740,7 +3740,7 @@ MATCH (l:Locale {key: 'es-CR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-CR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-CR'})
 SET at.display_name = 'Communication Style for es-CR',
     at.locale = 'es-CR',
     at.segment = 'general',
@@ -3754,7 +3754,7 @@ SET at.display_name = 'Communication Style for es-CR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CR'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-CR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-CR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3765,7 +3765,7 @@ MATCH (l:Locale {key: 'ps-AF'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ps-AF'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ps-AF'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ps-AF'})
 SET at.display_name = 'Communication Style for ps-AF',
     at.locale = 'ps-AF',
     at.segment = 'general',
@@ -3779,7 +3779,7 @@ SET at.display_name = 'Communication Style for ps-AF',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ps-AF'})
-MATCH (at:AudienceTrait {key: 'communication-style@ps-AF'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ps-AF'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3790,7 +3790,7 @@ MATCH (l:Locale {key: 'fr-CM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-CM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-CM'})
 SET at.display_name = 'Communication Style for fr-CM',
     at.locale = 'fr-CM',
     at.segment = 'general',
@@ -3804,7 +3804,7 @@ SET at.display_name = 'Communication Style for fr-CM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CM'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-CM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-CM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3815,7 +3815,7 @@ MATCH (l:Locale {key: 'el-GR'})
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@el-GR'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@el-GR'})
 SET at.display_name = 'Communication Style for el-GR',
     at.locale = 'el-GR',
     at.segment = 'general',
@@ -3829,7 +3829,7 @@ SET at.display_name = 'Communication Style for el-GR',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (at:AudienceTrait {key: 'communication-style@el-GR'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3840,7 +3840,7 @@ MATCH (l:Locale {key: 'hi-IN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@hi-IN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@hi-IN'})
 SET at.display_name = 'Communication Style for hi-IN',
     at.locale = 'hi-IN',
     at.segment = 'general',
@@ -3854,7 +3854,7 @@ SET at.display_name = 'Communication Style for hi-IN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (at:AudienceTrait {key: 'communication-style@hi-IN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3865,7 +3865,7 @@ MATCH (l:Locale {key: 'qu-PE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@qu-PE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@qu-PE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@qu-PE'})
 SET at.display_name = 'Communication Style for qu-PE',
     at.locale = 'qu-PE',
     at.segment = 'general',
@@ -3879,7 +3879,7 @@ SET at.display_name = 'Communication Style for qu-PE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@qu-PE'})
-MATCH (at:AudienceTrait {key: 'communication-style@qu-PE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@qu-PE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3890,7 +3890,7 @@ MATCH (l:Locale {key: 'sr-RS'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sr-RS'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sr-RS'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sr-RS'})
 SET at.display_name = 'Communication Style for sr-RS',
     at.locale = 'sr-RS',
     at.segment = 'general',
@@ -3904,7 +3904,7 @@ SET at.display_name = 'Communication Style for sr-RS',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sr-RS'})
-MATCH (at:AudienceTrait {key: 'communication-style@sr-RS'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sr-RS'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3915,7 +3915,7 @@ MATCH (l:Locale {key: 'ms-BN'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-BN'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ms-BN'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ms-BN'})
 SET at.display_name = 'Communication Style for ms-BN',
     at.locale = 'ms-BN',
     at.segment = 'general',
@@ -3929,7 +3929,7 @@ SET at.display_name = 'Communication Style for ms-BN',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-BN'})
-MATCH (at:AudienceTrait {key: 'communication-style@ms-BN'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ms-BN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3940,7 +3940,7 @@ MATCH (l:Locale {key: 'es-UY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-UY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-UY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-UY'})
 SET at.display_name = 'Communication Style for es-UY',
     at.locale = 'es-UY',
     at.segment = 'general',
@@ -3954,7 +3954,7 @@ SET at.display_name = 'Communication Style for es-UY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-UY'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-UY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-UY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3965,7 +3965,7 @@ MATCH (l:Locale {key: 'zu-ZA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zu-ZA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zu-ZA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zu-ZA'})
 SET at.display_name = 'Communication Style for zu-ZA',
     at.locale = 'zu-ZA',
     at.segment = 'general',
@@ -3979,7 +3979,7 @@ SET at.display_name = 'Communication Style for zu-ZA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zu-ZA'})
-MATCH (at:AudienceTrait {key: 'communication-style@zu-ZA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zu-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -3990,7 +3990,7 @@ MATCH (l:Locale {key: 'fr-BF'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BF'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-BF'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-BF'})
 SET at.display_name = 'Communication Style for fr-BF',
     at.locale = 'fr-BF',
     at.segment = 'general',
@@ -4004,7 +4004,7 @@ SET at.display_name = 'Communication Style for fr-BF',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BF'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-BF'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-BF'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4015,7 +4015,7 @@ MATCH (l:Locale {key: 'en-SA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-SA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-SA'})
 SET at.display_name = 'Communication Style for en-SA',
     at.locale = 'en-SA',
     at.segment = 'general',
@@ -4029,7 +4029,7 @@ SET at.display_name = 'Communication Style for en-SA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SA'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-SA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4040,7 +4040,7 @@ MATCH (l:Locale {key: 'id-ID'})
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@id-ID'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@id-ID'})
 SET at.display_name = 'Communication Style for id-ID',
     at.locale = 'id-ID',
     at.segment = 'general',
@@ -4054,7 +4054,7 @@ SET at.display_name = 'Communication Style for id-ID',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (at:AudienceTrait {key: 'communication-style@id-ID'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4065,7 +4065,7 @@ MATCH (l:Locale {key: 'ar-QA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-QA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-QA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-QA'})
 SET at.display_name = 'Communication Style for ar-QA',
     at.locale = 'ar-QA',
     at.segment = 'general',
@@ -4079,7 +4079,7 @@ SET at.display_name = 'Communication Style for ar-QA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-QA'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-QA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-QA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4090,7 +4090,7 @@ MATCH (l:Locale {key: 'es-VE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-VE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-VE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-VE'})
 SET at.display_name = 'Communication Style for es-VE',
     at.locale = 'es-VE',
     at.segment = 'general',
@@ -4104,7 +4104,7 @@ SET at.display_name = 'Communication Style for es-VE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-VE'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-VE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-VE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4115,7 +4115,7 @@ MATCH (l:Locale {key: 'az-AZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@az-AZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@az-AZ'})
 SET at.display_name = 'Communication Style for az-AZ',
     at.locale = 'az-AZ',
     at.segment = 'general',
@@ -4129,7 +4129,7 @@ SET at.display_name = 'Communication Style for az-AZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@az-AZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4140,7 +4140,7 @@ MATCH (l:Locale {key: 'de-DE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@de-DE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@de-DE'})
 SET at.display_name = 'Communication Style for de-DE',
     at.locale = 'de-DE',
     at.segment = 'general',
@@ -4154,7 +4154,7 @@ SET at.display_name = 'Communication Style for de-DE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (at:AudienceTrait {key: 'communication-style@de-DE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4165,7 +4165,7 @@ MATCH (l:Locale {key: 'ar-SA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-SA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-SA'})
 SET at.display_name = 'Communication Style for ar-SA',
     at.locale = 'ar-SA',
     at.segment = 'general',
@@ -4179,7 +4179,7 @@ SET at.display_name = 'Communication Style for ar-SA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-SA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4190,7 +4190,7 @@ MATCH (l:Locale {key: 'fr-MA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-MA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-MA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-MA'})
 SET at.display_name = 'Communication Style for fr-MA',
     at.locale = 'fr-MA',
     at.segment = 'general',
@@ -4204,7 +4204,7 @@ SET at.display_name = 'Communication Style for fr-MA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-MA'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-MA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4215,7 +4215,7 @@ MATCH (l:Locale {key: 'uz-UZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@uz-UZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@uz-UZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@uz-UZ'})
 SET at.display_name = 'Communication Style for uz-UZ',
     at.locale = 'uz-UZ',
     at.segment = 'general',
@@ -4229,7 +4229,7 @@ SET at.display_name = 'Communication Style for uz-UZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uz-UZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@uz-UZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@uz-UZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4240,7 +4240,7 @@ MATCH (l:Locale {key: 'lv-LV'})
 MATCH (as:AudienceSet {key: 'audience-set:general@lv-LV'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@lv-LV'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@lv-LV'})
 SET at.display_name = 'Communication Style for lv-LV',
     at.locale = 'lv-LV',
     at.segment = 'general',
@@ -4254,7 +4254,7 @@ SET at.display_name = 'Communication Style for lv-LV',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lv-LV'})
-MATCH (at:AudienceTrait {key: 'communication-style@lv-LV'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@lv-LV'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4265,7 +4265,7 @@ MATCH (l:Locale {key: 'xh-ZA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@xh-ZA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@xh-ZA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@xh-ZA'})
 SET at.display_name = 'Communication Style for xh-ZA',
     at.locale = 'xh-ZA',
     at.segment = 'general',
@@ -4279,7 +4279,7 @@ SET at.display_name = 'Communication Style for xh-ZA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@xh-ZA'})
-MATCH (at:AudienceTrait {key: 'communication-style@xh-ZA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@xh-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4290,7 +4290,7 @@ MATCH (l:Locale {key: 'ro-MD'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ro-MD'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ro-MD'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ro-MD'})
 SET at.display_name = 'Communication Style for ro-MD',
     at.locale = 'ro-MD',
     at.segment = 'general',
@@ -4304,7 +4304,7 @@ SET at.display_name = 'Communication Style for ro-MD',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ro-MD'})
-MATCH (at:AudienceTrait {key: 'communication-style@ro-MD'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ro-MD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4315,7 +4315,7 @@ MATCH (l:Locale {key: 'en-NG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-NG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-NG'})
 SET at.display_name = 'Communication Style for en-NG',
     at.locale = 'en-NG',
     at.segment = 'general',
@@ -4329,7 +4329,7 @@ SET at.display_name = 'Communication Style for en-NG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NG'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-NG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-NG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4340,7 +4340,7 @@ MATCH (l:Locale {key: 'it-IT'})
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@it-IT'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@it-IT'})
 SET at.display_name = 'Communication Style for it-IT',
     at.locale = 'it-IT',
     at.segment = 'general',
@@ -4354,7 +4354,7 @@ SET at.display_name = 'Communication Style for it-IT',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (at:AudienceTrait {key: 'communication-style@it-IT'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4365,7 +4365,7 @@ MATCH (l:Locale {key: 'no-NO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@no-NO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@no-NO'})
 SET at.display_name = 'Communication Style for no-NO',
     at.locale = 'no-NO',
     at.segment = 'general',
@@ -4379,7 +4379,7 @@ SET at.display_name = 'Communication Style for no-NO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (at:AudienceTrait {key: 'communication-style@no-NO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4390,7 +4390,7 @@ MATCH (l:Locale {key: 'sk-SK'})
 MATCH (as:AudienceSet {key: 'audience-set:general@sk-SK'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@sk-SK'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@sk-SK'})
 SET at.display_name = 'Communication Style for sk-SK',
     at.locale = 'sk-SK',
     at.segment = 'general',
@@ -4404,7 +4404,7 @@ SET at.display_name = 'Communication Style for sk-SK',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sk-SK'})
-MATCH (at:AudienceTrait {key: 'communication-style@sk-SK'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@sk-SK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4415,7 +4415,7 @@ MATCH (l:Locale {key: 'gn-PY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@gn-PY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@gn-PY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@gn-PY'})
 SET at.display_name = 'Communication Style for gn-PY',
     at.locale = 'gn-PY',
     at.segment = 'general',
@@ -4429,7 +4429,7 @@ SET at.display_name = 'Communication Style for gn-PY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@gn-PY'})
-MATCH (at:AudienceTrait {key: 'communication-style@gn-PY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@gn-PY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4440,7 +4440,7 @@ MATCH (l:Locale {key: 'uk-UA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@uk-UA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@uk-UA'})
 SET at.display_name = 'Communication Style for uk-UA',
     at.locale = 'uk-UA',
     at.segment = 'general',
@@ -4454,7 +4454,7 @@ SET at.display_name = 'Communication Style for uk-UA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (at:AudienceTrait {key: 'communication-style@uk-UA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4465,7 +4465,7 @@ MATCH (l:Locale {key: 'pl-PL'})
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@pl-PL'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@pl-PL'})
 SET at.display_name = 'Communication Style for pl-PL',
     at.locale = 'pl-PL',
     at.segment = 'general',
@@ -4479,7 +4479,7 @@ SET at.display_name = 'Communication Style for pl-PL',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (at:AudienceTrait {key: 'communication-style@pl-PL'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4490,7 +4490,7 @@ MATCH (l:Locale {key: 'zh-SG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-SG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@zh-SG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@zh-SG'})
 SET at.display_name = 'Communication Style for zh-SG',
     at.locale = 'zh-SG',
     at.segment = 'general',
@@ -4504,7 +4504,7 @@ SET at.display_name = 'Communication Style for zh-SG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-SG'})
-MATCH (at:AudienceTrait {key: 'communication-style@zh-SG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@zh-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4515,7 +4515,7 @@ MATCH (l:Locale {key: 'en-CA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-CA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-CA'})
 SET at.display_name = 'Communication Style for en-CA',
     at.locale = 'en-CA',
     at.segment = 'general',
@@ -4529,7 +4529,7 @@ SET at.display_name = 'Communication Style for en-CA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-CA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4540,7 +4540,7 @@ MATCH (l:Locale {key: 'en-AE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-AE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-AE'})
 SET at.display_name = 'Communication Style for en-AE',
     at.locale = 'en-AE',
     at.segment = 'general',
@@ -4554,7 +4554,7 @@ SET at.display_name = 'Communication Style for en-AE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AE'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-AE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4565,7 +4565,7 @@ MATCH (l:Locale {key: 'en-CY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-CY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-CY'})
 SET at.display_name = 'Communication Style for en-CY',
     at.locale = 'en-CY',
     at.segment = 'general',
@@ -4579,7 +4579,7 @@ SET at.display_name = 'Communication Style for en-CY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CY'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-CY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4590,7 +4590,7 @@ MATCH (l:Locale {key: 'ru-RU'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ru-RU'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ru-RU'})
 SET at.display_name = 'Communication Style for ru-RU',
     at.locale = 'ru-RU',
     at.segment = 'general',
@@ -4604,7 +4604,7 @@ SET at.display_name = 'Communication Style for ru-RU',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (at:AudienceTrait {key: 'communication-style@ru-RU'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4615,7 +4615,7 @@ MATCH (l:Locale {key: 'mi-NZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@mi-NZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@mi-NZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@mi-NZ'})
 SET at.display_name = 'Communication Style for mi-NZ',
     at.locale = 'mi-NZ',
     at.segment = 'general',
@@ -4629,7 +4629,7 @@ SET at.display_name = 'Communication Style for mi-NZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@mi-NZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@mi-NZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@mi-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4640,7 +4640,7 @@ MATCH (l:Locale {key: 'es-PE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-PE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PE'})
 SET at.display_name = 'Communication Style for es-PE',
     at.locale = 'es-PE',
     at.segment = 'general',
@@ -4654,7 +4654,7 @@ SET at.display_name = 'Communication Style for es-PE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PE'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-PE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-PE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4665,7 +4665,7 @@ MATCH (l:Locale {key: 'yo-NG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@yo-NG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@yo-NG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@yo-NG'})
 SET at.display_name = 'Communication Style for yo-NG',
     at.locale = 'yo-NG',
     at.segment = 'general',
@@ -4679,7 +4679,7 @@ SET at.display_name = 'Communication Style for yo-NG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@yo-NG'})
-MATCH (at:AudienceTrait {key: 'communication-style@yo-NG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@yo-NG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4690,7 +4690,7 @@ MATCH (l:Locale {key: 'tk-TM'})
 MATCH (as:AudienceSet {key: 'audience-set:general@tk-TM'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@tk-TM'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@tk-TM'})
 SET at.display_name = 'Communication Style for tk-TM',
     at.locale = 'tk-TM',
     at.segment = 'general',
@@ -4704,7 +4704,7 @@ SET at.display_name = 'Communication Style for tk-TM',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tk-TM'})
-MATCH (at:AudienceTrait {key: 'communication-style@tk-TM'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@tk-TM'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4715,7 +4715,7 @@ MATCH (l:Locale {key: 'es-PY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-PY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PY'})
 SET at.display_name = 'Communication Style for es-PY',
     at.locale = 'es-PY',
     at.segment = 'general',
@@ -4729,7 +4729,7 @@ SET at.display_name = 'Communication Style for es-PY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PY'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-PY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-PY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4740,7 +4740,7 @@ MATCH (l:Locale {key: 'ha-NG'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ha-NG'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ha-NG'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ha-NG'})
 SET at.display_name = 'Communication Style for ha-NG',
     at.locale = 'ha-NG',
     at.segment = 'general',
@@ -4754,7 +4754,7 @@ SET at.display_name = 'Communication Style for ha-NG',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ha-NG'})
-MATCH (at:AudienceTrait {key: 'communication-style@ha-NG'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ha-NG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4765,7 +4765,7 @@ MATCH (l:Locale {key: 'el-CY'})
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@el-CY'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@el-CY'})
 SET at.display_name = 'Communication Style for el-CY',
     at.locale = 'el-CY',
     at.segment = 'general',
@@ -4779,7 +4779,7 @@ SET at.display_name = 'Communication Style for el-CY',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (at:AudienceTrait {key: 'communication-style@el-CY'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4790,7 +4790,7 @@ MATCH (l:Locale {key: 'jv-ID'})
 MATCH (as:AudienceSet {key: 'audience-set:general@jv-ID'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@jv-ID'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@jv-ID'})
 SET at.display_name = 'Communication Style for jv-ID',
     at.locale = 'jv-ID',
     at.segment = 'general',
@@ -4804,7 +4804,7 @@ SET at.display_name = 'Communication Style for jv-ID',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@jv-ID'})
-MATCH (at:AudienceTrait {key: 'communication-style@jv-ID'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@jv-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4815,7 +4815,7 @@ MATCH (l:Locale {key: 'km-KH'})
 MATCH (as:AudienceSet {key: 'audience-set:general@km-KH'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@km-KH'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@km-KH'})
 SET at.display_name = 'Communication Style for km-KH',
     at.locale = 'km-KH',
     at.segment = 'general',
@@ -4829,7 +4829,7 @@ SET at.display_name = 'Communication Style for km-KH',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@km-KH'})
-MATCH (at:AudienceTrait {key: 'communication-style@km-KH'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@km-KH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4840,7 +4840,7 @@ MATCH (l:Locale {key: 'so-SO'})
 MATCH (as:AudienceSet {key: 'audience-set:general@so-SO'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@so-SO'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@so-SO'})
 SET at.display_name = 'Communication Style for so-SO',
     at.locale = 'so-SO',
     at.segment = 'general',
@@ -4854,7 +4854,7 @@ SET at.display_name = 'Communication Style for so-SO',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@so-SO'})
-MATCH (at:AudienceTrait {key: 'communication-style@so-SO'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@so-SO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4865,7 +4865,7 @@ MATCH (l:Locale {key: 'ar-AE'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-AE'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-AE'})
 SET at.display_name = 'Communication Style for ar-AE',
     at.locale = 'ar-AE',
     at.segment = 'general',
@@ -4879,7 +4879,7 @@ SET at.display_name = 'Communication Style for ar-AE',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-AE'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4890,7 +4890,7 @@ MATCH (l:Locale {key: 'en-NZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@en-NZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@en-NZ'})
 SET at.display_name = 'Communication Style for en-NZ',
     at.locale = 'en-NZ',
     at.segment = 'general',
@@ -4904,7 +4904,7 @@ SET at.display_name = 'Communication Style for en-NZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@en-NZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4915,7 +4915,7 @@ MATCH (l:Locale {key: 'ne-NP'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ne-NP'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ne-NP'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ne-NP'})
 SET at.display_name = 'Communication Style for ne-NP',
     at.locale = 'ne-NP',
     at.segment = 'general',
@@ -4929,7 +4929,7 @@ SET at.display_name = 'Communication Style for ne-NP',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ne-NP'})
-MATCH (at:AudienceTrait {key: 'communication-style@ne-NP'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ne-NP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4940,7 +4940,7 @@ MATCH (l:Locale {key: 'fr-DZ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-DZ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@fr-DZ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@fr-DZ'})
 SET at.display_name = 'Communication Style for fr-DZ',
     at.locale = 'fr-DZ',
     at.segment = 'general',
@@ -4954,7 +4954,7 @@ SET at.display_name = 'Communication Style for fr-DZ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-DZ'})
-MATCH (at:AudienceTrait {key: 'communication-style@fr-DZ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@fr-DZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4965,7 +4965,7 @@ MATCH (l:Locale {key: 'ar-LB'})
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-LB'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@ar-LB'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@ar-LB'})
 SET at.display_name = 'Communication Style for ar-LB',
     at.locale = 'ar-LB',
     at.segment = 'general',
@@ -4979,7 +4979,7 @@ SET at.display_name = 'Communication Style for ar-LB',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-LB'})
-MATCH (at:AudienceTrait {key: 'communication-style@ar-LB'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@ar-LB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -4990,7 +4990,7 @@ MATCH (l:Locale {key: 'tg-TJ'})
 MATCH (as:AudienceSet {key: 'audience-set:general@tg-TJ'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@tg-TJ'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@tg-TJ'})
 SET at.display_name = 'Communication Style for tg-TJ',
     at.locale = 'tg-TJ',
     at.segment = 'general',
@@ -5004,7 +5004,7 @@ SET at.display_name = 'Communication Style for tg-TJ',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tg-TJ'})
-MATCH (at:AudienceTrait {key: 'communication-style@tg-TJ'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@tg-TJ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
 // ----------------------------------------------------------------------------
@@ -5015,7 +5015,7 @@ MATCH (l:Locale {key: 'es-PA'})
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PA'})
 MERGE (l)-[:HAS_AUDIENCE]->(as);
 
-MERGE (at:AudienceTrait {key: 'communication-style@es-PA'})
+MERGE (at:AudienceTrait {key: 'audience:communication-style@es-PA'})
 SET at.display_name = 'Communication Style for es-PA',
     at.locale = 'es-PA',
     at.segment = 'general',
@@ -5029,5 +5029,5 @@ SET at.display_name = 'Communication Style for es-PA',
     at.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-PA'})
-MATCH (at:AudienceTrait {key: 'communication-style@es-PA'})
+MATCH (at:AudienceTrait {key: 'audience:communication-style@es-PA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);

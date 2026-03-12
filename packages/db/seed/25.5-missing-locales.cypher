@@ -5,7 +5,7 @@
 
 // === fil-PH - Filipino (Philippines) ===
 
-MERGE (cr:CultureRef {key: 'pakikisama-harmony@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:pakikisama-harmony@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Pakikisama (Harmony)',
     cr.importance = 'critical',
@@ -19,7 +19,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'hiya-sense-of-shame@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:hiya-sense-of-shame@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Hiya (Sense of Shame)',
     cr.importance = 'critical',
@@ -33,7 +33,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'utang-na-loob-debt-of-gratitude@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:utang-na-loob-debt-of-gratitude@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Utang na Loob (Debt of Gratitude)',
     cr.importance = 'high',
@@ -47,7 +47,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'bayanihan-community-spirit@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:bayanihan-community-spirit@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Bayanihan (Community Spirit)',
     cr.importance = 'high',
@@ -61,7 +61,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'family-first-values@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:family-first-values@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Family-First Values',
     cr.importance = 'critical',
@@ -75,7 +75,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'respect-for-elders-po-opo@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:respect-for-elders-po-opo@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Respect for Elders (Po/Opo)',
     cr.importance = 'high',
@@ -89,7 +89,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'hospitality-mabuhay-spirit@fil-PH'})
+MERGE (cr:CultureRef {key: 'cultureref:hospitality-mabuhay-spirit@fil-PH'})
 SET cr.locale = 'fil-PH',
     cr.text = 'Hospitality (Mabuhay Spirit)',
     cr.importance = 'high',
@@ -103,7 +103,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (t:Taboo {key: 'public-confrontation@fil-PH'})
+MERGE (t:Taboo {key: 'taboo:public-confrontation@fil-PH'})
 SET t.locale = 'fil-PH',
     t.text = 'Public confrontation',
     t.severity = 'high',
@@ -117,7 +117,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fil-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'refusing-hospitality@fil-PH'})
+MERGE (t:Taboo {key: 'taboo:refusing-hospitality@fil-PH'})
 SET t.locale = 'fil-PH',
     t.text = 'Refusing hospitality',
     t.severity = 'medium',
@@ -131,7 +131,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fil-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'loud-or-aggressive-behavior@fil-PH'})
+MERGE (t:Taboo {key: 'taboo:loud-or-aggressive-behavior@fil-PH'})
 SET t.locale = 'fil-PH',
     t.text = 'Loud or aggressive behavior',
     t.severity = 'high',
@@ -145,7 +145,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fil-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'rushing-decisions@fil-PH'})
+MERGE (t:Taboo {key: 'taboo:rushing-decisions@fil-PH'})
 SET t.locale = 'fil-PH',
     t.text = 'Rushing decisions',
     t.severity = 'medium',
@@ -159,7 +159,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fil-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-elders@fil-PH'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-elders@fil-PH'})
 SET t.locale = 'fil-PH',
     t.text = 'Disrespecting elders',
     t.severity = 'critical',
@@ -173,7 +173,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fil-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (at:AudienceTrait {key: 'mobile-first-consumers@fil-PH'})
+MERGE (at:AudienceTrait {key: 'audience:mobile-first-consumers@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'Mobile-first consumers',
     at.content = 'Philippines has one of highest social media usage rates globally',
@@ -184,7 +184,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'ofw-influence@fil-PH'})
+MERGE (at:AudienceTrait {key: 'audience:ofw-influence@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'OFW influence',
     at.content = 'Overseas Filipino Workers shape consumption patterns and aspirations',
@@ -195,7 +195,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'celebrity-endorsements@fil-PH'})
+MERGE (at:AudienceTrait {key: 'audience:celebrity-endorsements@fil-PH'})
 SET at.locale = 'fil-PH',
     at.text = 'Celebrity endorsements',
     at.content = 'High trust in celebrity and influencer recommendations',
@@ -206,7 +206,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (e:Expression {key: 'mabuhay@fil-PH'})
+MERGE (e:Expression {key: 'expr:mabuhay@fil-PH'})
 SET e.locale = 'fil-PH',
     e.text = 'Mabuhay!',
     e.register = 'formal',
@@ -219,7 +219,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'salamat-po@fil-PH'})
+MERGE (e:Expression {key: 'expr:salamat-po@fil-PH'})
 SET e.locale = 'fil-PH',
     e.text = 'Salamat po',
     e.register = 'polite',
@@ -232,7 +232,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'diskarte-lang@fil-PH'})
+MERGE (e:Expression {key: 'expr:diskarte-lang@fil-PH'})
 SET e.locale = 'fil-PH',
     e.text = 'Diskarte lang',
     e.register = 'casual',
@@ -245,7 +245,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (p:Pattern {key: 'cta-sumali-na-sa-produc@fil-PH'})
+MERGE (p:Pattern {key: 'pattern:cta-sumali-na-sa-produc@fil-PH'})
 SET p.locale = 'fil-PH',
     p.text = 'Sumali na sa {product} at maranasan ang pagkakaiba!',
     p.type = 'cta',
@@ -258,7 +258,7 @@ WITH p
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fil-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'social-proof-pinagkakatiwalaan-ng@fil-PH'})
+MERGE (p:Pattern {key: 'pattern:social-proof-pinagkakatiwalaan-ng@fil-PH'})
 SET p.locale = 'fil-PH',
     p.text = 'Pinagkakatiwalaan ng milyun-milyong pamilyang Pilipino',
     p.type = 'social_proof',
@@ -273,7 +273,7 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // === lo-LA - Lao (Laos) ===
 
-MERGE (cr:CultureRef {key: 'theravada-buddhism@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:theravada-buddhism@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Theravada Buddhism',
     cr.importance = 'critical',
@@ -287,7 +287,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'harmony-and-non-confrontation@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:harmony-and-non-confrontation@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Harmony and Non-confrontation',
     cr.importance = 'critical',
@@ -301,7 +301,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'sabaidee-spirit@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:sabaidee-spirit@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Sabaidee Spirit',
     cr.importance = 'high',
@@ -315,7 +315,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'respect-for-hierarchy@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:respect-for-hierarchy@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Respect for Hierarchy',
     cr.importance = 'high',
@@ -329,7 +329,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'modesty@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:modesty@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Modesty',
     cr.importance = 'high',
@@ -343,7 +343,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'community-support@lo-LA'})
+MERGE (cr:CultureRef {key: 'cultureref:community-support@lo-LA'})
 SET cr.locale = 'lo-LA',
     cr.text = 'Community Support',
     cr.importance = 'medium',
@@ -357,7 +357,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (t:Taboo {key: 'touching-heads@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:touching-heads@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Touching heads',
     t.severity = 'critical',
@@ -371,7 +371,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pointing-with-feet@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:pointing-with-feet@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Pointing with feet',
     t.severity = 'critical',
@@ -385,7 +385,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'public-displays-of-affection@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:public-displays-of-affection@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Public displays of affection',
     t.severity = 'high',
@@ -399,7 +399,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'raising-voice-or-arguing@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:raising-voice-or-arguing@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Raising voice or arguing',
     t.severity = 'high',
@@ -413,7 +413,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-monks@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-monks@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Disrespecting monks',
     t.severity = 'critical',
@@ -427,7 +427,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'rushing-decisions@lo-LA'})
+MERGE (t:Taboo {key: 'taboo:rushing-decisions@lo-LA'})
 SET t.locale = 'lo-LA',
     t.text = 'Rushing decisions',
     t.severity = 'medium',
@@ -441,7 +441,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lo-LA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (at:AudienceTrait {key: 'mobile-penetration-growing@lo-LA'})
+MERGE (at:AudienceTrait {key: 'audience:mobile-penetration-growing@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Mobile penetration growing',
     at.content = 'Increasing smartphone adoption, especially among youth',
@@ -452,7 +452,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'traditional-values@lo-LA'})
+MERGE (at:AudienceTrait {key: 'audience:traditional-values@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Traditional values',
     at.content = 'Strong adherence to Buddhist and traditional practices',
@@ -463,7 +463,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'face-conscious@lo-LA'})
+MERGE (at:AudienceTrait {key: 'audience:face-conscious@lo-LA'})
 SET at.locale = 'lo-LA',
     at.text = 'Face-conscious',
     at.content = 'Social standing and reputation highly important',
@@ -474,7 +474,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (e:Expression {key: 'sabaidee@lo-LA'})
+MERGE (e:Expression {key: 'expr:sabaidee@lo-LA'})
 SET e.locale = 'lo-LA',
     e.text = 'ສະບາຍດີ (Sabaidee)',
     e.register = 'standard',
@@ -487,7 +487,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'khop-jai@lo-LA'})
+MERGE (e:Expression {key: 'expr:khop-jai@lo-LA'})
 SET e.locale = 'lo-LA',
     e.text = 'ຂອບໃຈ (Khop jai)',
     e.register = 'casual',
@@ -500,7 +500,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'khop-jai-jao@lo-LA'})
+MERGE (e:Expression {key: 'expr:khop-jai-jao@lo-LA'})
 SET e.locale = 'lo-LA',
     e.text = 'ຂອບໃຈຈ້າວ (Khop jai jao)',
     e.register = 'polite',
@@ -513,7 +513,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (p:Pattern {key: 'cta-product@lo-LA'})
+MERGE (p:Pattern {key: 'pattern:cta-product@lo-LA'})
 SET p.locale = 'lo-LA',
     p.text = 'ເຂົ້າຮ່ວມ {product} ມື້ນີ້',
     p.type = 'cta',
@@ -526,7 +526,7 @@ WITH p
 MATCH (ps:PatternSet {key: 'pattern-set:cta@lo-LA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'greeting@lo-LA'})
+MERGE (p:Pattern {key: 'pattern:greeting@lo-LA'})
 SET p.locale = 'lo-LA',
     p.text = 'ສະບາຍດີ! ຍິນດີຕ້ອນຮັບ',
     p.type = 'greeting',
@@ -541,7 +541,7 @@ MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // === or-IN - Odia (Odisha, India) ===
 
-MERGE (cr:CultureRef {key: 'lord-jagannath-devotion@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:lord-jagannath-devotion@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'Lord Jagannath Devotion',
     cr.importance = 'critical',
@@ -555,7 +555,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'temple-heritage@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:temple-heritage@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'Temple Heritage',
     cr.importance = 'high',
@@ -569,7 +569,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'odissi-classical-arts@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:odissi-classical-arts@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'Odissi Classical Arts',
     cr.importance = 'high',
@@ -583,7 +583,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'dayakari-politeness@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:dayakari-politeness@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'ଦୟାକରି (Dayakari - Politeness)',
     cr.importance = 'high',
@@ -597,7 +597,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'folk-culture-preservation@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:folk-culture-preservation@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'Folk Culture Preservation',
     cr.importance = 'medium',
@@ -611,7 +611,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'festival-traditions@or-IN'})
+MERGE (cr:CultureRef {key: 'cultureref:festival-traditions@or-IN'})
 SET cr.locale = 'or-IN',
     cr.text = 'Festival Traditions',
     cr.importance = 'high',
@@ -625,7 +625,7 @@ WITH cr
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (t:Taboo {key: 'disrespecting-lord-jagannath@or-IN'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-lord-jagannath@or-IN'})
 SET t.locale = 'or-IN',
     t.text = 'Disrespecting Lord Jagannath',
     t.severity = 'critical',
@@ -639,7 +639,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'temple-photography-without-permission@or-IN'})
+MERGE (t:Taboo {key: 'taboo:temple-photography-without-permission@or-IN'})
 SET t.locale = 'or-IN',
     t.text = 'Temple photography without permission',
     t.severity = 'high',
@@ -653,7 +653,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'western-cultural-imposition@or-IN'})
+MERGE (t:Taboo {key: 'taboo:western-cultural-imposition@or-IN'})
 SET t.locale = 'or-IN',
     t.text = 'Western cultural imposition',
     t.severity = 'medium',
@@ -667,7 +667,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'impolite-language@or-IN'})
+MERGE (t:Taboo {key: 'taboo:impolite-language@or-IN'})
 SET t.locale = 'or-IN',
     t.text = 'Impolite language',
     t.severity = 'medium',
@@ -681,7 +681,7 @@ WITH t
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (at:AudienceTrait {key: 'regional-pride@or-IN'})
+MERGE (at:AudienceTrait {key: 'audience:regional-pride@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Regional pride',
     at.content = 'Strong identification with Odia heritage and Odisha state',
@@ -692,7 +692,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'festival-oriented@or-IN'})
+MERGE (at:AudienceTrait {key: 'audience:festival-oriented@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Festival-oriented',
     at.content = 'Consumer behavior strongly tied to festival calendar',
@@ -703,7 +703,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (at:AudienceTrait {key: 'spiritually-connected@or-IN'})
+MERGE (at:AudienceTrait {key: 'audience:spiritually-connected@or-IN'})
 SET at.locale = 'or-IN',
     at.text = 'Spiritually connected',
     at.content = 'Daily life intertwined with religious practices',
@@ -714,7 +714,7 @@ WITH at
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at);
 
-MERGE (e:Expression {key: 'namaskara@or-IN'})
+MERGE (e:Expression {key: 'expr:namaskara@or-IN'})
 SET e.locale = 'or-IN',
     e.text = 'ନମସ୍କାର (Namaskara)',
     e.register = 'formal',
@@ -727,7 +727,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'dhanyabad@or-IN'})
+MERGE (e:Expression {key: 'expr:dhanyabad@or-IN'})
 SET e.locale = 'or-IN',
     e.text = 'ଧନ୍ୟବାଦ (Dhanyabad)',
     e.register = 'standard',
@@ -740,7 +740,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'jai-jagannath@or-IN'})
+MERGE (e:Expression {key: 'expr:jai-jagannath@or-IN'})
 SET e.locale = 'or-IN',
     e.text = 'ଜୟ ଜଗନ୍ନାଥ (Jai Jagannath)',
     e.register = 'devotional',
@@ -753,7 +753,7 @@ WITH e
 MATCH (es:ExpressionSet {key: 'expression-set:greetings@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (p:Pattern {key: 'cta-product@or-IN'})
+MERGE (p:Pattern {key: 'pattern:cta-product@or-IN'})
 SET p.locale = 'or-IN',
     p.text = 'ଆଜି {product} ସହ ଯୋଗ ଦିଅନ୍ତୁ',
     p.type = 'cta',
@@ -766,7 +766,7 @@ WITH p
 MATCH (ps:PatternSet {key: 'pattern-set:cta@or-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'greeting@or-IN'})
+MERGE (p:Pattern {key: 'pattern:greeting@or-IN'})
 SET p.locale = 'or-IN',
     p.text = 'ନମସ୍କାର! ସ୍ୱାଗତ',
     p.type = 'greeting',

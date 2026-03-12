@@ -6,7 +6,7 @@
 // ============================================================================
 
 // --- en-US AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-US'})
 SET a.display_name = 'directness',
     a.locale = 'en-US',
     a.content = 'very_direct',
@@ -17,10 +17,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-US'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-US',
     a.content = 'low',
@@ -31,10 +31,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-US'})
 SET a.display_name = 'formality',
     a.locale = 'en-US',
     a.content = 'informal',
@@ -45,10 +45,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-US'})
 SET a.display_name = 'context type',
     a.locale = 'en-US',
     a.content = 'low_context',
@@ -59,10 +59,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-US'})
 SET a.display_name = 'decision style',
     a.locale = 'en-US',
     a.content = 'fast',
@@ -73,10 +73,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-US'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-US',
     a.content = 'task_first',
@@ -87,10 +87,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-US'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-US',
     a.content = 'explicit',
@@ -101,10 +101,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-US'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-US'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-US',
     a.content = '{"tone":"enthusiastic","detail_level":"moderate","proof_types":["testimonials","statistics","money_back_guarantees"]}',
@@ -115,11 +115,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-US'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-US'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-US'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-GB AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-GB'})
 SET a.display_name = 'directness',
     a.locale = 'en-GB',
     a.content = 'indirect',
@@ -130,10 +130,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-GB'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-GB',
     a.content = 'medium',
@@ -144,10 +144,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-GB'})
 SET a.display_name = 'formality',
     a.locale = 'en-GB',
     a.content = 'formal_casual_mix',
@@ -158,10 +158,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-GB'})
 SET a.display_name = 'context type',
     a.locale = 'en-GB',
     a.content = 'medium_context',
@@ -172,10 +172,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-GB'})
 SET a.display_name = 'decision style',
     a.locale = 'en-GB',
     a.content = 'considered',
@@ -186,10 +186,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-GB'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-GB',
     a.content = 'rapport_then_task',
@@ -200,10 +200,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-GB'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-GB',
     a.content = 'softened',
@@ -214,10 +214,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-GB'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-GB'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-GB',
     a.content = '{"tone":"witty","detail_level":"moderate","proof_types":["third_party_reviews","awards","case_studies"]}',
@@ -228,11 +228,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-GB'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-GB'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-GB'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-AU AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-AU'})
 SET a.display_name = 'directness',
     a.locale = 'en-AU',
     a.content = 'direct',
@@ -243,10 +243,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-AU'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-AU',
     a.content = 'very_low',
@@ -257,10 +257,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-AU'})
 SET a.display_name = 'formality',
     a.locale = 'en-AU',
     a.content = 'very_informal',
@@ -271,10 +271,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-AU'})
 SET a.display_name = 'context type',
     a.locale = 'en-AU',
     a.content = 'low_context',
@@ -285,10 +285,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-AU'})
 SET a.display_name = 'decision style',
     a.locale = 'en-AU',
     a.content = 'practical',
@@ -299,10 +299,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-AU'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-AU',
     a.content = 'casual_rapport',
@@ -313,10 +313,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-AU'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-AU',
     a.content = 'blunt_friendly',
@@ -327,10 +327,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-AU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-AU'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-AU',
     a.content = '{"tone":"casual","detail_level":"concise","proof_types":["peer_reviews","value_for_money","practical_results"]}',
@@ -341,11 +341,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-AU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-AU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-AU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-CA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-CA'})
 SET a.display_name = 'directness',
     a.locale = 'en-CA',
     a.content = 'moderate',
@@ -356,10 +356,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-CA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-CA',
     a.content = 'low',
@@ -370,10 +370,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-CA'})
 SET a.display_name = 'formality',
     a.locale = 'en-CA',
     a.content = 'polite_informal',
@@ -384,10 +384,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-CA'})
 SET a.display_name = 'context type',
     a.locale = 'en-CA',
     a.content = 'low_context',
@@ -398,10 +398,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-CA'})
 SET a.display_name = 'decision style',
     a.locale = 'en-CA',
     a.content = 'considered',
@@ -412,10 +412,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-CA'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-CA',
     a.content = 'friendly_professional',
@@ -426,10 +426,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-CA'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-CA',
     a.content = 'diplomatic',
@@ -440,10 +440,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-CA'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-CA',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["customer_reviews","value_proposition","ethical_practices"]}',
@@ -454,11 +454,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-IN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IN'})
 SET a.display_name = 'directness',
     a.locale = 'en-IN',
     a.content = 'indirect',
@@ -469,10 +469,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-IN',
     a.content = 'high',
@@ -483,10 +483,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IN'})
 SET a.display_name = 'formality',
     a.locale = 'en-IN',
     a.content = 'formal',
@@ -497,10 +497,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IN'})
 SET a.display_name = 'context type',
     a.locale = 'en-IN',
     a.content = 'high_context',
@@ -511,10 +511,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'en-IN',
     a.content = 'consensus_family',
@@ -525,10 +525,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IN'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-IN',
     a.content = 'relationship_first',
@@ -539,10 +539,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IN'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-IN',
     a.content = 'indirect',
@@ -553,10 +553,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IN'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-IN',
     a.content = '{"tone":"respectful","detail_level":"detailed","proof_types":["celebrity_endorsements","awards","technical_specs","price_value"]}',
@@ -567,11 +567,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-SG AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-SG'})
 SET a.display_name = 'directness',
     a.locale = 'en-SG',
     a.content = 'moderate',
@@ -582,10 +582,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-SG'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-SG',
     a.content = 'high',
@@ -596,10 +596,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-SG'})
 SET a.display_name = 'formality',
     a.locale = 'en-SG',
     a.content = 'formal',
@@ -610,10 +610,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-SG'})
 SET a.display_name = 'context type',
     a.locale = 'en-SG',
     a.content = 'medium_context',
@@ -624,10 +624,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-SG'})
 SET a.display_name = 'decision style',
     a.locale = 'en-SG',
     a.content = 'research_heavy',
@@ -638,10 +638,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-SG'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-SG',
     a.content = 'trust_then_task',
@@ -652,10 +652,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-SG'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-SG',
     a.content = 'diplomatic',
@@ -666,10 +666,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-SG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-SG'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-SG',
     a.content = '{"tone":"professional","detail_level":"detailed","proof_types":["credentials","reviews","awards","price_comparison"]}',
@@ -680,11 +680,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-SG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-SG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-SG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-ZA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-ZA'})
 SET a.display_name = 'directness',
     a.locale = 'en-ZA',
     a.content = 'moderate',
@@ -695,10 +695,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-ZA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-ZA',
     a.content = 'medium',
@@ -709,10 +709,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-ZA'})
 SET a.display_name = 'formality',
     a.locale = 'en-ZA',
     a.content = 'warm_formal',
@@ -723,10 +723,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-ZA'})
 SET a.display_name = 'context type',
     a.locale = 'en-ZA',
     a.content = 'medium_context',
@@ -737,10 +737,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-ZA'})
 SET a.display_name = 'decision style',
     a.locale = 'en-ZA',
     a.content = 'value_conscious',
@@ -751,10 +751,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-ZA'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-ZA',
     a.content = 'relationship_first',
@@ -765,10 +765,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-ZA'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-ZA',
     a.content = 'diplomatic',
@@ -779,10 +779,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-ZA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-ZA'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-ZA',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["local_testimonials","value_proposition","community_impact"]}',
@@ -793,11 +793,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-ZA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-ZA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-ZA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-NZ AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-NZ'})
 SET a.display_name = 'directness',
     a.locale = 'en-NZ',
     a.content = 'moderate',
@@ -808,10 +808,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-NZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-NZ',
     a.content = 'very_low',
@@ -822,10 +822,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-NZ'})
 SET a.display_name = 'formality',
     a.locale = 'en-NZ',
     a.content = 'informal',
@@ -836,10 +836,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-NZ'})
 SET a.display_name = 'context type',
     a.locale = 'en-NZ',
     a.content = 'low_context',
@@ -850,10 +850,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-NZ'})
 SET a.display_name = 'decision style',
     a.locale = 'en-NZ',
     a.content = 'practical',
@@ -864,10 +864,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-NZ'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-NZ',
     a.content = 'casual_friendly',
@@ -878,10 +878,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-NZ'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-NZ',
     a.content = 'honest_kind',
@@ -892,10 +892,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-NZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-NZ'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-NZ',
     a.content = '{"tone":"friendly","detail_level":"concise","proof_types":["local_reviews","environmental_credentials","practical_value"]}',
@@ -906,11 +906,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-NZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-NZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-NZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-IE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IE'})
 SET a.display_name = 'directness',
     a.locale = 'en-IE',
     a.content = 'indirect',
@@ -921,10 +921,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-IE',
     a.content = 'low',
@@ -935,10 +935,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IE'})
 SET a.display_name = 'formality',
     a.locale = 'en-IE',
     a.content = 'warm_informal',
@@ -949,10 +949,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IE'})
 SET a.display_name = 'context type',
     a.locale = 'en-IE',
     a.content = 'medium_context',
@@ -963,10 +963,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IE'})
 SET a.display_name = 'decision style',
     a.locale = 'en-IE',
     a.content = 'relationship_based',
@@ -977,10 +977,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IE'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-IE',
     a.content = 'rapport_first',
@@ -991,10 +991,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IE'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-IE',
     a.content = 'softened_honest',
@@ -1005,10 +1005,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-IE',
     a.content = '{"tone":"warm","detail_level":"narrative","proof_types":["stories","local_testimonials","word_of_mouth"]}',
@@ -1019,11 +1019,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-IE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-IE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-IE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- en-PH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-PH'})
 SET a.display_name = 'directness',
     a.locale = 'en-PH',
     a.content = 'indirect',
@@ -1034,10 +1034,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-PH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'en-PH',
     a.content = 'high',
@@ -1048,10 +1048,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-PH'})
 SET a.display_name = 'formality',
     a.locale = 'en-PH',
     a.content = 'respectful',
@@ -1062,10 +1062,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-PH'})
 SET a.display_name = 'context type',
     a.locale = 'en-PH',
     a.content = 'high_context',
@@ -1076,10 +1076,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-PH'})
 SET a.display_name = 'decision style',
     a.locale = 'en-PH',
     a.content = 'family_influenced',
@@ -1090,10 +1090,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-PH'})
 SET a.display_name = 'relationship building',
     a.locale = 'en-PH',
     a.content = 'relationship_first',
@@ -1104,10 +1104,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-PH'})
 SET a.display_name = 'feedback style',
     a.locale = 'en-PH',
     a.content = 'indirect',
@@ -1118,10 +1118,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-PH'})
 SET a.display_name = 'communication preferences',
     a.locale = 'en-PH',
     a.content = '{"tone":"warm","detail_level":"moderate","proof_types":["celebrity_endorsements","social_proof","family_testimonials"]}',
@@ -1132,11 +1132,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@en-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@en-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@en-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- de-DE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-DE'})
 SET a.display_name = 'directness',
     a.locale = 'de-DE',
     a.content = 'very_direct',
@@ -1147,10 +1147,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-DE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-DE',
     a.content = 'medium',
@@ -1161,10 +1161,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-DE'})
 SET a.display_name = 'formality',
     a.locale = 'de-DE',
     a.content = 'formal',
@@ -1175,10 +1175,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-DE'})
 SET a.display_name = 'context type',
     a.locale = 'de-DE',
     a.content = 'low_context',
@@ -1189,10 +1189,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-DE'})
 SET a.display_name = 'decision style',
     a.locale = 'de-DE',
     a.content = 'systematic',
@@ -1203,10 +1203,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-DE'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-DE',
     a.content = 'task_first',
@@ -1217,10 +1217,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-DE'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-DE',
     a.content = 'explicit',
@@ -1231,10 +1231,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-DE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-DE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-DE',
     a.content = '{"tone":"professional","detail_level":"comprehensive","proof_types":["technical_specs","certifications","test_results","expert_reviews"]}',
@@ -1245,11 +1245,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-DE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-DE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-DE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- de-AT AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-AT'})
 SET a.display_name = 'directness',
     a.locale = 'de-AT',
     a.content = 'moderate',
@@ -1260,10 +1260,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-AT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-AT',
     a.content = 'high',
@@ -1274,10 +1274,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-AT'})
 SET a.display_name = 'formality',
     a.locale = 'de-AT',
     a.content = 'very_formal',
@@ -1288,10 +1288,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-AT'})
 SET a.display_name = 'context type',
     a.locale = 'de-AT',
     a.content = 'medium_context',
@@ -1302,10 +1302,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-AT'})
 SET a.display_name = 'decision style',
     a.locale = 'de-AT',
     a.content = 'considered',
@@ -1316,10 +1316,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-AT'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-AT',
     a.content = 'rapport_then_task',
@@ -1330,10 +1330,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-AT'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-AT',
     a.content = 'diplomatic_direct',
@@ -1344,10 +1344,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-AT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-AT'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-AT',
     a.content = '{"tone":"sophisticated","detail_level":"comprehensive","proof_types":["credentials","heritage","quality_certifications","expert_opinions"]}',
@@ -1358,11 +1358,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-AT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-AT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-AT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- de-CH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-CH'})
 SET a.display_name = 'directness',
     a.locale = 'de-CH',
     a.content = 'direct',
@@ -1373,10 +1373,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'de-CH',
     a.content = 'low',
@@ -1387,10 +1387,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-CH'})
 SET a.display_name = 'formality',
     a.locale = 'de-CH',
     a.content = 'formal',
@@ -1401,10 +1401,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-CH'})
 SET a.display_name = 'context type',
     a.locale = 'de-CH',
     a.content = 'low_context',
@@ -1415,10 +1415,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-CH'})
 SET a.display_name = 'decision style',
     a.locale = 'de-CH',
     a.content = 'consensus_driven',
@@ -1429,10 +1429,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-CH'})
 SET a.display_name = 'relationship building',
     a.locale = 'de-CH',
     a.content = 'trust_through_reliability',
@@ -1443,10 +1443,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-CH'})
 SET a.display_name = 'feedback style',
     a.locale = 'de-CH',
     a.content = 'factual',
@@ -1457,10 +1457,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-CH'})
 SET a.display_name = 'communication preferences',
     a.locale = 'de-CH',
     a.content = '{"tone":"understated","detail_level":"thorough","proof_types":["quality_certifications","Swiss_made","precision_metrics","long_term_reliability"]}',
@@ -1471,11 +1471,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@de-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@de-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@de-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- nl-NL AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-NL'})
 SET a.display_name = 'directness',
     a.locale = 'nl-NL',
     a.content = 'very_direct',
@@ -1486,10 +1486,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-NL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'nl-NL',
     a.content = 'very_low',
@@ -1500,10 +1500,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-NL'})
 SET a.display_name = 'formality',
     a.locale = 'nl-NL',
     a.content = 'informal',
@@ -1514,10 +1514,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-NL'})
 SET a.display_name = 'context type',
     a.locale = 'nl-NL',
     a.content = 'very_low_context',
@@ -1528,10 +1528,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-NL'})
 SET a.display_name = 'decision style',
     a.locale = 'nl-NL',
     a.content = 'pragmatic',
@@ -1542,10 +1542,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-NL'})
 SET a.display_name = 'relationship building',
     a.locale = 'nl-NL',
     a.content = 'task_oriented',
@@ -1556,10 +1556,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-NL'})
 SET a.display_name = 'feedback style',
     a.locale = 'nl-NL',
     a.content = 'blunt',
@@ -1570,10 +1570,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-NL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-NL'})
 SET a.display_name = 'communication preferences',
     a.locale = 'nl-NL',
     a.content = '{"tone":"straightforward","detail_level":"concise","proof_types":["value_comparison","practical_benefits","user_reviews"]}',
@@ -1584,11 +1584,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-NL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-NL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-NL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- nl-BE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-BE'})
 SET a.display_name = 'directness',
     a.locale = 'nl-BE',
     a.content = 'moderate',
@@ -1599,10 +1599,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-BE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'nl-BE',
     a.content = 'low',
@@ -1613,10 +1613,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-BE'})
 SET a.display_name = 'formality',
     a.locale = 'nl-BE',
     a.content = 'moderate',
@@ -1627,10 +1627,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-BE'})
 SET a.display_name = 'context type',
     a.locale = 'nl-BE',
     a.content = 'low_context',
@@ -1641,10 +1641,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-BE'})
 SET a.display_name = 'decision style',
     a.locale = 'nl-BE',
     a.content = 'careful',
@@ -1655,10 +1655,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-BE'})
 SET a.display_name = 'relationship building',
     a.locale = 'nl-BE',
     a.content = 'gradual_trust',
@@ -1669,10 +1669,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-BE'})
 SET a.display_name = 'feedback style',
     a.locale = 'nl-BE',
     a.content = 'softened',
@@ -1683,10 +1683,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-BE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'nl-BE',
     a.content = '{"tone":"warm_professional","detail_level":"moderate","proof_types":["local_testimonials","quality_focus","practical_value"]}',
@@ -1697,11 +1697,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@nl-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@nl-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@nl-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- sv-SE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sv-SE'})
 SET a.display_name = 'directness',
     a.locale = 'sv-SE',
     a.content = 'moderate',
@@ -1712,10 +1712,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sv-SE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sv-SE',
     a.content = 'very_low',
@@ -1726,10 +1726,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sv-SE'})
 SET a.display_name = 'formality',
     a.locale = 'sv-SE',
     a.content = 'informal',
@@ -1740,10 +1740,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sv-SE'})
 SET a.display_name = 'context type',
     a.locale = 'sv-SE',
     a.content = 'low_context',
@@ -1754,10 +1754,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sv-SE'})
 SET a.display_name = 'decision style',
     a.locale = 'sv-SE',
     a.content = 'consensus_research',
@@ -1768,10 +1768,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@sv-SE'})
 SET a.display_name = 'relationship building',
     a.locale = 'sv-SE',
     a.content = 'task_then_social',
@@ -1782,10 +1782,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@sv-SE'})
 SET a.display_name = 'feedback style',
     a.locale = 'sv-SE',
     a.content = 'diplomatic_honest',
@@ -1796,10 +1796,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@sv-SE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@sv-SE'})
 SET a.display_name = 'communication preferences',
     a.locale = 'sv-SE',
     a.content = '{"tone":"understated","detail_level":"balanced","proof_types":["environmental_certs","user_reviews","functional_benefits"]}',
@@ -1810,11 +1810,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sv-SE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@sv-SE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@sv-SE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- da-DK AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@da-DK'})
 SET a.display_name = 'directness',
     a.locale = 'da-DK',
     a.content = 'direct',
@@ -1825,10 +1825,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@da-DK'})
 SET a.display_name = 'hierarchy',
     a.locale = 'da-DK',
     a.content = 'very_low',
@@ -1839,10 +1839,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@da-DK'})
 SET a.display_name = 'formality',
     a.locale = 'da-DK',
     a.content = 'very_informal',
@@ -1853,10 +1853,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@da-DK'})
 SET a.display_name = 'context type',
     a.locale = 'da-DK',
     a.content = 'low_context',
@@ -1867,10 +1867,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@da-DK'})
 SET a.display_name = 'decision style',
     a.locale = 'da-DK',
     a.content = 'practical',
@@ -1881,10 +1881,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@da-DK'})
 SET a.display_name = 'relationship building',
     a.locale = 'da-DK',
     a.content = 'informal_professional',
@@ -1895,10 +1895,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@da-DK'})
 SET a.display_name = 'feedback style',
     a.locale = 'da-DK',
     a.content = 'honest_kind',
@@ -1909,10 +1909,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@da-DK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@da-DK'})
 SET a.display_name = 'communication preferences',
     a.locale = 'da-DK',
     a.content = '{"tone":"casual","detail_level":"concise","proof_types":["design_quality","user_reviews","practical_value"]}',
@@ -1923,11 +1923,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@da-DK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@da-DK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@da-DK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- no-NO AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@no-NO'})
 SET a.display_name = 'directness',
     a.locale = 'no-NO',
     a.content = 'direct',
@@ -1938,10 +1938,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@no-NO'})
 SET a.display_name = 'hierarchy',
     a.locale = 'no-NO',
     a.content = 'very_low',
@@ -1952,10 +1952,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@no-NO'})
 SET a.display_name = 'formality',
     a.locale = 'no-NO',
     a.content = 'informal',
@@ -1966,10 +1966,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@no-NO'})
 SET a.display_name = 'context type',
     a.locale = 'no-NO',
     a.content = 'low_context',
@@ -1980,10 +1980,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@no-NO'})
 SET a.display_name = 'decision style',
     a.locale = 'no-NO',
     a.content = 'independent',
@@ -1994,10 +1994,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@no-NO'})
 SET a.display_name = 'relationship building',
     a.locale = 'no-NO',
     a.content = 'trust_through_honesty',
@@ -2008,10 +2008,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@no-NO'})
 SET a.display_name = 'feedback style',
     a.locale = 'no-NO',
     a.content = 'honest',
@@ -2022,10 +2022,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@no-NO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@no-NO'})
 SET a.display_name = 'communication preferences',
     a.locale = 'no-NO',
     a.content = '{"tone":"natural","detail_level":"balanced","proof_types":["environmental_impact","quality_evidence","practical_results"]}',
@@ -2036,11 +2036,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@no-NO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@no-NO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@no-NO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fi-FI AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fi-FI'})
 SET a.display_name = 'directness',
     a.locale = 'fi-FI',
     a.content = 'very_direct',
@@ -2051,10 +2051,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fi-FI'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fi-FI',
     a.content = 'very_low',
@@ -2065,10 +2065,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fi-FI'})
 SET a.display_name = 'formality',
     a.locale = 'fi-FI',
     a.content = 'informal',
@@ -2079,10 +2079,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fi-FI'})
 SET a.display_name = 'context type',
     a.locale = 'fi-FI',
     a.content = 'very_low_context',
@@ -2093,10 +2093,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fi-FI'})
 SET a.display_name = 'decision style',
     a.locale = 'fi-FI',
     a.content = 'thorough',
@@ -2107,10 +2107,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@fi-FI'})
 SET a.display_name = 'relationship building',
     a.locale = 'fi-FI',
     a.content = 'trust_through_reliability',
@@ -2121,10 +2121,10 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:feedback-style@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@fi-FI'})
 SET a.display_name = 'feedback style',
     a.locale = 'fi-FI',
     a.content = 'blunt_honest',
@@ -2135,10 +2135,10 @@ SET a.display_name = 'feedback style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:feedback-style@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:feedback-style@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@fi-FI'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@fi-FI'})
 SET a.display_name = 'communication preferences',
     a.locale = 'fi-FI',
     a.content = '{"tone":"understated","detail_level":"essential_only","proof_types":["technical_evidence","independent_tests","factual_data"]}',
@@ -2149,11 +2149,11 @@ SET a.display_name = 'communication preferences',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fi-FI'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:communication-preferences@fi-FI'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:communication-preferences@fi-FI'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- zh-CN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-CN'})
 SET a.display_name = 'directness',
     a.locale = 'zh-CN',
     a.content = 'indirect_moderate',
@@ -2164,10 +2164,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-CN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-CN',
     a.content = 'high',
@@ -2178,10 +2178,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-CN'})
 SET a.display_name = 'formality',
     a.locale = 'zh-CN',
     a.content = 'formal_business',
@@ -2192,10 +2192,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-CN'})
 SET a.display_name = 'context type',
     a.locale = 'zh-CN',
     a.content = 'high_context',
@@ -2206,10 +2206,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-CN'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-CN',
     a.content = 'critical',
@@ -2220,10 +2220,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-CN'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-CN',
     a.content = 'consensus_with_authority',
@@ -2234,10 +2234,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-CN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-CN'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-CN',
     a.content = 'relationship_first',
@@ -2248,11 +2248,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-CN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-CN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-CN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- zh-TW AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-TW'})
 SET a.display_name = 'directness',
     a.locale = 'zh-TW',
     a.content = 'indirect_but_clearer',
@@ -2263,10 +2263,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-TW'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-TW',
     a.content = 'moderate',
@@ -2277,10 +2277,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-TW'})
 SET a.display_name = 'formality',
     a.locale = 'zh-TW',
     a.content = 'polite_professional',
@@ -2291,10 +2291,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-TW'})
 SET a.display_name = 'context type',
     a.locale = 'zh-TW',
     a.content = 'high_context',
@@ -2305,10 +2305,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-TW'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-TW',
     a.content = 'important',
@@ -2319,10 +2319,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-TW'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-TW',
     a.content = 'individual_with_consensus',
@@ -2333,10 +2333,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-TW'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-TW'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-TW',
     a.content = 'quality_and_reputation',
@@ -2347,11 +2347,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-TW'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-TW'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-TW'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- zh-HK AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-HK'})
 SET a.display_name = 'directness',
     a.locale = 'zh-HK',
     a.content = 'direct_professional',
@@ -2362,10 +2362,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-HK'})
 SET a.display_name = 'hierarchy',
     a.locale = 'zh-HK',
     a.content = 'moderate_high',
@@ -2376,10 +2376,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-HK'})
 SET a.display_name = 'formality',
     a.locale = 'zh-HK',
     a.content = 'business_formal',
@@ -2390,10 +2390,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-HK'})
 SET a.display_name = 'context type',
     a.locale = 'zh-HK',
     a.content = 'moderate_high_context',
@@ -2404,10 +2404,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-HK'})
 SET a.display_name = 'face saving',
     a.locale = 'zh-HK',
     a.content = 'important',
@@ -2418,10 +2418,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-HK'})
 SET a.display_name = 'decision style',
     a.locale = 'zh-HK',
     a.content = 'fast_pragmatic',
@@ -2432,10 +2432,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-HK'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-HK'})
 SET a.display_name = 'trust building',
     a.locale = 'zh-HK',
     a.content = 'track_record_and_efficiency',
@@ -2446,11 +2446,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@zh-HK'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@zh-HK'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@zh-HK'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ja-JP AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ja-JP'})
 SET a.display_name = 'directness',
     a.locale = 'ja-JP',
     a.content = 'very_indirect',
@@ -2461,10 +2461,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ja-JP'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ja-JP',
     a.content = 'very_high',
@@ -2475,10 +2475,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ja-JP'})
 SET a.display_name = 'formality',
     a.locale = 'ja-JP',
     a.content = 'very_formal',
@@ -2489,10 +2489,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ja-JP'})
 SET a.display_name = 'context type',
     a.locale = 'ja-JP',
     a.content = 'very_high_context',
@@ -2503,10 +2503,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ja-JP'})
 SET a.display_name = 'face saving',
     a.locale = 'ja-JP',
     a.content = 'critical',
@@ -2517,10 +2517,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ja-JP'})
 SET a.display_name = 'decision style',
     a.locale = 'ja-JP',
     a.content = 'slow_consensus_nemawashi',
@@ -2531,10 +2531,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ja-JP'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ja-JP'})
 SET a.display_name = 'trust building',
     a.locale = 'ja-JP',
     a.content = 'long_term_relationship',
@@ -2545,11 +2545,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ja-JP'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@ja-JP'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ja-JP'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ko-KR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ko-KR'})
 SET a.display_name = 'directness',
     a.locale = 'ko-KR',
     a.content = 'moderate_direct',
@@ -2560,10 +2560,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ko-KR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ko-KR',
     a.content = 'high',
@@ -2574,10 +2574,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ko-KR'})
 SET a.display_name = 'formality',
     a.locale = 'ko-KR',
     a.content = 'formal_with_warmth',
@@ -2588,10 +2588,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ko-KR'})
 SET a.display_name = 'context type',
     a.locale = 'ko-KR',
     a.content = 'high_context',
@@ -2602,10 +2602,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ko-KR'})
 SET a.display_name = 'face saving',
     a.locale = 'ko-KR',
     a.content = 'very_important',
@@ -2616,10 +2616,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ko-KR'})
 SET a.display_name = 'decision style',
     a.locale = 'ko-KR',
     a.content = 'fast_but_thorough',
@@ -2630,10 +2630,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ko-KR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ko-KR'})
 SET a.display_name = 'trust building',
     a.locale = 'ko-KR',
     a.content = 'brand_reputation_and_reviews',
@@ -2644,11 +2644,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ko-KR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@ko-KR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ko-KR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- hi-IN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@hi-IN'})
 SET a.display_name = 'directness',
     a.locale = 'hi-IN',
     a.content = 'indirect_warm',
@@ -2659,10 +2659,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@hi-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'hi-IN',
     a.content = 'high',
@@ -2673,10 +2673,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@hi-IN'})
 SET a.display_name = 'formality',
     a.locale = 'hi-IN',
     a.content = 'respectful_informal',
@@ -2687,10 +2687,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@hi-IN'})
 SET a.display_name = 'context type',
     a.locale = 'hi-IN',
     a.content = 'high_context',
@@ -2701,10 +2701,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@hi-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'hi-IN',
     a.content = 'important',
@@ -2715,10 +2715,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@hi-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'hi-IN',
     a.content = 'family_consensus',
@@ -2729,10 +2729,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@hi-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@hi-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'hi-IN',
     a.content = 'word_of_mouth_and_celebrities',
@@ -2743,11 +2743,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@hi-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@hi-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@hi-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- bn-BD AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@bn-BD'})
 SET a.display_name = 'directness',
     a.locale = 'bn-BD',
     a.content = 'indirect_polite',
@@ -2758,10 +2758,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@bn-BD'})
 SET a.display_name = 'hierarchy',
     a.locale = 'bn-BD',
     a.content = 'high',
@@ -2772,10 +2772,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@bn-BD'})
 SET a.display_name = 'formality',
     a.locale = 'bn-BD',
     a.content = 'formal_respectful',
@@ -2786,10 +2786,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@bn-BD'})
 SET a.display_name = 'context type',
     a.locale = 'bn-BD',
     a.content = 'high_context',
@@ -2800,10 +2800,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@bn-BD'})
 SET a.display_name = 'face saving',
     a.locale = 'bn-BD',
     a.content = 'important',
@@ -2814,10 +2814,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@bn-BD'})
 SET a.display_name = 'decision style',
     a.locale = 'bn-BD',
     a.content = 'elder_influenced',
@@ -2828,10 +2828,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@bn-BD'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@bn-BD'})
 SET a.display_name = 'trust building',
     a.locale = 'bn-BD',
     a.content = 'community_recommendations',
@@ -2842,11 +2842,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@bn-BD'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@bn-BD'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@bn-BD'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ta-IN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ta-IN'})
 SET a.display_name = 'directness',
     a.locale = 'ta-IN',
     a.content = 'moderate_direct',
@@ -2857,10 +2857,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ta-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ta-IN',
     a.content = 'high',
@@ -2871,10 +2871,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ta-IN'})
 SET a.display_name = 'formality',
     a.locale = 'ta-IN',
     a.content = 'formal_respectful',
@@ -2885,10 +2885,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ta-IN'})
 SET a.display_name = 'context type',
     a.locale = 'ta-IN',
     a.content = 'high_context',
@@ -2899,10 +2899,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ta-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'ta-IN',
     a.content = 'important',
@@ -2913,10 +2913,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ta-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'ta-IN',
     a.content = 'deliberate_value_focused',
@@ -2927,10 +2927,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ta-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ta-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'ta-IN',
     a.content = 'local_endorsements',
@@ -2941,11 +2941,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ta-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@ta-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ta-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- te-IN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@te-IN'})
 SET a.display_name = 'directness',
     a.locale = 'te-IN',
     a.content = 'moderate_indirect',
@@ -2956,10 +2956,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@te-IN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'te-IN',
     a.content = 'high',
@@ -2970,10 +2970,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@te-IN'})
 SET a.display_name = 'formality',
     a.locale = 'te-IN',
     a.content = 'respectful_formal',
@@ -2984,10 +2984,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@te-IN'})
 SET a.display_name = 'context type',
     a.locale = 'te-IN',
     a.content = 'high_context',
@@ -2998,10 +2998,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@te-IN'})
 SET a.display_name = 'face saving',
     a.locale = 'te-IN',
     a.content = 'important',
@@ -3012,10 +3012,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@te-IN'})
 SET a.display_name = 'decision style',
     a.locale = 'te-IN',
     a.content = 'family_and_value_driven',
@@ -3026,10 +3026,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@te-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@te-IN'})
 SET a.display_name = 'trust building',
     a.locale = 'te-IN',
     a.content = 'celebrity_and_local_endorsements',
@@ -3040,11 +3040,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@te-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@te-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@te-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- vi-VN AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@vi-VN'})
 SET a.display_name = 'directness',
     a.locale = 'vi-VN',
     a.content = 'indirect_polite',
@@ -3055,10 +3055,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@vi-VN'})
 SET a.display_name = 'hierarchy',
     a.locale = 'vi-VN',
     a.content = 'high',
@@ -3069,10 +3069,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@vi-VN'})
 SET a.display_name = 'formality',
     a.locale = 'vi-VN',
     a.content = 'formal_respectful',
@@ -3083,10 +3083,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@vi-VN'})
 SET a.display_name = 'context type',
     a.locale = 'vi-VN',
     a.content = 'high_context',
@@ -3097,10 +3097,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@vi-VN'})
 SET a.display_name = 'face saving',
     a.locale = 'vi-VN',
     a.content = 'important',
@@ -3111,10 +3111,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@vi-VN'})
 SET a.display_name = 'decision style',
     a.locale = 'vi-VN',
     a.content = 'value_conscious_family',
@@ -3125,10 +3125,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@vi-VN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@vi-VN'})
 SET a.display_name = 'trust building',
     a.locale = 'vi-VN',
     a.content = 'social_proof_and_reviews',
@@ -3139,11 +3139,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@vi-VN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@vi-VN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@vi-VN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- th-TH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@th-TH'})
 SET a.display_name = 'directness',
     a.locale = 'th-TH',
     a.content = 'very_indirect',
@@ -3154,10 +3154,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@th-TH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'th-TH',
     a.content = 'very_high',
@@ -3168,10 +3168,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@th-TH'})
 SET a.display_name = 'formality',
     a.locale = 'th-TH',
     a.content = 'formal_with_warmth',
@@ -3182,10 +3182,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@th-TH'})
 SET a.display_name = 'context type',
     a.locale = 'th-TH',
     a.content = 'very_high_context',
@@ -3196,10 +3196,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@th-TH'})
 SET a.display_name = 'face saving',
     a.locale = 'th-TH',
     a.content = 'critical',
@@ -3210,10 +3210,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@th-TH'})
 SET a.display_name = 'decision style',
     a.locale = 'th-TH',
     a.content = 'relationship_based',
@@ -3224,10 +3224,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@th-TH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@th-TH'})
 SET a.display_name = 'trust building',
     a.locale = 'th-TH',
     a.content = 'likability_and_referrals',
@@ -3238,11 +3238,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@th-TH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@th-TH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@th-TH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- id-ID AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@id-ID'})
 SET a.display_name = 'directness',
     a.locale = 'id-ID',
     a.content = 'indirect_harmonious',
@@ -3253,10 +3253,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@id-ID'})
 SET a.display_name = 'hierarchy',
     a.locale = 'id-ID',
     a.content = 'high',
@@ -3267,10 +3267,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@id-ID'})
 SET a.display_name = 'formality',
     a.locale = 'id-ID',
     a.content = 'respectful_friendly',
@@ -3281,10 +3281,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@id-ID'})
 SET a.display_name = 'context type',
     a.locale = 'id-ID',
     a.content = 'high_context',
@@ -3295,10 +3295,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@id-ID'})
 SET a.display_name = 'face saving',
     a.locale = 'id-ID',
     a.content = 'important',
@@ -3309,10 +3309,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@id-ID'})
 SET a.display_name = 'decision style',
     a.locale = 'id-ID',
     a.content = 'consensus_oriented',
@@ -3323,10 +3323,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@id-ID'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@id-ID'})
 SET a.display_name = 'trust building',
     a.locale = 'id-ID',
     a.content = 'community_and_influencers',
@@ -3337,11 +3337,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@id-ID'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@id-ID'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@id-ID'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ms-MY AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ms-MY'})
 SET a.display_name = 'directness',
     a.locale = 'ms-MY',
     a.content = 'indirect_polite',
@@ -3352,10 +3352,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ms-MY'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ms-MY',
     a.content = 'high',
@@ -3366,10 +3366,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ms-MY'})
 SET a.display_name = 'formality',
     a.locale = 'ms-MY',
     a.content = 'formal_respectful',
@@ -3380,10 +3380,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ms-MY'})
 SET a.display_name = 'context type',
     a.locale = 'ms-MY',
     a.content = 'high_context',
@@ -3394,10 +3394,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ms-MY'})
 SET a.display_name = 'face saving',
     a.locale = 'ms-MY',
     a.content = 'important',
@@ -3408,10 +3408,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ms-MY'})
 SET a.display_name = 'decision style',
     a.locale = 'ms-MY',
     a.content = 'relationship_and_value',
@@ -3422,10 +3422,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ms-MY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ms-MY'})
 SET a.display_name = 'trust building',
     a.locale = 'ms-MY',
     a.content = 'brand_reputation',
@@ -3436,11 +3436,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ms-MY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@ms-MY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ms-MY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fil-PH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fil-PH'})
 SET a.display_name = 'directness',
     a.locale = 'fil-PH',
     a.content = 'indirect_warm',
@@ -3451,10 +3451,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fil-PH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fil-PH',
     a.content = 'moderate_high',
@@ -3465,10 +3465,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fil-PH'})
 SET a.display_name = 'formality',
     a.locale = 'fil-PH',
     a.content = 'respectful_casual',
@@ -3479,10 +3479,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fil-PH'})
 SET a.display_name = 'context type',
     a.locale = 'fil-PH',
     a.content = 'high_context',
@@ -3493,10 +3493,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:face-saving@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@fil-PH'})
 SET a.display_name = 'face saving',
     a.locale = 'fil-PH',
     a.content = 'important',
@@ -3507,10 +3507,10 @@ SET a.display_name = 'face saving',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:face-saving@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:face-saving@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fil-PH'})
 SET a.display_name = 'decision style',
     a.locale = 'fil-PH',
     a.content = 'social_influenced',
@@ -3521,10 +3521,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@fil-PH'})
 SET a.display_name = 'trust building',
     a.locale = 'fil-PH',
     a.content = 'personal_recommendations',
@@ -3535,11 +3535,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ar-SA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-SA'})
 SET a.display_name = 'directness',
     a.locale = 'ar-SA',
     a.content = 'indirect',
@@ -3550,10 +3550,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-SA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-SA',
     a.content = 'very_high',
@@ -3564,10 +3564,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-SA'})
 SET a.display_name = 'formality',
     a.locale = 'ar-SA',
     a.content = 'very_formal',
@@ -3578,10 +3578,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-SA'})
 SET a.display_name = 'context type',
     a.locale = 'ar-SA',
     a.content = 'very_high_context',
@@ -3592,10 +3592,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-SA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-SA',
     a.content = 'critical',
@@ -3606,10 +3606,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-SA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-SA',
     a.content = 'strict_separation',
@@ -3620,10 +3620,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-SA'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-SA',
     a.content = 'polychronic',
@@ -3634,10 +3634,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-SA'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-SA',
     a.content = 'consensus_elder_led',
@@ -3648,10 +3648,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:relationship-building@ar-SA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@ar-SA'})
 SET a.display_name = 'relationship building',
     a.locale = 'ar-SA',
     a.content = 'essential_before_business',
@@ -3662,11 +3662,11 @@ SET a.display_name = 'relationship building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-SA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:relationship-building@ar-SA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:relationship-building@ar-SA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ar-EG AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-EG'})
 SET a.display_name = 'directness',
     a.locale = 'ar-EG',
     a.content = 'moderate',
@@ -3677,10 +3677,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-EG'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-EG',
     a.content = 'high',
@@ -3691,10 +3691,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-EG'})
 SET a.display_name = 'formality',
     a.locale = 'ar-EG',
     a.content = 'moderate',
@@ -3705,10 +3705,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-EG'})
 SET a.display_name = 'context type',
     a.locale = 'ar-EG',
     a.content = 'high_context',
@@ -3719,10 +3719,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-EG'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-EG',
     a.content = 'high',
@@ -3733,10 +3733,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-EG'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-EG',
     a.content = 'moderate_flexibility',
@@ -3747,10 +3747,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-EG'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-EG',
     a.content = 'polychronic',
@@ -3761,10 +3761,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-EG'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-EG',
     a.content = 'emotional_relationship_based',
@@ -3775,10 +3775,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:humor-receptivity@ar-EG'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:humor-receptivity@ar-EG'})
 SET a.display_name = 'humor receptivity',
     a.locale = 'ar-EG',
     a.content = 'very_high',
@@ -3789,11 +3789,11 @@ SET a.display_name = 'humor receptivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-EG'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:humor-receptivity@ar-EG'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:humor-receptivity@ar-EG'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ar-AE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-AE'})
 SET a.display_name = 'directness',
     a.locale = 'ar-AE',
     a.content = 'moderate',
@@ -3804,10 +3804,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-AE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-AE',
     a.content = 'high',
@@ -3818,10 +3818,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-AE'})
 SET a.display_name = 'formality',
     a.locale = 'ar-AE',
     a.content = 'formal_but_modern',
@@ -3832,10 +3832,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-AE'})
 SET a.display_name = 'context type',
     a.locale = 'ar-AE',
     a.content = 'moderate_context',
@@ -3846,10 +3846,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-AE'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-AE',
     a.content = 'moderate',
@@ -3860,10 +3860,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-AE'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-AE',
     a.content = 'progressive_for_region',
@@ -3874,10 +3874,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-AE'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-AE',
     a.content = 'mixed',
@@ -3888,10 +3888,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-AE'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-AE',
     a.content = 'efficiency_focused',
@@ -3902,10 +3902,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:bilingual-preference@ar-AE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:bilingual-preference@ar-AE'})
 SET a.display_name = 'bilingual preference',
     a.locale = 'ar-AE',
     a.content = 'arabic_english_mixed',
@@ -3916,11 +3916,11 @@ SET a.display_name = 'bilingual preference',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-AE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:bilingual-preference@ar-AE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:bilingual-preference@ar-AE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ar-MA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-MA'})
 SET a.display_name = 'directness',
     a.locale = 'ar-MA',
     a.content = 'moderate',
@@ -3931,10 +3931,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-MA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ar-MA',
     a.content = 'high',
@@ -3945,10 +3945,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-MA'})
 SET a.display_name = 'formality',
     a.locale = 'ar-MA',
     a.content = 'moderate',
@@ -3959,10 +3959,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-MA'})
 SET a.display_name = 'context type',
     a.locale = 'ar-MA',
     a.content = 'high_context',
@@ -3973,10 +3973,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-MA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ar-MA',
     a.content = 'moderate',
@@ -3987,10 +3987,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-MA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ar-MA',
     a.content = 'moderate_progressive',
@@ -4001,10 +4001,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-MA'})
 SET a.display_name = 'time orientation',
     a.locale = 'ar-MA',
     a.content = 'polychronic',
@@ -4015,10 +4015,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-MA'})
 SET a.display_name = 'decision style',
     a.locale = 'ar-MA',
     a.content = 'relationship_based',
@@ -4029,10 +4029,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:language-preference@ar-MA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-preference@ar-MA'})
 SET a.display_name = 'language preference',
     a.locale = 'ar-MA',
     a.content = 'darija_french_mix',
@@ -4043,11 +4043,11 @@ SET a.display_name = 'language preference',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ar-MA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:language-preference@ar-MA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:language-preference@ar-MA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- ru-RU AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ru-RU'})
 SET a.display_name = 'directness',
     a.locale = 'ru-RU',
     a.content = 'direct',
@@ -4058,10 +4058,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ru-RU'})
 SET a.display_name = 'hierarchy',
     a.locale = 'ru-RU',
     a.content = 'high',
@@ -4072,10 +4072,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ru-RU'})
 SET a.display_name = 'formality',
     a.locale = 'ru-RU',
     a.content = 'formal',
@@ -4086,10 +4086,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ru-RU'})
 SET a.display_name = 'context type',
     a.locale = 'ru-RU',
     a.content = 'moderate_context',
@@ -4100,10 +4100,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ru-RU'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'ru-RU',
     a.content = 'moderate',
@@ -4114,10 +4114,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ru-RU'})
 SET a.display_name = 'gender considerations',
     a.locale = 'ru-RU',
     a.content = 'traditional_but_evolving',
@@ -4128,10 +4128,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ru-RU'})
 SET a.display_name = 'time orientation',
     a.locale = 'ru-RU',
     a.content = 'long_term',
@@ -4142,10 +4142,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ru-RU'})
 SET a.display_name = 'decision style',
     a.locale = 'ru-RU',
     a.content = 'analytical_skeptical',
@@ -4156,10 +4156,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:trust-building@ru-RU'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ru-RU'})
 SET a.display_name = 'trust building',
     a.locale = 'ru-RU',
     a.content = 'slow_but_loyal',
@@ -4170,11 +4170,11 @@ SET a.display_name = 'trust building',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@ru-RU'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:trust-building@ru-RU'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:trust-building@ru-RU'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- uk-UA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@uk-UA'})
 SET a.display_name = 'directness',
     a.locale = 'uk-UA',
     a.content = 'direct',
@@ -4185,10 +4185,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@uk-UA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'uk-UA',
     a.content = 'moderate',
@@ -4199,10 +4199,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@uk-UA'})
 SET a.display_name = 'formality',
     a.locale = 'uk-UA',
     a.content = 'moderate',
@@ -4213,10 +4213,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@uk-UA'})
 SET a.display_name = 'context type',
     a.locale = 'uk-UA',
     a.content = 'moderate_context',
@@ -4227,10 +4227,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@uk-UA'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'uk-UA',
     a.content = 'moderate',
@@ -4241,10 +4241,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@uk-UA'})
 SET a.display_name = 'gender considerations',
     a.locale = 'uk-UA',
     a.content = 'egalitarian',
@@ -4255,10 +4255,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@uk-UA'})
 SET a.display_name = 'time orientation',
     a.locale = 'uk-UA',
     a.content = 'present_focused',
@@ -4269,10 +4269,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@uk-UA'})
 SET a.display_name = 'decision style',
     a.locale = 'uk-UA',
     a.content = 'pragmatic',
@@ -4283,10 +4283,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:national-solidarity@uk-UA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:national-solidarity@uk-UA'})
 SET a.display_name = 'national solidarity',
     a.locale = 'uk-UA',
     a.content = 'extremely_high',
@@ -4297,11 +4297,11 @@ SET a.display_name = 'national solidarity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@uk-UA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:national-solidarity@uk-UA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:national-solidarity@uk-UA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- pl-PL AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pl-PL'})
 SET a.display_name = 'directness',
     a.locale = 'pl-PL',
     a.content = 'direct',
@@ -4312,10 +4312,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pl-PL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pl-PL',
     a.content = 'moderate',
@@ -4326,10 +4326,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pl-PL'})
 SET a.display_name = 'formality',
     a.locale = 'pl-PL',
     a.content = 'formal_in_business',
@@ -4340,10 +4340,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pl-PL'})
 SET a.display_name = 'context type',
     a.locale = 'pl-PL',
     a.content = 'moderate_context',
@@ -4354,10 +4354,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@pl-PL'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'pl-PL',
     a.content = 'high',
@@ -4368,10 +4368,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@pl-PL'})
 SET a.display_name = 'gender considerations',
     a.locale = 'pl-PL',
     a.content = 'traditional_evolving',
@@ -4382,10 +4382,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@pl-PL'})
 SET a.display_name = 'time orientation',
     a.locale = 'pl-PL',
     a.content = 'future_focused',
@@ -4396,10 +4396,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@pl-PL'})
 SET a.display_name = 'decision style',
     a.locale = 'pl-PL',
     a.content = 'quality_conscious',
@@ -4410,10 +4410,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:price-sensitivity@pl-PL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:price-sensitivity@pl-PL'})
 SET a.display_name = 'price sensitivity',
     a.locale = 'pl-PL',
     a.content = 'value_oriented',
@@ -4424,11 +4424,11 @@ SET a.display_name = 'price sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pl-PL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:price-sensitivity@pl-PL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:price-sensitivity@pl-PL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- cs-CZ AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@cs-CZ'})
 SET a.display_name = 'directness',
     a.locale = 'cs-CZ',
     a.content = 'direct',
@@ -4439,10 +4439,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@cs-CZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'cs-CZ',
     a.content = 'low',
@@ -4453,10 +4453,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@cs-CZ'})
 SET a.display_name = 'formality',
     a.locale = 'cs-CZ',
     a.content = 'informal_preferred',
@@ -4467,10 +4467,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@cs-CZ'})
 SET a.display_name = 'context type',
     a.locale = 'cs-CZ',
     a.content = 'low_context',
@@ -4481,10 +4481,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@cs-CZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'cs-CZ',
     a.content = 'very_low',
@@ -4495,10 +4495,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@cs-CZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'cs-CZ',
     a.content = 'egalitarian',
@@ -4509,10 +4509,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@cs-CZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'cs-CZ',
     a.content = 'pragmatic',
@@ -4523,10 +4523,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@cs-CZ'})
 SET a.display_name = 'decision style',
     a.locale = 'cs-CZ',
     a.content = 'rational_skeptical',
@@ -4537,10 +4537,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:marketing-receptivity@cs-CZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:marketing-receptivity@cs-CZ'})
 SET a.display_name = 'marketing receptivity',
     a.locale = 'cs-CZ',
     a.content = 'skeptical',
@@ -4551,11 +4551,11 @@ SET a.display_name = 'marketing receptivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@cs-CZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:marketing-receptivity@cs-CZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:marketing-receptivity@cs-CZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- tr-TR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@tr-TR'})
 SET a.display_name = 'directness',
     a.locale = 'tr-TR',
     a.content = 'moderate',
@@ -4566,10 +4566,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@tr-TR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'tr-TR',
     a.content = 'high',
@@ -4580,10 +4580,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@tr-TR'})
 SET a.display_name = 'formality',
     a.locale = 'tr-TR',
     a.content = 'formal_respectful',
@@ -4594,10 +4594,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@tr-TR'})
 SET a.display_name = 'context type',
     a.locale = 'tr-TR',
     a.content = 'high_context',
@@ -4608,10 +4608,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@tr-TR'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'tr-TR',
     a.content = 'moderate_varied',
@@ -4622,10 +4622,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@tr-TR'})
 SET a.display_name = 'gender considerations',
     a.locale = 'tr-TR',
     a.content = 'varies_by_region',
@@ -4636,10 +4636,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@tr-TR'})
 SET a.display_name = 'time orientation',
     a.locale = 'tr-TR',
     a.content = 'relationship_first',
@@ -4650,10 +4650,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@tr-TR'})
 SET a.display_name = 'decision style',
     a.locale = 'tr-TR',
     a.content = 'emotional_relational',
@@ -4664,10 +4664,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:brand-loyalty@tr-TR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:brand-loyalty@tr-TR'})
 SET a.display_name = 'brand loyalty',
     a.locale = 'tr-TR',
     a.content = 'high_once_established',
@@ -4678,11 +4678,11 @@ SET a.display_name = 'brand loyalty',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@tr-TR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:brand-loyalty@tr-TR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:brand-loyalty@tr-TR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- az-AZ AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@az-AZ'})
 SET a.display_name = 'directness',
     a.locale = 'az-AZ',
     a.content = 'moderate',
@@ -4693,10 +4693,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@az-AZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'az-AZ',
     a.content = 'high',
@@ -4707,10 +4707,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@az-AZ'})
 SET a.display_name = 'formality',
     a.locale = 'az-AZ',
     a.content = 'formal',
@@ -4721,10 +4721,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@az-AZ'})
 SET a.display_name = 'context type',
     a.locale = 'az-AZ',
     a.content = 'high_context',
@@ -4735,10 +4735,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@az-AZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'az-AZ',
     a.content = 'moderate_secular',
@@ -4749,10 +4749,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@az-AZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'az-AZ',
     a.content = 'traditional_modernizing',
@@ -4763,10 +4763,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@az-AZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'az-AZ',
     a.content = 'relationship_based',
@@ -4777,10 +4777,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@az-AZ'})
 SET a.display_name = 'decision style',
     a.locale = 'az-AZ',
     a.content = 'consensus_seeking',
@@ -4791,10 +4791,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:language-identity@az-AZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-identity@az-AZ'})
 SET a.display_name = 'language identity',
     a.locale = 'az-AZ',
     a.content = 'strong_turkic',
@@ -4805,11 +4805,11 @@ SET a.display_name = 'language identity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@az-AZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:language-identity@az-AZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:language-identity@az-AZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- he-IL AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@he-IL'})
 SET a.display_name = 'directness',
     a.locale = 'he-IL',
     a.content = 'very_direct',
@@ -4820,10 +4820,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@he-IL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'he-IL',
     a.content = 'low',
@@ -4834,10 +4834,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@he-IL'})
 SET a.display_name = 'formality',
     a.locale = 'he-IL',
     a.content = 'informal',
@@ -4848,10 +4848,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@he-IL'})
 SET a.display_name = 'context type',
     a.locale = 'he-IL',
     a.content = 'low_context',
@@ -4862,10 +4862,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@he-IL'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'he-IL',
     a.content = 'varied_secular_to_orthodox',
@@ -4876,10 +4876,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@he-IL'})
 SET a.display_name = 'gender considerations',
     a.locale = 'he-IL',
     a.content = 'egalitarian_secular',
@@ -4890,10 +4890,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@he-IL'})
 SET a.display_name = 'time orientation',
     a.locale = 'he-IL',
     a.content = 'present_urgent',
@@ -4904,10 +4904,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@he-IL'})
 SET a.display_name = 'decision style',
     a.locale = 'he-IL',
     a.content = 'fast_decisive',
@@ -4918,10 +4918,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:negotiation-style@he-IL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:negotiation-style@he-IL'})
 SET a.display_name = 'negotiation style',
     a.locale = 'he-IL',
     a.content = 'assertive',
@@ -4932,11 +4932,11 @@ SET a.display_name = 'negotiation style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@he-IL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:negotiation-style@he-IL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:negotiation-style@he-IL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- sw-KE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-KE'})
 SET a.display_name = 'directness',
     a.locale = 'sw-KE',
     a.content = 'moderate',
@@ -4947,10 +4947,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-KE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sw-KE',
     a.content = 'moderate',
@@ -4961,10 +4961,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-KE'})
 SET a.display_name = 'formality',
     a.locale = 'sw-KE',
     a.content = 'moderate',
@@ -4975,10 +4975,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-KE'})
 SET a.display_name = 'context type',
     a.locale = 'sw-KE',
     a.content = 'moderate_context',
@@ -4989,10 +4989,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-KE'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'sw-KE',
     a.content = 'moderate_diverse',
@@ -5003,10 +5003,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-KE'})
 SET a.display_name = 'gender considerations',
     a.locale = 'sw-KE',
     a.content = 'evolving_urban_different',
@@ -5017,10 +5017,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-KE'})
 SET a.display_name = 'time orientation',
     a.locale = 'sw-KE',
     a.content = 'flexible',
@@ -5031,10 +5031,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-KE'})
 SET a.display_name = 'decision style',
     a.locale = 'sw-KE',
     a.content = 'relationship_influenced',
@@ -5045,10 +5045,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:digital-adoption@sw-KE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:digital-adoption@sw-KE'})
 SET a.display_name = 'digital adoption',
     a.locale = 'sw-KE',
     a.content = 'high_mobile_first',
@@ -5059,11 +5059,11 @@ SET a.display_name = 'digital adoption',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-KE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:digital-adoption@sw-KE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:digital-adoption@sw-KE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- sw-TZ AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-TZ'})
 SET a.display_name = 'directness',
     a.locale = 'sw-TZ',
     a.content = 'indirect_polite',
@@ -5074,10 +5074,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-TZ'})
 SET a.display_name = 'hierarchy',
     a.locale = 'sw-TZ',
     a.content = 'moderate',
@@ -5088,10 +5088,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-TZ'})
 SET a.display_name = 'formality',
     a.locale = 'sw-TZ',
     a.content = 'formal',
@@ -5102,10 +5102,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-TZ'})
 SET a.display_name = 'context type',
     a.locale = 'sw-TZ',
     a.content = 'high_context',
@@ -5116,10 +5116,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-TZ'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'sw-TZ',
     a.content = 'high',
@@ -5130,10 +5130,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-TZ'})
 SET a.display_name = 'gender considerations',
     a.locale = 'sw-TZ',
     a.content = 'traditional',
@@ -5144,10 +5144,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-TZ'})
 SET a.display_name = 'time orientation',
     a.locale = 'sw-TZ',
     a.content = 'relaxed_pole_pole',
@@ -5158,10 +5158,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-TZ'})
 SET a.display_name = 'decision style',
     a.locale = 'sw-TZ',
     a.content = 'consensus',
@@ -5172,10 +5172,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:language-purity@sw-TZ'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:language-purity@sw-TZ'})
 SET a.display_name = 'language purity',
     a.locale = 'sw-TZ',
     a.content = 'pure_swahili_preferred',
@@ -5186,11 +5186,11 @@ SET a.display_name = 'language purity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@sw-TZ'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:language-purity@sw-TZ'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:language-purity@sw-TZ'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- am-ET AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@am-ET'})
 SET a.display_name = 'directness',
     a.locale = 'am-ET',
     a.content = 'indirect',
@@ -5201,10 +5201,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@am-ET'})
 SET a.display_name = 'hierarchy',
     a.locale = 'am-ET',
     a.content = 'high',
@@ -5215,10 +5215,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@am-ET'})
 SET a.display_name = 'formality',
     a.locale = 'am-ET',
     a.content = 'very_formal',
@@ -5229,10 +5229,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@am-ET'})
 SET a.display_name = 'context type',
     a.locale = 'am-ET',
     a.content = 'very_high_context',
@@ -5243,10 +5243,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@am-ET'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'am-ET',
     a.content = 'critical',
@@ -5257,10 +5257,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@am-ET'})
 SET a.display_name = 'gender considerations',
     a.locale = 'am-ET',
     a.content = 'traditional',
@@ -5271,10 +5271,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@am-ET'})
 SET a.display_name = 'time orientation',
     a.locale = 'am-ET',
     a.content = 'ethiopian_calendar',
@@ -5285,10 +5285,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@am-ET'})
 SET a.display_name = 'decision style',
     a.locale = 'am-ET',
     a.content = 'elder_influenced',
@@ -5299,10 +5299,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:unique-calendar@am-ET'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:unique-calendar@am-ET'})
 SET a.display_name = 'unique calendar',
     a.locale = 'am-ET',
     a.content = '13_months_different_year',
@@ -5313,11 +5313,11 @@ SET a.display_name = 'unique calendar',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@am-ET'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:unique-calendar@am-ET'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:unique-calendar@am-ET'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- el-GR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-GR'})
 SET a.display_name = 'directness',
     a.locale = 'el-GR',
     a.content = 'direct_expressive',
@@ -5328,10 +5328,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-GR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'el-GR',
     a.content = 'moderate',
@@ -5342,10 +5342,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-GR'})
 SET a.display_name = 'formality',
     a.locale = 'el-GR',
     a.content = 'moderate',
@@ -5356,10 +5356,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-GR'})
 SET a.display_name = 'context type',
     a.locale = 'el-GR',
     a.content = 'moderate_context',
@@ -5370,10 +5370,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-GR'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'el-GR',
     a.content = 'moderate_orthodox',
@@ -5384,10 +5384,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-GR'})
 SET a.display_name = 'gender considerations',
     a.locale = 'el-GR',
     a.content = 'egalitarian_modern',
@@ -5398,10 +5398,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-GR'})
 SET a.display_name = 'time orientation',
     a.locale = 'el-GR',
     a.content = 'relaxed_mediterranean',
@@ -5412,10 +5412,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-GR'})
 SET a.display_name = 'decision style',
     a.locale = 'el-GR',
     a.content = 'emotional_relational',
@@ -5426,10 +5426,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:skepticism@el-GR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:skepticism@el-GR'})
 SET a.display_name = 'skepticism',
     a.locale = 'el-GR',
     a.content = 'high_toward_institutions',
@@ -5440,11 +5440,11 @@ SET a.display_name = 'skepticism',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-GR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:skepticism@el-GR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:skepticism@el-GR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- el-CY AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-CY'})
 SET a.display_name = 'directness',
     a.locale = 'el-CY',
     a.content = 'direct',
@@ -5455,10 +5455,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-CY'})
 SET a.display_name = 'hierarchy',
     a.locale = 'el-CY',
     a.content = 'moderate',
@@ -5469,10 +5469,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-CY'})
 SET a.display_name = 'formality',
     a.locale = 'el-CY',
     a.content = 'moderate_casual',
@@ -5483,10 +5483,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-CY'})
 SET a.display_name = 'context type',
     a.locale = 'el-CY',
     a.content = 'high_context',
@@ -5497,10 +5497,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-CY'})
 SET a.display_name = 'religious sensitivity',
     a.locale = 'el-CY',
     a.content = 'moderate_orthodox',
@@ -5511,10 +5511,10 @@ SET a.display_name = 'religious sensitivity',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:religious-sensitivity@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:religious-sensitivity@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-CY'})
 SET a.display_name = 'gender considerations',
     a.locale = 'el-CY',
     a.content = 'traditional_modernizing',
@@ -5525,10 +5525,10 @@ SET a.display_name = 'gender considerations',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:gender-considerations@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:gender-considerations@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-CY'})
 SET a.display_name = 'time orientation',
     a.locale = 'el-CY',
     a.content = 'relaxed',
@@ -5539,10 +5539,10 @@ SET a.display_name = 'time orientation',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:time-orientation@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:time-orientation@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-CY'})
 SET a.display_name = 'decision style',
     a.locale = 'el-CY',
     a.content = 'relationship_based',
@@ -5553,10 +5553,10 @@ SET a.display_name = 'decision style',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:decision-style@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:decision-style@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:market-size@el-CY'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:market-size@el-CY'})
 SET a.display_name = 'market size',
     a.locale = 'el-CY',
     a.content = 'small_tight_knit',
@@ -5567,11 +5567,11 @@ SET a.display_name = 'market size',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@el-CY'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:market-size@el-CY'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:market-size@el-CY'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fr-FR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-FR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-FR'})
 SET a.display_name = 'directness',
     a.locale = 'fr-FR',
     a.content = 'indirect',
@@ -5582,10 +5582,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fr-FR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-FR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-FR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-FR',
     a.content = 'high',
@@ -5596,10 +5596,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-FR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-FR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-FR'})
 SET a.display_name = 'formality',
     a.locale = 'fr-FR',
     a.content = 'formal',
@@ -5610,10 +5610,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fr-FR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-FR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-FR'})
 SET a.display_name = 'context type',
     a.locale = 'fr-FR',
     a.content = 'high_context',
@@ -5624,10 +5624,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-FR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-FR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-FR'})
 SET a.display_name = 'notes',
     a.locale = 'fr-FR',
     a.content = 'Titles matter (Monsieur/Madame), vous by default, build relationship before transaction',
@@ -5638,11 +5638,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-FR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@fr-FR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-FR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fr-CA AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CA'})
 SET a.display_name = 'directness',
     a.locale = 'fr-CA',
     a.content = 'balanced',
@@ -5653,10 +5653,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CA'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-CA',
     a.content = 'low',
@@ -5667,10 +5667,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CA'})
 SET a.display_name = 'formality',
     a.locale = 'fr-CA',
     a.content = 'informal',
@@ -5681,10 +5681,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CA'})
 SET a.display_name = 'context type',
     a.locale = 'fr-CA',
     a.content = 'low_context',
@@ -5695,10 +5695,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CA'})
 SET a.display_name = 'notes',
     a.locale = 'fr-CA',
     a.content = 'More direct than France, tu acceptable earlier, North American efficiency valued',
@@ -5709,11 +5709,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fr-BE AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-BE'})
 SET a.display_name = 'directness',
     a.locale = 'fr-BE',
     a.content = 'balanced',
@@ -5724,10 +5724,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fr-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-BE'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-BE',
     a.content = 'medium',
@@ -5738,10 +5738,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-BE'})
 SET a.display_name = 'formality',
     a.locale = 'fr-BE',
     a.content = 'moderate',
@@ -5752,10 +5752,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fr-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-BE'})
 SET a.display_name = 'context type',
     a.locale = 'fr-BE',
     a.content = 'medium_context',
@@ -5766,10 +5766,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-BE'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-BE'})
 SET a.display_name = 'notes',
     a.locale = 'fr-BE',
     a.content = 'Less formal than France, more practical, appreciate efficiency with politeness',
@@ -5780,11 +5780,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-BE'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@fr-BE'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-BE'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- fr-CH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CH'})
 SET a.display_name = 'directness',
     a.locale = 'fr-CH',
     a.content = 'direct',
@@ -5795,10 +5795,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@fr-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'fr-CH',
     a.content = 'medium',
@@ -5809,10 +5809,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@fr-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CH'})
 SET a.display_name = 'formality',
     a.locale = 'fr-CH',
     a.content = 'formal',
@@ -5823,10 +5823,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@fr-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CH'})
 SET a.display_name = 'context type',
     a.locale = 'fr-CH',
     a.content = 'low_context',
@@ -5837,10 +5837,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@fr-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CH'})
 SET a.display_name = 'notes',
     a.locale = 'fr-CH',
     a.content = 'German-influenced directness, precision in communication, punctuality sacred',
@@ -5851,11 +5851,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fr-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@fr-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@fr-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- es-ES AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-ES'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-ES'})
 SET a.display_name = 'directness',
     a.locale = 'es-ES',
     a.content = 'indirect',
@@ -5866,10 +5866,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@es-ES'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-ES'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-ES'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-ES',
     a.content = 'medium',
@@ -5880,10 +5880,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-ES'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-ES'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-ES'})
 SET a.display_name = 'formality',
     a.locale = 'es-ES',
     a.content = 'moderate',
@@ -5894,10 +5894,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@es-ES'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-ES'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-ES'})
 SET a.display_name = 'context type',
     a.locale = 'es-ES',
     a.content = 'high_context',
@@ -5908,10 +5908,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@es-ES'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-ES'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-ES'})
 SET a.display_name = 'notes',
     a.locale = 'es-ES',
     a.content = 'Relationship-first, vosotros for plural, flexible timing expectations',
@@ -5922,11 +5922,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-ES'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@es-ES'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-ES'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- es-MX AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-MX'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-MX'})
 SET a.display_name = 'directness',
     a.locale = 'es-MX',
     a.content = 'indirect',
@@ -5937,10 +5937,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@es-MX'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-MX'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-MX'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-MX',
     a.content = 'high',
@@ -5951,10 +5951,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-MX'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-MX'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-MX'})
 SET a.display_name = 'formality',
     a.locale = 'es-MX',
     a.content = 'formal',
@@ -5965,10 +5965,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@es-MX'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-MX'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-MX'})
 SET a.display_name = 'context type',
     a.locale = 'es-MX',
     a.content = 'high_context',
@@ -5979,10 +5979,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@es-MX'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-MX'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-MX'})
 SET a.display_name = 'notes',
     a.locale = 'es-MX',
     a.content = 'Usted default with strangers, diminutives show warmth (ahorita, tantito)',
@@ -5993,11 +5993,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-MX'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@es-MX'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-MX'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- es-AR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-AR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-AR'})
 SET a.display_name = 'directness',
     a.locale = 'es-AR',
     a.content = 'direct',
@@ -6008,10 +6008,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@es-AR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-AR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-AR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-AR',
     a.content = 'low',
@@ -6022,10 +6022,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-AR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-AR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-AR'})
 SET a.display_name = 'formality',
     a.locale = 'es-AR',
     a.content = 'informal',
@@ -6036,10 +6036,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@es-AR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-AR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-AR'})
 SET a.display_name = 'context type',
     a.locale = 'es-AR',
     a.content = 'medium_context',
@@ -6050,10 +6050,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@es-AR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-AR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-AR'})
 SET a.display_name = 'notes',
     a.locale = 'es-AR',
     a.content = 'Voseo (vos instead of tú), highly expressive, debate culture',
@@ -6064,11 +6064,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-AR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@es-AR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-AR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- es-CO AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-CO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CO'})
 SET a.display_name = 'directness',
     a.locale = 'es-CO',
     a.content = 'indirect',
@@ -6079,10 +6079,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@es-CO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CO'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-CO',
     a.content = 'high',
@@ -6093,10 +6093,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-CO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CO'})
 SET a.display_name = 'formality',
     a.locale = 'es-CO',
     a.content = 'formal',
@@ -6107,10 +6107,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@es-CO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CO'})
 SET a.display_name = 'context type',
     a.locale = 'es-CO',
     a.content = 'high_context',
@@ -6121,10 +6121,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-CO'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CO'})
 SET a.display_name = 'notes',
     a.locale = 'es-CO',
     a.content = 'Usted common even among friends, exceptional politeness norms',
@@ -6135,11 +6135,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CO'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@es-CO'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CO'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- es-CL AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@es-CL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CL'})
 SET a.display_name = 'directness',
     a.locale = 'es-CL',
     a.content = 'balanced',
@@ -6150,10 +6150,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@es-CL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CL'})
 SET a.display_name = 'hierarchy',
     a.locale = 'es-CL',
     a.content = 'medium',
@@ -6164,10 +6164,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@es-CL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@es-CL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CL'})
 SET a.display_name = 'formality',
     a.locale = 'es-CL',
     a.content = 'moderate',
@@ -6178,10 +6178,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@es-CL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CL'})
 SET a.display_name = 'context type',
     a.locale = 'es-CL',
     a.content = 'medium_context',
@@ -6192,10 +6192,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@es-CL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@es-CL'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CL'})
 SET a.display_name = 'notes',
     a.locale = 'es-CL',
     a.content = 'Mix of tú/usted, aspirational middle class, tech-savvy',
@@ -6206,11 +6206,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@es-CL'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@es-CL'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@es-CL'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- pt-BR AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pt-BR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-BR'})
 SET a.display_name = 'directness',
     a.locale = 'pt-BR',
     a.content = 'indirect',
@@ -6221,10 +6221,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@pt-BR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-BR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-BR'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pt-BR',
     a.content = 'high',
@@ -6235,10 +6235,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-BR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pt-BR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-BR'})
 SET a.display_name = 'formality',
     a.locale = 'pt-BR',
     a.content = 'informal',
@@ -6249,10 +6249,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@pt-BR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-BR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-BR'})
 SET a.display_name = 'context type',
     a.locale = 'pt-BR',
     a.content = 'high_context',
@@ -6263,10 +6263,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-BR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@pt-BR'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-BR'})
 SET a.display_name = 'notes',
     a.locale = 'pt-BR',
     a.content = 'Você (not tu) in most regions, warmth over efficiency, personal relationship before business',
@@ -6277,11 +6277,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-BR'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@pt-BR'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-BR'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- pt-PT AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@pt-PT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-PT'})
 SET a.display_name = 'directness',
     a.locale = 'pt-PT',
     a.content = 'balanced',
@@ -6292,10 +6292,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@pt-PT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-PT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-PT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'pt-PT',
     a.content = 'medium',
@@ -6306,10 +6306,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@pt-PT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@pt-PT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-PT'})
 SET a.display_name = 'formality',
     a.locale = 'pt-PT',
     a.content = 'formal',
@@ -6320,10 +6320,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@pt-PT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-PT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-PT'})
 SET a.display_name = 'context type',
     a.locale = 'pt-PT',
     a.content = 'medium_context',
@@ -6334,10 +6334,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@pt-PT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@pt-PT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-PT'})
 SET a.display_name = 'notes',
     a.locale = 'pt-PT',
     a.content = 'Tu conjugation, more formal than Brazil, European business norms',
@@ -6348,11 +6348,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@pt-PT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@pt-PT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@pt-PT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- it-IT AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@it-IT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-IT'})
 SET a.display_name = 'directness',
     a.locale = 'it-IT',
     a.content = 'indirect',
@@ -6363,10 +6363,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@it-IT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-IT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-IT'})
 SET a.display_name = 'hierarchy',
     a.locale = 'it-IT',
     a.content = 'high',
@@ -6377,10 +6377,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-IT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@it-IT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-IT'})
 SET a.display_name = 'formality',
     a.locale = 'it-IT',
     a.content = 'formal',
@@ -6391,10 +6391,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@it-IT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@it-IT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-IT'})
 SET a.display_name = 'context type',
     a.locale = 'it-IT',
     a.content = 'high_context',
@@ -6405,10 +6405,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@it-IT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@it-IT'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-IT'})
 SET a.display_name = 'notes',
     a.locale = 'it-IT',
     a.content = 'Lei form default, relationships before transactions, flexible timing',
@@ -6419,11 +6419,11 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-IT'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@it-IT'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-IT'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // --- it-CH AudienceTraits from Research ---
-MERGE (a:AudienceTrait {key: 'audience-trait:research:directness@it-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-CH'})
 SET a.display_name = 'directness',
     a.locale = 'it-CH',
     a.content = 'balanced',
@@ -6434,10 +6434,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:directness@it-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:directness@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-CH'})
 SET a.display_name = 'hierarchy',
     a.locale = 'it-CH',
     a.content = 'medium',
@@ -6448,10 +6448,10 @@ SET a.display_name = 'hierarchy',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:hierarchy@it-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:hierarchy@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:formality@it-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-CH'})
 SET a.display_name = 'formality',
     a.locale = 'it-CH',
     a.content = 'formal',
@@ -6462,10 +6462,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:formality@it-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:formality@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:context-type@it-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-CH'})
 SET a.display_name = 'context type',
     a.locale = 'it-CH',
     a.content = 'low_context',
@@ -6476,10 +6476,10 @@ SET a.display_name = 'context type',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:context-type@it-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:context-type@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:research:notes@it-CH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-CH'})
 SET a.display_name = 'notes',
     a.locale = 'it-CH',
     a.content = 'Swiss Italian formal, Lei default, punctuality expected unlike Italy',
@@ -6490,5 +6490,5 @@ SET a.display_name = 'notes',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@it-CH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:research:notes@it-CH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:research:notes@it-CH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);

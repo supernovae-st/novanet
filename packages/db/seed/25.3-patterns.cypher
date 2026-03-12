@@ -10,7 +10,7 @@
 // en-US Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-get-started@en-US'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-US'})
 SET p.display_name = 'Get Started Now',
     p.locale = 'en-US',
     p.template = 'Get Started Now',
@@ -27,10 +27,10 @@ SET p.display_name = 'Get Started Now',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-US'})
-MATCH (p:Pattern {key: 'pattern:cta-get-started@en-US'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-get-started@en-US'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-try-free@en-US'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-try-free@en-US'})
 SET p.display_name = 'Try {product} Free',
     p.locale = 'en-US',
     p.template = 'Try {product} Free',
@@ -47,10 +47,10 @@ SET p.display_name = 'Try {product} Free',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-US'})
-MATCH (p:Pattern {key: 'pattern:cta-try-free@en-US'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-try-free@en-US'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-unlock@en-US'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-unlock@en-US'})
 SET p.display_name = 'Unlock {benefit} in Minutes',
     p.locale = 'en-US',
     p.template = 'Unlock {benefit} in Minutes',
@@ -67,14 +67,14 @@ SET p.display_name = 'Unlock {benefit} in Minutes',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-US'})
-MATCH (p:Pattern {key: 'pattern:headline-unlock@en-US'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-unlock@en-US'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-GB Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-discover@en-GB'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-discover@en-GB'})
 SET p.display_name = 'Discover More',
     p.locale = 'en-GB',
     p.template = 'Discover More',
@@ -91,10 +91,10 @@ SET p.display_name = 'Discover More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-GB'})
-MATCH (p:Pattern {key: 'pattern:cta-discover@en-GB'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-discover@en-GB'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-find-out@en-GB'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out@en-GB'})
 SET p.display_name = 'Find Out How',
     p.locale = 'en-GB',
     p.template = 'Find Out How',
@@ -111,10 +111,10 @@ SET p.display_name = 'Find Out How',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-GB'})
-MATCH (p:Pattern {key: 'pattern:cta-find-out@en-GB'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-find-out@en-GB'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-simply@en-GB'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-simply@en-GB'})
 SET p.display_name = 'Simply {benefit}',
     p.locale = 'en-GB',
     p.template = 'Simply {benefit}',
@@ -131,14 +131,14 @@ SET p.display_name = 'Simply {benefit}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-GB'})
-MATCH (p:Pattern {key: 'pattern:headline-simply@en-GB'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-simply@en-GB'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-AU Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-give-it-a-go@en-AU'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-give-it-a-go@en-AU'})
 SET p.display_name = 'Give It a Go',
     p.locale = 'en-AU',
     p.template = 'Give It a Go',
@@ -155,10 +155,10 @@ SET p.display_name = 'Give It a Go',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-AU'})
-MATCH (p:Pattern {key: 'pattern:cta-give-it-a-go@en-AU'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-give-it-a-go@en-AU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-check-it-out@en-AU'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-check-it-out@en-AU'})
 SET p.display_name = 'Check It Out',
     p.locale = 'en-AU',
     p.template = 'Check It Out',
@@ -175,10 +175,10 @@ SET p.display_name = 'Check It Out',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-AU'})
-MATCH (p:Pattern {key: 'pattern:cta-check-it-out@en-AU'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-check-it-out@en-AU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-no-worries@en-AU'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-no-worries@en-AU'})
 SET p.display_name = '{benefit} — No Worries',
     p.locale = 'en-AU',
     p.template = '{benefit} — No Worries',
@@ -195,14 +195,14 @@ SET p.display_name = '{benefit} — No Worries',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-AU'})
-MATCH (p:Pattern {key: 'pattern:headline-no-worries@en-AU'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-no-worries@en-AU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-CA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-more@en-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-CA'})
 SET p.display_name = 'Learn More',
     p.locale = 'en-CA',
     p.template = 'Learn More',
@@ -219,10 +219,10 @@ SET p.display_name = 'Learn More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-CA'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-more@en-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-get-started@en-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-CA'})
 SET p.display_name = 'Get Started',
     p.locale = 'en-CA',
     p.template = 'Get Started',
@@ -239,10 +239,10 @@ SET p.display_name = 'Get Started',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-CA'})
-MATCH (p:Pattern {key: 'pattern:cta-get-started@en-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-get-started@en-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-better-way@en-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-better-way@en-CA'})
 SET p.display_name = 'A Better Way to {action}',
     p.locale = 'en-CA',
     p.template = 'A Better Way to {action}',
@@ -259,14 +259,14 @@ SET p.display_name = 'A Better Way to {action}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-CA'})
-MATCH (p:Pattern {key: 'pattern:headline-better-way@en-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-better-way@en-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-IN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-explore-now@en-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-explore-now@en-IN'})
 SET p.display_name = 'Explore Now',
     p.locale = 'en-IN',
     p.template = 'Explore Now',
@@ -283,10 +283,10 @@ SET p.display_name = 'Explore Now',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-explore-now@en-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-explore-now@en-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-know-more@en-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-know-more@en-IN'})
 SET p.display_name = 'Know More',
     p.locale = 'en-IN',
     p.template = 'Know More',
@@ -303,10 +303,10 @@ SET p.display_name = 'Know More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-know-more@en-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-know-more@en-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-transform@en-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-transform@en-IN'})
 SET p.display_name = 'Transform Your {noun} Today',
     p.locale = 'en-IN',
     p.template = 'Transform Your {noun} Today',
@@ -323,14 +323,14 @@ SET p.display_name = 'Transform Your {noun} Today',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IN'})
-MATCH (p:Pattern {key: 'pattern:headline-transform@en-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-transform@en-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-SG Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-find-out-more@en-SG'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out-more@en-SG'})
 SET p.display_name = 'Find Out More',
     p.locale = 'en-SG',
     p.template = 'Find Out More',
@@ -347,10 +347,10 @@ SET p.display_name = 'Find Out More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-SG'})
-MATCH (p:Pattern {key: 'pattern:cta-find-out-more@en-SG'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-find-out-more@en-SG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-get-quote@en-SG'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-get-quote@en-SG'})
 SET p.display_name = 'Get Your Quote',
     p.locale = 'en-SG',
     p.template = 'Get Your Quote',
@@ -367,10 +367,10 @@ SET p.display_name = 'Get Your Quote',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-SG'})
-MATCH (p:Pattern {key: 'pattern:cta-get-quote@en-SG'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-get-quote@en-SG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-smart-choice@en-SG'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-smart-choice@en-SG'})
 SET p.display_name = 'The Smart Choice for {noun}',
     p.locale = 'en-SG',
     p.template = 'The Smart Choice for {noun}',
@@ -387,14 +387,14 @@ SET p.display_name = 'The Smart Choice for {noun}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-SG'})
-MATCH (p:Pattern {key: 'pattern:headline-smart-choice@en-SG'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-smart-choice@en-SG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-ZA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-discover@en-ZA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-discover@en-ZA'})
 SET p.display_name = 'Discover {product}',
     p.locale = 'en-ZA',
     p.template = 'Discover {product}',
@@ -411,10 +411,10 @@ SET p.display_name = 'Discover {product}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-ZA'})
-MATCH (p:Pattern {key: 'pattern:cta-discover@en-ZA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-discover@en-ZA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-start-journey@en-ZA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-start-journey@en-ZA'})
 SET p.display_name = 'Start Your Journey',
     p.locale = 'en-ZA',
     p.template = 'Start Your Journey',
@@ -431,10 +431,10 @@ SET p.display_name = 'Start Your Journey',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-ZA'})
-MATCH (p:Pattern {key: 'pattern:cta-start-journey@en-ZA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-start-journey@en-ZA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-together@en-ZA'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-together@en-ZA'})
 SET p.display_name = 'Together, We {action}',
     p.locale = 'en-ZA',
     p.template = 'Together, We {action}',
@@ -451,14 +451,14 @@ SET p.display_name = 'Together, We {action}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-ZA'})
-MATCH (p:Pattern {key: 'pattern:headline-together@en-ZA'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-together@en-ZA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-NZ Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-give-go@en-NZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-give-go@en-NZ'})
 SET p.display_name = 'Give It a Go',
     p.locale = 'en-NZ',
     p.template = 'Give It a Go',
@@ -475,10 +475,10 @@ SET p.display_name = 'Give It a Go',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-NZ'})
-MATCH (p:Pattern {key: 'pattern:cta-give-go@en-NZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-give-go@en-NZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-suss-it-out@en-NZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-suss-it-out@en-NZ'})
 SET p.display_name = 'Suss It Out',
     p.locale = 'en-NZ',
     p.template = 'Suss It Out',
@@ -495,10 +495,10 @@ SET p.display_name = 'Suss It Out',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-NZ'})
-MATCH (p:Pattern {key: 'pattern:cta-suss-it-out@en-NZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-suss-it-out@en-NZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-sorted@en-NZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-sorted@en-NZ'})
 SET p.display_name = 'Get {noun} Sorted',
     p.locale = 'en-NZ',
     p.template = 'Get {noun} Sorted',
@@ -515,14 +515,14 @@ SET p.display_name = 'Get {noun} Sorted',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-NZ'})
-MATCH (p:Pattern {key: 'pattern:headline-sorted@en-NZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-sorted@en-NZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-IE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-find-out@en-IE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-find-out@en-IE'})
 SET p.display_name = 'Find Out More',
     p.locale = 'en-IE',
     p.template = 'Find Out More',
@@ -539,10 +539,10 @@ SET p.display_name = 'Find Out More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IE'})
-MATCH (p:Pattern {key: 'pattern:cta-find-out@en-IE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-find-out@en-IE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-get-started@en-IE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-get-started@en-IE'})
 SET p.display_name = 'Get Started',
     p.locale = 'en-IE',
     p.template = 'Get Started',
@@ -559,10 +559,10 @@ SET p.display_name = 'Get Started',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IE'})
-MATCH (p:Pattern {key: 'pattern:cta-get-started@en-IE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-get-started@en-IE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-discover@en-IE'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-discover@en-IE'})
 SET p.display_name = 'Discover a Better Way to {action}',
     p.locale = 'en-IE',
     p.template = 'Discover a Better Way to {action}',
@@ -579,14 +579,14 @@ SET p.display_name = 'Discover a Better Way to {action}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-IE'})
-MATCH (p:Pattern {key: 'pattern:headline-discover@en-IE'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-discover@en-IE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // en-PH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-try-now@en-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-try-now@en-PH'})
 SET p.display_name = 'Try It Now',
     p.locale = 'en-PH',
     p.template = 'Try It Now',
@@ -603,10 +603,10 @@ SET p.display_name = 'Try It Now',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-PH'})
-MATCH (p:Pattern {key: 'pattern:cta-try-now@en-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-try-now@en-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-more@en-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-PH'})
 SET p.display_name = 'Learn More',
     p.locale = 'en-PH',
     p.template = 'Learn More',
@@ -623,10 +623,10 @@ SET p.display_name = 'Learn More',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-PH'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-more@en-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-more@en-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-level-up@en-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-level-up@en-PH'})
 SET p.display_name = 'Level Up Your {noun}',
     p.locale = 'en-PH',
     p.template = 'Level Up Your {noun}',
@@ -643,14 +643,14 @@ SET p.display_name = 'Level Up Your {noun}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@en-PH'})
-MATCH (p:Pattern {key: 'pattern:headline-level-up@en-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-level-up@en-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // de-DE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-jetzt-starten@de-DE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-jetzt-starten@de-DE'})
 SET p.display_name = 'Jetzt starten',
     p.locale = 'de-DE',
     p.template = 'Jetzt starten',
@@ -667,10 +667,10 @@ SET p.display_name = 'Jetzt starten',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-DE'})
-MATCH (p:Pattern {key: 'pattern:cta-jetzt-starten@de-DE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-jetzt-starten@de-DE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-mehr-erfahren@de-DE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren@de-DE'})
 SET p.display_name = 'Mehr erfahren',
     p.locale = 'de-DE',
     p.template = 'Mehr erfahren',
@@ -687,10 +687,10 @@ SET p.display_name = 'Mehr erfahren',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-DE'})
-MATCH (p:Pattern {key: 'pattern:cta-mehr-erfahren@de-DE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren@de-DE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-made-in-germany@de-DE'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-made-in-germany@de-DE'})
 SET p.display_name = '{product} - Made in Germany',
     p.locale = 'de-DE',
     p.template = '{product} - Made in Germany',
@@ -707,14 +707,14 @@ SET p.display_name = '{product} - Made in Germany',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-DE'})
-MATCH (p:Pattern {key: 'pattern:headline-made-in-germany@de-DE'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-made-in-germany@de-DE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // de-AT Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-entdecken@de-AT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-entdecken@de-AT'})
 SET p.display_name = 'Jetzt entdecken',
     p.locale = 'de-AT',
     p.template = 'Jetzt entdecken',
@@ -731,10 +731,10 @@ SET p.display_name = 'Jetzt entdecken',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-AT'})
-MATCH (p:Pattern {key: 'pattern:cta-entdecken@de-AT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-entdecken@de-AT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-mehr-dazu@de-AT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-dazu@de-AT'})
 SET p.display_name = 'Mehr dazu',
     p.locale = 'de-AT',
     p.template = 'Mehr dazu',
@@ -751,10 +751,10 @@ SET p.display_name = 'Mehr dazu',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-AT'})
-MATCH (p:Pattern {key: 'pattern:cta-mehr-dazu@de-AT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-mehr-dazu@de-AT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-quality@de-AT'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-quality@de-AT'})
 SET p.display_name = '{benefit} in hoechster Qualitaet',
     p.locale = 'de-AT',
     p.template = '{benefit} in hoechster Qualitaet',
@@ -771,14 +771,14 @@ SET p.display_name = '{benefit} in hoechster Qualitaet',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-AT'})
-MATCH (p:Pattern {key: 'pattern:headline-quality@de-AT'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-quality@de-AT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // de-CH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-mehr-erfahren-ch@de-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren-ch@de-CH'})
 SET p.display_name = 'Meh erfahre',
     p.locale = 'de-CH',
     p.template = 'Meh erfahre',
@@ -795,10 +795,10 @@ SET p.display_name = 'Meh erfahre',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-mehr-erfahren-ch@de-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-mehr-erfahren-ch@de-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-jetzt-entdecken@de-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-jetzt-entdecken@de-CH'})
 SET p.display_name = 'Jetzt entdecken',
     p.locale = 'de-CH',
     p.template = 'Jetzt entdecken',
@@ -815,10 +815,10 @@ SET p.display_name = 'Jetzt entdecken',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-jetzt-entdecken@de-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-jetzt-entdecken@de-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-swiss-quality@de-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-swiss-quality@de-CH'})
 SET p.display_name = 'Schweizer Qualitaet fuer {noun}',
     p.locale = 'de-CH',
     p.template = 'Schweizer Qualitaet fuer {noun}',
@@ -835,14 +835,14 @@ SET p.display_name = 'Schweizer Qualitaet fuer {noun}',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@de-CH'})
-MATCH (p:Pattern {key: 'pattern:headline-swiss-quality@de-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-swiss-quality@de-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // nl-NL Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-bekijk-nu@nl-NL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-bekijk-nu@nl-NL'})
 SET p.display_name = 'Bekijk nu',
     p.locale = 'nl-NL',
     p.template = 'Bekijk nu',
@@ -859,10 +859,10 @@ SET p.display_name = 'Bekijk nu',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-NL'})
-MATCH (p:Pattern {key: 'pattern:cta-bekijk-nu@nl-NL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-bekijk-nu@nl-NL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-probeer-gratis@nl-NL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-probeer-gratis@nl-NL'})
 SET p.display_name = 'Probeer gratis',
     p.locale = 'nl-NL',
     p.template = 'Probeer gratis',
@@ -879,10 +879,10 @@ SET p.display_name = 'Probeer gratis',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-NL'})
-MATCH (p:Pattern {key: 'pattern:cta-probeer-gratis@nl-NL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-probeer-gratis@nl-NL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-simpel@nl-NL'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-simpel@nl-NL'})
 SET p.display_name = '{product} — gewoon goed',
     p.locale = 'nl-NL',
     p.template = '{product} — gewoon goed',
@@ -899,14 +899,14 @@ SET p.display_name = '{product} — gewoon goed',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-NL'})
-MATCH (p:Pattern {key: 'pattern:headline-simpel@nl-NL'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-simpel@nl-NL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // nl-BE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-ontdek-meer@nl-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-ontdek-meer@nl-BE'})
 SET p.display_name = 'Ontdek meer',
     p.locale = 'nl-BE',
     p.template = 'Ontdek meer',
@@ -923,10 +923,10 @@ SET p.display_name = 'Ontdek meer',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-BE'})
-MATCH (p:Pattern {key: 'pattern:cta-ontdek-meer@nl-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-ontdek-meer@nl-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-meer-info@nl-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-meer-info@nl-BE'})
 SET p.display_name = 'Meer info',
     p.locale = 'nl-BE',
     p.template = 'Meer info',
@@ -943,10 +943,10 @@ SET p.display_name = 'Meer info',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-BE'})
-MATCH (p:Pattern {key: 'pattern:cta-meer-info@nl-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-meer-info@nl-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-quality-be@nl-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-quality-be@nl-BE'})
 SET p.display_name = 'Kwaliteit die je voelt',
     p.locale = 'nl-BE',
     p.template = 'Kwaliteit die je voelt',
@@ -963,14 +963,14 @@ SET p.display_name = 'Kwaliteit die je voelt',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@nl-BE'})
-MATCH (p:Pattern {key: 'pattern:headline-quality-be@nl-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-quality-be@nl-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // sv-SE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-laes-mer@sv-SE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-laes-mer@sv-SE'})
 SET p.display_name = 'Laes mer',
     p.locale = 'sv-SE',
     p.template = 'Laes mer',
@@ -987,10 +987,10 @@ SET p.display_name = 'Laes mer',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sv-SE'})
-MATCH (p:Pattern {key: 'pattern:cta-laes-mer@sv-SE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-laes-mer@sv-SE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-kom-igang@sv-SE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-kom-igang@sv-SE'})
 SET p.display_name = 'Kom igang',
     p.locale = 'sv-SE',
     p.template = 'Kom igang',
@@ -1007,10 +1007,10 @@ SET p.display_name = 'Kom igang',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sv-SE'})
-MATCH (p:Pattern {key: 'pattern:cta-kom-igang@sv-SE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-kom-igang@sv-SE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-lagom@sv-SE'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-lagom@sv-SE'})
 SET p.display_name = 'Precis {benefit} — varken mer eller mindre',
     p.locale = 'sv-SE',
     p.template = 'Precis {benefit} — varken mer eller mindre',
@@ -1027,14 +1027,14 @@ SET p.display_name = 'Precis {benefit} — varken mer eller mindre',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sv-SE'})
-MATCH (p:Pattern {key: 'pattern:headline-lagom@sv-SE'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-lagom@sv-SE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // da-DK Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-laes-mere@da-DK'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-laes-mere@da-DK'})
 SET p.display_name = 'Laes mere',
     p.locale = 'da-DK',
     p.template = 'Laes mere',
@@ -1051,10 +1051,10 @@ SET p.display_name = 'Laes mere',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@da-DK'})
-MATCH (p:Pattern {key: 'pattern:cta-laes-mere@da-DK'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-laes-mere@da-DK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-proev-gratis@da-DK'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-proev-gratis@da-DK'})
 SET p.display_name = 'Proev gratis',
     p.locale = 'da-DK',
     p.template = 'Proev gratis',
@@ -1071,10 +1071,10 @@ SET p.display_name = 'Proev gratis',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@da-DK'})
-MATCH (p:Pattern {key: 'pattern:cta-proev-gratis@da-DK'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-proev-gratis@da-DK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-simpelt@da-DK'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-simpelt@da-DK'})
 SET p.display_name = '{product} — simpelt og godt',
     p.locale = 'da-DK',
     p.template = '{product} — simpelt og godt',
@@ -1091,14 +1091,14 @@ SET p.display_name = '{product} — simpelt og godt',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@da-DK'})
-MATCH (p:Pattern {key: 'pattern:headline-simpelt@da-DK'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-simpelt@da-DK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // no-NO Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-les-mer@no-NO'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-les-mer@no-NO'})
 SET p.display_name = 'Les mer',
     p.locale = 'no-NO',
     p.template = 'Les mer',
@@ -1115,10 +1115,10 @@ SET p.display_name = 'Les mer',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@no-NO'})
-MATCH (p:Pattern {key: 'pattern:cta-les-mer@no-NO'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-les-mer@no-NO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-kom-i-gang@no-NO'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-kom-i-gang@no-NO'})
 SET p.display_name = 'Kom i gang',
     p.locale = 'no-NO',
     p.template = 'Kom i gang',
@@ -1135,10 +1135,10 @@ SET p.display_name = 'Kom i gang',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@no-NO'})
-MATCH (p:Pattern {key: 'pattern:cta-kom-i-gang@no-NO'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-kom-i-gang@no-NO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-natur@no-NO'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-natur@no-NO'})
 SET p.display_name = '{benefit} — naturlig valg',
     p.locale = 'no-NO',
     p.template = '{benefit} — naturlig valg',
@@ -1155,14 +1155,14 @@ SET p.display_name = '{benefit} — naturlig valg',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@no-NO'})
-MATCH (p:Pattern {key: 'pattern:headline-natur@no-NO'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-natur@no-NO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fi-FI Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-lue-lisaa@fi-FI'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-lue-lisaa@fi-FI'})
 SET p.display_name = 'Lue lisaa',
     p.locale = 'fi-FI',
     p.template = 'Lue lisaa',
@@ -1179,10 +1179,10 @@ SET p.display_name = 'Lue lisaa',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fi-FI'})
-MATCH (p:Pattern {key: 'pattern:cta-lue-lisaa@fi-FI'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-lue-lisaa@fi-FI'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-kokeile@fi-FI'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-kokeile@fi-FI'})
 SET p.display_name = 'Kokeile',
     p.locale = 'fi-FI',
     p.template = 'Kokeile',
@@ -1199,10 +1199,10 @@ SET p.display_name = 'Kokeile',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fi-FI'})
-MATCH (p:Pattern {key: 'pattern:cta-kokeile@fi-FI'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-kokeile@fi-FI'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:headline-toimii@fi-FI'})
+MERGE (p:Pattern {key: 'pattern:pattern:headline-toimii@fi-FI'})
 SET p.display_name = '{product} — toimii',
     p.locale = 'fi-FI',
     p.template = '{product} — toimii',
@@ -1219,14 +1219,14 @@ SET p.display_name = '{product} — toimii',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fi-FI'})
-MATCH (p:Pattern {key: 'pattern:headline-toimii@fi-FI'})
+MATCH (p:Pattern {key: 'pattern:pattern:headline-toimii@fi-FI'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // zh-CN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-57@zh-CN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-57@zh-CN'})
 SET p.display_name = '立即免费试用',
     p.locale = 'zh-CN',
     p.template = '立即免费试用',
@@ -1243,10 +1243,10 @@ SET p.display_name = '立即免费试用',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-CN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-57@zh-CN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-57@zh-CN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-58@zh-CN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-58@zh-CN'})
 SET p.display_name = '马上开始',
     p.locale = 'zh-CN',
     p.template = '马上开始',
@@ -1263,10 +1263,10 @@ SET p.display_name = '马上开始',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-CN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-58@zh-CN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-58@zh-CN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-59@zh-CN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-59@zh-CN'})
 SET p.display_name = '已有100万+用户信赖',
     p.locale = 'zh-CN',
     p.template = '已有100万+用户信赖',
@@ -1283,14 +1283,14 @@ SET p.display_name = '已有100万+用户信赖',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-CN'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-59@zh-CN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-59@zh-CN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // zh-TW Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-60@zh-TW'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-60@zh-TW'})
 SET p.display_name = '立即體驗',
     p.locale = 'zh-TW',
     p.template = '立即體驗',
@@ -1307,10 +1307,10 @@ SET p.display_name = '立即體驗',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-TW'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-60@zh-TW'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-60@zh-TW'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-61@zh-TW'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-61@zh-TW'})
 SET p.display_name = '免費開始使用',
     p.locale = 'zh-TW',
     p.template = '免費開始使用',
@@ -1327,10 +1327,10 @@ SET p.display_name = '免費開始使用',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-TW'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-61@zh-TW'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-61@zh-TW'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-lifestyle-62@zh-TW'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-lifestyle-62@zh-TW'})
 SET p.display_name = '讓生活更美好',
     p.locale = 'zh-TW',
     p.template = '讓生活更美好',
@@ -1347,14 +1347,14 @@ SET p.display_name = '讓生活更美好',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-TW'})
-MATCH (p:Pattern {key: 'pattern:cta-lifestyle-62@zh-TW'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-lifestyle-62@zh-TW'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // zh-HK Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-63@zh-HK'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-63@zh-HK'})
 SET p.display_name = '立即開始',
     p.locale = 'zh-HK',
     p.template = '立即開始',
@@ -1371,10 +1371,10 @@ SET p.display_name = '立即開始',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-HK'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-63@zh-HK'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-63@zh-HK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-business-64@zh-HK'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-business-64@zh-HK'})
 SET p.display_name = '提升業務效率',
     p.locale = 'zh-HK',
     p.template = '提升業務效率',
@@ -1391,10 +1391,10 @@ SET p.display_name = '提升業務效率',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-HK'})
-MATCH (p:Pattern {key: 'pattern:cta-business-64@zh-HK'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-business-64@zh-HK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-65@zh-HK'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-65@zh-HK'})
 SET p.display_name = '免費試用14天',
     p.locale = 'zh-HK',
     p.template = '免費試用14天',
@@ -1411,14 +1411,14 @@ SET p.display_name = '免費試用14天',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@zh-HK'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-65@zh-HK'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-65@zh-HK'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ja-JP Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-66@ja-JP'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-66@ja-JP'})
 SET p.display_name = '今すぐ始める',
     p.locale = 'ja-JP',
     p.template = '今すぐ始める',
@@ -1435,10 +1435,10 @@ SET p.display_name = '今すぐ始める',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ja-JP'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-66@ja-JP'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-66@ja-JP'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-soft-67@ja-JP'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-soft-67@ja-JP'})
 SET p.display_name = '無料でお試しください',
     p.locale = 'ja-JP',
     p.template = '無料でお試しください',
@@ -1455,10 +1455,10 @@ SET p.display_name = '無料でお試しください',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ja-JP'})
-MATCH (p:Pattern {key: 'pattern:cta-soft-67@ja-JP'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-soft-67@ja-JP'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-inquiry-68@ja-JP'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-inquiry-68@ja-JP'})
 SET p.display_name = '詳しくはこちら',
     p.locale = 'ja-JP',
     p.template = '詳しくはこちら',
@@ -1475,14 +1475,14 @@ SET p.display_name = '詳しくはこちら',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ja-JP'})
-MATCH (p:Pattern {key: 'pattern:cta-inquiry-68@ja-JP'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-inquiry-68@ja-JP'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ko-KR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-69@ko-KR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-69@ko-KR'})
 SET p.display_name = '지금 시작하기',
     p.locale = 'ko-KR',
     p.template = '지금 시작하기',
@@ -1499,10 +1499,10 @@ SET p.display_name = '지금 시작하기',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ko-KR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-69@ko-KR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-69@ko-KR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-70@ko-KR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-70@ko-KR'})
 SET p.display_name = '오늘만 무료!',
     p.locale = 'ko-KR',
     p.template = '오늘만 무료!',
@@ -1519,10 +1519,10 @@ SET p.display_name = '오늘만 무료!',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ko-KR'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-70@ko-KR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-70@ko-KR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-71@ko-KR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-71@ko-KR'})
 SET p.display_name = '무료로 체험하세요',
     p.locale = 'ko-KR',
     p.template = '무료로 체험하세요',
@@ -1539,14 +1539,14 @@ SET p.display_name = '무료로 체험하세요',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ko-KR'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-71@ko-KR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-71@ko-KR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // hi-IN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-72@hi-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-72@hi-IN'})
 SET p.display_name = 'अभी शुरू करें',
     p.locale = 'hi-IN',
     p.template = 'अभी शुरू करें',
@@ -1563,10 +1563,10 @@ SET p.display_name = 'अभी शुरू करें',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@hi-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-72@hi-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-72@hi-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-value-73@hi-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-value-73@hi-IN'})
 SET p.display_name = 'मुफ्त में आज़माएं',
     p.locale = 'hi-IN',
     p.template = 'मुफ्त में आज़माएं',
@@ -1583,10 +1583,10 @@ SET p.display_name = 'मुफ्त में आज़माएं',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@hi-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-value-73@hi-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-value-73@hi-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-family-74@hi-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-family-74@hi-IN'})
 SET p.display_name = 'अपने परिवार के लिए',
     p.locale = 'hi-IN',
     p.template = 'अपने परिवार के लिए',
@@ -1603,14 +1603,14 @@ SET p.display_name = 'अपने परिवार के लिए',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@hi-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-family-74@hi-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-family-74@hi-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // bn-BD Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-75@bn-BD'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-75@bn-BD'})
 SET p.display_name = 'এখনই শুরু করুন',
     p.locale = 'bn-BD',
     p.template = 'এখনই শুরু করুন',
@@ -1627,10 +1627,10 @@ SET p.display_name = 'এখনই শুরু করুন',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@bn-BD'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-75@bn-BD'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-75@bn-BD'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-76@bn-BD'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-76@bn-BD'})
 SET p.display_name = 'বিনামূল্যে ব্যবহার করুন',
     p.locale = 'bn-BD',
     p.template = 'বিনামূল্যে ব্যবহার করুন',
@@ -1647,10 +1647,10 @@ SET p.display_name = 'বিনামূল্যে ব্যবহার ক�
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@bn-BD'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-76@bn-BD'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-76@bn-BD'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-77@bn-BD'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-77@bn-BD'})
 SET p.display_name = 'আরও জানুন',
     p.locale = 'bn-BD',
     p.template = 'আরও জানুন',
@@ -1667,14 +1667,14 @@ SET p.display_name = 'আরও জানুন',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@bn-BD'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-77@bn-BD'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-77@bn-BD'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ta-IN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-78@ta-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-78@ta-IN'})
 SET p.display_name = 'இப்போதே தொடங்குங்கள்',
     p.locale = 'ta-IN',
     p.template = 'இப்போதே தொடங்குங்கள்',
@@ -1691,10 +1691,10 @@ SET p.display_name = 'இப்போதே தொடங்குங்கள்
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ta-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-78@ta-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-78@ta-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-79@ta-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-79@ta-IN'})
 SET p.display_name = 'இலவசமாக முயற்சிக்கவும்',
     p.locale = 'ta-IN',
     p.template = 'இலவசமாக முயற்சிக்கவும்',
@@ -1711,10 +1711,10 @@ SET p.display_name = 'இலவசமாக முயற்சிக்கவு
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ta-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-79@ta-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-79@ta-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-80@ta-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-80@ta-IN'})
 SET p.display_name = 'மேலும் அறிக',
     p.locale = 'ta-IN',
     p.template = 'மேலும் அறிக',
@@ -1731,14 +1731,14 @@ SET p.display_name = 'மேலும் அறிக',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ta-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-80@ta-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-80@ta-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // te-IN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-81@te-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-81@te-IN'})
 SET p.display_name = 'ఇప్పుడే ప్రారంభించండి',
     p.locale = 'te-IN',
     p.template = 'ఇప్పుడే ప్రారంభించండి',
@@ -1755,10 +1755,10 @@ SET p.display_name = 'ఇప్పుడే ప్రారంభించండ
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@te-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-81@te-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-81@te-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-82@te-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-82@te-IN'})
 SET p.display_name = 'ఉచితంగా ప్రయత్నించండి',
     p.locale = 'te-IN',
     p.template = 'ఉచితంగా ప్రయత్నించండి',
@@ -1775,10 +1775,10 @@ SET p.display_name = 'ఉచితంగా ప్రయత్నించండ
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@te-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-82@te-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-82@te-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-83@te-IN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-83@te-IN'})
 SET p.display_name = 'మరింత తెలుసుకోండి',
     p.locale = 'te-IN',
     p.template = 'మరింత తెలుసుకోండి',
@@ -1795,14 +1795,14 @@ SET p.display_name = 'మరింత తెలుసుకోండి',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@te-IN'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-83@te-IN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-83@te-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // vi-VN Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-84@vi-VN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-84@vi-VN'})
 SET p.display_name = 'Bắt đầu ngay',
     p.locale = 'vi-VN',
     p.template = 'Bắt đầu ngay',
@@ -1819,10 +1819,10 @@ SET p.display_name = 'Bắt đầu ngay',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@vi-VN'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-84@vi-VN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-84@vi-VN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-85@vi-VN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-85@vi-VN'})
 SET p.display_name = 'Dùng thử miễn phí',
     p.locale = 'vi-VN',
     p.template = 'Dùng thử miễn phí',
@@ -1839,10 +1839,10 @@ SET p.display_name = 'Dùng thử miễn phí',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@vi-VN'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-85@vi-VN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-85@vi-VN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-value-86@vi-VN'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-value-86@vi-VN'})
 SET p.display_name = 'Tiết kiệm ngay hôm nay',
     p.locale = 'vi-VN',
     p.template = 'Tiết kiệm ngay hôm nay',
@@ -1859,14 +1859,14 @@ SET p.display_name = 'Tiết kiệm ngay hôm nay',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@vi-VN'})
-MATCH (p:Pattern {key: 'pattern:cta-value-86@vi-VN'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-value-86@vi-VN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // th-TH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-87@th-TH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-87@th-TH'})
 SET p.display_name = 'เริ่มต้นเลย',
     p.locale = 'th-TH',
     p.template = 'เริ่มต้นเลย',
@@ -1883,10 +1883,10 @@ SET p.display_name = 'เริ่มต้นเลย',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@th-TH'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-87@th-TH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-87@th-TH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-soft-88@th-TH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-soft-88@th-TH'})
 SET p.display_name = 'ลองใช้ฟรี',
     p.locale = 'th-TH',
     p.template = 'ลองใช้ฟรี',
@@ -1903,10 +1903,10 @@ SET p.display_name = 'ลองใช้ฟรี',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@th-TH'})
-MATCH (p:Pattern {key: 'pattern:cta-soft-88@th-TH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-soft-88@th-TH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-fun-89@th-TH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-fun-89@th-TH'})
 SET p.display_name = 'มาสนุกกันเถอะ!',
     p.locale = 'th-TH',
     p.template = 'มาสนุกกันเถอะ!',
@@ -1923,14 +1923,14 @@ SET p.display_name = 'มาสนุกกันเถอะ!',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@th-TH'})
-MATCH (p:Pattern {key: 'pattern:cta-fun-89@th-TH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-fun-89@th-TH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // id-ID Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-90@id-ID'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-90@id-ID'})
 SET p.display_name = 'Mulai Sekarang',
     p.locale = 'id-ID',
     p.template = 'Mulai Sekarang',
@@ -1947,10 +1947,10 @@ SET p.display_name = 'Mulai Sekarang',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@id-ID'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-90@id-ID'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-90@id-ID'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-91@id-ID'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-91@id-ID'})
 SET p.display_name = 'Coba Gratis',
     p.locale = 'id-ID',
     p.template = 'Coba Gratis',
@@ -1967,10 +1967,10 @@ SET p.display_name = 'Coba Gratis',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@id-ID'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-91@id-ID'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-91@id-ID'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-community-92@id-ID'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-community-92@id-ID'})
 SET p.display_name = 'Gabung Bersama Kami',
     p.locale = 'id-ID',
     p.template = 'Gabung Bersama Kami',
@@ -1987,14 +1987,14 @@ SET p.display_name = 'Gabung Bersama Kami',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@id-ID'})
-MATCH (p:Pattern {key: 'pattern:cta-community-92@id-ID'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-community-92@id-ID'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ms-MY Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-93@ms-MY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-93@ms-MY'})
 SET p.display_name = 'Mulakan Sekarang',
     p.locale = 'ms-MY',
     p.template = 'Mulakan Sekarang',
@@ -2011,10 +2011,10 @@ SET p.display_name = 'Mulakan Sekarang',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ms-MY'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-93@ms-MY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-93@ms-MY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-94@ms-MY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-94@ms-MY'})
 SET p.display_name = 'Cuba Percuma',
     p.locale = 'ms-MY',
     p.template = 'Cuba Percuma',
@@ -2031,10 +2031,10 @@ SET p.display_name = 'Cuba Percuma',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ms-MY'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-94@ms-MY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-94@ms-MY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-learn-95@ms-MY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-learn-95@ms-MY'})
 SET p.display_name = 'Ketahui Lebih Lanjut',
     p.locale = 'ms-MY',
     p.template = 'Ketahui Lebih Lanjut',
@@ -2051,14 +2051,14 @@ SET p.display_name = 'Ketahui Lebih Lanjut',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ms-MY'})
-MATCH (p:Pattern {key: 'pattern:cta-learn-95@ms-MY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-learn-95@ms-MY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fil-PH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-96@fil-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-96@fil-PH'})
 SET p.display_name = 'Magsimula Na',
     p.locale = 'fil-PH',
     p.template = 'Magsimula Na',
@@ -2075,10 +2075,10 @@ SET p.display_name = 'Magsimula Na',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fil-PH'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-96@fil-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-96@fil-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trial-97@fil-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trial-97@fil-PH'})
 SET p.display_name = 'Subukan Nang Libre',
     p.locale = 'fil-PH',
     p.template = 'Subukan Nang Libre',
@@ -2095,10 +2095,10 @@ SET p.display_name = 'Subukan Nang Libre',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fil-PH'})
-MATCH (p:Pattern {key: 'pattern:cta-trial-97@fil-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trial-97@fil-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-community-98@fil-PH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-community-98@fil-PH'})
 SET p.display_name = 'Samahan Mo Kami',
     p.locale = 'fil-PH',
     p.template = 'Samahan Mo Kami',
@@ -2115,14 +2115,14 @@ SET p.display_name = 'Samahan Mo Kami',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fil-PH'})
-MATCH (p:Pattern {key: 'pattern:cta-community-98@fil-PH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-community-98@fil-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ar-SA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-99@ar-SA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-99@ar-SA'})
 SET p.display_name = 'ابدأ الآن',
     p.locale = 'ar-SA',
     p.template = 'ابدأ الآن',
@@ -2139,10 +2139,10 @@ SET p.display_name = 'ابدأ الآن',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-SA'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-99@ar-SA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-99@ar-SA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-100@ar-SA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-100@ar-SA'})
 SET p.display_name = 'جرّب مجاناً',
     p.locale = 'ar-SA',
     p.template = 'جرّب مجاناً',
@@ -2159,10 +2159,10 @@ SET p.display_name = 'جرّب مجاناً',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-SA'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-100@ar-SA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-100@ar-SA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-exclusive-101@ar-SA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-exclusive-101@ar-SA'})
 SET p.display_name = 'احصل على عرضك الحصري',
     p.locale = 'ar-SA',
     p.template = 'احصل على عرضك الحصري',
@@ -2179,14 +2179,14 @@ SET p.display_name = 'احصل على عرضك الحصري',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-SA'})
-MATCH (p:Pattern {key: 'pattern:cta-exclusive-101@ar-SA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-exclusive-101@ar-SA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ar-EG Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-102@ar-EG'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-102@ar-EG'})
 SET p.display_name = 'جرّب دلوقتي',
     p.locale = 'ar-EG',
     p.template = 'جرّب دلوقتي',
@@ -2203,10 +2203,10 @@ SET p.display_name = 'جرّب دلوقتي',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-EG'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-102@ar-EG'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-102@ar-EG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-value-103@ar-EG'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-value-103@ar-EG'})
 SET p.display_name = 'وفّر فلوسك',
     p.locale = 'ar-EG',
     p.template = 'وفّر فلوسك',
@@ -2223,10 +2223,10 @@ SET p.display_name = 'وفّر فلوسك',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-EG'})
-MATCH (p:Pattern {key: 'pattern:cta-value-103@ar-EG'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-value-103@ar-EG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-social-104@ar-EG'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-social-104@ar-EG'})
 SET p.display_name = 'انضم لملايين المصريين',
     p.locale = 'ar-EG',
     p.template = 'انضم لملايين المصريين',
@@ -2243,14 +2243,14 @@ SET p.display_name = 'انضم لملايين المصريين',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-EG'})
-MATCH (p:Pattern {key: 'pattern:cta-social-104@ar-EG'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-social-104@ar-EG'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ar-AE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-105@ar-AE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-105@ar-AE'})
 SET p.display_name = 'اكتشف المزيد',
     p.locale = 'ar-AE',
     p.template = 'اكتشف المزيد',
@@ -2267,10 +2267,10 @@ SET p.display_name = 'اكتشف المزيد',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-AE'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-105@ar-AE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-105@ar-AE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-premium-106@ar-AE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-premium-106@ar-AE'})
 SET p.display_name = 'احصل على تجربة حصرية',
     p.locale = 'ar-AE',
     p.template = 'احصل على تجربة حصرية',
@@ -2287,10 +2287,10 @@ SET p.display_name = 'احصل على تجربة حصرية',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-AE'})
-MATCH (p:Pattern {key: 'pattern:cta-premium-106@ar-AE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-premium-106@ar-AE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-innovation-107@ar-AE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-innovation-107@ar-AE'})
 SET p.display_name = 'كن الأول',
     p.locale = 'ar-AE',
     p.template = 'كن الأول',
@@ -2307,14 +2307,14 @@ SET p.display_name = 'كن الأول',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-AE'})
-MATCH (p:Pattern {key: 'pattern:cta-innovation-107@ar-AE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-innovation-107@ar-AE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ar-MA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-108@ar-MA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-108@ar-MA'})
 SET p.display_name = 'جرب دابا',
     p.locale = 'ar-MA',
     p.template = 'جرب دابا',
@@ -2331,10 +2331,10 @@ SET p.display_name = 'جرب دابا',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-MA'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-108@ar-MA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-108@ar-MA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-french-mix-109@ar-MA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-french-mix-109@ar-MA'})
 SET p.display_name = 'Inscrivez-vous مجاناً',
     p.locale = 'ar-MA',
     p.template = 'Inscrivez-vous مجاناً',
@@ -2351,10 +2351,10 @@ SET p.display_name = 'Inscrivez-vous مجاناً',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-MA'})
-MATCH (p:Pattern {key: 'pattern:cta-french-mix-109@ar-MA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-french-mix-109@ar-MA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-value-110@ar-MA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-value-110@ar-MA'})
 SET p.display_name = 'اكتشف العرض ديالنا',
     p.locale = 'ar-MA',
     p.template = 'اكتشف العرض ديالنا',
@@ -2371,14 +2371,14 @@ SET p.display_name = 'اكتشف العرض ديالنا',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ar-MA'})
-MATCH (p:Pattern {key: 'pattern:cta-value-110@ar-MA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-value-110@ar-MA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // ru-RU Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-111@ru-RU'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-111@ru-RU'})
 SET p.display_name = 'Начать сейчас',
     p.locale = 'ru-RU',
     p.template = 'Начать сейчас',
@@ -2395,10 +2395,10 @@ SET p.display_name = 'Начать сейчас',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ru-RU'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-111@ru-RU'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-111@ru-RU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-112@ru-RU'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-112@ru-RU'})
 SET p.display_name = 'Попробуйте бесплатно',
     p.locale = 'ru-RU',
     p.template = 'Попробуйте бесплатно',
@@ -2415,10 +2415,10 @@ SET p.display_name = 'Попробуйте бесплатно',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ru-RU'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-112@ru-RU'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-112@ru-RU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-quality-113@ru-RU'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-113@ru-RU'})
 SET p.display_name = 'Убедитесь в качестве',
     p.locale = 'ru-RU',
     p.template = 'Убедитесь в качестве',
@@ -2435,14 +2435,14 @@ SET p.display_name = 'Убедитесь в качестве',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@ru-RU'})
-MATCH (p:Pattern {key: 'pattern:cta-quality-113@ru-RU'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-quality-113@ru-RU'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // uk-UA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-114@uk-UA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-114@uk-UA'})
 SET p.display_name = 'Почати зараз',
     p.locale = 'uk-UA',
     p.template = 'Почати зараз',
@@ -2459,10 +2459,10 @@ SET p.display_name = 'Почати зараз',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@uk-UA'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-114@uk-UA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-114@uk-UA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-support-115@uk-UA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-support-115@uk-UA'})
 SET p.display_name = 'Приєднуйся до нас',
     p.locale = 'uk-UA',
     p.template = 'Приєднуйся до нас',
@@ -2479,10 +2479,10 @@ SET p.display_name = 'Приєднуйся до нас',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@uk-UA'})
-MATCH (p:Pattern {key: 'pattern:cta-support-115@uk-UA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-support-115@uk-UA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-national-116@uk-UA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-national-116@uk-UA'})
 SET p.display_name = 'Зроблено в Україні',
     p.locale = 'uk-UA',
     p.template = 'Зроблено в Україні',
@@ -2499,14 +2499,14 @@ SET p.display_name = 'Зроблено в Україні',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@uk-UA'})
-MATCH (p:Pattern {key: 'pattern:cta-national-116@uk-UA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-national-116@uk-UA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // pl-PL Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-117@pl-PL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-117@pl-PL'})
 SET p.display_name = 'Zacznij teraz',
     p.locale = 'pl-PL',
     p.template = 'Zacznij teraz',
@@ -2523,10 +2523,10 @@ SET p.display_name = 'Zacznij teraz',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pl-PL'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-117@pl-PL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-117@pl-PL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-118@pl-PL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-118@pl-PL'})
 SET p.display_name = 'Wypróbuj za darmo',
     p.locale = 'pl-PL',
     p.template = 'Wypróbuj za darmo',
@@ -2543,10 +2543,10 @@ SET p.display_name = 'Wypróbuj za darmo',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pl-PL'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-118@pl-PL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-118@pl-PL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-quality-119@pl-PL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-119@pl-PL'})
 SET p.display_name = 'Sprawdź jakość',
     p.locale = 'pl-PL',
     p.template = 'Sprawdź jakość',
@@ -2563,14 +2563,14 @@ SET p.display_name = 'Sprawdź jakość',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pl-PL'})
-MATCH (p:Pattern {key: 'pattern:cta-quality-119@pl-PL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-quality-119@pl-PL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // cs-CZ Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-120@cs-CZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-120@cs-CZ'})
 SET p.display_name = 'Vyzkoušejte zdarma',
     p.locale = 'cs-CZ',
     p.template = 'Vyzkoušejte zdarma',
@@ -2587,10 +2587,10 @@ SET p.display_name = 'Vyzkoušejte zdarma',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@cs-CZ'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-120@cs-CZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-120@cs-CZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-understated-121@cs-CZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-understated-121@cs-CZ'})
 SET p.display_name = 'Zjistěte více',
     p.locale = 'cs-CZ',
     p.template = 'Zjistěte více',
@@ -2607,10 +2607,10 @@ SET p.display_name = 'Zjistěte více',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@cs-CZ'})
-MATCH (p:Pattern {key: 'pattern:cta-understated-121@cs-CZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-understated-121@cs-CZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-practical-122@cs-CZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-practical-122@cs-CZ'})
 SET p.display_name = 'Funguje to',
     p.locale = 'cs-CZ',
     p.template = 'Funguje to',
@@ -2627,14 +2627,14 @@ SET p.display_name = 'Funguje to',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@cs-CZ'})
-MATCH (p:Pattern {key: 'pattern:cta-practical-122@cs-CZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-practical-122@cs-CZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // tr-TR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-123@tr-TR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-123@tr-TR'})
 SET p.display_name = 'Hemen başla',
     p.locale = 'tr-TR',
     p.template = 'Hemen başla',
@@ -2651,10 +2651,10 @@ SET p.display_name = 'Hemen başla',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@tr-TR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-123@tr-TR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-123@tr-TR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-124@tr-TR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-124@tr-TR'})
 SET p.display_name = 'Ücretsiz dene',
     p.locale = 'tr-TR',
     p.template = 'Ücretsiz dene',
@@ -2671,10 +2671,10 @@ SET p.display_name = 'Ücretsiz dene',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@tr-TR'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-124@tr-TR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-124@tr-TR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-exclusive-125@tr-TR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-exclusive-125@tr-TR'})
 SET p.display_name = 'Fırsatı kaçırma',
     p.locale = 'tr-TR',
     p.template = 'Fırsatı kaçırma',
@@ -2691,14 +2691,14 @@ SET p.display_name = 'Fırsatı kaçırma',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@tr-TR'})
-MATCH (p:Pattern {key: 'pattern:cta-exclusive-125@tr-TR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-exclusive-125@tr-TR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // az-AZ Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-126@az-AZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-126@az-AZ'})
 SET p.display_name = 'İndi başla',
     p.locale = 'az-AZ',
     p.template = 'İndi başla',
@@ -2715,10 +2715,10 @@ SET p.display_name = 'İndi başla',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@az-AZ'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-126@az-AZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-126@az-AZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-127@az-AZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-127@az-AZ'})
 SET p.display_name = 'Pulsuz sına',
     p.locale = 'az-AZ',
     p.template = 'Pulsuz sına',
@@ -2735,10 +2735,10 @@ SET p.display_name = 'Pulsuz sına',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@az-AZ'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-127@az-AZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-127@az-AZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-modern-128@az-AZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-modern-128@az-AZ'})
 SET p.display_name = 'Gələcəyə addım at',
     p.locale = 'az-AZ',
     p.template = 'Gələcəyə addım at',
@@ -2755,14 +2755,14 @@ SET p.display_name = 'Gələcəyə addım at',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@az-AZ'})
-MATCH (p:Pattern {key: 'pattern:cta-modern-128@az-AZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-modern-128@az-AZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // he-IL Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-129@he-IL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-129@he-IL'})
 SET p.display_name = 'התחל עכשיו',
     p.locale = 'he-IL',
     p.template = 'התחל עכשיו',
@@ -2779,10 +2779,10 @@ SET p.display_name = 'התחל עכשיו',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@he-IL'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-129@he-IL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-129@he-IL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-free-130@he-IL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-free-130@he-IL'})
 SET p.display_name = 'נסה בחינם',
     p.locale = 'he-IL',
     p.template = 'נסה בחינם',
@@ -2799,10 +2799,10 @@ SET p.display_name = 'נסה בחינם',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@he-IL'})
-MATCH (p:Pattern {key: 'pattern:cta-free-130@he-IL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-free-130@he-IL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-innovation-131@he-IL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-innovation-131@he-IL'})
 SET p.display_name = 'הצטרף לחדשנות',
     p.locale = 'he-IL',
     p.template = 'הצטרף לחדשנות',
@@ -2819,14 +2819,14 @@ SET p.display_name = 'הצטרף לחדשנות',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@he-IL'})
-MATCH (p:Pattern {key: 'pattern:cta-innovation-131@he-IL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-innovation-131@he-IL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // sw-KE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-132@sw-KE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-132@sw-KE'})
 SET p.display_name = 'Anza sasa',
     p.locale = 'sw-KE',
     p.template = 'Anza sasa',
@@ -2843,10 +2843,10 @@ SET p.display_name = 'Anza sasa',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-KE'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-132@sw-KE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-132@sw-KE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-mobile-133@sw-KE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-mobile-133@sw-KE'})
 SET p.display_name = 'Pakia app',
     p.locale = 'sw-KE',
     p.template = 'Pakia app',
@@ -2863,10 +2863,10 @@ SET p.display_name = 'Pakia app',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-KE'})
-MATCH (p:Pattern {key: 'pattern:cta-mobile-133@sw-KE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-mobile-133@sw-KE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-community-134@sw-KE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-community-134@sw-KE'})
 SET p.display_name = 'Jiunge nasi',
     p.locale = 'sw-KE',
     p.template = 'Jiunge nasi',
@@ -2883,14 +2883,14 @@ SET p.display_name = 'Jiunge nasi',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-KE'})
-MATCH (p:Pattern {key: 'pattern:cta-community-134@sw-KE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-community-134@sw-KE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // sw-TZ Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-135@sw-TZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-135@sw-TZ'})
 SET p.display_name = 'Anza sasa hivi',
     p.locale = 'sw-TZ',
     p.template = 'Anza sasa hivi',
@@ -2907,10 +2907,10 @@ SET p.display_name = 'Anza sasa hivi',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-TZ'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-135@sw-TZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-135@sw-TZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-respectful-136@sw-TZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-respectful-136@sw-TZ'})
 SET p.display_name = 'Karibu kujiunga',
     p.locale = 'sw-TZ',
     p.template = 'Karibu kujiunga',
@@ -2927,10 +2927,10 @@ SET p.display_name = 'Karibu kujiunga',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-TZ'})
-MATCH (p:Pattern {key: 'pattern:cta-respectful-136@sw-TZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-respectful-136@sw-TZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-community-137@sw-TZ'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-community-137@sw-TZ'})
 SET p.display_name = 'Tuungane pamoja',
     p.locale = 'sw-TZ',
     p.template = 'Tuungane pamoja',
@@ -2947,14 +2947,14 @@ SET p.display_name = 'Tuungane pamoja',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@sw-TZ'})
-MATCH (p:Pattern {key: 'pattern:cta-community-137@sw-TZ'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-community-137@sw-TZ'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // am-ET Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-138@am-ET'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-138@am-ET'})
 SET p.display_name = 'አሁን ይጀምሩ',
     p.locale = 'am-ET',
     p.template = 'አሁን ይጀምሩ',
@@ -2971,10 +2971,10 @@ SET p.display_name = 'አሁን ይጀምሩ',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@am-ET'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-138@am-ET'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-138@am-ET'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-trust-139@am-ET'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-trust-139@am-ET'})
 SET p.display_name = 'በነጻ ይሞክሩ',
     p.locale = 'am-ET',
     p.template = 'በነጻ ይሞክሩ',
@@ -2991,10 +2991,10 @@ SET p.display_name = 'በነጻ ይሞክሩ',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@am-ET'})
-MATCH (p:Pattern {key: 'pattern:cta-trust-139@am-ET'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-trust-139@am-ET'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-heritage-140@am-ET'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-heritage-140@am-ET'})
 SET p.display_name = 'ኢትዮጵያዊ መፍትሄ',
     p.locale = 'am-ET',
     p.template = 'ኢትዮጵያዊ መፍትሄ',
@@ -3011,14 +3011,14 @@ SET p.display_name = 'ኢትዮጵያዊ መፍትሄ',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@am-ET'})
-MATCH (p:Pattern {key: 'pattern:cta-heritage-140@am-ET'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-heritage-140@am-ET'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // el-GR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-141@el-GR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-141@el-GR'})
 SET p.display_name = 'Ξεκινήστε τώρα',
     p.locale = 'el-GR',
     p.template = 'Ξεκινήστε τώρα',
@@ -3035,10 +3035,10 @@ SET p.display_name = 'Ξεκινήστε τώρα',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-GR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-141@el-GR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-141@el-GR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-free-142@el-GR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-free-142@el-GR'})
 SET p.display_name = 'Δοκιμάστε δωρεάν',
     p.locale = 'el-GR',
     p.template = 'Δοκιμάστε δωρεάν',
@@ -3055,10 +3055,10 @@ SET p.display_name = 'Δοκιμάστε δωρεάν',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-GR'})
-MATCH (p:Pattern {key: 'pattern:cta-free-142@el-GR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-free-142@el-GR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-quality-143@el-GR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-quality-143@el-GR'})
 SET p.display_name = 'Ποιότητα που αξίζετε',
     p.locale = 'el-GR',
     p.template = 'Ποιότητα που αξίζετε',
@@ -3075,14 +3075,14 @@ SET p.display_name = 'Ποιότητα που αξίζετε',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-GR'})
-MATCH (p:Pattern {key: 'pattern:cta-quality-143@el-GR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-quality-143@el-GR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // el-CY Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-144@el-CY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-144@el-CY'})
 SET p.display_name = 'Αρκέψετε τώρα',
     p.locale = 'el-CY',
     p.template = 'Αρκέψετε τώρα',
@@ -3099,10 +3099,10 @@ SET p.display_name = 'Αρκέψετε τώρα',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-CY'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-144@el-CY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-144@el-CY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-standard-145@el-CY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-standard-145@el-CY'})
 SET p.display_name = 'Ξεκινήστε τώρα',
     p.locale = 'el-CY',
     p.template = 'Ξεκινήστε τώρα',
@@ -3119,10 +3119,10 @@ SET p.display_name = 'Ξεκινήστε τώρα',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-CY'})
-MATCH (p:Pattern {key: 'pattern:cta-standard-145@el-CY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-standard-145@el-CY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-local-146@el-CY'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-local-146@el-CY'})
 SET p.display_name = 'Για την Κύπρο',
     p.locale = 'el-CY',
     p.template = 'Για την Κύπρο',
@@ -3139,14 +3139,14 @@ SET p.display_name = 'Για την Κύπρο',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@el-CY'})
-MATCH (p:Pattern {key: 'pattern:cta-local-146@el-CY'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-local-146@el-CY'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fr-FR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-147@fr-FR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-147@fr-FR'})
 SET p.display_name = 'Découvrir notre solution',
     p.locale = 'fr-FR',
     p.template = 'Découvrir notre solution',
@@ -3163,10 +3163,10 @@ SET p.display_name = 'Découvrir notre solution',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-FR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-147@fr-FR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-147@fr-FR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-148@fr-FR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-148@fr-FR'})
 SET p.display_name = 'En savoir plus',
     p.locale = 'fr-FR',
     p.template = 'En savoir plus',
@@ -3183,10 +3183,10 @@ SET p.display_name = 'En savoir plus',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-FR'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-148@fr-FR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-148@fr-FR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-149@fr-FR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-149@fr-FR'})
 SET p.display_name = 'Profitez de notre offre',
     p.locale = 'fr-FR',
     p.template = 'Profitez de notre offre',
@@ -3203,14 +3203,14 @@ SET p.display_name = 'Profitez de notre offre',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-FR'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-149@fr-FR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-149@fr-FR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fr-CA Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-150@fr-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-150@fr-CA'})
 SET p.display_name = 'Essayez gratuitement',
     p.locale = 'fr-CA',
     p.template = 'Essayez gratuitement',
@@ -3227,10 +3227,10 @@ SET p.display_name = 'Essayez gratuitement',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CA'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-150@fr-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-150@fr-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-151@fr-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-151@fr-CA'})
 SET p.display_name = 'Voir comment ça marche',
     p.locale = 'fr-CA',
     p.template = 'Voir comment ça marche',
@@ -3247,10 +3247,10 @@ SET p.display_name = 'Voir comment ça marche',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CA'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-151@fr-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-151@fr-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-152@fr-CA'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-152@fr-CA'})
 SET p.display_name = 'Commencez maintenant',
     p.locale = 'fr-CA',
     p.template = 'Commencez maintenant',
@@ -3267,14 +3267,14 @@ SET p.display_name = 'Commencez maintenant',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CA'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-152@fr-CA'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-152@fr-CA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fr-BE Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-153@fr-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-153@fr-BE'})
 SET p.display_name = 'Testez notre solution',
     p.locale = 'fr-BE',
     p.template = 'Testez notre solution',
@@ -3291,10 +3291,10 @@ SET p.display_name = 'Testez notre solution',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-BE'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-153@fr-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-153@fr-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-154@fr-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-154@fr-BE'})
 SET p.display_name = 'Découvrez les avantages',
     p.locale = 'fr-BE',
     p.template = 'Découvrez les avantages',
@@ -3311,10 +3311,10 @@ SET p.display_name = 'Découvrez les avantages',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-BE'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-154@fr-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-154@fr-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-155@fr-BE'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-155@fr-BE'})
 SET p.display_name = 'Démarrez votre essai',
     p.locale = 'fr-BE',
     p.template = 'Démarrez votre essai',
@@ -3331,14 +3331,14 @@ SET p.display_name = 'Démarrez votre essai',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-BE'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-155@fr-BE'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-155@fr-BE'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // fr-CH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-156@fr-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-156@fr-CH'})
 SET p.display_name = 'Demander une démonstration',
     p.locale = 'fr-CH',
     p.template = 'Demander une démonstration',
@@ -3355,10 +3355,10 @@ SET p.display_name = 'Demander une démonstration',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-156@fr-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-156@fr-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-157@fr-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-157@fr-CH'})
 SET p.display_name = 'Consulter la documentation',
     p.locale = 'fr-CH',
     p.template = 'Consulter la documentation',
@@ -3375,10 +3375,10 @@ SET p.display_name = 'Consulter la documentation',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-157@fr-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-157@fr-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-158@fr-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-158@fr-CH'})
 SET p.display_name = 'Planifier votre consultation',
     p.locale = 'fr-CH',
     p.template = 'Planifier votre consultation',
@@ -3395,14 +3395,14 @@ SET p.display_name = 'Planifier votre consultation',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@fr-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-158@fr-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-158@fr-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // es-ES Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-159@es-ES'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-159@es-ES'})
 SET p.display_name = 'Descubre cómo funciona',
     p.locale = 'es-ES',
     p.template = 'Descubre cómo funciona',
@@ -3419,10 +3419,10 @@ SET p.display_name = 'Descubre cómo funciona',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-ES'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-159@es-ES'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-159@es-ES'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-160@es-ES'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-160@es-ES'})
 SET p.display_name = 'Solicita más información',
     p.locale = 'es-ES',
     p.template = 'Solicita más información',
@@ -3439,10 +3439,10 @@ SET p.display_name = 'Solicita más información',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-ES'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-160@es-ES'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-160@es-ES'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-161@es-ES'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-161@es-ES'})
 SET p.display_name = 'Empieza tu prueba gratuita',
     p.locale = 'es-ES',
     p.template = 'Empieza tu prueba gratuita',
@@ -3459,14 +3459,14 @@ SET p.display_name = 'Empieza tu prueba gratuita',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-ES'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-161@es-ES'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-161@es-ES'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // es-MX Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-162@es-MX'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-162@es-MX'})
 SET p.display_name = 'Conoce nuestra solución',
     p.locale = 'es-MX',
     p.template = 'Conoce nuestra solución',
@@ -3483,10 +3483,10 @@ SET p.display_name = 'Conoce nuestra solución',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-MX'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-162@es-MX'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-162@es-MX'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-163@es-MX'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-163@es-MX'})
 SET p.display_name = 'Solicita una demostración',
     p.locale = 'es-MX',
     p.template = 'Solicita una demostración',
@@ -3503,10 +3503,10 @@ SET p.display_name = 'Solicita una demostración',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-MX'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-163@es-MX'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-163@es-MX'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-164@es-MX'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-164@es-MX'})
 SET p.display_name = 'Aprovecha esta oportunidad',
     p.locale = 'es-MX',
     p.template = 'Aprovecha esta oportunidad',
@@ -3523,14 +3523,14 @@ SET p.display_name = 'Aprovecha esta oportunidad',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-MX'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-164@es-MX'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-164@es-MX'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // es-AR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-165@es-AR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-165@es-AR'})
 SET p.display_name = 'Probá gratis ahora',
     p.locale = 'es-AR',
     p.template = 'Probá gratis ahora',
@@ -3547,10 +3547,10 @@ SET p.display_name = 'Probá gratis ahora',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-AR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-165@es-AR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-165@es-AR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-166@es-AR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-166@es-AR'})
 SET p.display_name = 'Mirá cómo funciona',
     p.locale = 'es-AR',
     p.template = 'Mirá cómo funciona',
@@ -3567,10 +3567,10 @@ SET p.display_name = 'Mirá cómo funciona',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-AR'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-166@es-AR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-166@es-AR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-167@es-AR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-167@es-AR'})
 SET p.display_name = 'Empezá tu prueba hoy',
     p.locale = 'es-AR',
     p.template = 'Empezá tu prueba hoy',
@@ -3587,14 +3587,14 @@ SET p.display_name = 'Empezá tu prueba hoy',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-AR'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-167@es-AR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-167@es-AR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // es-CO Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-168@es-CO'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-168@es-CO'})
 SET p.display_name = 'Conozca nuestra solución',
     p.locale = 'es-CO',
     p.template = 'Conozca nuestra solución',
@@ -3611,10 +3611,10 @@ SET p.display_name = 'Conozca nuestra solución',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CO'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-168@es-CO'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-168@es-CO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-169@es-CO'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-169@es-CO'})
 SET p.display_name = 'Solicite una demostración gratuita',
     p.locale = 'es-CO',
     p.template = 'Solicite una demostración gratuita',
@@ -3631,10 +3631,10 @@ SET p.display_name = 'Solicite una demostración gratuita',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CO'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-169@es-CO'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-169@es-CO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-170@es-CO'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-170@es-CO'})
 SET p.display_name = 'Aproveche esta oportunidad',
     p.locale = 'es-CO',
     p.template = 'Aproveche esta oportunidad',
@@ -3651,14 +3651,14 @@ SET p.display_name = 'Aproveche esta oportunidad',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CO'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-170@es-CO'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-170@es-CO'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // es-CL Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-171@es-CL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-171@es-CL'})
 SET p.display_name = 'Prueba gratis',
     p.locale = 'es-CL',
     p.template = 'Prueba gratis',
@@ -3675,10 +3675,10 @@ SET p.display_name = 'Prueba gratis',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CL'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-171@es-CL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-171@es-CL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-172@es-CL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-172@es-CL'})
 SET p.display_name = 'Conoce los beneficios',
     p.locale = 'es-CL',
     p.template = 'Conoce los beneficios',
@@ -3695,10 +3695,10 @@ SET p.display_name = 'Conoce los beneficios',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CL'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-172@es-CL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-172@es-CL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-173@es-CL'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-173@es-CL'})
 SET p.display_name = 'Comienza altiro',
     p.locale = 'es-CL',
     p.template = 'Comienza altiro',
@@ -3715,14 +3715,14 @@ SET p.display_name = 'Comienza altiro',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@es-CL'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-173@es-CL'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-173@es-CL'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // pt-BR Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-174@pt-BR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-174@pt-BR'})
 SET p.display_name = 'Experimente grátis',
     p.locale = 'pt-BR',
     p.template = 'Experimente grátis',
@@ -3739,10 +3739,10 @@ SET p.display_name = 'Experimente grátis',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-BR'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-174@pt-BR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-174@pt-BR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-175@pt-BR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-175@pt-BR'})
 SET p.display_name = 'Saiba mais',
     p.locale = 'pt-BR',
     p.template = 'Saiba mais',
@@ -3759,10 +3759,10 @@ SET p.display_name = 'Saiba mais',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-BR'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-175@pt-BR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-175@pt-BR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-176@pt-BR'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-176@pt-BR'})
 SET p.display_name = 'Comece agora mesmo',
     p.locale = 'pt-BR',
     p.template = 'Comece agora mesmo',
@@ -3779,14 +3779,14 @@ SET p.display_name = 'Comece agora mesmo',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-BR'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-176@pt-BR'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-176@pt-BR'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // pt-PT Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-177@pt-PT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-177@pt-PT'})
 SET p.display_name = 'Experimenta gratuitamente',
     p.locale = 'pt-PT',
     p.template = 'Experimenta gratuitamente',
@@ -3803,10 +3803,10 @@ SET p.display_name = 'Experimenta gratuitamente',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-PT'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-177@pt-PT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-177@pt-PT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-178@pt-PT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-178@pt-PT'})
 SET p.display_name = 'Sabe mais',
     p.locale = 'pt-PT',
     p.template = 'Sabe mais',
@@ -3823,10 +3823,10 @@ SET p.display_name = 'Sabe mais',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-PT'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-178@pt-PT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-178@pt-PT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-179@pt-PT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-179@pt-PT'})
 SET p.display_name = 'Começa hoje',
     p.locale = 'pt-PT',
     p.template = 'Começa hoje',
@@ -3843,14 +3843,14 @@ SET p.display_name = 'Começa hoje',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@pt-PT'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-179@pt-PT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-179@pt-PT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // it-IT Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-180@it-IT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-180@it-IT'})
 SET p.display_name = 'Scopri la soluzione',
     p.locale = 'it-IT',
     p.template = 'Scopri la soluzione',
@@ -3867,10 +3867,10 @@ SET p.display_name = 'Scopri la soluzione',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-IT'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-180@it-IT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-180@it-IT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-181@it-IT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-181@it-IT'})
 SET p.display_name = 'Richiedi informazioni',
     p.locale = 'it-IT',
     p.template = 'Richiedi informazioni',
@@ -3887,10 +3887,10 @@ SET p.display_name = 'Richiedi informazioni',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-IT'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-181@it-IT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-181@it-IT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-182@it-IT'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-182@it-IT'})
 SET p.display_name = 'Prova gratuita',
     p.locale = 'it-IT',
     p.template = 'Prova gratuita',
@@ -3907,14 +3907,14 @@ SET p.display_name = 'Prova gratuita',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-IT'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-182@it-IT'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-182@it-IT'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // ----------------------------------------------------------------------------
 // it-CH Patterns
 // ----------------------------------------------------------------------------
 
-MERGE (p:Pattern {key: 'pattern:cta-primary-183@it-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-primary-183@it-CH'})
 SET p.display_name = 'Richieda una consulenza',
     p.locale = 'it-CH',
     p.template = 'Richieda una consulenza',
@@ -3931,10 +3931,10 @@ SET p.display_name = 'Richieda una consulenza',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-primary-183@it-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-primary-183@it-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-secondary-184@it-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-secondary-184@it-CH'})
 SET p.display_name = 'Consulti la documentazione',
     p.locale = 'it-CH',
     p.template = 'Consulti la documentazione',
@@ -3951,10 +3951,10 @@ SET p.display_name = 'Consulti la documentazione',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-secondary-184@it-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-secondary-184@it-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
-MERGE (p:Pattern {key: 'pattern:cta-urgency-185@it-CH'})
+MERGE (p:Pattern {key: 'pattern:pattern:cta-urgency-185@it-CH'})
 SET p.display_name = 'Fissi un appuntamento',
     p.locale = 'it-CH',
     p.template = 'Fissi un appuntamento',
@@ -3971,5 +3971,5 @@ SET p.display_name = 'Fissi un appuntamento',
     p.updated_at = datetime();
 
 MATCH (ps:PatternSet {key: 'pattern-set:cta@it-CH'})
-MATCH (p:Pattern {key: 'pattern:cta-urgency-185@it-CH'})
+MATCH (p:Pattern {key: 'pattern:pattern:cta-urgency-185@it-CH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);

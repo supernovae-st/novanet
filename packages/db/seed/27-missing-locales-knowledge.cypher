@@ -11,7 +11,7 @@
 // ============================================================================
 
 // --- fil-PH Expressions ---
-MERGE (e:Expression {key: 'expression:subukan-mo-na@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:subukan-mo-na@fil-PH'})
 SET e.text = 'Subukan mo na!',
     e.english = 'Try it now!',
     e.locale = 'fil-PH',
@@ -24,10 +24,10 @@ SET e.text = 'Subukan mo na!',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:subukan-mo-na@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:subukan-mo-na@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:libre-lang@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:libre-lang@fil-PH'})
 SET e.text = 'Libre lang!',
     e.english = 'It\'s free!',
     e.locale = 'fil-PH',
@@ -40,10 +40,10 @@ SET e.text = 'Libre lang!',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:libre-lang@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:libre-lang@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:mabilis-at-madali@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:mabilis-at-madali@fil-PH'})
 SET e.text = 'Mabilis at madali',
     e.english = 'Fast and easy',
     e.locale = 'fil-PH',
@@ -56,10 +56,10 @@ SET e.text = 'Mabilis at madali',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:mabilis-at-madali@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:mabilis-at-madali@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:mag-sign-up-ngayon@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:mag-sign-up-ngayon@fil-PH'})
 SET e.text = 'Mag-sign up ngayon',
     e.english = 'Sign up now',
     e.locale = 'fil-PH',
@@ -72,10 +72,10 @@ SET e.text = 'Mag-sign up ngayon',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:mag-sign-up-ngayon@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:mag-sign-up-ngayon@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:i-download-na@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:i-download-na@fil-PH'})
 SET e.text = 'I-download na',
     e.english = 'Download now',
     e.locale = 'fil-PH',
@@ -88,10 +88,10 @@ SET e.text = 'I-download na',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:i-download-na@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:i-download-na@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:sulit-na-sulit@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:sulit-na-sulit@fil-PH'})
 SET e.text = 'Sulit na sulit!',
     e.english = 'Totally worth it!',
     e.locale = 'fil-PH',
@@ -104,10 +104,10 @@ SET e.text = 'Sulit na sulit!',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:sulit-na-sulit@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:sulit-na-sulit@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:para-sayo-lang@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:para-sayo-lang@fil-PH'})
 SET e.text = 'Para sa\'yo lang',
     e.english = 'Just for you',
     e.locale = 'fil-PH',
@@ -120,10 +120,10 @@ SET e.text = 'Para sa\'yo lang',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:para-sayo-lang@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:para-sayo-lang@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:walang-kahirap-hirap@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:walang-kahirap-hirap@fil-PH'})
 SET e.text = 'Walang kahirap-hirap',
     e.english = 'No hassle / Effortless',
     e.locale = 'fil-PH',
@@ -136,10 +136,10 @@ SET e.text = 'Walang kahirap-hirap',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:walang-kahirap-hirap@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:walang-kahirap-hirap@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:siguradong-maaasahan@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:siguradong-maaasahan@fil-PH'})
 SET e.text = 'Siguradong maaasahan',
     e.english = 'Reliably dependable',
     e.locale = 'fil-PH',
@@ -152,10 +152,10 @@ SET e.text = 'Siguradong maaasahan',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:siguradong-maaasahan@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:siguradong-maaasahan@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:samahan-mo-kami@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:samahan-mo-kami@fil-PH'})
 SET e.text = 'Samahan mo kami',
     e.english = 'Join us',
     e.locale = 'fil-PH',
@@ -168,10 +168,10 @@ SET e.text = 'Samahan mo kami',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:samahan-mo-kami@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:samahan-mo-kami@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:bagong-teknolohiya@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:bagong-teknolohiya@fil-PH'})
 SET e.text = 'Bagong teknolohiya',
     e.english = 'New technology',
     e.locale = 'fil-PH',
@@ -184,10 +184,10 @@ SET e.text = 'Bagong teknolohiya',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:bagong-teknolohiya@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:bagong-teknolohiya@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:salamat-sa-pagtitiwala@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:salamat-sa-pagtitiwala@fil-PH'})
 SET e.text = 'Salamat sa pagtitiwala',
     e.english = 'Thank you for trusting us',
     e.locale = 'fil-PH',
@@ -200,10 +200,10 @@ SET e.text = 'Salamat sa pagtitiwala',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:salamat-sa-pagtitiwala@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:salamat-sa-pagtitiwala@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:mas-maganda-mas-mura@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:mas-maganda-mas-mura@fil-PH'})
 SET e.text = 'Mas maganda, mas mura',
     e.english = 'Better and cheaper',
     e.locale = 'fil-PH',
@@ -216,10 +216,10 @@ SET e.text = 'Mas maganda, mas mura',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:mas-maganda-mas-mura@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:mas-maganda-mas-mura@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:i-scan-mo-lang@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:i-scan-mo-lang@fil-PH'})
 SET e.text = 'I-scan mo lang',
     e.english = 'Just scan it',
     e.locale = 'fil-PH',
@@ -232,10 +232,10 @@ SET e.text = 'I-scan mo lang',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:i-scan-mo-lang@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:i-scan-mo-lang@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:maging-isa-sa-amin@fil-PH'})
+MERGE (e:Expression {key: 'expr:expression:maging-isa-sa-amin@fil-PH'})
 SET e.text = 'Maging isa sa amin',
     e.english = 'Become one of us',
     e.locale = 'fil-PH',
@@ -248,11 +248,11 @@ SET e.text = 'Maging isa sa amin',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@fil-PH'})
-MATCH (e:Expression {key: 'expression:maging-isa-sa-amin@fil-PH'})
+MATCH (e:Expression {key: 'expr:expression:maging-isa-sa-amin@fil-PH'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 // --- fil-PH CultureRefs ---
-MERGE (c:CultureRef {key: 'culture-ref:pasko@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:pasko@fil-PH'})
 SET c.display_name = 'Pasko',
     c.locale = 'fil-PH',
     c.content = 'World\'s longest Christmas season (September-January). Major shopping and family gifting focus.',
@@ -263,10 +263,10 @@ SET c.display_name = 'Pasko',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:pasko@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:pasko@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:bayanihan@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:bayanihan@fil-PH'})
 SET c.display_name = 'Bayanihan',
     c.locale = 'fil-PH',
     c.content = 'Community helping spirit. Traditional practice of community members helping each other.',
@@ -277,10 +277,10 @@ SET c.display_name = 'Bayanihan',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:bayanihan@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:bayanihan@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:utang-na-loob@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:utang-na-loob@fil-PH'})
 SET c.display_name = 'Utang na loob',
     c.locale = 'fil-PH',
     c.content = 'Debt of gratitude. Deep sense of reciprocal obligation.',
@@ -291,10 +291,10 @@ SET c.display_name = 'Utang na loob',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:utang-na-loob@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:utang-na-loob@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:undas@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:undas@fil-PH'})
 SET c.display_name = 'Undas',
     c.locale = 'fil-PH',
     c.content = 'All Saints Day/All Souls Day (November 1-2). Family gathering time to honor deceased relatives.',
@@ -305,10 +305,10 @@ SET c.display_name = 'Undas',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:undas@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:undas@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:fiesta-culture@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:fiesta-culture@fil-PH'})
 SET c.display_name = 'Fiesta culture',
     c.locale = 'fil-PH',
     c.content = 'Town festivals with parades, food, and gatherings. Hospitality is paramount.',
@@ -319,10 +319,10 @@ SET c.display_name = 'Fiesta culture',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:fiesta-culture@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:fiesta-culture@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:pakikisama@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:pakikisama@fil-PH'})
 SET c.display_name = 'Pakikisama',
     c.locale = 'fil-PH',
     c.content = 'Getting along and social harmony. Value of maintaining smooth interpersonal relationships.',
@@ -333,10 +333,10 @@ SET c.display_name = 'Pakikisama',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:pakikisama@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:pakikisama@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:ofw-culture@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:ofw-culture@fil-PH'})
 SET c.display_name = 'OFW culture',
     c.locale = 'fil-PH',
     c.content = 'Over 10 million Overseas Filipino Workers. Family separation and remittances are common reality.',
@@ -347,10 +347,10 @@ SET c.display_name = 'OFW culture',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:ofw-culture@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:ofw-culture@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:pista-ng-mga-puso@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:pista-ng-mga-puso@fil-PH'})
 SET c.display_name = 'Pista ng mga Puso',
     c.locale = 'fil-PH',
     c.content = 'Valentine\'s Day. Extremely popular with mass weddings and elaborate proposals.',
@@ -361,7 +361,7 @@ SET c.display_name = 'Pista ng mga Puso',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:pista-ng-mga-puso@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:pista-ng-mga-puso@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fil-PH Taboos ---
@@ -565,7 +565,7 @@ MATCH (p:Pattern {key: 'pattern:fil-ph-pat-008@fil-PH'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // --- fil-PH AudienceTraits ---
-MERGE (a:AudienceTrait {key: 'audience-trait:formality@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:formality@fil-PH'})
 SET a.display_name = 'formality',
     a.locale = 'fil-PH',
     a.content = 'casual_respectful',
@@ -576,10 +576,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:formality@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:formality@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:directness@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:directness@fil-PH'})
 SET a.display_name = 'directness',
     a.locale = 'fil-PH',
     a.content = 'indirect_positive',
@@ -590,10 +590,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:directness@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:directness@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:decision-making@fil-PH'})
 SET a.display_name = 'decision_making',
     a.locale = 'fil-PH',
     a.content = 'social_influenced',
@@ -604,10 +604,10 @@ SET a.display_name = 'decision_making',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:decision-making@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:decision-making@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-social-proof@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-social-proof@fil-PH'})
 SET a.display_name = 'social_proof',
     a.locale = 'fil-PH',
     a.content = 'Trust factor: social_proof',
@@ -618,10 +618,10 @@ SET a.display_name = 'social_proof',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-social-proof@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-social-proof@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-payment@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-local-payment@fil-PH'})
 SET a.display_name = 'local_payment',
     a.locale = 'fil-PH',
     a.content = 'Trust factor: local_payment',
@@ -632,10 +632,10 @@ SET a.display_name = 'local_payment',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-local-payment@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-local-payment@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-support@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-local-support@fil-PH'})
 SET a.display_name = 'local_support',
     a.locale = 'fil-PH',
     a.content = 'Trust factor: local_support',
@@ -646,10 +646,10 @@ SET a.display_name = 'local_support',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-local-support@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-local-support@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@fil-PH'})
 SET a.display_name = 'Facebook',
     a.locale = 'fil-PH',
     a.content = 'Preferred communication channel: Facebook',
@@ -660,10 +660,10 @@ SET a.display_name = 'Facebook',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-facebook@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-messenger@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-messenger@fil-PH'})
 SET a.display_name = 'Messenger',
     a.locale = 'fil-PH',
     a.content = 'Preferred communication channel: Messenger',
@@ -674,10 +674,10 @@ SET a.display_name = 'Messenger',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-messenger@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-messenger@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-viber@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-viber@fil-PH'})
 SET a.display_name = 'Viber',
     a.locale = 'fil-PH',
     a.content = 'Preferred communication channel: Viber',
@@ -688,10 +688,10 @@ SET a.display_name = 'Viber',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-viber@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-viber@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-tiktok@fil-PH'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-tiktok@fil-PH'})
 SET a.display_name = 'TikTok',
     a.locale = 'fil-PH',
     a.content = 'Preferred communication channel: TikTok',
@@ -702,7 +702,7 @@ SET a.display_name = 'TikTok',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@fil-PH'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-tiktok@fil-PH'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-tiktok@fil-PH'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // ============================================================================
@@ -710,7 +710,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // ============================================================================
 
 // --- lo-LA Expressions ---
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສະບາຍດີ',
     e.english = 'Hello / Good day',
     e.locale = 'lo-LA',
@@ -723,10 +723,10 @@ SET e.text = 'ສະບາຍດີ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຍິນດີຕ້ອນຮັບ',
     e.english = 'Welcome',
     e.locale = 'lo-LA',
@@ -739,10 +739,10 @@ SET e.text = 'ຍິນດີຕ້ອນຮັບ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຂອບໃຈ',
     e.english = 'Thank you',
     e.locale = 'lo-LA',
@@ -755,10 +755,10 @@ SET e.text = 'ຂອບໃຈ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຂອບໃຈຫຼາຍໆ',
     e.english = 'Thank you very much',
     e.locale = 'lo-LA',
@@ -771,10 +771,10 @@ SET e.text = 'ຂອບໃຈຫຼາຍໆ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ລອງເບິ່ງດຽວນີ້',
     e.english = 'Try it now',
     e.locale = 'lo-LA',
@@ -787,10 +787,10 @@ SET e.text = 'ລອງເບິ່ງດຽວນີ້',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເລີ່ມຕົ້ນຟຣີ',
     e.english = 'Start free',
     e.locale = 'lo-LA',
@@ -803,10 +803,10 @@ SET e.text = 'ເລີ່ມຕົ້ນຟຣີ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:qr-code@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:qr-code@lo-LA'})
 SET e.text = 'ສ້າງ QR Code',
     e.english = 'Create QR Code',
     e.locale = 'lo-LA',
@@ -819,10 +819,10 @@ SET e.text = 'ສ້າງ QR Code',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:qr-code@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:qr-code@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ໃຊ້ງ່າຍ',
     e.english = 'Easy to use',
     e.locale = 'lo-LA',
@@ -835,10 +835,10 @@ SET e.text = 'ໃຊ້ງ່າຍ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ໄວ ແລະ ສະດວກ',
     e.english = 'Fast and convenient',
     e.locale = 'lo-LA',
@@ -851,10 +851,10 @@ SET e.text = 'ໄວ ແລະ ສະດວກ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເປັນມືອາຊີບ',
     e.english = 'Professional',
     e.locale = 'lo-LA',
@@ -867,10 +867,10 @@ SET e.text = 'ເປັນມືອາຊີບ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ເຊື່ອຖືໄດ້',
     e.english = 'Trustworthy / Reliable',
     e.locale = 'lo-LA',
@@ -883,10 +883,10 @@ SET e.text = 'ເຊື່ອຖືໄດ້',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຟຣີຕະຫຼອດໄປ',
     e.english = 'Free forever',
     e.locale = 'lo-LA',
@@ -899,10 +899,10 @@ SET e.text = 'ຟຣີຕະຫຼອດໄປ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ຕິດຕໍ່ພວກເຮົາ',
     e.english = 'Contact us',
     e.locale = 'lo-LA',
@@ -915,10 +915,10 @@ SET e.text = 'ຕິດຕໍ່ພວກເຮົາ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສຶກສາເພີ່ມເຕີມ',
     e.english = 'Learn more',
     e.locale = 'lo-LA',
@@ -931,10 +931,10 @@ SET e.text = 'ສຶກສາເພີ່ມເຕີມ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@lo-LA'})
+MERGE (e:Expression {key: 'expr:expression:@lo-LA'})
 SET e.text = 'ສຳເລັດແລ້ວ',
     e.english = 'Success / Completed',
     e.locale = 'lo-LA',
@@ -947,11 +947,11 @@ SET e.text = 'ສຳເລັດແລ້ວ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@lo-LA'})
-MATCH (e:Expression {key: 'expression:@lo-LA'})
+MATCH (e:Expression {key: 'expr:expression:@lo-LA'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 // --- lo-LA CultureRefs ---
-MERGE (c:CultureRef {key: 'culture-ref:boun-pi-mai-lao@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:boun-pi-mai-lao@lo-LA'})
 SET c.display_name = 'Boun Pi Mai Lao',
     c.locale = 'lo-LA',
     c.content = 'Lao New Year (April 14-16). Most important holiday with water festivals, temple visits, and family reunions.',
@@ -962,10 +962,10 @@ SET c.display_name = 'Boun Pi Mai Lao',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:boun-pi-mai-lao@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:boun-pi-mai-lao@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:boun-that-luang@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:boun-that-luang@lo-LA'})
 SET c.display_name = 'Boun That Luang',
     c.locale = 'lo-LA',
     c.content = 'National religious festival at That Luang stupa in Vientiane (November full moon).',
@@ -976,10 +976,10 @@ SET c.display_name = 'Boun That Luang',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:boun-that-luang@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:boun-that-luang@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:boun-suang-heua@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:boun-suang-heua@lo-LA'})
 SET c.display_name = 'Boun Suang Heua',
     c.locale = 'lo-LA',
     c.content = 'Boat Racing Festival celebrating end of Buddhist Lent (October).',
@@ -990,10 +990,10 @@ SET c.display_name = 'Boun Suang Heua',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:boun-suang-heua@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:boun-suang-heua@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:theravada-buddhism@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:theravada-buddhism@lo-LA'})
 SET c.display_name = 'Theravada Buddhism',
     c.locale = 'lo-LA',
     c.content = '95%+ Buddhist population. Buddhism permeates daily life through temple visits and merit-making.',
@@ -1004,10 +1004,10 @@ SET c.display_name = 'Theravada Buddhism',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:theravada-buddhism@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:theravada-buddhism@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:family-and-hierarchy@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:family-and-hierarchy@lo-LA'})
 SET c.display_name = 'Family and Hierarchy',
     c.locale = 'lo-LA',
     c.content = 'Extended family structures with strong respect for elders (phii-nong system).',
@@ -1018,10 +1018,10 @@ SET c.display_name = 'Family and Hierarchy',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:family-and-hierarchy@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:family-and-hierarchy@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:boun-ok-phansa@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:boun-ok-phansa@lo-LA'})
 SET c.display_name = 'Boun Ok Phansa',
     c.locale = 'lo-LA',
     c.content = 'End of Buddhist Lent with illuminated boat floats (Lai Heua Fai).',
@@ -1032,10 +1032,10 @@ SET c.display_name = 'Boun Ok Phansa',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:boun-ok-phansa@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:boun-ok-phansa@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:bo-pen-nyang@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:bo-pen-nyang@lo-LA'})
 SET c.display_name = 'Bo pen nyang',
     c.locale = 'lo-LA',
     c.content = 'Core Lao philosophy emphasizing relaxed attitude and non-confrontation.',
@@ -1046,10 +1046,10 @@ SET c.display_name = 'Bo pen nyang',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:bo-pen-nyang@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:bo-pen-nyang@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:naga@lo-LA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:naga@lo-LA'})
 SET c.display_name = 'Naga',
     c.locale = 'lo-LA',
     c.content = 'Mythical serpent central to Lao/Mekong mythology. Protector of Buddhism.',
@@ -1060,7 +1060,7 @@ SET c.display_name = 'Naga',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@lo-LA'})
-MATCH (c:CultureRef {key: 'culture-ref:naga@lo-LA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:naga@lo-LA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- lo-LA Taboos ---
@@ -1264,7 +1264,7 @@ MATCH (p:Pattern {key: 'pattern:pattern-lo-humble-quality@lo-LA'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // --- lo-LA AudienceTraits ---
-MERGE (a:AudienceTrait {key: 'audience-trait:formality@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:formality@lo-LA'})
 SET a.display_name = 'formality',
     a.locale = 'lo-LA',
     a.content = 'moderate_formal',
@@ -1275,10 +1275,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:formality@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:formality@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:directness@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:directness@lo-LA'})
 SET a.display_name = 'directness',
     a.locale = 'lo-LA',
     a.content = 'consultative_deliberate',
@@ -1289,10 +1289,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:directness@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:directness@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:decision-making@lo-LA'})
 SET a.display_name = 'decision_making',
     a.locale = 'lo-LA',
     a.content = 'family_influenced',
@@ -1303,10 +1303,10 @@ SET a.display_name = 'decision_making',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:decision-making@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:decision-making@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-government-endorsement@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-government-endorsement@lo-LA'})
 SET a.display_name = 'government_endorsement',
     a.locale = 'lo-LA',
     a.content = 'Trust factor: government_endorsement',
@@ -1317,10 +1317,10 @@ SET a.display_name = 'government_endorsement',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-government-endorsement@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-government-endorsement@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-presence@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-local-presence@lo-LA'})
 SET a.display_name = 'local_presence',
     a.locale = 'lo-LA',
     a.content = 'Trust factor: local_presence',
@@ -1331,10 +1331,10 @@ SET a.display_name = 'local_presence',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-local-presence@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-local-presence@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-lao-support@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-lao-support@lo-LA'})
 SET a.display_name = 'lao_support',
     a.locale = 'lo-LA',
     a.content = 'Trust factor: lao_support',
@@ -1345,10 +1345,10 @@ SET a.display_name = 'lao_support',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-lao-support@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-lao-support@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@lo-LA'})
 SET a.display_name = 'Facebook',
     a.locale = 'lo-LA',
     a.content = 'Preferred communication channel: Facebook',
@@ -1359,10 +1359,10 @@ SET a.display_name = 'Facebook',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-facebook@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-whatsapp@lo-LA'})
 SET a.display_name = 'WhatsApp',
     a.locale = 'lo-LA',
     a.content = 'Preferred communication channel: WhatsApp',
@@ -1373,10 +1373,10 @@ SET a.display_name = 'WhatsApp',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-whatsapp@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-line@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-line@lo-LA'})
 SET a.display_name = 'LINE',
     a.locale = 'lo-LA',
     a.content = 'Preferred communication channel: LINE',
@@ -1387,10 +1387,10 @@ SET a.display_name = 'LINE',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-line@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-line@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-sms@lo-LA'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-sms@lo-LA'})
 SET a.display_name = 'SMS',
     a.locale = 'lo-LA',
     a.content = 'Preferred communication channel: SMS',
@@ -1401,7 +1401,7 @@ SET a.display_name = 'SMS',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@lo-LA'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-sms@lo-LA'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-sms@lo-LA'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
 // ============================================================================
@@ -1409,7 +1409,7 @@ MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 // ============================================================================
 
 // --- or-IN Expressions ---
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ନମସ୍କାର',
     e.english = 'Hello / Greetings',
     e.locale = 'or-IN',
@@ -1422,10 +1422,10 @@ SET e.text = 'ନମସ୍କାର',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସ୍ଵାଗତ',
     e.english = 'Welcome',
     e.locale = 'or-IN',
@@ -1438,10 +1438,10 @@ SET e.text = 'ସ୍ଵାଗତ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଧନ୍ୟବାଦ',
     e.english = 'Thank you',
     e.locale = 'or-IN',
@@ -1454,10 +1454,10 @@ SET e.text = 'ଧନ୍ୟବାଦ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ବର୍ତ୍ତମାନ ଚେଷ୍ଟା କରନ୍ତୁ',
     e.english = 'Try it now',
     e.locale = 'or-IN',
@@ -1470,10 +1470,10 @@ SET e.text = 'ବର୍ତ୍ତମାନ ଚେଷ୍ଟା କରନ୍ତୁ'
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ',
     e.english = 'Start free',
     e.locale = 'or-IN',
@@ -1486,10 +1486,10 @@ SET e.text = 'ମାଗଣା ଆରମ୍ଭ କରନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:qr@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:qr@or-IN'})
 SET e.text = 'QR କୋଡ ତିଆରି କରନ୍ତୁ',
     e.english = 'Create QR Code',
     e.locale = 'or-IN',
@@ -1502,10 +1502,10 @@ SET e.text = 'QR କୋଡ ତିଆରି କରନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:qr@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:qr@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସହଜ ଏବଂ ସୁବିଧାଜନକ',
     e.english = 'Easy and convenient',
     e.locale = 'or-IN',
@@ -1518,10 +1518,10 @@ SET e.text = 'ସହଜ ଏବଂ ସୁବିଧାଜନକ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଦ୍ରୁତ ଏବଂ ନିର୍ଭରଯୋଗ୍ୟ',
     e.english = 'Fast and reliable',
     e.locale = 'or-IN',
@@ -1534,10 +1534,10 @@ SET e.text = 'ଦ୍ରୁତ ଏବଂ ନିର୍ଭରଯୋଗ୍ୟ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ବିଶ୍ଵସ୍ତ ସେବା',
     e.english = 'Trusted service',
     e.locale = 'or-IN',
@@ -1550,10 +1550,10 @@ SET e.text = 'ବିଶ୍ଵସ୍ତ ସେବା',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆମ ସହ ଯୋଗ ଦିଅନ୍ତୁ',
     e.english = 'Join us',
     e.locale = 'or-IN',
@@ -1566,10 +1566,10 @@ SET e.text = 'ଆମ ସହ ଯୋଗ ଦିଅନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା',
     e.english = 'Completely free',
     e.locale = 'or-IN',
@@ -1582,10 +1582,10 @@ SET e.text = 'ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆଜି ହିଁ ଆରମ୍ଭ କରନ୍ତୁ',
     e.english = 'Start today',
     e.locale = 'or-IN',
@@ -1598,10 +1598,10 @@ SET e.text = 'ଆଜି ହିଁ ଆରମ୍ଭ କରନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆହୁରି ଜାଣନ୍ତୁ',
     e.english = 'Learn more',
     e.locale = 'or-IN',
@@ -1614,10 +1614,10 @@ SET e.text = 'ଆହୁରି ଜାଣନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ଆମକୁ ସମ୍ପର୍କ କରନ୍ତୁ',
     e.english = 'Contact us',
     e.locale = 'or-IN',
@@ -1630,10 +1630,10 @@ SET e.text = 'ଆମକୁ ସମ୍ପର୍କ କରନ୍ତୁ',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
-MERGE (e:Expression {key: 'expression:@or-IN'})
+MERGE (e:Expression {key: 'expr:expression:@or-IN'})
 SET e.text = 'ସଫଳ ହୋଇଗଲା',
     e.english = 'Success',
     e.locale = 'or-IN',
@@ -1646,11 +1646,11 @@ SET e.text = 'ସଫଳ ହୋଇଗଲା',
     e.updated_at = datetime();
 
 MATCH (es:ExpressionSet {key: 'expression-set@or-IN'})
-MATCH (e:Expression {key: 'expression:@or-IN'})
+MATCH (e:Expression {key: 'expr:expression:@or-IN'})
 MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 // --- or-IN CultureRefs ---
-MERGE (c:CultureRef {key: 'culture-ref:rath-yatra@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:rath-yatra@or-IN'})
 SET c.display_name = 'Rath Yatra',
     c.locale = 'or-IN',
     c.content = 'Annual chariot festival in Puri for Lord Jagannath. One of India\'s largest religious gatherings.',
@@ -1661,10 +1661,10 @@ SET c.display_name = 'Rath Yatra',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:rath-yatra@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:rath-yatra@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:raja-parba@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:raja-parba@or-IN'})
 SET c.display_name = 'Raja Parba',
     c.locale = 'or-IN',
     c.content = 'Three-day festival celebrating womanhood and fertility. Girls swing and enjoy special foods.',
@@ -1675,10 +1675,10 @@ SET c.display_name = 'Raja Parba',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:raja-parba@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:raja-parba@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:durga-puja@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:durga-puja@or-IN'})
 SET c.display_name = 'Durga Puja',
     c.locale = 'or-IN',
     c.content = 'Major festival celebrating goddess Durga. Elaborate pandals and community celebrations.',
@@ -1689,10 +1689,10 @@ SET c.display_name = 'Durga Puja',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:durga-puja@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:durga-puja@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:konark-sun-temple@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:konark-sun-temple@or-IN'})
 SET c.display_name = 'Konark Sun Temple',
     c.locale = 'or-IN',
     c.content = 'UNESCO World Heritage site. Symbol of Odia architectural heritage and pride.',
@@ -1703,10 +1703,10 @@ SET c.display_name = 'Konark Sun Temple',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:konark-sun-temple@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:konark-sun-temple@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:jagannath-culture@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:jagannath-culture@or-IN'})
 SET c.display_name = 'Jagannath Culture',
     c.locale = 'or-IN',
     c.content = 'Lord Jagannath worship is central to Odia identity. Prasad sharing and temple traditions.',
@@ -1717,10 +1717,10 @@ SET c.display_name = 'Jagannath Culture',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:jagannath-culture@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:jagannath-culture@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:odissi-dance@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:odissi-dance@or-IN'})
 SET c.display_name = 'Odissi Dance',
     c.locale = 'or-IN',
     c.content = 'Classical dance form originating from Odisha. Symbol of cultural heritage.',
@@ -1731,10 +1731,10 @@ SET c.display_name = 'Odissi Dance',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:odissi-dance@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:odissi-dance@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:cuttack-chandi@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:cuttack-chandi@or-IN'})
 SET c.display_name = 'Cuttack Chandi',
     c.locale = 'or-IN',
     c.content = 'Annual fair during Durga Puja in Cuttack. Major cultural and shopping event.',
@@ -1745,10 +1745,10 @@ SET c.display_name = 'Cuttack Chandi',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:cuttack-chandi@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:cuttack-chandi@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:pakhala-tradition@or-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:pakhala-tradition@or-IN'})
 SET c.display_name = 'Pakhala Tradition',
     c.locale = 'or-IN',
     c.content = 'Traditional fermented rice dish. Symbol of Odia hospitality and simplicity.',
@@ -1759,7 +1759,7 @@ SET c.display_name = 'Pakhala Tradition',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@or-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:pakhala-tradition@or-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:pakhala-tradition@or-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- or-IN Taboos ---
@@ -1963,7 +1963,7 @@ MATCH (p:Pattern {key: 'pattern:or-in-pat-008@or-IN'})
 MERGE (ps)-[:CONTAINS_PATTERN]->(p);
 
 // --- or-IN AudienceTraits ---
-MERGE (a:AudienceTrait {key: 'audience-trait:formality@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:formality@or-IN'})
 SET a.display_name = 'formality',
     a.locale = 'or-IN',
     a.content = 'formal_respectful',
@@ -1974,10 +1974,10 @@ SET a.display_name = 'formality',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:formality@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:formality@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:directness@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:directness@or-IN'})
 SET a.display_name = 'directness',
     a.locale = 'or-IN',
     a.content = 'polite_indirect',
@@ -1988,10 +1988,10 @@ SET a.display_name = 'directness',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:directness@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:directness@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:decision-making@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:decision-making@or-IN'})
 SET a.display_name = 'decision_making',
     a.locale = 'or-IN',
     a.content = 'family_and_community_influenced',
@@ -2002,10 +2002,10 @@ SET a.display_name = 'decision_making',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:decision-making@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:decision-making@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-local-language@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-local-language@or-IN'})
 SET a.display_name = 'local_language',
     a.locale = 'or-IN',
     a.content = 'Trust factor: local_language',
@@ -2016,10 +2016,10 @@ SET a.display_name = 'local_language',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-local-language@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-local-language@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-government-partnership@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-government-partnership@or-IN'})
 SET a.display_name = 'government_partnership',
     a.locale = 'or-IN',
     a.content = 'Trust factor: government_partnership',
@@ -2030,10 +2030,10 @@ SET a.display_name = 'government_partnership',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-government-partnership@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-government-partnership@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:trust-testimonials@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:trust-testimonials@or-IN'})
 SET a.display_name = 'testimonials',
     a.locale = 'or-IN',
     a.content = 'Trust factor: testimonials',
@@ -2044,10 +2044,10 @@ SET a.display_name = 'testimonials',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:trust-testimonials@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:trust-testimonials@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-whatsapp@or-IN'})
 SET a.display_name = 'WhatsApp',
     a.locale = 'or-IN',
     a.content = 'Preferred communication channel: WhatsApp',
@@ -2058,10 +2058,10 @@ SET a.display_name = 'WhatsApp',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-whatsapp@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-whatsapp@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-facebook@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@or-IN'})
 SET a.display_name = 'Facebook',
     a.locale = 'or-IN',
     a.content = 'Preferred communication channel: Facebook',
@@ -2072,10 +2072,10 @@ SET a.display_name = 'Facebook',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-facebook@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-facebook@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-youtube@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-youtube@or-IN'})
 SET a.display_name = 'YouTube',
     a.locale = 'or-IN',
     a.content = 'Preferred communication channel: YouTube',
@@ -2086,10 +2086,10 @@ SET a.display_name = 'YouTube',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-youtube@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-youtube@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);
 
-MERGE (a:AudienceTrait {key: 'audience-trait:channel-sms@or-IN'})
+MERGE (a:AudienceTrait {key: 'audience:audience-trait:channel-sms@or-IN'})
 SET a.display_name = 'SMS',
     a.locale = 'or-IN',
     a.content = 'Preferred communication channel: SMS',
@@ -2100,5 +2100,5 @@ SET a.display_name = 'SMS',
     a.updated_at = datetime();
 
 MATCH (as:AudienceSet {key: 'audience-set:general@or-IN'})
-MATCH (a:AudienceTrait {key: 'audience-trait:channel-sms@or-IN'})
+MATCH (a:AudienceTrait {key: 'audience:audience-trait:channel-sms@or-IN'})
 MERGE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(a);

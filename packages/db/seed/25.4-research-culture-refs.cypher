@@ -6,7 +6,7 @@
 // ============================================================================
 
 // --- en-US CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-0@en-US'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-0@en-US'})
 SET c.display_name = 'culture-0',
     c.locale = 'en-US',
     c.content = 'culture-0',
@@ -18,10 +18,10 @@ SET c.display_name = 'culture-0',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-US'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-0@en-US'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-0@en-US'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-1@en-US'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-1@en-US'})
 SET c.display_name = 'culture-1',
     c.locale = 'en-US',
     c.content = 'culture-1',
@@ -33,10 +33,10 @@ SET c.display_name = 'culture-1',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-US'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-1@en-US'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-1@en-US'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-2@en-US'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-2@en-US'})
 SET c.display_name = 'culture-2',
     c.locale = 'en-US',
     c.content = 'culture-2',
@@ -48,10 +48,10 @@ SET c.display_name = 'culture-2',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-US'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-2@en-US'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-2@en-US'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-3@en-US'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-3@en-US'})
 SET c.display_name = 'culture-3',
     c.locale = 'en-US',
     c.content = 'culture-3',
@@ -63,10 +63,10 @@ SET c.display_name = 'culture-3',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-US'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-3@en-US'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-3@en-US'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-4@en-US'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-4@en-US'})
 SET c.display_name = 'culture-4',
     c.locale = 'en-US',
     c.content = 'culture-4',
@@ -78,11 +78,11 @@ SET c.display_name = 'culture-4',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-US'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-4@en-US'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-4@en-US'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-GB CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-5@en-GB'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-5@en-GB'})
 SET c.display_name = 'culture-5',
     c.locale = 'en-GB',
     c.content = 'culture-5',
@@ -94,10 +94,10 @@ SET c.display_name = 'culture-5',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-GB'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-5@en-GB'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-5@en-GB'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-6@en-GB'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-6@en-GB'})
 SET c.display_name = 'culture-6',
     c.locale = 'en-GB',
     c.content = 'culture-6',
@@ -109,10 +109,10 @@ SET c.display_name = 'culture-6',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-GB'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-6@en-GB'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-6@en-GB'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-7@en-GB'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-7@en-GB'})
 SET c.display_name = 'culture-7',
     c.locale = 'en-GB',
     c.content = 'culture-7',
@@ -124,10 +124,10 @@ SET c.display_name = 'culture-7',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-GB'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-7@en-GB'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-7@en-GB'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-8@en-GB'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-8@en-GB'})
 SET c.display_name = 'culture-8',
     c.locale = 'en-GB',
     c.content = 'culture-8',
@@ -139,10 +139,10 @@ SET c.display_name = 'culture-8',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-GB'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-8@en-GB'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-8@en-GB'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-9@en-GB'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-9@en-GB'})
 SET c.display_name = 'culture-9',
     c.locale = 'en-GB',
     c.content = 'culture-9',
@@ -154,11 +154,11 @@ SET c.display_name = 'culture-9',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-GB'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-9@en-GB'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-9@en-GB'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-AU CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-10@en-AU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-10@en-AU'})
 SET c.display_name = 'culture-10',
     c.locale = 'en-AU',
     c.content = 'culture-10',
@@ -170,10 +170,10 @@ SET c.display_name = 'culture-10',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-AU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-10@en-AU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-10@en-AU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-11@en-AU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-11@en-AU'})
 SET c.display_name = 'culture-11',
     c.locale = 'en-AU',
     c.content = 'culture-11',
@@ -185,10 +185,10 @@ SET c.display_name = 'culture-11',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-AU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-11@en-AU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-11@en-AU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-12@en-AU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-12@en-AU'})
 SET c.display_name = 'culture-12',
     c.locale = 'en-AU',
     c.content = 'culture-12',
@@ -200,10 +200,10 @@ SET c.display_name = 'culture-12',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-AU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-12@en-AU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-12@en-AU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-13@en-AU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-13@en-AU'})
 SET c.display_name = 'culture-13',
     c.locale = 'en-AU',
     c.content = 'culture-13',
@@ -215,10 +215,10 @@ SET c.display_name = 'culture-13',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-AU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-13@en-AU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-13@en-AU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-14@en-AU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-14@en-AU'})
 SET c.display_name = 'culture-14',
     c.locale = 'en-AU',
     c.content = 'culture-14',
@@ -230,11 +230,11 @@ SET c.display_name = 'culture-14',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-AU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-14@en-AU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-14@en-AU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-CA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-15@en-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-15@en-CA'})
 SET c.display_name = 'culture-15',
     c.locale = 'en-CA',
     c.content = 'culture-15',
@@ -246,10 +246,10 @@ SET c.display_name = 'culture-15',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-15@en-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-15@en-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-16@en-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-16@en-CA'})
 SET c.display_name = 'culture-16',
     c.locale = 'en-CA',
     c.content = 'culture-16',
@@ -261,10 +261,10 @@ SET c.display_name = 'culture-16',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-16@en-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-16@en-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-17@en-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-17@en-CA'})
 SET c.display_name = 'culture-17',
     c.locale = 'en-CA',
     c.content = 'culture-17',
@@ -276,10 +276,10 @@ SET c.display_name = 'culture-17',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-17@en-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-17@en-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-18@en-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-18@en-CA'})
 SET c.display_name = 'culture-18',
     c.locale = 'en-CA',
     c.content = 'culture-18',
@@ -291,10 +291,10 @@ SET c.display_name = 'culture-18',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-18@en-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-18@en-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-19@en-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-19@en-CA'})
 SET c.display_name = 'culture-19',
     c.locale = 'en-CA',
     c.content = 'culture-19',
@@ -306,11 +306,11 @@ SET c.display_name = 'culture-19',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-19@en-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-19@en-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-IN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-20@en-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-20@en-IN'})
 SET c.display_name = 'culture-20',
     c.locale = 'en-IN',
     c.content = 'culture-20',
@@ -322,10 +322,10 @@ SET c.display_name = 'culture-20',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-20@en-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-20@en-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-21@en-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-21@en-IN'})
 SET c.display_name = 'culture-21',
     c.locale = 'en-IN',
     c.content = 'culture-21',
@@ -337,10 +337,10 @@ SET c.display_name = 'culture-21',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-21@en-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-21@en-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-22@en-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-22@en-IN'})
 SET c.display_name = 'culture-22',
     c.locale = 'en-IN',
     c.content = 'culture-22',
@@ -352,10 +352,10 @@ SET c.display_name = 'culture-22',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-22@en-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-22@en-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-23@en-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-23@en-IN'})
 SET c.display_name = 'culture-23',
     c.locale = 'en-IN',
     c.content = 'culture-23',
@@ -367,10 +367,10 @@ SET c.display_name = 'culture-23',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-23@en-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-23@en-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-24@en-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-24@en-IN'})
 SET c.display_name = 'culture-24',
     c.locale = 'en-IN',
     c.content = 'culture-24',
@@ -382,11 +382,11 @@ SET c.display_name = 'culture-24',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-24@en-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-24@en-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-SG CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-25@en-SG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-25@en-SG'})
 SET c.display_name = 'culture-25',
     c.locale = 'en-SG',
     c.content = 'culture-25',
@@ -398,10 +398,10 @@ SET c.display_name = 'culture-25',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-SG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-25@en-SG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-25@en-SG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-26@en-SG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-26@en-SG'})
 SET c.display_name = 'culture-26',
     c.locale = 'en-SG',
     c.content = 'culture-26',
@@ -413,10 +413,10 @@ SET c.display_name = 'culture-26',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-SG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-26@en-SG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-26@en-SG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-27@en-SG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-27@en-SG'})
 SET c.display_name = 'culture-27',
     c.locale = 'en-SG',
     c.content = 'culture-27',
@@ -428,10 +428,10 @@ SET c.display_name = 'culture-27',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-SG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-27@en-SG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-27@en-SG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-28@en-SG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-28@en-SG'})
 SET c.display_name = 'culture-28',
     c.locale = 'en-SG',
     c.content = 'culture-28',
@@ -443,10 +443,10 @@ SET c.display_name = 'culture-28',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-SG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-28@en-SG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-28@en-SG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-29@en-SG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-29@en-SG'})
 SET c.display_name = 'culture-29',
     c.locale = 'en-SG',
     c.content = 'culture-29',
@@ -458,11 +458,11 @@ SET c.display_name = 'culture-29',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-SG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-29@en-SG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-29@en-SG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-ZA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-30@en-ZA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-30@en-ZA'})
 SET c.display_name = 'culture-30',
     c.locale = 'en-ZA',
     c.content = 'culture-30',
@@ -474,10 +474,10 @@ SET c.display_name = 'culture-30',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-ZA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-30@en-ZA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-30@en-ZA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-31@en-ZA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-31@en-ZA'})
 SET c.display_name = 'culture-31',
     c.locale = 'en-ZA',
     c.content = 'culture-31',
@@ -489,10 +489,10 @@ SET c.display_name = 'culture-31',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-ZA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-31@en-ZA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-31@en-ZA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-32@en-ZA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-32@en-ZA'})
 SET c.display_name = 'culture-32',
     c.locale = 'en-ZA',
     c.content = 'culture-32',
@@ -504,10 +504,10 @@ SET c.display_name = 'culture-32',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-ZA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-32@en-ZA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-32@en-ZA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-33@en-ZA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-33@en-ZA'})
 SET c.display_name = 'culture-33',
     c.locale = 'en-ZA',
     c.content = 'culture-33',
@@ -519,10 +519,10 @@ SET c.display_name = 'culture-33',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-ZA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-33@en-ZA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-33@en-ZA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-34@en-ZA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-34@en-ZA'})
 SET c.display_name = 'culture-34',
     c.locale = 'en-ZA',
     c.content = 'culture-34',
@@ -534,11 +534,11 @@ SET c.display_name = 'culture-34',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-ZA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-34@en-ZA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-34@en-ZA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-NZ CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-35@en-NZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-35@en-NZ'})
 SET c.display_name = 'culture-35',
     c.locale = 'en-NZ',
     c.content = 'culture-35',
@@ -550,10 +550,10 @@ SET c.display_name = 'culture-35',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-NZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-35@en-NZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-35@en-NZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-36@en-NZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-36@en-NZ'})
 SET c.display_name = 'culture-36',
     c.locale = 'en-NZ',
     c.content = 'culture-36',
@@ -565,10 +565,10 @@ SET c.display_name = 'culture-36',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-NZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-36@en-NZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-36@en-NZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-37@en-NZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-37@en-NZ'})
 SET c.display_name = 'culture-37',
     c.locale = 'en-NZ',
     c.content = 'culture-37',
@@ -580,10 +580,10 @@ SET c.display_name = 'culture-37',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-NZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-37@en-NZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-37@en-NZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-38@en-NZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-38@en-NZ'})
 SET c.display_name = 'culture-38',
     c.locale = 'en-NZ',
     c.content = 'culture-38',
@@ -595,10 +595,10 @@ SET c.display_name = 'culture-38',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-NZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-38@en-NZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-38@en-NZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-39@en-NZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-39@en-NZ'})
 SET c.display_name = 'culture-39',
     c.locale = 'en-NZ',
     c.content = 'culture-39',
@@ -610,11 +610,11 @@ SET c.display_name = 'culture-39',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-NZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-39@en-NZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-39@en-NZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-IE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-40@en-IE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-40@en-IE'})
 SET c.display_name = 'culture-40',
     c.locale = 'en-IE',
     c.content = 'culture-40',
@@ -626,10 +626,10 @@ SET c.display_name = 'culture-40',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-40@en-IE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-40@en-IE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-41@en-IE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-41@en-IE'})
 SET c.display_name = 'culture-41',
     c.locale = 'en-IE',
     c.content = 'culture-41',
@@ -641,10 +641,10 @@ SET c.display_name = 'culture-41',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-41@en-IE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-41@en-IE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-42@en-IE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-42@en-IE'})
 SET c.display_name = 'culture-42',
     c.locale = 'en-IE',
     c.content = 'culture-42',
@@ -656,10 +656,10 @@ SET c.display_name = 'culture-42',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-42@en-IE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-42@en-IE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-43@en-IE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-43@en-IE'})
 SET c.display_name = 'culture-43',
     c.locale = 'en-IE',
     c.content = 'culture-43',
@@ -671,10 +671,10 @@ SET c.display_name = 'culture-43',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-43@en-IE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-43@en-IE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-44@en-IE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-44@en-IE'})
 SET c.display_name = 'culture-44',
     c.locale = 'en-IE',
     c.content = 'culture-44',
@@ -686,11 +686,11 @@ SET c.display_name = 'culture-44',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-IE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-44@en-IE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-44@en-IE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- en-PH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-45@en-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-45@en-PH'})
 SET c.display_name = 'culture-45',
     c.locale = 'en-PH',
     c.content = 'culture-45',
@@ -702,10 +702,10 @@ SET c.display_name = 'culture-45',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-45@en-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-45@en-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-46@en-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-46@en-PH'})
 SET c.display_name = 'culture-46',
     c.locale = 'en-PH',
     c.content = 'culture-46',
@@ -717,10 +717,10 @@ SET c.display_name = 'culture-46',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-46@en-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-46@en-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-47@en-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-47@en-PH'})
 SET c.display_name = 'culture-47',
     c.locale = 'en-PH',
     c.content = 'culture-47',
@@ -732,10 +732,10 @@ SET c.display_name = 'culture-47',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-47@en-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-47@en-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-48@en-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-48@en-PH'})
 SET c.display_name = 'culture-48',
     c.locale = 'en-PH',
     c.content = 'culture-48',
@@ -747,10 +747,10 @@ SET c.display_name = 'culture-48',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-48@en-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-48@en-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-49@en-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-49@en-PH'})
 SET c.display_name = 'culture-49',
     c.locale = 'en-PH',
     c.content = 'culture-49',
@@ -762,11 +762,11 @@ SET c.display_name = 'culture-49',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@en-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-49@en-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-49@en-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- de-DE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-50@de-DE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-50@de-DE'})
 SET c.display_name = 'culture-50',
     c.locale = 'de-DE',
     c.content = 'culture-50',
@@ -778,10 +778,10 @@ SET c.display_name = 'culture-50',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-DE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-50@de-DE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-50@de-DE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-51@de-DE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-51@de-DE'})
 SET c.display_name = 'culture-51',
     c.locale = 'de-DE',
     c.content = 'culture-51',
@@ -793,10 +793,10 @@ SET c.display_name = 'culture-51',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-DE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-51@de-DE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-51@de-DE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-52@de-DE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-52@de-DE'})
 SET c.display_name = 'culture-52',
     c.locale = 'de-DE',
     c.content = 'culture-52',
@@ -808,10 +808,10 @@ SET c.display_name = 'culture-52',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-DE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-52@de-DE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-52@de-DE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-53@de-DE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-53@de-DE'})
 SET c.display_name = 'culture-53',
     c.locale = 'de-DE',
     c.content = 'culture-53',
@@ -823,10 +823,10 @@ SET c.display_name = 'culture-53',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-DE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-53@de-DE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-53@de-DE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-54@de-DE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-54@de-DE'})
 SET c.display_name = 'culture-54',
     c.locale = 'de-DE',
     c.content = 'culture-54',
@@ -838,11 +838,11 @@ SET c.display_name = 'culture-54',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-DE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-54@de-DE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-54@de-DE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- de-AT CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-55@de-AT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-55@de-AT'})
 SET c.display_name = 'culture-55',
     c.locale = 'de-AT',
     c.content = 'culture-55',
@@ -854,10 +854,10 @@ SET c.display_name = 'culture-55',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-AT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-55@de-AT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-55@de-AT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-56@de-AT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-56@de-AT'})
 SET c.display_name = 'culture-56',
     c.locale = 'de-AT',
     c.content = 'culture-56',
@@ -869,10 +869,10 @@ SET c.display_name = 'culture-56',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-AT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-56@de-AT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-56@de-AT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-57@de-AT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-57@de-AT'})
 SET c.display_name = 'culture-57',
     c.locale = 'de-AT',
     c.content = 'culture-57',
@@ -884,10 +884,10 @@ SET c.display_name = 'culture-57',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-AT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-57@de-AT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-57@de-AT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-58@de-AT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-58@de-AT'})
 SET c.display_name = 'culture-58',
     c.locale = 'de-AT',
     c.content = 'culture-58',
@@ -899,10 +899,10 @@ SET c.display_name = 'culture-58',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-AT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-58@de-AT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-58@de-AT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-59@de-AT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-59@de-AT'})
 SET c.display_name = 'culture-59',
     c.locale = 'de-AT',
     c.content = 'culture-59',
@@ -914,11 +914,11 @@ SET c.display_name = 'culture-59',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-AT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-59@de-AT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-59@de-AT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- de-CH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-60@de-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-60@de-CH'})
 SET c.display_name = 'culture-60',
     c.locale = 'de-CH',
     c.content = 'culture-60',
@@ -930,10 +930,10 @@ SET c.display_name = 'culture-60',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-60@de-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-60@de-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-61@de-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-61@de-CH'})
 SET c.display_name = 'culture-61',
     c.locale = 'de-CH',
     c.content = 'culture-61',
@@ -945,10 +945,10 @@ SET c.display_name = 'culture-61',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-61@de-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-61@de-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-62@de-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-62@de-CH'})
 SET c.display_name = 'culture-62',
     c.locale = 'de-CH',
     c.content = 'culture-62',
@@ -960,10 +960,10 @@ SET c.display_name = 'culture-62',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-62@de-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-62@de-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-63@de-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-63@de-CH'})
 SET c.display_name = 'culture-63',
     c.locale = 'de-CH',
     c.content = 'culture-63',
@@ -975,10 +975,10 @@ SET c.display_name = 'culture-63',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-63@de-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-63@de-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-64@de-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-64@de-CH'})
 SET c.display_name = 'culture-64',
     c.locale = 'de-CH',
     c.content = 'culture-64',
@@ -990,11 +990,11 @@ SET c.display_name = 'culture-64',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@de-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-64@de-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-64@de-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- nl-NL CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-65@nl-NL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-65@nl-NL'})
 SET c.display_name = 'culture-65',
     c.locale = 'nl-NL',
     c.content = 'culture-65',
@@ -1006,10 +1006,10 @@ SET c.display_name = 'culture-65',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-NL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-65@nl-NL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-65@nl-NL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-66@nl-NL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-66@nl-NL'})
 SET c.display_name = 'culture-66',
     c.locale = 'nl-NL',
     c.content = 'culture-66',
@@ -1021,10 +1021,10 @@ SET c.display_name = 'culture-66',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-NL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-66@nl-NL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-66@nl-NL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-67@nl-NL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-67@nl-NL'})
 SET c.display_name = 'culture-67',
     c.locale = 'nl-NL',
     c.content = 'culture-67',
@@ -1036,10 +1036,10 @@ SET c.display_name = 'culture-67',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-NL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-67@nl-NL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-67@nl-NL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-68@nl-NL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-68@nl-NL'})
 SET c.display_name = 'culture-68',
     c.locale = 'nl-NL',
     c.content = 'culture-68',
@@ -1051,10 +1051,10 @@ SET c.display_name = 'culture-68',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-NL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-68@nl-NL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-68@nl-NL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-69@nl-NL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-69@nl-NL'})
 SET c.display_name = 'culture-69',
     c.locale = 'nl-NL',
     c.content = 'culture-69',
@@ -1066,11 +1066,11 @@ SET c.display_name = 'culture-69',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-NL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-69@nl-NL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-69@nl-NL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- nl-BE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-70@nl-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-70@nl-BE'})
 SET c.display_name = 'culture-70',
     c.locale = 'nl-BE',
     c.content = 'culture-70',
@@ -1082,10 +1082,10 @@ SET c.display_name = 'culture-70',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-70@nl-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-70@nl-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-71@nl-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-71@nl-BE'})
 SET c.display_name = 'culture-71',
     c.locale = 'nl-BE',
     c.content = 'culture-71',
@@ -1097,10 +1097,10 @@ SET c.display_name = 'culture-71',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-71@nl-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-71@nl-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-72@nl-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-72@nl-BE'})
 SET c.display_name = 'culture-72',
     c.locale = 'nl-BE',
     c.content = 'culture-72',
@@ -1112,10 +1112,10 @@ SET c.display_name = 'culture-72',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-72@nl-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-72@nl-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-73@nl-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-73@nl-BE'})
 SET c.display_name = 'culture-73',
     c.locale = 'nl-BE',
     c.content = 'culture-73',
@@ -1127,10 +1127,10 @@ SET c.display_name = 'culture-73',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-73@nl-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-73@nl-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-74@nl-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-74@nl-BE'})
 SET c.display_name = 'culture-74',
     c.locale = 'nl-BE',
     c.content = 'culture-74',
@@ -1142,11 +1142,11 @@ SET c.display_name = 'culture-74',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@nl-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-74@nl-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-74@nl-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- sv-SE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-75@sv-SE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-75@sv-SE'})
 SET c.display_name = 'culture-75',
     c.locale = 'sv-SE',
     c.content = 'culture-75',
@@ -1158,10 +1158,10 @@ SET c.display_name = 'culture-75',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sv-SE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-75@sv-SE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-75@sv-SE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-76@sv-SE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-76@sv-SE'})
 SET c.display_name = 'culture-76',
     c.locale = 'sv-SE',
     c.content = 'culture-76',
@@ -1173,10 +1173,10 @@ SET c.display_name = 'culture-76',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sv-SE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-76@sv-SE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-76@sv-SE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-77@sv-SE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-77@sv-SE'})
 SET c.display_name = 'culture-77',
     c.locale = 'sv-SE',
     c.content = 'culture-77',
@@ -1188,10 +1188,10 @@ SET c.display_name = 'culture-77',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sv-SE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-77@sv-SE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-77@sv-SE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-78@sv-SE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-78@sv-SE'})
 SET c.display_name = 'culture-78',
     c.locale = 'sv-SE',
     c.content = 'culture-78',
@@ -1203,10 +1203,10 @@ SET c.display_name = 'culture-78',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sv-SE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-78@sv-SE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-78@sv-SE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-79@sv-SE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-79@sv-SE'})
 SET c.display_name = 'culture-79',
     c.locale = 'sv-SE',
     c.content = 'culture-79',
@@ -1218,11 +1218,11 @@ SET c.display_name = 'culture-79',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sv-SE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-79@sv-SE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-79@sv-SE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- da-DK CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-80@da-DK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-80@da-DK'})
 SET c.display_name = 'culture-80',
     c.locale = 'da-DK',
     c.content = 'culture-80',
@@ -1234,10 +1234,10 @@ SET c.display_name = 'culture-80',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@da-DK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-80@da-DK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-80@da-DK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-81@da-DK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-81@da-DK'})
 SET c.display_name = 'culture-81',
     c.locale = 'da-DK',
     c.content = 'culture-81',
@@ -1249,10 +1249,10 @@ SET c.display_name = 'culture-81',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@da-DK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-81@da-DK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-81@da-DK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-82@da-DK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-82@da-DK'})
 SET c.display_name = 'culture-82',
     c.locale = 'da-DK',
     c.content = 'culture-82',
@@ -1264,10 +1264,10 @@ SET c.display_name = 'culture-82',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@da-DK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-82@da-DK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-82@da-DK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-83@da-DK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-83@da-DK'})
 SET c.display_name = 'culture-83',
     c.locale = 'da-DK',
     c.content = 'culture-83',
@@ -1279,10 +1279,10 @@ SET c.display_name = 'culture-83',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@da-DK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-83@da-DK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-83@da-DK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-84@da-DK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-84@da-DK'})
 SET c.display_name = 'culture-84',
     c.locale = 'da-DK',
     c.content = 'culture-84',
@@ -1294,11 +1294,11 @@ SET c.display_name = 'culture-84',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@da-DK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-84@da-DK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-84@da-DK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- no-NO CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-85@no-NO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-85@no-NO'})
 SET c.display_name = 'culture-85',
     c.locale = 'no-NO',
     c.content = 'culture-85',
@@ -1310,10 +1310,10 @@ SET c.display_name = 'culture-85',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@no-NO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-85@no-NO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-85@no-NO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-86@no-NO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-86@no-NO'})
 SET c.display_name = 'culture-86',
     c.locale = 'no-NO',
     c.content = 'culture-86',
@@ -1325,10 +1325,10 @@ SET c.display_name = 'culture-86',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@no-NO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-86@no-NO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-86@no-NO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-87@no-NO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-87@no-NO'})
 SET c.display_name = 'culture-87',
     c.locale = 'no-NO',
     c.content = 'culture-87',
@@ -1340,10 +1340,10 @@ SET c.display_name = 'culture-87',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@no-NO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-87@no-NO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-87@no-NO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-88@no-NO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-88@no-NO'})
 SET c.display_name = 'culture-88',
     c.locale = 'no-NO',
     c.content = 'culture-88',
@@ -1355,10 +1355,10 @@ SET c.display_name = 'culture-88',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@no-NO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-88@no-NO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-88@no-NO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-89@no-NO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-89@no-NO'})
 SET c.display_name = 'culture-89',
     c.locale = 'no-NO',
     c.content = 'culture-89',
@@ -1370,11 +1370,11 @@ SET c.display_name = 'culture-89',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@no-NO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-89@no-NO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-89@no-NO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fi-FI CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-90@fi-FI'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-90@fi-FI'})
 SET c.display_name = 'culture-90',
     c.locale = 'fi-FI',
     c.content = 'culture-90',
@@ -1386,10 +1386,10 @@ SET c.display_name = 'culture-90',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fi-FI'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-90@fi-FI'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-90@fi-FI'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-91@fi-FI'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-91@fi-FI'})
 SET c.display_name = 'culture-91',
     c.locale = 'fi-FI',
     c.content = 'culture-91',
@@ -1401,10 +1401,10 @@ SET c.display_name = 'culture-91',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fi-FI'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-91@fi-FI'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-91@fi-FI'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-92@fi-FI'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-92@fi-FI'})
 SET c.display_name = 'culture-92',
     c.locale = 'fi-FI',
     c.content = 'culture-92',
@@ -1416,10 +1416,10 @@ SET c.display_name = 'culture-92',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fi-FI'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-92@fi-FI'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-92@fi-FI'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-93@fi-FI'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-93@fi-FI'})
 SET c.display_name = 'culture-93',
     c.locale = 'fi-FI',
     c.content = 'culture-93',
@@ -1431,10 +1431,10 @@ SET c.display_name = 'culture-93',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fi-FI'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-93@fi-FI'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-93@fi-FI'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-94@fi-FI'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-94@fi-FI'})
 SET c.display_name = 'culture-94',
     c.locale = 'fi-FI',
     c.content = 'culture-94',
@@ -1446,11 +1446,11 @@ SET c.display_name = 'culture-94',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fi-FI'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-94@fi-FI'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-94@fi-FI'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- zh-CN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-95@zh-CN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-95@zh-CN'})
 SET c.display_name = 'culture-95',
     c.locale = 'zh-CN',
     c.content = 'culture-95',
@@ -1462,10 +1462,10 @@ SET c.display_name = 'culture-95',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-CN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-95@zh-CN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-95@zh-CN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-96@zh-CN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-96@zh-CN'})
 SET c.display_name = 'culture-96',
     c.locale = 'zh-CN',
     c.content = 'culture-96',
@@ -1477,10 +1477,10 @@ SET c.display_name = 'culture-96',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-CN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-96@zh-CN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-96@zh-CN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-97@zh-CN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-97@zh-CN'})
 SET c.display_name = 'culture-97',
     c.locale = 'zh-CN',
     c.content = 'culture-97',
@@ -1492,10 +1492,10 @@ SET c.display_name = 'culture-97',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-CN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-97@zh-CN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-97@zh-CN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-98@zh-CN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-98@zh-CN'})
 SET c.display_name = 'culture-98',
     c.locale = 'zh-CN',
     c.content = 'culture-98',
@@ -1507,10 +1507,10 @@ SET c.display_name = 'culture-98',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-CN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-98@zh-CN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-98@zh-CN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-99@zh-CN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-99@zh-CN'})
 SET c.display_name = 'culture-99',
     c.locale = 'zh-CN',
     c.content = 'culture-99',
@@ -1522,11 +1522,11 @@ SET c.display_name = 'culture-99',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-CN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-99@zh-CN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-99@zh-CN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- zh-TW CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-100@zh-TW'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-100@zh-TW'})
 SET c.display_name = 'culture-100',
     c.locale = 'zh-TW',
     c.content = 'culture-100',
@@ -1538,10 +1538,10 @@ SET c.display_name = 'culture-100',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-TW'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-100@zh-TW'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-100@zh-TW'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-101@zh-TW'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-101@zh-TW'})
 SET c.display_name = 'culture-101',
     c.locale = 'zh-TW',
     c.content = 'culture-101',
@@ -1553,10 +1553,10 @@ SET c.display_name = 'culture-101',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-TW'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-101@zh-TW'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-101@zh-TW'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-102@zh-TW'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-102@zh-TW'})
 SET c.display_name = 'culture-102',
     c.locale = 'zh-TW',
     c.content = 'culture-102',
@@ -1568,10 +1568,10 @@ SET c.display_name = 'culture-102',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-TW'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-102@zh-TW'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-102@zh-TW'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-103@zh-TW'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-103@zh-TW'})
 SET c.display_name = 'culture-103',
     c.locale = 'zh-TW',
     c.content = 'culture-103',
@@ -1583,11 +1583,11 @@ SET c.display_name = 'culture-103',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-TW'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-103@zh-TW'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-103@zh-TW'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- zh-HK CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-104@zh-HK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-104@zh-HK'})
 SET c.display_name = 'culture-104',
     c.locale = 'zh-HK',
     c.content = 'culture-104',
@@ -1599,10 +1599,10 @@ SET c.display_name = 'culture-104',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-HK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-104@zh-HK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-104@zh-HK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-105@zh-HK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-105@zh-HK'})
 SET c.display_name = 'culture-105',
     c.locale = 'zh-HK',
     c.content = 'culture-105',
@@ -1614,10 +1614,10 @@ SET c.display_name = 'culture-105',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-HK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-105@zh-HK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-105@zh-HK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-106@zh-HK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-106@zh-HK'})
 SET c.display_name = 'culture-106',
     c.locale = 'zh-HK',
     c.content = 'culture-106',
@@ -1629,10 +1629,10 @@ SET c.display_name = 'culture-106',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-HK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-106@zh-HK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-106@zh-HK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-107@zh-HK'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-107@zh-HK'})
 SET c.display_name = 'culture-107',
     c.locale = 'zh-HK',
     c.content = 'culture-107',
@@ -1644,11 +1644,11 @@ SET c.display_name = 'culture-107',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@zh-HK'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-107@zh-HK'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-107@zh-HK'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ja-JP CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-108@ja-JP'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-108@ja-JP'})
 SET c.display_name = 'culture-108',
     c.locale = 'ja-JP',
     c.content = 'culture-108',
@@ -1660,10 +1660,10 @@ SET c.display_name = 'culture-108',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ja-JP'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-108@ja-JP'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-108@ja-JP'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-109@ja-JP'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-109@ja-JP'})
 SET c.display_name = 'culture-109',
     c.locale = 'ja-JP',
     c.content = 'culture-109',
@@ -1675,10 +1675,10 @@ SET c.display_name = 'culture-109',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ja-JP'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-109@ja-JP'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-109@ja-JP'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-110@ja-JP'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-110@ja-JP'})
 SET c.display_name = 'culture-110',
     c.locale = 'ja-JP',
     c.content = 'culture-110',
@@ -1690,10 +1690,10 @@ SET c.display_name = 'culture-110',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ja-JP'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-110@ja-JP'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-110@ja-JP'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-111@ja-JP'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-111@ja-JP'})
 SET c.display_name = 'culture-111',
     c.locale = 'ja-JP',
     c.content = 'culture-111',
@@ -1705,10 +1705,10 @@ SET c.display_name = 'culture-111',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ja-JP'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-111@ja-JP'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-111@ja-JP'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-112@ja-JP'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-112@ja-JP'})
 SET c.display_name = 'culture-112',
     c.locale = 'ja-JP',
     c.content = 'culture-112',
@@ -1720,11 +1720,11 @@ SET c.display_name = 'culture-112',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ja-JP'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-112@ja-JP'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-112@ja-JP'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ko-KR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-113@ko-KR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-113@ko-KR'})
 SET c.display_name = 'culture-113',
     c.locale = 'ko-KR',
     c.content = 'culture-113',
@@ -1736,10 +1736,10 @@ SET c.display_name = 'culture-113',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ko-KR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-113@ko-KR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-113@ko-KR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-114@ko-KR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-114@ko-KR'})
 SET c.display_name = 'culture-114',
     c.locale = 'ko-KR',
     c.content = 'culture-114',
@@ -1751,10 +1751,10 @@ SET c.display_name = 'culture-114',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ko-KR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-114@ko-KR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-114@ko-KR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-115@ko-KR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-115@ko-KR'})
 SET c.display_name = 'culture-115',
     c.locale = 'ko-KR',
     c.content = 'culture-115',
@@ -1766,10 +1766,10 @@ SET c.display_name = 'culture-115',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ko-KR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-115@ko-KR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-115@ko-KR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-116@ko-KR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-116@ko-KR'})
 SET c.display_name = 'culture-116',
     c.locale = 'ko-KR',
     c.content = 'culture-116',
@@ -1781,10 +1781,10 @@ SET c.display_name = 'culture-116',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ko-KR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-116@ko-KR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-116@ko-KR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-117@ko-KR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-117@ko-KR'})
 SET c.display_name = 'culture-117',
     c.locale = 'ko-KR',
     c.content = 'culture-117',
@@ -1796,11 +1796,11 @@ SET c.display_name = 'culture-117',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ko-KR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-117@ko-KR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-117@ko-KR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- hi-IN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-118@hi-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-118@hi-IN'})
 SET c.display_name = 'culture-118',
     c.locale = 'hi-IN',
     c.content = 'culture-118',
@@ -1812,10 +1812,10 @@ SET c.display_name = 'culture-118',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@hi-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-118@hi-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-118@hi-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-119@hi-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-119@hi-IN'})
 SET c.display_name = 'culture-119',
     c.locale = 'hi-IN',
     c.content = 'culture-119',
@@ -1827,10 +1827,10 @@ SET c.display_name = 'culture-119',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@hi-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-119@hi-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-119@hi-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-120@hi-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-120@hi-IN'})
 SET c.display_name = 'culture-120',
     c.locale = 'hi-IN',
     c.content = 'culture-120',
@@ -1842,10 +1842,10 @@ SET c.display_name = 'culture-120',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@hi-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-120@hi-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-120@hi-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-121@hi-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-121@hi-IN'})
 SET c.display_name = 'culture-121',
     c.locale = 'hi-IN',
     c.content = 'culture-121',
@@ -1857,11 +1857,11 @@ SET c.display_name = 'culture-121',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@hi-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-121@hi-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-121@hi-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- bn-BD CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-122@bn-BD'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-122@bn-BD'})
 SET c.display_name = 'culture-122',
     c.locale = 'bn-BD',
     c.content = 'culture-122',
@@ -1873,10 +1873,10 @@ SET c.display_name = 'culture-122',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@bn-BD'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-122@bn-BD'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-122@bn-BD'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-123@bn-BD'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-123@bn-BD'})
 SET c.display_name = 'culture-123',
     c.locale = 'bn-BD',
     c.content = 'culture-123',
@@ -1888,10 +1888,10 @@ SET c.display_name = 'culture-123',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@bn-BD'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-123@bn-BD'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-123@bn-BD'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-124@bn-BD'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-124@bn-BD'})
 SET c.display_name = 'culture-124',
     c.locale = 'bn-BD',
     c.content = 'culture-124',
@@ -1903,10 +1903,10 @@ SET c.display_name = 'culture-124',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@bn-BD'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-124@bn-BD'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-124@bn-BD'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-125@bn-BD'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-125@bn-BD'})
 SET c.display_name = 'culture-125',
     c.locale = 'bn-BD',
     c.content = 'culture-125',
@@ -1918,11 +1918,11 @@ SET c.display_name = 'culture-125',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@bn-BD'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-125@bn-BD'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-125@bn-BD'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ta-IN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-126@ta-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-126@ta-IN'})
 SET c.display_name = 'culture-126',
     c.locale = 'ta-IN',
     c.content = 'culture-126',
@@ -1934,10 +1934,10 @@ SET c.display_name = 'culture-126',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ta-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-126@ta-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-126@ta-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-127@ta-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-127@ta-IN'})
 SET c.display_name = 'culture-127',
     c.locale = 'ta-IN',
     c.content = 'culture-127',
@@ -1949,10 +1949,10 @@ SET c.display_name = 'culture-127',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ta-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-127@ta-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-127@ta-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-128@ta-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-128@ta-IN'})
 SET c.display_name = 'culture-128',
     c.locale = 'ta-IN',
     c.content = 'culture-128',
@@ -1964,10 +1964,10 @@ SET c.display_name = 'culture-128',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ta-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-128@ta-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-128@ta-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-129@ta-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-129@ta-IN'})
 SET c.display_name = 'culture-129',
     c.locale = 'ta-IN',
     c.content = 'culture-129',
@@ -1979,11 +1979,11 @@ SET c.display_name = 'culture-129',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ta-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-129@ta-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-129@ta-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- te-IN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-130@te-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-130@te-IN'})
 SET c.display_name = 'culture-130',
     c.locale = 'te-IN',
     c.content = 'culture-130',
@@ -1995,10 +1995,10 @@ SET c.display_name = 'culture-130',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@te-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-130@te-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-130@te-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-131@te-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-131@te-IN'})
 SET c.display_name = 'culture-131',
     c.locale = 'te-IN',
     c.content = 'culture-131',
@@ -2010,10 +2010,10 @@ SET c.display_name = 'culture-131',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@te-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-131@te-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-131@te-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-132@te-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-132@te-IN'})
 SET c.display_name = 'culture-132',
     c.locale = 'te-IN',
     c.content = 'culture-132',
@@ -2025,10 +2025,10 @@ SET c.display_name = 'culture-132',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@te-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-132@te-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-132@te-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-133@te-IN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-133@te-IN'})
 SET c.display_name = 'culture-133',
     c.locale = 'te-IN',
     c.content = 'culture-133',
@@ -2040,11 +2040,11 @@ SET c.display_name = 'culture-133',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@te-IN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-133@te-IN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-133@te-IN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- vi-VN CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-134@vi-VN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-134@vi-VN'})
 SET c.display_name = 'culture-134',
     c.locale = 'vi-VN',
     c.content = 'culture-134',
@@ -2056,10 +2056,10 @@ SET c.display_name = 'culture-134',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@vi-VN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-134@vi-VN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-134@vi-VN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-135@vi-VN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-135@vi-VN'})
 SET c.display_name = 'culture-135',
     c.locale = 'vi-VN',
     c.content = 'culture-135',
@@ -2071,10 +2071,10 @@ SET c.display_name = 'culture-135',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@vi-VN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-135@vi-VN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-135@vi-VN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-136@vi-VN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-136@vi-VN'})
 SET c.display_name = 'culture-136',
     c.locale = 'vi-VN',
     c.content = 'culture-136',
@@ -2086,10 +2086,10 @@ SET c.display_name = 'culture-136',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@vi-VN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-136@vi-VN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-136@vi-VN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-137@vi-VN'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-137@vi-VN'})
 SET c.display_name = 'culture-137',
     c.locale = 'vi-VN',
     c.content = 'culture-137',
@@ -2101,11 +2101,11 @@ SET c.display_name = 'culture-137',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@vi-VN'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-137@vi-VN'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-137@vi-VN'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- th-TH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-138@th-TH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-138@th-TH'})
 SET c.display_name = 'culture-138',
     c.locale = 'th-TH',
     c.content = 'culture-138',
@@ -2117,10 +2117,10 @@ SET c.display_name = 'culture-138',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@th-TH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-138@th-TH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-138@th-TH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-139@th-TH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-139@th-TH'})
 SET c.display_name = 'culture-139',
     c.locale = 'th-TH',
     c.content = 'culture-139',
@@ -2132,10 +2132,10 @@ SET c.display_name = 'culture-139',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@th-TH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-139@th-TH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-139@th-TH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-140@th-TH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-140@th-TH'})
 SET c.display_name = 'culture-140',
     c.locale = 'th-TH',
     c.content = 'culture-140',
@@ -2147,10 +2147,10 @@ SET c.display_name = 'culture-140',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@th-TH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-140@th-TH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-140@th-TH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-141@th-TH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-141@th-TH'})
 SET c.display_name = 'culture-141',
     c.locale = 'th-TH',
     c.content = 'culture-141',
@@ -2162,11 +2162,11 @@ SET c.display_name = 'culture-141',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@th-TH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-141@th-TH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-141@th-TH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- id-ID CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-142@id-ID'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-142@id-ID'})
 SET c.display_name = 'culture-142',
     c.locale = 'id-ID',
     c.content = 'culture-142',
@@ -2178,10 +2178,10 @@ SET c.display_name = 'culture-142',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@id-ID'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-142@id-ID'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-142@id-ID'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-143@id-ID'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-143@id-ID'})
 SET c.display_name = 'culture-143',
     c.locale = 'id-ID',
     c.content = 'culture-143',
@@ -2193,10 +2193,10 @@ SET c.display_name = 'culture-143',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@id-ID'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-143@id-ID'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-143@id-ID'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-144@id-ID'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-144@id-ID'})
 SET c.display_name = 'culture-144',
     c.locale = 'id-ID',
     c.content = 'culture-144',
@@ -2208,10 +2208,10 @@ SET c.display_name = 'culture-144',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@id-ID'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-144@id-ID'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-144@id-ID'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-145@id-ID'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-145@id-ID'})
 SET c.display_name = 'culture-145',
     c.locale = 'id-ID',
     c.content = 'culture-145',
@@ -2223,11 +2223,11 @@ SET c.display_name = 'culture-145',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@id-ID'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-145@id-ID'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-145@id-ID'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ms-MY CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-146@ms-MY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-146@ms-MY'})
 SET c.display_name = 'culture-146',
     c.locale = 'ms-MY',
     c.content = 'culture-146',
@@ -2239,10 +2239,10 @@ SET c.display_name = 'culture-146',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ms-MY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-146@ms-MY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-146@ms-MY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-147@ms-MY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-147@ms-MY'})
 SET c.display_name = 'culture-147',
     c.locale = 'ms-MY',
     c.content = 'culture-147',
@@ -2254,10 +2254,10 @@ SET c.display_name = 'culture-147',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ms-MY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-147@ms-MY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-147@ms-MY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-148@ms-MY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-148@ms-MY'})
 SET c.display_name = 'culture-148',
     c.locale = 'ms-MY',
     c.content = 'culture-148',
@@ -2269,10 +2269,10 @@ SET c.display_name = 'culture-148',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ms-MY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-148@ms-MY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-148@ms-MY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-149@ms-MY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-149@ms-MY'})
 SET c.display_name = 'culture-149',
     c.locale = 'ms-MY',
     c.content = 'culture-149',
@@ -2284,11 +2284,11 @@ SET c.display_name = 'culture-149',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ms-MY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-149@ms-MY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-149@ms-MY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fil-PH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-150@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-150@fil-PH'})
 SET c.display_name = 'culture-150',
     c.locale = 'fil-PH',
     c.content = 'culture-150',
@@ -2300,10 +2300,10 @@ SET c.display_name = 'culture-150',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-150@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-150@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-151@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-151@fil-PH'})
 SET c.display_name = 'culture-151',
     c.locale = 'fil-PH',
     c.content = 'culture-151',
@@ -2315,10 +2315,10 @@ SET c.display_name = 'culture-151',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-151@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-151@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-152@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-152@fil-PH'})
 SET c.display_name = 'culture-152',
     c.locale = 'fil-PH',
     c.content = 'culture-152',
@@ -2330,10 +2330,10 @@ SET c.display_name = 'culture-152',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-152@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-152@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-153@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-153@fil-PH'})
 SET c.display_name = 'culture-153',
     c.locale = 'fil-PH',
     c.content = 'culture-153',
@@ -2345,10 +2345,10 @@ SET c.display_name = 'culture-153',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-153@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-153@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-154@fil-PH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-154@fil-PH'})
 SET c.display_name = 'culture-154',
     c.locale = 'fil-PH',
     c.content = 'culture-154',
@@ -2360,11 +2360,11 @@ SET c.display_name = 'culture-154',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fil-PH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-154@fil-PH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-154@fil-PH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ar-SA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-155@ar-SA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-155@ar-SA'})
 SET c.display_name = 'culture-155',
     c.locale = 'ar-SA',
     c.content = 'culture-155',
@@ -2376,10 +2376,10 @@ SET c.display_name = 'culture-155',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-SA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-155@ar-SA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-155@ar-SA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-156@ar-SA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-156@ar-SA'})
 SET c.display_name = 'culture-156',
     c.locale = 'ar-SA',
     c.content = 'culture-156',
@@ -2391,10 +2391,10 @@ SET c.display_name = 'culture-156',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-SA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-156@ar-SA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-156@ar-SA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-157@ar-SA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-157@ar-SA'})
 SET c.display_name = 'culture-157',
     c.locale = 'ar-SA',
     c.content = 'culture-157',
@@ -2406,10 +2406,10 @@ SET c.display_name = 'culture-157',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-SA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-157@ar-SA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-157@ar-SA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-158@ar-SA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-158@ar-SA'})
 SET c.display_name = 'culture-158',
     c.locale = 'ar-SA',
     c.content = 'culture-158',
@@ -2421,10 +2421,10 @@ SET c.display_name = 'culture-158',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-SA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-158@ar-SA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-158@ar-SA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-159@ar-SA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-159@ar-SA'})
 SET c.display_name = 'culture-159',
     c.locale = 'ar-SA',
     c.content = 'culture-159',
@@ -2436,11 +2436,11 @@ SET c.display_name = 'culture-159',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-SA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-159@ar-SA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-159@ar-SA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ar-EG CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-160@ar-EG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-160@ar-EG'})
 SET c.display_name = 'culture-160',
     c.locale = 'ar-EG',
     c.content = 'culture-160',
@@ -2452,10 +2452,10 @@ SET c.display_name = 'culture-160',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-EG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-160@ar-EG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-160@ar-EG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-161@ar-EG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-161@ar-EG'})
 SET c.display_name = 'culture-161',
     c.locale = 'ar-EG',
     c.content = 'culture-161',
@@ -2467,10 +2467,10 @@ SET c.display_name = 'culture-161',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-EG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-161@ar-EG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-161@ar-EG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-162@ar-EG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-162@ar-EG'})
 SET c.display_name = 'culture-162',
     c.locale = 'ar-EG',
     c.content = 'culture-162',
@@ -2482,10 +2482,10 @@ SET c.display_name = 'culture-162',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-EG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-162@ar-EG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-162@ar-EG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-163@ar-EG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-163@ar-EG'})
 SET c.display_name = 'culture-163',
     c.locale = 'ar-EG',
     c.content = 'culture-163',
@@ -2497,10 +2497,10 @@ SET c.display_name = 'culture-163',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-EG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-163@ar-EG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-163@ar-EG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-164@ar-EG'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-164@ar-EG'})
 SET c.display_name = 'culture-164',
     c.locale = 'ar-EG',
     c.content = 'culture-164',
@@ -2512,11 +2512,11 @@ SET c.display_name = 'culture-164',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-EG'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-164@ar-EG'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-164@ar-EG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ar-AE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-165@ar-AE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-165@ar-AE'})
 SET c.display_name = 'culture-165',
     c.locale = 'ar-AE',
     c.content = 'culture-165',
@@ -2528,10 +2528,10 @@ SET c.display_name = 'culture-165',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-AE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-165@ar-AE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-165@ar-AE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-166@ar-AE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-166@ar-AE'})
 SET c.display_name = 'culture-166',
     c.locale = 'ar-AE',
     c.content = 'culture-166',
@@ -2543,10 +2543,10 @@ SET c.display_name = 'culture-166',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-AE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-166@ar-AE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-166@ar-AE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-167@ar-AE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-167@ar-AE'})
 SET c.display_name = 'culture-167',
     c.locale = 'ar-AE',
     c.content = 'culture-167',
@@ -2558,10 +2558,10 @@ SET c.display_name = 'culture-167',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-AE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-167@ar-AE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-167@ar-AE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-168@ar-AE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-168@ar-AE'})
 SET c.display_name = 'culture-168',
     c.locale = 'ar-AE',
     c.content = 'culture-168',
@@ -2573,11 +2573,11 @@ SET c.display_name = 'culture-168',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-AE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-168@ar-AE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-168@ar-AE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ar-MA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-169@ar-MA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-169@ar-MA'})
 SET c.display_name = 'culture-169',
     c.locale = 'ar-MA',
     c.content = 'culture-169',
@@ -2589,10 +2589,10 @@ SET c.display_name = 'culture-169',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-MA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-169@ar-MA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-169@ar-MA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-170@ar-MA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-170@ar-MA'})
 SET c.display_name = 'culture-170',
     c.locale = 'ar-MA',
     c.content = 'culture-170',
@@ -2604,10 +2604,10 @@ SET c.display_name = 'culture-170',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-MA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-170@ar-MA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-170@ar-MA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-171@ar-MA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-171@ar-MA'})
 SET c.display_name = 'culture-171',
     c.locale = 'ar-MA',
     c.content = 'culture-171',
@@ -2619,10 +2619,10 @@ SET c.display_name = 'culture-171',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-MA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-171@ar-MA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-171@ar-MA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-172@ar-MA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-172@ar-MA'})
 SET c.display_name = 'culture-172',
     c.locale = 'ar-MA',
     c.content = 'culture-172',
@@ -2634,11 +2634,11 @@ SET c.display_name = 'culture-172',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ar-MA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-172@ar-MA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-172@ar-MA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- ru-RU CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-173@ru-RU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-173@ru-RU'})
 SET c.display_name = 'culture-173',
     c.locale = 'ru-RU',
     c.content = 'culture-173',
@@ -2650,10 +2650,10 @@ SET c.display_name = 'culture-173',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-RU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-173@ru-RU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-173@ru-RU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-174@ru-RU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-174@ru-RU'})
 SET c.display_name = 'culture-174',
     c.locale = 'ru-RU',
     c.content = 'culture-174',
@@ -2665,10 +2665,10 @@ SET c.display_name = 'culture-174',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-RU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-174@ru-RU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-174@ru-RU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-175@ru-RU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-175@ru-RU'})
 SET c.display_name = 'culture-175',
     c.locale = 'ru-RU',
     c.content = 'culture-175',
@@ -2680,10 +2680,10 @@ SET c.display_name = 'culture-175',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-RU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-175@ru-RU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-175@ru-RU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-176@ru-RU'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-176@ru-RU'})
 SET c.display_name = 'culture-176',
     c.locale = 'ru-RU',
     c.content = 'culture-176',
@@ -2695,11 +2695,11 @@ SET c.display_name = 'culture-176',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-RU'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-176@ru-RU'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-176@ru-RU'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- uk-UA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-177@uk-UA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-177@uk-UA'})
 SET c.display_name = 'culture-177',
     c.locale = 'uk-UA',
     c.content = 'culture-177',
@@ -2711,10 +2711,10 @@ SET c.display_name = 'culture-177',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@uk-UA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-177@uk-UA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-177@uk-UA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-178@uk-UA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-178@uk-UA'})
 SET c.display_name = 'culture-178',
     c.locale = 'uk-UA',
     c.content = 'culture-178',
@@ -2726,10 +2726,10 @@ SET c.display_name = 'culture-178',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@uk-UA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-178@uk-UA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-178@uk-UA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-179@uk-UA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-179@uk-UA'})
 SET c.display_name = 'culture-179',
     c.locale = 'uk-UA',
     c.content = 'culture-179',
@@ -2741,10 +2741,10 @@ SET c.display_name = 'culture-179',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@uk-UA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-179@uk-UA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-179@uk-UA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-180@uk-UA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-180@uk-UA'})
 SET c.display_name = 'culture-180',
     c.locale = 'uk-UA',
     c.content = 'culture-180',
@@ -2756,11 +2756,11 @@ SET c.display_name = 'culture-180',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@uk-UA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-180@uk-UA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-180@uk-UA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- pl-PL CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-181@pl-PL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-181@pl-PL'})
 SET c.display_name = 'culture-181',
     c.locale = 'pl-PL',
     c.content = 'culture-181',
@@ -2772,10 +2772,10 @@ SET c.display_name = 'culture-181',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pl-PL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-181@pl-PL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-181@pl-PL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-182@pl-PL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-182@pl-PL'})
 SET c.display_name = 'culture-182',
     c.locale = 'pl-PL',
     c.content = 'culture-182',
@@ -2787,10 +2787,10 @@ SET c.display_name = 'culture-182',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pl-PL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-182@pl-PL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-182@pl-PL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-183@pl-PL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-183@pl-PL'})
 SET c.display_name = 'culture-183',
     c.locale = 'pl-PL',
     c.content = 'culture-183',
@@ -2802,10 +2802,10 @@ SET c.display_name = 'culture-183',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pl-PL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-183@pl-PL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-183@pl-PL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-184@pl-PL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-184@pl-PL'})
 SET c.display_name = 'culture-184',
     c.locale = 'pl-PL',
     c.content = 'culture-184',
@@ -2817,11 +2817,11 @@ SET c.display_name = 'culture-184',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pl-PL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-184@pl-PL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-184@pl-PL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- cs-CZ CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-185@cs-CZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-185@cs-CZ'})
 SET c.display_name = 'culture-185',
     c.locale = 'cs-CZ',
     c.content = 'culture-185',
@@ -2833,10 +2833,10 @@ SET c.display_name = 'culture-185',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@cs-CZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-185@cs-CZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-185@cs-CZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-186@cs-CZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-186@cs-CZ'})
 SET c.display_name = 'culture-186',
     c.locale = 'cs-CZ',
     c.content = 'culture-186',
@@ -2848,10 +2848,10 @@ SET c.display_name = 'culture-186',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@cs-CZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-186@cs-CZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-186@cs-CZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-187@cs-CZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-187@cs-CZ'})
 SET c.display_name = 'culture-187',
     c.locale = 'cs-CZ',
     c.content = 'culture-187',
@@ -2863,10 +2863,10 @@ SET c.display_name = 'culture-187',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@cs-CZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-187@cs-CZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-187@cs-CZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-188@cs-CZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-188@cs-CZ'})
 SET c.display_name = 'culture-188',
     c.locale = 'cs-CZ',
     c.content = 'culture-188',
@@ -2878,11 +2878,11 @@ SET c.display_name = 'culture-188',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@cs-CZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-188@cs-CZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-188@cs-CZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- tr-TR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-189@tr-TR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-189@tr-TR'})
 SET c.display_name = 'culture-189',
     c.locale = 'tr-TR',
     c.content = 'culture-189',
@@ -2894,10 +2894,10 @@ SET c.display_name = 'culture-189',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@tr-TR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-189@tr-TR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-189@tr-TR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-190@tr-TR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-190@tr-TR'})
 SET c.display_name = 'culture-190',
     c.locale = 'tr-TR',
     c.content = 'culture-190',
@@ -2909,10 +2909,10 @@ SET c.display_name = 'culture-190',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@tr-TR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-190@tr-TR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-190@tr-TR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-191@tr-TR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-191@tr-TR'})
 SET c.display_name = 'culture-191',
     c.locale = 'tr-TR',
     c.content = 'culture-191',
@@ -2924,10 +2924,10 @@ SET c.display_name = 'culture-191',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@tr-TR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-191@tr-TR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-191@tr-TR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-192@tr-TR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-192@tr-TR'})
 SET c.display_name = 'culture-192',
     c.locale = 'tr-TR',
     c.content = 'culture-192',
@@ -2939,11 +2939,11 @@ SET c.display_name = 'culture-192',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@tr-TR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-192@tr-TR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-192@tr-TR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- az-AZ CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-193@az-AZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-193@az-AZ'})
 SET c.display_name = 'culture-193',
     c.locale = 'az-AZ',
     c.content = 'culture-193',
@@ -2955,10 +2955,10 @@ SET c.display_name = 'culture-193',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@az-AZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-193@az-AZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-193@az-AZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-194@az-AZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-194@az-AZ'})
 SET c.display_name = 'culture-194',
     c.locale = 'az-AZ',
     c.content = 'culture-194',
@@ -2970,10 +2970,10 @@ SET c.display_name = 'culture-194',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@az-AZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-194@az-AZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-194@az-AZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-195@az-AZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-195@az-AZ'})
 SET c.display_name = 'culture-195',
     c.locale = 'az-AZ',
     c.content = 'culture-195',
@@ -2985,10 +2985,10 @@ SET c.display_name = 'culture-195',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@az-AZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-195@az-AZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-195@az-AZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-196@az-AZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-196@az-AZ'})
 SET c.display_name = 'culture-196',
     c.locale = 'az-AZ',
     c.content = 'culture-196',
@@ -3000,11 +3000,11 @@ SET c.display_name = 'culture-196',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@az-AZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-196@az-AZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-196@az-AZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- he-IL CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-197@he-IL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-197@he-IL'})
 SET c.display_name = 'culture-197',
     c.locale = 'he-IL',
     c.content = 'culture-197',
@@ -3016,10 +3016,10 @@ SET c.display_name = 'culture-197',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@he-IL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-197@he-IL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-197@he-IL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-198@he-IL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-198@he-IL'})
 SET c.display_name = 'culture-198',
     c.locale = 'he-IL',
     c.content = 'culture-198',
@@ -3031,10 +3031,10 @@ SET c.display_name = 'culture-198',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@he-IL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-198@he-IL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-198@he-IL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-199@he-IL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-199@he-IL'})
 SET c.display_name = 'culture-199',
     c.locale = 'he-IL',
     c.content = 'culture-199',
@@ -3046,10 +3046,10 @@ SET c.display_name = 'culture-199',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@he-IL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-199@he-IL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-199@he-IL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-200@he-IL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-200@he-IL'})
 SET c.display_name = 'culture-200',
     c.locale = 'he-IL',
     c.content = 'culture-200',
@@ -3061,11 +3061,11 @@ SET c.display_name = 'culture-200',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@he-IL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-200@he-IL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-200@he-IL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- sw-KE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-201@sw-KE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-201@sw-KE'})
 SET c.display_name = 'culture-201',
     c.locale = 'sw-KE',
     c.content = 'culture-201',
@@ -3077,10 +3077,10 @@ SET c.display_name = 'culture-201',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-KE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-201@sw-KE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-201@sw-KE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-202@sw-KE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-202@sw-KE'})
 SET c.display_name = 'culture-202',
     c.locale = 'sw-KE',
     c.content = 'culture-202',
@@ -3092,10 +3092,10 @@ SET c.display_name = 'culture-202',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-KE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-202@sw-KE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-202@sw-KE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-203@sw-KE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-203@sw-KE'})
 SET c.display_name = 'culture-203',
     c.locale = 'sw-KE',
     c.content = 'culture-203',
@@ -3107,10 +3107,10 @@ SET c.display_name = 'culture-203',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-KE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-203@sw-KE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-203@sw-KE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-204@sw-KE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-204@sw-KE'})
 SET c.display_name = 'culture-204',
     c.locale = 'sw-KE',
     c.content = 'culture-204',
@@ -3122,11 +3122,11 @@ SET c.display_name = 'culture-204',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-KE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-204@sw-KE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-204@sw-KE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- sw-TZ CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-205@sw-TZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-205@sw-TZ'})
 SET c.display_name = 'culture-205',
     c.locale = 'sw-TZ',
     c.content = 'culture-205',
@@ -3138,10 +3138,10 @@ SET c.display_name = 'culture-205',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-TZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-205@sw-TZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-205@sw-TZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-206@sw-TZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-206@sw-TZ'})
 SET c.display_name = 'culture-206',
     c.locale = 'sw-TZ',
     c.content = 'culture-206',
@@ -3153,10 +3153,10 @@ SET c.display_name = 'culture-206',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-TZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-206@sw-TZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-206@sw-TZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-207@sw-TZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-207@sw-TZ'})
 SET c.display_name = 'culture-207',
     c.locale = 'sw-TZ',
     c.content = 'culture-207',
@@ -3168,10 +3168,10 @@ SET c.display_name = 'culture-207',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-TZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-207@sw-TZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-207@sw-TZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-208@sw-TZ'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-208@sw-TZ'})
 SET c.display_name = 'culture-208',
     c.locale = 'sw-TZ',
     c.content = 'culture-208',
@@ -3183,11 +3183,11 @@ SET c.display_name = 'culture-208',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@sw-TZ'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-208@sw-TZ'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-208@sw-TZ'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- am-ET CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-209@am-ET'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-209@am-ET'})
 SET c.display_name = 'culture-209',
     c.locale = 'am-ET',
     c.content = 'culture-209',
@@ -3199,10 +3199,10 @@ SET c.display_name = 'culture-209',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@am-ET'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-209@am-ET'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-209@am-ET'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-210@am-ET'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-210@am-ET'})
 SET c.display_name = 'culture-210',
     c.locale = 'am-ET',
     c.content = 'culture-210',
@@ -3214,10 +3214,10 @@ SET c.display_name = 'culture-210',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@am-ET'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-210@am-ET'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-210@am-ET'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-211@am-ET'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-211@am-ET'})
 SET c.display_name = 'culture-211',
     c.locale = 'am-ET',
     c.content = 'culture-211',
@@ -3229,10 +3229,10 @@ SET c.display_name = 'culture-211',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@am-ET'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-211@am-ET'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-211@am-ET'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-212@am-ET'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-212@am-ET'})
 SET c.display_name = 'culture-212',
     c.locale = 'am-ET',
     c.content = 'culture-212',
@@ -3244,11 +3244,11 @@ SET c.display_name = 'culture-212',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@am-ET'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-212@am-ET'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-212@am-ET'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- el-GR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-213@el-GR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-213@el-GR'})
 SET c.display_name = 'culture-213',
     c.locale = 'el-GR',
     c.content = 'culture-213',
@@ -3260,10 +3260,10 @@ SET c.display_name = 'culture-213',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-GR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-213@el-GR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-213@el-GR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-214@el-GR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-214@el-GR'})
 SET c.display_name = 'culture-214',
     c.locale = 'el-GR',
     c.content = 'culture-214',
@@ -3275,10 +3275,10 @@ SET c.display_name = 'culture-214',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-GR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-214@el-GR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-214@el-GR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-215@el-GR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-215@el-GR'})
 SET c.display_name = 'culture-215',
     c.locale = 'el-GR',
     c.content = 'culture-215',
@@ -3290,10 +3290,10 @@ SET c.display_name = 'culture-215',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-GR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-215@el-GR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-215@el-GR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-216@el-GR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-216@el-GR'})
 SET c.display_name = 'culture-216',
     c.locale = 'el-GR',
     c.content = 'culture-216',
@@ -3305,11 +3305,11 @@ SET c.display_name = 'culture-216',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-GR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-216@el-GR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-216@el-GR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- el-CY CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-217@el-CY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-217@el-CY'})
 SET c.display_name = 'culture-217',
     c.locale = 'el-CY',
     c.content = 'culture-217',
@@ -3321,10 +3321,10 @@ SET c.display_name = 'culture-217',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-CY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-217@el-CY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-217@el-CY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-218@el-CY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-218@el-CY'})
 SET c.display_name = 'culture-218',
     c.locale = 'el-CY',
     c.content = 'culture-218',
@@ -3336,10 +3336,10 @@ SET c.display_name = 'culture-218',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-CY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-218@el-CY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-218@el-CY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-219@el-CY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-219@el-CY'})
 SET c.display_name = 'culture-219',
     c.locale = 'el-CY',
     c.content = 'culture-219',
@@ -3351,10 +3351,10 @@ SET c.display_name = 'culture-219',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-CY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-219@el-CY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-219@el-CY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-220@el-CY'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-220@el-CY'})
 SET c.display_name = 'culture-220',
     c.locale = 'el-CY',
     c.content = 'culture-220',
@@ -3366,11 +3366,11 @@ SET c.display_name = 'culture-220',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@el-CY'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-220@el-CY'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-220@el-CY'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fr-FR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-221@fr-FR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-221@fr-FR'})
 SET c.display_name = 'culture-221',
     c.locale = 'fr-FR',
     c.content = 'culture-221',
@@ -3382,10 +3382,10 @@ SET c.display_name = 'culture-221',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-FR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-221@fr-FR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-221@fr-FR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-222@fr-FR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-222@fr-FR'})
 SET c.display_name = 'culture-222',
     c.locale = 'fr-FR',
     c.content = 'culture-222',
@@ -3397,10 +3397,10 @@ SET c.display_name = 'culture-222',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-FR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-222@fr-FR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-222@fr-FR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-223@fr-FR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-223@fr-FR'})
 SET c.display_name = 'culture-223',
     c.locale = 'fr-FR',
     c.content = 'culture-223',
@@ -3412,10 +3412,10 @@ SET c.display_name = 'culture-223',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-FR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-223@fr-FR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-223@fr-FR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-224@fr-FR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-224@fr-FR'})
 SET c.display_name = 'culture-224',
     c.locale = 'fr-FR',
     c.content = 'culture-224',
@@ -3427,10 +3427,10 @@ SET c.display_name = 'culture-224',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-FR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-224@fr-FR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-224@fr-FR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-225@fr-FR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-225@fr-FR'})
 SET c.display_name = 'culture-225',
     c.locale = 'fr-FR',
     c.content = 'culture-225',
@@ -3442,11 +3442,11 @@ SET c.display_name = 'culture-225',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-FR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-225@fr-FR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-225@fr-FR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fr-CA CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-226@fr-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-226@fr-CA'})
 SET c.display_name = 'culture-226',
     c.locale = 'fr-CA',
     c.content = 'culture-226',
@@ -3458,10 +3458,10 @@ SET c.display_name = 'culture-226',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-226@fr-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-226@fr-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-227@fr-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-227@fr-CA'})
 SET c.display_name = 'culture-227',
     c.locale = 'fr-CA',
     c.content = 'culture-227',
@@ -3473,10 +3473,10 @@ SET c.display_name = 'culture-227',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-227@fr-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-227@fr-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-228@fr-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-228@fr-CA'})
 SET c.display_name = 'culture-228',
     c.locale = 'fr-CA',
     c.content = 'culture-228',
@@ -3488,10 +3488,10 @@ SET c.display_name = 'culture-228',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-228@fr-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-228@fr-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-229@fr-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-229@fr-CA'})
 SET c.display_name = 'culture-229',
     c.locale = 'fr-CA',
     c.content = 'culture-229',
@@ -3503,10 +3503,10 @@ SET c.display_name = 'culture-229',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-229@fr-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-229@fr-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-230@fr-CA'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-230@fr-CA'})
 SET c.display_name = 'culture-230',
     c.locale = 'fr-CA',
     c.content = 'culture-230',
@@ -3518,11 +3518,11 @@ SET c.display_name = 'culture-230',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CA'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-230@fr-CA'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-230@fr-CA'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fr-BE CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-231@fr-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-231@fr-BE'})
 SET c.display_name = 'culture-231',
     c.locale = 'fr-BE',
     c.content = 'culture-231',
@@ -3534,10 +3534,10 @@ SET c.display_name = 'culture-231',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-231@fr-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-231@fr-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-232@fr-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-232@fr-BE'})
 SET c.display_name = 'culture-232',
     c.locale = 'fr-BE',
     c.content = 'culture-232',
@@ -3549,10 +3549,10 @@ SET c.display_name = 'culture-232',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-232@fr-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-232@fr-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-233@fr-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-233@fr-BE'})
 SET c.display_name = 'culture-233',
     c.locale = 'fr-BE',
     c.content = 'culture-233',
@@ -3564,10 +3564,10 @@ SET c.display_name = 'culture-233',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-233@fr-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-233@fr-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-234@fr-BE'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-234@fr-BE'})
 SET c.display_name = 'culture-234',
     c.locale = 'fr-BE',
     c.content = 'culture-234',
@@ -3579,11 +3579,11 @@ SET c.display_name = 'culture-234',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-BE'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-234@fr-BE'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-234@fr-BE'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- fr-CH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-235@fr-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-235@fr-CH'})
 SET c.display_name = 'culture-235',
     c.locale = 'fr-CH',
     c.content = 'culture-235',
@@ -3595,10 +3595,10 @@ SET c.display_name = 'culture-235',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-235@fr-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-235@fr-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-236@fr-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-236@fr-CH'})
 SET c.display_name = 'culture-236',
     c.locale = 'fr-CH',
     c.content = 'culture-236',
@@ -3610,10 +3610,10 @@ SET c.display_name = 'culture-236',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-236@fr-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-236@fr-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-237@fr-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-237@fr-CH'})
 SET c.display_name = 'culture-237',
     c.locale = 'fr-CH',
     c.content = 'culture-237',
@@ -3625,10 +3625,10 @@ SET c.display_name = 'culture-237',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-237@fr-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-237@fr-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-238@fr-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-238@fr-CH'})
 SET c.display_name = 'culture-238',
     c.locale = 'fr-CH',
     c.content = 'culture-238',
@@ -3640,11 +3640,11 @@ SET c.display_name = 'culture-238',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@fr-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-238@fr-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-238@fr-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- es-ES CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-239@es-ES'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-239@es-ES'})
 SET c.display_name = 'culture-239',
     c.locale = 'es-ES',
     c.content = 'culture-239',
@@ -3656,10 +3656,10 @@ SET c.display_name = 'culture-239',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-ES'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-239@es-ES'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-239@es-ES'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-240@es-ES'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-240@es-ES'})
 SET c.display_name = 'culture-240',
     c.locale = 'es-ES',
     c.content = 'culture-240',
@@ -3671,10 +3671,10 @@ SET c.display_name = 'culture-240',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-ES'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-240@es-ES'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-240@es-ES'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-241@es-ES'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-241@es-ES'})
 SET c.display_name = 'culture-241',
     c.locale = 'es-ES',
     c.content = 'culture-241',
@@ -3686,10 +3686,10 @@ SET c.display_name = 'culture-241',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-ES'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-241@es-ES'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-241@es-ES'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-242@es-ES'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-242@es-ES'})
 SET c.display_name = 'culture-242',
     c.locale = 'es-ES',
     c.content = 'culture-242',
@@ -3701,11 +3701,11 @@ SET c.display_name = 'culture-242',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-ES'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-242@es-ES'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-242@es-ES'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- es-MX CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-243@es-MX'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-243@es-MX'})
 SET c.display_name = 'culture-243',
     c.locale = 'es-MX',
     c.content = 'culture-243',
@@ -3717,10 +3717,10 @@ SET c.display_name = 'culture-243',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-MX'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-243@es-MX'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-243@es-MX'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-244@es-MX'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-244@es-MX'})
 SET c.display_name = 'culture-244',
     c.locale = 'es-MX',
     c.content = 'culture-244',
@@ -3732,10 +3732,10 @@ SET c.display_name = 'culture-244',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-MX'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-244@es-MX'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-244@es-MX'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-245@es-MX'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-245@es-MX'})
 SET c.display_name = 'culture-245',
     c.locale = 'es-MX',
     c.content = 'culture-245',
@@ -3747,10 +3747,10 @@ SET c.display_name = 'culture-245',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-MX'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-245@es-MX'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-245@es-MX'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-246@es-MX'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-246@es-MX'})
 SET c.display_name = 'culture-246',
     c.locale = 'es-MX',
     c.content = 'culture-246',
@@ -3762,11 +3762,11 @@ SET c.display_name = 'culture-246',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-MX'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-246@es-MX'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-246@es-MX'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- es-AR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-247@es-AR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-247@es-AR'})
 SET c.display_name = 'culture-247',
     c.locale = 'es-AR',
     c.content = 'culture-247',
@@ -3778,10 +3778,10 @@ SET c.display_name = 'culture-247',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-AR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-247@es-AR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-247@es-AR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-248@es-AR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-248@es-AR'})
 SET c.display_name = 'culture-248',
     c.locale = 'es-AR',
     c.content = 'culture-248',
@@ -3793,10 +3793,10 @@ SET c.display_name = 'culture-248',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-AR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-248@es-AR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-248@es-AR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-249@es-AR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-249@es-AR'})
 SET c.display_name = 'culture-249',
     c.locale = 'es-AR',
     c.content = 'culture-249',
@@ -3808,10 +3808,10 @@ SET c.display_name = 'culture-249',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-AR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-249@es-AR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-249@es-AR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-250@es-AR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-250@es-AR'})
 SET c.display_name = 'culture-250',
     c.locale = 'es-AR',
     c.content = 'culture-250',
@@ -3823,11 +3823,11 @@ SET c.display_name = 'culture-250',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-AR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-250@es-AR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-250@es-AR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- es-CO CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-251@es-CO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-251@es-CO'})
 SET c.display_name = 'culture-251',
     c.locale = 'es-CO',
     c.content = 'culture-251',
@@ -3839,10 +3839,10 @@ SET c.display_name = 'culture-251',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-251@es-CO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-251@es-CO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-252@es-CO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-252@es-CO'})
 SET c.display_name = 'culture-252',
     c.locale = 'es-CO',
     c.content = 'culture-252',
@@ -3854,10 +3854,10 @@ SET c.display_name = 'culture-252',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-252@es-CO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-252@es-CO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-253@es-CO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-253@es-CO'})
 SET c.display_name = 'culture-253',
     c.locale = 'es-CO',
     c.content = 'culture-253',
@@ -3869,10 +3869,10 @@ SET c.display_name = 'culture-253',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-253@es-CO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-253@es-CO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-254@es-CO'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-254@es-CO'})
 SET c.display_name = 'culture-254',
     c.locale = 'es-CO',
     c.content = 'culture-254',
@@ -3884,11 +3884,11 @@ SET c.display_name = 'culture-254',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CO'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-254@es-CO'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-254@es-CO'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- es-CL CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-255@es-CL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-255@es-CL'})
 SET c.display_name = 'culture-255',
     c.locale = 'es-CL',
     c.content = 'culture-255',
@@ -3900,10 +3900,10 @@ SET c.display_name = 'culture-255',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-255@es-CL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-255@es-CL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-256@es-CL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-256@es-CL'})
 SET c.display_name = 'culture-256',
     c.locale = 'es-CL',
     c.content = 'culture-256',
@@ -3915,10 +3915,10 @@ SET c.display_name = 'culture-256',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-256@es-CL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-256@es-CL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-257@es-CL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-257@es-CL'})
 SET c.display_name = 'culture-257',
     c.locale = 'es-CL',
     c.content = 'culture-257',
@@ -3930,10 +3930,10 @@ SET c.display_name = 'culture-257',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-257@es-CL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-257@es-CL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-258@es-CL'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-258@es-CL'})
 SET c.display_name = 'culture-258',
     c.locale = 'es-CL',
     c.content = 'culture-258',
@@ -3945,11 +3945,11 @@ SET c.display_name = 'culture-258',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@es-CL'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-258@es-CL'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-258@es-CL'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- pt-BR CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-259@pt-BR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-259@pt-BR'})
 SET c.display_name = 'culture-259',
     c.locale = 'pt-BR',
     c.content = 'culture-259',
@@ -3961,10 +3961,10 @@ SET c.display_name = 'culture-259',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-BR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-259@pt-BR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-259@pt-BR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-260@pt-BR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-260@pt-BR'})
 SET c.display_name = 'culture-260',
     c.locale = 'pt-BR',
     c.content = 'culture-260',
@@ -3976,10 +3976,10 @@ SET c.display_name = 'culture-260',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-BR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-260@pt-BR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-260@pt-BR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-261@pt-BR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-261@pt-BR'})
 SET c.display_name = 'culture-261',
     c.locale = 'pt-BR',
     c.content = 'culture-261',
@@ -3991,10 +3991,10 @@ SET c.display_name = 'culture-261',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-BR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-261@pt-BR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-261@pt-BR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-262@pt-BR'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-262@pt-BR'})
 SET c.display_name = 'culture-262',
     c.locale = 'pt-BR',
     c.content = 'culture-262',
@@ -4006,11 +4006,11 @@ SET c.display_name = 'culture-262',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-BR'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-262@pt-BR'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-262@pt-BR'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- pt-PT CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-263@pt-PT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-263@pt-PT'})
 SET c.display_name = 'culture-263',
     c.locale = 'pt-PT',
     c.content = 'culture-263',
@@ -4022,10 +4022,10 @@ SET c.display_name = 'culture-263',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-PT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-263@pt-PT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-263@pt-PT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-264@pt-PT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-264@pt-PT'})
 SET c.display_name = 'culture-264',
     c.locale = 'pt-PT',
     c.content = 'culture-264',
@@ -4037,10 +4037,10 @@ SET c.display_name = 'culture-264',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-PT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-264@pt-PT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-264@pt-PT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-265@pt-PT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-265@pt-PT'})
 SET c.display_name = 'culture-265',
     c.locale = 'pt-PT',
     c.content = 'culture-265',
@@ -4052,10 +4052,10 @@ SET c.display_name = 'culture-265',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-PT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-265@pt-PT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-265@pt-PT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-266@pt-PT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-266@pt-PT'})
 SET c.display_name = 'culture-266',
     c.locale = 'pt-PT',
     c.content = 'culture-266',
@@ -4067,11 +4067,11 @@ SET c.display_name = 'culture-266',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@pt-PT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-266@pt-PT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-266@pt-PT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- it-IT CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-267@it-IT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-267@it-IT'})
 SET c.display_name = 'culture-267',
     c.locale = 'it-IT',
     c.content = 'culture-267',
@@ -4083,10 +4083,10 @@ SET c.display_name = 'culture-267',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-IT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-267@it-IT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-267@it-IT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-268@it-IT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-268@it-IT'})
 SET c.display_name = 'culture-268',
     c.locale = 'it-IT',
     c.content = 'culture-268',
@@ -4098,10 +4098,10 @@ SET c.display_name = 'culture-268',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-IT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-268@it-IT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-268@it-IT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-269@it-IT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-269@it-IT'})
 SET c.display_name = 'culture-269',
     c.locale = 'it-IT',
     c.content = 'culture-269',
@@ -4113,10 +4113,10 @@ SET c.display_name = 'culture-269',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-IT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-269@it-IT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-269@it-IT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-270@it-IT'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-270@it-IT'})
 SET c.display_name = 'culture-270',
     c.locale = 'it-IT',
     c.content = 'culture-270',
@@ -4128,11 +4128,11 @@ SET c.display_name = 'culture-270',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-IT'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-270@it-IT'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-270@it-IT'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
 // --- it-CH CultureRefs from Research ---
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-271@it-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-271@it-CH'})
 SET c.display_name = 'culture-271',
     c.locale = 'it-CH',
     c.content = 'culture-271',
@@ -4144,10 +4144,10 @@ SET c.display_name = 'culture-271',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-271@it-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-271@it-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-272@it-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-272@it-CH'})
 SET c.display_name = 'culture-272',
     c.locale = 'it-CH',
     c.content = 'culture-272',
@@ -4159,10 +4159,10 @@ SET c.display_name = 'culture-272',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-272@it-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-272@it-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-273@it-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-273@it-CH'})
 SET c.display_name = 'culture-273',
     c.locale = 'it-CH',
     c.content = 'culture-273',
@@ -4174,10 +4174,10 @@ SET c.display_name = 'culture-273',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-273@it-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-273@it-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);
 
-MERGE (c:CultureRef {key: 'culture-ref:research:culture-274@it-CH'})
+MERGE (c:CultureRef {key: 'cultureref:culture-ref:research:culture-274@it-CH'})
 SET c.display_name = 'culture-274',
     c.locale = 'it-CH',
     c.content = 'culture-274',
@@ -4189,5 +4189,5 @@ SET c.display_name = 'culture-274',
     c.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@it-CH'})
-MATCH (c:CultureRef {key: 'culture-ref:research:culture-274@it-CH'})
+MATCH (c:CultureRef {key: 'cultureref:culture-ref:research:culture-274@it-CH'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(c);

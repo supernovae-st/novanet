@@ -15,7 +15,7 @@ MATCH (l:Locale {key: 'ceb-PH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-religious-symbols-santo-nino@ceb-PH'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-santo-nino@ceb-PH'})
 SET t.display_name = 'Disrespecting religious symbols (Santo Nino',
     t.locale = 'ceb-PH',
     t.term = 'Disrespecting religious symbols (Santo Nino',
@@ -31,10 +31,10 @@ SET t.display_name = 'Disrespecting religious symbols (Santo Nino',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
-MATCH (t:Taboo {key: 'disrespecting-religious-symbols-santo-nino@ceb-PH'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-religious-symbols-santo-nino@ceb-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'cross@ceb-PH'})
+MERGE (t:Taboo {key: 'taboo:cross@ceb-PH'})
 SET t.display_name = 'cross',
     t.locale = 'ceb-PH',
     t.term = 'cross',
@@ -50,10 +50,10 @@ SET t.display_name = 'cross',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
-MATCH (t:Taboo {key: 'cross@ceb-PH'})
+MATCH (t:Taboo {key: 'taboo:cross@ceb-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'saints@ceb-PH'})
+MERGE (t:Taboo {key: 'taboo:saints@ceb-PH'})
 SET t.display_name = 'saints)',
     t.locale = 'ceb-PH',
     t.term = 'saints)',
@@ -69,10 +69,10 @@ SET t.display_name = 'saints)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
-MATCH (t:Taboo {key: 'saints@ceb-PH'})
+MATCH (t:Taboo {key: 'taboo:saints@ceb-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mocking-or-disrespecting-elders@ceb-PH'})
+MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@ceb-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
     t.locale = 'ceb-PH',
     t.term = 'Mocking or disrespecting elders',
@@ -88,10 +88,10 @@ SET t.display_name = 'Mocking or disrespecting elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
-MATCH (t:Taboo {key: 'mocking-or-disrespecting-elders@ceb-PH'})
+MATCH (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@ceb-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'causing-public-hiya-shameembarrassment@ceb-PH'})
+MERGE (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@ceb-PH'})
 SET t.display_name = 'Causing public hiya (shame/embarrassment)',
     t.locale = 'ceb-PH',
     t.term = 'Causing public hiya (shame/embarrassment)',
@@ -107,7 +107,7 @@ SET t.display_name = 'Causing public hiya (shame/embarrassment)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ceb-PH'})
-MATCH (t:Taboo {key: 'causing-public-hiya-shameembarrassment@ceb-PH'})
+MATCH (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@ceb-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -118,7 +118,7 @@ MATCH (l:Locale {key: 'mn-MN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mn-MN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-chinggis-khaan@mn-MN'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-chinggis-khaan@mn-MN'})
 SET t.display_name = 'Disrespecting Chinggis Khaan',
     t.locale = 'mn-MN',
     t.term = 'Disrespecting Chinggis Khaan',
@@ -134,10 +134,10 @@ SET t.display_name = 'Disrespecting Chinggis Khaan',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mn-MN'})
-MATCH (t:Taboo {key: 'disrespecting-chinggis-khaan@mn-MN'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-chinggis-khaan@mn-MN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'inner-mongolia-and-territorial-issues@mn-MN'})
+MERGE (t:Taboo {key: 'taboo:inner-mongolia-and-territorial-issues@mn-MN'})
 SET t.display_name = 'Inner Mongolia and territorial issues',
     t.locale = 'mn-MN',
     t.term = 'Inner Mongolia and territorial issues',
@@ -153,10 +153,10 @@ SET t.display_name = 'Inner Mongolia and territorial issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mn-MN'})
-MATCH (t:Taboo {key: 'inner-mongolia-and-territorial-issues@mn-MN'})
+MATCH (t:Taboo {key: 'taboo:inner-mongolia-and-territorial-issues@mn-MN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-elders-or-family@mn-MN'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-elders-or-family@mn-MN'})
 SET t.display_name = 'Criticism of elders or family',
     t.locale = 'mn-MN',
     t.term = 'Criticism of elders or family',
@@ -172,7 +172,7 @@ SET t.display_name = 'Criticism of elders or family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mn-MN'})
-MATCH (t:Taboo {key: 'criticism-of-elders-or-family@mn-MN'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-elders-or-family@mn-MN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -183,7 +183,7 @@ MATCH (l:Locale {key: 'en-MY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'race-relations-and-racial-policies@en-MY'})
+MERGE (t:Taboo {key: 'taboo:race-relations-and-racial-policies@en-MY'})
 SET t.display_name = 'Race relations and racial policies',
     t.locale = 'en-MY',
     t.term = 'Race relations and racial policies',
@@ -199,10 +199,10 @@ SET t.display_name = 'Race relations and racial policies',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MY'})
-MATCH (t:Taboo {key: 'race-relations-and-racial-policies@en-MY'})
+MATCH (t:Taboo {key: 'taboo:race-relations-and-racial-policies@en-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-issues-and-comparisons@en-MY'})
+MERGE (t:Taboo {key: 'taboo:religious-issues-and-comparisons@en-MY'})
 SET t.display_name = 'Religious issues and comparisons',
     t.locale = 'en-MY',
     t.term = 'Religious issues and comparisons',
@@ -218,10 +218,10 @@ SET t.display_name = 'Religious issues and comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MY'})
-MATCH (t:Taboo {key: 'religious-issues-and-comparisons@en-MY'})
+MATCH (t:Taboo {key: 'taboo:religious-issues-and-comparisons@en-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'royalty-raja-raja-melayu@en-MY'})
+MERGE (t:Taboo {key: 'taboo:royalty-raja-raja-melayu@en-MY'})
 SET t.display_name = 'Royalty (Raja-raja Melayu)',
     t.locale = 'en-MY',
     t.term = 'Royalty (Raja-raja Melayu)',
@@ -237,7 +237,7 @@ SET t.display_name = 'Royalty (Raja-raja Melayu)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MY'})
-MATCH (t:Taboo {key: 'royalty-raja-raja-melayu@en-MY'})
+MATCH (t:Taboo {key: 'taboo:royalty-raja-raja-melayu@en-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -248,7 +248,7 @@ MATCH (l:Locale {key: 'bn-BD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-BD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam@bn-BD'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam@bn-BD'})
 SET t.display_name = 'Insulting Islam',
     t.locale = 'bn-BD',
     t.term = 'Insulting Islam',
@@ -264,10 +264,10 @@ SET t.display_name = 'Insulting Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-BD'})
-MATCH (t:Taboo {key: 'insulting-islam@bn-BD'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam@bn-BD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1971-liberation-war-denialism@bn-BD'})
+MERGE (t:Taboo {key: 'taboo:1971-liberation-war-denialism@bn-BD'})
 SET t.display_name = '1971 Liberation War denialism',
     t.locale = 'bn-BD',
     t.term = '1971 Liberation War denialism',
@@ -283,10 +283,10 @@ SET t.display_name = '1971 Liberation War denialism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-BD'})
-MATCH (t:Taboo {key: '1971-liberation-war-denialism@bn-BD'})
+MATCH (t:Taboo {key: 'taboo:1971-liberation-war-denialism@bn-BD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hindu-muslim-communal-tensions@bn-BD'})
+MERGE (t:Taboo {key: 'taboo:hindu-muslim-communal-tensions@bn-BD'})
 SET t.display_name = 'Hindu-Muslim communal tensions',
     t.locale = 'bn-BD',
     t.term = 'Hindu-Muslim communal tensions',
@@ -302,7 +302,7 @@ SET t.display_name = 'Hindu-Muslim communal tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-BD'})
-MATCH (t:Taboo {key: 'hindu-muslim-communal-tensions@bn-BD'})
+MATCH (t:Taboo {key: 'taboo:hindu-muslim-communal-tensions@bn-BD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -313,7 +313,7 @@ MATCH (l:Locale {key: 'en-TZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticizing-nyerere@en-TZ'})
+MERGE (t:Taboo {key: 'taboo:criticizing-nyerere@en-TZ'})
 SET t.display_name = 'Criticizing Nyerere',
     t.locale = 'en-TZ',
     t.term = 'Criticizing Nyerere',
@@ -329,10 +329,10 @@ SET t.display_name = 'Criticizing Nyerere',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TZ'})
-MATCH (t:Taboo {key: 'criticizing-nyerere@en-TZ'})
+MATCH (t:Taboo {key: 'taboo:criticizing-nyerere@en-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'zanzibar-separatismpolitics@en-TZ'})
+MERGE (t:Taboo {key: 'taboo:zanzibar-separatismpolitics@en-TZ'})
 SET t.display_name = 'Zanzibar separatism/politics',
     t.locale = 'en-TZ',
     t.term = 'Zanzibar separatism/politics',
@@ -348,10 +348,10 @@ SET t.display_name = 'Zanzibar separatism/politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TZ'})
-MATCH (t:Taboo {key: 'zanzibar-separatismpolitics@en-TZ'})
+MATCH (t:Taboo {key: 'taboo:zanzibar-separatismpolitics@en-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-division@en-TZ'})
+MERGE (t:Taboo {key: 'taboo:religious-division@en-TZ'})
 SET t.display_name = 'Religious division',
     t.locale = 'en-TZ',
     t.term = 'Religious division',
@@ -367,7 +367,7 @@ SET t.display_name = 'Religious division',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TZ'})
-MATCH (t:Taboo {key: 'religious-division@en-TZ'})
+MATCH (t:Taboo {key: 'taboo:religious-division@en-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -378,7 +378,7 @@ MATCH (l:Locale {key: 'en-SG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racial-or-religious-denigration@en-SG'})
+MERGE (t:Taboo {key: 'taboo:racial-or-religious-denigration@en-SG'})
 SET t.display_name = 'Racial or religious denigration',
     t.locale = 'en-SG',
     t.term = 'Racial or religious denigration',
@@ -394,7 +394,7 @@ SET t.display_name = 'Racial or religious denigration',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SG'})
-MATCH (t:Taboo {key: 'racial-or-religious-denigration@en-SG'})
+MATCH (t:Taboo {key: 'taboo:racial-or-religious-denigration@en-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -405,7 +405,7 @@ MATCH (l:Locale {key: 'ta-LK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-LK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-conflictcivil-war@ta-LK'})
+MERGE (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@ta-LK'})
 SET t.display_name = 'Ethnic conflict/civil war',
     t.locale = 'ta-LK',
     t.term = 'Ethnic conflict/civil war',
@@ -421,10 +421,10 @@ SET t.display_name = 'Ethnic conflict/civil war',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-LK'})
-MATCH (t:Taboo {key: 'ethnic-conflictcivil-war@ta-LK'})
+MATCH (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@ta-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ltteterrorism-references@ta-LK'})
+MERGE (t:Taboo {key: 'taboo:ltteterrorism-references@ta-LK'})
 SET t.display_name = 'LTTE/terrorism references',
     t.locale = 'ta-LK',
     t.term = 'LTTE/terrorism references',
@@ -440,10 +440,10 @@ SET t.display_name = 'LTTE/terrorism references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-LK'})
-MATCH (t:Taboo {key: 'ltteterrorism-references@ta-LK'})
+MATCH (t:Taboo {key: 'taboo:ltteterrorism-references@ta-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'tamil-sinhalese-comparisons@ta-LK'})
+MERGE (t:Taboo {key: 'taboo:tamil-sinhalese-comparisons@ta-LK'})
 SET t.display_name = 'Tamil-Sinhalese comparisons',
     t.locale = 'ta-LK',
     t.term = 'Tamil-Sinhalese comparisons',
@@ -459,7 +459,7 @@ SET t.display_name = 'Tamil-Sinhalese comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-LK'})
-MATCH (t:Taboo {key: 'tamil-sinhalese-comparisons@ta-LK'})
+MATCH (t:Taboo {key: 'taboo:tamil-sinhalese-comparisons@ta-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -470,7 +470,7 @@ MATCH (l:Locale {key: 'en-ZA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racial-stereotypes@en-ZA'})
+MERGE (t:Taboo {key: 'taboo:racial-stereotypes@en-ZA'})
 SET t.display_name = 'Racial stereotypes',
     t.locale = 'en-ZA',
     t.term = 'Racial stereotypes',
@@ -486,10 +486,10 @@ SET t.display_name = 'Racial stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZA'})
-MATCH (t:Taboo {key: 'racial-stereotypes@en-ZA'})
+MATCH (t:Taboo {key: 'taboo:racial-stereotypes@en-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'apartheid-nostalgia@en-ZA'})
+MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@en-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
     t.locale = 'en-ZA',
     t.term = 'Apartheid nostalgia',
@@ -505,10 +505,10 @@ SET t.display_name = 'Apartheid nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZA'})
-MATCH (t:Taboo {key: 'apartheid-nostalgia@en-ZA'})
+MATCH (t:Taboo {key: 'taboo:apartheid-nostalgia@en-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'land-reform-debates@en-ZA'})
+MERGE (t:Taboo {key: 'taboo:land-reform-debates@en-ZA'})
 SET t.display_name = 'Land reform debates',
     t.locale = 'en-ZA',
     t.term = 'Land reform debates',
@@ -524,7 +524,7 @@ SET t.display_name = 'Land reform debates',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZA'})
-MATCH (t:Taboo {key: 'land-reform-debates@en-ZA'})
+MATCH (t:Taboo {key: 'taboo:land-reform-debates@en-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -535,7 +535,7 @@ MATCH (l:Locale {key: 'en-BB'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BB'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'mocking-bajan-accent-or-dialect@en-BB'})
+MERGE (t:Taboo {key: 'taboo:mocking-bajan-accent-or-dialect@en-BB'})
 SET t.display_name = 'Mocking Bajan accent or dialect',
     t.locale = 'en-BB',
     t.term = 'Mocking Bajan accent or dialect',
@@ -551,10 +551,10 @@ SET t.display_name = 'Mocking Bajan accent or dialect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BB'})
-MATCH (t:Taboo {key: 'mocking-bajan-accent-or-dialect@en-BB'})
+MATCH (t:Taboo {key: 'taboo:mocking-bajan-accent-or-dialect@en-BB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'slavery-glorification-or-minimization@en-BB'})
+MERGE (t:Taboo {key: 'taboo:slavery-glorification-or-minimization@en-BB'})
 SET t.display_name = 'Slavery glorification or minimization',
     t.locale = 'en-BB',
     t.term = 'Slavery glorification or minimization',
@@ -570,7 +570,7 @@ SET t.display_name = 'Slavery glorification or minimization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BB'})
-MATCH (t:Taboo {key: 'slavery-glorification-or-minimization@en-BB'})
+MATCH (t:Taboo {key: 'taboo:slavery-glorification-or-minimization@en-BB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -581,7 +581,7 @@ MATCH (l:Locale {key: 'si-LK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@si-LK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-conflictcivil-war@si-LK'})
+MERGE (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@si-LK'})
 SET t.display_name = 'Ethnic conflict/civil war',
     t.locale = 'si-LK',
     t.term = 'Ethnic conflict/civil war',
@@ -597,10 +597,10 @@ SET t.display_name = 'Ethnic conflict/civil war',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@si-LK'})
-MATCH (t:Taboo {key: 'ethnic-conflictcivil-war@si-LK'})
+MATCH (t:Taboo {key: 'taboo:ethnic-conflictcivil-war@si-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ltteterrorism-references@si-LK'})
+MERGE (t:Taboo {key: 'taboo:ltteterrorism-references@si-LK'})
 SET t.display_name = 'LTTE/terrorism references',
     t.locale = 'si-LK',
     t.term = 'LTTE/terrorism references',
@@ -616,10 +616,10 @@ SET t.display_name = 'LTTE/terrorism references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@si-LK'})
-MATCH (t:Taboo {key: 'ltteterrorism-references@si-LK'})
+MATCH (t:Taboo {key: 'taboo:ltteterrorism-references@si-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-insulting@si-LK'})
+MERGE (t:Taboo {key: 'taboo:religious-insulting@si-LK'})
 SET t.display_name = 'Religious insulting',
     t.locale = 'si-LK',
     t.term = 'Religious insulting',
@@ -635,7 +635,7 @@ SET t.display_name = 'Religious insulting',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@si-LK'})
-MATCH (t:Taboo {key: 'religious-insulting@si-LK'})
+MATCH (t:Taboo {key: 'taboo:religious-insulting@si-LK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -646,7 +646,7 @@ MATCH (l:Locale {key: 'bs-BA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bs-BA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-attribution-or-nationalism@bs-BA'})
+MERGE (t:Taboo {key: 'taboo:ethnic-attribution-or-nationalism@bs-BA'})
 SET t.display_name = 'Ethnic attribution or nationalism',
     t.locale = 'bs-BA',
     t.term = 'Ethnic attribution or nationalism',
@@ -662,10 +662,10 @@ SET t.display_name = 'Ethnic attribution or nationalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bs-BA'})
-MATCH (t:Taboo {key: 'ethnic-attribution-or-nationalism@bs-BA'})
+MATCH (t:Taboo {key: 'taboo:ethnic-attribution-or-nationalism@bs-BA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1992-1995-war-references@bs-BA'})
+MERGE (t:Taboo {key: 'taboo:1992-1995-war-references@bs-BA'})
 SET t.display_name = '1992-1995 war references',
     t.locale = 'bs-BA',
     t.term = '1992-1995 war references',
@@ -681,10 +681,10 @@ SET t.display_name = '1992-1995 war references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bs-BA'})
-MATCH (t:Taboo {key: '1992-1995-war-references@bs-BA'})
+MATCH (t:Taboo {key: 'taboo:1992-1995-war-references@bs-BA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-comparisons@bs-BA'})
+MERGE (t:Taboo {key: 'taboo:religious-comparisons@bs-BA'})
 SET t.display_name = 'Religious comparisons',
     t.locale = 'bs-BA',
     t.term = 'Religious comparisons',
@@ -700,7 +700,7 @@ SET t.display_name = 'Religious comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bs-BA'})
-MATCH (t:Taboo {key: 'religious-comparisons@bs-BA'})
+MATCH (t:Taboo {key: 'taboo:religious-comparisons@bs-BA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -711,7 +711,7 @@ MATCH (l:Locale {key: 'it-CH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-CH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'treating-swiss-italian-as-just-italian@it-CH'})
+MERGE (t:Taboo {key: 'taboo:treating-swiss-italian-as-just-italian@it-CH'})
 SET t.display_name = 'Treating Swiss Italian as "just Italian"',
     t.locale = 'it-CH',
     t.term = 'Treating Swiss Italian as "just Italian"',
@@ -727,10 +727,10 @@ SET t.display_name = 'Treating Swiss Italian as "just Italian"',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-CH'})
-MATCH (t:Taboo {key: 'treating-swiss-italian-as-just-italian@it-CH'})
+MATCH (t:Taboo {key: 'taboo:treating-swiss-italian-as-just-italian@it-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'implying-ticino-is-less-swiss@it-CH'})
+MERGE (t:Taboo {key: 'taboo:implying-ticino-is-less-swiss@it-CH'})
 SET t.display_name = 'Implying Ticino is less Swiss',
     t.locale = 'it-CH',
     t.term = 'Implying Ticino is less Swiss',
@@ -746,10 +746,10 @@ SET t.display_name = 'Implying Ticino is less Swiss',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-CH'})
-MATCH (t:Taboo {key: 'implying-ticino-is-less-swiss@it-CH'})
+MATCH (t:Taboo {key: 'taboo:implying-ticino-is-less-swiss@it-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'language-region-favoritism@it-CH'})
+MERGE (t:Taboo {key: 'taboo:language-region-favoritism@it-CH'})
 SET t.display_name = 'Language region favoritism',
     t.locale = 'it-CH',
     t.term = 'Language region favoritism',
@@ -765,7 +765,7 @@ SET t.display_name = 'Language region favoritism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-CH'})
-MATCH (t:Taboo {key: 'language-region-favoritism@it-CH'})
+MATCH (t:Taboo {key: 'taboo:language-region-favoritism@it-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -776,7 +776,7 @@ MATCH (l:Locale {key: 'tr-TR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tr-TR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-or-disrespect-of-ataturk@tr-TR'})
+MERGE (t:Taboo {key: 'taboo:criticism-or-disrespect-of-ataturk@tr-TR'})
 SET t.display_name = 'Criticism or disrespect of Ataturk',
     t.locale = 'tr-TR',
     t.term = 'Criticism or disrespect of Ataturk',
@@ -792,10 +792,10 @@ SET t.display_name = 'Criticism or disrespect of Ataturk',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tr-TR'})
-MATCH (t:Taboo {key: 'criticism-or-disrespect-of-ataturk@tr-TR'})
+MATCH (t:Taboo {key: 'taboo:criticism-or-disrespect-of-ataturk@tr-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'recognition-of-armenian-genocide@tr-TR'})
+MERGE (t:Taboo {key: 'taboo:recognition-of-armenian-genocide@tr-TR'})
 SET t.display_name = 'Recognition of Armenian "genocide"',
     t.locale = 'tr-TR',
     t.term = 'Recognition of Armenian "genocide"',
@@ -811,10 +811,10 @@ SET t.display_name = 'Recognition of Armenian "genocide"',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tr-TR'})
-MATCH (t:Taboo {key: 'recognition-of-armenian-genocide@tr-TR'})
+MATCH (t:Taboo {key: 'taboo:recognition-of-armenian-genocide@tr-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'kurdish-separatismpkk-support@tr-TR'})
+MERGE (t:Taboo {key: 'taboo:kurdish-separatismpkk-support@tr-TR'})
 SET t.display_name = 'Kurdish separatism/PKK support',
     t.locale = 'tr-TR',
     t.term = 'Kurdish separatism/PKK support',
@@ -830,7 +830,7 @@ SET t.display_name = 'Kurdish separatism/PKK support',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tr-TR'})
-MATCH (t:Taboo {key: 'kurdish-separatismpkk-support@tr-TR'})
+MATCH (t:Taboo {key: 'taboo:kurdish-separatismpkk-support@tr-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -841,7 +841,7 @@ MATCH (l:Locale {key: 'es-MX'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-MX'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'us-mexico-war-1846-1848@es-MX'})
+MERGE (t:Taboo {key: 'taboo:us-mexico-war-1846-1848@es-MX'})
 SET t.display_name = 'US-Mexico War 1846-1848',
     t.locale = 'es-MX',
     t.term = 'US-Mexico War 1846-1848',
@@ -857,10 +857,10 @@ SET t.display_name = 'US-Mexico War 1846-1848',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-MX'})
-MATCH (t:Taboo {key: 'us-mexico-war-1846-1848@es-MX'})
+MATCH (t:Taboo {key: 'taboo:us-mexico-war-1846-1848@es-MX'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'la-malincheconquest-narrative@es-MX'})
+MERGE (t:Taboo {key: 'taboo:la-malincheconquest-narrative@es-MX'})
 SET t.display_name = 'La Malinche/Conquest narrative',
     t.locale = 'es-MX',
     t.term = 'La Malinche/Conquest narrative',
@@ -876,10 +876,10 @@ SET t.display_name = 'La Malinche/Conquest narrative',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-MX'})
-MATCH (t:Taboo {key: 'la-malincheconquest-narrative@es-MX'})
+MATCH (t:Taboo {key: 'taboo:la-malincheconquest-narrative@es-MX'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'drug-cartels-and-narco-violence@es-MX'})
+MERGE (t:Taboo {key: 'taboo:drug-cartels-and-narco-violence@es-MX'})
 SET t.display_name = 'Drug cartels and narco-violence',
     t.locale = 'es-MX',
     t.term = 'Drug cartels and narco-violence',
@@ -895,7 +895,7 @@ SET t.display_name = 'Drug cartels and narco-violence',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-MX'})
-MATCH (t:Taboo {key: 'drug-cartels-and-narco-violence@es-MX'})
+MATCH (t:Taboo {key: 'taboo:drug-cartels-and-narco-violence@es-MX'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -906,7 +906,7 @@ MATCH (l:Locale {key: 'ar-MA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-MA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'western-sahara-sovereignty@ar-MA'})
+MERGE (t:Taboo {key: 'taboo:western-sahara-sovereignty@ar-MA'})
 SET t.display_name = 'Western Sahara sovereignty',
     t.locale = 'ar-MA',
     t.term = 'Western Sahara sovereignty',
@@ -922,10 +922,10 @@ SET t.display_name = 'Western Sahara sovereignty',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-MA'})
-MATCH (t:Taboo {key: 'western-sahara-sovereignty@ar-MA'})
+MATCH (t:Taboo {key: 'taboo:western-sahara-sovereignty@ar-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-the-monarchy@ar-MA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-MA'})
 SET t.display_name = 'Criticism of the monarchy',
     t.locale = 'ar-MA',
     t.term = 'Criticism of the monarchy',
@@ -941,10 +941,10 @@ SET t.display_name = 'Criticism of the monarchy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-MA'})
-MATCH (t:Taboo {key: 'criticism-of-the-monarchy@ar-MA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-the-prophet@ar-MA'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ar-MA'})
 SET t.display_name = 'Insulting Islam or the Prophet',
     t.locale = 'ar-MA',
     t.term = 'Insulting Islam or the Prophet',
@@ -960,7 +960,7 @@ SET t.display_name = 'Insulting Islam or the Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-MA'})
-MATCH (t:Taboo {key: 'insulting-islam-or-the-prophet@ar-MA'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ar-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -971,7 +971,7 @@ MATCH (l:Locale {key: 'ar-LY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-islam-or-islamic-values@ar-LY'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@ar-LY'})
 SET t.display_name = 'Criticism of Islam or Islamic values',
     t.locale = 'ar-LY',
     t.term = 'Criticism of Islam or Islamic values',
@@ -987,10 +987,10 @@ SET t.display_name = 'Criticism of Islam or Islamic values',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LY'})
-MATCH (t:Taboo {key: 'criticism-of-islam-or-islamic-values@ar-LY'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@ar-LY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-libya-or-libyan-identity@ar-LY'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-libya-or-libyan-identity@ar-LY'})
 SET t.display_name = 'Criticism of Libya or Libyan identity',
     t.locale = 'ar-LY',
     t.term = 'Criticism of Libya or Libyan identity',
@@ -1006,10 +1006,10 @@ SET t.display_name = 'Criticism of Libya or Libyan identity',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LY'})
-MATCH (t:Taboo {key: 'criticism-of-libya-or-libyan-identity@ar-LY'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-libya-or-libyan-identity@ar-LY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'current-political-factions@ar-LY'})
+MERGE (t:Taboo {key: 'taboo:current-political-factions@ar-LY'})
 SET t.display_name = 'Current political factions',
     t.locale = 'ar-LY',
     t.term = 'Current political factions',
@@ -1025,7 +1025,7 @@ SET t.display_name = 'Current political factions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LY'})
-MATCH (t:Taboo {key: 'current-political-factions@ar-LY'})
+MATCH (t:Taboo {key: 'taboo:current-political-factions@ar-LY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1036,7 +1036,7 @@ MATCH (l:Locale {key: 'fr-MG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'violations-de-fady@fr-MG'})
+MERGE (t:Taboo {key: 'taboo:violations-de-fady@fr-MG'})
 SET t.display_name = 'Violations de fady',
     t.locale = 'fr-MG',
     t.term = 'Violations de fady',
@@ -1052,10 +1052,10 @@ SET t.display_name = 'Violations de fady',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MG'})
-MATCH (t:Taboo {key: 'violations-de-fady@fr-MG'})
+MATCH (t:Taboo {key: 'taboo:violations-de-fady@fr-MG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'irrespect-envers-les-ancetres-razana@fr-MG'})
+MERGE (t:Taboo {key: 'taboo:irrespect-envers-les-ancetres-razana@fr-MG'})
 SET t.display_name = 'Irrespect envers les ancetres (razana)',
     t.locale = 'fr-MG',
     t.term = 'Irrespect envers les ancetres (razana)',
@@ -1071,7 +1071,7 @@ SET t.display_name = 'Irrespect envers les ancetres (razana)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MG'})
-MATCH (t:Taboo {key: 'irrespect-envers-les-ancetres-razana@fr-MG'})
+MATCH (t:Taboo {key: 'taboo:irrespect-envers-les-ancetres-razana@fr-MG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1082,7 +1082,7 @@ MATCH (l:Locale {key: 'ar-EG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-EG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-religious-figures@ar-EG'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-religious-figures@ar-EG'})
 SET t.display_name = 'Insulting Islam or religious figures',
     t.locale = 'ar-EG',
     t.term = 'Insulting Islam or religious figures',
@@ -1098,10 +1098,10 @@ SET t.display_name = 'Insulting Islam or religious figures',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-EG'})
-MATCH (t:Taboo {key: 'insulting-islam-or-religious-figures@ar-EG'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-religious-figures@ar-EG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-commentary-on-current-events@ar-EG'})
+MERGE (t:Taboo {key: 'taboo:political-commentary-on-current-events@ar-EG'})
 SET t.display_name = 'Political commentary on current events',
     t.locale = 'ar-EG',
     t.term = 'Political commentary on current events',
@@ -1117,10 +1117,10 @@ SET t.display_name = 'Political commentary on current events',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-EG'})
-MATCH (t:Taboo {key: 'political-commentary-on-current-events@ar-EG'})
+MATCH (t:Taboo {key: 'taboo:political-commentary-on-current-events@ar-EG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'israel-references@ar-EG'})
+MERGE (t:Taboo {key: 'taboo:israel-references@ar-EG'})
 SET t.display_name = 'Israel references',
     t.locale = 'ar-EG',
     t.term = 'Israel references',
@@ -1136,7 +1136,7 @@ SET t.display_name = 'Israel references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-EG'})
-MATCH (t:Taboo {key: 'israel-references@ar-EG'})
+MATCH (t:Taboo {key: 'taboo:israel-references@ar-EG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1147,7 +1147,7 @@ MATCH (l:Locale {key: 'my-MM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@my-MM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-situation-and-military@my-MM'})
+MERGE (t:Taboo {key: 'taboo:political-situation-and-military@my-MM'})
 SET t.display_name = 'Political situation and military',
     t.locale = 'my-MM',
     t.term = 'Political situation and military',
@@ -1163,10 +1163,10 @@ SET t.display_name = 'Political situation and military',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@my-MM'})
-MATCH (t:Taboo {key: 'political-situation-and-military@my-MM'})
+MATCH (t:Taboo {key: 'taboo:political-situation-and-military@my-MM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'buddhist-disrespect@my-MM'})
+MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@my-MM'})
 SET t.display_name = 'Buddhist disrespect',
     t.locale = 'my-MM',
     t.term = 'Buddhist disrespect',
@@ -1182,10 +1182,10 @@ SET t.display_name = 'Buddhist disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@my-MM'})
-MATCH (t:Taboo {key: 'buddhist-disrespect@my-MM'})
+MATCH (t:Taboo {key: 'taboo:buddhist-disrespect@my-MM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-conflicts@my-MM'})
+MERGE (t:Taboo {key: 'taboo:ethnic-conflicts@my-MM'})
 SET t.display_name = 'Ethnic conflicts',
     t.locale = 'my-MM',
     t.term = 'Ethnic conflicts',
@@ -1201,7 +1201,7 @@ SET t.display_name = 'Ethnic conflicts',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@my-MM'})
-MATCH (t:Taboo {key: 'ethnic-conflicts@my-MM'})
+MATCH (t:Taboo {key: 'taboo:ethnic-conflicts@my-MM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1212,7 +1212,7 @@ MATCH (l:Locale {key: 'ta-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'tamil-language-disrespect@ta-IN'})
+MERGE (t:Taboo {key: 'taboo:tamil-language-disrespect@ta-IN'})
 SET t.display_name = 'Tamil language disrespect',
     t.locale = 'ta-IN',
     t.term = 'Tamil language disrespect',
@@ -1228,10 +1228,10 @@ SET t.display_name = 'Tamil language disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-IN'})
-MATCH (t:Taboo {key: 'tamil-language-disrespect@ta-IN'})
+MATCH (t:Taboo {key: 'taboo:tamil-language-disrespect@ta-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-discrimination@ta-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@ta-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'ta-IN',
     t.term = 'Caste discrimination',
@@ -1247,10 +1247,10 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@ta-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@ta-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hindi-imposition@ta-IN'})
+MERGE (t:Taboo {key: 'taboo:hindi-imposition@ta-IN'})
 SET t.display_name = 'Hindi imposition',
     t.locale = 'ta-IN',
     t.term = 'Hindi imposition',
@@ -1266,7 +1266,7 @@ SET t.display_name = 'Hindi imposition',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ta-IN'})
-MATCH (t:Taboo {key: 'hindi-imposition@ta-IN'})
+MATCH (t:Taboo {key: 'taboo:hindi-imposition@ta-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1277,7 +1277,7 @@ MATCH (l:Locale {key: 'fr-CD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'divisions-ethniques-et-tribalisme@fr-CD'})
+MERGE (t:Taboo {key: 'taboo:divisions-ethniques-et-tribalisme@fr-CD'})
 SET t.display_name = 'Divisions ethniques et tribalisme',
     t.locale = 'fr-CD',
     t.term = 'Divisions ethniques et tribalisme',
@@ -1293,10 +1293,10 @@ SET t.display_name = 'Divisions ethniques et tribalisme',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CD'})
-MATCH (t:Taboo {key: 'divisions-ethniques-et-tribalisme@fr-CD'})
+MATCH (t:Taboo {key: 'taboo:divisions-ethniques-et-tribalisme@fr-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'commentaire-politique-gouvernement-actuel@fr-CD'})
+MERGE (t:Taboo {key: 'taboo:commentaire-politique-gouvernement-actuel@fr-CD'})
 SET t.display_name = 'Commentaire politique (gouvernement actuel)',
     t.locale = 'fr-CD',
     t.term = 'Commentaire politique (gouvernement actuel)',
@@ -1312,10 +1312,10 @@ SET t.display_name = 'Commentaire politique (gouvernement actuel)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CD'})
-MATCH (t:Taboo {key: 'commentaire-politique-gouvernement-actuel@fr-CD'})
+MATCH (t:Taboo {key: 'taboo:commentaire-politique-gouvernement-actuel@fr-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'conflit-a-l@fr-CD'})
+MERGE (t:Taboo {key: 'taboo:conflit-a-l@fr-CD'})
 SET t.display_name = 'Conflit a l\\',
     t.locale = 'fr-CD',
     t.term = 'Conflit a l\\',
@@ -1331,7 +1331,7 @@ SET t.display_name = 'Conflit a l\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CD'})
-MATCH (t:Taboo {key: 'conflit-a-l@fr-CD'})
+MATCH (t:Taboo {key: 'taboo:conflit-a-l@fr-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1342,7 +1342,7 @@ MATCH (l:Locale {key: 'as-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@as-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'nrccitizenship-issues@as-IN'})
+MERGE (t:Taboo {key: 'taboo:nrccitizenship-issues@as-IN'})
 SET t.display_name = 'NRC/citizenship issues',
     t.locale = 'as-IN',
     t.term = 'NRC/citizenship issues',
@@ -1358,10 +1358,10 @@ SET t.display_name = 'NRC/citizenship issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@as-IN'})
-MATCH (t:Taboo {key: 'nrccitizenship-issues@as-IN'})
+MATCH (t:Taboo {key: 'taboo:nrccitizenship-issues@as-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'immigrationdemographic-change@as-IN'})
+MERGE (t:Taboo {key: 'taboo:immigrationdemographic-change@as-IN'})
 SET t.display_name = 'Immigration/demographic change',
     t.locale = 'as-IN',
     t.term = 'Immigration/demographic change',
@@ -1377,10 +1377,10 @@ SET t.display_name = 'Immigration/demographic change',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@as-IN'})
-MATCH (t:Taboo {key: 'immigrationdemographic-change@as-IN'})
+MATCH (t:Taboo {key: 'taboo:immigrationdemographic-change@as-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'bodo-assamese-relations@as-IN'})
+MERGE (t:Taboo {key: 'taboo:bodo-assamese-relations@as-IN'})
 SET t.display_name = 'Bodo-Assamese relations',
     t.locale = 'as-IN',
     t.term = 'Bodo-Assamese relations',
@@ -1396,7 +1396,7 @@ SET t.display_name = 'Bodo-Assamese relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@as-IN'})
-MATCH (t:Taboo {key: 'bodo-assamese-relations@as-IN'})
+MATCH (t:Taboo {key: 'taboo:bodo-assamese-relations@as-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1407,7 +1407,7 @@ MATCH (l:Locale {key: 'lt-LT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lt-LT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'soviet-nostalgia-or-symbolism@lt-LT'})
+MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lt-LT'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
     t.locale = 'lt-LT',
     t.term = 'Soviet nostalgia or symbolism',
@@ -1423,10 +1423,10 @@ SET t.display_name = 'Soviet nostalgia or symbolism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lt-LT'})
-MATCH (t:Taboo {key: 'soviet-nostalgia-or-symbolism@lt-LT'})
+MATCH (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lt-LT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pro-russian-political-messaging@lt-LT'})
+MERGE (t:Taboo {key: 'taboo:pro-russian-political-messaging@lt-LT'})
 SET t.display_name = 'Pro-Russian political messaging',
     t.locale = 'lt-LT',
     t.term = 'Pro-Russian political messaging',
@@ -1442,10 +1442,10 @@ SET t.display_name = 'Pro-Russian political messaging',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lt-LT'})
-MATCH (t:Taboo {key: 'pro-russian-political-messaging@lt-LT'})
+MATCH (t:Taboo {key: 'taboo:pro-russian-political-messaging@lt-LT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-lithuania-to-russia@lt-LT'})
+MERGE (t:Taboo {key: 'taboo:comparing-lithuania-to-russia@lt-LT'})
 SET t.display_name = 'Comparing Lithuania to Russia',
     t.locale = 'lt-LT',
     t.term = 'Comparing Lithuania to Russia',
@@ -1461,7 +1461,7 @@ SET t.display_name = 'Comparing Lithuania to Russia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lt-LT'})
-MATCH (t:Taboo {key: 'comparing-lithuania-to-russia@lt-LT'})
+MATCH (t:Taboo {key: 'taboo:comparing-lithuania-to-russia@lt-LT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1472,7 +1472,7 @@ MATCH (l:Locale {key: 'sw-KE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-KE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-stereotyping-tribalism@sw-KE'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping-tribalism@sw-KE'})
 SET t.display_name = 'Ethnic stereotyping (tribalism)',
     t.locale = 'sw-KE',
     t.term = 'Ethnic stereotyping (tribalism)',
@@ -1488,10 +1488,10 @@ SET t.display_name = 'Ethnic stereotyping (tribalism)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-KE'})
-MATCH (t:Taboo {key: 'ethnic-stereotyping-tribalism@sw-KE'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotyping-tribalism@sw-KE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'electionscampaigns@sw-KE'})
+MERGE (t:Taboo {key: 'taboo:electionscampaigns@sw-KE'})
 SET t.display_name = 'Elections/campaigns',
     t.locale = 'sw-KE',
     t.term = 'Elections/campaigns',
@@ -1507,7 +1507,7 @@ SET t.display_name = 'Elections/campaigns',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-KE'})
-MATCH (t:Taboo {key: 'electionscampaigns@sw-KE'})
+MATCH (t:Taboo {key: 'taboo:electionscampaigns@sw-KE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1518,7 +1518,7 @@ MATCH (l:Locale {key: 'hy-AM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hy-AM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'armenian-genocide-denial-or-minimization@hy-AM'})
+MERGE (t:Taboo {key: 'taboo:armenian-genocide-denial-or-minimization@hy-AM'})
 SET t.display_name = 'Armenian Genocide denial or minimization',
     t.locale = 'hy-AM',
     t.term = 'Armenian Genocide denial or minimization',
@@ -1534,10 +1534,10 @@ SET t.display_name = 'Armenian Genocide denial or minimization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hy-AM'})
-MATCH (t:Taboo {key: 'armenian-genocide-denial-or-minimization@hy-AM'})
+MATCH (t:Taboo {key: 'taboo:armenian-genocide-denial-or-minimization@hy-AM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pro-turkish-or-pro-azerbaijani-political-messaging@hy-AM'})
+MERGE (t:Taboo {key: 'taboo:pro-turkish-or-pro-azerbaijani-political-messaging@hy-AM'})
 SET t.display_name = 'Pro-Turkish or pro-Azerbaijani political messaging',
     t.locale = 'hy-AM',
     t.term = 'Pro-Turkish or pro-Azerbaijani political messaging',
@@ -1553,10 +1553,10 @@ SET t.display_name = 'Pro-Turkish or pro-Azerbaijani political messaging',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hy-AM'})
-MATCH (t:Taboo {key: 'pro-turkish-or-pro-azerbaijani-political-messaging@hy-AM'})
+MATCH (t:Taboo {key: 'taboo:pro-turkish-or-pro-azerbaijani-political-messaging@hy-AM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'questioning-armenian-christianity@hy-AM'})
+MERGE (t:Taboo {key: 'taboo:questioning-armenian-christianity@hy-AM'})
 SET t.display_name = 'Questioning Armenian Christianity',
     t.locale = 'hy-AM',
     t.term = 'Questioning Armenian Christianity',
@@ -1572,7 +1572,7 @@ SET t.display_name = 'Questioning Armenian Christianity',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hy-AM'})
-MATCH (t:Taboo {key: 'questioning-armenian-christianity@hy-AM'})
+MATCH (t:Taboo {key: 'taboo:questioning-armenian-christianity@hy-AM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1583,7 +1583,7 @@ MATCH (l:Locale {key: 'pt-MZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-MZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'civil-war-blame@pt-MZ'})
+MERGE (t:Taboo {key: 'taboo:civil-war-blame@pt-MZ'})
 SET t.display_name = 'Civil War blame',
     t.locale = 'pt-MZ',
     t.term = 'Civil War blame',
@@ -1599,10 +1599,10 @@ SET t.display_name = 'Civil War blame',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-MZ'})
-MATCH (t:Taboo {key: 'civil-war-blame@pt-MZ'})
+MATCH (t:Taboo {key: 'taboo:civil-war-blame@pt-MZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-divisions@pt-MZ'})
+MERGE (t:Taboo {key: 'taboo:ethnic-divisions@pt-MZ'})
 SET t.display_name = 'Ethnic divisions',
     t.locale = 'pt-MZ',
     t.term = 'Ethnic divisions',
@@ -1618,10 +1618,10 @@ SET t.display_name = 'Ethnic divisions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-MZ'})
-MATCH (t:Taboo {key: 'ethnic-divisions@pt-MZ'})
+MATCH (t:Taboo {key: 'taboo:ethnic-divisions@pt-MZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'north-south-disparities@pt-MZ'})
+MERGE (t:Taboo {key: 'taboo:north-south-disparities@pt-MZ'})
 SET t.display_name = 'North-South disparities',
     t.locale = 'pt-MZ',
     t.term = 'North-South disparities',
@@ -1637,7 +1637,7 @@ SET t.display_name = 'North-South disparities',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-MZ'})
-MATCH (t:Taboo {key: 'north-south-disparities@pt-MZ'})
+MATCH (t:Taboo {key: 'taboo:north-south-disparities@pt-MZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1648,7 +1648,7 @@ MATCH (l:Locale {key: 'nl-BE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-BE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'flemish-walloon-tensions@nl-BE'})
+MERGE (t:Taboo {key: 'taboo:flemish-walloon-tensions@nl-BE'})
 SET t.display_name = 'Flemish-Walloon tensions',
     t.locale = 'nl-BE',
     t.term = 'Flemish-Walloon tensions',
@@ -1664,10 +1664,10 @@ SET t.display_name = 'Flemish-Walloon tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-BE'})
-MATCH (t:Taboo {key: 'flemish-walloon-tensions@nl-BE'})
+MATCH (t:Taboo {key: 'taboo:flemish-walloon-tensions@nl-BE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'linguistic-politics@nl-BE'})
+MERGE (t:Taboo {key: 'taboo:linguistic-politics@nl-BE'})
 SET t.display_name = 'Linguistic politics',
     t.locale = 'nl-BE',
     t.term = 'Linguistic politics',
@@ -1683,7 +1683,7 @@ SET t.display_name = 'Linguistic politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-BE'})
-MATCH (t:Taboo {key: 'linguistic-politics@nl-BE'})
+MATCH (t:Taboo {key: 'taboo:linguistic-politics@nl-BE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1694,7 +1694,7 @@ MATCH (l:Locale {key: 'te-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@te-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'telugu-language-disrespect@te-IN'})
+MERGE (t:Taboo {key: 'taboo:telugu-language-disrespect@te-IN'})
 SET t.display_name = 'Telugu language disrespect',
     t.locale = 'te-IN',
     t.term = 'Telugu language disrespect',
@@ -1710,10 +1710,10 @@ SET t.display_name = 'Telugu language disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@te-IN'})
-MATCH (t:Taboo {key: 'telugu-language-disrespect@te-IN'})
+MATCH (t:Taboo {key: 'taboo:telugu-language-disrespect@te-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'andhra-telangana-division@te-IN'})
+MERGE (t:Taboo {key: 'taboo:andhra-telangana-division@te-IN'})
 SET t.display_name = 'Andhra-Telangana division',
     t.locale = 'te-IN',
     t.term = 'Andhra-Telangana division',
@@ -1729,10 +1729,10 @@ SET t.display_name = 'Andhra-Telangana division',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@te-IN'})
-MATCH (t:Taboo {key: 'andhra-telangana-division@te-IN'})
+MATCH (t:Taboo {key: 'taboo:andhra-telangana-division@te-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-communalism@te-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@te-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'te-IN',
     t.term = 'Religious communalism',
@@ -1748,7 +1748,7 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@te-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@te-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@te-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1759,7 +1759,7 @@ MATCH (l:Locale {key: 'ml-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ml-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'caste-discrimination@ml-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@ml-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'ml-IN',
     t.term = 'Caste discrimination',
@@ -1775,10 +1775,10 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ml-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@ml-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@ml-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-communalism@ml-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@ml-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'ml-IN',
     t.term = 'Religious communalism',
@@ -1794,10 +1794,10 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ml-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@ml-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@ml-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'communal-incidents@ml-IN'})
+MERGE (t:Taboo {key: 'taboo:communal-incidents@ml-IN'})
 SET t.display_name = 'Communal incidents',
     t.locale = 'ml-IN',
     t.term = 'Communal incidents',
@@ -1813,7 +1813,7 @@ SET t.display_name = 'Communal incidents',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ml-IN'})
-MATCH (t:Taboo {key: 'communal-incidents@ml-IN'})
+MATCH (t:Taboo {key: 'taboo:communal-incidents@ml-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1824,7 +1824,7 @@ MATCH (l:Locale {key: 'vi-VN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@vi-VN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-communist-partygovernment@vi-VN'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-communist-partygovernment@vi-VN'})
 SET t.display_name = 'Criticism of Communist Party/government',
     t.locale = 'vi-VN',
     t.term = 'Criticism of Communist Party/government',
@@ -1840,10 +1840,10 @@ SET t.display_name = 'Criticism of Communist Party/government',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@vi-VN'})
-MATCH (t:Taboo {key: 'criticism-of-communist-partygovernment@vi-VN'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-communist-partygovernment@vi-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'challenging-national-sovereignty-south-china-sea@vi-VN'})
+MERGE (t:Taboo {key: 'taboo:challenging-national-sovereignty-south-china-sea@vi-VN'})
 SET t.display_name = 'Challenging national sovereignty (South China Sea',
     t.locale = 'vi-VN',
     t.term = 'Challenging national sovereignty (South China Sea',
@@ -1859,10 +1859,10 @@ SET t.display_name = 'Challenging national sovereignty (South China Sea',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@vi-VN'})
-MATCH (t:Taboo {key: 'challenging-national-sovereignty-south-china-sea@vi-VN'})
+MATCH (t:Taboo {key: 'taboo:challenging-national-sovereignty-south-china-sea@vi-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'etc@vi-VN'})
+MERGE (t:Taboo {key: 'taboo:etc@vi-VN'})
 SET t.display_name = 'etc.)',
     t.locale = 'vi-VN',
     t.term = 'etc.)',
@@ -1878,10 +1878,10 @@ SET t.display_name = 'etc.)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@vi-VN'})
-MATCH (t:Taboo {key: 'etc@vi-VN'})
+MATCH (t:Taboo {key: 'taboo:etc@vi-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'south-china-sea-bien-dong@vi-VN'})
+MERGE (t:Taboo {key: 'taboo:south-china-sea-bien-dong@vi-VN'})
 SET t.display_name = 'South China Sea / Bien Dong',
     t.locale = 'vi-VN',
     t.term = 'South China Sea / Bien Dong',
@@ -1897,7 +1897,7 @@ SET t.display_name = 'South China Sea / Bien Dong',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@vi-VN'})
-MATCH (t:Taboo {key: 'south-china-sea-bien-dong@vi-VN'})
+MATCH (t:Taboo {key: 'taboo:south-china-sea-bien-dong@vi-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1908,7 +1908,7 @@ MATCH (l:Locale {key: 'fr-BE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'linguistic-tensions-flemish-vs-walloon@fr-BE'})
+MERGE (t:Taboo {key: 'taboo:linguistic-tensions-flemish-vs-walloon@fr-BE'})
 SET t.display_name = 'Linguistic tensions (Flemish vs Walloon)',
     t.locale = 'fr-BE',
     t.term = 'Linguistic tensions (Flemish vs Walloon)',
@@ -1924,10 +1924,10 @@ SET t.display_name = 'Linguistic tensions (Flemish vs Walloon)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BE'})
-MATCH (t:Taboo {key: 'linguistic-tensions-flemish-vs-walloon@fr-BE'})
+MATCH (t:Taboo {key: 'taboo:linguistic-tensions-flemish-vs-walloon@fr-BE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-to-france-dismissively@fr-BE'})
+MERGE (t:Taboo {key: 'taboo:comparing-to-france-dismissively@fr-BE'})
 SET t.display_name = 'Comparing to France dismissively',
     t.locale = 'fr-BE',
     t.term = 'Comparing to France dismissively',
@@ -1943,10 +1943,10 @@ SET t.display_name = 'Comparing to France dismissively',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BE'})
-MATCH (t:Taboo {key: 'comparing-to-france-dismissively@fr-BE'})
+MATCH (t:Taboo {key: 'taboo:comparing-to-france-dismissively@fr-BE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'congo-colonization-1885-1960@fr-BE'})
+MERGE (t:Taboo {key: 'taboo:congo-colonization-1885-1960@fr-BE'})
 SET t.display_name = 'Congo colonization (1885-1960)',
     t.locale = 'fr-BE',
     t.term = 'Congo colonization (1885-1960)',
@@ -1962,7 +1962,7 @@ SET t.display_name = 'Congo colonization (1885-1960)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BE'})
-MATCH (t:Taboo {key: 'congo-colonization-1885-1960@fr-BE'})
+MATCH (t:Taboo {key: 'taboo:congo-colonization-1885-1960@fr-BE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -1973,7 +1973,7 @@ MATCH (l:Locale {key: 'ru-IL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-IL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'holocaustshoah@ru-IL'})
+MERGE (t:Taboo {key: 'taboo:holocaustshoah@ru-IL'})
 SET t.display_name = 'Holocaust/Shoah',
     t.locale = 'ru-IL',
     t.term = 'Holocaust/Shoah',
@@ -1989,10 +1989,10 @@ SET t.display_name = 'Holocaust/Shoah',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-IL'})
-MATCH (t:Taboo {key: 'holocaustshoah@ru-IL'})
+MATCH (t:Taboo {key: 'taboo:holocaustshoah@ru-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'soviet-persecution-of-jews@ru-IL'})
+MERGE (t:Taboo {key: 'taboo:soviet-persecution-of-jews@ru-IL'})
 SET t.display_name = 'Soviet Persecution of Jews',
     t.locale = 'ru-IL',
     t.term = 'Soviet Persecution of Jews',
@@ -2008,10 +2008,10 @@ SET t.display_name = 'Soviet Persecution of Jews',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-IL'})
-MATCH (t:Taboo {key: 'soviet-persecution-of-jews@ru-IL'})
+MATCH (t:Taboo {key: 'taboo:soviet-persecution-of-jews@ru-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'israeli-palestinian-conflict@ru-IL'})
+MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict@ru-IL'})
 SET t.display_name = 'Israeli-Palestinian Conflict',
     t.locale = 'ru-IL',
     t.term = 'Israeli-Palestinian Conflict',
@@ -2027,7 +2027,7 @@ SET t.display_name = 'Israeli-Palestinian Conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-IL'})
-MATCH (t:Taboo {key: 'israeli-palestinian-conflict@ru-IL'})
+MATCH (t:Taboo {key: 'taboo:israeli-palestinian-conflict@ru-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2038,7 +2038,7 @@ MATCH (l:Locale {key: 'rw-RW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@rw-RW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-references-hutututsitwa@rw-RW'})
+MERGE (t:Taboo {key: 'taboo:ethnic-references-hutututsitwa@rw-RW'})
 SET t.display_name = 'Ethnic references (Hutu/Tutsi/Twa)',
     t.locale = 'rw-RW',
     t.term = 'Ethnic references (Hutu/Tutsi/Twa)',
@@ -2054,10 +2054,10 @@ SET t.display_name = 'Ethnic references (Hutu/Tutsi/Twa)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@rw-RW'})
-MATCH (t:Taboo {key: 'ethnic-references-hutututsitwa@rw-RW'})
+MATCH (t:Taboo {key: 'taboo:ethnic-references-hutututsitwa@rw-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1994-genocide-denialminimization@rw-RW'})
+MERGE (t:Taboo {key: 'taboo:1994-genocide-denialminimization@rw-RW'})
 SET t.display_name = '1994 Genocide denial/minimization',
     t.locale = 'rw-RW',
     t.term = '1994 Genocide denial/minimization',
@@ -2073,10 +2073,10 @@ SET t.display_name = '1994 Genocide denial/minimization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@rw-RW'})
-MATCH (t:Taboo {key: '1994-genocide-denialminimization@rw-RW'})
+MATCH (t:Taboo {key: 'taboo:1994-genocide-denialminimization@rw-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'divisionism-ubwoko@rw-RW'})
+MERGE (t:Taboo {key: 'taboo:divisionism-ubwoko@rw-RW'})
 SET t.display_name = 'Divisionism (ubwoko)',
     t.locale = 'rw-RW',
     t.term = 'Divisionism (ubwoko)',
@@ -2092,7 +2092,7 @@ SET t.display_name = 'Divisionism (ubwoko)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@rw-RW'})
-MATCH (t:Taboo {key: 'divisionism-ubwoko@rw-RW'})
+MATCH (t:Taboo {key: 'taboo:divisionism-ubwoko@rw-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2103,7 +2103,7 @@ MATCH (l:Locale {key: 'en-KY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'tax-haven-stereotypes@en-KY'})
+MERGE (t:Taboo {key: 'taboo:tax-haven-stereotypes@en-KY'})
 SET t.display_name = 'Tax haven stereotypes',
     t.locale = 'en-KY',
     t.term = 'Tax haven stereotypes',
@@ -2119,10 +2119,10 @@ SET t.display_name = 'Tax haven stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KY'})
-MATCH (t:Taboo {key: 'tax-haven-stereotypes@en-KY'})
+MATCH (t:Taboo {key: 'taboo:tax-haven-stereotypes@en-KY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'money-laundering-accusations@en-KY'})
+MERGE (t:Taboo {key: 'taboo:money-laundering-accusations@en-KY'})
 SET t.display_name = 'Money laundering accusations',
     t.locale = 'en-KY',
     t.term = 'Money laundering accusations',
@@ -2138,7 +2138,7 @@ SET t.display_name = 'Money laundering accusations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KY'})
-MATCH (t:Taboo {key: 'money-laundering-accusations@en-KY'})
+MATCH (t:Taboo {key: 'taboo:money-laundering-accusations@en-KY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2149,7 +2149,7 @@ MATCH (l:Locale {key: 'ky-KG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ky-KG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-tensions-kyrgyz-uzbek@ky-KG'})
+MERGE (t:Taboo {key: 'taboo:ethnic-tensions-kyrgyz-uzbek@ky-KG'})
 SET t.display_name = 'Ethnic tensions (Kyrgyz-Uzbek)',
     t.locale = 'ky-KG',
     t.term = 'Ethnic tensions (Kyrgyz-Uzbek)',
@@ -2165,10 +2165,10 @@ SET t.display_name = 'Ethnic tensions (Kyrgyz-Uzbek)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ky-KG'})
-MATCH (t:Taboo {key: 'ethnic-tensions-kyrgyz-uzbek@ky-KG'})
+MATCH (t:Taboo {key: 'taboo:ethnic-tensions-kyrgyz-uzbek@ky-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-criticism-current-government@ky-KG'})
+MERGE (t:Taboo {key: 'taboo:political-criticism-current-government@ky-KG'})
 SET t.display_name = 'Political criticism (current government)',
     t.locale = 'ky-KG',
     t.term = 'Political criticism (current government)',
@@ -2184,10 +2184,10 @@ SET t.display_name = 'Political criticism (current government)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ky-KG'})
-MATCH (t:Taboo {key: 'political-criticism-current-government@ky-KG'})
+MATCH (t:Taboo {key: 'taboo:political-criticism-current-government@ky-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'border-disputes@ky-KG'})
+MERGE (t:Taboo {key: 'taboo:border-disputes@ky-KG'})
 SET t.display_name = 'Border disputes',
     t.locale = 'ky-KG',
     t.term = 'Border disputes',
@@ -2203,7 +2203,7 @@ SET t.display_name = 'Border disputes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ky-KG'})
-MATCH (t:Taboo {key: 'border-disputes@ky-KG'})
+MATCH (t:Taboo {key: 'taboo:border-disputes@ky-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2214,7 +2214,7 @@ MATCH (l:Locale {key: 'en-IE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'british-stereotyping-of-ireland@en-IE'})
+MERGE (t:Taboo {key: 'taboo:british-stereotyping-of-ireland@en-IE'})
 SET t.display_name = 'British stereotyping of Ireland',
     t.locale = 'en-IE',
     t.term = 'British stereotyping of Ireland',
@@ -2230,10 +2230,10 @@ SET t.display_name = 'British stereotyping of Ireland',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IE'})
-MATCH (t:Taboo {key: 'british-stereotyping-of-ireland@en-IE'})
+MATCH (t:Taboo {key: 'taboo:british-stereotyping-of-ireland@en-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'northern-ireland-conflict@en-IE'})
+MERGE (t:Taboo {key: 'taboo:northern-ireland-conflict@en-IE'})
 SET t.display_name = 'Northern Ireland conflict',
     t.locale = 'en-IE',
     t.term = 'Northern Ireland conflict',
@@ -2249,10 +2249,10 @@ SET t.display_name = 'Northern Ireland conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IE'})
-MATCH (t:Taboo {key: 'northern-ireland-conflict@en-IE'})
+MATCH (t:Taboo {key: 'taboo:northern-ireland-conflict@en-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'famine-references@en-IE'})
+MERGE (t:Taboo {key: 'taboo:famine-references@en-IE'})
 SET t.display_name = 'Famine references',
     t.locale = 'en-IE',
     t.term = 'Famine references',
@@ -2268,7 +2268,7 @@ SET t.display_name = 'Famine references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IE'})
-MATCH (t:Taboo {key: 'famine-references@en-IE'})
+MATCH (t:Taboo {key: 'taboo:famine-references@en-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2279,7 +2279,7 @@ MATCH (l:Locale {key: 'su-ID'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@su-ID'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-religion@su-ID'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-religion@su-ID'})
 SET t.display_name = 'Insulting Islam or religion',
     t.locale = 'su-ID',
     t.term = 'Insulting Islam or religion',
@@ -2295,10 +2295,10 @@ SET t.display_name = 'Insulting Islam or religion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@su-ID'})
-MATCH (t:Taboo {key: 'insulting-islam-or-religion@su-ID'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-religion@su-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'causing-public-isin-shame@su-ID'})
+MERGE (t:Taboo {key: 'taboo:causing-public-isin-shame@su-ID'})
 SET t.display_name = 'Causing public isin (shame)',
     t.locale = 'su-ID',
     t.term = 'Causing public isin (shame)',
@@ -2314,10 +2314,10 @@ SET t.display_name = 'Causing public isin (shame)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@su-ID'})
-MATCH (t:Taboo {key: 'causing-public-isin-shame@su-ID'})
+MATCH (t:Taboo {key: 'taboo:causing-public-isin-shame@su-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'direct-confrontation-or-criticism@su-ID'})
+MERGE (t:Taboo {key: 'taboo:direct-confrontation-or-criticism@su-ID'})
 SET t.display_name = 'Direct confrontation or criticism',
     t.locale = 'su-ID',
     t.term = 'Direct confrontation or criticism',
@@ -2333,7 +2333,7 @@ SET t.display_name = 'Direct confrontation or criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@su-ID'})
-MATCH (t:Taboo {key: 'direct-confrontation-or-criticism@su-ID'})
+MATCH (t:Taboo {key: 'taboo:direct-confrontation-or-criticism@su-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2344,7 +2344,7 @@ MATCH (l:Locale {key: 'en-UG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-UG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'lgbtq-topics@en-UG'})
+MERGE (t:Taboo {key: 'taboo:lgbtq-topics@en-UG'})
 SET t.display_name = 'LGBTQ+ topics',
     t.locale = 'en-UG',
     t.term = 'LGBTQ+ topics',
@@ -2360,10 +2360,10 @@ SET t.display_name = 'LGBTQ+ topics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-UG'})
-MATCH (t:Taboo {key: 'lgbtq-topics@en-UG'})
+MATCH (t:Taboo {key: 'taboo:lgbtq-topics@en-UG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnictribal-tensions@en-UG'})
+MERGE (t:Taboo {key: 'taboo:ethnictribal-tensions@en-UG'})
 SET t.display_name = 'Ethnic/tribal tensions',
     t.locale = 'en-UG',
     t.term = 'Ethnic/tribal tensions',
@@ -2379,10 +2379,10 @@ SET t.display_name = 'Ethnic/tribal tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-UG'})
-MATCH (t:Taboo {key: 'ethnictribal-tensions@en-UG'})
+MATCH (t:Taboo {key: 'taboo:ethnictribal-tensions@en-UG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'current-political-opposition@en-UG'})
+MERGE (t:Taboo {key: 'taboo:current-political-opposition@en-UG'})
 SET t.display_name = 'Current political opposition',
     t.locale = 'en-UG',
     t.term = 'Current political opposition',
@@ -2398,7 +2398,7 @@ SET t.display_name = 'Current political opposition',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-UG'})
-MATCH (t:Taboo {key: 'current-political-opposition@en-UG'})
+MATCH (t:Taboo {key: 'taboo:current-political-opposition@en-UG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2409,7 +2409,7 @@ MATCH (l:Locale {key: 'sw-TZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-TZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-nyerere@sw-TZ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-nyerere@sw-TZ'})
 SET t.display_name = 'Criticism of Nyerere',
     t.locale = 'sw-TZ',
     t.term = 'Criticism of Nyerere',
@@ -2425,10 +2425,10 @@ SET t.display_name = 'Criticism of Nyerere',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-TZ'})
-MATCH (t:Taboo {key: 'criticism-of-nyerere@sw-TZ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-nyerere@sw-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'tribalethnic-divisions@sw-TZ'})
+MERGE (t:Taboo {key: 'taboo:tribalethnic-divisions@sw-TZ'})
 SET t.display_name = 'Tribal/Ethnic divisions',
     t.locale = 'sw-TZ',
     t.term = 'Tribal/Ethnic divisions',
@@ -2444,10 +2444,10 @@ SET t.display_name = 'Tribal/Ethnic divisions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-TZ'})
-MATCH (t:Taboo {key: 'tribalethnic-divisions@sw-TZ'})
+MATCH (t:Taboo {key: 'taboo:tribalethnic-divisions@sw-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'zanzibar-mainland-tensions@sw-TZ'})
+MERGE (t:Taboo {key: 'taboo:zanzibar-mainland-tensions@sw-TZ'})
 SET t.display_name = 'Zanzibar-Mainland tensions',
     t.locale = 'sw-TZ',
     t.term = 'Zanzibar-Mainland tensions',
@@ -2463,7 +2463,7 @@ SET t.display_name = 'Zanzibar-Mainland tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sw-TZ'})
-MATCH (t:Taboo {key: 'zanzibar-mainland-tensions@sw-TZ'})
+MATCH (t:Taboo {key: 'taboo:zanzibar-mainland-tensions@sw-TZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2474,7 +2474,7 @@ MATCH (l:Locale {key: 'hu-HU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hu-HU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'treaty-of-trianon-1920@hu-HU'})
+MERGE (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 SET t.display_name = 'Treaty of Trianon (1920)',
     t.locale = 'hu-HU',
     t.term = 'Treaty of Trianon (1920)',
@@ -2490,10 +2490,10 @@ SET t.display_name = 'Treaty of Trianon (1920)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hu-HU'})
-MATCH (t:Taboo {key: 'treaty-of-trianon-1920@hu-HU'})
+MATCH (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'conflating-hungarians-with-slavs@hu-HU'})
+MERGE (t:Taboo {key: 'taboo:conflating-hungarians-with-slavs@hu-HU'})
 SET t.display_name = 'Conflating Hungarians with Slavs',
     t.locale = 'hu-HU',
     t.term = 'Conflating Hungarians with Slavs',
@@ -2509,10 +2509,10 @@ SET t.display_name = 'Conflating Hungarians with Slavs',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hu-HU'})
-MATCH (t:Taboo {key: 'conflating-hungarians-with-slavs@hu-HU'})
+MATCH (t:Taboo {key: 'taboo:conflating-hungarians-with-slavs@hu-HU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'treaty-of-trianon-1920@hu-HU'})
+MERGE (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 SET t.display_name = 'Treaty of Trianon (1920)',
     t.locale = 'hu-HU',
     t.term = 'Treaty of Trianon (1920)',
@@ -2528,7 +2528,7 @@ SET t.display_name = 'Treaty of Trianon (1920)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hu-HU'})
-MATCH (t:Taboo {key: 'treaty-of-trianon-1920@hu-HU'})
+MATCH (t:Taboo {key: 'taboo:treaty-of-trianon-1920@hu-HU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2539,7 +2539,7 @@ MATCH (l:Locale {key: 'es-EC'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-EC'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'dollarization-criticism@es-EC'})
+MERGE (t:Taboo {key: 'taboo:dollarization-criticism@es-EC'})
 SET t.display_name = 'Dollarization criticism',
     t.locale = 'es-EC',
     t.term = 'Dollarization criticism',
@@ -2555,10 +2555,10 @@ SET t.display_name = 'Dollarization criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-EC'})
-MATCH (t:Taboo {key: 'dollarization-criticism@es-EC'})
+MATCH (t:Taboo {key: 'taboo:dollarization-criticism@es-EC'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'indigenous-discrimination@es-EC'})
+MERGE (t:Taboo {key: 'taboo:indigenous-discrimination@es-EC'})
 SET t.display_name = 'Indigenous discrimination',
     t.locale = 'es-EC',
     t.term = 'Indigenous discrimination',
@@ -2574,10 +2574,10 @@ SET t.display_name = 'Indigenous discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-EC'})
-MATCH (t:Taboo {key: 'indigenous-discrimination@es-EC'})
+MATCH (t:Taboo {key: 'taboo:indigenous-discrimination@es-EC'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'regional-mockery@es-EC'})
+MERGE (t:Taboo {key: 'taboo:regional-mockery@es-EC'})
 SET t.display_name = 'Regional mockery',
     t.locale = 'es-EC',
     t.term = 'Regional mockery',
@@ -2593,7 +2593,7 @@ SET t.display_name = 'Regional mockery',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-EC'})
-MATCH (t:Taboo {key: 'regional-mockery@es-EC'})
+MATCH (t:Taboo {key: 'taboo:regional-mockery@es-EC'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2604,7 +2604,7 @@ MATCH (l:Locale {key: 'mg-MG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mg-MG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'fady-violations@mg-MG'})
+MERGE (t:Taboo {key: 'taboo:fady-violations@mg-MG'})
 SET t.display_name = 'Fady violations',
     t.locale = 'mg-MG',
     t.term = 'Fady violations',
@@ -2620,10 +2620,10 @@ SET t.display_name = 'Fady violations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mg-MG'})
-MATCH (t:Taboo {key: 'fady-violations@mg-MG'})
+MATCH (t:Taboo {key: 'taboo:fady-violations@mg-MG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-ancestors-razana@mg-MG'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-ancestors-razana@mg-MG'})
 SET t.display_name = 'Disrespecting ancestors (razana)',
     t.locale = 'mg-MG',
     t.term = 'Disrespecting ancestors (razana)',
@@ -2639,7 +2639,7 @@ SET t.display_name = 'Disrespecting ancestors (razana)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mg-MG'})
-MATCH (t:Taboo {key: 'disrespecting-ancestors-razana@mg-MG'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-ancestors-razana@mg-MG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2650,7 +2650,7 @@ MATCH (l:Locale {key: 'ca-AD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-AD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'sovereignty-threats@ca-AD'})
+MERGE (t:Taboo {key: 'taboo:sovereignty-threats@ca-AD'})
 SET t.display_name = 'Sovereignty threats',
     t.locale = 'ca-AD',
     t.term = 'Sovereignty threats',
@@ -2666,10 +2666,10 @@ SET t.display_name = 'Sovereignty threats',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-AD'})
-MATCH (t:Taboo {key: 'sovereignty-threats@ca-AD'})
+MATCH (t:Taboo {key: 'taboo:sovereignty-threats@ca-AD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'tax-haven-characterization@ca-AD'})
+MERGE (t:Taboo {key: 'taboo:tax-haven-characterization@ca-AD'})
 SET t.display_name = 'Tax haven characterization',
     t.locale = 'ca-AD',
     t.term = 'Tax haven characterization',
@@ -2685,7 +2685,7 @@ SET t.display_name = 'Tax haven characterization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-AD'})
-MATCH (t:Taboo {key: 'tax-haven-characterization@ca-AD'})
+MATCH (t:Taboo {key: 'taboo:tax-haven-characterization@ca-AD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2696,7 +2696,7 @@ MATCH (l:Locale {key: 'ko-KR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ko-KR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'japanese-colonial-period-1910-1945@ko-KR'})
+MERGE (t:Taboo {key: 'taboo:japanese-colonial-period-1910-1945@ko-KR'})
 SET t.display_name = 'Japanese Colonial Period (1910-1945)',
     t.locale = 'ko-KR',
     t.term = 'Japanese Colonial Period (1910-1945)',
@@ -2712,10 +2712,10 @@ SET t.display_name = 'Japanese Colonial Period (1910-1945)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ko-KR'})
-MATCH (t:Taboo {key: 'japanese-colonial-period-1910-1945@ko-KR'})
+MATCH (t:Taboo {key: 'taboo:japanese-colonial-period-1910-1945@ko-KR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'north-korea-politics@ko-KR'})
+MERGE (t:Taboo {key: 'taboo:north-korea-politics@ko-KR'})
 SET t.display_name = 'North Korea Politics',
     t.locale = 'ko-KR',
     t.term = 'North Korea Politics',
@@ -2731,10 +2731,10 @@ SET t.display_name = 'North Korea Politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ko-KR'})
-MATCH (t:Taboo {key: 'north-korea-politics@ko-KR'})
+MATCH (t:Taboo {key: 'taboo:north-korea-politics@ko-KR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-disputes-dokdo@ko-KR'})
+MERGE (t:Taboo {key: 'taboo:territorial-disputes-dokdo@ko-KR'})
 SET t.display_name = 'Territorial Disputes (Dokdo/독도)',
     t.locale = 'ko-KR',
     t.term = 'Territorial Disputes (Dokdo/독도)',
@@ -2750,7 +2750,7 @@ SET t.display_name = 'Territorial Disputes (Dokdo/독도)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ko-KR'})
-MATCH (t:Taboo {key: 'territorial-disputes-dokdo@ko-KR'})
+MATCH (t:Taboo {key: 'taboo:territorial-disputes-dokdo@ko-KR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2761,7 +2761,7 @@ MATCH (l:Locale {key: 'ln-CD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ln-CD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-divisions-and-tribalism@ln-CD'})
+MERGE (t:Taboo {key: 'taboo:ethnic-divisions-and-tribalism@ln-CD'})
 SET t.display_name = 'Ethnic divisions and tribalism',
     t.locale = 'ln-CD',
     t.term = 'Ethnic divisions and tribalism',
@@ -2777,10 +2777,10 @@ SET t.display_name = 'Ethnic divisions and tribalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ln-CD'})
-MATCH (t:Taboo {key: 'ethnic-divisions-and-tribalism@ln-CD'})
+MATCH (t:Taboo {key: 'taboo:ethnic-divisions-and-tribalism@ln-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-commentary-current-government@ln-CD'})
+MERGE (t:Taboo {key: 'taboo:political-commentary-current-government@ln-CD'})
 SET t.display_name = 'Political commentary (current government)',
     t.locale = 'ln-CD',
     t.term = 'Political commentary (current government)',
@@ -2796,10 +2796,10 @@ SET t.display_name = 'Political commentary (current government)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ln-CD'})
-MATCH (t:Taboo {key: 'political-commentary-current-government@ln-CD'})
+MATCH (t:Taboo {key: 'taboo:political-commentary-current-government@ln-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'eastern-drc-conflict@ln-CD'})
+MERGE (t:Taboo {key: 'taboo:eastern-drc-conflict@ln-CD'})
 SET t.display_name = 'Eastern DRC conflict',
     t.locale = 'ln-CD',
     t.term = 'Eastern DRC conflict',
@@ -2815,7 +2815,7 @@ SET t.display_name = 'Eastern DRC conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ln-CD'})
-MATCH (t:Taboo {key: 'eastern-drc-conflict@ln-CD'})
+MATCH (t:Taboo {key: 'taboo:eastern-drc-conflict@ln-CD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2826,7 +2826,7 @@ MATCH (l:Locale {key: 'en-KE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnictribal-tensions@en-KE'})
+MERGE (t:Taboo {key: 'taboo:ethnictribal-tensions@en-KE'})
 SET t.display_name = 'Ethnic/tribal tensions',
     t.locale = 'en-KE',
     t.term = 'Ethnic/tribal tensions',
@@ -2842,10 +2842,10 @@ SET t.display_name = 'Ethnic/tribal tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KE'})
-MATCH (t:Taboo {key: 'ethnictribal-tensions@en-KE'})
+MATCH (t:Taboo {key: 'taboo:ethnictribal-tensions@en-KE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-tribalism@en-KE'})
+MERGE (t:Taboo {key: 'taboo:political-tribalism@en-KE'})
 SET t.display_name = 'Political tribalism',
     t.locale = 'en-KE',
     t.term = 'Political tribalism',
@@ -2861,10 +2861,10 @@ SET t.display_name = 'Political tribalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KE'})
-MATCH (t:Taboo {key: 'political-tribalism@en-KE'})
+MATCH (t:Taboo {key: 'taboo:political-tribalism@en-KE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2007-2008-post-election-violence@en-KE'})
+MERGE (t:Taboo {key: 'taboo:2007-2008-post-election-violence@en-KE'})
 SET t.display_name = '2007-2008 Post-Election Violence',
     t.locale = 'en-KE',
     t.term = '2007-2008 Post-Election Violence',
@@ -2880,7 +2880,7 @@ SET t.display_name = '2007-2008 Post-Election Violence',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-KE'})
-MATCH (t:Taboo {key: '2007-2008-post-election-violence@en-KE'})
+MATCH (t:Taboo {key: 'taboo:2007-2008-post-election-violence@en-KE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2891,7 +2891,7 @@ MATCH (l:Locale {key: 'ar-DZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-DZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam@ar-DZ'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-DZ'})
 SET t.display_name = 'Insulting Islam',
     t.locale = 'ar-DZ',
     t.term = 'Insulting Islam',
@@ -2907,10 +2907,10 @@ SET t.display_name = 'Insulting Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-DZ'})
-MATCH (t:Taboo {key: 'insulting-islam@ar-DZ'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam@ar-DZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'french-colonization-praise@ar-DZ'})
+MERGE (t:Taboo {key: 'taboo:french-colonization-praise@ar-DZ'})
 SET t.display_name = 'French colonization praise',
     t.locale = 'ar-DZ',
     t.term = 'French colonization praise',
@@ -2926,10 +2926,10 @@ SET t.display_name = 'French colonization praise',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-DZ'})
-MATCH (t:Taboo {key: 'french-colonization-praise@ar-DZ'})
+MATCH (t:Taboo {key: 'taboo:french-colonization-praise@ar-DZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'morocco-algeria-relations@ar-DZ'})
+MERGE (t:Taboo {key: 'taboo:morocco-algeria-relations@ar-DZ'})
 SET t.display_name = 'Morocco-Algeria relations',
     t.locale = 'ar-DZ',
     t.term = 'Morocco-Algeria relations',
@@ -2945,7 +2945,7 @@ SET t.display_name = 'Morocco-Algeria relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-DZ'})
-MATCH (t:Taboo {key: 'morocco-algeria-relations@ar-DZ'})
+MATCH (t:Taboo {key: 'taboo:morocco-algeria-relations@ar-DZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -2956,7 +2956,7 @@ MATCH (l:Locale {key: 'fr-CA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'souverainete-independance@fr-CA'})
+MERGE (t:Taboo {key: 'taboo:souverainete-independance@fr-CA'})
 SET t.display_name = 'Souverainete / independance',
     t.locale = 'fr-CA',
     t.term = 'Souverainete / independance',
@@ -2972,10 +2972,10 @@ SET t.display_name = 'Souverainete / independance',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CA'})
-MATCH (t:Taboo {key: 'souverainete-independance@fr-CA'})
+MATCH (t:Taboo {key: 'taboo:souverainete-independance@fr-CA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparaisons-defavorables-avec-la-france@fr-CA'})
+MERGE (t:Taboo {key: 'taboo:comparaisons-defavorables-avec-la-france@fr-CA'})
 SET t.display_name = 'Comparaisons defavorables avec la France',
     t.locale = 'fr-CA',
     t.term = 'Comparaisons defavorables avec la France',
@@ -2991,10 +2991,10 @@ SET t.display_name = 'Comparaisons defavorables avec la France',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CA'})
-MATCH (t:Taboo {key: 'comparaisons-defavorables-avec-la-france@fr-CA'})
+MATCH (t:Taboo {key: 'taboo:comparaisons-defavorables-avec-la-france@fr-CA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'federalisme-vs-souverainisme@fr-CA'})
+MERGE (t:Taboo {key: 'taboo:federalisme-vs-souverainisme@fr-CA'})
 SET t.display_name = 'Federalisme vs souverainisme',
     t.locale = 'fr-CA',
     t.term = 'Federalisme vs souverainisme',
@@ -3010,7 +3010,7 @@ SET t.display_name = 'Federalisme vs souverainisme',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CA'})
-MATCH (t:Taboo {key: 'federalisme-vs-souverainisme@fr-CA'})
+MATCH (t:Taboo {key: 'taboo:federalisme-vs-souverainisme@fr-CA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3021,7 +3021,7 @@ MATCH (l:Locale {key: 'en-GB'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GB'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'the-troubles-northern-ireland@en-GB'})
+MERGE (t:Taboo {key: 'taboo:the-troubles-northern-ireland@en-GB'})
 SET t.display_name = 'The Troubles (Northern Ireland)',
     t.locale = 'en-GB',
     t.term = 'The Troubles (Northern Ireland)',
@@ -3037,7 +3037,7 @@ SET t.display_name = 'The Troubles (Northern Ireland)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GB'})
-MATCH (t:Taboo {key: 'the-troubles-northern-ireland@en-GB'})
+MATCH (t:Taboo {key: 'taboo:the-troubles-northern-ireland@en-GB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3048,7 +3048,7 @@ MATCH (l:Locale {key: 'fr-RW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-RW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'references-ethniques-hutututsitwa@fr-RW'})
+MERGE (t:Taboo {key: 'taboo:references-ethniques-hutututsitwa@fr-RW'})
 SET t.display_name = 'References ethniques (Hutu/Tutsi/Twa)',
     t.locale = 'fr-RW',
     t.term = 'References ethniques (Hutu/Tutsi/Twa)',
@@ -3064,10 +3064,10 @@ SET t.display_name = 'References ethniques (Hutu/Tutsi/Twa)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-RW'})
-MATCH (t:Taboo {key: 'references-ethniques-hutututsitwa@fr-RW'})
+MATCH (t:Taboo {key: 'taboo:references-ethniques-hutututsitwa@fr-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'negationminimisation-du-genocide-de-1994@fr-RW'})
+MERGE (t:Taboo {key: 'taboo:negationminimisation-du-genocide-de-1994@fr-RW'})
 SET t.display_name = 'Negation/minimisation du genocide de 1994',
     t.locale = 'fr-RW',
     t.term = 'Negation/minimisation du genocide de 1994',
@@ -3083,10 +3083,10 @@ SET t.display_name = 'Negation/minimisation du genocide de 1994',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-RW'})
-MATCH (t:Taboo {key: 'negationminimisation-du-genocide-de-1994@fr-RW'})
+MATCH (t:Taboo {key: 'taboo:negationminimisation-du-genocide-de-1994@fr-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'divisionnisme-ubwoko@fr-RW'})
+MERGE (t:Taboo {key: 'taboo:divisionnisme-ubwoko@fr-RW'})
 SET t.display_name = 'Divisionnisme (ubwoko)',
     t.locale = 'fr-RW',
     t.term = 'Divisionnisme (ubwoko)',
@@ -3102,7 +3102,7 @@ SET t.display_name = 'Divisionnisme (ubwoko)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-RW'})
-MATCH (t:Taboo {key: 'divisionnisme-ubwoko@fr-RW'})
+MATCH (t:Taboo {key: 'taboo:divisionnisme-ubwoko@fr-RW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3113,7 +3113,7 @@ MATCH (l:Locale {key: 'ru-BY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-BY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'current-political-situation@ru-BY'})
+MERGE (t:Taboo {key: 'taboo:current-political-situation@ru-BY'})
 SET t.display_name = 'Текущая политическая ситуация (Current political situation)',
     t.locale = 'ru-BY',
     t.term = 'Текущая политическая ситуация (Current political situation)',
@@ -3129,10 +3129,10 @@ SET t.display_name = 'Текущая политическая ситуация (
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-BY'})
-MATCH (t:Taboo {key: 'current-political-situation@ru-BY'})
+MATCH (t:Taboo {key: 'taboo:current-political-situation@ru-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'government-criticism@ru-BY'})
+MERGE (t:Taboo {key: 'taboo:government-criticism@ru-BY'})
 SET t.display_name = 'Критика государственных институтов (Government criticism)',
     t.locale = 'ru-BY',
     t.term = 'Критика государственных институтов (Government criticism)',
@@ -3148,10 +3148,10 @@ SET t.display_name = 'Критика государственных инстит
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-BY'})
-MATCH (t:Taboo {key: 'government-criticism@ru-BY'})
+MATCH (t:Taboo {key: 'taboo:government-criticism@ru-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2020-2020-events-and-aftermath@ru-BY'})
+MERGE (t:Taboo {key: 'taboo:2020-2020-events-and-aftermath@ru-BY'})
 SET t.display_name = 'События 2020 года (2020 events and aftermath)',
     t.locale = 'ru-BY',
     t.term = 'События 2020 года (2020 events and aftermath)',
@@ -3167,7 +3167,7 @@ SET t.display_name = 'События 2020 года (2020 events and aftermath)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-BY'})
-MATCH (t:Taboo {key: '2020-2020-events-and-aftermath@ru-BY'})
+MATCH (t:Taboo {key: 'taboo:2020-2020-events-and-aftermath@ru-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3178,7 +3178,7 @@ MATCH (l:Locale {key: 'es-GT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-GT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'civil-wararmed-conflict-1960-1996@es-GT'})
+MERGE (t:Taboo {key: 'taboo:civil-wararmed-conflict-1960-1996@es-GT'})
 SET t.display_name = 'Civil War/Armed Conflict (1960-1996)',
     t.locale = 'es-GT',
     t.term = 'Civil War/Armed Conflict (1960-1996)',
@@ -3194,10 +3194,10 @@ SET t.display_name = 'Civil War/Armed Conflict (1960-1996)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-GT'})
-MATCH (t:Taboo {key: 'civil-wararmed-conflict-1960-1996@es-GT'})
+MATCH (t:Taboo {key: 'taboo:civil-wararmed-conflict-1960-1996@es-GT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'genocide-and-massacres@es-GT'})
+MERGE (t:Taboo {key: 'taboo:genocide-and-massacres@es-GT'})
 SET t.display_name = 'Genocide and massacres',
     t.locale = 'es-GT',
     t.term = 'Genocide and massacres',
@@ -3213,10 +3213,10 @@ SET t.display_name = 'Genocide and massacres',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-GT'})
-MATCH (t:Taboo {key: 'genocide-and-massacres@es-GT'})
+MATCH (t:Taboo {key: 'taboo:genocide-and-massacres@es-GT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'racialethnic-discrimination@es-GT'})
+MERGE (t:Taboo {key: 'taboo:racialethnic-discrimination@es-GT'})
 SET t.display_name = 'Racial/ethnic discrimination',
     t.locale = 'es-GT',
     t.term = 'Racial/ethnic discrimination',
@@ -3232,7 +3232,7 @@ SET t.display_name = 'Racial/ethnic discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-GT'})
-MATCH (t:Taboo {key: 'racialethnic-discrimination@es-GT'})
+MATCH (t:Taboo {key: 'taboo:racialethnic-discrimination@es-GT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3243,7 +3243,7 @@ MATCH (l:Locale {key: 'ms-SG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-SG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-any-religion@ms-SG'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-SG'})
 SET t.display_name = 'Insulting Islam or any religion',
     t.locale = 'ms-SG',
     t.term = 'Insulting Islam or any religion',
@@ -3259,10 +3259,10 @@ SET t.display_name = 'Insulting Islam or any religion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-SG'})
-MATCH (t:Taboo {key: 'insulting-islam-or-any-religion@ms-SG'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'non-halal-content-prominently@ms-SG'})
+MERGE (t:Taboo {key: 'taboo:non-halal-content-prominently@ms-SG'})
 SET t.display_name = 'Non-halal content prominently',
     t.locale = 'ms-SG',
     t.term = 'Non-halal content prominently',
@@ -3278,10 +3278,10 @@ SET t.display_name = 'Non-halal content prominently',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-SG'})
-MATCH (t:Taboo {key: 'non-halal-content-prominently@ms-SG'})
+MATCH (t:Taboo {key: 'taboo:non-halal-content-prominently@ms-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'racial-denigration-of-any-group@ms-SG'})
+MERGE (t:Taboo {key: 'taboo:racial-denigration-of-any-group@ms-SG'})
 SET t.display_name = 'Racial denigration of any group',
     t.locale = 'ms-SG',
     t.term = 'Racial denigration of any group',
@@ -3297,7 +3297,7 @@ SET t.display_name = 'Racial denigration of any group',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-SG'})
-MATCH (t:Taboo {key: 'racial-denigration-of-any-group@ms-SG'})
+MATCH (t:Taboo {key: 'taboo:racial-denigration-of-any-group@ms-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3308,7 +3308,7 @@ MATCH (l:Locale {key: 'ht-HT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ht-HT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'vodou-mockerysensationalism@ht-HT'})
+MERGE (t:Taboo {key: 'taboo:vodou-mockerysensationalism@ht-HT'})
 SET t.display_name = 'Vodou mockery/sensationalism',
     t.locale = 'ht-HT',
     t.term = 'Vodou mockery/sensationalism',
@@ -3324,10 +3324,10 @@ SET t.display_name = 'Vodou mockery/sensationalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ht-HT'})
-MATCH (t:Taboo {key: 'vodou-mockerysensationalism@ht-HT'})
+MATCH (t:Taboo {key: 'taboo:vodou-mockerysensationalism@ht-HT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'voodoo-spellingstereotypes@ht-HT'})
+MERGE (t:Taboo {key: 'taboo:voodoo-spellingstereotypes@ht-HT'})
 SET t.display_name = '"Voodoo" spelling/stereotypes',
     t.locale = 'ht-HT',
     t.term = '"Voodoo" spelling/stereotypes',
@@ -3343,10 +3343,10 @@ SET t.display_name = '"Voodoo" spelling/stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ht-HT'})
-MATCH (t:Taboo {key: 'voodoo-spellingstereotypes@ht-HT'})
+MATCH (t:Taboo {key: 'taboo:voodoo-spellingstereotypes@ht-HT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'poverty-tourism@ht-HT'})
+MERGE (t:Taboo {key: 'taboo:poverty-tourism@ht-HT'})
 SET t.display_name = 'Poverty tourism',
     t.locale = 'ht-HT',
     t.term = 'Poverty tourism',
@@ -3362,7 +3362,7 @@ SET t.display_name = 'Poverty tourism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ht-HT'})
-MATCH (t:Taboo {key: 'poverty-tourism@ht-HT'})
+MATCH (t:Taboo {key: 'taboo:poverty-tourism@ht-HT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3373,7 +3373,7 @@ MATCH (l:Locale {key: 'ms-MY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-MY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-any-religion@ms-MY'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-MY'})
 SET t.display_name = 'Insulting Islam or any religion',
     t.locale = 'ms-MY',
     t.term = 'Insulting Islam or any religion',
@@ -3389,10 +3389,10 @@ SET t.display_name = 'Insulting Islam or any religion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-MY'})
-MATCH (t:Taboo {key: 'insulting-islam-or-any-religion@ms-MY'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@ms-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticizing-royalty@ms-MY'})
+MERGE (t:Taboo {key: 'taboo:criticizing-royalty@ms-MY'})
 SET t.display_name = 'Criticizing royalty',
     t.locale = 'ms-MY',
     t.term = 'Criticizing royalty',
@@ -3408,10 +3408,10 @@ SET t.display_name = 'Criticizing royalty',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-MY'})
-MATCH (t:Taboo {key: 'criticizing-royalty@ms-MY'})
+MATCH (t:Taboo {key: 'taboo:criticizing-royalty@ms-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'racial-tension-or-preferential-policies@ms-MY'})
+MERGE (t:Taboo {key: 'taboo:racial-tension-or-preferential-policies@ms-MY'})
 SET t.display_name = 'Racial tension or preferential policies',
     t.locale = 'ms-MY',
     t.term = 'Racial tension or preferential policies',
@@ -3427,7 +3427,7 @@ SET t.display_name = 'Racial tension or preferential policies',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-MY'})
-MATCH (t:Taboo {key: 'racial-tension-or-preferential-policies@ms-MY'})
+MATCH (t:Taboo {key: 'taboo:racial-tension-or-preferential-policies@ms-MY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3438,7 +3438,7 @@ MATCH (l:Locale {key: 'sq-AL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sq-AL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'communist-era-1944-1991@sq-AL'})
+MERGE (t:Taboo {key: 'taboo:communist-era-1944-1991@sq-AL'})
 SET t.display_name = 'Communist Era (1944-1991)',
     t.locale = 'sq-AL',
     t.term = 'Communist Era (1944-1991)',
@@ -3454,10 +3454,10 @@ SET t.display_name = 'Communist Era (1944-1991)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sq-AL'})
-MATCH (t:Taboo {key: 'communist-era-1944-1991@sq-AL'})
+MATCH (t:Taboo {key: 'taboo:communist-era-1944-1991@sq-AL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'blood-feuds-gjakmarrja@sq-AL'})
+MERGE (t:Taboo {key: 'taboo:blood-feuds-gjakmarrja@sq-AL'})
 SET t.display_name = 'Blood Feuds (Gjakmarrja)',
     t.locale = 'sq-AL',
     t.term = 'Blood Feuds (Gjakmarrja)',
@@ -3473,7 +3473,7 @@ SET t.display_name = 'Blood Feuds (Gjakmarrja)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sq-AL'})
-MATCH (t:Taboo {key: 'blood-feuds-gjakmarrja@sq-AL'})
+MATCH (t:Taboo {key: 'taboo:blood-feuds-gjakmarrja@sq-AL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3484,7 +3484,7 @@ MATCH (l:Locale {key: 'mk-MK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mk-MK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'country-name-and-dispute-with-greece@mk-MK'})
+MERGE (t:Taboo {key: 'taboo:country-name-and-dispute-with-greece@mk-MK'})
 SET t.display_name = 'Име на државата и спорот со Грција (Country name and dispute with Greece)',
     t.locale = 'mk-MK',
     t.term = 'Име на државата и спорот со Грција (Country name and dispute with Greece)',
@@ -3500,10 +3500,10 @@ SET t.display_name = 'Име на државата и спорот со Грци
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mk-MK'})
-MATCH (t:Taboo {key: 'country-name-and-dispute-with-greece@mk-MK'})
+MATCH (t:Taboo {key: 'taboo:country-name-and-dispute-with-greece@mk-MK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'bulgarianmacedonian-history-debate@mk-MK'})
+MERGE (t:Taboo {key: 'taboo:bulgarianmacedonian-history-debate@mk-MK'})
 SET t.display_name = 'Бугарска/Македонска историја (Bulgarian/Macedonian history debate)',
     t.locale = 'mk-MK',
     t.term = 'Бугарска/Македонска историја (Bulgarian/Macedonian history debate)',
@@ -3519,7 +3519,7 @@ SET t.display_name = 'Бугарска/Македонска историја (Bu
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mk-MK'})
-MATCH (t:Taboo {key: 'bulgarianmacedonian-history-debate@mk-MK'})
+MATCH (t:Taboo {key: 'taboo:bulgarianmacedonian-history-debate@mk-MK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3530,7 +3530,7 @@ MATCH (l:Locale {key: 'mr-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mr-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'shivaji-maharaj-disrespect@mr-IN'})
+MERGE (t:Taboo {key: 'taboo:shivaji-maharaj-disrespect@mr-IN'})
 SET t.display_name = 'Shivaji Maharaj disrespect',
     t.locale = 'mr-IN',
     t.term = 'Shivaji Maharaj disrespect',
@@ -3546,10 +3546,10 @@ SET t.display_name = 'Shivaji Maharaj disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mr-IN'})
-MATCH (t:Taboo {key: 'shivaji-maharaj-disrespect@mr-IN'})
+MATCH (t:Taboo {key: 'taboo:shivaji-maharaj-disrespect@mr-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-communalism@mr-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@mr-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'mr-IN',
     t.term = 'Religious communalism',
@@ -3565,10 +3565,10 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mr-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@mr-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@mr-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-discrimination@mr-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@mr-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'mr-IN',
     t.term = 'Caste discrimination',
@@ -3584,7 +3584,7 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mr-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@mr-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@mr-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3595,7 +3595,7 @@ MATCH (l:Locale {key: 'es-CU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-criticism-within-cuba@es-CU'})
+MERGE (t:Taboo {key: 'taboo:political-criticism-within-cuba@es-CU'})
 SET t.display_name = 'Political criticism (within Cuba)',
     t.locale = 'es-CU',
     t.term = 'Political criticism (within Cuba)',
@@ -3611,10 +3611,10 @@ SET t.display_name = 'Political criticism (within Cuba)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CU'})
-MATCH (t:Taboo {key: 'political-criticism-within-cuba@es-CU'})
+MATCH (t:Taboo {key: 'taboo:political-criticism-within-cuba@es-CU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'us-cuba-relations-positioning@es-CU'})
+MERGE (t:Taboo {key: 'taboo:us-cuba-relations-positioning@es-CU'})
 SET t.display_name = 'US-Cuba relations positioning',
     t.locale = 'es-CU',
     t.term = 'US-Cuba relations positioning',
@@ -3630,10 +3630,10 @@ SET t.display_name = 'US-Cuba relations positioning',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CU'})
-MATCH (t:Taboo {key: 'us-cuba-relations-positioning@es-CU'})
+MATCH (t:Taboo {key: 'taboo:us-cuba-relations-positioning@es-CU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'government-and-leadership@es-CU'})
+MERGE (t:Taboo {key: 'taboo:government-and-leadership@es-CU'})
 SET t.display_name = 'Government and leadership',
     t.locale = 'es-CU',
     t.term = 'Government and leadership',
@@ -3649,7 +3649,7 @@ SET t.display_name = 'Government and leadership',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CU'})
-MATCH (t:Taboo {key: 'government-and-leadership@es-CU'})
+MATCH (t:Taboo {key: 'taboo:government-and-leadership@es-CU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3660,7 +3660,7 @@ MATCH (l:Locale {key: 'ru-KG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: '@ru-KG'})
+MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Межэтническая напряженность',
     t.locale = 'ru-KG',
     t.term = 'Межэтническая напряженность',
@@ -3676,10 +3676,10 @@ SET t.display_name = 'Межэтническая напряженность',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KG'})
-MATCH (t:Taboo {key: '@ru-KG'})
+MATCH (t:Taboo {key: 'taboo:@ru-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '@ru-KG'})
+MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Критика правительства',
     t.locale = 'ru-KG',
     t.term = 'Критика правительства',
@@ -3695,10 +3695,10 @@ SET t.display_name = 'Критика правительства',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KG'})
-MATCH (t:Taboo {key: '@ru-KG'})
+MATCH (t:Taboo {key: 'taboo:@ru-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '@ru-KG'})
+MERGE (t:Taboo {key: 'taboo:@ru-KG'})
 SET t.display_name = 'Пограничные споры',
     t.locale = 'ru-KG',
     t.term = 'Пограничные споры',
@@ -3714,7 +3714,7 @@ SET t.display_name = 'Пограничные споры',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KG'})
-MATCH (t:Taboo {key: '@ru-KG'})
+MATCH (t:Taboo {key: 'taboo:@ru-KG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3725,7 +3725,7 @@ MATCH (l:Locale {key: 'ig-NG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ig-NG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'biafracivil-war@ig-NG'})
+MERGE (t:Taboo {key: 'taboo:biafracivil-war@ig-NG'})
 SET t.display_name = 'Biafra/Civil War',
     t.locale = 'ig-NG',
     t.term = 'Biafra/Civil War',
@@ -3741,10 +3741,10 @@ SET t.display_name = 'Biafra/Civil War',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ig-NG'})
-MATCH (t:Taboo {key: 'biafracivil-war@ig-NG'})
+MATCH (t:Taboo {key: 'taboo:biafracivil-war@ig-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-stereotypes@ig-NG'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotypes@ig-NG'})
 SET t.display_name = 'Ethnic stereotypes',
     t.locale = 'ig-NG',
     t.term = 'Ethnic stereotypes',
@@ -3760,10 +3760,10 @@ SET t.display_name = 'Ethnic stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ig-NG'})
-MATCH (t:Taboo {key: 'ethnic-stereotypes@ig-NG'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotypes@ig-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-mockery@ig-NG'})
+MERGE (t:Taboo {key: 'taboo:religious-mockery@ig-NG'})
 SET t.display_name = 'Religious mockery',
     t.locale = 'ig-NG',
     t.term = 'Religious mockery',
@@ -3779,7 +3779,7 @@ SET t.display_name = 'Religious mockery',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ig-NG'})
-MATCH (t:Taboo {key: 'religious-mockery@ig-NG'})
+MATCH (t:Taboo {key: 'taboo:religious-mockery@ig-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3790,7 +3790,7 @@ MATCH (l:Locale {key: 'ka-GE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ka-GE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'russian-occupation-of-territories@ka-GE'})
+MERGE (t:Taboo {key: 'taboo:russian-occupation-of-territories@ka-GE'})
 SET t.display_name = 'Russian occupation of territories',
     t.locale = 'ka-GE',
     t.term = 'Russian occupation of territories',
@@ -3806,10 +3806,10 @@ SET t.display_name = 'Russian occupation of territories',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ka-GE'})
-MATCH (t:Taboo {key: 'russian-occupation-of-territories@ka-GE'})
+MATCH (t:Taboo {key: 'taboo:russian-occupation-of-territories@ka-GE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pro-russian-political-messaging@ka-GE'})
+MERGE (t:Taboo {key: 'taboo:pro-russian-political-messaging@ka-GE'})
 SET t.display_name = 'Pro-Russian political messaging',
     t.locale = 'ka-GE',
     t.term = 'Pro-Russian political messaging',
@@ -3825,10 +3825,10 @@ SET t.display_name = 'Pro-Russian political messaging',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ka-GE'})
-MATCH (t:Taboo {key: 'pro-russian-political-messaging@ka-GE'})
+MATCH (t:Taboo {key: 'taboo:pro-russian-political-messaging@ka-GE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'questioning-orthodox-christianity@ka-GE'})
+MERGE (t:Taboo {key: 'taboo:questioning-orthodox-christianity@ka-GE'})
 SET t.display_name = 'Questioning Orthodox Christianity',
     t.locale = 'ka-GE',
     t.term = 'Questioning Orthodox Christianity',
@@ -3844,7 +3844,7 @@ SET t.display_name = 'Questioning Orthodox Christianity',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ka-GE'})
-MATCH (t:Taboo {key: 'questioning-orthodox-christianity@ka-GE'})
+MATCH (t:Taboo {key: 'taboo:questioning-orthodox-christianity@ka-GE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3855,7 +3855,7 @@ MATCH (l:Locale {key: 'ar-BH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-BH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'sectarian-divisions-sunnishia@ar-BH'})
+MERGE (t:Taboo {key: 'taboo:sectarian-divisions-sunnishia@ar-BH'})
 SET t.display_name = 'Sectarian divisions (Sunni/Shia)',
     t.locale = 'ar-BH',
     t.term = 'Sectarian divisions (Sunni/Shia)',
@@ -3871,10 +3871,10 @@ SET t.display_name = 'Sectarian divisions (Sunni/Shia)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-BH'})
-MATCH (t:Taboo {key: 'sectarian-divisions-sunnishia@ar-BH'})
+MATCH (t:Taboo {key: 'taboo:sectarian-divisions-sunnishia@ar-BH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2011-protests-and-aftermath@ar-BH'})
+MERGE (t:Taboo {key: 'taboo:2011-protests-and-aftermath@ar-BH'})
 SET t.display_name = '2011 protests and aftermath',
     t.locale = 'ar-BH',
     t.term = '2011 protests and aftermath',
@@ -3890,10 +3890,10 @@ SET t.display_name = '2011 protests and aftermath',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-BH'})
-MATCH (t:Taboo {key: '2011-protests-and-aftermath@ar-BH'})
+MATCH (t:Taboo {key: 'taboo:2011-protests-and-aftermath@ar-BH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-royal-family@ar-BH'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-BH'})
 SET t.display_name = 'Criticism of royal family',
     t.locale = 'ar-BH',
     t.term = 'Criticism of royal family',
@@ -3909,7 +3909,7 @@ SET t.display_name = 'Criticism of royal family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-BH'})
-MATCH (t:Taboo {key: 'criticism-of-royal-family@ar-BH'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-BH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3920,7 +3920,7 @@ MATCH (l:Locale {key: 'fr-LU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-LU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'cadrage-paradis-fiscal@fr-LU'})
+MERGE (t:Taboo {key: 'taboo:cadrage-paradis-fiscal@fr-LU'})
 SET t.display_name = 'Cadrage "paradis fiscal"',
     t.locale = 'fr-LU',
     t.term = 'Cadrage "paradis fiscal"',
@@ -3936,10 +3936,10 @@ SET t.display_name = 'Cadrage "paradis fiscal"',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-LU'})
-MATCH (t:Taboo {key: 'cadrage-paradis-fiscal@fr-LU'})
+MATCH (t:Taboo {key: 'taboo:cadrage-paradis-fiscal@fr-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'confondre-luxembourg-avec-belgique-ou-allemagne@fr-LU'})
+MERGE (t:Taboo {key: 'taboo:confondre-luxembourg-avec-belgique-ou-allemagne@fr-LU'})
 SET t.display_name = 'Confondre Luxembourg avec Belgique ou Allemagne',
     t.locale = 'fr-LU',
     t.term = 'Confondre Luxembourg avec Belgique ou Allemagne',
@@ -3955,10 +3955,10 @@ SET t.display_name = 'Confondre Luxembourg avec Belgique ou Allemagne',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-LU'})
-MATCH (t:Taboo {key: 'confondre-luxembourg-avec-belgique-ou-allemagne@fr-LU'})
+MATCH (t:Taboo {key: 'taboo:confondre-luxembourg-avec-belgique-ou-allemagne@fr-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'discuter-de-richesse-personnelle-ou-de-revenus@fr-LU'})
+MERGE (t:Taboo {key: 'taboo:discuter-de-richesse-personnelle-ou-de-revenus@fr-LU'})
 SET t.display_name = 'Discuter de richesse personnelle ou de revenus',
     t.locale = 'fr-LU',
     t.term = 'Discuter de richesse personnelle ou de revenus',
@@ -3974,7 +3974,7 @@ SET t.display_name = 'Discuter de richesse personnelle ou de revenus',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-LU'})
-MATCH (t:Taboo {key: 'discuter-de-richesse-personnelle-ou-de-revenus@fr-LU'})
+MATCH (t:Taboo {key: 'taboo:discuter-de-richesse-personnelle-ou-de-revenus@fr-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -3985,7 +3985,7 @@ MATCH (l:Locale {key: 'en-ZW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'current-political-situation@en-ZW'})
+MERGE (t:Taboo {key: 'taboo:current-political-situation@en-ZW'})
 SET t.display_name = 'Current political situation',
     t.locale = 'en-ZW',
     t.term = 'Current political situation',
@@ -4001,10 +4001,10 @@ SET t.display_name = 'Current political situation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZW'})
-MATCH (t:Taboo {key: 'current-political-situation@en-ZW'})
+MATCH (t:Taboo {key: 'taboo:current-political-situation@en-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'economic-crisis-references@en-ZW'})
+MERGE (t:Taboo {key: 'taboo:economic-crisis-references@en-ZW'})
 SET t.display_name = 'Economic crisis references',
     t.locale = 'en-ZW',
     t.term = 'Economic crisis references',
@@ -4020,10 +4020,10 @@ SET t.display_name = 'Economic crisis references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZW'})
-MATCH (t:Taboo {key: 'economic-crisis-references@en-ZW'})
+MATCH (t:Taboo {key: 'taboo:economic-crisis-references@en-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'land-reform-farm-seizures@en-ZW'})
+MERGE (t:Taboo {key: 'taboo:land-reform-farm-seizures@en-ZW'})
 SET t.display_name = 'Land reform / farm seizures',
     t.locale = 'en-ZW',
     t.term = 'Land reform / farm seizures',
@@ -4039,7 +4039,7 @@ SET t.display_name = 'Land reform / farm seizures',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZW'})
-MATCH (t:Taboo {key: 'land-reform-farm-seizures@en-ZW'})
+MATCH (t:Taboo {key: 'taboo:land-reform-farm-seizures@en-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4050,7 +4050,7 @@ MATCH (l:Locale {key: 'en-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'religious-communalism@en-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@en-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'en-IN',
     t.term = 'Religious communalism',
@@ -4066,10 +4066,10 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@en-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@en-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste@en-IN'})
+MERGE (t:Taboo {key: 'taboo:caste@en-IN'})
 SET t.display_name = 'Caste',
     t.locale = 'en-IN',
     t.term = 'Caste',
@@ -4085,10 +4085,10 @@ SET t.display_name = 'Caste',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IN'})
-MATCH (t:Taboo {key: 'caste@en-IN'})
+MATCH (t:Taboo {key: 'taboo:caste@en-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'kashmir-and-territorial-disputes@en-IN'})
+MERGE (t:Taboo {key: 'taboo:kashmir-and-territorial-disputes@en-IN'})
 SET t.display_name = 'Kashmir and territorial disputes',
     t.locale = 'en-IN',
     t.term = 'Kashmir and territorial disputes',
@@ -4104,7 +4104,7 @@ SET t.display_name = 'Kashmir and territorial disputes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-IN'})
-MATCH (t:Taboo {key: 'kashmir-and-territorial-disputes@en-IN'})
+MATCH (t:Taboo {key: 'taboo:kashmir-and-territorial-disputes@en-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4115,7 +4115,7 @@ MATCH (l:Locale {key: 'zh-TW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'taiwan-sovereignty-status@zh-TW'})
+MERGE (t:Taboo {key: 'taboo:taiwan-sovereignty-status@zh-TW'})
 SET t.display_name = '台灣主權地位 (Taiwan sovereignty status)',
     t.locale = 'zh-TW',
     t.term = '台灣主權地位 (Taiwan sovereignty status)',
@@ -4131,10 +4131,10 @@ SET t.display_name = '台灣主權地位 (Taiwan sovereignty status)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TW'})
-MATCH (t:Taboo {key: 'taiwan-sovereignty-status@zh-TW'})
+MATCH (t:Taboo {key: 'taboo:taiwan-sovereignty-status@zh-TW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'unification-independence-debate@zh-TW'})
+MERGE (t:Taboo {key: 'taboo:unification-independence-debate@zh-TW'})
 SET t.display_name = '統獨議題 (Unification-independence debate)',
     t.locale = 'zh-TW',
     t.term = '統獨議題 (Unification-independence debate)',
@@ -4150,10 +4150,10 @@ SET t.display_name = '統獨議題 (Unification-independence debate)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TW'})
-MATCH (t:Taboo {key: 'unification-independence-debate@zh-TW'})
+MATCH (t:Taboo {key: 'taboo:unification-independence-debate@zh-TW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'cross-strait-relations@zh-TW'})
+MERGE (t:Taboo {key: 'taboo:cross-strait-relations@zh-TW'})
 SET t.display_name = '兩岸關係 (Cross-strait relations)',
     t.locale = 'zh-TW',
     t.term = '兩岸關係 (Cross-strait relations)',
@@ -4169,7 +4169,7 @@ SET t.display_name = '兩岸關係 (Cross-strait relations)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TW'})
-MATCH (t:Taboo {key: 'cross-strait-relations@zh-TW'})
+MATCH (t:Taboo {key: 'taboo:cross-strait-relations@zh-TW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4180,7 +4180,7 @@ MATCH (l:Locale {key: 'de-CH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-CH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'comparing-swiss-to-germans-unfavorably@de-CH'})
+MERGE (t:Taboo {key: 'taboo:comparing-swiss-to-germans-unfavorably@de-CH'})
 SET t.display_name = 'Comparing Swiss to Germans unfavorably',
     t.locale = 'de-CH',
     t.term = 'Comparing Swiss to Germans unfavorably',
@@ -4196,10 +4196,10 @@ SET t.display_name = 'Comparing Swiss to Germans unfavorably',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-CH'})
-MATCH (t:Taboo {key: 'comparing-swiss-to-germans-unfavorably@de-CH'})
+MATCH (t:Taboo {key: 'taboo:comparing-swiss-to-germans-unfavorably@de-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'language-region-favoritism@de-CH'})
+MERGE (t:Taboo {key: 'taboo:language-region-favoritism@de-CH'})
 SET t.display_name = 'Language region favoritism',
     t.locale = 'de-CH',
     t.term = 'Language region favoritism',
@@ -4215,10 +4215,10 @@ SET t.display_name = 'Language region favoritism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-CH'})
-MATCH (t:Taboo {key: 'language-region-favoritism@de-CH'})
+MATCH (t:Taboo {key: 'taboo:language-region-favoritism@de-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'discussing-personal-finances-or-income@de-CH'})
+MERGE (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@de-CH'})
 SET t.display_name = 'Discussing personal finances or income',
     t.locale = 'de-CH',
     t.term = 'Discussing personal finances or income',
@@ -4234,7 +4234,7 @@ SET t.display_name = 'Discussing personal finances or income',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-CH'})
-MATCH (t:Taboo {key: 'discussing-personal-finances-or-income@de-CH'})
+MATCH (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@de-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4245,7 +4245,7 @@ MATCH (l:Locale {key: 'pt-BR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-BR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racism-and-racial-inequality@pt-BR'})
+MERGE (t:Taboo {key: 'taboo:racism-and-racial-inequality@pt-BR'})
 SET t.display_name = 'Racism and racial inequality',
     t.locale = 'pt-BR',
     t.term = 'Racism and racial inequality',
@@ -4261,10 +4261,10 @@ SET t.display_name = 'Racism and racial inequality',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-BR'})
-MATCH (t:Taboo {key: 'racism-and-racial-inequality@pt-BR'})
+MATCH (t:Taboo {key: 'taboo:racism-and-racial-inequality@pt-BR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'class-discrimination@pt-BR'})
+MERGE (t:Taboo {key: 'taboo:class-discrimination@pt-BR'})
 SET t.display_name = 'Class discrimination',
     t.locale = 'pt-BR',
     t.term = 'Class discrimination',
@@ -4280,10 +4280,10 @@ SET t.display_name = 'Class discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-BR'})
-MATCH (t:Taboo {key: 'class-discrimination@pt-BR'})
+MATCH (t:Taboo {key: 'taboo:class-discrimination@pt-BR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-polarization@pt-BR'})
+MERGE (t:Taboo {key: 'taboo:political-polarization@pt-BR'})
 SET t.display_name = 'Political polarization',
     t.locale = 'pt-BR',
     t.term = 'Political polarization',
@@ -4299,7 +4299,7 @@ SET t.display_name = 'Political polarization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-BR'})
-MATCH (t:Taboo {key: 'political-polarization@pt-BR'})
+MATCH (t:Taboo {key: 'taboo:political-polarization@pt-BR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4310,7 +4310,7 @@ MATCH (l:Locale {key: 'fa-IR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fa-IR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-islam-or-islamic-values@fa-IR'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@fa-IR'})
 SET t.display_name = 'Criticism of Islam or Islamic values',
     t.locale = 'fa-IR',
     t.term = 'Criticism of Islam or Islamic values',
@@ -4326,10 +4326,10 @@ SET t.display_name = 'Criticism of Islam or Islamic values',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fa-IR'})
-MATCH (t:Taboo {key: 'criticism-of-islam-or-islamic-values@fa-IR'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-values@fa-IR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-supreme-leader-or-political-system@fa-IR'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-supreme-leader-or-political-system@fa-IR'})
 SET t.display_name = 'Criticism of Supreme Leader or political system',
     t.locale = 'fa-IR',
     t.term = 'Criticism of Supreme Leader or political system',
@@ -4345,10 +4345,10 @@ SET t.display_name = 'Criticism of Supreme Leader or political system',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fa-IR'})
-MATCH (t:Taboo {key: 'criticism-of-supreme-leader-or-political-system@fa-IR'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-supreme-leader-or-political-system@fa-IR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pre-marital-relationships-or-sexuality@fa-IR'})
+MERGE (t:Taboo {key: 'taboo:pre-marital-relationships-or-sexuality@fa-IR'})
 SET t.display_name = 'Pre-marital relationships or sexuality',
     t.locale = 'fa-IR',
     t.term = 'Pre-marital relationships or sexuality',
@@ -4364,7 +4364,7 @@ SET t.display_name = 'Pre-marital relationships or sexuality',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fa-IR'})
-MATCH (t:Taboo {key: 'pre-marital-relationships-or-sexuality@fa-IR'})
+MATCH (t:Taboo {key: 'taboo:pre-marital-relationships-or-sexuality@fa-IR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4375,7 +4375,7 @@ MATCH (l:Locale {key: 'de-AT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-AT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'calling-austrians-german@de-AT'})
+MERGE (t:Taboo {key: 'taboo:calling-austrians-german@de-AT'})
 SET t.display_name = 'Calling Austrians "German"',
     t.locale = 'de-AT',
     t.term = 'Calling Austrians "German"',
@@ -4391,10 +4391,10 @@ SET t.display_name = 'Calling Austrians "German"',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-AT'})
-MATCH (t:Taboo {key: 'calling-austrians-german@de-AT'})
+MATCH (t:Taboo {key: 'taboo:calling-austrians-german@de-AT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'nazi-periodholocaust@de-AT'})
+MERGE (t:Taboo {key: 'taboo:nazi-periodholocaust@de-AT'})
 SET t.display_name = 'Nazi period/Holocaust',
     t.locale = 'de-AT',
     t.term = 'Nazi period/Holocaust',
@@ -4410,10 +4410,10 @@ SET t.display_name = 'Nazi period/Holocaust',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-AT'})
-MATCH (t:Taboo {key: 'nazi-periodholocaust@de-AT'})
+MATCH (t:Taboo {key: 'taboo:nazi-periodholocaust@de-AT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'nazi-imagery-or-symbols@de-AT'})
+MERGE (t:Taboo {key: 'taboo:nazi-imagery-or-symbols@de-AT'})
 SET t.display_name = 'Nazi imagery or symbols',
     t.locale = 'de-AT',
     t.term = 'Nazi imagery or symbols',
@@ -4429,7 +4429,7 @@ SET t.display_name = 'Nazi imagery or symbols',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-AT'})
-MATCH (t:Taboo {key: 'nazi-imagery-or-symbols@de-AT'})
+MATCH (t:Taboo {key: 'taboo:nazi-imagery-or-symbols@de-AT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4440,7 +4440,7 @@ MATCH (l:Locale {key: 'fr-TN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-TN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulter-l@fr-TN'})
+MERGE (t:Taboo {key: 'taboo:insulter-l@fr-TN'})
 SET t.display_name = 'Insulter l\\',
     t.locale = 'fr-TN',
     t.term = 'Insulter l\\',
@@ -4456,7 +4456,7 @@ SET t.display_name = 'Insulter l\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-TN'})
-MATCH (t:Taboo {key: 'insulter-l@fr-TN'})
+MATCH (t:Taboo {key: 'taboo:insulter-l@fr-TN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4467,7 +4467,7 @@ MATCH (l:Locale {key: 'en-TT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'mocking-trinidadian-dialect@en-TT'})
+MERGE (t:Taboo {key: 'taboo:mocking-trinidadian-dialect@en-TT'})
 SET t.display_name = 'Mocking Trinidadian dialect',
     t.locale = 'en-TT',
     t.term = 'Mocking Trinidadian dialect',
@@ -4483,10 +4483,10 @@ SET t.display_name = 'Mocking Trinidadian dialect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TT'})
-MATCH (t:Taboo {key: 'mocking-trinidadian-dialect@en-TT'})
+MATCH (t:Taboo {key: 'taboo:mocking-trinidadian-dialect@en-TT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-stereotyping@en-TT'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-TT'})
 SET t.display_name = 'Ethnic stereotyping',
     t.locale = 'en-TT',
     t.term = 'Ethnic stereotyping',
@@ -4502,10 +4502,10 @@ SET t.display_name = 'Ethnic stereotyping',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TT'})
-MATCH (t:Taboo {key: 'ethnic-stereotyping@en-TT'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotyping@en-TT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'slavery-glorification@en-TT'})
+MERGE (t:Taboo {key: 'taboo:slavery-glorification@en-TT'})
 SET t.display_name = 'Slavery glorification',
     t.locale = 'en-TT',
     t.term = 'Slavery glorification',
@@ -4521,7 +4521,7 @@ SET t.display_name = 'Slavery glorification',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-TT'})
-MATCH (t:Taboo {key: 'slavery-glorification@en-TT'})
+MATCH (t:Taboo {key: 'taboo:slavery-glorification@en-TT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4532,7 +4532,7 @@ MATCH (l:Locale {key: 'is-IS'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@is-IS'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'whaling-controversy@is-IS'})
+MERGE (t:Taboo {key: 'taboo:whaling-controversy@is-IS'})
 SET t.display_name = 'Whaling controversy',
     t.locale = 'is-IS',
     t.term = 'Whaling controversy',
@@ -4548,10 +4548,10 @@ SET t.display_name = 'Whaling controversy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@is-IS'})
-MATCH (t:Taboo {key: 'whaling-controversy@is-IS'})
+MATCH (t:Taboo {key: 'taboo:whaling-controversy@is-IS'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'whaling-policy@is-IS'})
+MERGE (t:Taboo {key: 'taboo:whaling-policy@is-IS'})
 SET t.display_name = 'Whaling policy',
     t.locale = 'is-IS',
     t.term = 'Whaling policy',
@@ -4567,7 +4567,7 @@ SET t.display_name = 'Whaling policy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@is-IS'})
-MATCH (t:Taboo {key: 'whaling-policy@is-IS'})
+MATCH (t:Taboo {key: 'taboo:whaling-policy@is-IS'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4578,7 +4578,7 @@ MATCH (l:Locale {key: 'ca-ES'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-ES'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'independence-politics@ca-ES'})
+MERGE (t:Taboo {key: 'taboo:independence-politics@ca-ES'})
 SET t.display_name = 'Independence politics',
     t.locale = 'ca-ES',
     t.term = 'Independence politics',
@@ -4594,10 +4594,10 @@ SET t.display_name = 'Independence politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-ES'})
-MATCH (t:Taboo {key: 'independence-politics@ca-ES'})
+MATCH (t:Taboo {key: 'taboo:independence-politics@ca-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'spanish-vs-catalan-framing@ca-ES'})
+MERGE (t:Taboo {key: 'taboo:spanish-vs-catalan-framing@ca-ES'})
 SET t.display_name = 'Spanish vs Catalan framing',
     t.locale = 'ca-ES',
     t.term = 'Spanish vs Catalan framing',
@@ -4613,10 +4613,10 @@ SET t.display_name = 'Spanish vs Catalan framing',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-ES'})
-MATCH (t:Taboo {key: 'spanish-vs-catalan-framing@ca-ES'})
+MATCH (t:Taboo {key: 'taboo:spanish-vs-catalan-framing@ca-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2017-events@ca-ES'})
+MERGE (t:Taboo {key: 'taboo:2017-events@ca-ES'})
 SET t.display_name = '2017 events',
     t.locale = 'ca-ES',
     t.term = '2017 events',
@@ -4632,7 +4632,7 @@ SET t.display_name = '2017 events',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ca-ES'})
-MATCH (t:Taboo {key: '2017-events@ca-ES'})
+MATCH (t:Taboo {key: 'taboo:2017-events@ca-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4643,7 +4643,7 @@ MATCH (l:Locale {key: 'ru-KZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-government-or-president@ru-KZ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-president@ru-KZ'})
 SET t.display_name = 'Criticism of government or president',
     t.locale = 'ru-KZ',
     t.term = 'Criticism of government or president',
@@ -4659,10 +4659,10 @@ SET t.display_name = 'Criticism of government or president',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KZ'})
-MATCH (t:Taboo {key: 'criticism-of-government-or-president@ru-KZ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-government-or-president@ru-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'inter-ethnic-tensions-or-divisions@ru-KZ'})
+MERGE (t:Taboo {key: 'taboo:inter-ethnic-tensions-or-divisions@ru-KZ'})
 SET t.display_name = 'Inter-ethnic tensions or divisions',
     t.locale = 'ru-KZ',
     t.term = 'Inter-ethnic tensions or divisions',
@@ -4678,10 +4678,10 @@ SET t.display_name = 'Inter-ethnic tensions or divisions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KZ'})
-MATCH (t:Taboo {key: 'inter-ethnic-tensions-or-divisions@ru-KZ'})
+MATCH (t:Taboo {key: 'taboo:inter-ethnic-tensions-or-divisions@ru-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-integrity-questions@ru-KZ'})
+MERGE (t:Taboo {key: 'taboo:territorial-integrity-questions@ru-KZ'})
 SET t.display_name = 'Territorial integrity questions',
     t.locale = 'ru-KZ',
     t.term = 'Territorial integrity questions',
@@ -4697,7 +4697,7 @@ SET t.display_name = 'Territorial integrity questions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-KZ'})
-MATCH (t:Taboo {key: 'territorial-integrity-questions@ru-KZ'})
+MATCH (t:Taboo {key: 'taboo:territorial-integrity-questions@ru-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4708,7 +4708,7 @@ MATCH (l:Locale {key: 'kn-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kn-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'kannada-language-disrespect@kn-IN'})
+MERGE (t:Taboo {key: 'taboo:kannada-language-disrespect@kn-IN'})
 SET t.display_name = 'Kannada language disrespect',
     t.locale = 'kn-IN',
     t.term = 'Kannada language disrespect',
@@ -4724,10 +4724,10 @@ SET t.display_name = 'Kannada language disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kn-IN'})
-MATCH (t:Taboo {key: 'kannada-language-disrespect@kn-IN'})
+MATCH (t:Taboo {key: 'taboo:kannada-language-disrespect@kn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-communalism@kn-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@kn-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'kn-IN',
     t.term = 'Religious communalism',
@@ -4743,10 +4743,10 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kn-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@kn-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@kn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-discrimination@kn-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@kn-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'kn-IN',
     t.term = 'Caste discrimination',
@@ -4762,7 +4762,7 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kn-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@kn-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@kn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4773,7 +4773,7 @@ MATCH (l:Locale {key: 'ro-RO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-RO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ceauescu-era-communist-dictatorship@ro-RO'})
+MERGE (t:Taboo {key: 'taboo:ceauescu-era-communist-dictatorship@ro-RO'})
 SET t.display_name = 'Ceaușescu era / communist dictatorship',
     t.locale = 'ro-RO',
     t.term = 'Ceaușescu era / communist dictatorship',
@@ -4789,10 +4789,10 @@ SET t.display_name = 'Ceaușescu era / communist dictatorship',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-RO'})
-MATCH (t:Taboo {key: 'ceauescu-era-communist-dictatorship@ro-RO'})
+MATCH (t:Taboo {key: 'taboo:ceauescu-era-communist-dictatorship@ro-RO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'roma-stereotypes@ro-RO'})
+MERGE (t:Taboo {key: 'taboo:roma-stereotypes@ro-RO'})
 SET t.display_name = 'Roma stereotypes',
     t.locale = 'ro-RO',
     t.term = 'Roma stereotypes',
@@ -4808,10 +4808,10 @@ SET t.display_name = 'Roma stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-RO'})
-MATCH (t:Taboo {key: 'roma-stereotypes@ro-RO'})
+MATCH (t:Taboo {key: 'taboo:roma-stereotypes@ro-RO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hungarian-romanian-tensions@ro-RO'})
+MERGE (t:Taboo {key: 'taboo:hungarian-romanian-tensions@ro-RO'})
 SET t.display_name = 'Hungarian-Romanian tensions',
     t.locale = 'ro-RO',
     t.term = 'Hungarian-Romanian tensions',
@@ -4827,7 +4827,7 @@ SET t.display_name = 'Hungarian-Romanian tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-RO'})
-MATCH (t:Taboo {key: 'hungarian-romanian-tensions@ro-RO'})
+MATCH (t:Taboo {key: 'taboo:hungarian-romanian-tensions@ro-RO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4838,7 +4838,7 @@ MATCH (l:Locale {key: 'gu-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gu-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'beefmeat-content@gu-IN'})
+MERGE (t:Taboo {key: 'taboo:beefmeat-content@gu-IN'})
 SET t.display_name = 'Beef/meat content',
     t.locale = 'gu-IN',
     t.term = 'Beef/meat content',
@@ -4854,10 +4854,10 @@ SET t.display_name = 'Beef/meat content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gu-IN'})
-MATCH (t:Taboo {key: 'beefmeat-content@gu-IN'})
+MATCH (t:Taboo {key: 'taboo:beefmeat-content@gu-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'alcohol-promotion@gu-IN'})
+MERGE (t:Taboo {key: 'taboo:alcohol-promotion@gu-IN'})
 SET t.display_name = 'Alcohol promotion',
     t.locale = 'gu-IN',
     t.term = 'Alcohol promotion',
@@ -4873,10 +4873,10 @@ SET t.display_name = 'Alcohol promotion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gu-IN'})
-MATCH (t:Taboo {key: 'alcohol-promotion@gu-IN'})
+MATCH (t:Taboo {key: 'taboo:alcohol-promotion@gu-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-communalism@gu-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@gu-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'gu-IN',
     t.term = 'Religious communalism',
@@ -4892,7 +4892,7 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gu-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@gu-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@gu-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4903,7 +4903,7 @@ MATCH (l:Locale {key: 'pt-AO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-AO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'guerra-civil-1975-2002@pt-AO'})
+MERGE (t:Taboo {key: 'taboo:guerra-civil-1975-2002@pt-AO'})
 SET t.display_name = 'Guerra Civil (1975-2002)',
     t.locale = 'pt-AO',
     t.term = 'Guerra Civil (1975-2002)',
@@ -4919,10 +4919,10 @@ SET t.display_name = 'Guerra Civil (1975-2002)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-AO'})
-MATCH (t:Taboo {key: 'guerra-civil-1975-2002@pt-AO'})
+MATCH (t:Taboo {key: 'taboo:guerra-civil-1975-2002@pt-AO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'unita-vs-mpla-historico@pt-AO'})
+MERGE (t:Taboo {key: 'taboo:unita-vs-mpla-historico@pt-AO'})
 SET t.display_name = 'UNITA vs MPLA historico',
     t.locale = 'pt-AO',
     t.term = 'UNITA vs MPLA historico',
@@ -4938,10 +4938,10 @@ SET t.display_name = 'UNITA vs MPLA historico',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-AO'})
-MATCH (t:Taboo {key: 'unita-vs-mpla-historico@pt-AO'})
+MATCH (t:Taboo {key: 'taboo:unita-vs-mpla-historico@pt-AO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'jonas-savimbi@pt-AO'})
+MERGE (t:Taboo {key: 'taboo:jonas-savimbi@pt-AO'})
 SET t.display_name = 'Jonas Savimbi',
     t.locale = 'pt-AO',
     t.term = 'Jonas Savimbi',
@@ -4957,7 +4957,7 @@ SET t.display_name = 'Jonas Savimbi',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-AO'})
-MATCH (t:Taboo {key: 'jonas-savimbi@pt-AO'})
+MATCH (t:Taboo {key: 'taboo:jonas-savimbi@pt-AO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -4968,7 +4968,7 @@ MATCH (l:Locale {key: 'ny-MW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ny-MW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'witchcraft-ufiti@ny-MW'})
+MERGE (t:Taboo {key: 'taboo:witchcraft-ufiti@ny-MW'})
 SET t.display_name = 'Witchcraft (ufiti)',
     t.locale = 'ny-MW',
     t.term = 'Witchcraft (ufiti)',
@@ -4984,10 +4984,10 @@ SET t.display_name = 'Witchcraft (ufiti)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ny-MW'})
-MATCH (t:Taboo {key: 'witchcraft-ufiti@ny-MW'})
+MATCH (t:Taboo {key: 'taboo:witchcraft-ufiti@ny-MW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'sexual-content@ny-MW'})
+MERGE (t:Taboo {key: 'taboo:sexual-content@ny-MW'})
 SET t.display_name = 'Sexual content',
     t.locale = 'ny-MW',
     t.term = 'Sexual content',
@@ -5003,10 +5003,10 @@ SET t.display_name = 'Sexual content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ny-MW'})
-MATCH (t:Taboo {key: 'sexual-content@ny-MW'})
+MATCH (t:Taboo {key: 'taboo:sexual-content@ny-MW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-elders@ny-MW'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-elders@ny-MW'})
 SET t.display_name = 'Disrespecting elders',
     t.locale = 'ny-MW',
     t.term = 'Disrespecting elders',
@@ -5022,7 +5022,7 @@ SET t.display_name = 'Disrespecting elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ny-MW'})
-MATCH (t:Taboo {key: 'disrespecting-elders@ny-MW'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-elders@ny-MW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5033,7 +5033,7 @@ MATCH (l:Locale {key: 'or-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-religious-sentiments@or-IN'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-religious-sentiments@or-IN'})
 SET t.display_name = 'Disrespecting religious sentiments',
     t.locale = 'or-IN',
     t.term = 'Disrespecting religious sentiments',
@@ -5049,10 +5049,10 @@ SET t.display_name = 'Disrespecting religious sentiments',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
-MATCH (t:Taboo {key: 'disrespecting-religious-sentiments@or-IN'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-religious-sentiments@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insults-to-jagannath-temple@or-IN'})
+MERGE (t:Taboo {key: 'taboo:insults-to-jagannath-temple@or-IN'})
 SET t.display_name = 'Insults to Jagannath temple',
     t.locale = 'or-IN',
     t.term = 'Insults to Jagannath temple',
@@ -5068,7 +5068,7 @@ SET t.display_name = 'Insults to Jagannath temple',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@or-IN'})
-MATCH (t:Taboo {key: 'insults-to-jagannath-temple@or-IN'})
+MATCH (t:Taboo {key: 'taboo:insults-to-jagannath-temple@or-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5079,7 +5079,7 @@ MATCH (l:Locale {key: 'zh-CN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'taiwan@zh-CN'})
+MERGE (t:Taboo {key: 'taboo:taiwan@zh-CN'})
 SET t.display_name = 'Taiwan',
     t.locale = 'zh-CN',
     t.term = 'Taiwan',
@@ -5095,10 +5095,10 @@ SET t.display_name = 'Taiwan',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
-MATCH (t:Taboo {key: 'taiwan@zh-CN'})
+MATCH (t:Taboo {key: 'taboo:taiwan@zh-CN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'tibet@zh-CN'})
+MERGE (t:Taboo {key: 'taboo:tibet@zh-CN'})
 SET t.display_name = 'Tibet',
     t.locale = 'zh-CN',
     t.term = 'Tibet',
@@ -5114,10 +5114,10 @@ SET t.display_name = 'Tibet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
-MATCH (t:Taboo {key: 'tibet@zh-CN'})
+MATCH (t:Taboo {key: 'taboo:tibet@zh-CN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'xinjiang@zh-CN'})
+MERGE (t:Taboo {key: 'taboo:xinjiang@zh-CN'})
 SET t.display_name = 'Xinjiang',
     t.locale = 'zh-CN',
     t.term = 'Xinjiang',
@@ -5133,10 +5133,10 @@ SET t.display_name = 'Xinjiang',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
-MATCH (t:Taboo {key: 'xinjiang@zh-CN'})
+MATCH (t:Taboo {key: 'taboo:xinjiang@zh-CN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'tiananmen-square-1989@zh-CN'})
+MERGE (t:Taboo {key: 'taboo:tiananmen-square-1989@zh-CN'})
 SET t.display_name = 'Tiananmen Square (1989)',
     t.locale = 'zh-CN',
     t.term = 'Tiananmen Square (1989)',
@@ -5152,10 +5152,10 @@ SET t.display_name = 'Tiananmen Square (1989)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
-MATCH (t:Taboo {key: 'tiananmen-square-1989@zh-CN'})
+MATCH (t:Taboo {key: 'taboo:tiananmen-square-1989@zh-CN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-criticism@zh-CN'})
+MERGE (t:Taboo {key: 'taboo:political-criticism@zh-CN'})
 SET t.display_name = 'Political criticism',
     t.locale = 'zh-CN',
     t.term = 'Political criticism',
@@ -5171,7 +5171,7 @@ SET t.display_name = 'Political criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-CN'})
-MATCH (t:Taboo {key: 'political-criticism@zh-CN'})
+MATCH (t:Taboo {key: 'taboo:political-criticism@zh-CN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5182,7 +5182,7 @@ MATCH (l:Locale {key: 'sn-ZW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sn-ZW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'current-political-situation@sn-ZW'})
+MERGE (t:Taboo {key: 'taboo:current-political-situation@sn-ZW'})
 SET t.display_name = 'Current political situation',
     t.locale = 'sn-ZW',
     t.term = 'Current political situation',
@@ -5198,10 +5198,10 @@ SET t.display_name = 'Current political situation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sn-ZW'})
-MATCH (t:Taboo {key: 'current-political-situation@sn-ZW'})
+MATCH (t:Taboo {key: 'taboo:current-political-situation@sn-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'economic-crisis-references@sn-ZW'})
+MERGE (t:Taboo {key: 'taboo:economic-crisis-references@sn-ZW'})
 SET t.display_name = 'Economic crisis references',
     t.locale = 'sn-ZW',
     t.term = 'Economic crisis references',
@@ -5217,10 +5217,10 @@ SET t.display_name = 'Economic crisis references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sn-ZW'})
-MATCH (t:Taboo {key: 'economic-crisis-references@sn-ZW'})
+MATCH (t:Taboo {key: 'taboo:economic-crisis-references@sn-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'land-reform-farm-seizures@sn-ZW'})
+MERGE (t:Taboo {key: 'taboo:land-reform-farm-seizures@sn-ZW'})
 SET t.display_name = 'Land reform / farm seizures',
     t.locale = 'sn-ZW',
     t.term = 'Land reform / farm seizures',
@@ -5236,7 +5236,7 @@ SET t.display_name = 'Land reform / farm seizures',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sn-ZW'})
-MATCH (t:Taboo {key: 'land-reform-farm-seizures@sn-ZW'})
+MATCH (t:Taboo {key: 'taboo:land-reform-farm-seizures@sn-ZW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5247,7 +5247,7 @@ MATCH (l:Locale {key: 'ar-JO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-JO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-the-monarchy@ar-JO'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-JO'})
 SET t.display_name = 'Criticism of the monarchy',
     t.locale = 'ar-JO',
     t.term = 'Criticism of the monarchy',
@@ -5263,10 +5263,10 @@ SET t.display_name = 'Criticism of the monarchy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-JO'})
-MATCH (t:Taboo {key: 'criticism-of-the-monarchy@ar-JO'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-the-monarchy@ar-JO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-islam@ar-JO'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-JO'})
 SET t.display_name = 'Insulting Islam',
     t.locale = 'ar-JO',
     t.term = 'Insulting Islam',
@@ -5282,10 +5282,10 @@ SET t.display_name = 'Insulting Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-JO'})
-MATCH (t:Taboo {key: 'insulting-islam@ar-JO'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam@ar-JO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'israeli-palestinian-conflict-taking-israeli-side@ar-JO'})
+MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict-taking-israeli-side@ar-JO'})
 SET t.display_name = 'Israeli-Palestinian conflict (taking Israeli side)',
     t.locale = 'ar-JO',
     t.term = 'Israeli-Palestinian conflict (taking Israeli side)',
@@ -5301,7 +5301,7 @@ SET t.display_name = 'Israeli-Palestinian conflict (taking Israeli side)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-JO'})
-MATCH (t:Taboo {key: 'israeli-palestinian-conflict-taking-israeli-side@ar-JO'})
+MATCH (t:Taboo {key: 'taboo:israeli-palestinian-conflict-taking-israeli-side@ar-JO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5312,7 +5312,7 @@ MATCH (l:Locale {key: 'ar-KW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-KW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-prophet@ar-KW'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-KW'})
 SET t.display_name = 'Insulting Islam or Prophet',
     t.locale = 'ar-KW',
     t.term = 'Insulting Islam or Prophet',
@@ -5328,10 +5328,10 @@ SET t.display_name = 'Insulting Islam or Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-KW'})
-MATCH (t:Taboo {key: 'insulting-islam-or-prophet@ar-KW'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-KW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-emir-or-ruling-family@ar-KW'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-emir-or-ruling-family@ar-KW'})
 SET t.display_name = 'Criticism of Emir or ruling family',
     t.locale = 'ar-KW',
     t.term = 'Criticism of Emir or ruling family',
@@ -5347,10 +5347,10 @@ SET t.display_name = 'Criticism of Emir or ruling family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-KW'})
-MATCH (t:Taboo {key: 'criticism-of-emir-or-ruling-family@ar-KW'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-emir-or-ruling-family@ar-KW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-criticism@ar-KW'})
+MERGE (t:Taboo {key: 'taboo:political-criticism@ar-KW'})
 SET t.display_name = 'Political criticism',
     t.locale = 'ar-KW',
     t.term = 'Political criticism',
@@ -5366,7 +5366,7 @@ SET t.display_name = 'Political criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-KW'})
-MATCH (t:Taboo {key: 'political-criticism@ar-KW'})
+MATCH (t:Taboo {key: 'taboo:political-criticism@ar-KW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5377,7 +5377,7 @@ MATCH (l:Locale {key: 'en-AU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'indigenous-mistreatmentappropriation@en-AU'})
+MERGE (t:Taboo {key: 'taboo:indigenous-mistreatmentappropriation@en-AU'})
 SET t.display_name = 'Indigenous mistreatment/appropriation',
     t.locale = 'en-AU',
     t.term = 'Indigenous mistreatment/appropriation',
@@ -5393,10 +5393,10 @@ SET t.display_name = 'Indigenous mistreatment/appropriation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AU'})
-MATCH (t:Taboo {key: 'indigenous-mistreatmentappropriation@en-AU'})
+MATCH (t:Taboo {key: 'taboo:indigenous-mistreatmentappropriation@en-AU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'racism-and-discrimination@en-AU'})
+MERGE (t:Taboo {key: 'taboo:racism-and-discrimination@en-AU'})
 SET t.display_name = 'Racism and discrimination',
     t.locale = 'en-AU',
     t.term = 'Racism and discrimination',
@@ -5412,10 +5412,10 @@ SET t.display_name = 'Racism and discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AU'})
-MATCH (t:Taboo {key: 'racism-and-discrimination@en-AU'})
+MATCH (t:Taboo {key: 'taboo:racism-and-discrimination@en-AU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'stolen-generations-indigenous-treatment@en-AU'})
+MERGE (t:Taboo {key: 'taboo:stolen-generations-indigenous-treatment@en-AU'})
 SET t.display_name = 'Stolen Generations / Indigenous treatment',
     t.locale = 'en-AU',
     t.term = 'Stolen Generations / Indigenous treatment',
@@ -5431,7 +5431,7 @@ SET t.display_name = 'Stolen Generations / Indigenous treatment',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AU'})
-MATCH (t:Taboo {key: 'stolen-generations-indigenous-treatment@en-AU'})
+MATCH (t:Taboo {key: 'taboo:stolen-generations-indigenous-treatment@en-AU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5442,7 +5442,7 @@ MATCH (l:Locale {key: 'fr-FR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-FR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'personal-incomewealth@fr-FR'})
+MERGE (t:Taboo {key: 'taboo:personal-incomewealth@fr-FR'})
 SET t.display_name = 'Personal income/wealth',
     t.locale = 'fr-FR',
     t.term = 'Personal income/wealth',
@@ -5458,10 +5458,10 @@ SET t.display_name = 'Personal income/wealth',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-FR'})
-MATCH (t:Taboo {key: 'personal-incomewealth@fr-FR'})
+MATCH (t:Taboo {key: 'taboo:personal-incomewealth@fr-FR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-affiliation@fr-FR'})
+MERGE (t:Taboo {key: 'taboo:religious-affiliation@fr-FR'})
 SET t.display_name = 'Religious affiliation',
     t.locale = 'fr-FR',
     t.term = 'Religious affiliation',
@@ -5477,10 +5477,10 @@ SET t.display_name = 'Religious affiliation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-FR'})
-MATCH (t:Taboo {key: 'religious-affiliation@fr-FR'})
+MATCH (t:Taboo {key: 'taboo:religious-affiliation@fr-FR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-extremism@fr-FR'})
+MERGE (t:Taboo {key: 'taboo:political-extremism@fr-FR'})
 SET t.display_name = 'Political extremism',
     t.locale = 'fr-FR',
     t.term = 'Political extremism',
@@ -5496,7 +5496,7 @@ SET t.display_name = 'Political extremism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-FR'})
-MATCH (t:Taboo {key: 'political-extremism@fr-FR'})
+MATCH (t:Taboo {key: 'taboo:political-extremism@fr-FR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5507,7 +5507,7 @@ MATCH (l:Locale {key: 'fr-SN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-SN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'irrespect-envers-les-autorites-religieuses@fr-SN'})
+MERGE (t:Taboo {key: 'taboo:irrespect-envers-les-autorites-religieuses@fr-SN'})
 SET t.display_name = 'Irrespect envers les autorites religieuses',
     t.locale = 'fr-SN',
     t.term = 'Irrespect envers les autorites religieuses',
@@ -5523,10 +5523,10 @@ SET t.display_name = 'Irrespect envers les autorites religieuses',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-SN'})
-MATCH (t:Taboo {key: 'irrespect-envers-les-autorites-religieuses@fr-SN'})
+MATCH (t:Taboo {key: 'taboo:irrespect-envers-les-autorites-religieuses@fr-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insultes-aux-parents-ou-ancetres@fr-SN'})
+MERGE (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-SN'})
 SET t.display_name = 'Insultes aux parents ou ancetres',
     t.locale = 'fr-SN',
     t.term = 'Insultes aux parents ou ancetres',
@@ -5542,10 +5542,10 @@ SET t.display_name = 'Insultes aux parents ou ancetres',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-SN'})
-MATCH (t:Taboo {key: 'insultes-aux-parents-ou-ancetres@fr-SN'})
+MATCH (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'irrespect-envers-l@fr-SN'})
+MERGE (t:Taboo {key: 'taboo:irrespect-envers-l@fr-SN'})
 SET t.display_name = 'Irrespect envers l\\',
     t.locale = 'fr-SN',
     t.term = 'Irrespect envers l\\',
@@ -5561,7 +5561,7 @@ SET t.display_name = 'Irrespect envers l\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-SN'})
-MATCH (t:Taboo {key: 'irrespect-envers-l@fr-SN'})
+MATCH (t:Taboo {key: 'taboo:irrespect-envers-l@fr-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5572,7 +5572,7 @@ MATCH (l:Locale {key: 'pa-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespect-to-sikh-faithgurus@pa-IN'})
+MERGE (t:Taboo {key: 'taboo:disrespect-to-sikh-faithgurus@pa-IN'})
 SET t.display_name = 'Disrespect to Sikh faith/Gurus',
     t.locale = 'pa-IN',
     t.term = 'Disrespect to Sikh faith/Gurus',
@@ -5588,10 +5588,10 @@ SET t.display_name = 'Disrespect to Sikh faith/Gurus',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-IN'})
-MATCH (t:Taboo {key: 'disrespect-to-sikh-faithgurus@pa-IN'})
+MATCH (t:Taboo {key: 'taboo:disrespect-to-sikh-faithgurus@pa-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1984-references@pa-IN'})
+MERGE (t:Taboo {key: 'taboo:1984-references@pa-IN'})
 SET t.display_name = '1984 references',
     t.locale = 'pa-IN',
     t.term = '1984 references',
@@ -5607,10 +5607,10 @@ SET t.display_name = '1984 references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-IN'})
-MATCH (t:Taboo {key: '1984-references@pa-IN'})
+MATCH (t:Taboo {key: 'taboo:1984-references@pa-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-system-mentions@pa-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-system-mentions@pa-IN'})
 SET t.display_name = 'Caste system mentions',
     t.locale = 'pa-IN',
     t.term = 'Caste system mentions',
@@ -5626,7 +5626,7 @@ SET t.display_name = 'Caste system mentions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-IN'})
-MATCH (t:Taboo {key: 'caste-system-mentions@pa-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-system-mentions@pa-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5637,7 +5637,7 @@ MATCH (l:Locale {key: 'cs-CZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cs-CZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'communist-era-nostalgia@cs-CZ'})
+MERGE (t:Taboo {key: 'taboo:communist-era-nostalgia@cs-CZ'})
 SET t.display_name = 'Communist era nostalgia',
     t.locale = 'cs-CZ',
     t.term = 'Communist era nostalgia',
@@ -5653,10 +5653,10 @@ SET t.display_name = 'Communist era nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cs-CZ'})
-MATCH (t:Taboo {key: 'communist-era-nostalgia@cs-CZ'})
+MATCH (t:Taboo {key: 'taboo:communist-era-nostalgia@cs-CZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'nazi-occupation@cs-CZ'})
+MERGE (t:Taboo {key: 'taboo:nazi-occupation@cs-CZ'})
 SET t.display_name = 'Nazi occupation',
     t.locale = 'cs-CZ',
     t.term = 'Nazi occupation',
@@ -5672,7 +5672,7 @@ SET t.display_name = 'Nazi occupation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cs-CZ'})
-MATCH (t:Taboo {key: 'nazi-occupation@cs-CZ'})
+MATCH (t:Taboo {key: 'taboo:nazi-occupation@cs-CZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5683,7 +5683,7 @@ MATCH (l:Locale {key: 'es-CL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'pinochet-dictatorship-1973-1990@es-CL'})
+MERGE (t:Taboo {key: 'taboo:pinochet-dictatorship-1973-1990@es-CL'})
 SET t.display_name = 'Pinochet dictatorship (1973-1990)',
     t.locale = 'es-CL',
     t.term = 'Pinochet dictatorship (1973-1990)',
@@ -5699,10 +5699,10 @@ SET t.display_name = 'Pinochet dictatorship (1973-1990)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CL'})
-MATCH (t:Taboo {key: 'pinochet-dictatorship-1973-1990@es-CL'})
+MATCH (t:Taboo {key: 'taboo:pinochet-dictatorship-1973-1990@es-CL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'allende-government-and-1973-coup@es-CL'})
+MERGE (t:Taboo {key: 'taboo:allende-government-and-1973-coup@es-CL'})
 SET t.display_name = 'Allende government and 1973 coup',
     t.locale = 'es-CL',
     t.term = 'Allende government and 1973 coup',
@@ -5718,10 +5718,10 @@ SET t.display_name = 'Allende government and 1973 coup',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CL'})
-MATCH (t:Taboo {key: 'allende-government-and-1973-coup@es-CL'})
+MATCH (t:Taboo {key: 'taboo:allende-government-and-1973-coup@es-CL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2019-estallido-social@es-CL'})
+MERGE (t:Taboo {key: 'taboo:2019-estallido-social@es-CL'})
 SET t.display_name = '2019 Estallido Social',
     t.locale = 'es-CL',
     t.term = '2019 Estallido Social',
@@ -5737,7 +5737,7 @@ SET t.display_name = '2019 Estallido Social',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CL'})
-MATCH (t:Taboo {key: '2019-estallido-social@es-CL'})
+MATCH (t:Taboo {key: 'taboo:2019-estallido-social@es-CL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5748,7 +5748,7 @@ MATCH (l:Locale {key: 'nl-NL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'colonialism-indonesia@nl-NL'})
+MERGE (t:Taboo {key: 'taboo:colonialism-indonesia@nl-NL'})
 SET t.display_name = 'Colonialism (Indonesia',
     t.locale = 'nl-NL',
     t.term = 'Colonialism (Indonesia',
@@ -5764,10 +5764,10 @@ SET t.display_name = 'Colonialism (Indonesia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
-MATCH (t:Taboo {key: 'colonialism-indonesia@nl-NL'})
+MATCH (t:Taboo {key: 'taboo:colonialism-indonesia@nl-NL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'suriname@nl-NL'})
+MERGE (t:Taboo {key: 'taboo:suriname@nl-NL'})
 SET t.display_name = 'Suriname',
     t.locale = 'nl-NL',
     t.term = 'Suriname',
@@ -5783,10 +5783,10 @@ SET t.display_name = 'Suriname',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
-MATCH (t:Taboo {key: 'suriname@nl-NL'})
+MATCH (t:Taboo {key: 'taboo:suriname@nl-NL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'slavery@nl-NL'})
+MERGE (t:Taboo {key: 'taboo:slavery@nl-NL'})
 SET t.display_name = 'slavery)',
     t.locale = 'nl-NL',
     t.term = 'slavery)',
@@ -5802,10 +5802,10 @@ SET t.display_name = 'slavery)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
-MATCH (t:Taboo {key: 'slavery@nl-NL'})
+MATCH (t:Taboo {key: 'taboo:slavery@nl-NL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'zwarte-piet-controversy@nl-NL'})
+MERGE (t:Taboo {key: 'taboo:zwarte-piet-controversy@nl-NL'})
 SET t.display_name = 'Zwarte Piet controversy',
     t.locale = 'nl-NL',
     t.term = 'Zwarte Piet controversy',
@@ -5821,10 +5821,10 @@ SET t.display_name = 'Zwarte Piet controversy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
-MATCH (t:Taboo {key: 'zwarte-piet-controversy@nl-NL'})
+MATCH (t:Taboo {key: 'taboo:zwarte-piet-controversy@nl-NL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'immigration-politics@nl-NL'})
+MERGE (t:Taboo {key: 'taboo:immigration-politics@nl-NL'})
 SET t.display_name = 'Immigration politics',
     t.locale = 'nl-NL',
     t.term = 'Immigration politics',
@@ -5840,7 +5840,7 @@ SET t.display_name = 'Immigration politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@nl-NL'})
-MATCH (t:Taboo {key: 'immigration-politics@nl-NL'})
+MATCH (t:Taboo {key: 'taboo:immigration-politics@nl-NL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5851,7 +5851,7 @@ MATCH (l:Locale {key: 'es-HN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-HN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'gang-violence-maras@es-HN'})
+MERGE (t:Taboo {key: 'taboo:gang-violence-maras@es-HN'})
 SET t.display_name = 'Gang violence (maras)',
     t.locale = 'es-HN',
     t.term = 'Gang violence (maras)',
@@ -5867,10 +5867,10 @@ SET t.display_name = 'Gang violence (maras)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-HN'})
-MATCH (t:Taboo {key: 'gang-violence-maras@es-HN'})
+MATCH (t:Taboo {key: 'taboo:gang-violence-maras@es-HN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-corruption@es-HN'})
+MERGE (t:Taboo {key: 'taboo:political-corruption@es-HN'})
 SET t.display_name = 'Political corruption',
     t.locale = 'es-HN',
     t.term = 'Political corruption',
@@ -5886,7 +5886,7 @@ SET t.display_name = 'Political corruption',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-HN'})
-MATCH (t:Taboo {key: 'political-corruption@es-HN'})
+MATCH (t:Taboo {key: 'taboo:political-corruption@es-HN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5897,7 +5897,7 @@ MATCH (l:Locale {key: 'bg-BG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bg-BG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ottoman-empire-period@bg-BG'})
+MERGE (t:Taboo {key: 'taboo:ottoman-empire-period@bg-BG'})
 SET t.display_name = 'Ottoman Empire period',
     t.locale = 'bg-BG',
     t.term = 'Ottoman Empire period',
@@ -5913,10 +5913,10 @@ SET t.display_name = 'Ottoman Empire period',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bg-BG'})
-MATCH (t:Taboo {key: 'ottoman-empire-period@bg-BG'})
+MATCH (t:Taboo {key: 'taboo:ottoman-empire-period@bg-BG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'communist-era-nostalgiacriticism@bg-BG'})
+MERGE (t:Taboo {key: 'taboo:communist-era-nostalgiacriticism@bg-BG'})
 SET t.display_name = 'Communist era nostalgia/criticism',
     t.locale = 'bg-BG',
     t.term = 'Communist era nostalgia/criticism',
@@ -5932,7 +5932,7 @@ SET t.display_name = 'Communist era nostalgia/criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bg-BG'})
-MATCH (t:Taboo {key: 'communist-era-nostalgiacriticism@bg-BG'})
+MATCH (t:Taboo {key: 'taboo:communist-era-nostalgiacriticism@bg-BG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -5943,7 +5943,7 @@ MATCH (l:Locale {key: 'sd-PK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sd-PK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'blasphemy-against-islam@sd-PK'})
+MERGE (t:Taboo {key: 'taboo:blasphemy-against-islam@sd-PK'})
 SET t.display_name = 'Blasphemy against Islam',
     t.locale = 'sd-PK',
     t.term = 'Blasphemy against Islam',
@@ -5959,10 +5959,10 @@ SET t.display_name = 'Blasphemy against Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sd-PK'})
-MATCH (t:Taboo {key: 'blasphemy-against-islam@sd-PK'})
+MATCH (t:Taboo {key: 'taboo:blasphemy-against-islam@sd-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'sectarian-divisions@sd-PK'})
+MERGE (t:Taboo {key: 'taboo:sectarian-divisions@sd-PK'})
 SET t.display_name = 'Sectarian divisions',
     t.locale = 'sd-PK',
     t.term = 'Sectarian divisions',
@@ -5978,10 +5978,10 @@ SET t.display_name = 'Sectarian divisions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sd-PK'})
-MATCH (t:Taboo {key: 'sectarian-divisions@sd-PK'})
+MATCH (t:Taboo {key: 'taboo:sectarian-divisions@sd-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ahmadiyya-references@sd-PK'})
+MERGE (t:Taboo {key: 'taboo:ahmadiyya-references@sd-PK'})
 SET t.display_name = 'Ahmadiyya references',
     t.locale = 'sd-PK',
     t.term = 'Ahmadiyya references',
@@ -5997,7 +5997,7 @@ SET t.display_name = 'Ahmadiyya references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sd-PK'})
-MATCH (t:Taboo {key: 'ahmadiyya-references@sd-PK'})
+MATCH (t:Taboo {key: 'taboo:ahmadiyya-references@sd-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6008,7 +6008,7 @@ MATCH (l:Locale {key: 'en-GH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-stereotyping@en-GH'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-GH'})
 SET t.display_name = 'Ethnic stereotyping',
     t.locale = 'en-GH',
     t.term = 'Ethnic stereotyping',
@@ -6024,10 +6024,10 @@ SET t.display_name = 'Ethnic stereotyping',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GH'})
-MATCH (t:Taboo {key: 'ethnic-stereotyping@en-GH'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotyping@en-GH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'chieftaincy-disputes@en-GH'})
+MERGE (t:Taboo {key: 'taboo:chieftaincy-disputes@en-GH'})
 SET t.display_name = 'Chieftaincy disputes',
     t.locale = 'en-GH',
     t.term = 'Chieftaincy disputes',
@@ -6043,10 +6043,10 @@ SET t.display_name = 'Chieftaincy disputes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GH'})
-MATCH (t:Taboo {key: 'chieftaincy-disputes@en-GH'})
+MATCH (t:Taboo {key: 'taboo:chieftaincy-disputes@en-GH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'witchcraft-allegations@en-GH'})
+MERGE (t:Taboo {key: 'taboo:witchcraft-allegations@en-GH'})
 SET t.display_name = 'Witchcraft allegations',
     t.locale = 'en-GH',
     t.term = 'Witchcraft allegations',
@@ -6062,7 +6062,7 @@ SET t.display_name = 'Witchcraft allegations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-GH'})
-MATCH (t:Taboo {key: 'witchcraft-allegations@en-GH'})
+MATCH (t:Taboo {key: 'taboo:witchcraft-allegations@en-GH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6073,7 +6073,7 @@ MATCH (l:Locale {key: 'en-PH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-religious-symbols-or-beliefs@en-PH'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@en-PH'})
 SET t.display_name = 'Disrespecting religious symbols or beliefs',
     t.locale = 'en-PH',
     t.term = 'Disrespecting religious symbols or beliefs',
@@ -6089,10 +6089,10 @@ SET t.display_name = 'Disrespecting religious symbols or beliefs',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PH'})
-MATCH (t:Taboo {key: 'disrespecting-religious-symbols-or-beliefs@en-PH'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@en-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'causing-public-embarrassment-hiya@en-PH'})
+MERGE (t:Taboo {key: 'taboo:causing-public-embarrassment-hiya@en-PH'})
 SET t.display_name = 'Causing public embarrassment (hiya)',
     t.locale = 'en-PH',
     t.term = 'Causing public embarrassment (hiya)',
@@ -6108,10 +6108,10 @@ SET t.display_name = 'Causing public embarrassment (hiya)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PH'})
-MATCH (t:Taboo {key: 'causing-public-embarrassment-hiya@en-PH'})
+MATCH (t:Taboo {key: 'taboo:causing-public-embarrassment-hiya@en-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mocking-or-disrespecting-elders@en-PH'})
+MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@en-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
     t.locale = 'en-PH',
     t.term = 'Mocking or disrespecting elders',
@@ -6127,7 +6127,7 @@ SET t.display_name = 'Mocking or disrespecting elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PH'})
-MATCH (t:Taboo {key: 'mocking-or-disrespecting-elders@en-PH'})
+MATCH (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@en-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6138,7 +6138,7 @@ MATCH (l:Locale {key: 'sl-SI'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sl-SI'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'yugoslav-period-nostalgia-or-criticism@sl-SI'})
+MERGE (t:Taboo {key: 'taboo:yugoslav-period-nostalgia-or-criticism@sl-SI'})
 SET t.display_name = 'Yugoslav period nostalgia or criticism',
     t.locale = 'sl-SI',
     t.term = 'Yugoslav period nostalgia or criticism',
@@ -6154,10 +6154,10 @@ SET t.display_name = 'Yugoslav period nostalgia or criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sl-SI'})
-MATCH (t:Taboo {key: 'yugoslav-period-nostalgia-or-criticism@sl-SI'})
+MATCH (t:Taboo {key: 'taboo:yugoslav-period-nostalgia-or-criticism@sl-SI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-comparisons-with-neighbors@sl-SI'})
+MERGE (t:Taboo {key: 'taboo:ethnic-comparisons-with-neighbors@sl-SI'})
 SET t.display_name = 'Ethnic comparisons with neighbors',
     t.locale = 'sl-SI',
     t.term = 'Ethnic comparisons with neighbors',
@@ -6173,7 +6173,7 @@ SET t.display_name = 'Ethnic comparisons with neighbors',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sl-SI'})
-MATCH (t:Taboo {key: 'ethnic-comparisons-with-neighbors@sl-SI'})
+MATCH (t:Taboo {key: 'taboo:ethnic-comparisons-with-neighbors@sl-SI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6184,7 +6184,7 @@ MATCH (l:Locale {key: 'en-HK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-HK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'hong-kong-china-political-relations@en-HK'})
+MERGE (t:Taboo {key: 'taboo:hong-kong-china-political-relations@en-HK'})
 SET t.display_name = 'Hong Kong-China political relations',
     t.locale = 'en-HK',
     t.term = 'Hong Kong-China political relations',
@@ -6200,10 +6200,10 @@ SET t.display_name = 'Hong Kong-China political relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-HK'})
-MATCH (t:Taboo {key: 'hong-kong-china-political-relations@en-HK'})
+MATCH (t:Taboo {key: 'taboo:hong-kong-china-political-relations@en-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2019-2020-protests@en-HK'})
+MERGE (t:Taboo {key: 'taboo:2019-2020-protests@en-HK'})
 SET t.display_name = '2019-2020 protests',
     t.locale = 'en-HK',
     t.term = '2019-2020 protests',
@@ -6219,10 +6219,10 @@ SET t.display_name = '2019-2020 protests',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-HK'})
-MATCH (t:Taboo {key: '2019-2020-protests@en-HK'})
+MATCH (t:Taboo {key: 'taboo:2019-2020-protests@en-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'taiwan-independence@en-HK'})
+MERGE (t:Taboo {key: 'taboo:taiwan-independence@en-HK'})
 SET t.display_name = 'Taiwan independence',
     t.locale = 'en-HK',
     t.term = 'Taiwan independence',
@@ -6238,7 +6238,7 @@ SET t.display_name = 'Taiwan independence',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-HK'})
-MATCH (t:Taboo {key: 'taiwan-independence@en-HK'})
+MATCH (t:Taboo {key: 'taboo:taiwan-independence@en-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6249,7 +6249,7 @@ MATCH (l:Locale {key: 'en-MU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-divisions-or-favouritism@en-MU'})
+MERGE (t:Taboo {key: 'taboo:ethnic-divisions-or-favouritism@en-MU'})
 SET t.display_name = 'Ethnic divisions or favouritism',
     t.locale = 'en-MU',
     t.term = 'Ethnic divisions or favouritism',
@@ -6265,10 +6265,10 @@ SET t.display_name = 'Ethnic divisions or favouritism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MU'})
-MATCH (t:Taboo {key: 'ethnic-divisions-or-favouritism@en-MU'})
+MATCH (t:Taboo {key: 'taboo:ethnic-divisions-or-favouritism@en-MU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'communalism@en-MU'})
+MERGE (t:Taboo {key: 'taboo:communalism@en-MU'})
 SET t.display_name = 'Communalism',
     t.locale = 'en-MU',
     t.term = 'Communalism',
@@ -6284,7 +6284,7 @@ SET t.display_name = 'Communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-MU'})
-MATCH (t:Taboo {key: 'communalism@en-MU'})
+MATCH (t:Taboo {key: 'taboo:communalism@en-MU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6295,7 +6295,7 @@ MATCH (l:Locale {key: 'et-EE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@et-EE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'soviet-nostalgia-or-symbolism@et-EE'})
+MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@et-EE'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
     t.locale = 'et-EE',
     t.term = 'Soviet nostalgia or symbolism',
@@ -6311,10 +6311,10 @@ SET t.display_name = 'Soviet nostalgia or symbolism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@et-EE'})
-MATCH (t:Taboo {key: 'soviet-nostalgia-or-symbolism@et-EE'})
+MATCH (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@et-EE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-to-russia-positively@et-EE'})
+MERGE (t:Taboo {key: 'taboo:comparing-to-russia-positively@et-EE'})
 SET t.display_name = 'Comparing to Russia positively',
     t.locale = 'et-EE',
     t.term = 'Comparing to Russia positively',
@@ -6330,10 +6330,10 @@ SET t.display_name = 'Comparing to Russia positively',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@et-EE'})
-MATCH (t:Taboo {key: 'comparing-to-russia-positively@et-EE'})
+MATCH (t:Taboo {key: 'taboo:comparing-to-russia-positively@et-EE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'soviet-occupation-1940-1991@et-EE'})
+MERGE (t:Taboo {key: 'taboo:soviet-occupation-1940-1991@et-EE'})
 SET t.display_name = 'Soviet Occupation (1940-1991)',
     t.locale = 'et-EE',
     t.term = 'Soviet Occupation (1940-1991)',
@@ -6349,7 +6349,7 @@ SET t.display_name = 'Soviet Occupation (1940-1991)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@et-EE'})
-MATCH (t:Taboo {key: 'soviet-occupation-1940-1991@et-EE'})
+MATCH (t:Taboo {key: 'taboo:soviet-occupation-1940-1991@et-EE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6360,7 +6360,7 @@ MATCH (l:Locale {key: 'es-SV'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-SV'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'civil-war-1979-1992@es-SV'})
+MERGE (t:Taboo {key: 'taboo:civil-war-1979-1992@es-SV'})
 SET t.display_name = 'Civil War (1979-1992)',
     t.locale = 'es-SV',
     t.term = 'Civil War (1979-1992)',
@@ -6376,10 +6376,10 @@ SET t.display_name = 'Civil War (1979-1992)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-SV'})
-MATCH (t:Taboo {key: 'civil-war-1979-1992@es-SV'})
+MATCH (t:Taboo {key: 'taboo:civil-war-1979-1992@es-SV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'el-mozote-massacre@es-SV'})
+MERGE (t:Taboo {key: 'taboo:el-mozote-massacre@es-SV'})
 SET t.display_name = 'El Mozote massacre',
     t.locale = 'es-SV',
     t.term = 'El Mozote massacre',
@@ -6395,10 +6395,10 @@ SET t.display_name = 'El Mozote massacre',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-SV'})
-MATCH (t:Taboo {key: 'el-mozote-massacre@es-SV'})
+MATCH (t:Taboo {key: 'taboo:el-mozote-massacre@es-SV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'gang-violence-maras@es-SV'})
+MERGE (t:Taboo {key: 'taboo:gang-violence-maras@es-SV'})
 SET t.display_name = 'Gang violence (maras)',
     t.locale = 'es-SV',
     t.term = 'Gang violence (maras)',
@@ -6414,7 +6414,7 @@ SET t.display_name = 'Gang violence (maras)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-SV'})
-MATCH (t:Taboo {key: 'gang-violence-maras@es-SV'})
+MATCH (t:Taboo {key: 'taboo:gang-violence-maras@es-SV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6425,7 +6425,7 @@ MATCH (l:Locale {key: 'pt-CH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-CH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'immigration-status-assumptions@pt-CH'})
+MERGE (t:Taboo {key: 'taboo:immigration-status-assumptions@pt-CH'})
 SET t.display_name = 'Immigration status assumptions',
     t.locale = 'pt-CH',
     t.term = 'Immigration status assumptions',
@@ -6441,10 +6441,10 @@ SET t.display_name = 'Immigration status assumptions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-CH'})
-MATCH (t:Taboo {key: 'immigration-status-assumptions@pt-CH'})
+MATCH (t:Taboo {key: 'taboo:immigration-status-assumptions@pt-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-portuguese-to-spanish@pt-CH'})
+MERGE (t:Taboo {key: 'taboo:comparing-portuguese-to-spanish@pt-CH'})
 SET t.display_name = 'Comparing Portuguese to Spanish',
     t.locale = 'pt-CH',
     t.term = 'Comparing Portuguese to Spanish',
@@ -6460,10 +6460,10 @@ SET t.display_name = 'Comparing Portuguese to Spanish',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-CH'})
-MATCH (t:Taboo {key: 'comparing-portuguese-to-spanish@pt-CH'})
+MATCH (t:Taboo {key: 'taboo:comparing-portuguese-to-spanish@pt-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'discussing-personal-finances-or-income@pt-CH'})
+MERGE (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@pt-CH'})
 SET t.display_name = 'Discussing personal finances or income',
     t.locale = 'pt-CH',
     t.term = 'Discussing personal finances or income',
@@ -6479,7 +6479,7 @@ SET t.display_name = 'Discussing personal finances or income',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-CH'})
-MATCH (t:Taboo {key: 'discussing-personal-finances-or-income@pt-CH'})
+MATCH (t:Taboo {key: 'taboo:discussing-personal-finances-or-income@pt-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6490,7 +6490,7 @@ MATCH (l:Locale {key: 'es-PR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-status-debate@es-PR'})
+MERGE (t:Taboo {key: 'taboo:political-status-debate@es-PR'})
 SET t.display_name = 'Political status debate',
     t.locale = 'es-PR',
     t.term = 'Political status debate',
@@ -6506,10 +6506,10 @@ SET t.display_name = 'Political status debate',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PR'})
-MATCH (t:Taboo {key: 'political-status-debate@es-PR'})
+MATCH (t:Taboo {key: 'taboo:political-status-debate@es-PR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hurricane-maria-mismanagement@es-PR'})
+MERGE (t:Taboo {key: 'taboo:hurricane-maria-mismanagement@es-PR'})
 SET t.display_name = 'Hurricane Maria mismanagement',
     t.locale = 'es-PR',
     t.term = 'Hurricane Maria mismanagement',
@@ -6525,10 +6525,10 @@ SET t.display_name = 'Hurricane Maria mismanagement',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PR'})
-MATCH (t:Taboo {key: 'hurricane-maria-mismanagement@es-PR'})
+MATCH (t:Taboo {key: 'taboo:hurricane-maria-mismanagement@es-PR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hurricane-maria-2017@es-PR'})
+MERGE (t:Taboo {key: 'taboo:hurricane-maria-2017@es-PR'})
 SET t.display_name = 'Hurricane Maria (2017)',
     t.locale = 'es-PR',
     t.term = 'Hurricane Maria (2017)',
@@ -6544,7 +6544,7 @@ SET t.display_name = 'Hurricane Maria (2017)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PR'})
-MATCH (t:Taboo {key: 'hurricane-maria-2017@es-PR'})
+MATCH (t:Taboo {key: 'taboo:hurricane-maria-2017@es-PR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6555,7 +6555,7 @@ MATCH (l:Locale {key: 'ur-PK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ur-PK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'blasphemy@ur-PK'})
+MERGE (t:Taboo {key: 'taboo:blasphemy@ur-PK'})
 SET t.display_name = 'توہین مذہب (Blasphemy)',
     t.locale = 'ur-PK',
     t.term = 'توہین مذہب (Blasphemy)',
@@ -6571,10 +6571,10 @@ SET t.display_name = 'توہین مذہب (Blasphemy)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ur-PK'})
-MATCH (t:Taboo {key: 'blasphemy@ur-PK'})
+MATCH (t:Taboo {key: 'taboo:blasphemy@ur-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-armed-forces@ur-PK'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-armed-forces@ur-PK'})
 SET t.display_name = 'Criticism of Armed Forces',
     t.locale = 'ur-PK',
     t.term = 'Criticism of Armed Forces',
@@ -6590,10 +6590,10 @@ SET t.display_name = 'Criticism of Armed Forces',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ur-PK'})
-MATCH (t:Taboo {key: 'criticism-of-armed-forces@ur-PK'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-armed-forces@ur-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ahmadiyya-references@ur-PK'})
+MERGE (t:Taboo {key: 'taboo:ahmadiyya-references@ur-PK'})
 SET t.display_name = 'Ahmadiyya references',
     t.locale = 'ur-PK',
     t.term = 'Ahmadiyya references',
@@ -6609,7 +6609,7 @@ SET t.display_name = 'Ahmadiyya references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ur-PK'})
-MATCH (t:Taboo {key: 'ahmadiyya-references@ur-PK'})
+MATCH (t:Taboo {key: 'taboo:ahmadiyya-references@ur-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6620,7 +6620,7 @@ MATCH (l:Locale {key: 'en-ZM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'tribal-divisionspreferences@en-ZM'})
+MERGE (t:Taboo {key: 'taboo:tribal-divisionspreferences@en-ZM'})
 SET t.display_name = 'Tribal divisions/preferences',
     t.locale = 'en-ZM',
     t.term = 'Tribal divisions/preferences',
@@ -6636,10 +6636,10 @@ SET t.display_name = 'Tribal divisions/preferences',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZM'})
-MATCH (t:Taboo {key: 'tribal-divisionspreferences@en-ZM'})
+MATCH (t:Taboo {key: 'taboo:tribal-divisionspreferences@en-ZM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-elders@en-ZM'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-elders@en-ZM'})
 SET t.display_name = 'Disrespecting elders',
     t.locale = 'en-ZM',
     t.term = 'Disrespecting elders',
@@ -6655,10 +6655,10 @@ SET t.display_name = 'Disrespecting elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZM'})
-MATCH (t:Taboo {key: 'disrespecting-elders@en-ZM'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-elders@en-ZM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticizing-christianity@en-ZM'})
+MERGE (t:Taboo {key: 'taboo:criticizing-christianity@en-ZM'})
 SET t.display_name = 'Criticizing Christianity',
     t.locale = 'en-ZM',
     t.term = 'Criticizing Christianity',
@@ -6674,7 +6674,7 @@ SET t.display_name = 'Criticizing Christianity',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-ZM'})
-MATCH (t:Taboo {key: 'criticizing-christianity@en-ZM'})
+MATCH (t:Taboo {key: 'taboo:criticizing-christianity@en-ZM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6685,7 +6685,7 @@ MATCH (l:Locale {key: 'ar-OM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-OM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-sultan-or-royal-family@ar-OM'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ar-OM'})
 SET t.display_name = 'Criticism of Sultan or Royal Family',
     t.locale = 'ar-OM',
     t.term = 'Criticism of Sultan or Royal Family',
@@ -6701,10 +6701,10 @@ SET t.display_name = 'Criticism of Sultan or Royal Family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-OM'})
-MATCH (t:Taboo {key: 'criticism-of-sultan-or-royal-family@ar-OM'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ar-OM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-ibadi-practices@ar-OM'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-ibadi-practices@ar-OM'})
 SET t.display_name = 'Insulting Islam or Ibadi practices',
     t.locale = 'ar-OM',
     t.term = 'Insulting Islam or Ibadi practices',
@@ -6720,10 +6720,10 @@ SET t.display_name = 'Insulting Islam or Ibadi practices',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-OM'})
-MATCH (t:Taboo {key: 'insulting-islam-or-ibadi-practices@ar-OM'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-ibadi-practices@ar-OM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-government-policies@ar-OM'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-government-policies@ar-OM'})
 SET t.display_name = 'Criticism of government policies',
     t.locale = 'ar-OM',
     t.term = 'Criticism of government policies',
@@ -6739,7 +6739,7 @@ SET t.display_name = 'Criticism of government policies',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-OM'})
-MATCH (t:Taboo {key: 'criticism-of-government-policies@ar-OM'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-government-policies@ar-OM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6750,7 +6750,7 @@ MATCH (l:Locale {key: 'ru-MD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-MD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'transnistria-conflict@ru-MD'})
+MERGE (t:Taboo {key: 'taboo:transnistria-conflict@ru-MD'})
 SET t.display_name = 'Transnistria conflict',
     t.locale = 'ru-MD',
     t.term = 'Transnistria conflict',
@@ -6766,10 +6766,10 @@ SET t.display_name = 'Transnistria conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-MD'})
-MATCH (t:Taboo {key: 'transnistria-conflict@ru-MD'})
+MATCH (t:Taboo {key: 'taboo:transnistria-conflict@ru-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'moldova-romania-relations@ru-MD'})
+MERGE (t:Taboo {key: 'taboo:moldova-romania-relations@ru-MD'})
 SET t.display_name = 'Moldova-Romania relations',
     t.locale = 'ru-MD',
     t.term = 'Moldova-Romania relations',
@@ -6785,10 +6785,10 @@ SET t.display_name = 'Moldova-Romania relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-MD'})
-MATCH (t:Taboo {key: 'moldova-romania-relations@ru-MD'})
+MATCH (t:Taboo {key: 'taboo:moldova-romania-relations@ru-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'russian-vs-romanian-language-debates@ru-MD'})
+MERGE (t:Taboo {key: 'taboo:russian-vs-romanian-language-debates@ru-MD'})
 SET t.display_name = 'Russian vs Romanian language debates',
     t.locale = 'ru-MD',
     t.term = 'Russian vs Romanian language debates',
@@ -6804,7 +6804,7 @@ SET t.display_name = 'Russian vs Romanian language debates',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-MD'})
-MATCH (t:Taboo {key: 'russian-vs-romanian-language-debates@ru-MD'})
+MATCH (t:Taboo {key: 'taboo:russian-vs-romanian-language-debates@ru-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6815,7 +6815,7 @@ MATCH (l:Locale {key: 'mt-MT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mt-MT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-party-affiliation@mt-MT'})
+MERGE (t:Taboo {key: 'taboo:political-party-affiliation@mt-MT'})
 SET t.display_name = 'Political party affiliation',
     t.locale = 'mt-MT',
     t.term = 'Political party affiliation',
@@ -6831,10 +6831,10 @@ SET t.display_name = 'Political party affiliation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mt-MT'})
-MATCH (t:Taboo {key: 'political-party-affiliation@mt-MT'})
+MATCH (t:Taboo {key: 'taboo:political-party-affiliation@mt-MT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'abortion@mt-MT'})
+MERGE (t:Taboo {key: 'taboo:abortion@mt-MT'})
 SET t.display_name = 'Abortion',
     t.locale = 'mt-MT',
     t.term = 'Abortion',
@@ -6850,10 +6850,10 @@ SET t.display_name = 'Abortion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mt-MT'})
-MATCH (t:Taboo {key: 'abortion@mt-MT'})
+MATCH (t:Taboo {key: 'taboo:abortion@mt-MT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pn-vs-pl-politics@mt-MT'})
+MERGE (t:Taboo {key: 'taboo:pn-vs-pl-politics@mt-MT'})
 SET t.display_name = 'PN vs PL politics',
     t.locale = 'mt-MT',
     t.term = 'PN vs PL politics',
@@ -6869,7 +6869,7 @@ SET t.display_name = 'PN vs PL politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mt-MT'})
-MATCH (t:Taboo {key: 'pn-vs-pl-politics@mt-MT'})
+MATCH (t:Taboo {key: 'taboo:pn-vs-pl-politics@mt-MT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6880,7 +6880,7 @@ MATCH (l:Locale {key: 'eu-ES'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@eu-ES'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-violence-eta-references@eu-ES'})
+MERGE (t:Taboo {key: 'taboo:political-violence-eta-references@eu-ES'})
 SET t.display_name = 'Political violence / ETA references',
     t.locale = 'eu-ES',
     t.term = 'Political violence / ETA references',
@@ -6896,10 +6896,10 @@ SET t.display_name = 'Political violence / ETA references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@eu-ES'})
-MATCH (t:Taboo {key: 'political-violence-eta-references@eu-ES'})
+MATCH (t:Taboo {key: 'taboo:political-violence-eta-references@eu-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'independence-politics@eu-ES'})
+MERGE (t:Taboo {key: 'taboo:independence-politics@eu-ES'})
 SET t.display_name = 'Independence politics',
     t.locale = 'eu-ES',
     t.term = 'Independence politics',
@@ -6915,10 +6915,10 @@ SET t.display_name = 'Independence politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@eu-ES'})
-MATCH (t:Taboo {key: 'independence-politics@eu-ES'})
+MATCH (t:Taboo {key: 'taboo:independence-politics@eu-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'spanish-nationalism@eu-ES'})
+MERGE (t:Taboo {key: 'taboo:spanish-nationalism@eu-ES'})
 SET t.display_name = 'Spanish nationalism',
     t.locale = 'eu-ES',
     t.term = 'Spanish nationalism',
@@ -6934,7 +6934,7 @@ SET t.display_name = 'Spanish nationalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@eu-ES'})
-MATCH (t:Taboo {key: 'spanish-nationalism@eu-ES'})
+MATCH (t:Taboo {key: 'taboo:spanish-nationalism@eu-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -6945,7 +6945,7 @@ MATCH (l:Locale {key: 'ja-JP'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ja-JP'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'world-war-ii-and-imperial-history@ja-JP'})
+MERGE (t:Taboo {key: 'taboo:world-war-ii-and-imperial-history@ja-JP'})
 SET t.display_name = 'World War II and imperial history',
     t.locale = 'ja-JP',
     t.term = 'World War II and imperial history',
@@ -6961,10 +6961,10 @@ SET t.display_name = 'World War II and imperial history',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ja-JP'})
-MATCH (t:Taboo {key: 'world-war-ii-and-imperial-history@ja-JP'})
+MATCH (t:Taboo {key: 'taboo:world-war-ii-and-imperial-history@ja-JP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'atomic-bombings-hiroshima@ja-JP'})
+MERGE (t:Taboo {key: 'taboo:atomic-bombings-hiroshima@ja-JP'})
 SET t.display_name = 'Atomic bombings (Hiroshima',
     t.locale = 'ja-JP',
     t.term = 'Atomic bombings (Hiroshima',
@@ -6980,10 +6980,10 @@ SET t.display_name = 'Atomic bombings (Hiroshima',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ja-JP'})
-MATCH (t:Taboo {key: 'atomic-bombings-hiroshima@ja-JP'})
+MATCH (t:Taboo {key: 'taboo:atomic-bombings-hiroshima@ja-JP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'nagasaki@ja-JP'})
+MERGE (t:Taboo {key: 'taboo:nagasaki@ja-JP'})
 SET t.display_name = 'Nagasaki)',
     t.locale = 'ja-JP',
     t.term = 'Nagasaki)',
@@ -6999,10 +6999,10 @@ SET t.display_name = 'Nagasaki)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ja-JP'})
-MATCH (t:Taboo {key: 'nagasaki@ja-JP'})
+MATCH (t:Taboo {key: 'taboo:nagasaki@ja-JP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-disputes@ja-JP'})
+MERGE (t:Taboo {key: 'taboo:territorial-disputes@ja-JP'})
 SET t.display_name = 'Territorial disputes',
     t.locale = 'ja-JP',
     t.term = 'Territorial disputes',
@@ -7018,7 +7018,7 @@ SET t.display_name = 'Territorial disputes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ja-JP'})
-MATCH (t:Taboo {key: 'territorial-disputes@ja-JP'})
+MATCH (t:Taboo {key: 'taboo:territorial-disputes@ja-JP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7029,7 +7029,7 @@ MATCH (l:Locale {key: 'bn-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'hindu-muslim-communalism@bn-IN'})
+MERGE (t:Taboo {key: 'taboo:hindu-muslim-communalism@bn-IN'})
 SET t.display_name = 'Hindu-Muslim communalism',
     t.locale = 'bn-IN',
     t.term = 'Hindu-Muslim communalism',
@@ -7045,10 +7045,10 @@ SET t.display_name = 'Hindu-Muslim communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-IN'})
-MATCH (t:Taboo {key: 'hindu-muslim-communalism@bn-IN'})
+MATCH (t:Taboo {key: 'taboo:hindu-muslim-communalism@bn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'partition-of-bengal@bn-IN'})
+MERGE (t:Taboo {key: 'taboo:partition-of-bengal@bn-IN'})
 SET t.display_name = 'Partition of Bengal',
     t.locale = 'bn-IN',
     t.term = 'Partition of Bengal',
@@ -7064,10 +7064,10 @@ SET t.display_name = 'Partition of Bengal',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-IN'})
-MATCH (t:Taboo {key: 'partition-of-bengal@bn-IN'})
+MATCH (t:Taboo {key: 'taboo:partition-of-bengal@bn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-discrimination@bn-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@bn-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'bn-IN',
     t.term = 'Caste discrimination',
@@ -7083,7 +7083,7 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@bn-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@bn-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@bn-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7094,7 +7094,7 @@ MATCH (l:Locale {key: 'he-IL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@he-IL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'holocaustshoah@he-IL'})
+MERGE (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 SET t.display_name = 'Holocaust/Shoah',
     t.locale = 'he-IL',
     t.term = 'Holocaust/Shoah',
@@ -7110,10 +7110,10 @@ SET t.display_name = 'Holocaust/Shoah',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@he-IL'})
-MATCH (t:Taboo {key: 'holocaustshoah@he-IL'})
+MATCH (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'israeli-palestinian-conflict@he-IL'})
+MERGE (t:Taboo {key: 'taboo:israeli-palestinian-conflict@he-IL'})
 SET t.display_name = 'Israeli-Palestinian Conflict',
     t.locale = 'he-IL',
     t.term = 'Israeli-Palestinian Conflict',
@@ -7129,10 +7129,10 @@ SET t.display_name = 'Israeli-Palestinian Conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@he-IL'})
-MATCH (t:Taboo {key: 'israeli-palestinian-conflict@he-IL'})
+MATCH (t:Taboo {key: 'taboo:israeli-palestinian-conflict@he-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'holocaustshoah@he-IL'})
+MERGE (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 SET t.display_name = 'Holocaust/Shoah',
     t.locale = 'he-IL',
     t.term = 'Holocaust/Shoah',
@@ -7148,7 +7148,7 @@ SET t.display_name = 'Holocaust/Shoah',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@he-IL'})
-MATCH (t:Taboo {key: 'holocaustshoah@he-IL'})
+MATCH (t:Taboo {key: 'taboo:holocaustshoah@he-IL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7159,7 +7159,7 @@ MATCH (l:Locale {key: 'zh-HK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-HK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-status-and-governance@zh-HK'})
+MERGE (t:Taboo {key: 'taboo:political-status-and-governance@zh-HK'})
 SET t.display_name = 'Political status and governance',
     t.locale = 'zh-HK',
     t.term = 'Political status and governance',
@@ -7175,10 +7175,10 @@ SET t.display_name = 'Political status and governance',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-HK'})
-MATCH (t:Taboo {key: 'political-status-and-governance@zh-HK'})
+MATCH (t:Taboo {key: 'taboo:political-status-and-governance@zh-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mainland-china-comparisons@zh-HK'})
+MERGE (t:Taboo {key: 'taboo:mainland-china-comparisons@zh-HK'})
 SET t.display_name = 'Mainland China comparisons',
     t.locale = 'zh-HK',
     t.term = 'Mainland China comparisons',
@@ -7194,10 +7194,10 @@ SET t.display_name = 'Mainland China comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-HK'})
-MATCH (t:Taboo {key: 'mainland-china-comparisons@zh-HK'})
+MATCH (t:Taboo {key: 'taboo:mainland-china-comparisons@zh-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'taiwan-and-sovereignty-issues@zh-HK'})
+MERGE (t:Taboo {key: 'taboo:taiwan-and-sovereignty-issues@zh-HK'})
 SET t.display_name = 'Taiwan and sovereignty issues',
     t.locale = 'zh-HK',
     t.term = 'Taiwan and sovereignty issues',
@@ -7213,7 +7213,7 @@ SET t.display_name = 'Taiwan and sovereignty issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-HK'})
-MATCH (t:Taboo {key: 'taiwan-and-sovereignty-issues@zh-HK'})
+MATCH (t:Taboo {key: 'taboo:taiwan-and-sovereignty-issues@zh-HK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7224,7 +7224,7 @@ MATCH (l:Locale {key: 'es-CO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'drug-traffickingnarcos-stereotypes@es-CO'})
+MERGE (t:Taboo {key: 'taboo:drug-traffickingnarcos-stereotypes@es-CO'})
 SET t.display_name = 'Drug trafficking/narcos stereotypes',
     t.locale = 'es-CO',
     t.term = 'Drug trafficking/narcos stereotypes',
@@ -7240,10 +7240,10 @@ SET t.display_name = 'Drug trafficking/narcos stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CO'})
-MATCH (t:Taboo {key: 'drug-traffickingnarcos-stereotypes@es-CO'})
+MATCH (t:Taboo {key: 'taboo:drug-traffickingnarcos-stereotypes@es-CO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'internal-armed-conflict-details@es-CO'})
+MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-details@es-CO'})
 SET t.display_name = 'Internal armed conflict details',
     t.locale = 'es-CO',
     t.term = 'Internal armed conflict details',
@@ -7259,10 +7259,10 @@ SET t.display_name = 'Internal armed conflict details',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CO'})
-MATCH (t:Taboo {key: 'internal-armed-conflict-details@es-CO'})
+MATCH (t:Taboo {key: 'taboo:internal-armed-conflict-details@es-CO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'false-positives-scandal-falsos-positivos@es-CO'})
+MERGE (t:Taboo {key: 'taboo:false-positives-scandal-falsos-positivos@es-CO'})
 SET t.display_name = 'False positives scandal (falsos positivos)',
     t.locale = 'es-CO',
     t.term = 'False positives scandal (falsos positivos)',
@@ -7278,7 +7278,7 @@ SET t.display_name = 'False positives scandal (falsos positivos)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CO'})
-MATCH (t:Taboo {key: 'false-positives-scandal-falsos-positivos@es-CO'})
+MATCH (t:Taboo {key: 'taboo:false-positives-scandal-falsos-positivos@es-CO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7289,7 +7289,7 @@ MATCH (l:Locale {key: 'de-LU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-LU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'tax-haven-framing@de-LU'})
+MERGE (t:Taboo {key: 'taboo:tax-haven-framing@de-LU'})
 SET t.display_name = '"Tax haven" framing',
     t.locale = 'de-LU',
     t.term = '"Tax haven" framing',
@@ -7305,10 +7305,10 @@ SET t.display_name = '"Tax haven" framing',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-LU'})
-MATCH (t:Taboo {key: 'tax-haven-framing@de-LU'})
+MATCH (t:Taboo {key: 'taboo:tax-haven-framing@de-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'conflating-luxembourg-with-belgium-or-germany@de-LU'})
+MERGE (t:Taboo {key: 'taboo:conflating-luxembourg-with-belgium-or-germany@de-LU'})
 SET t.display_name = 'Conflating Luxembourg with Belgium or Germany',
     t.locale = 'de-LU',
     t.term = 'Conflating Luxembourg with Belgium or Germany',
@@ -7324,10 +7324,10 @@ SET t.display_name = 'Conflating Luxembourg with Belgium or Germany',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-LU'})
-MATCH (t:Taboo {key: 'conflating-luxembourg-with-belgium-or-germany@de-LU'})
+MATCH (t:Taboo {key: 'taboo:conflating-luxembourg-with-belgium-or-germany@de-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'discussing-personal-wealth-or-income@de-LU'})
+MERGE (t:Taboo {key: 'taboo:discussing-personal-wealth-or-income@de-LU'})
 SET t.display_name = 'Discussing personal wealth or income',
     t.locale = 'de-LU',
     t.term = 'Discussing personal wealth or income',
@@ -7343,7 +7343,7 @@ SET t.display_name = 'Discussing personal wealth or income',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-LU'})
-MATCH (t:Taboo {key: 'discussing-personal-wealth-or-income@de-LU'})
+MATCH (t:Taboo {key: 'taboo:discussing-personal-wealth-or-income@de-LU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7354,7 +7354,7 @@ MATCH (l:Locale {key: 'es-BO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-BO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'sea-access-to-chile@es-BO'})
+MERGE (t:Taboo {key: 'taboo:sea-access-to-chile@es-BO'})
 SET t.display_name = 'Sea access to Chile',
     t.locale = 'es-BO',
     t.term = 'Sea access to Chile',
@@ -7370,10 +7370,10 @@ SET t.display_name = 'Sea access to Chile',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-BO'})
-MATCH (t:Taboo {key: 'sea-access-to-chile@es-BO'})
+MATCH (t:Taboo {key: 'taboo:sea-access-to-chile@es-BO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'indigenous-discrimination@es-BO'})
+MERGE (t:Taboo {key: 'taboo:indigenous-discrimination@es-BO'})
 SET t.display_name = 'Indigenous discrimination',
     t.locale = 'es-BO',
     t.term = 'Indigenous discrimination',
@@ -7389,10 +7389,10 @@ SET t.display_name = 'Indigenous discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-BO'})
-MATCH (t:Taboo {key: 'indigenous-discrimination@es-BO'})
+MATCH (t:Taboo {key: 'taboo:indigenous-discrimination@es-BO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-instability-jokes@es-BO'})
+MERGE (t:Taboo {key: 'taboo:political-instability-jokes@es-BO'})
 SET t.display_name = 'Political instability jokes',
     t.locale = 'es-BO',
     t.term = 'Political instability jokes',
@@ -7408,7 +7408,7 @@ SET t.display_name = 'Political instability jokes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-BO'})
-MATCH (t:Taboo {key: 'political-instability-jokes@es-BO'})
+MATCH (t:Taboo {key: 'taboo:political-instability-jokes@es-BO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7419,7 +7419,7 @@ MATCH (l:Locale {key: 'th-TH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@th-TH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-monarchy@th-TH'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-monarchy@th-TH'})
 SET t.display_name = 'Criticism of monarchy',
     t.locale = 'th-TH',
     t.term = 'Criticism of monarchy',
@@ -7435,10 +7435,10 @@ SET t.display_name = 'Criticism of monarchy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@th-TH'})
-MATCH (t:Taboo {key: 'criticism-of-monarchy@th-TH'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-monarchy@th-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-buddha-images@th-TH'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-buddha-images@th-TH'})
 SET t.display_name = 'Disrespecting Buddha images',
     t.locale = 'th-TH',
     t.term = 'Disrespecting Buddha images',
@@ -7454,10 +7454,10 @@ SET t.display_name = 'Disrespecting Buddha images',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@th-TH'})
-MATCH (t:Taboo {key: 'disrespecting-buddha-images@th-TH'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-buddha-images@th-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-buddhism-or-monks@th-TH'})
+MERGE (t:Taboo {key: 'taboo:insulting-buddhism-or-monks@th-TH'})
 SET t.display_name = 'Insulting Buddhism or monks',
     t.locale = 'th-TH',
     t.term = 'Insulting Buddhism or monks',
@@ -7473,7 +7473,7 @@ SET t.display_name = 'Insulting Buddhism or monks',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@th-TH'})
-MATCH (t:Taboo {key: 'insulting-buddhism-or-monks@th-TH'})
+MATCH (t:Taboo {key: 'taboo:insulting-buddhism-or-monks@th-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7484,7 +7484,7 @@ MATCH (l:Locale {key: 'kk-KZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kk-KZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-government-or-leadership@kk-KZ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@kk-KZ'})
 SET t.display_name = 'Criticism of government or leadership',
     t.locale = 'kk-KZ',
     t.term = 'Criticism of government or leadership',
@@ -7500,10 +7500,10 @@ SET t.display_name = 'Criticism of government or leadership',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kk-KZ'})
-MATCH (t:Taboo {key: 'criticism-of-government-or-leadership@kk-KZ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@kk-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'inter-ethnic-tensions-historical-or-current@kk-KZ'})
+MERGE (t:Taboo {key: 'taboo:inter-ethnic-tensions-historical-or-current@kk-KZ'})
 SET t.display_name = 'Inter-ethnic tensions (historical or current)',
     t.locale = 'kk-KZ',
     t.term = 'Inter-ethnic tensions (historical or current)',
@@ -7519,10 +7519,10 @@ SET t.display_name = 'Inter-ethnic tensions (historical or current)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kk-KZ'})
-MATCH (t:Taboo {key: 'inter-ethnic-tensions-historical-or-current@kk-KZ'})
+MATCH (t:Taboo {key: 'taboo:inter-ethnic-tensions-historical-or-current@kk-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-disputes-or-border-issues@kk-KZ'})
+MERGE (t:Taboo {key: 'taboo:territorial-disputes-or-border-issues@kk-KZ'})
 SET t.display_name = 'Territorial disputes or border issues',
     t.locale = 'kk-KZ',
     t.term = 'Territorial disputes or border issues',
@@ -7538,7 +7538,7 @@ SET t.display_name = 'Territorial disputes or border issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@kk-KZ'})
-MATCH (t:Taboo {key: 'territorial-disputes-or-border-issues@kk-KZ'})
+MATCH (t:Taboo {key: 'taboo:territorial-disputes-or-border-issues@kk-KZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7549,7 +7549,7 @@ MATCH (l:Locale {key: 'fi-FI'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fi-FI'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'bragging-or-self-promotion@fi-FI'})
+MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@fi-FI'})
 SET t.display_name = 'Bragging or self-promotion',
     t.locale = 'fi-FI',
     t.term = 'Bragging or self-promotion',
@@ -7565,10 +7565,10 @@ SET t.display_name = 'Bragging or self-promotion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fi-FI'})
-MATCH (t:Taboo {key: 'bragging-or-self-promotion@fi-FI'})
+MATCH (t:Taboo {key: 'taboo:bragging-or-self-promotion@fi-FI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-finland-to-russia@fi-FI'})
+MERGE (t:Taboo {key: 'taboo:comparing-finland-to-russia@fi-FI'})
 SET t.display_name = 'Comparing Finland to Russia',
     t.locale = 'fi-FI',
     t.term = 'Comparing Finland to Russia',
@@ -7584,10 +7584,10 @@ SET t.display_name = 'Comparing Finland to Russia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fi-FI'})
-MATCH (t:Taboo {key: 'comparing-finland-to-russia@fi-FI'})
+MATCH (t:Taboo {key: 'taboo:comparing-finland-to-russia@fi-FI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'promising-more-than-you-deliver@fi-FI'})
+MERGE (t:Taboo {key: 'taboo:promising-more-than-you-deliver@fi-FI'})
 SET t.display_name = 'Promising more than you deliver',
     t.locale = 'fi-FI',
     t.term = 'Promising more than you deliver',
@@ -7603,7 +7603,7 @@ SET t.display_name = 'Promising more than you deliver',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fi-FI'})
-MATCH (t:Taboo {key: 'promising-more-than-you-deliver@fi-FI'})
+MATCH (t:Taboo {key: 'taboo:promising-more-than-you-deliver@fi-FI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7614,7 +7614,7 @@ MATCH (l:Locale {key: 'ar-TN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-TN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-prophet@ar-TN'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-TN'})
 SET t.display_name = 'Insulting Islam or Prophet',
     t.locale = 'ar-TN',
     t.term = 'Insulting Islam or Prophet',
@@ -7630,10 +7630,10 @@ SET t.display_name = 'Insulting Islam or Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-TN'})
-MATCH (t:Taboo {key: 'insulting-islam-or-prophet@ar-TN'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-TN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticizing-the-military@ar-TN'})
+MERGE (t:Taboo {key: 'taboo:criticizing-the-military@ar-TN'})
 SET t.display_name = 'Criticizing the military',
     t.locale = 'ar-TN',
     t.term = 'Criticizing the military',
@@ -7649,10 +7649,10 @@ SET t.display_name = 'Criticizing the military',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-TN'})
-MATCH (t:Taboo {key: 'criticizing-the-military@ar-TN'})
+MATCH (t:Taboo {key: 'taboo:criticizing-the-military@ar-TN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'taking-sides-on-2011-revolution-politics@ar-TN'})
+MERGE (t:Taboo {key: 'taboo:taking-sides-on-2011-revolution-politics@ar-TN'})
 SET t.display_name = 'Taking sides on 2011 Revolution politics',
     t.locale = 'ar-TN',
     t.term = 'Taking sides on 2011 Revolution politics',
@@ -7668,7 +7668,7 @@ SET t.display_name = 'Taking sides on 2011 Revolution politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-TN'})
-MATCH (t:Taboo {key: 'taking-sides-on-2011-revolution-politics@ar-TN'})
+MATCH (t:Taboo {key: 'taboo:taking-sides-on-2011-revolution-politics@ar-TN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7679,7 +7679,7 @@ MATCH (l:Locale {key: 'en-VN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-VN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-communist-party-or-government@en-VN'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-communist-party-or-government@en-VN'})
 SET t.display_name = 'Criticism of Communist Party or government',
     t.locale = 'en-VN',
     t.term = 'Criticism of Communist Party or government',
@@ -7695,10 +7695,10 @@ SET t.display_name = 'Criticism of Communist Party or government',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-VN'})
-MATCH (t:Taboo {key: 'criticism-of-communist-party-or-government@en-VN'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-communist-party-or-government@en-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-disputes-south-china-sea@en-VN'})
+MERGE (t:Taboo {key: 'taboo:territorial-disputes-south-china-sea@en-VN'})
 SET t.display_name = 'Territorial disputes (South China Sea)',
     t.locale = 'en-VN',
     t.term = 'Territorial disputes (South China Sea)',
@@ -7714,10 +7714,10 @@ SET t.display_name = 'Territorial disputes (South China Sea)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-VN'})
-MATCH (t:Taboo {key: 'territorial-disputes-south-china-sea@en-VN'})
+MATCH (t:Taboo {key: 'taboo:territorial-disputes-south-china-sea@en-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'historical-war-commentary@en-VN'})
+MERGE (t:Taboo {key: 'taboo:historical-war-commentary@en-VN'})
 SET t.display_name = 'Historical war commentary',
     t.locale = 'en-VN',
     t.term = 'Historical war commentary',
@@ -7733,7 +7733,7 @@ SET t.display_name = 'Historical war commentary',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-VN'})
-MATCH (t:Taboo {key: 'historical-war-commentary@en-VN'})
+MATCH (t:Taboo {key: 'taboo:historical-war-commentary@en-VN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7744,7 +7744,7 @@ MATCH (l:Locale {key: 'tl-PH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tl-PH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-religious-symbols-or-beliefs@tl-PH'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@tl-PH'})
 SET t.display_name = 'Disrespecting religious symbols or beliefs',
     t.locale = 'tl-PH',
     t.term = 'Disrespecting religious symbols or beliefs',
@@ -7760,10 +7760,10 @@ SET t.display_name = 'Disrespecting religious symbols or beliefs',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tl-PH'})
-MATCH (t:Taboo {key: 'disrespecting-religious-symbols-or-beliefs@tl-PH'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-religious-symbols-or-beliefs@tl-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'causing-public-hiya-shameembarrassment@tl-PH'})
+MERGE (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@tl-PH'})
 SET t.display_name = 'Causing public hiya (shame/embarrassment)',
     t.locale = 'tl-PH',
     t.term = 'Causing public hiya (shame/embarrassment)',
@@ -7779,10 +7779,10 @@ SET t.display_name = 'Causing public hiya (shame/embarrassment)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tl-PH'})
-MATCH (t:Taboo {key: 'causing-public-hiya-shameembarrassment@tl-PH'})
+MATCH (t:Taboo {key: 'taboo:causing-public-hiya-shameembarrassment@tl-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mocking-or-disrespecting-elders@tl-PH'})
+MERGE (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@tl-PH'})
 SET t.display_name = 'Mocking or disrespecting elders',
     t.locale = 'tl-PH',
     t.term = 'Mocking or disrespecting elders',
@@ -7798,7 +7798,7 @@ SET t.display_name = 'Mocking or disrespecting elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tl-PH'})
-MATCH (t:Taboo {key: 'mocking-or-disrespecting-elders@tl-PH'})
+MATCH (t:Taboo {key: 'taboo:mocking-or-disrespecting-elders@tl-PH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7809,7 +7809,7 @@ MATCH (l:Locale {key: 'en-PK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'blasphemy-and-disrespect-to-islam@en-PK'})
+MERGE (t:Taboo {key: 'taboo:blasphemy-and-disrespect-to-islam@en-PK'})
 SET t.display_name = 'Blasphemy and disrespect to Islam',
     t.locale = 'en-PK',
     t.term = 'Blasphemy and disrespect to Islam',
@@ -7825,10 +7825,10 @@ SET t.display_name = 'Blasphemy and disrespect to Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PK'})
-MATCH (t:Taboo {key: 'blasphemy-and-disrespect-to-islam@en-PK'})
+MATCH (t:Taboo {key: 'taboo:blasphemy-and-disrespect-to-islam@en-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'anti-pakistan-sentiment@en-PK'})
+MERGE (t:Taboo {key: 'taboo:anti-pakistan-sentiment@en-PK'})
 SET t.display_name = 'Anti-Pakistan sentiment',
     t.locale = 'en-PK',
     t.term = 'Anti-Pakistan sentiment',
@@ -7844,10 +7844,10 @@ SET t.display_name = 'Anti-Pakistan sentiment',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PK'})
-MATCH (t:Taboo {key: 'anti-pakistan-sentiment@en-PK'})
+MATCH (t:Taboo {key: 'taboo:anti-pakistan-sentiment@en-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'kashmir-dispute-taking-india@en-PK'})
+MERGE (t:Taboo {key: 'taboo:kashmir-dispute-taking-india@en-PK'})
 SET t.display_name = 'Kashmir dispute (taking India\\',
     t.locale = 'en-PK',
     t.term = 'Kashmir dispute (taking India\\',
@@ -7863,7 +7863,7 @@ SET t.display_name = 'Kashmir dispute (taking India\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-PK'})
-MATCH (t:Taboo {key: 'kashmir-dispute-taking-india@en-PK'})
+MATCH (t:Taboo {key: 'taboo:kashmir-dispute-taking-india@en-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7874,7 +7874,7 @@ MATCH (l:Locale {key: 'fr-CH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'comparer-les-suisses-aux-francais-de-maniere-defav@fr-CH'})
+MERGE (t:Taboo {key: 'taboo:comparer-les-suisses-aux-francais-de-maniere-defav@fr-CH'})
 SET t.display_name = 'Comparer les Suisses aux Francais de maniere defavorable',
     t.locale = 'fr-CH',
     t.term = 'Comparer les Suisses aux Francais de maniere defavorable',
@@ -7890,10 +7890,10 @@ SET t.display_name = 'Comparer les Suisses aux Francais de maniere defavorable',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CH'})
-MATCH (t:Taboo {key: 'comparer-les-suisses-aux-francais-de-maniere-defav@fr-CH'})
+MATCH (t:Taboo {key: 'taboo:comparer-les-suisses-aux-francais-de-maniere-defav@fr-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'confondre-suisse-romande-et-france@fr-CH'})
+MERGE (t:Taboo {key: 'taboo:confondre-suisse-romande-et-france@fr-CH'})
 SET t.display_name = 'Confondre Suisse romande et France',
     t.locale = 'fr-CH',
     t.term = 'Confondre Suisse romande et France',
@@ -7909,10 +7909,10 @@ SET t.display_name = 'Confondre Suisse romande et France',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CH'})
-MATCH (t:Taboo {key: 'confondre-suisse-romande-et-france@fr-CH'})
+MATCH (t:Taboo {key: 'taboo:confondre-suisse-romande-et-france@fr-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'favoritisme-entre-regions-linguistiques@fr-CH'})
+MERGE (t:Taboo {key: 'taboo:favoritisme-entre-regions-linguistiques@fr-CH'})
 SET t.display_name = 'Favoritisme entre regions linguistiques',
     t.locale = 'fr-CH',
     t.term = 'Favoritisme entre regions linguistiques',
@@ -7928,7 +7928,7 @@ SET t.display_name = 'Favoritisme entre regions linguistiques',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CH'})
-MATCH (t:Taboo {key: 'favoritisme-entre-regions-linguistiques@fr-CH'})
+MATCH (t:Taboo {key: 'taboo:favoritisme-entre-regions-linguistiques@fr-CH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7939,7 +7939,7 @@ MATCH (l:Locale {key: 'cy-GB'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cy-GB'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'welsh-language-politics@cy-GB'})
+MERGE (t:Taboo {key: 'taboo:welsh-language-politics@cy-GB'})
 SET t.display_name = 'Welsh language politics',
     t.locale = 'cy-GB',
     t.term = 'Welsh language politics',
@@ -7955,10 +7955,10 @@ SET t.display_name = 'Welsh language politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cy-GB'})
-MATCH (t:Taboo {key: 'welsh-language-politics@cy-GB'})
+MATCH (t:Taboo {key: 'taboo:welsh-language-politics@cy-GB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'linguistic-imperialism@cy-GB'})
+MERGE (t:Taboo {key: 'taboo:linguistic-imperialism@cy-GB'})
 SET t.display_name = 'Linguistic imperialism',
     t.locale = 'cy-GB',
     t.term = 'Linguistic imperialism',
@@ -7974,7 +7974,7 @@ SET t.display_name = 'Linguistic imperialism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@cy-GB'})
-MATCH (t:Taboo {key: 'linguistic-imperialism@cy-GB'})
+MATCH (t:Taboo {key: 'taboo:linguistic-imperialism@cy-GB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -7985,7 +7985,7 @@ MATCH (l:Locale {key: 'en-FJ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-FJ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'touching-someone@en-FJ'})
+MERGE (t:Taboo {key: 'taboo:touching-someone@en-FJ'})
 SET t.display_name = 'Touching someone\\',
     t.locale = 'en-FJ',
     t.term = 'Touching someone\\',
@@ -8001,7 +8001,7 @@ SET t.display_name = 'Touching someone\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-FJ'})
-MATCH (t:Taboo {key: 'touching-someone@en-FJ'})
+MATCH (t:Taboo {key: 'taboo:touching-someone@en-FJ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8012,7 +8012,7 @@ MATCH (l:Locale {key: 'af-ZA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@af-ZA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racial-stereotypes@af-ZA'})
+MERGE (t:Taboo {key: 'taboo:racial-stereotypes@af-ZA'})
 SET t.display_name = 'Racial stereotypes',
     t.locale = 'af-ZA',
     t.term = 'Racial stereotypes',
@@ -8028,10 +8028,10 @@ SET t.display_name = 'Racial stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@af-ZA'})
-MATCH (t:Taboo {key: 'racial-stereotypes@af-ZA'})
+MATCH (t:Taboo {key: 'taboo:racial-stereotypes@af-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'apartheid-nostalgia@af-ZA'})
+MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@af-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
     t.locale = 'af-ZA',
     t.term = 'Apartheid nostalgia',
@@ -8047,10 +8047,10 @@ SET t.display_name = 'Apartheid nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@af-ZA'})
-MATCH (t:Taboo {key: 'apartheid-nostalgia@af-ZA'})
+MATCH (t:Taboo {key: 'taboo:apartheid-nostalgia@af-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'land-ownership-debates@af-ZA'})
+MERGE (t:Taboo {key: 'taboo:land-ownership-debates@af-ZA'})
 SET t.display_name = 'Land ownership debates',
     t.locale = 'af-ZA',
     t.term = 'Land ownership debates',
@@ -8066,7 +8066,7 @@ SET t.display_name = 'Land ownership debates',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@af-ZA'})
-MATCH (t:Taboo {key: 'land-ownership-debates@af-ZA'})
+MATCH (t:Taboo {key: 'taboo:land-ownership-debates@af-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8077,7 +8077,7 @@ MATCH (l:Locale {key: 'en-JM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-JM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'mocking-patoisjamaican-english@en-JM'})
+MERGE (t:Taboo {key: 'taboo:mocking-patoisjamaican-english@en-JM'})
 SET t.display_name = 'Mocking Patois/Jamaican English',
     t.locale = 'en-JM',
     t.term = 'Mocking Patois/Jamaican English',
@@ -8093,10 +8093,10 @@ SET t.display_name = 'Mocking Patois/Jamaican English',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-JM'})
-MATCH (t:Taboo {key: 'mocking-patoisjamaican-english@en-JM'})
+MATCH (t:Taboo {key: 'taboo:mocking-patoisjamaican-english@en-JM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'slavery-glorification@en-JM'})
+MERGE (t:Taboo {key: 'taboo:slavery-glorification@en-JM'})
 SET t.display_name = 'Slavery glorification',
     t.locale = 'en-JM',
     t.term = 'Slavery glorification',
@@ -8112,10 +8112,10 @@ SET t.display_name = 'Slavery glorification',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-JM'})
-MATCH (t:Taboo {key: 'slavery-glorification@en-JM'})
+MATCH (t:Taboo {key: 'taboo:slavery-glorification@en-JM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'violencecrime-stereotypes@en-JM'})
+MERGE (t:Taboo {key: 'taboo:violencecrime-stereotypes@en-JM'})
 SET t.display_name = 'Violence/crime stereotypes',
     t.locale = 'en-JM',
     t.term = 'Violence/crime stereotypes',
@@ -8131,7 +8131,7 @@ SET t.display_name = 'Violence/crime stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-JM'})
-MATCH (t:Taboo {key: 'violencecrime-stereotypes@en-JM'})
+MATCH (t:Taboo {key: 'taboo:violencecrime-stereotypes@en-JM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8142,7 +8142,7 @@ MATCH (l:Locale {key: 'da-DK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@da-DK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'immigration-politics@da-DK'})
+MERGE (t:Taboo {key: 'taboo:immigration-politics@da-DK'})
 SET t.display_name = 'Immigration politics',
     t.locale = 'da-DK',
     t.term = 'Immigration politics',
@@ -8158,10 +8158,10 @@ SET t.display_name = 'Immigration politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@da-DK'})
-MATCH (t:Taboo {key: 'immigration-politics@da-DK'})
+MATCH (t:Taboo {key: 'taboo:immigration-politics@da-DK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'immigrationintegration@da-DK'})
+MERGE (t:Taboo {key: 'taboo:immigrationintegration@da-DK'})
 SET t.display_name = 'Immigration/integration',
     t.locale = 'da-DK',
     t.term = 'Immigration/integration',
@@ -8177,7 +8177,7 @@ SET t.display_name = 'Immigration/integration',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@da-DK'})
-MATCH (t:Taboo {key: 'immigrationintegration@da-DK'})
+MATCH (t:Taboo {key: 'taboo:immigrationintegration@da-DK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8188,7 +8188,7 @@ MATCH (l:Locale {key: 'en-US'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-US'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racism-and-discrimination@en-US'})
+MERGE (t:Taboo {key: 'taboo:racism-and-discrimination@en-US'})
 SET t.display_name = 'Racism and discrimination',
     t.locale = 'en-US',
     t.term = 'Racism and discrimination',
@@ -8204,10 +8204,10 @@ SET t.display_name = 'Racism and discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-US'})
-MATCH (t:Taboo {key: 'racism-and-discrimination@en-US'})
+MATCH (t:Taboo {key: 'taboo:racism-and-discrimination@en-US'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'gun-violence@en-US'})
+MERGE (t:Taboo {key: 'taboo:gun-violence@en-US'})
 SET t.display_name = 'Gun violence',
     t.locale = 'en-US',
     t.term = 'Gun violence',
@@ -8223,10 +8223,10 @@ SET t.display_name = 'Gun violence',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-US'})
-MATCH (t:Taboo {key: 'gun-violence@en-US'})
+MATCH (t:Taboo {key: 'taboo:gun-violence@en-US'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'slavery-and-jim-crow@en-US'})
+MERGE (t:Taboo {key: 'taboo:slavery-and-jim-crow@en-US'})
 SET t.display_name = 'Slavery and Jim Crow',
     t.locale = 'en-US',
     t.term = 'Slavery and Jim Crow',
@@ -8242,7 +8242,7 @@ SET t.display_name = 'Slavery and Jim Crow',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-US'})
-MATCH (t:Taboo {key: 'slavery-and-jim-crow@en-US'})
+MATCH (t:Taboo {key: 'taboo:slavery-and-jim-crow@en-US'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8253,7 +8253,7 @@ MATCH (l:Locale {key: 'pt-PT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-PT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'colonial-history-criticism@pt-PT'})
+MERGE (t:Taboo {key: 'taboo:colonial-history-criticism@pt-PT'})
 SET t.display_name = 'Colonial history criticism',
     t.locale = 'pt-PT',
     t.term = 'Colonial history criticism',
@@ -8269,7 +8269,7 @@ SET t.display_name = 'Colonial history criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pt-PT'})
-MATCH (t:Taboo {key: 'colonial-history-criticism@pt-PT'})
+MATCH (t:Taboo {key: 'taboo:colonial-history-criticism@pt-PT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8280,7 +8280,7 @@ MATCH (l:Locale {key: 'ga-IE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ga-IE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'the-troubles-and-partition@ga-IE'})
+MERGE (t:Taboo {key: 'taboo:the-troubles-and-partition@ga-IE'})
 SET t.display_name = 'The Troubles and partition',
     t.locale = 'ga-IE',
     t.term = 'The Troubles and partition',
@@ -8296,10 +8296,10 @@ SET t.display_name = 'The Troubles and partition',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ga-IE'})
-MATCH (t:Taboo {key: 'the-troubles-and-partition@ga-IE'})
+MATCH (t:Taboo {key: 'taboo:the-troubles-and-partition@ga-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'british-irish-relations@ga-IE'})
+MERGE (t:Taboo {key: 'taboo:british-irish-relations@ga-IE'})
 SET t.display_name = 'British-Irish relations',
     t.locale = 'ga-IE',
     t.term = 'British-Irish relations',
@@ -8315,10 +8315,10 @@ SET t.display_name = 'British-Irish relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ga-IE'})
-MATCH (t:Taboo {key: 'british-irish-relations@ga-IE'})
+MATCH (t:Taboo {key: 'taboo:british-irish-relations@ga-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'the-great-famine-an-gorta-mor@ga-IE'})
+MERGE (t:Taboo {key: 'taboo:the-great-famine-an-gorta-mor@ga-IE'})
 SET t.display_name = 'The Great Famine (An Gorta Mor)',
     t.locale = 'ga-IE',
     t.term = 'The Great Famine (An Gorta Mor)',
@@ -8334,7 +8334,7 @@ SET t.display_name = 'The Great Famine (An Gorta Mor)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ga-IE'})
-MATCH (t:Taboo {key: 'the-great-famine-an-gorta-mor@ga-IE'})
+MATCH (t:Taboo {key: 'taboo:the-great-famine-an-gorta-mor@ga-IE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8345,7 +8345,7 @@ MATCH (l:Locale {key: 'es-AR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-AR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'military-dictatorship-1976-1983@es-AR'})
+MERGE (t:Taboo {key: 'taboo:military-dictatorship-1976-1983@es-AR'})
 SET t.display_name = 'Military dictatorship (1976-1983)',
     t.locale = 'es-AR',
     t.term = 'Military dictatorship (1976-1983)',
@@ -8361,10 +8361,10 @@ SET t.display_name = 'Military dictatorship (1976-1983)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-AR'})
-MATCH (t:Taboo {key: 'military-dictatorship-1976-1983@es-AR'})
+MATCH (t:Taboo {key: 'taboo:military-dictatorship-1976-1983@es-AR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'malvinasfalklands@es-AR'})
+MERGE (t:Taboo {key: 'taboo:malvinasfalklands@es-AR'})
 SET t.display_name = 'Malvinas/Falklands',
     t.locale = 'es-AR',
     t.term = 'Malvinas/Falklands',
@@ -8380,10 +8380,10 @@ SET t.display_name = 'Malvinas/Falklands',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-AR'})
-MATCH (t:Taboo {key: 'malvinasfalklands@es-AR'})
+MATCH (t:Taboo {key: 'taboo:malvinasfalklands@es-AR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'defending-dictatorship-actions@es-AR'})
+MERGE (t:Taboo {key: 'taboo:defending-dictatorship-actions@es-AR'})
 SET t.display_name = 'Defending dictatorship actions',
     t.locale = 'es-AR',
     t.term = 'Defending dictatorship actions',
@@ -8399,7 +8399,7 @@ SET t.display_name = 'Defending dictatorship actions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-AR'})
-MATCH (t:Taboo {key: 'defending-dictatorship-actions@es-AR'})
+MATCH (t:Taboo {key: 'taboo:defending-dictatorship-actions@es-AR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8410,7 +8410,7 @@ MATCH (l:Locale {key: 'gl-ES'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gl-ES'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'dismissing-galician-language@gl-ES'})
+MERGE (t:Taboo {key: 'taboo:dismissing-galician-language@gl-ES'})
 SET t.display_name = 'Dismissing Galician language',
     t.locale = 'gl-ES',
     t.term = 'Dismissing Galician language',
@@ -8426,10 +8426,10 @@ SET t.display_name = 'Dismissing Galician language',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gl-ES'})
-MATCH (t:Taboo {key: 'dismissing-galician-language@gl-ES'})
+MATCH (t:Taboo {key: 'taboo:dismissing-galician-language@gl-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mocking-rural-galicia@gl-ES'})
+MERGE (t:Taboo {key: 'taboo:mocking-rural-galicia@gl-ES'})
 SET t.display_name = 'Mocking rural Galicia',
     t.locale = 'gl-ES',
     t.term = 'Mocking rural Galicia',
@@ -8445,10 +8445,10 @@ SET t.display_name = 'Mocking rural Galicia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gl-ES'})
-MATCH (t:Taboo {key: 'mocking-rural-galicia@gl-ES'})
+MATCH (t:Taboo {key: 'taboo:mocking-rural-galicia@gl-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'franco-dictatorship-nostalgia@gl-ES'})
+MERGE (t:Taboo {key: 'taboo:franco-dictatorship-nostalgia@gl-ES'})
 SET t.display_name = 'Franco dictatorship nostalgia',
     t.locale = 'gl-ES',
     t.term = 'Franco dictatorship nostalgia',
@@ -8464,7 +8464,7 @@ SET t.display_name = 'Franco dictatorship nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gl-ES'})
-MATCH (t:Taboo {key: 'franco-dictatorship-nostalgia@gl-ES'})
+MATCH (t:Taboo {key: 'taboo:franco-dictatorship-nostalgia@gl-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8475,7 +8475,7 @@ MATCH (l:Locale {key: 'es-ES'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-ES'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'guerra-civil-espanola@es-ES'})
+MERGE (t:Taboo {key: 'taboo:guerra-civil-espanola@es-ES'})
 SET t.display_name = 'Guerra Civil Espanola',
     t.locale = 'es-ES',
     t.term = 'Guerra Civil Espanola',
@@ -8491,10 +8491,10 @@ SET t.display_name = 'Guerra Civil Espanola',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-ES'})
-MATCH (t:Taboo {key: 'guerra-civil-espanola@es-ES'})
+MATCH (t:Taboo {key: 'taboo:guerra-civil-espanola@es-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'terrorismo-eta@es-ES'})
+MERGE (t:Taboo {key: 'taboo:terrorismo-eta@es-ES'})
 SET t.display_name = 'Terrorismo ETA',
     t.locale = 'es-ES',
     t.term = 'Terrorismo ETA',
@@ -8510,10 +8510,10 @@ SET t.display_name = 'Terrorismo ETA',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-ES'})
-MATCH (t:Taboo {key: 'terrorismo-eta@es-ES'})
+MATCH (t:Taboo {key: 'taboo:terrorismo-eta@es-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'independentismo-catalanvasco@es-ES'})
+MERGE (t:Taboo {key: 'taboo:independentismo-catalanvasco@es-ES'})
 SET t.display_name = 'Independentismo catalan/vasco',
     t.locale = 'es-ES',
     t.term = 'Independentismo catalan/vasco',
@@ -8529,7 +8529,7 @@ SET t.display_name = 'Independentismo catalan/vasco',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-ES'})
-MATCH (t:Taboo {key: 'independentismo-catalanvasco@es-ES'})
+MATCH (t:Taboo {key: 'taboo:independentismo-catalanvasco@es-ES'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8540,7 +8540,7 @@ MATCH (l:Locale {key: 'zh-TH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'thai-monarchy-criticism@zh-TH'})
+MERGE (t:Taboo {key: 'taboo:thai-monarchy-criticism@zh-TH'})
 SET t.display_name = 'Thai monarchy criticism',
     t.locale = 'zh-TH',
     t.term = 'Thai monarchy criticism',
@@ -8556,10 +8556,10 @@ SET t.display_name = 'Thai monarchy criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TH'})
-MATCH (t:Taboo {key: 'thai-monarchy-criticism@zh-TH'})
+MATCH (t:Taboo {key: 'taboo:thai-monarchy-criticism@zh-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-divisions@zh-TH'})
+MERGE (t:Taboo {key: 'taboo:political-divisions@zh-TH'})
 SET t.display_name = 'Political divisions',
     t.locale = 'zh-TH',
     t.term = 'Political divisions',
@@ -8575,10 +8575,10 @@ SET t.display_name = 'Political divisions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TH'})
-MATCH (t:Taboo {key: 'political-divisions@zh-TH'})
+MATCH (t:Taboo {key: 'taboo:political-divisions@zh-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'buddhist-disrespect@zh-TH'})
+MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@zh-TH'})
 SET t.display_name = 'Buddhist disrespect',
     t.locale = 'zh-TH',
     t.term = 'Buddhist disrespect',
@@ -8594,7 +8594,7 @@ SET t.display_name = 'Buddhist disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-TH'})
-MATCH (t:Taboo {key: 'buddhist-disrespect@zh-TH'})
+MATCH (t:Taboo {key: 'taboo:buddhist-disrespect@zh-TH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8605,7 +8605,7 @@ MATCH (l:Locale {key: 'be-BY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@be-BY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'current-political-situation@be-BY'})
+MERGE (t:Taboo {key: 'taboo:current-political-situation@be-BY'})
 SET t.display_name = 'Current political situation',
     t.locale = 'be-BY',
     t.term = 'Current political situation',
@@ -8621,10 +8621,10 @@ SET t.display_name = 'Current political situation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@be-BY'})
-MATCH (t:Taboo {key: 'current-political-situation@be-BY'})
+MATCH (t:Taboo {key: 'taboo:current-political-situation@be-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'government-criticism@be-BY'})
+MERGE (t:Taboo {key: 'taboo:government-criticism@be-BY'})
 SET t.display_name = 'Government criticism',
     t.locale = 'be-BY',
     t.term = 'Government criticism',
@@ -8640,10 +8640,10 @@ SET t.display_name = 'Government criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@be-BY'})
-MATCH (t:Taboo {key: 'government-criticism@be-BY'})
+MATCH (t:Taboo {key: 'taboo:government-criticism@be-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2020-protests-and-aftermath@be-BY'})
+MERGE (t:Taboo {key: 'taboo:2020-protests-and-aftermath@be-BY'})
 SET t.display_name = '2020 protests and aftermath',
     t.locale = 'be-BY',
     t.term = '2020 protests and aftermath',
@@ -8659,7 +8659,7 @@ SET t.display_name = '2020 protests and aftermath',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@be-BY'})
-MATCH (t:Taboo {key: '2020-protests-and-aftermath@be-BY'})
+MATCH (t:Taboo {key: 'taboo:2020-protests-and-aftermath@be-BY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8670,7 +8670,7 @@ MATCH (l:Locale {key: 'wo-SN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@wo-SN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-the-prophet@wo-SN'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@wo-SN'})
 SET t.display_name = 'Insulting Islam or the Prophet',
     t.locale = 'wo-SN',
     t.term = 'Insulting Islam or the Prophet',
@@ -8686,10 +8686,10 @@ SET t.display_name = 'Insulting Islam or the Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@wo-SN'})
-MATCH (t:Taboo {key: 'insulting-islam-or-the-prophet@wo-SN'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@wo-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-sufi-brotherhoods@wo-SN'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-sufi-brotherhoods@wo-SN'})
 SET t.display_name = 'Disrespecting Sufi brotherhoods',
     t.locale = 'wo-SN',
     t.term = 'Disrespecting Sufi brotherhoods',
@@ -8705,10 +8705,10 @@ SET t.display_name = 'Disrespecting Sufi brotherhoods',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@wo-SN'})
-MATCH (t:Taboo {key: 'disrespecting-sufi-brotherhoods@wo-SN'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-sufi-brotherhoods@wo-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'lgbtq-references@wo-SN'})
+MERGE (t:Taboo {key: 'taboo:lgbtq-references@wo-SN'})
 SET t.display_name = 'LGBTQ+ references',
     t.locale = 'wo-SN',
     t.term = 'LGBTQ+ references',
@@ -8724,7 +8724,7 @@ SET t.display_name = 'LGBTQ+ references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@wo-SN'})
-MATCH (t:Taboo {key: 'lgbtq-references@wo-SN'})
+MATCH (t:Taboo {key: 'taboo:lgbtq-references@wo-SN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8735,7 +8735,7 @@ MATCH (l:Locale {key: 'es-NI'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-NI'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-commentary@es-NI'})
+MERGE (t:Taboo {key: 'taboo:political-commentary@es-NI'})
 SET t.display_name = 'Political commentary',
     t.locale = 'es-NI',
     t.term = 'Political commentary',
@@ -8751,10 +8751,10 @@ SET t.display_name = 'Political commentary',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-NI'})
-MATCH (t:Taboo {key: 'political-commentary@es-NI'})
+MATCH (t:Taboo {key: 'taboo:political-commentary@es-NI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'sandinistacontra-history@es-NI'})
+MERGE (t:Taboo {key: 'taboo:sandinistacontra-history@es-NI'})
 SET t.display_name = 'Sandinista/Contra history',
     t.locale = 'es-NI',
     t.term = 'Sandinista/Contra history',
@@ -8770,10 +8770,10 @@ SET t.display_name = 'Sandinista/Contra history',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-NI'})
-MATCH (t:Taboo {key: 'sandinistacontra-history@es-NI'})
+MATCH (t:Taboo {key: 'taboo:sandinistacontra-history@es-NI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '2018-protests@es-NI'})
+MERGE (t:Taboo {key: 'taboo:2018-protests@es-NI'})
 SET t.display_name = '2018 protests',
     t.locale = 'es-NI',
     t.term = '2018 protests',
@@ -8789,7 +8789,7 @@ SET t.display_name = '2018 protests',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-NI'})
-MATCH (t:Taboo {key: '2018-protests@es-NI'})
+MATCH (t:Taboo {key: 'taboo:2018-protests@es-NI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8800,7 +8800,7 @@ MATCH (l:Locale {key: 'sv-SE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sv-SE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'bragging-or-self-promotion@sv-SE'})
+MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@sv-SE'})
 SET t.display_name = 'Bragging or self-promotion',
     t.locale = 'sv-SE',
     t.term = 'Bragging or self-promotion',
@@ -8816,10 +8816,10 @@ SET t.display_name = 'Bragging or self-promotion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sv-SE'})
-MATCH (t:Taboo {key: 'bragging-or-self-promotion@sv-SE'})
+MATCH (t:Taboo {key: 'taboo:bragging-or-self-promotion@sv-SE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'immigration-politics@sv-SE'})
+MERGE (t:Taboo {key: 'taboo:immigration-politics@sv-SE'})
 SET t.display_name = 'Immigration politics',
     t.locale = 'sv-SE',
     t.term = 'Immigration politics',
@@ -8835,10 +8835,10 @@ SET t.display_name = 'Immigration politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sv-SE'})
-MATCH (t:Taboo {key: 'immigration-politics@sv-SE'})
+MATCH (t:Taboo {key: 'taboo:immigration-politics@sv-SE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'overpromising@sv-SE'})
+MERGE (t:Taboo {key: 'taboo:overpromising@sv-SE'})
 SET t.display_name = 'Overpromising',
     t.locale = 'sv-SE',
     t.term = 'Overpromising',
@@ -8854,7 +8854,7 @@ SET t.display_name = 'Overpromising',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sv-SE'})
-MATCH (t:Taboo {key: 'overpromising@sv-SE'})
+MATCH (t:Taboo {key: 'taboo:overpromising@sv-SE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8865,7 +8865,7 @@ MATCH (l:Locale {key: 'hr-HR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hr-HR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'yugoslav-period-nostalgia@hr-HR'})
+MERGE (t:Taboo {key: 'taboo:yugoslav-period-nostalgia@hr-HR'})
 SET t.display_name = 'Yugoslav period nostalgia',
     t.locale = 'hr-HR',
     t.term = 'Yugoslav period nostalgia',
@@ -8881,10 +8881,10 @@ SET t.display_name = 'Yugoslav period nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hr-HR'})
-MATCH (t:Taboo {key: 'yugoslav-period-nostalgia@hr-HR'})
+MATCH (t:Taboo {key: 'taboo:yugoslav-period-nostalgia@hr-HR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1991-1995-homeland-war-references@hr-HR'})
+MERGE (t:Taboo {key: 'taboo:1991-1995-homeland-war-references@hr-HR'})
 SET t.display_name = '1991-1995 Homeland War references',
     t.locale = 'hr-HR',
     t.term = '1991-1995 Homeland War references',
@@ -8900,10 +8900,10 @@ SET t.display_name = '1991-1995 Homeland War references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hr-HR'})
-MATCH (t:Taboo {key: '1991-1995-homeland-war-references@hr-HR'})
+MATCH (t:Taboo {key: 'taboo:1991-1995-homeland-war-references@hr-HR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-tensions-or-comparisons@hr-HR'})
+MERGE (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@hr-HR'})
 SET t.display_name = 'Ethnic tensions or comparisons',
     t.locale = 'hr-HR',
     t.term = 'Ethnic tensions or comparisons',
@@ -8919,7 +8919,7 @@ SET t.display_name = 'Ethnic tensions or comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hr-HR'})
-MATCH (t:Taboo {key: 'ethnic-tensions-or-comparisons@hr-HR'})
+MATCH (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@hr-HR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8930,7 +8930,7 @@ MATCH (l:Locale {key: 'fr-CI'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CI'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'crise-post-electorale-2010-2011@fr-CI'})
+MERGE (t:Taboo {key: 'taboo:crise-post-electorale-2010-2011@fr-CI'})
 SET t.display_name = 'Crise post-electorale 2010-2011',
     t.locale = 'fr-CI',
     t.term = 'Crise post-electorale 2010-2011',
@@ -8946,10 +8946,10 @@ SET t.display_name = 'Crise post-electorale 2010-2011',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CI'})
-MATCH (t:Taboo {key: 'crise-post-electorale-2010-2011@fr-CI'})
+MATCH (t:Taboo {key: 'taboo:crise-post-electorale-2010-2011@fr-CI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnicisme-et-clivages-nord-sud@fr-CI'})
+MERGE (t:Taboo {key: 'taboo:ethnicisme-et-clivages-nord-sud@fr-CI'})
 SET t.display_name = 'Ethnicisme et clivages Nord-Sud',
     t.locale = 'fr-CI',
     t.term = 'Ethnicisme et clivages Nord-Sud',
@@ -8965,10 +8965,10 @@ SET t.display_name = 'Ethnicisme et clivages Nord-Sud',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CI'})
-MATCH (t:Taboo {key: 'ethnicisme-et-clivages-nord-sud@fr-CI'})
+MATCH (t:Taboo {key: 'taboo:ethnicisme-et-clivages-nord-sud@fr-CI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insultes-aux-parents-ou-ancetres@fr-CI'})
+MERGE (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-CI'})
 SET t.display_name = 'Insultes aux parents ou ancetres',
     t.locale = 'fr-CI',
     t.term = 'Insultes aux parents ou ancetres',
@@ -8984,7 +8984,7 @@ SET t.display_name = 'Insultes aux parents ou ancetres',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CI'})
-MATCH (t:Taboo {key: 'insultes-aux-parents-ou-ancetres@fr-CI'})
+MATCH (t:Taboo {key: 'taboo:insultes-aux-parents-ou-ancetres@fr-CI'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -8995,7 +8995,7 @@ MATCH (l:Locale {key: 'ku-TR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ku-TR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'pkk-and-armed-conflict@ku-TR'})
+MERGE (t:Taboo {key: 'taboo:pkk-and-armed-conflict@ku-TR'})
 SET t.display_name = 'PKK and armed conflict',
     t.locale = 'ku-TR',
     t.term = 'PKK and armed conflict',
@@ -9011,10 +9011,10 @@ SET t.display_name = 'PKK and armed conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ku-TR'})
-MATCH (t:Taboo {key: 'pkk-and-armed-conflict@ku-TR'})
+MATCH (t:Taboo {key: 'taboo:pkk-and-armed-conflict@ku-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'kurdish-political-parties-and-movements@ku-TR'})
+MERGE (t:Taboo {key: 'taboo:kurdish-political-parties-and-movements@ku-TR'})
 SET t.display_name = 'Kurdish political parties and movements',
     t.locale = 'ku-TR',
     t.term = 'Kurdish political parties and movements',
@@ -9030,10 +9030,10 @@ SET t.display_name = 'Kurdish political parties and movements',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ku-TR'})
-MATCH (t:Taboo {key: 'kurdish-political-parties-and-movements@ku-TR'})
+MATCH (t:Taboo {key: 'taboo:kurdish-political-parties-and-movements@ku-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'turkey-kurdistan-territorial-discussions@ku-TR'})
+MERGE (t:Taboo {key: 'taboo:turkey-kurdistan-territorial-discussions@ku-TR'})
 SET t.display_name = 'Turkey-Kurdistan territorial discussions',
     t.locale = 'ku-TR',
     t.term = 'Turkey-Kurdistan territorial discussions',
@@ -9049,7 +9049,7 @@ SET t.display_name = 'Turkey-Kurdistan territorial discussions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ku-TR'})
-MATCH (t:Taboo {key: 'turkey-kurdistan-territorial-discussions@ku-TR'})
+MATCH (t:Taboo {key: 'taboo:turkey-kurdistan-territorial-discussions@ku-TR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9060,7 +9060,7 @@ MATCH (l:Locale {key: 'en-BW'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BW'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-elderschiefs@en-BW'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-elderschiefs@en-BW'})
 SET t.display_name = 'Disrespecting elders/chiefs',
     t.locale = 'en-BW',
     t.term = 'Disrespecting elders/chiefs',
@@ -9076,10 +9076,10 @@ SET t.display_name = 'Disrespecting elders/chiefs',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BW'})
-MATCH (t:Taboo {key: 'disrespecting-elderschiefs@en-BW'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-elderschiefs@en-BW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'witchcraft-accusations@en-BW'})
+MERGE (t:Taboo {key: 'taboo:witchcraft-accusations@en-BW'})
 SET t.display_name = 'Witchcraft accusations',
     t.locale = 'en-BW',
     t.term = 'Witchcraft accusations',
@@ -9095,10 +9095,10 @@ SET t.display_name = 'Witchcraft accusations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BW'})
-MATCH (t:Taboo {key: 'witchcraft-accusations@en-BW'})
+MATCH (t:Taboo {key: 'taboo:witchcraft-accusations@en-BW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hivaids-stigmatization@en-BW'})
+MERGE (t:Taboo {key: 'taboo:hivaids-stigmatization@en-BW'})
 SET t.display_name = 'HIV/AIDS stigmatization',
     t.locale = 'en-BW',
     t.term = 'HIV/AIDS stigmatization',
@@ -9114,7 +9114,7 @@ SET t.display_name = 'HIV/AIDS stigmatization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-BW'})
-MATCH (t:Taboo {key: 'hivaids-stigmatization@en-BW'})
+MATCH (t:Taboo {key: 'taboo:hivaids-stigmatization@en-BW'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9125,7 +9125,7 @@ MATCH (l:Locale {key: 'ar-IQ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-IQ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'sectarian-references-or-division-sunnishia@ar-IQ'})
+MERGE (t:Taboo {key: 'taboo:sectarian-references-or-division-sunnishia@ar-IQ'})
 SET t.display_name = 'Sectarian references or division (Sunni/Shia)',
     t.locale = 'ar-IQ',
     t.term = 'Sectarian references or division (Sunni/Shia)',
@@ -9141,10 +9141,10 @@ SET t.display_name = 'Sectarian references or division (Sunni/Shia)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-IQ'})
-MATCH (t:Taboo {key: 'sectarian-references-or-division-sunnishia@ar-IQ'})
+MATCH (t:Taboo {key: 'taboo:sectarian-references-or-division-sunnishia@ar-IQ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-islam-or-religious-figures@ar-IQ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-religious-figures@ar-IQ'})
 SET t.display_name = 'Criticism of Islam or religious figures',
     t.locale = 'ar-IQ',
     t.term = 'Criticism of Islam or religious figures',
@@ -9160,10 +9160,10 @@ SET t.display_name = 'Criticism of Islam or religious figures',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-IQ'})
-MATCH (t:Taboo {key: 'criticism-of-islam-or-religious-figures@ar-IQ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam-or-religious-figures@ar-IQ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-marja-religious-authorities@ar-IQ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-marja-religious-authorities@ar-IQ'})
 SET t.display_name = 'Criticism of Marja (religious authorities)',
     t.locale = 'ar-IQ',
     t.term = 'Criticism of Marja (religious authorities)',
@@ -9179,7 +9179,7 @@ SET t.display_name = 'Criticism of Marja (religious authorities)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-IQ'})
-MATCH (t:Taboo {key: 'criticism-of-marja-religious-authorities@ar-IQ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-marja-religious-authorities@ar-IQ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9190,7 +9190,7 @@ MATCH (l:Locale {key: 'pa-PK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-PK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'blasphemy@pa-PK'})
+MERGE (t:Taboo {key: 'taboo:blasphemy@pa-PK'})
 SET t.display_name = 'اسلام دی توہین (Blasphemy)',
     t.locale = 'pa-PK',
     t.term = 'اسلام دی توہین (Blasphemy)',
@@ -9206,10 +9206,10 @@ SET t.display_name = 'اسلام دی توہین (Blasphemy)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-PK'})
-MATCH (t:Taboo {key: 'blasphemy@pa-PK'})
+MATCH (t:Taboo {key: 'taboo:blasphemy@pa-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pro-india-sentiment@pa-PK'})
+MERGE (t:Taboo {key: 'taboo:pro-india-sentiment@pa-PK'})
 SET t.display_name = 'بھارت نال ہمدردی (Pro-India sentiment)',
     t.locale = 'pa-PK',
     t.term = 'بھارت نال ہمدردی (Pro-India sentiment)',
@@ -9225,10 +9225,10 @@ SET t.display_name = 'بھارت نال ہمدردی (Pro-India sentiment)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-PK'})
-MATCH (t:Taboo {key: 'pro-india-sentiment@pa-PK'})
+MATCH (t:Taboo {key: 'taboo:pro-india-sentiment@pa-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'sectarian-content@pa-PK'})
+MERGE (t:Taboo {key: 'taboo:sectarian-content@pa-PK'})
 SET t.display_name = 'فرقہ واریت (Sectarian content)',
     t.locale = 'pa-PK',
     t.term = 'فرقہ واریت (Sectarian content)',
@@ -9244,7 +9244,7 @@ SET t.display_name = 'فرقہ واریت (Sectarian content)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pa-PK'})
-MATCH (t:Taboo {key: 'sectarian-content@pa-PK'})
+MATCH (t:Taboo {key: 'taboo:sectarian-content@pa-PK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9255,7 +9255,7 @@ MATCH (l:Locale {key: 'es-DO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-DO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'trujillo-dictatorship-1930-1961@es-DO'})
+MERGE (t:Taboo {key: 'taboo:trujillo-dictatorship-1930-1961@es-DO'})
 SET t.display_name = 'Trujillo dictatorship (1930-1961)',
     t.locale = 'es-DO',
     t.term = 'Trujillo dictatorship (1930-1961)',
@@ -9271,10 +9271,10 @@ SET t.display_name = 'Trujillo dictatorship (1930-1961)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-DO'})
-MATCH (t:Taboo {key: 'trujillo-dictatorship-1930-1961@es-DO'})
+MATCH (t:Taboo {key: 'taboo:trujillo-dictatorship-1930-1961@es-DO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'haitihaitian-relations@es-DO'})
+MERGE (t:Taboo {key: 'taboo:haitihaitian-relations@es-DO'})
 SET t.display_name = 'Haiti/Haitian relations',
     t.locale = 'es-DO',
     t.term = 'Haiti/Haitian relations',
@@ -9290,10 +9290,10 @@ SET t.display_name = 'Haiti/Haitian relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-DO'})
-MATCH (t:Taboo {key: 'haitihaitian-relations@es-DO'})
+MATCH (t:Taboo {key: 'taboo:haitihaitian-relations@es-DO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'colorismracial-hierarchy@es-DO'})
+MERGE (t:Taboo {key: 'taboo:colorismracial-hierarchy@es-DO'})
 SET t.display_name = 'Colorism/racial hierarchy',
     t.locale = 'es-DO',
     t.term = 'Colorism/racial hierarchy',
@@ -9309,7 +9309,7 @@ SET t.display_name = 'Colorism/racial hierarchy',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-DO'})
-MATCH (t:Taboo {key: 'colorismracial-hierarchy@es-DO'})
+MATCH (t:Taboo {key: 'taboo:colorismracial-hierarchy@es-DO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9320,7 +9320,7 @@ MATCH (l:Locale {key: 'es-CR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'nicaragua-tensions@es-CR'})
+MERGE (t:Taboo {key: 'taboo:nicaragua-tensions@es-CR'})
 SET t.display_name = 'Nicaragua tensions',
     t.locale = 'es-CR',
     t.term = 'Nicaragua tensions',
@@ -9336,10 +9336,10 @@ SET t.display_name = 'Nicaragua tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CR'})
-MATCH (t:Taboo {key: 'nicaragua-tensions@es-CR'})
+MATCH (t:Taboo {key: 'taboo:nicaragua-tensions@es-CR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'calling-costa-ricans-nicaraguans-or-implying-centr@es-CR'})
+MERGE (t:Taboo {key: 'taboo:calling-costa-ricans-nicaraguans-or-implying-centr@es-CR'})
 SET t.display_name = 'Calling Costa Ricans "Nicaraguans" or implying Central American sameness',
     t.locale = 'es-CR',
     t.term = 'Calling Costa Ricans "Nicaraguans" or implying Central American sameness',
@@ -9355,7 +9355,7 @@ SET t.display_name = 'Calling Costa Ricans "Nicaraguans" or implying Central Ame
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-CR'})
-MATCH (t:Taboo {key: 'calling-costa-ricans-nicaraguans-or-implying-centr@es-CR'})
+MATCH (t:Taboo {key: 'taboo:calling-costa-ricans-nicaraguans-or-implying-centr@es-CR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9366,7 +9366,7 @@ MATCH (l:Locale {key: 'ps-AF'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ps-AF'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-islam-or-islamic-governance@ps-AF'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-governance@ps-AF'})
 SET t.display_name = 'Criticism of Islam or Islamic governance',
     t.locale = 'ps-AF',
     t.term = 'Criticism of Islam or Islamic governance',
@@ -9382,10 +9382,10 @@ SET t.display_name = 'Criticism of Islam or Islamic governance',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ps-AF'})
-MATCH (t:Taboo {key: 'criticism-of-islam-or-islamic-governance@ps-AF'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-governance@ps-AF'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'women@ps-AF'})
+MERGE (t:Taboo {key: 'taboo:women@ps-AF'})
 SET t.display_name = 'Women\\',
     t.locale = 'ps-AF',
     t.term = 'Women\\',
@@ -9401,7 +9401,7 @@ SET t.display_name = 'Women\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ps-AF'})
-MATCH (t:Taboo {key: 'women@ps-AF'})
+MATCH (t:Taboo {key: 'taboo:women@ps-AF'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9412,7 +9412,7 @@ MATCH (l:Locale {key: 'fr-CM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'anglophone-crisisseparatism@fr-CM'})
+MERGE (t:Taboo {key: 'taboo:anglophone-crisisseparatism@fr-CM'})
 SET t.display_name = 'Anglophone crisis/separatism',
     t.locale = 'fr-CM',
     t.term = 'Anglophone crisis/separatism',
@@ -9428,10 +9428,10 @@ SET t.display_name = 'Anglophone crisis/separatism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CM'})
-MATCH (t:Taboo {key: 'anglophone-crisisseparatism@fr-CM'})
+MATCH (t:Taboo {key: 'taboo:anglophone-crisisseparatism@fr-CM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-favoritism-or-tribalism@fr-CM'})
+MERGE (t:Taboo {key: 'taboo:ethnic-favoritism-or-tribalism@fr-CM'})
 SET t.display_name = 'Ethnic favoritism or tribalism',
     t.locale = 'fr-CM',
     t.term = 'Ethnic favoritism or tribalism',
@@ -9447,10 +9447,10 @@ SET t.display_name = 'Ethnic favoritism or tribalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CM'})
-MATCH (t:Taboo {key: 'ethnic-favoritism-or-tribalism@fr-CM'})
+MATCH (t:Taboo {key: 'taboo:ethnic-favoritism-or-tribalism@fr-CM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-commentary-government@fr-CM'})
+MERGE (t:Taboo {key: 'taboo:political-commentary-government@fr-CM'})
 SET t.display_name = 'Political commentary (government)',
     t.locale = 'fr-CM',
     t.term = 'Political commentary (government)',
@@ -9466,7 +9466,7 @@ SET t.display_name = 'Political commentary (government)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-CM'})
-MATCH (t:Taboo {key: 'political-commentary-government@fr-CM'})
+MATCH (t:Taboo {key: 'taboo:political-commentary-government@fr-CM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9477,7 +9477,7 @@ MATCH (l:Locale {key: 'el-GR'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-GR'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'turkey-relations-and-cyprus-issue@el-GR'})
+MERGE (t:Taboo {key: 'taboo:turkey-relations-and-cyprus-issue@el-GR'})
 SET t.display_name = 'Turkey relations and Cyprus issue',
     t.locale = 'el-GR',
     t.term = 'Turkey relations and Cyprus issue',
@@ -9493,10 +9493,10 @@ SET t.display_name = 'Turkey relations and Cyprus issue',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-GR'})
-MATCH (t:Taboo {key: 'turkey-relations-and-cyprus-issue@el-GR'})
+MATCH (t:Taboo {key: 'taboo:turkey-relations-and-cyprus-issue@el-GR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'macedonia-naming-dispute@el-GR'})
+MERGE (t:Taboo {key: 'taboo:macedonia-naming-dispute@el-GR'})
 SET t.display_name = 'Macedonia naming dispute',
     t.locale = 'el-GR',
     t.term = 'Macedonia naming dispute',
@@ -9512,10 +9512,10 @@ SET t.display_name = 'Macedonia naming dispute',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-GR'})
-MATCH (t:Taboo {key: 'macedonia-naming-dispute@el-GR'})
+MATCH (t:Taboo {key: 'taboo:macedonia-naming-dispute@el-GR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'cyprus-invasion-1974@el-GR'})
+MERGE (t:Taboo {key: 'taboo:cyprus-invasion-1974@el-GR'})
 SET t.display_name = 'Cyprus invasion (1974)',
     t.locale = 'el-GR',
     t.term = 'Cyprus invasion (1974)',
@@ -9531,7 +9531,7 @@ SET t.display_name = 'Cyprus invasion (1974)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-GR'})
-MATCH (t:Taboo {key: 'cyprus-invasion-1974@el-GR'})
+MATCH (t:Taboo {key: 'taboo:cyprus-invasion-1974@el-GR'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9542,7 +9542,7 @@ MATCH (l:Locale {key: 'hi-IN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hi-IN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'religious-communalism@hi-IN'})
+MERGE (t:Taboo {key: 'taboo:religious-communalism@hi-IN'})
 SET t.display_name = 'Religious communalism',
     t.locale = 'hi-IN',
     t.term = 'Religious communalism',
@@ -9558,10 +9558,10 @@ SET t.display_name = 'Religious communalism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hi-IN'})
-MATCH (t:Taboo {key: 'religious-communalism@hi-IN'})
+MATCH (t:Taboo {key: 'taboo:religious-communalism@hi-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'caste-discrimination@hi-IN'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@hi-IN'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'hi-IN',
     t.term = 'Caste discrimination',
@@ -9577,10 +9577,10 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hi-IN'})
-MATCH (t:Taboo {key: 'caste-discrimination@hi-IN'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@hi-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'kashmir-and-territorial-issues@hi-IN'})
+MERGE (t:Taboo {key: 'taboo:kashmir-and-territorial-issues@hi-IN'})
 SET t.display_name = 'Kashmir and territorial issues',
     t.locale = 'hi-IN',
     t.term = 'Kashmir and territorial issues',
@@ -9596,7 +9596,7 @@ SET t.display_name = 'Kashmir and territorial issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@hi-IN'})
-MATCH (t:Taboo {key: 'kashmir-and-territorial-issues@hi-IN'})
+MATCH (t:Taboo {key: 'taboo:kashmir-and-territorial-issues@hi-IN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9607,7 +9607,7 @@ MATCH (l:Locale {key: 'qu-PE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@qu-PE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'spanish-conquest-and-colonization@qu-PE'})
+MERGE (t:Taboo {key: 'taboo:spanish-conquest-and-colonization@qu-PE'})
 SET t.display_name = 'Spanish conquest and colonization',
     t.locale = 'qu-PE',
     t.term = 'Spanish conquest and colonization',
@@ -9623,10 +9623,10 @@ SET t.display_name = 'Spanish conquest and colonization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@qu-PE'})
-MATCH (t:Taboo {key: 'spanish-conquest-and-colonization@qu-PE'})
+MATCH (t:Taboo {key: 'taboo:spanish-conquest-and-colonization@qu-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'indigenous-poverty-stereotypes@qu-PE'})
+MERGE (t:Taboo {key: 'taboo:indigenous-poverty-stereotypes@qu-PE'})
 SET t.display_name = 'Indigenous poverty stereotypes',
     t.locale = 'qu-PE',
     t.term = 'Indigenous poverty stereotypes',
@@ -9642,10 +9642,10 @@ SET t.display_name = 'Indigenous poverty stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@qu-PE'})
-MATCH (t:Taboo {key: 'indigenous-poverty-stereotypes@qu-PE'})
+MATCH (t:Taboo {key: 'taboo:indigenous-poverty-stereotypes@qu-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'linguistic-discrimination@qu-PE'})
+MERGE (t:Taboo {key: 'taboo:linguistic-discrimination@qu-PE'})
 SET t.display_name = 'Linguistic discrimination',
     t.locale = 'qu-PE',
     t.term = 'Linguistic discrimination',
@@ -9661,7 +9661,7 @@ SET t.display_name = 'Linguistic discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@qu-PE'})
-MATCH (t:Taboo {key: 'linguistic-discrimination@qu-PE'})
+MATCH (t:Taboo {key: 'taboo:linguistic-discrimination@qu-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9672,7 +9672,7 @@ MATCH (l:Locale {key: 'sr-RS'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sr-RS'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'kosovo-references@sr-RS'})
+MERGE (t:Taboo {key: 'taboo:kosovo-references@sr-RS'})
 SET t.display_name = 'Kosovo references',
     t.locale = 'sr-RS',
     t.term = 'Kosovo references',
@@ -9688,10 +9688,10 @@ SET t.display_name = 'Kosovo references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sr-RS'})
-MATCH (t:Taboo {key: 'kosovo-references@sr-RS'})
+MATCH (t:Taboo {key: 'taboo:kosovo-references@sr-RS'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: '1990s-wars-and-nato-bombing@sr-RS'})
+MERGE (t:Taboo {key: 'taboo:1990s-wars-and-nato-bombing@sr-RS'})
 SET t.display_name = '1990s wars and NATO bombing',
     t.locale = 'sr-RS',
     t.term = '1990s wars and NATO bombing',
@@ -9707,10 +9707,10 @@ SET t.display_name = '1990s wars and NATO bombing',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sr-RS'})
-MATCH (t:Taboo {key: '1990s-wars-and-nato-bombing@sr-RS'})
+MATCH (t:Taboo {key: 'taboo:1990s-wars-and-nato-bombing@sr-RS'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-tensions-or-comparisons@sr-RS'})
+MERGE (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@sr-RS'})
 SET t.display_name = 'Ethnic tensions or comparisons',
     t.locale = 'sr-RS',
     t.term = 'Ethnic tensions or comparisons',
@@ -9726,7 +9726,7 @@ SET t.display_name = 'Ethnic tensions or comparisons',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sr-RS'})
-MATCH (t:Taboo {key: 'ethnic-tensions-or-comparisons@sr-RS'})
+MATCH (t:Taboo {key: 'taboo:ethnic-tensions-or-comparisons@sr-RS'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9737,7 +9737,7 @@ MATCH (l:Locale {key: 'ms-BN'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-BN'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-sultan-or-royal-family@ms-BN'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ms-BN'})
 SET t.display_name = 'Criticism of Sultan or Royal Family',
     t.locale = 'ms-BN',
     t.term = 'Criticism of Sultan or Royal Family',
@@ -9753,10 +9753,10 @@ SET t.display_name = 'Criticism of Sultan or Royal Family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-BN'})
-MATCH (t:Taboo {key: 'criticism-of-sultan-or-royal-family@ms-BN'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-sultan-or-royal-family@ms-BN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-islam-or-islamic-law-sharia@ms-BN'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-law-sharia@ms-BN'})
 SET t.display_name = 'Criticism of Islam or Islamic law (Sharia)',
     t.locale = 'ms-BN',
     t.term = 'Criticism of Islam or Islamic law (Sharia)',
@@ -9772,10 +9772,10 @@ SET t.display_name = 'Criticism of Islam or Islamic law (Sharia)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-BN'})
-MATCH (t:Taboo {key: 'criticism-of-islam-or-islamic-law-sharia@ms-BN'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam-or-islamic-law-sharia@ms-BN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'alcohol-references@ms-BN'})
+MERGE (t:Taboo {key: 'taboo:alcohol-references@ms-BN'})
 SET t.display_name = 'Alcohol references',
     t.locale = 'ms-BN',
     t.term = 'Alcohol references',
@@ -9791,7 +9791,7 @@ SET t.display_name = 'Alcohol references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ms-BN'})
-MATCH (t:Taboo {key: 'alcohol-references@ms-BN'})
+MATCH (t:Taboo {key: 'taboo:alcohol-references@ms-BN'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9802,7 +9802,7 @@ MATCH (l:Locale {key: 'es-UY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-UY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'military-dictatorship-1973-1985@es-UY'})
+MERGE (t:Taboo {key: 'taboo:military-dictatorship-1973-1985@es-UY'})
 SET t.display_name = 'Military dictatorship (1973-1985)',
     t.locale = 'es-UY',
     t.term = 'Military dictatorship (1973-1985)',
@@ -9818,10 +9818,10 @@ SET t.display_name = 'Military dictatorship (1973-1985)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-UY'})
-MATCH (t:Taboo {key: 'military-dictatorship-1973-1985@es-UY'})
+MATCH (t:Taboo {key: 'taboo:military-dictatorship-1973-1985@es-UY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disappearances-and-human-rights-violations@es-UY'})
+MERGE (t:Taboo {key: 'taboo:disappearances-and-human-rights-violations@es-UY'})
 SET t.display_name = 'Disappearances and human rights violations',
     t.locale = 'es-UY',
     t.term = 'Disappearances and human rights violations',
@@ -9837,10 +9837,10 @@ SET t.display_name = 'Disappearances and human rights violations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-UY'})
-MATCH (t:Taboo {key: 'disappearances-and-human-rights-violations@es-UY'})
+MATCH (t:Taboo {key: 'taboo:disappearances-and-human-rights-violations@es-UY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'assuming-uruguay-is-part-of-argentina@es-UY'})
+MERGE (t:Taboo {key: 'taboo:assuming-uruguay-is-part-of-argentina@es-UY'})
 SET t.display_name = 'Assuming Uruguay is part of Argentina',
     t.locale = 'es-UY',
     t.term = 'Assuming Uruguay is part of Argentina',
@@ -9856,7 +9856,7 @@ SET t.display_name = 'Assuming Uruguay is part of Argentina',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-UY'})
-MATCH (t:Taboo {key: 'assuming-uruguay-is-part-of-argentina@es-UY'})
+MATCH (t:Taboo {key: 'taboo:assuming-uruguay-is-part-of-argentina@es-UY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9867,7 +9867,7 @@ MATCH (l:Locale {key: 'zu-ZA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zu-ZA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'apartheid-dismissal-or-minimization@zu-ZA'})
+MERGE (t:Taboo {key: 'taboo:apartheid-dismissal-or-minimization@zu-ZA'})
 SET t.display_name = 'Apartheid dismissal or minimization',
     t.locale = 'zu-ZA',
     t.term = 'Apartheid dismissal or minimization',
@@ -9883,10 +9883,10 @@ SET t.display_name = 'Apartheid dismissal or minimization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zu-ZA'})
-MATCH (t:Taboo {key: 'apartheid-dismissal-or-minimization@zu-ZA'})
+MATCH (t:Taboo {key: 'taboo:apartheid-dismissal-or-minimization@zu-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-stereotyping@zu-ZA'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@zu-ZA'})
 SET t.display_name = 'Ethnic stereotyping',
     t.locale = 'zu-ZA',
     t.term = 'Ethnic stereotyping',
@@ -9902,10 +9902,10 @@ SET t.display_name = 'Ethnic stereotyping',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zu-ZA'})
-MATCH (t:Taboo {key: 'ethnic-stereotyping@zu-ZA'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotyping@zu-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'witchcrafttraditional-medicine-mockery@zu-ZA'})
+MERGE (t:Taboo {key: 'taboo:witchcrafttraditional-medicine-mockery@zu-ZA'})
 SET t.display_name = 'Witchcraft/traditional medicine mockery',
     t.locale = 'zu-ZA',
     t.term = 'Witchcraft/traditional medicine mockery',
@@ -9921,7 +9921,7 @@ SET t.display_name = 'Witchcraft/traditional medicine mockery',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zu-ZA'})
-MATCH (t:Taboo {key: 'witchcrafttraditional-medicine-mockery@zu-ZA'})
+MATCH (t:Taboo {key: 'taboo:witchcrafttraditional-medicine-mockery@zu-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9932,7 +9932,7 @@ MATCH (l:Locale {key: 'fr-BF'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BF'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnicisme-et-tribalisme@fr-BF'})
+MERGE (t:Taboo {key: 'taboo:ethnicisme-et-tribalisme@fr-BF'})
 SET t.display_name = 'Ethnicisme et tribalisme',
     t.locale = 'fr-BF',
     t.term = 'Ethnicisme et tribalisme',
@@ -9948,10 +9948,10 @@ SET t.display_name = 'Ethnicisme et tribalisme',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BF'})
-MATCH (t:Taboo {key: 'ethnicisme-et-tribalisme@fr-BF'})
+MATCH (t:Taboo {key: 'taboo:ethnicisme-et-tribalisme@fr-BF'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'critique-de-thomas-sankara@fr-BF'})
+MERGE (t:Taboo {key: 'taboo:critique-de-thomas-sankara@fr-BF'})
 SET t.display_name = 'Critique de Thomas Sankara',
     t.locale = 'fr-BF',
     t.term = 'Critique de Thomas Sankara',
@@ -9967,10 +9967,10 @@ SET t.display_name = 'Critique de Thomas Sankara',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BF'})
-MATCH (t:Taboo {key: 'critique-de-thomas-sankara@fr-BF'})
+MATCH (t:Taboo {key: 'taboo:critique-de-thomas-sankara@fr-BF'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'situation-securitaire-actuelle@fr-BF'})
+MERGE (t:Taboo {key: 'taboo:situation-securitaire-actuelle@fr-BF'})
 SET t.display_name = 'Situation securitaire actuelle',
     t.locale = 'fr-BF',
     t.term = 'Situation securitaire actuelle',
@@ -9986,7 +9986,7 @@ SET t.display_name = 'Situation securitaire actuelle',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-BF'})
-MATCH (t:Taboo {key: 'situation-securitaire-actuelle@fr-BF'})
+MATCH (t:Taboo {key: 'taboo:situation-securitaire-actuelle@fr-BF'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -9997,7 +9997,7 @@ MATCH (l:Locale {key: 'en-SA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-islam@en-SA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam@en-SA'})
 SET t.display_name = 'Criticism of Islam',
     t.locale = 'en-SA',
     t.term = 'Criticism of Islam',
@@ -10013,10 +10013,10 @@ SET t.display_name = 'Criticism of Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SA'})
-MATCH (t:Taboo {key: 'criticism-of-islam@en-SA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam@en-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-royal-family-or-leadership@en-SA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family-or-leadership@en-SA'})
 SET t.display_name = 'Criticism of Royal Family or Leadership',
     t.locale = 'en-SA',
     t.term = 'Criticism of Royal Family or Leadership',
@@ -10032,10 +10032,10 @@ SET t.display_name = 'Criticism of Royal Family or Leadership',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SA'})
-MATCH (t:Taboo {key: 'criticism-of-royal-family-or-leadership@en-SA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-royal-family-or-leadership@en-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'atheism-or-anti-religious-content@en-SA'})
+MERGE (t:Taboo {key: 'taboo:atheism-or-anti-religious-content@en-SA'})
 SET t.display_name = 'Atheism or anti-religious content',
     t.locale = 'en-SA',
     t.term = 'Atheism or anti-religious content',
@@ -10051,7 +10051,7 @@ SET t.display_name = 'Atheism or anti-religious content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-SA'})
-MATCH (t:Taboo {key: 'atheism-or-anti-religious-content@en-SA'})
+MATCH (t:Taboo {key: 'taboo:atheism-or-anti-religious-content@en-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10062,7 +10062,7 @@ MATCH (l:Locale {key: 'id-ID'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@id-ID'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-any-religion@id-ID'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@id-ID'})
 SET t.display_name = 'Insulting Islam or any religion',
     t.locale = 'id-ID',
     t.term = 'Insulting Islam or any religion',
@@ -10078,10 +10078,10 @@ SET t.display_name = 'Insulting Islam or any religion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@id-ID'})
-MATCH (t:Taboo {key: 'insulting-islam-or-any-religion@id-ID'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-any-religion@id-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'separatism-and-territorial-issues@id-ID'})
+MERGE (t:Taboo {key: 'taboo:separatism-and-territorial-issues@id-ID'})
 SET t.display_name = 'Separatism and territorial issues',
     t.locale = 'id-ID',
     t.term = 'Separatism and territorial issues',
@@ -10097,10 +10097,10 @@ SET t.display_name = 'Separatism and territorial issues',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@id-ID'})
-MATCH (t:Taboo {key: 'separatism-and-territorial-issues@id-ID'})
+MATCH (t:Taboo {key: 'taboo:separatism-and-territorial-issues@id-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'pkicommunism@id-ID'})
+MERGE (t:Taboo {key: 'taboo:pkicommunism@id-ID'})
 SET t.display_name = 'PKI/Communism',
     t.locale = 'id-ID',
     t.term = 'PKI/Communism',
@@ -10116,7 +10116,7 @@ SET t.display_name = 'PKI/Communism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@id-ID'})
-MATCH (t:Taboo {key: 'pkicommunism@id-ID'})
+MATCH (t:Taboo {key: 'taboo:pkicommunism@id-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10127,7 +10127,7 @@ MATCH (l:Locale {key: 'ar-QA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-QA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-amir-or-ruling-family@ar-QA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-amir-or-ruling-family@ar-QA'})
 SET t.display_name = 'Criticism of Amir or ruling family',
     t.locale = 'ar-QA',
     t.term = 'Criticism of Amir or ruling family',
@@ -10143,10 +10143,10 @@ SET t.display_name = 'Criticism of Amir or ruling family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-QA'})
-MATCH (t:Taboo {key: 'criticism-of-amir-or-ruling-family@ar-QA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-amir-or-ruling-family@ar-QA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-prophet@ar-QA'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-QA'})
 SET t.display_name = 'Insulting Islam or Prophet',
     t.locale = 'ar-QA',
     t.term = 'Insulting Islam or Prophet',
@@ -10162,10 +10162,10 @@ SET t.display_name = 'Insulting Islam or Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-QA'})
-MATCH (t:Taboo {key: 'insulting-islam-or-prophet@ar-QA'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-prophet@ar-QA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'lgbtq-content@ar-QA'})
+MERGE (t:Taboo {key: 'taboo:lgbtq-content@ar-QA'})
 SET t.display_name = 'LGBTQ+ content',
     t.locale = 'ar-QA',
     t.term = 'LGBTQ+ content',
@@ -10181,7 +10181,7 @@ SET t.display_name = 'LGBTQ+ content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-QA'})
-MATCH (t:Taboo {key: 'lgbtq-content@ar-QA'})
+MATCH (t:Taboo {key: 'taboo:lgbtq-content@ar-QA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10192,7 +10192,7 @@ MATCH (l:Locale {key: 'es-VE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-VE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'current-political-situation@es-VE'})
+MERGE (t:Taboo {key: 'taboo:current-political-situation@es-VE'})
 SET t.display_name = 'Current political situation',
     t.locale = 'es-VE',
     t.term = 'Current political situation',
@@ -10208,10 +10208,10 @@ SET t.display_name = 'Current political situation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-VE'})
-MATCH (t:Taboo {key: 'current-political-situation@es-VE'})
+MATCH (t:Taboo {key: 'taboo:current-political-situation@es-VE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'economic-crisishyperinflation@es-VE'})
+MERGE (t:Taboo {key: 'taboo:economic-crisishyperinflation@es-VE'})
 SET t.display_name = 'Economic crisis/hyperinflation',
     t.locale = 'es-VE',
     t.term = 'Economic crisis/hyperinflation',
@@ -10227,10 +10227,10 @@ SET t.display_name = 'Economic crisis/hyperinflation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-VE'})
-MATCH (t:Taboo {key: 'economic-crisishyperinflation@es-VE'})
+MATCH (t:Taboo {key: 'taboo:economic-crisishyperinflation@es-VE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'venezuelan-diasporaemigration@es-VE'})
+MERGE (t:Taboo {key: 'taboo:venezuelan-diasporaemigration@es-VE'})
 SET t.display_name = 'Venezuelan diaspora/emigration',
     t.locale = 'es-VE',
     t.term = 'Venezuelan diaspora/emigration',
@@ -10246,7 +10246,7 @@ SET t.display_name = 'Venezuelan diaspora/emigration',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-VE'})
-MATCH (t:Taboo {key: 'venezuelan-diasporaemigration@es-VE'})
+MATCH (t:Taboo {key: 'taboo:venezuelan-diasporaemigration@es-VE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10257,7 +10257,7 @@ MATCH (l:Locale {key: 'az-AZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@az-AZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'armenian-azerbaijani-conflict-pro-armenian-stance@az-AZ'})
+MERGE (t:Taboo {key: 'taboo:armenian-azerbaijani-conflict-pro-armenian-stance@az-AZ'})
 SET t.display_name = 'Armenian-Azerbaijani conflict (pro-Armenian stance)',
     t.locale = 'az-AZ',
     t.term = 'Armenian-Azerbaijani conflict (pro-Armenian stance)',
@@ -10273,10 +10273,10 @@ SET t.display_name = 'Armenian-Azerbaijani conflict (pro-Armenian stance)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@az-AZ'})
-MATCH (t:Taboo {key: 'armenian-azerbaijani-conflict-pro-armenian-stance@az-AZ'})
+MATCH (t:Taboo {key: 'taboo:armenian-azerbaijani-conflict-pro-armenian-stance@az-AZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-government-or-leadership@az-AZ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@az-AZ'})
 SET t.display_name = 'Criticism of government or leadership',
     t.locale = 'az-AZ',
     t.term = 'Criticism of government or leadership',
@@ -10292,10 +10292,10 @@ SET t.display_name = 'Criticism of government or leadership',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@az-AZ'})
-MATCH (t:Taboo {key: 'criticism-of-government-or-leadership@az-AZ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@az-AZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-mockery-or-disrespect@az-AZ'})
+MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@az-AZ'})
 SET t.display_name = 'Religious mockery or disrespect',
     t.locale = 'az-AZ',
     t.term = 'Religious mockery or disrespect',
@@ -10311,7 +10311,7 @@ SET t.display_name = 'Religious mockery or disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@az-AZ'})
-MATCH (t:Taboo {key: 'religious-mockery-or-disrespect@az-AZ'})
+MATCH (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@az-AZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10322,7 +10322,7 @@ MATCH (l:Locale {key: 'de-DE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-DE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'nazi-era-and-holocaust@de-DE'})
+MERGE (t:Taboo {key: 'taboo:nazi-era-and-holocaust@de-DE'})
 SET t.display_name = 'Nazi era and Holocaust',
     t.locale = 'de-DE',
     t.term = 'Nazi era and Holocaust',
@@ -10338,10 +10338,10 @@ SET t.display_name = 'Nazi era and Holocaust',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-DE'})
-MATCH (t:Taboo {key: 'nazi-era-and-holocaust@de-DE'})
+MATCH (t:Taboo {key: 'taboo:nazi-era-and-holocaust@de-DE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'swastika-and-nazi-symbols@de-DE'})
+MERGE (t:Taboo {key: 'taboo:swastika-and-nazi-symbols@de-DE'})
 SET t.display_name = 'Swastika and Nazi symbols',
     t.locale = 'de-DE',
     t.term = 'Swastika and Nazi symbols',
@@ -10357,10 +10357,10 @@ SET t.display_name = 'Swastika and Nazi symbols',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-DE'})
-MATCH (t:Taboo {key: 'swastika-and-nazi-symbols@de-DE'})
+MATCH (t:Taboo {key: 'taboo:swastika-and-nazi-symbols@de-DE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-anything-to-nazishitler@de-DE'})
+MERGE (t:Taboo {key: 'taboo:comparing-anything-to-nazishitler@de-DE'})
 SET t.display_name = 'Comparing anything to Nazis/Hitler',
     t.locale = 'de-DE',
     t.term = 'Comparing anything to Nazis/Hitler',
@@ -10376,7 +10376,7 @@ SET t.display_name = 'Comparing anything to Nazis/Hitler',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@de-DE'})
-MATCH (t:Taboo {key: 'comparing-anything-to-nazishitler@de-DE'})
+MATCH (t:Taboo {key: 'taboo:comparing-anything-to-nazishitler@de-DE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10387,7 +10387,7 @@ MATCH (l:Locale {key: 'ar-SA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-SA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-islam@ar-SA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-islam@ar-SA'})
 SET t.display_name = 'Criticism of Islam',
     t.locale = 'ar-SA',
     t.term = 'Criticism of Islam',
@@ -10403,10 +10403,10 @@ SET t.display_name = 'Criticism of Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-SA'})
-MATCH (t:Taboo {key: 'criticism-of-islam@ar-SA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-islam@ar-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-royal-family@ar-SA'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-SA'})
 SET t.display_name = 'Criticism of Royal Family',
     t.locale = 'ar-SA',
     t.term = 'Criticism of Royal Family',
@@ -10422,10 +10422,10 @@ SET t.display_name = 'Criticism of Royal Family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-SA'})
-MATCH (t:Taboo {key: 'criticism-of-royal-family@ar-SA'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-royal-family@ar-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'atheism@ar-SA'})
+MERGE (t:Taboo {key: 'taboo:atheism@ar-SA'})
 SET t.display_name = 'الإلحاد / Atheism',
     t.locale = 'ar-SA',
     t.term = 'الإلحاد / Atheism',
@@ -10441,7 +10441,7 @@ SET t.display_name = 'الإلحاد / Atheism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-SA'})
-MATCH (t:Taboo {key: 'atheism@ar-SA'})
+MATCH (t:Taboo {key: 'taboo:atheism@ar-SA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10452,7 +10452,7 @@ MATCH (l:Locale {key: 'fr-MA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'souverainete-du-sahara-occidental@fr-MA'})
+MERGE (t:Taboo {key: 'taboo:souverainete-du-sahara-occidental@fr-MA'})
 SET t.display_name = 'Souverainete du Sahara occidental',
     t.locale = 'fr-MA',
     t.term = 'Souverainete du Sahara occidental',
@@ -10468,10 +10468,10 @@ SET t.display_name = 'Souverainete du Sahara occidental',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MA'})
-MATCH (t:Taboo {key: 'souverainete-du-sahara-occidental@fr-MA'})
+MATCH (t:Taboo {key: 'taboo:souverainete-du-sahara-occidental@fr-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'critique-de-la-monarchie@fr-MA'})
+MERGE (t:Taboo {key: 'taboo:critique-de-la-monarchie@fr-MA'})
 SET t.display_name = 'Critique de la monarchie',
     t.locale = 'fr-MA',
     t.term = 'Critique de la monarchie',
@@ -10487,10 +10487,10 @@ SET t.display_name = 'Critique de la monarchie',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MA'})
-MATCH (t:Taboo {key: 'critique-de-la-monarchie@fr-MA'})
+MATCH (t:Taboo {key: 'taboo:critique-de-la-monarchie@fr-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulte-a-l@fr-MA'})
+MERGE (t:Taboo {key: 'taboo:insulte-a-l@fr-MA'})
 SET t.display_name = 'Insulte a l\\',
     t.locale = 'fr-MA',
     t.term = 'Insulte a l\\',
@@ -10506,7 +10506,7 @@ SET t.display_name = 'Insulte a l\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-MA'})
-MATCH (t:Taboo {key: 'insulte-a-l@fr-MA'})
+MATCH (t:Taboo {key: 'taboo:insulte-a-l@fr-MA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10517,7 +10517,7 @@ MATCH (l:Locale {key: 'uz-UZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uz-UZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-government-or-leadership@uz-UZ'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@uz-UZ'})
 SET t.display_name = 'Criticism of government or leadership',
     t.locale = 'uz-UZ',
     t.term = 'Criticism of government or leadership',
@@ -10533,10 +10533,10 @@ SET t.display_name = 'Criticism of government or leadership',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uz-UZ'})
-MATCH (t:Taboo {key: 'criticism-of-government-or-leadership@uz-UZ'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-government-or-leadership@uz-UZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-mockery-or-disrespect-to-islam@uz-UZ'})
+MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect-to-islam@uz-UZ'})
 SET t.display_name = 'Religious mockery or disrespect to Islam',
     t.locale = 'uz-UZ',
     t.term = 'Religious mockery or disrespect to Islam',
@@ -10552,10 +10552,10 @@ SET t.display_name = 'Religious mockery or disrespect to Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uz-UZ'})
-MATCH (t:Taboo {key: 'religious-mockery-or-disrespect-to-islam@uz-UZ'})
+MATCH (t:Taboo {key: 'taboo:religious-mockery-or-disrespect-to-islam@uz-UZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'territorial-disputes-or-regional-tensions@uz-UZ'})
+MERGE (t:Taboo {key: 'taboo:territorial-disputes-or-regional-tensions@uz-UZ'})
 SET t.display_name = 'Territorial disputes or regional tensions',
     t.locale = 'uz-UZ',
     t.term = 'Territorial disputes or regional tensions',
@@ -10571,7 +10571,7 @@ SET t.display_name = 'Territorial disputes or regional tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uz-UZ'})
-MATCH (t:Taboo {key: 'territorial-disputes-or-regional-tensions@uz-UZ'})
+MATCH (t:Taboo {key: 'taboo:territorial-disputes-or-regional-tensions@uz-UZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10582,7 +10582,7 @@ MATCH (l:Locale {key: 'lv-LV'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lv-LV'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'soviet-nostalgia-or-symbolism@lv-LV'})
+MERGE (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lv-LV'})
 SET t.display_name = 'Soviet nostalgia or symbolism',
     t.locale = 'lv-LV',
     t.term = 'Soviet nostalgia or symbolism',
@@ -10598,10 +10598,10 @@ SET t.display_name = 'Soviet nostalgia or symbolism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lv-LV'})
-MATCH (t:Taboo {key: 'soviet-nostalgia-or-symbolism@lv-LV'})
+MATCH (t:Taboo {key: 'taboo:soviet-nostalgia-or-symbolism@lv-LV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparing-to-russia-positively@lv-LV'})
+MERGE (t:Taboo {key: 'taboo:comparing-to-russia-positively@lv-LV'})
 SET t.display_name = 'Comparing to Russia positively',
     t.locale = 'lv-LV',
     t.term = 'Comparing to Russia positively',
@@ -10617,10 +10617,10 @@ SET t.display_name = 'Comparing to Russia positively',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lv-LV'})
-MATCH (t:Taboo {key: 'comparing-to-russia-positively@lv-LV'})
+MATCH (t:Taboo {key: 'taboo:comparing-to-russia-positively@lv-LV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'questioning-latvian-language-importance@lv-LV'})
+MERGE (t:Taboo {key: 'taboo:questioning-latvian-language-importance@lv-LV'})
 SET t.display_name = 'Questioning Latvian language importance',
     t.locale = 'lv-LV',
     t.term = 'Questioning Latvian language importance',
@@ -10636,7 +10636,7 @@ SET t.display_name = 'Questioning Latvian language importance',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@lv-LV'})
-MATCH (t:Taboo {key: 'questioning-latvian-language-importance@lv-LV'})
+MATCH (t:Taboo {key: 'taboo:questioning-latvian-language-importance@lv-LV'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10647,7 +10647,7 @@ MATCH (l:Locale {key: 'xh-ZA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@xh-ZA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'apartheid-nostalgia@xh-ZA'})
+MERGE (t:Taboo {key: 'taboo:apartheid-nostalgia@xh-ZA'})
 SET t.display_name = 'Apartheid nostalgia',
     t.locale = 'xh-ZA',
     t.term = 'Apartheid nostalgia',
@@ -10663,10 +10663,10 @@ SET t.display_name = 'Apartheid nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@xh-ZA'})
-MATCH (t:Taboo {key: 'apartheid-nostalgia@xh-ZA'})
+MATCH (t:Taboo {key: 'taboo:apartheid-nostalgia@xh-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'racial-stereotypes@xh-ZA'})
+MERGE (t:Taboo {key: 'taboo:racial-stereotypes@xh-ZA'})
 SET t.display_name = 'Racial stereotypes',
     t.locale = 'xh-ZA',
     t.term = 'Racial stereotypes',
@@ -10682,10 +10682,10 @@ SET t.display_name = 'Racial stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@xh-ZA'})
-MATCH (t:Taboo {key: 'racial-stereotypes@xh-ZA'})
+MATCH (t:Taboo {key: 'taboo:racial-stereotypes@xh-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'initiation-ceremony-details@xh-ZA'})
+MERGE (t:Taboo {key: 'taboo:initiation-ceremony-details@xh-ZA'})
 SET t.display_name = 'Initiation ceremony details',
     t.locale = 'xh-ZA',
     t.term = 'Initiation ceremony details',
@@ -10701,7 +10701,7 @@ SET t.display_name = 'Initiation ceremony details',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@xh-ZA'})
-MATCH (t:Taboo {key: 'initiation-ceremony-details@xh-ZA'})
+MATCH (t:Taboo {key: 'taboo:initiation-ceremony-details@xh-ZA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10712,7 +10712,7 @@ MATCH (l:Locale {key: 'ro-MD'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-MD'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'transnistria-conflict@ro-MD'})
+MERGE (t:Taboo {key: 'taboo:transnistria-conflict@ro-MD'})
 SET t.display_name = 'Transnistria conflict',
     t.locale = 'ro-MD',
     t.term = 'Transnistria conflict',
@@ -10728,10 +10728,10 @@ SET t.display_name = 'Transnistria conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-MD'})
-MATCH (t:Taboo {key: 'transnistria-conflict@ro-MD'})
+MATCH (t:Taboo {key: 'taboo:transnistria-conflict@ro-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'moldova-vs-romania-identity@ro-MD'})
+MERGE (t:Taboo {key: 'taboo:moldova-vs-romania-identity@ro-MD'})
 SET t.display_name = 'Moldova vs Romania identity',
     t.locale = 'ro-MD',
     t.term = 'Moldova vs Romania identity',
@@ -10747,10 +10747,10 @@ SET t.display_name = 'Moldova vs Romania identity',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-MD'})
-MATCH (t:Taboo {key: 'moldova-vs-romania-identity@ro-MD'})
+MATCH (t:Taboo {key: 'taboo:moldova-vs-romania-identity@ro-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'russian-influencepolitics@ro-MD'})
+MERGE (t:Taboo {key: 'taboo:russian-influencepolitics@ro-MD'})
 SET t.display_name = 'Russian influence/politics',
     t.locale = 'ro-MD',
     t.term = 'Russian influence/politics',
@@ -10766,7 +10766,7 @@ SET t.display_name = 'Russian influence/politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ro-MD'})
-MATCH (t:Taboo {key: 'russian-influencepolitics@ro-MD'})
+MATCH (t:Taboo {key: 'taboo:russian-influencepolitics@ro-MD'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10777,7 +10777,7 @@ MATCH (l:Locale {key: 'en-NG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'ethnic-stereotyping@en-NG'})
+MERGE (t:Taboo {key: 'taboo:ethnic-stereotyping@en-NG'})
 SET t.display_name = 'Ethnic stereotyping',
     t.locale = 'en-NG',
     t.term = 'Ethnic stereotyping',
@@ -10793,10 +10793,10 @@ SET t.display_name = 'Ethnic stereotyping',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NG'})
-MATCH (t:Taboo {key: 'ethnic-stereotyping@en-NG'})
+MATCH (t:Taboo {key: 'taboo:ethnic-stereotyping@en-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-conflict@en-NG'})
+MERGE (t:Taboo {key: 'taboo:religious-conflict@en-NG'})
 SET t.display_name = 'Religious conflict',
     t.locale = 'en-NG',
     t.term = 'Religious conflict',
@@ -10812,10 +10812,10 @@ SET t.display_name = 'Religious conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NG'})
-MATCH (t:Taboo {key: 'religious-conflict@en-NG'})
+MATCH (t:Taboo {key: 'taboo:religious-conflict@en-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'biafracivil-war@en-NG'})
+MERGE (t:Taboo {key: 'taboo:biafracivil-war@en-NG'})
 SET t.display_name = 'Biafra/Civil War',
     t.locale = 'en-NG',
     t.term = 'Biafra/Civil War',
@@ -10831,7 +10831,7 @@ SET t.display_name = 'Biafra/Civil War',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NG'})
-MATCH (t:Taboo {key: 'biafracivil-war@en-NG'})
+MATCH (t:Taboo {key: 'taboo:biafracivil-war@en-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10842,7 +10842,7 @@ MATCH (l:Locale {key: 'it-IT'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-IT'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'mafia-stereotypes@it-IT'})
+MERGE (t:Taboo {key: 'taboo:mafia-stereotypes@it-IT'})
 SET t.display_name = 'Mafia stereotypes',
     t.locale = 'it-IT',
     t.term = 'Mafia stereotypes',
@@ -10858,7 +10858,7 @@ SET t.display_name = 'Mafia stereotypes',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@it-IT'})
-MATCH (t:Taboo {key: 'mafia-stereotypes@it-IT'})
+MATCH (t:Taboo {key: 'taboo:mafia-stereotypes@it-IT'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10869,7 +10869,7 @@ MATCH (l:Locale {key: 'no-NO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@no-NO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'bragging-or-self-promotion@no-NO'})
+MERGE (t:Taboo {key: 'taboo:bragging-or-self-promotion@no-NO'})
 SET t.display_name = 'Bragging or self-promotion',
     t.locale = 'no-NO',
     t.term = 'Bragging or self-promotion',
@@ -10885,10 +10885,10 @@ SET t.display_name = 'Bragging or self-promotion',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@no-NO'})
-MATCH (t:Taboo {key: 'bragging-or-self-promotion@no-NO'})
+MATCH (t:Taboo {key: 'taboo:bragging-or-self-promotion@no-NO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'immigration-politics@no-NO'})
+MERGE (t:Taboo {key: 'taboo:immigration-politics@no-NO'})
 SET t.display_name = 'Immigration politics',
     t.locale = 'no-NO',
     t.term = 'Immigration politics',
@@ -10904,10 +10904,10 @@ SET t.display_name = 'Immigration politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@no-NO'})
-MATCH (t:Taboo {key: 'immigration-politics@no-NO'})
+MATCH (t:Taboo {key: 'taboo:immigration-politics@no-NO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'promising-more-than-delivering@no-NO'})
+MERGE (t:Taboo {key: 'taboo:promising-more-than-delivering@no-NO'})
 SET t.display_name = 'Promising more than delivering',
     t.locale = 'no-NO',
     t.term = 'Promising more than delivering',
@@ -10923,7 +10923,7 @@ SET t.display_name = 'Promising more than delivering',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@no-NO'})
-MATCH (t:Taboo {key: 'promising-more-than-delivering@no-NO'})
+MATCH (t:Taboo {key: 'taboo:promising-more-than-delivering@no-NO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10934,7 +10934,7 @@ MATCH (l:Locale {key: 'sk-SK'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sk-SK'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'conflating-slovaks-with-czechs@sk-SK'})
+MERGE (t:Taboo {key: 'taboo:conflating-slovaks-with-czechs@sk-SK'})
 SET t.display_name = 'Conflating Slovaks with Czechs',
     t.locale = 'sk-SK',
     t.term = 'Conflating Slovaks with Czechs',
@@ -10950,10 +10950,10 @@ SET t.display_name = 'Conflating Slovaks with Czechs',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sk-SK'})
-MATCH (t:Taboo {key: 'conflating-slovaks-with-czechs@sk-SK'})
+MATCH (t:Taboo {key: 'taboo:conflating-slovaks-with-czechs@sk-SK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hungarian-minority-tensions@sk-SK'})
+MERGE (t:Taboo {key: 'taboo:hungarian-minority-tensions@sk-SK'})
 SET t.display_name = 'Hungarian minority tensions',
     t.locale = 'sk-SK',
     t.term = 'Hungarian minority tensions',
@@ -10969,7 +10969,7 @@ SET t.display_name = 'Hungarian minority tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@sk-SK'})
-MATCH (t:Taboo {key: 'hungarian-minority-tensions@sk-SK'})
+MATCH (t:Taboo {key: 'taboo:hungarian-minority-tensions@sk-SK'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -10980,7 +10980,7 @@ MATCH (l:Locale {key: 'gn-PY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gn-PY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'triple-alliance-war-1864-1870@gn-PY'})
+MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.locale = 'gn-PY',
     t.term = 'Triple Alliance War (1864-1870)',
@@ -10996,10 +10996,10 @@ SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gn-PY'})
-MATCH (t:Taboo {key: 'triple-alliance-war-1864-1870@gn-PY'})
+MATCH (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'indigenous-exploitation@gn-PY'})
+MERGE (t:Taboo {key: 'taboo:indigenous-exploitation@gn-PY'})
 SET t.display_name = 'Indigenous exploitation',
     t.locale = 'gn-PY',
     t.term = 'Indigenous exploitation',
@@ -11015,10 +11015,10 @@ SET t.display_name = 'Indigenous exploitation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gn-PY'})
-MATCH (t:Taboo {key: 'indigenous-exploitation@gn-PY'})
+MATCH (t:Taboo {key: 'taboo:indigenous-exploitation@gn-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'triple-alliance-war-1864-1870@gn-PY'})
+MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.locale = 'gn-PY',
     t.term = 'Triple Alliance War (1864-1870)',
@@ -11034,7 +11034,7 @@ SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@gn-PY'})
-MATCH (t:Taboo {key: 'triple-alliance-war-1864-1870@gn-PY'})
+MATCH (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@gn-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11045,7 +11045,7 @@ MATCH (l:Locale {key: 'uk-UA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uk-UA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'russia-and-russian-aggression@uk-UA'})
+MERGE (t:Taboo {key: 'taboo:russia-and-russian-aggression@uk-UA'})
 SET t.display_name = 'Russia and Russian aggression',
     t.locale = 'uk-UA',
     t.term = 'Russia and Russian aggression',
@@ -11061,10 +11061,10 @@ SET t.display_name = 'Russia and Russian aggression',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uk-UA'})
-MATCH (t:Taboo {key: 'russia-and-russian-aggression@uk-UA'})
+MATCH (t:Taboo {key: 'taboo:russia-and-russian-aggression@uk-UA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'soviet-nostalgia@uk-UA'})
+MERGE (t:Taboo {key: 'taboo:soviet-nostalgia@uk-UA'})
 SET t.display_name = 'Soviet nostalgia',
     t.locale = 'uk-UA',
     t.term = 'Soviet nostalgia',
@@ -11080,10 +11080,10 @@ SET t.display_name = 'Soviet nostalgia',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uk-UA'})
-MATCH (t:Taboo {key: 'soviet-nostalgia@uk-UA'})
+MATCH (t:Taboo {key: 'taboo:soviet-nostalgia@uk-UA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'holodomor-denial-or-minimization@uk-UA'})
+MERGE (t:Taboo {key: 'taboo:holodomor-denial-or-minimization@uk-UA'})
 SET t.display_name = 'Holodomor denial or minimization',
     t.locale = 'uk-UA',
     t.term = 'Holodomor denial or minimization',
@@ -11099,7 +11099,7 @@ SET t.display_name = 'Holodomor denial or minimization',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@uk-UA'})
-MATCH (t:Taboo {key: 'holodomor-denial-or-minimization@uk-UA'})
+MATCH (t:Taboo {key: 'taboo:holodomor-denial-or-minimization@uk-UA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11110,7 +11110,7 @@ MATCH (l:Locale {key: 'pl-PL'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pl-PL'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'nazi-occupation-and-holocaust@pl-PL'})
+MERGE (t:Taboo {key: 'taboo:nazi-occupation-and-holocaust@pl-PL'})
 SET t.display_name = 'Nazi occupation and Holocaust',
     t.locale = 'pl-PL',
     t.term = 'Nazi occupation and Holocaust',
@@ -11126,10 +11126,10 @@ SET t.display_name = 'Nazi occupation and Holocaust',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pl-PL'})
-MATCH (t:Taboo {key: 'nazi-occupation-and-holocaust@pl-PL'})
+MATCH (t:Taboo {key: 'taboo:nazi-occupation-and-holocaust@pl-PL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'communist-era-glorification@pl-PL'})
+MERGE (t:Taboo {key: 'taboo:communist-era-glorification@pl-PL'})
 SET t.display_name = 'Communist era glorification',
     t.locale = 'pl-PL',
     t.term = 'Communist era glorification',
@@ -11145,10 +11145,10 @@ SET t.display_name = 'Communist era glorification',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pl-PL'})
-MATCH (t:Taboo {key: 'communist-era-glorification@pl-PL'})
+MATCH (t:Taboo {key: 'taboo:communist-era-glorification@pl-PL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'russia-and-soviet-references@pl-PL'})
+MERGE (t:Taboo {key: 'taboo:russia-and-soviet-references@pl-PL'})
 SET t.display_name = 'Russia and Soviet references',
     t.locale = 'pl-PL',
     t.term = 'Russia and Soviet references',
@@ -11164,7 +11164,7 @@ SET t.display_name = 'Russia and Soviet references',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@pl-PL'})
-MATCH (t:Taboo {key: 'russia-and-soviet-references@pl-PL'})
+MATCH (t:Taboo {key: 'taboo:russia-and-soviet-references@pl-PL'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11175,7 +11175,7 @@ MATCH (l:Locale {key: 'zh-SG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-SG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'racial-commentary@zh-SG'})
+MERGE (t:Taboo {key: 'taboo:racial-commentary@zh-SG'})
 SET t.display_name = 'Racial commentary',
     t.locale = 'zh-SG',
     t.term = 'Racial commentary',
@@ -11191,10 +11191,10 @@ SET t.display_name = 'Racial commentary',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-SG'})
-MATCH (t:Taboo {key: 'racial-commentary@zh-SG'})
+MATCH (t:Taboo {key: 'taboo:racial-commentary@zh-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-criticism@zh-SG'})
+MERGE (t:Taboo {key: 'taboo:religious-criticism@zh-SG'})
 SET t.display_name = 'Religious criticism',
     t.locale = 'zh-SG',
     t.term = 'Religious criticism',
@@ -11210,10 +11210,10 @@ SET t.display_name = 'Religious criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-SG'})
-MATCH (t:Taboo {key: 'religious-criticism@zh-SG'})
+MATCH (t:Taboo {key: 'taboo:religious-criticism@zh-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-criticism-of-government@zh-SG'})
+MERGE (t:Taboo {key: 'taboo:political-criticism-of-government@zh-SG'})
 SET t.display_name = 'Political criticism of government',
     t.locale = 'zh-SG',
     t.term = 'Political criticism of government',
@@ -11229,7 +11229,7 @@ SET t.display_name = 'Political criticism of government',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@zh-SG'})
-MATCH (t:Taboo {key: 'political-criticism-of-government@zh-SG'})
+MATCH (t:Taboo {key: 'taboo:political-criticism-of-government@zh-SG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11240,7 +11240,7 @@ MATCH (l:Locale {key: 'en-CA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'indigenous-peoples@en-CA'})
+MERGE (t:Taboo {key: 'taboo:indigenous-peoples@en-CA'})
 SET t.display_name = 'Indigenous peoples\\',
     t.locale = 'en-CA',
     t.term = 'Indigenous peoples\\',
@@ -11256,7 +11256,7 @@ SET t.display_name = 'Indigenous peoples\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CA'})
-MATCH (t:Taboo {key: 'indigenous-peoples@en-CA'})
+MATCH (t:Taboo {key: 'taboo:indigenous-peoples@en-CA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11267,7 +11267,7 @@ MATCH (l:Locale {key: 'en-AE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-uae-leadership-or-ruling-families@en-AE'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-uae-leadership-or-ruling-families@en-AE'})
 SET t.display_name = 'Criticism of UAE leadership or ruling families',
     t.locale = 'en-AE',
     t.term = 'Criticism of UAE leadership or ruling families',
@@ -11283,10 +11283,10 @@ SET t.display_name = 'Criticism of UAE leadership or ruling families',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AE'})
-MATCH (t:Taboo {key: 'criticism-of-uae-leadership-or-ruling-families@en-AE'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-uae-leadership-or-ruling-families@en-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespect-toward-islam@en-AE'})
+MERGE (t:Taboo {key: 'taboo:disrespect-toward-islam@en-AE'})
 SET t.display_name = 'Disrespect toward Islam',
     t.locale = 'en-AE',
     t.term = 'Disrespect toward Islam',
@@ -11302,10 +11302,10 @@ SET t.display_name = 'Disrespect toward Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AE'})
-MATCH (t:Taboo {key: 'disrespect-toward-islam@en-AE'})
+MATCH (t:Taboo {key: 'taboo:disrespect-toward-islam@en-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'lgbtq-content@en-AE'})
+MERGE (t:Taboo {key: 'taboo:lgbtq-content@en-AE'})
 SET t.display_name = 'LGBTQ+ content',
     t.locale = 'en-AE',
     t.term = 'LGBTQ+ content',
@@ -11321,7 +11321,7 @@ SET t.display_name = 'LGBTQ+ content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-AE'})
-MATCH (t:Taboo {key: 'lgbtq-content@en-AE'})
+MATCH (t:Taboo {key: 'taboo:lgbtq-content@en-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11332,7 +11332,7 @@ MATCH (l:Locale {key: 'en-CY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'cyprus-divisionoccupation@en-CY'})
+MERGE (t:Taboo {key: 'taboo:cyprus-divisionoccupation@en-CY'})
 SET t.display_name = 'Cyprus division/occupation',
     t.locale = 'en-CY',
     t.term = 'Cyprus division/occupation',
@@ -11348,10 +11348,10 @@ SET t.display_name = 'Cyprus division/occupation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CY'})
-MATCH (t:Taboo {key: 'cyprus-divisionoccupation@en-CY'})
+MATCH (t:Taboo {key: 'taboo:cyprus-divisionoccupation@en-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'turkey-relations@en-CY'})
+MERGE (t:Taboo {key: 'taboo:turkey-relations@en-CY'})
 SET t.display_name = 'Turkey relations',
     t.locale = 'en-CY',
     t.term = 'Turkey relations',
@@ -11367,10 +11367,10 @@ SET t.display_name = 'Turkey relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CY'})
-MATCH (t:Taboo {key: 'turkey-relations@en-CY'})
+MATCH (t:Taboo {key: 'taboo:turkey-relations@en-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'northern-cyprustrnc@en-CY'})
+MERGE (t:Taboo {key: 'taboo:northern-cyprustrnc@en-CY'})
 SET t.display_name = 'Northern Cyprus/TRNC',
     t.locale = 'en-CY',
     t.term = 'Northern Cyprus/TRNC',
@@ -11386,7 +11386,7 @@ SET t.display_name = 'Northern Cyprus/TRNC',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-CY'})
-MATCH (t:Taboo {key: 'northern-cyprustrnc@en-CY'})
+MATCH (t:Taboo {key: 'taboo:northern-cyprustrnc@en-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11397,7 +11397,7 @@ MATCH (l:Locale {key: 'ru-RU'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-RU'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'political-commentary-or-criticism@ru-RU'})
+MERGE (t:Taboo {key: 'taboo:political-commentary-or-criticism@ru-RU'})
 SET t.display_name = 'Political commentary or criticism',
     t.locale = 'ru-RU',
     t.term = 'Political commentary or criticism',
@@ -11413,10 +11413,10 @@ SET t.display_name = 'Political commentary or criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-RU'})
-MATCH (t:Taboo {key: 'political-commentary-or-criticism@ru-RU'})
+MATCH (t:Taboo {key: 'taboo:political-commentary-or-criticism@ru-RU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'comparisons-with-other-countries-negative-framing@ru-RU'})
+MERGE (t:Taboo {key: 'taboo:comparisons-with-other-countries-negative-framing@ru-RU'})
 SET t.display_name = 'Comparisons with other countries (negative framing)',
     t.locale = 'ru-RU',
     t.term = 'Comparisons with other countries (negative framing)',
@@ -11432,10 +11432,10 @@ SET t.display_name = 'Comparisons with other countries (negative framing)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-RU'})
-MATCH (t:Taboo {key: 'comparisons-with-other-countries-negative-framing@ru-RU'})
+MATCH (t:Taboo {key: 'taboo:comparisons-with-other-countries-negative-framing@ru-RU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'lgbt-themes-in-marketing@ru-RU'})
+MERGE (t:Taboo {key: 'taboo:lgbt-themes-in-marketing@ru-RU'})
 SET t.display_name = 'LGBT themes in marketing',
     t.locale = 'ru-RU',
     t.term = 'LGBT themes in marketing',
@@ -11451,7 +11451,7 @@ SET t.display_name = 'LGBT themes in marketing',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ru-RU'})
-MATCH (t:Taboo {key: 'lgbt-themes-in-marketing@ru-RU'})
+MATCH (t:Taboo {key: 'taboo:lgbt-themes-in-marketing@ru-RU'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11462,7 +11462,7 @@ MATCH (l:Locale {key: 'mi-NZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mi-NZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-tapu-sacred-places-or-objects@mi-NZ'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-tapu-sacred-places-or-objects@mi-NZ'})
 SET t.display_name = 'Disrespecting tapu (sacred) places or objects',
     t.locale = 'mi-NZ',
     t.term = 'Disrespecting tapu (sacred) places or objects',
@@ -11478,10 +11478,10 @@ SET t.display_name = 'Disrespecting tapu (sacred) places or objects',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mi-NZ'})
-MATCH (t:Taboo {key: 'disrespecting-tapu-sacred-places-or-objects@mi-NZ'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-tapu-sacred-places-or-objects@mi-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mocking-or-misusing-ta-moko@mi-NZ'})
+MERGE (t:Taboo {key: 'taboo:mocking-or-misusing-ta-moko@mi-NZ'})
 SET t.display_name = 'Mocking or misusing ta moko',
     t.locale = 'mi-NZ',
     t.term = 'Mocking or misusing ta moko',
@@ -11497,10 +11497,10 @@ SET t.display_name = 'Mocking or misusing ta moko',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mi-NZ'})
-MATCH (t:Taboo {key: 'mocking-or-misusing-ta-moko@mi-NZ'})
+MATCH (t:Taboo {key: 'taboo:mocking-or-misusing-ta-moko@mi-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'disrespecting-kaumatua-or-elders@mi-NZ'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-kaumatua-or-elders@mi-NZ'})
 SET t.display_name = 'Disrespecting kaumatua or elders',
     t.locale = 'mi-NZ',
     t.term = 'Disrespecting kaumatua or elders',
@@ -11516,7 +11516,7 @@ SET t.display_name = 'Disrespecting kaumatua or elders',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@mi-NZ'})
-MATCH (t:Taboo {key: 'disrespecting-kaumatua-or-elders@mi-NZ'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-kaumatua-or-elders@mi-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11527,7 +11527,7 @@ MATCH (l:Locale {key: 'es-PE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'internal-armed-conflict-sendero-luminoso@es-PE'})
+MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-sendero-luminoso@es-PE'})
 SET t.display_name = 'Internal armed conflict (Sendero Luminoso',
     t.locale = 'es-PE',
     t.term = 'Internal armed conflict (Sendero Luminoso',
@@ -11543,10 +11543,10 @@ SET t.display_name = 'Internal armed conflict (Sendero Luminoso',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PE'})
-MATCH (t:Taboo {key: 'internal-armed-conflict-sendero-luminoso@es-PE'})
+MATCH (t:Taboo {key: 'taboo:internal-armed-conflict-sendero-luminoso@es-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'mrta@es-PE'})
+MERGE (t:Taboo {key: 'taboo:mrta@es-PE'})
 SET t.display_name = 'MRTA)',
     t.locale = 'es-PE',
     t.term = 'MRTA)',
@@ -11562,10 +11562,10 @@ SET t.display_name = 'MRTA)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PE'})
-MATCH (t:Taboo {key: 'mrta@es-PE'})
+MATCH (t:Taboo {key: 'taboo:mrta@es-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'fujimori-era-controversies@es-PE'})
+MERGE (t:Taboo {key: 'taboo:fujimori-era-controversies@es-PE'})
 SET t.display_name = 'Fujimori era controversies',
     t.locale = 'es-PE',
     t.term = 'Fujimori era controversies',
@@ -11581,10 +11581,10 @@ SET t.display_name = 'Fujimori era controversies',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PE'})
-MATCH (t:Taboo {key: 'fujimori-era-controversies@es-PE'})
+MATCH (t:Taboo {key: 'taboo:fujimori-era-controversies@es-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'internal-armed-conflict-1980-2000@es-PE'})
+MERGE (t:Taboo {key: 'taboo:internal-armed-conflict-1980-2000@es-PE'})
 SET t.display_name = 'Internal Armed Conflict (1980-2000)',
     t.locale = 'es-PE',
     t.term = 'Internal Armed Conflict (1980-2000)',
@@ -11600,7 +11600,7 @@ SET t.display_name = 'Internal Armed Conflict (1980-2000)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PE'})
-MATCH (t:Taboo {key: 'internal-armed-conflict-1980-2000@es-PE'})
+MATCH (t:Taboo {key: 'taboo:internal-armed-conflict-1980-2000@es-PE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11611,7 +11611,7 @@ MATCH (l:Locale {key: 'yo-NG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@yo-NG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'religious-mockery@yo-NG'})
+MERGE (t:Taboo {key: 'taboo:religious-mockery@yo-NG'})
 SET t.display_name = 'Religious mockery',
     t.locale = 'yo-NG',
     t.term = 'Religious mockery',
@@ -11627,10 +11627,10 @@ SET t.display_name = 'Religious mockery',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@yo-NG'})
-MATCH (t:Taboo {key: 'religious-mockery@yo-NG'})
+MATCH (t:Taboo {key: 'taboo:religious-mockery@yo-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-conflicts@yo-NG'})
+MERGE (t:Taboo {key: 'taboo:ethnic-conflicts@yo-NG'})
 SET t.display_name = 'Ethnic conflicts',
     t.locale = 'yo-NG',
     t.term = 'Ethnic conflicts',
@@ -11646,10 +11646,10 @@ SET t.display_name = 'Ethnic conflicts',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@yo-NG'})
-MATCH (t:Taboo {key: 'ethnic-conflicts@yo-NG'})
+MATCH (t:Taboo {key: 'taboo:ethnic-conflicts@yo-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'traditional-rulers-disrespect@yo-NG'})
+MERGE (t:Taboo {key: 'taboo:traditional-rulers-disrespect@yo-NG'})
 SET t.display_name = 'Traditional rulers disrespect',
     t.locale = 'yo-NG',
     t.term = 'Traditional rulers disrespect',
@@ -11665,7 +11665,7 @@ SET t.display_name = 'Traditional rulers disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@yo-NG'})
-MATCH (t:Taboo {key: 'traditional-rulers-disrespect@yo-NG'})
+MATCH (t:Taboo {key: 'taboo:traditional-rulers-disrespect@yo-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11676,7 +11676,7 @@ MATCH (l:Locale {key: 'tk-TM'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tk-TM'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-president-or-government@tk-TM'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-president-or-government@tk-TM'})
 SET t.display_name = 'Criticism of president or government',
     t.locale = 'tk-TM',
     t.term = 'Criticism of president or government',
@@ -11692,10 +11692,10 @@ SET t.display_name = 'Criticism of president or government',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tk-TM'})
-MATCH (t:Taboo {key: 'criticism-of-president-or-government@tk-TM'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-president-or-government@tk-TM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-commentary-of-any-kind@tk-TM'})
+MERGE (t:Taboo {key: 'taboo:political-commentary-of-any-kind@tk-TM'})
 SET t.display_name = 'Political commentary of any kind',
     t.locale = 'tk-TM',
     t.term = 'Political commentary of any kind',
@@ -11711,10 +11711,10 @@ SET t.display_name = 'Political commentary of any kind',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tk-TM'})
-MATCH (t:Taboo {key: 'political-commentary-of-any-kind@tk-TM'})
+MATCH (t:Taboo {key: 'taboo:political-commentary-of-any-kind@tk-TM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-mockery-or-disrespect@tk-TM'})
+MERGE (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@tk-TM'})
 SET t.display_name = 'Religious mockery or disrespect',
     t.locale = 'tk-TM',
     t.term = 'Religious mockery or disrespect',
@@ -11730,7 +11730,7 @@ SET t.display_name = 'Religious mockery or disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tk-TM'})
-MATCH (t:Taboo {key: 'religious-mockery-or-disrespect@tk-TM'})
+MATCH (t:Taboo {key: 'taboo:religious-mockery-or-disrespect@tk-TM'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11741,7 +11741,7 @@ MATCH (l:Locale {key: 'es-PY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'triple-alliance-war-1864-1870@es-PY'})
+MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.locale = 'es-PY',
     t.term = 'Triple Alliance War (1864-1870)',
@@ -11757,10 +11757,10 @@ SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PY'})
-MATCH (t:Taboo {key: 'triple-alliance-war-1864-1870@es-PY'})
+MATCH (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'indigenous-exploitation@es-PY'})
+MERGE (t:Taboo {key: 'taboo:indigenous-exploitation@es-PY'})
 SET t.display_name = 'Indigenous exploitation',
     t.locale = 'es-PY',
     t.term = 'Indigenous exploitation',
@@ -11776,10 +11776,10 @@ SET t.display_name = 'Indigenous exploitation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PY'})
-MATCH (t:Taboo {key: 'indigenous-exploitation@es-PY'})
+MATCH (t:Taboo {key: 'taboo:indigenous-exploitation@es-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'triple-alliance-war-1864-1870@es-PY'})
+MERGE (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.locale = 'es-PY',
     t.term = 'Triple Alliance War (1864-1870)',
@@ -11795,7 +11795,7 @@ SET t.display_name = 'Triple Alliance War (1864-1870)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PY'})
-MATCH (t:Taboo {key: 'triple-alliance-war-1864-1870@es-PY'})
+MATCH (t:Taboo {key: 'taboo:triple-alliance-war-1864-1870@es-PY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11806,7 +11806,7 @@ MATCH (l:Locale {key: 'ha-NG'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ha-NG'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-the-prophet@ha-NG'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ha-NG'})
 SET t.display_name = 'Insulting Islam or the Prophet',
     t.locale = 'ha-NG',
     t.term = 'Insulting Islam or the Prophet',
@@ -11822,10 +11822,10 @@ SET t.display_name = 'Insulting Islam or the Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ha-NG'})
-MATCH (t:Taboo {key: 'insulting-islam-or-the-prophet@ha-NG'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@ha-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'boko-haramterrorism@ha-NG'})
+MERGE (t:Taboo {key: 'taboo:boko-haramterrorism@ha-NG'})
 SET t.display_name = 'Boko Haram/terrorism',
     t.locale = 'ha-NG',
     t.term = 'Boko Haram/terrorism',
@@ -11841,10 +11841,10 @@ SET t.display_name = 'Boko Haram/terrorism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ha-NG'})
-MATCH (t:Taboo {key: 'boko-haramterrorism@ha-NG'})
+MATCH (t:Taboo {key: 'taboo:boko-haramterrorism@ha-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnicreligious-conflict@ha-NG'})
+MERGE (t:Taboo {key: 'taboo:ethnicreligious-conflict@ha-NG'})
 SET t.display_name = 'Ethnic/religious conflict',
     t.locale = 'ha-NG',
     t.term = 'Ethnic/religious conflict',
@@ -11860,7 +11860,7 @@ SET t.display_name = 'Ethnic/religious conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ha-NG'})
-MATCH (t:Taboo {key: 'ethnicreligious-conflict@ha-NG'})
+MATCH (t:Taboo {key: 'taboo:ethnicreligious-conflict@ha-NG'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11871,7 +11871,7 @@ MATCH (l:Locale {key: 'el-CY'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-CY'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'cyprus-division1974@el-CY'})
+MERGE (t:Taboo {key: 'taboo:cyprus-division1974@el-CY'})
 SET t.display_name = 'Cyprus division/1974',
     t.locale = 'el-CY',
     t.term = 'Cyprus division/1974',
@@ -11887,10 +11887,10 @@ SET t.display_name = 'Cyprus division/1974',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-CY'})
-MATCH (t:Taboo {key: 'cyprus-division1974@el-CY'})
+MATCH (t:Taboo {key: 'taboo:cyprus-division1974@el-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'greek-turkish-relations@el-CY'})
+MERGE (t:Taboo {key: 'taboo:greek-turkish-relations@el-CY'})
 SET t.display_name = 'Greek-Turkish relations',
     t.locale = 'el-CY',
     t.term = 'Greek-Turkish relations',
@@ -11906,10 +11906,10 @@ SET t.display_name = 'Greek-Turkish relations',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-CY'})
-MATCH (t:Taboo {key: 'greek-turkish-relations@el-CY'})
+MATCH (t:Taboo {key: 'taboo:greek-turkish-relations@el-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'recognition-of-trnc@el-CY'})
+MERGE (t:Taboo {key: 'taboo:recognition-of-trnc@el-CY'})
 SET t.display_name = 'Recognition of "TRNC"',
     t.locale = 'el-CY',
     t.term = 'Recognition of "TRNC"',
@@ -11925,7 +11925,7 @@ SET t.display_name = 'Recognition of "TRNC"',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@el-CY'})
-MATCH (t:Taboo {key: 'recognition-of-trnc@el-CY'})
+MATCH (t:Taboo {key: 'taboo:recognition-of-trnc@el-CY'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -11936,7 +11936,7 @@ MATCH (l:Locale {key: 'jv-ID'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@jv-ID'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'disrespecting-the-keraton-royal-courts@jv-ID'})
+MERGE (t:Taboo {key: 'taboo:disrespecting-the-keraton-royal-courts@jv-ID'})
 SET t.display_name = 'Disrespecting the Keraton (Royal Courts)',
     t.locale = 'jv-ID',
     t.term = 'Disrespecting the Keraton (Royal Courts)',
@@ -11952,10 +11952,10 @@ SET t.display_name = 'Disrespecting the Keraton (Royal Courts)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@jv-ID'})
-MATCH (t:Taboo {key: 'disrespecting-the-keraton-royal-courts@jv-ID'})
+MATCH (t:Taboo {key: 'taboo:disrespecting-the-keraton-royal-courts@jv-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'causing-public-isin-shameembarrassment@jv-ID'})
+MERGE (t:Taboo {key: 'taboo:causing-public-isin-shameembarrassment@jv-ID'})
 SET t.display_name = 'Causing public isin (shame/embarrassment)',
     t.locale = 'jv-ID',
     t.term = 'Causing public isin (shame/embarrassment)',
@@ -11971,10 +11971,10 @@ SET t.display_name = 'Causing public isin (shame/embarrassment)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@jv-ID'})
-MATCH (t:Taboo {key: 'causing-public-isin-shameembarrassment@jv-ID'})
+MATCH (t:Taboo {key: 'taboo:causing-public-isin-shameembarrassment@jv-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'direct-criticism-or-confrontation@jv-ID'})
+MERGE (t:Taboo {key: 'taboo:direct-criticism-or-confrontation@jv-ID'})
 SET t.display_name = 'Direct criticism or confrontation',
     t.locale = 'jv-ID',
     t.term = 'Direct criticism or confrontation',
@@ -11990,7 +11990,7 @@ SET t.display_name = 'Direct criticism or confrontation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@jv-ID'})
-MATCH (t:Taboo {key: 'direct-criticism-or-confrontation@jv-ID'})
+MATCH (t:Taboo {key: 'taboo:direct-criticism-or-confrontation@jv-ID'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12001,7 +12001,7 @@ MATCH (l:Locale {key: 'km-KH'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@km-KH'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'khmer-rouge-era-1975-1979@km-KH'})
+MERGE (t:Taboo {key: 'taboo:khmer-rouge-era-1975-1979@km-KH'})
 SET t.display_name = 'Khmer Rouge era (1975-1979)',
     t.locale = 'km-KH',
     t.term = 'Khmer Rouge era (1975-1979)',
@@ -12017,10 +12017,10 @@ SET t.display_name = 'Khmer Rouge era (1975-1979)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@km-KH'})
-MATCH (t:Taboo {key: 'khmer-rouge-era-1975-1979@km-KH'})
+MATCH (t:Taboo {key: 'taboo:khmer-rouge-era-1975-1979@km-KH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'criticism-of-royal-family@km-KH'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-royal-family@km-KH'})
 SET t.display_name = 'Criticism of Royal Family',
     t.locale = 'km-KH',
     t.term = 'Criticism of Royal Family',
@@ -12036,10 +12036,10 @@ SET t.display_name = 'Criticism of Royal Family',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@km-KH'})
-MATCH (t:Taboo {key: 'criticism-of-royal-family@km-KH'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-royal-family@km-KH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'buddhist-disrespect@km-KH'})
+MERGE (t:Taboo {key: 'taboo:buddhist-disrespect@km-KH'})
 SET t.display_name = 'Buddhist disrespect',
     t.locale = 'km-KH',
     t.term = 'Buddhist disrespect',
@@ -12055,7 +12055,7 @@ SET t.display_name = 'Buddhist disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@km-KH'})
-MATCH (t:Taboo {key: 'buddhist-disrespect@km-KH'})
+MATCH (t:Taboo {key: 'taboo:buddhist-disrespect@km-KH'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12066,7 +12066,7 @@ MATCH (l:Locale {key: 'so-SO'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@so-SO'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulting-islam-or-the-prophet@so-SO'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@so-SO'})
 SET t.display_name = 'Insulting Islam or the Prophet',
     t.locale = 'so-SO',
     t.term = 'Insulting Islam or the Prophet',
@@ -12082,10 +12082,10 @@ SET t.display_name = 'Insulting Islam or the Prophet',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@so-SO'})
-MATCH (t:Taboo {key: 'insulting-islam-or-the-prophet@so-SO'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam-or-the-prophet@so-SO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'clan-politics-and-conflict@so-SO'})
+MERGE (t:Taboo {key: 'taboo:clan-politics-and-conflict@so-SO'})
 SET t.display_name = 'Clan politics and conflict',
     t.locale = 'so-SO',
     t.term = 'Clan politics and conflict',
@@ -12101,10 +12101,10 @@ SET t.display_name = 'Clan politics and conflict',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@so-SO'})
-MATCH (t:Taboo {key: 'clan-politics-and-conflict@so-SO'})
+MATCH (t:Taboo {key: 'taboo:clan-politics-and-conflict@so-SO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'civil-war-and-al-shabaab@so-SO'})
+MERGE (t:Taboo {key: 'taboo:civil-war-and-al-shabaab@so-SO'})
 SET t.display_name = 'Civil war and Al-Shabaab',
     t.locale = 'so-SO',
     t.term = 'Civil war and Al-Shabaab',
@@ -12120,7 +12120,7 @@ SET t.display_name = 'Civil war and Al-Shabaab',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@so-SO'})
-MATCH (t:Taboo {key: 'civil-war-and-al-shabaab@so-SO'})
+MATCH (t:Taboo {key: 'taboo:civil-war-and-al-shabaab@so-SO'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12131,7 +12131,7 @@ MATCH (l:Locale {key: 'ar-AE'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-AE'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'criticism-of-ruling-families@ar-AE'})
+MERGE (t:Taboo {key: 'taboo:criticism-of-ruling-families@ar-AE'})
 SET t.display_name = 'Criticism of ruling families',
     t.locale = 'ar-AE',
     t.term = 'Criticism of ruling families',
@@ -12147,10 +12147,10 @@ SET t.display_name = 'Criticism of ruling families',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-AE'})
-MATCH (t:Taboo {key: 'criticism-of-ruling-families@ar-AE'})
+MATCH (t:Taboo {key: 'taboo:criticism-of-ruling-families@ar-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'insulting-islam@ar-AE'})
+MERGE (t:Taboo {key: 'taboo:insulting-islam@ar-AE'})
 SET t.display_name = 'Insulting Islam',
     t.locale = 'ar-AE',
     t.term = 'Insulting Islam',
@@ -12166,10 +12166,10 @@ SET t.display_name = 'Insulting Islam',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-AE'})
-MATCH (t:Taboo {key: 'insulting-islam@ar-AE'})
+MATCH (t:Taboo {key: 'taboo:insulting-islam@ar-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'lgbtq-content@ar-AE'})
+MERGE (t:Taboo {key: 'taboo:lgbtq-content@ar-AE'})
 SET t.display_name = 'LGBTQ+ content',
     t.locale = 'ar-AE',
     t.term = 'LGBTQ+ content',
@@ -12185,7 +12185,7 @@ SET t.display_name = 'LGBTQ+ content',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-AE'})
-MATCH (t:Taboo {key: 'lgbtq-content@ar-AE'})
+MATCH (t:Taboo {key: 'taboo:lgbtq-content@ar-AE'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12196,7 +12196,7 @@ MATCH (l:Locale {key: 'en-NZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'maori-cultural-appropriation@en-NZ'})
+MERGE (t:Taboo {key: 'taboo:maori-cultural-appropriation@en-NZ'})
 SET t.display_name = 'Maori cultural appropriation',
     t.locale = 'en-NZ',
     t.term = 'Maori cultural appropriation',
@@ -12212,10 +12212,10 @@ SET t.display_name = 'Maori cultural appropriation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NZ'})
-MATCH (t:Taboo {key: 'maori-cultural-appropriation@en-NZ'})
+MATCH (t:Taboo {key: 'taboo:maori-cultural-appropriation@en-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'treaty-breaches-land-confiscation@en-NZ'})
+MERGE (t:Taboo {key: 'taboo:treaty-breaches-land-confiscation@en-NZ'})
 SET t.display_name = 'Treaty breaches / Land confiscation',
     t.locale = 'en-NZ',
     t.term = 'Treaty breaches / Land confiscation',
@@ -12231,10 +12231,10 @@ SET t.display_name = 'Treaty breaches / Land confiscation',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NZ'})
-MATCH (t:Taboo {key: 'treaty-breaches-land-confiscation@en-NZ'})
+MATCH (t:Taboo {key: 'taboo:treaty-breaches-land-confiscation@en-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'land-wars-raupatu-confiscation@en-NZ'})
+MERGE (t:Taboo {key: 'taboo:land-wars-raupatu-confiscation@en-NZ'})
 SET t.display_name = 'Land Wars / Raupatu (confiscation)',
     t.locale = 'en-NZ',
     t.term = 'Land Wars / Raupatu (confiscation)',
@@ -12250,7 +12250,7 @@ SET t.display_name = 'Land Wars / Raupatu (confiscation)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@en-NZ'})
-MATCH (t:Taboo {key: 'land-wars-raupatu-confiscation@en-NZ'})
+MATCH (t:Taboo {key: 'taboo:land-wars-raupatu-confiscation@en-NZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12261,7 +12261,7 @@ MATCH (l:Locale {key: 'ne-NP'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ne-NP'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'caste-discrimination@ne-NP'})
+MERGE (t:Taboo {key: 'taboo:caste-discrimination@ne-NP'})
 SET t.display_name = 'Caste discrimination',
     t.locale = 'ne-NP',
     t.term = 'Caste discrimination',
@@ -12277,10 +12277,10 @@ SET t.display_name = 'Caste discrimination',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ne-NP'})
-MATCH (t:Taboo {key: 'caste-discrimination@ne-NP'})
+MATCH (t:Taboo {key: 'taboo:caste-discrimination@ne-NP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnic-tensions@ne-NP'})
+MERGE (t:Taboo {key: 'taboo:ethnic-tensions@ne-NP'})
 SET t.display_name = 'Ethnic tensions',
     t.locale = 'ne-NP',
     t.term = 'Ethnic tensions',
@@ -12296,10 +12296,10 @@ SET t.display_name = 'Ethnic tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ne-NP'})
-MATCH (t:Taboo {key: 'ethnic-tensions@ne-NP'})
+MATCH (t:Taboo {key: 'taboo:ethnic-tensions@ne-NP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'religious-disrespect@ne-NP'})
+MERGE (t:Taboo {key: 'taboo:religious-disrespect@ne-NP'})
 SET t.display_name = 'Religious disrespect',
     t.locale = 'ne-NP',
     t.term = 'Religious disrespect',
@@ -12315,7 +12315,7 @@ SET t.display_name = 'Religious disrespect',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ne-NP'})
-MATCH (t:Taboo {key: 'religious-disrespect@ne-NP'})
+MATCH (t:Taboo {key: 'taboo:religious-disrespect@ne-NP'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12326,7 +12326,7 @@ MATCH (l:Locale {key: 'fr-DZ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-DZ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'insulte-a-l@fr-DZ'})
+MERGE (t:Taboo {key: 'taboo:insulte-a-l@fr-DZ'})
 SET t.display_name = 'Insulte a l\\',
     t.locale = 'fr-DZ',
     t.term = 'Insulte a l\\',
@@ -12342,7 +12342,7 @@ SET t.display_name = 'Insulte a l\\',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@fr-DZ'})
-MATCH (t:Taboo {key: 'insulte-a-l@fr-DZ'})
+MATCH (t:Taboo {key: 'taboo:insulte-a-l@fr-DZ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12353,7 +12353,7 @@ MATCH (l:Locale {key: 'ar-LB'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LB'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'sectarian-politics@ar-LB'})
+MERGE (t:Taboo {key: 'taboo:sectarian-politics@ar-LB'})
 SET t.display_name = 'Sectarian Politics',
     t.locale = 'ar-LB',
     t.term = 'Sectarian Politics',
@@ -12369,10 +12369,10 @@ SET t.display_name = 'Sectarian Politics',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LB'})
-MATCH (t:Taboo {key: 'sectarian-politics@ar-LB'})
+MATCH (t:Taboo {key: 'taboo:sectarian-politics@ar-LB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'civil-war-1975-1990@ar-LB'})
+MERGE (t:Taboo {key: 'taboo:civil-war-1975-1990@ar-LB'})
 SET t.display_name = 'Civil War (1975-1990)',
     t.locale = 'ar-LB',
     t.term = 'Civil War (1975-1990)',
@@ -12388,10 +12388,10 @@ SET t.display_name = 'Civil War (1975-1990)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LB'})
-MATCH (t:Taboo {key: 'civil-war-1975-1990@ar-LB'})
+MATCH (t:Taboo {key: 'taboo:civil-war-1975-1990@ar-LB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'hezbollahpolitical-parties@ar-LB'})
+MERGE (t:Taboo {key: 'taboo:hezbollahpolitical-parties@ar-LB'})
 SET t.display_name = 'Hezbollah/Political Parties',
     t.locale = 'ar-LB',
     t.term = 'Hezbollah/Political Parties',
@@ -12407,7 +12407,7 @@ SET t.display_name = 'Hezbollah/Political Parties',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@ar-LB'})
-MATCH (t:Taboo {key: 'hezbollahpolitical-parties@ar-LB'})
+MATCH (t:Taboo {key: 'taboo:hezbollahpolitical-parties@ar-LB'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12418,7 +12418,7 @@ MATCH (l:Locale {key: 'tg-TJ'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tg-TJ'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'civil-war-1992-1997@tg-TJ'})
+MERGE (t:Taboo {key: 'taboo:civil-war-1992-1997@tg-TJ'})
 SET t.display_name = 'Civil War (1992-1997)',
     t.locale = 'tg-TJ',
     t.term = 'Civil War (1992-1997)',
@@ -12434,10 +12434,10 @@ SET t.display_name = 'Civil War (1992-1997)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tg-TJ'})
-MATCH (t:Taboo {key: 'civil-war-1992-1997@tg-TJ'})
+MATCH (t:Taboo {key: 'taboo:civil-war-1992-1997@tg-TJ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'political-criticism@tg-TJ'})
+MERGE (t:Taboo {key: 'taboo:political-criticism@tg-TJ'})
 SET t.display_name = 'Political criticism',
     t.locale = 'tg-TJ',
     t.term = 'Political criticism',
@@ -12453,10 +12453,10 @@ SET t.display_name = 'Political criticism',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tg-TJ'})
-MATCH (t:Taboo {key: 'political-criticism@tg-TJ'})
+MATCH (t:Taboo {key: 'taboo:political-criticism@tg-TJ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'ethnicregional-tensions@tg-TJ'})
+MERGE (t:Taboo {key: 'taboo:ethnicregional-tensions@tg-TJ'})
 SET t.display_name = 'Ethnic/Regional tensions',
     t.locale = 'tg-TJ',
     t.term = 'Ethnic/Regional tensions',
@@ -12472,7 +12472,7 @@ SET t.display_name = 'Ethnic/Regional tensions',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@tg-TJ'})
-MATCH (t:Taboo {key: 'ethnicregional-tensions@tg-TJ'})
+MATCH (t:Taboo {key: 'taboo:ethnicregional-tensions@tg-TJ'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
 // ----------------------------------------------------------------------------
@@ -12483,7 +12483,7 @@ MATCH (l:Locale {key: 'es-PA'})
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PA'})
 MERGE (l)-[:HAS_TABOOS]->(ts);
 
-MERGE (t:Taboo {key: 'us-invasion-of-1989-operation-just-cause@es-PA'})
+MERGE (t:Taboo {key: 'taboo:us-invasion-of-1989-operation-just-cause@es-PA'})
 SET t.display_name = 'US invasion of 1989 (Operation Just Cause)',
     t.locale = 'es-PA',
     t.term = 'US invasion of 1989 (Operation Just Cause)',
@@ -12499,10 +12499,10 @@ SET t.display_name = 'US invasion of 1989 (Operation Just Cause)',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PA'})
-MATCH (t:Taboo {key: 'us-invasion-of-1989-operation-just-cause@es-PA'})
+MATCH (t:Taboo {key: 'taboo:us-invasion-of-1989-operation-just-cause@es-PA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'manuel-noriega-and-dictatorship-era@es-PA'})
+MERGE (t:Taboo {key: 'taboo:manuel-noriega-and-dictatorship-era@es-PA'})
 SET t.display_name = 'Manuel Noriega and dictatorship era',
     t.locale = 'es-PA',
     t.term = 'Manuel Noriega and dictatorship era',
@@ -12518,10 +12518,10 @@ SET t.display_name = 'Manuel Noriega and dictatorship era',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PA'})
-MATCH (t:Taboo {key: 'manuel-noriega-and-dictatorship-era@es-PA'})
+MATCH (t:Taboo {key: 'taboo:manuel-noriega-and-dictatorship-era@es-PA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
 
-MERGE (t:Taboo {key: 'us-invasion-december-1989@es-PA'})
+MERGE (t:Taboo {key: 'taboo:us-invasion-december-1989@es-PA'})
 SET t.display_name = 'US invasion December 1989',
     t.locale = 'es-PA',
     t.term = 'US invasion December 1989',
@@ -12537,5 +12537,5 @@ SET t.display_name = 'US invasion December 1989',
     t.updated_at = datetime();
 
 MATCH (ts:TabooSet {key: 'taboo-set:avoid@es-PA'})
-MATCH (t:Taboo {key: 'us-invasion-december-1989@es-PA'})
+MATCH (t:Taboo {key: 'taboo:us-invasion-december-1989@es-PA'})
 MERGE (ts)-[:CONTAINS_TABOO]->(t);
