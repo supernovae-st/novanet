@@ -94,7 +94,7 @@ MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})
 MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_instruction:Schema:Layer {key: 'instruction'})
 ON CREATE SET
-  l_instruction.display_name = 'Instructions',
+  l_instruction.display_name = 'Instruction',
   l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
   l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: BlockInstruction (defined), BlockType (defined), BlockRules (defined).',
@@ -102,7 +102,7 @@ ON CREATE SET
   l_instruction.created_by = 'seed:schema',
   l_instruction.created_at = datetime()
 ON MATCH SET
-  l_instruction.display_name = 'Instructions',
+  l_instruction.display_name = 'Instruction',
   l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
   l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: BlockInstruction (defined), BlockType (defined), BlockRules (defined).',
@@ -113,7 +113,7 @@ MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'instruction'})
 MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_output:Schema:Layer {key: 'output'})
 ON CREATE SET
-  l_output.display_name = 'Generated Output',
+  l_output.display_name = 'Output',
   l_output.emoji = '✦',
   l_output.color = '#22c55e',
   l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageNative (generated), BlockNative (generated), OutputArtifact (generated).',
@@ -121,7 +121,7 @@ ON CREATE SET
   l_output.created_by = 'seed:schema',
   l_output.created_at = datetime()
 ON MATCH SET
-  l_output.display_name = 'Generated Output',
+  l_output.display_name = 'Output',
   l_output.emoji = '✦',
   l_output.color = '#22c55e',
   l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageNative (generated), BlockNative (generated), OutputArtifact (generated).',

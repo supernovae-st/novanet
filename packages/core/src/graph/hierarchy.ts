@@ -42,13 +42,13 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'foundation'),
       },
       'instruction': {
-        label: 'Instructions',
+        label: 'Instruction',
         description: 'USE: when accessing generation instructions and rules.',
         icon: '▤',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'instruction'),
       },
       'output': {
-        label: 'Generated Output',
+        label: 'Output',
         description: 'USE: when accessing generated content.',
         icon: '✦',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'output'),

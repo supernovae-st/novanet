@@ -123,8 +123,8 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
 export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   'config': 'Config',
   'foundation': 'Foundation',
-  'instruction': 'Instructions',
-  'output': 'Generated Output',
+  'instruction': 'Instruction',
+  'output': 'Output',
   'semantic': 'Semantic',
   'structure': 'Structure',
   'geography': 'Geography',
