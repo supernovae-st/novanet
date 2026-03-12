@@ -5,7 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // Key format: seo:{slug}@{locale} (ADR-029)
-// All keywords have trait = 'imported' (ADR-024)
+// Traits deprecated in ADR-024 (v0.19.0) - removed
 // All keywords link to Locale via FOR_LOCALE arc
 //
 // Data: 61 keywords with Ahrefs metrics from 2026-03-08
@@ -28,7 +28,6 @@ ON CREATE SET
   kw.cpc = 1.10,
   kw.traffic_potential = 940000,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -41,7 +40,6 @@ ON MATCH SET
   kw.volume = 708000,
   kw.difficulty = 93,
   kw.traffic_potential = 940000,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code" — 303K SV, KD94, Informational
@@ -57,7 +55,6 @@ ON CREATE SET
   kw.cpc = 0.90,
   kw.traffic_potential = 450000,
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -70,7 +67,6 @@ ON MATCH SET
   kw.volume = 303000,
   kw.difficulty = 94,
   kw.traffic_potential = 450000,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code scanner" — 145K SV, KD61, Transactional
@@ -86,7 +82,6 @@ ON CREATE SET
   kw.cpc = 0.80,
   kw.traffic_potential = 200000,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -98,7 +93,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 145000,
   kw.difficulty = 61,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "free qr code generator" — 117K SV, KD92, Transactional
@@ -114,7 +108,6 @@ ON CREATE SET
   kw.cpc = 1.00,
   kw.traffic_potential = 160000,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -126,7 +119,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 117000,
   kw.difficulty = 92,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code generator free" — 67K SV, KD90, Transactional
@@ -141,7 +133,6 @@ ON CREATE SET
   kw.difficulty = 90,
   kw.cpc = 0.95,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -153,7 +144,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 67000,
   kw.difficulty = 90,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "scan qr code" — 66K SV, KD72, Transactional
@@ -168,7 +158,6 @@ ON CREATE SET
   kw.difficulty = 72,
   kw.cpc = 0.70,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -180,7 +169,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 66000,
   kw.difficulty = 72,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code maker" — 52K SV, KD94, Transactional
@@ -195,7 +183,6 @@ ON CREATE SET
   kw.difficulty = 94,
   kw.cpc = 1.00,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -207,7 +194,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 52000,
   kw.difficulty = 94,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr scanner" — 50K SV, KD73, Transactional
@@ -222,7 +208,6 @@ ON CREATE SET
   kw.difficulty = 73,
   kw.cpc = 0.70,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -234,7 +219,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 50000,
   kw.difficulty = 73,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "create qr code" — 49K SV, KD89, Transactional
@@ -249,7 +233,6 @@ ON CREATE SET
   kw.difficulty = 89,
   kw.cpc = 0.90,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -261,7 +244,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 49000,
   kw.difficulty = 89,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "how to scan a qr code" — 38K SV, KD61, Informational
@@ -276,7 +258,6 @@ ON CREATE SET
   kw.difficulty = 61,
   kw.cpc = 0.50,
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -288,7 +269,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 38000,
   kw.difficulty = 61,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "create a qr code" — 37K SV, KD89, Transactional
@@ -303,7 +283,6 @@ ON CREATE SET
   kw.difficulty = 89,
   kw.cpc = 0.90,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -315,7 +294,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 37000,
   kw.difficulty = 89,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "how to make a qr code" — 37K SV, KD84, Informational
@@ -330,7 +308,6 @@ ON CREATE SET
   kw.difficulty = 84,
   kw.cpc = 0.70,
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -342,7 +319,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 37000,
   kw.difficulty = 84,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "how to create a qr code" — 33K SV, KD90, Informational
@@ -357,7 +333,6 @@ ON CREATE SET
   kw.difficulty = 90,
   kw.cpc = 0.80,
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -369,7 +344,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 33000,
   kw.difficulty = 90,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr generator" — 31K SV, KD91, Transactional
@@ -384,7 +358,6 @@ ON CREATE SET
   kw.difficulty = 91,
   kw.cpc = 0.95,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -396,7 +369,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 31000,
   kw.difficulty = 91,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "make a qr code" — 26K SV, KD85, Transactional
@@ -411,7 +383,6 @@ ON CREATE SET
   kw.difficulty = 85,
   kw.cpc = 0.85,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -423,7 +394,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 26000,
   kw.difficulty = 85,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code reader" — 20K SV, KD75, Transactional
@@ -438,7 +408,6 @@ ON CREATE SET
   kw.difficulty = 75,
   kw.cpc = 0.70,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -450,7 +419,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 20000,
   kw.difficulty = 75,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "free qr code" — 19K SV, KD93, Transactional
@@ -465,7 +433,6 @@ ON CREATE SET
   kw.difficulty = 93,
   kw.cpc = 0.90,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -477,7 +444,6 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 19000,
   kw.difficulty = 93,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code creator" — 19K SV, KD92, Transactional
@@ -492,7 +458,6 @@ ON CREATE SET
   kw.difficulty = 92,
   kw.cpc = 0.95,
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -504,12 +469,11 @@ ON CREATE SET
 ON MATCH SET
   kw.volume = 19000,
   kw.difficulty = 92,
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // =============================================================================
 // SECONDARY KEYWORDS (QR Code domain coverage)
-// v0.17.3: All keywords updated with trait = 'imported', source = 'ahrefs'
+// v0.19.0: ADR-024 - Traits deprecated, removed from all keywords
 // =============================================================================
 
 // "create qr code" — Transactional
@@ -521,7 +485,6 @@ ON CREATE SET
   kw.slug_form = 'create-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -531,7 +494,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "custom qr code" — Transactional
@@ -543,7 +505,6 @@ ON CREATE SET
   kw.slug_form = 'custom-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -553,7 +514,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "download qr code" — Transactional
@@ -565,7 +525,6 @@ ON CREATE SET
   kw.slug_form = 'download-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -575,7 +534,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "dynamic qr code generator" — Transactional
@@ -587,7 +545,6 @@ ON CREATE SET
   kw.slug_form = 'dynamic-qr-code-generator',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -597,7 +554,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "dynamic qr code" — Informational
@@ -609,7 +565,6 @@ ON CREATE SET
   kw.slug_form = 'dynamic-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -619,7 +574,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "free qr code generator" — Transactional (High Volume)
@@ -631,7 +585,6 @@ ON CREATE SET
   kw.slug_form = 'free-qr-code-generator',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -641,7 +594,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "free qr code" — Transactional
@@ -653,7 +605,6 @@ ON CREATE SET
   kw.slug_form = 'free-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -663,7 +614,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "generate qr code" — Transactional
@@ -675,7 +625,6 @@ ON CREATE SET
   kw.slug_form = 'generate-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -685,7 +634,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "how to create qr code" — Informational
@@ -697,7 +645,6 @@ ON CREATE SET
   kw.slug_form = 'how-to-create-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -707,7 +654,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "how to make qr code" — Informational
@@ -719,7 +665,6 @@ ON CREATE SET
   kw.slug_form = 'how-to-make-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -729,7 +674,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "instagram qr code" — Transactional
@@ -741,7 +685,6 @@ ON CREATE SET
   kw.slug_form = 'instagram-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -751,7 +694,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "make qr code" — Transactional
@@ -763,7 +705,6 @@ ON CREATE SET
   kw.slug_form = 'make-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -773,7 +714,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "menu qr code" — Transactional
@@ -785,7 +725,6 @@ ON CREATE SET
   kw.slug_form = 'menu-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -795,7 +734,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "print qr code" — Transactional
@@ -807,7 +745,6 @@ ON CREATE SET
   kw.slug_form = 'print-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -817,7 +754,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code business card" — Transactional
@@ -829,7 +765,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-business-card',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -839,7 +774,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code coupon" — Transactional
@@ -851,7 +785,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-coupon',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -861,7 +794,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code design" — Transactional
@@ -873,7 +805,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-design',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -883,7 +814,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code email" — Transactional
@@ -895,7 +825,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-email',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -905,7 +834,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code facebook" — Transactional
@@ -917,7 +845,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-facebook',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -927,7 +854,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code google maps" — Transactional
@@ -939,7 +865,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-google-maps',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -949,7 +874,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code google review" — Transactional
@@ -961,7 +885,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-google-review',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -971,7 +894,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code image" — Informational
@@ -983,7 +905,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-image',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -993,7 +914,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code instagram" — Transactional
@@ -1005,7 +925,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-instagram',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1015,7 +934,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code link" — Transactional
@@ -1027,7 +945,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-link',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1037,7 +954,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code linkedin" — Transactional
@@ -1049,7 +965,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-linkedin',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1059,7 +974,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code location" — Transactional
@@ -1071,7 +985,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-location',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1081,7 +994,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code maker" — Transactional
@@ -1093,7 +1005,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-maker',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1103,7 +1014,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code menu" — Transactional
@@ -1115,7 +1025,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-menu',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1125,7 +1034,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code payment" — Informational
@@ -1137,7 +1045,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-payment',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1147,7 +1054,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code paypal" — Transactional
@@ -1159,7 +1065,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-paypal',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1169,7 +1074,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code pdf" — Transactional
@@ -1181,7 +1085,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-pdf',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1191,7 +1094,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code phone" — Transactional
@@ -1203,7 +1105,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-phone',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1213,7 +1114,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code reader" — Transactional
@@ -1225,7 +1125,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-reader',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1235,7 +1134,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code scanner" — Transactional (High Volume)
@@ -1247,7 +1145,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-scanner',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1257,7 +1154,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code sms" — Transactional
@@ -1269,7 +1165,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-sms',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1279,7 +1174,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code spotify" — Transactional
@@ -1291,7 +1185,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-spotify',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1301,7 +1194,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code ticket" — Informational
@@ -1313,7 +1205,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-ticket',
   kw.locale_key = 'en-US',
   kw.intent = 'informational',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1323,7 +1214,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code tiktok" — Transactional
@@ -1335,7 +1225,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-tiktok',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1345,7 +1234,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code twitter" — Transactional
@@ -1357,7 +1245,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-twitter',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1367,7 +1254,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code url" — Transactional
@@ -1379,7 +1265,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-url',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1389,7 +1274,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code venmo" — Transactional
@@ -1401,7 +1285,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-venmo',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1411,7 +1294,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code video" — Transactional
@@ -1423,7 +1305,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-video',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1433,7 +1314,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code wedding" — Transactional
@@ -1445,7 +1325,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-wedding',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1455,7 +1334,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code whatsapp" — Transactional
@@ -1467,7 +1345,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-whatsapp',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1477,7 +1354,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code wifi generator" — Transactional
@@ -1489,7 +1365,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-wifi-generator',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1499,7 +1374,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code with logo" — Transactional
@@ -1511,7 +1385,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-with-logo',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1521,7 +1394,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "qr code youtube" — Transactional
@@ -1533,7 +1405,6 @@ ON CREATE SET
   kw.slug_form = 'qr-code-youtube',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1543,7 +1414,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "scan qr code" — Transactional
@@ -1555,7 +1425,6 @@ ON CREATE SET
   kw.slug_form = 'scan-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1565,7 +1434,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "vcard qr code" — Transactional
@@ -1577,7 +1445,6 @@ ON CREATE SET
   kw.slug_form = 'vcard-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1587,7 +1454,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // "wifi qr code" — Transactional
@@ -1599,7 +1465,6 @@ ON CREATE SET
   kw.slug_form = 'wifi-qr-code',
   kw.locale_key = 'en-US',
   kw.intent = 'transactional',
-  kw.trait = 'imported',
   kw.source = 'ahrefs',
   kw.source_date = date('2026-03-08'),
   kw.llm_context = 'USE: when targeting en-US search traffic. TRIGGERS: SEO, keywords, ranking. RELATES: EntityNative (via TARGETS), Locale (via FOR_LOCALE).',
@@ -1609,7 +1474,6 @@ ON CREATE SET
   kw.created_at = datetime(),
   kw.updated_at = datetime()
 ON MATCH SET
-  kw.trait = 'imported',
   kw.updated_at = datetime();
 
 // =============================================================================
