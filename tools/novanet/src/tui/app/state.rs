@@ -177,7 +177,9 @@ impl Focus {
 /// ```
 /// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Tree
 /// v0.13.1: Diagram and Architecture removed (panel simplification)
-#[deprecated(since = "0.18.3", note = "Use Focus enum instead")]
+// NOTE: InfoBox tracks the selected sub-box within Info panel.
+// Focus enum tracks which panel has keyboard focus.
+// Both are needed - Focus is panel-level, InfoBox is sub-panel level.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InfoBox {
     #[default]
