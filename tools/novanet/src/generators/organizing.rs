@@ -76,6 +76,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     for realm in &doc.node_realms {
         writeln!(out).unwrap();
         let var = format!("r_{}", realm.key);
+        let content = cypher_str(&realm.content);
         let llm = cypher_str(&realm.llm_context);
         write_merge_meta(
             &mut out,
@@ -84,8 +85,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             &realm.key,
             &[
                 ("display_name", &realm.display_name),
-                ("emoji", realm.emoji()),
-                ("color", &realm.color),
+                ("content", &content),
                 ("llm_context", &llm),
             ],
         );
@@ -102,6 +102,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         for layer in &realm.layers {
             // Replace hyphens with underscores for valid Cypher variable names
             let var = format!("l_{}", layer.key.replace('-', "_"));
+            let content = cypher_str(&layer.content);
             let llm = cypher_str(&layer.llm_context);
             write_merge_meta(
                 &mut out,
@@ -110,8 +111,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                 &layer.key,
                 &[
                     ("display_name", &layer.display_name),
-                    ("emoji", layer.emoji()),
-                    ("color", &layer.color),
+                    ("content", &content),
                     ("llm_context", &llm),
                 ],
             );
@@ -142,8 +142,8 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         writeln!(out, "ON CREATE SET").unwrap();
         // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
         writeln!(out, "  {var}.node_class = 'arc_family',").unwrap();
-        // v0.17.3 (ADR-036): Add provenance tracking
-        writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
+        // v0.19.0 (ADR-044): provenance as JSON object
+        writeln!(out, "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}}',").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
@@ -237,6 +237,7 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
+                content: "A test realm for testing.".to_string(),
                 icon: TaxonomyIcon {
                     web: "flask".to_string(),
                     terminal: "🧪".to_string(),
@@ -246,6 +247,7 @@ mod tests {
                 layers: vec![NodeLayerDef {
                     key: "base".to_string(),
                     display_name: "Base".to_string(),
+                    content: "Base layer for testing.".to_string(),
                     icon: TaxonomyIcon {
                         web: "clipboard".to_string(),
                         terminal: "📋".to_string(),
@@ -276,11 +278,11 @@ mod tests {
         // Realm
         assert!(cypher.contains("MERGE (r_test:Schema:Realm {key: 'test'})"));
         assert!(cypher.contains("r_test.display_name = 'Test'"));
-        assert!(cypher.contains("r_test.color = '#000000'"));
+        assert!(cypher.contains("r_test.content = 'A test realm for testing.'"));
 
         // Layer
         assert!(cypher.contains("MERGE (l_base:Schema:Layer {key: 'base'})"));
-        assert!(cypher.contains("l_base.emoji = '📋'"));
+        assert!(cypher.contains("l_base.content = 'Base layer for testing.'"));
 
         // HAS_LAYER
         assert!(cypher.contains("MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'base'})"));
@@ -319,6 +321,7 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
+                content: "A realm.".to_string(),
                 icon: TaxonomyIcon {
                     web: "x".to_string(),
                     terminal: "X".to_string(),
@@ -328,6 +331,7 @@ mod tests {
                 layers: vec![NodeLayerDef {
                     key: "l".to_string(),
                     display_name: "L".to_string(),
+                    content: "A layer.".to_string(),
                     icon: TaxonomyIcon {
                         web: "y".to_string(),
                         terminal: "Y".to_string(),
@@ -451,32 +455,35 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),
+                content: "A test realm for snapshot testing.".to_string(),
                 icon: TaxonomyIcon {
                     web: "flask".to_string(),
                     terminal: "🧪".to_string(),
                 },
                 color: "#3b82f6".to_string(),
-                llm_context: "A test realm for snapshot testing.".to_string(),
+                llm_context: "LLM context for test realm.".to_string(),
                 layers: vec![
                     NodeLayerDef {
                         key: "base".to_string(),
                         display_name: "Base Layer".to_string(),
+                        content: "The base layer.".to_string(),
                         icon: TaxonomyIcon {
                             web: "clipboard".to_string(),
                             terminal: "📋".to_string(),
                         },
                         color: "#10b981".to_string(),
-                        llm_context: "The base layer.".to_string(),
+                        llm_context: "LLM context for base layer.".to_string(),
                     },
                     NodeLayerDef {
                         key: "derived".to_string(),
                         display_name: "Derived Layer".to_string(),
+                        content: "A derived layer.".to_string(),
                         icon: TaxonomyIcon {
                             web: "wrench".to_string(),
                             terminal: "🔧".to_string(),
                         },
                         color: "#f59e0b".to_string(),
-                        llm_context: "A derived layer.".to_string(),
+                        llm_context: "LLM context for derived layer.".to_string(),
                     },
                 ],
             }],

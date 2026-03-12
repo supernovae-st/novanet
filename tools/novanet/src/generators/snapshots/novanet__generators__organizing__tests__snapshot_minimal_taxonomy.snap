@@ -22,17 +22,15 @@ expression: cypher
 MERGE (r_test:Schema:Realm {key: 'test'})
 ON CREATE SET
   r_test.display_name = 'Test Realm',
-  r_test.emoji = '🧪',
-  r_test.color = '#3b82f6',
-  r_test.llm_context = 'A test realm for snapshot testing.',
+  r_test.content = 'A test realm for snapshot testing.',
+  r_test.llm_context = 'LLM context for test realm.',
   r_test.node_class = 'realm',
-  r_test.created_by = 'seed:schema',
+  r_test.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   r_test.created_at = datetime()
 ON MATCH SET
   r_test.display_name = 'Test Realm',
-  r_test.emoji = '🧪',
-  r_test.color = '#3b82f6',
-  r_test.llm_context = 'A test realm for snapshot testing.',
+  r_test.content = 'A test realm for snapshot testing.',
+  r_test.llm_context = 'LLM context for test realm.',
   r_test.node_class = 'realm',
   r_test.updated_at = datetime();
 
@@ -44,17 +42,15 @@ ON MATCH SET
 MERGE (l_base:Schema:Layer {key: 'base'})
 ON CREATE SET
   l_base.display_name = 'Base Layer',
-  l_base.emoji = '📋',
-  l_base.color = '#10b981',
-  l_base.llm_context = 'The base layer.',
+  l_base.content = 'The base layer.',
+  l_base.llm_context = 'LLM context for base layer.',
   l_base.node_class = 'layer',
-  l_base.created_by = 'seed:schema',
+  l_base.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   l_base.created_at = datetime()
 ON MATCH SET
   l_base.display_name = 'Base Layer',
-  l_base.emoji = '📋',
-  l_base.color = '#10b981',
-  l_base.llm_context = 'The base layer.',
+  l_base.content = 'The base layer.',
+  l_base.llm_context = 'LLM context for base layer.',
   l_base.node_class = 'layer',
   l_base.updated_at = datetime();
 
@@ -63,17 +59,15 @@ MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_derived:Schema:Layer {key: 'derived'})
 ON CREATE SET
   l_derived.display_name = 'Derived Layer',
-  l_derived.emoji = '🔧',
-  l_derived.color = '#f59e0b',
-  l_derived.llm_context = 'A derived layer.',
+  l_derived.content = 'A derived layer.',
+  l_derived.llm_context = 'LLM context for derived layer.',
   l_derived.node_class = 'layer',
-  l_derived.created_by = 'seed:schema',
+  l_derived.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   l_derived.created_at = datetime()
 ON MATCH SET
   l_derived.display_name = 'Derived Layer',
-  l_derived.emoji = '🔧',
-  l_derived.color = '#f59e0b',
-  l_derived.llm_context = 'A derived layer.',
+  l_derived.content = 'A derived layer.',
+  l_derived.llm_context = 'LLM context for derived layer.',
   l_derived.node_class = 'layer',
   l_derived.updated_at = datetime();
 
@@ -87,7 +81,7 @@ MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
 ON CREATE SET
   af_semantic.node_class = 'arc_family',
-  af_semantic.created_by = 'seed:schema',
+  af_semantic.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   af_semantic.created_at = datetime(),
   af_semantic.updated_at = datetime()
 ON MATCH SET

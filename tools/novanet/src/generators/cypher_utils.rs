@@ -114,8 +114,8 @@ pub fn write_merge_meta(
     }
     // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
     writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
-    // v0.17.3 (ADR-036): Add provenance tracking
-    writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
+    // v0.19.0 (ADR-044): provenance as JSON object
+    writeln!(out, "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}}',").unwrap();
     writeln!(out, "  {var}.created_at = datetime()").unwrap();
 
     writeln!(out, "ON MATCH SET").unwrap();
@@ -307,8 +307,8 @@ mod tests {
         assert!(out.contains("r.emoji = 'globe'"));
         // v0.19.0 (ADR-037): node_class discriminator
         assert!(out.contains("r.node_class = 'realm'"));
-        // v0.17.3 (ADR-036): Provenance tracking
-        assert!(out.contains("r.created_by = 'seed:schema'"));
+        // v0.19.0 (ADR-044): Provenance tracking
+        assert!(out.contains("r.provenance = '{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}'"));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));
     }

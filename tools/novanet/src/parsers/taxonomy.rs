@@ -125,10 +125,13 @@ pub struct LayerRetrievalDefaults {
 pub struct NodeRealmDef {
     pub key: String,
     pub display_name: String,
-    /// v0.12.5: Dual format icon { web, terminal }.
-    pub icon: TaxonomyIcon,
-    pub color: String,
+    /// v0.19.0 (ADR-044): What this realm IS (1-3 sentences).
+    pub content: String,
     pub llm_context: String,
+    /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
+    pub icon: TaxonomyIcon,
+    /// Hex color for TUI display only, not in seeds.
+    pub color: String,
     pub layers: Vec<NodeLayerDef>,
 }
 
@@ -144,10 +147,13 @@ impl NodeRealmDef {
 pub struct NodeLayerDef {
     pub key: String,
     pub display_name: String,
-    /// v0.12.5: Dual format icon { web, terminal }.
-    pub icon: TaxonomyIcon,
-    pub color: String,
+    /// v0.19.0 (ADR-044): What this layer IS (1-3 sentences).
+    pub content: String,
     pub llm_context: String,
+    /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
+    pub icon: TaxonomyIcon,
+    /// Hex color for TUI display only, not in seeds.
+    pub color: String,
 }
 
 impl NodeLayerDef {
@@ -266,12 +272,13 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
         let layer_def = NodeLayerDef {
             key: layer.key.clone(),
             display_name: layer.display_name.clone(),
+            content: layer.content.clone(),
+            llm_context,
             icon: TaxonomyIcon {
                 web: layer.icon.web.clone(),
                 terminal: layer.icon.terminal.clone(),
             },
             color: layer.color.clone(),
-            llm_context,
         };
 
         for realm_key in &layer.realms {
@@ -289,12 +296,13 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
             NodeRealmDef {
                 key: r.key,
                 display_name: r.display_name,
+                content: r.content,
+                llm_context: r.llm_context.unwrap_or_default(),
                 icon: TaxonomyIcon {
                     web: r.icon.web,
                     terminal: r.icon.terminal,
                 },
                 color: r.color,
-                llm_context: r.llm_context.unwrap_or_default(),
                 layers,
             }
         })
@@ -415,12 +423,13 @@ mod tests {
 
     #[test]
     fn parse_taxonomy_yaml() {
-        // v0.17.3: node_traits removed (ADR-036)
+        // v0.19.0: content field required per ADR-044
         let yaml = r##"
-version: "0.17.3"
+version: "0.19.0"
 node_realms:
   - key: shared
     display_name: Shared
+    content: "Universal knowledge (READ-ONLY)."
     icon:
       web: globe
       terminal: "🌍"
@@ -429,6 +438,7 @@ node_realms:
     layers:
       - key: config
         display_name: Configuration
+        content: "System configuration and locale definitions."
         icon:
           web: settings
           terminal: "⚙️"
@@ -457,7 +467,7 @@ terminal:
     cyan: 6
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.version, "0.17.3");
+        assert_eq!(doc.version, "0.19.0");
         assert_eq!(doc.node_realms.len(), 1);
         assert_eq!(doc.node_realms[0].key, "shared");
         assert_eq!(doc.node_realms[0].layers.len(), 1);
@@ -475,12 +485,13 @@ terminal:
 
     #[test]
     fn parse_minimal_taxonomy() {
-        // v0.17.3: node_traits removed (ADR-036)
+        // v0.19.0: content field required per ADR-044
         let yaml = r##"
-version: "0.17.3"
+version: "0.19.0"
 node_realms:
   - key: test
     display_name: Test
+    content: "Test realm for unit tests."
     icon:
       web: flask
       terminal: "🧪"
@@ -489,6 +500,7 @@ node_realms:
     layers:
       - key: base
         display_name: Base
+        content: "Base layer for tests."
         icon:
           web: clipboard
           terminal: "📋"
@@ -502,7 +514,7 @@ arc_families:
     llm_context: "Ownership."
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.version, "0.17.3");
+        assert_eq!(doc.version, "0.19.0");
         assert!(doc.arc_scopes.is_empty());
         assert!(doc.arc_cardinalities.is_empty());
         assert!(doc.terminal.is_none());
@@ -511,12 +523,13 @@ arc_families:
 
     #[test]
     fn to_organizing_doc_conversion() {
-        // v0.17.3: node_traits removed (ADR-036)
+        // v0.19.0: content field required per ADR-044
         let yaml = r##"
-version: "0.17.3"
+version: "0.19.0"
 node_realms:
   - key: shared
     display_name: Shared
+    content: "Shared realm for universal definitions."
     icon:
       web: globe
       terminal: "🌍"
@@ -525,6 +538,7 @@ node_realms:
     layers:
       - key: config
         display_name: Configuration
+        content: "Configuration layer for system settings."
         icon:
           web: settings
           terminal: "⚙️"
@@ -540,7 +554,7 @@ arc_families:
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         let organizing = doc.to_organizing_doc();
 
-        assert_eq!(organizing.version, "0.17.3");
+        assert_eq!(organizing.version, "0.19.0");
         assert_eq!(organizing.realms.len(), 1);
         assert_eq!(organizing.realms[0].key, "shared");
         // Note: traits removed in v0.17.3 (ADR-036)
@@ -604,12 +618,13 @@ arc_families:
 
     #[test]
     fn parse_layer_retrieval_defaults() {
-        // v0.17.3: Test layer_retrieval_defaults field (was class_retrieval_defaults, keyed by layer)
+        // v0.19.0: content field required per ADR-044
         let yaml = r##"
-version: "10.5.0"
+version: "0.19.0"
 node_realms:
   - key: test
     display_name: Test
+    content: "Test realm for layer retrieval tests."
     icon:
       web: flask
       terminal: "🧪"
@@ -618,6 +633,7 @@ node_realms:
     layers:
       - key: semantic
         display_name: Semantic
+        content: "Semantic layer for meaning and relationships."
         icon:
           web: clipboard
           terminal: "📋"
@@ -625,6 +641,7 @@ node_realms:
         llm_context: "Semantic."
       - key: output
         display_name: Output
+        content: "Output layer for generated content."
         icon:
           web: file-output
           terminal: "📤"
@@ -654,7 +671,7 @@ arc_families:
     llm_context: "Semantic."
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.version, "10.5.0");
+        assert_eq!(doc.version, "0.19.0");
 
         // Check layer_retrieval_defaults (v0.17.3: keyed by layer, not trait)
         let defaults = doc.layer_retrieval_defaults.unwrap();
