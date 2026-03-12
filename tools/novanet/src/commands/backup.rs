@@ -331,10 +331,7 @@ fn create_service(
 
 /// Map BackupError to NovaNetError
 fn map_backup_error(e: BackupError) -> crate::error::NovaNetError {
-    crate::error::NovaNetError::Io(std::io::Error::new(
-        std::io::ErrorKind::Other,
-        e.to_string(),
-    ))
+    crate::error::NovaNetError::Io(std::io::Error::other(e.to_string()))
 }
 
 // ============================================================================
