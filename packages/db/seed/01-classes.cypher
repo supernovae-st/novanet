@@ -16,6 +16,7 @@
 MERGE (c_Adaptation:Schema:Class {label: 'Adaptation'})
 ON CREATE SET
   c_Adaptation.key = 'adaptation',
+  c_Adaptation.name = 'Adaptation',
   c_Adaptation.realm = 'shared',
   c_Adaptation.layer = 'locale',
   c_Adaptation.display_name = 'Adaptation',
@@ -32,6 +33,7 @@ ON CREATE SET
   c_Adaptation.created_at = datetime()
 ON MATCH SET
   c_Adaptation.key = 'adaptation',
+  c_Adaptation.name = 'Adaptation',
   c_Adaptation.realm = 'shared',
   c_Adaptation.layer = 'locale',
   c_Adaptation.display_name = 'Adaptation',
@@ -49,6 +51,7 @@ ON MATCH SET
 MERGE (c_AudienceSet:Schema:Class {label: 'AudienceSet'})
 ON CREATE SET
   c_AudienceSet.key = 'audience-set',
+  c_AudienceSet.name = 'AudienceSet',
   c_AudienceSet.realm = 'shared',
   c_AudienceSet.layer = 'knowledge',
   c_AudienceSet.display_name = 'AudienceSet',
@@ -65,6 +68,7 @@ ON CREATE SET
   c_AudienceSet.created_at = datetime()
 ON MATCH SET
   c_AudienceSet.key = 'audience-set',
+  c_AudienceSet.name = 'AudienceSet',
   c_AudienceSet.realm = 'shared',
   c_AudienceSet.layer = 'knowledge',
   c_AudienceSet.display_name = 'AudienceSet',
@@ -82,6 +86,7 @@ ON MATCH SET
 MERGE (c_AudienceTrait:Schema:Class {label: 'AudienceTrait'})
 ON CREATE SET
   c_AudienceTrait.key = 'audience-trait',
+  c_AudienceTrait.name = 'AudienceTrait',
   c_AudienceTrait.realm = 'shared',
   c_AudienceTrait.layer = 'knowledge',
   c_AudienceTrait.display_name = 'AudienceTrait',
@@ -98,6 +103,7 @@ ON CREATE SET
   c_AudienceTrait.created_at = datetime()
 ON MATCH SET
   c_AudienceTrait.key = 'audience-trait',
+  c_AudienceTrait.name = 'AudienceTrait',
   c_AudienceTrait.realm = 'shared',
   c_AudienceTrait.layer = 'knowledge',
   c_AudienceTrait.display_name = 'AudienceTrait',
@@ -115,6 +121,7 @@ ON MATCH SET
 MERGE (c_Block:Schema:Class {label: 'Block'})
 ON CREATE SET
   c_Block.key = 'block',
+  c_Block.name = 'Block',
   c_Block.realm = 'org',
   c_Block.layer = 'structure',
   c_Block.display_name = 'Block',
@@ -131,6 +138,7 @@ ON CREATE SET
   c_Block.created_at = datetime()
 ON MATCH SET
   c_Block.key = 'block',
+  c_Block.name = 'Block',
   c_Block.realm = 'org',
   c_Block.layer = 'structure',
   c_Block.display_name = 'Block',
@@ -148,6 +156,7 @@ ON MATCH SET
 MERGE (c_BlockInstruction:Schema:Class {label: 'BlockInstruction'})
 ON CREATE SET
   c_BlockInstruction.key = 'block-instruction',
+  c_BlockInstruction.name = 'BlockInstruction',
   c_BlockInstruction.realm = 'org',
   c_BlockInstruction.layer = 'instruction',
   c_BlockInstruction.display_name = 'BlockInstruction',
@@ -164,6 +173,7 @@ ON CREATE SET
   c_BlockInstruction.created_at = datetime()
 ON MATCH SET
   c_BlockInstruction.key = 'block-instruction',
+  c_BlockInstruction.name = 'BlockInstruction',
   c_BlockInstruction.realm = 'org',
   c_BlockInstruction.layer = 'instruction',
   c_BlockInstruction.display_name = 'BlockInstruction',
@@ -181,6 +191,7 @@ ON MATCH SET
 MERGE (c_BlockNative:Schema:Class {label: 'BlockNative'})
 ON CREATE SET
   c_BlockNative.key = 'block-native',
+  c_BlockNative.name = 'BlockNative',
   c_BlockNative.realm = 'org',
   c_BlockNative.layer = 'output',
   c_BlockNative.display_name = 'BlockNative',
@@ -197,6 +208,7 @@ ON CREATE SET
   c_BlockNative.created_at = datetime()
 ON MATCH SET
   c_BlockNative.key = 'block-native',
+  c_BlockNative.name = 'BlockNative',
   c_BlockNative.realm = 'org',
   c_BlockNative.layer = 'output',
   c_BlockNative.display_name = 'BlockNative',
@@ -214,6 +226,7 @@ ON MATCH SET
 MERGE (c_BlockRules:Schema:Class {label: 'BlockRules'})
 ON CREATE SET
   c_BlockRules.key = 'block-rules',
+  c_BlockRules.name = 'BlockRules',
   c_BlockRules.realm = 'org',
   c_BlockRules.layer = 'instruction',
   c_BlockRules.display_name = 'BlockRules',
@@ -230,6 +243,7 @@ ON CREATE SET
   c_BlockRules.created_at = datetime()
 ON MATCH SET
   c_BlockRules.key = 'block-rules',
+  c_BlockRules.name = 'BlockRules',
   c_BlockRules.realm = 'org',
   c_BlockRules.layer = 'instruction',
   c_BlockRules.display_name = 'BlockRules',
@@ -247,6 +261,7 @@ ON MATCH SET
 MERGE (c_BlockType:Schema:Class {label: 'BlockType'})
 ON CREATE SET
   c_BlockType.key = 'block-type',
+  c_BlockType.name = 'BlockType',
   c_BlockType.realm = 'org',
   c_BlockType.layer = 'instruction',
   c_BlockType.display_name = 'BlockType',
@@ -263,6 +278,7 @@ ON CREATE SET
   c_BlockType.created_at = datetime()
 ON MATCH SET
   c_BlockType.key = 'block-type',
+  c_BlockType.name = 'BlockType',
   c_BlockType.realm = 'org',
   c_BlockType.layer = 'instruction',
   c_BlockType.display_name = 'BlockType',
@@ -280,6 +296,7 @@ ON MATCH SET
 MERGE (c_Brand:Schema:Class {label: 'Brand'})
 ON CREATE SET
   c_Brand.key = 'brand',
+  c_Brand.name = 'Brand',
   c_Brand.realm = 'org',
   c_Brand.layer = 'foundation',
   c_Brand.display_name = 'Brand',
@@ -296,6 +313,7 @@ ON CREATE SET
   c_Brand.created_at = datetime()
 ON MATCH SET
   c_Brand.key = 'brand',
+  c_Brand.name = 'Brand',
   c_Brand.realm = 'org',
   c_Brand.layer = 'foundation',
   c_Brand.display_name = 'Brand',
@@ -313,6 +331,7 @@ ON MATCH SET
 MERGE (c_BrandDesign:Schema:Class {label: 'BrandDesign'})
 ON CREATE SET
   c_BrandDesign.key = 'brand-design',
+  c_BrandDesign.name = 'BrandDesign',
   c_BrandDesign.realm = 'org',
   c_BrandDesign.layer = 'foundation',
   c_BrandDesign.display_name = 'BrandDesign',
@@ -329,6 +348,7 @@ ON CREATE SET
   c_BrandDesign.created_at = datetime()
 ON MATCH SET
   c_BrandDesign.key = 'brand-design',
+  c_BrandDesign.name = 'BrandDesign',
   c_BrandDesign.realm = 'org',
   c_BrandDesign.layer = 'foundation',
   c_BrandDesign.display_name = 'BrandDesign',
@@ -346,6 +366,7 @@ ON MATCH SET
 MERGE (c_BrandPrinciples:Schema:Class {label: 'BrandPrinciples'})
 ON CREATE SET
   c_BrandPrinciples.key = 'brand-principles',
+  c_BrandPrinciples.name = 'BrandPrinciples',
   c_BrandPrinciples.realm = 'org',
   c_BrandPrinciples.layer = 'foundation',
   c_BrandPrinciples.display_name = 'BrandPrinciples',
@@ -362,6 +383,7 @@ ON CREATE SET
   c_BrandPrinciples.created_at = datetime()
 ON MATCH SET
   c_BrandPrinciples.key = 'brand-principles',
+  c_BrandPrinciples.name = 'BrandPrinciples',
   c_BrandPrinciples.realm = 'org',
   c_BrandPrinciples.layer = 'foundation',
   c_BrandPrinciples.display_name = 'BrandPrinciples',
@@ -379,6 +401,7 @@ ON MATCH SET
 MERGE (c_ContentSlot:Schema:Class {label: 'ContentSlot'})
 ON CREATE SET
   c_ContentSlot.key = 'content-slot',
+  c_ContentSlot.name = 'ContentSlot',
   c_ContentSlot.realm = 'org',
   c_ContentSlot.layer = 'structure',
   c_ContentSlot.display_name = 'ContentSlot',
@@ -395,6 +418,7 @@ ON CREATE SET
   c_ContentSlot.created_at = datetime()
 ON MATCH SET
   c_ContentSlot.key = 'content-slot',
+  c_ContentSlot.name = 'ContentSlot',
   c_ContentSlot.realm = 'org',
   c_ContentSlot.layer = 'structure',
   c_ContentSlot.display_name = 'ContentSlot',
@@ -412,6 +436,7 @@ ON MATCH SET
 MERGE (c_Continent:Schema:Class {label: 'Continent'})
 ON CREATE SET
   c_Continent.key = 'continent',
+  c_Continent.name = 'Continent',
   c_Continent.realm = 'shared',
   c_Continent.layer = 'geography',
   c_Continent.display_name = 'Continent',
@@ -428,6 +453,7 @@ ON CREATE SET
   c_Continent.created_at = datetime()
 ON MATCH SET
   c_Continent.key = 'continent',
+  c_Continent.name = 'Continent',
   c_Continent.realm = 'shared',
   c_Continent.layer = 'geography',
   c_Continent.display_name = 'Continent',
@@ -445,6 +471,7 @@ ON MATCH SET
 MERGE (c_Country:Schema:Class {label: 'Country'})
 ON CREATE SET
   c_Country.key = 'country',
+  c_Country.name = 'Country',
   c_Country.realm = 'shared',
   c_Country.layer = 'geography',
   c_Country.display_name = 'Country',
@@ -461,6 +488,7 @@ ON CREATE SET
   c_Country.created_at = datetime()
 ON MATCH SET
   c_Country.key = 'country',
+  c_Country.name = 'Country',
   c_Country.realm = 'shared',
   c_Country.layer = 'geography',
   c_Country.display_name = 'Country',
@@ -478,6 +506,7 @@ ON MATCH SET
 MERGE (c_CulturalRealm:Schema:Class {label: 'CulturalRealm'})
 ON CREATE SET
   c_CulturalRealm.key = 'cultural-realm',
+  c_CulturalRealm.name = 'CulturalRealm',
   c_CulturalRealm.realm = 'shared',
   c_CulturalRealm.layer = 'knowledge',
   c_CulturalRealm.display_name = 'CulturalRealm',
@@ -494,6 +523,7 @@ ON CREATE SET
   c_CulturalRealm.created_at = datetime()
 ON MATCH SET
   c_CulturalRealm.key = 'cultural-realm',
+  c_CulturalRealm.name = 'CulturalRealm',
   c_CulturalRealm.realm = 'shared',
   c_CulturalRealm.layer = 'knowledge',
   c_CulturalRealm.display_name = 'CulturalRealm',
@@ -511,6 +541,7 @@ ON MATCH SET
 MERGE (c_CulturalSubRealm:Schema:Class {label: 'CulturalSubRealm'})
 ON CREATE SET
   c_CulturalSubRealm.key = 'cultural-sub-realm',
+  c_CulturalSubRealm.name = 'CulturalSubRealm',
   c_CulturalSubRealm.realm = 'shared',
   c_CulturalSubRealm.layer = 'knowledge',
   c_CulturalSubRealm.display_name = 'CulturalSubRealm',
@@ -527,6 +558,7 @@ ON CREATE SET
   c_CulturalSubRealm.created_at = datetime()
 ON MATCH SET
   c_CulturalSubRealm.key = 'cultural-sub-realm',
+  c_CulturalSubRealm.name = 'CulturalSubRealm',
   c_CulturalSubRealm.realm = 'shared',
   c_CulturalSubRealm.layer = 'knowledge',
   c_CulturalSubRealm.display_name = 'CulturalSubRealm',
@@ -544,6 +576,7 @@ ON MATCH SET
 MERGE (c_Culture:Schema:Class {label: 'Culture'})
 ON CREATE SET
   c_Culture.key = 'culture',
+  c_Culture.name = 'Culture',
   c_Culture.realm = 'shared',
   c_Culture.layer = 'locale',
   c_Culture.display_name = 'Culture',
@@ -560,6 +593,7 @@ ON CREATE SET
   c_Culture.created_at = datetime()
 ON MATCH SET
   c_Culture.key = 'culture',
+  c_Culture.name = 'Culture',
   c_Culture.realm = 'shared',
   c_Culture.layer = 'locale',
   c_Culture.display_name = 'Culture',
@@ -577,6 +611,7 @@ ON MATCH SET
 MERGE (c_CultureRef:Schema:Class {label: 'CultureRef'})
 ON CREATE SET
   c_CultureRef.key = 'culture-ref',
+  c_CultureRef.name = 'CultureRef',
   c_CultureRef.realm = 'shared',
   c_CultureRef.layer = 'knowledge',
   c_CultureRef.display_name = 'CultureRef',
@@ -593,6 +628,7 @@ ON CREATE SET
   c_CultureRef.created_at = datetime()
 ON MATCH SET
   c_CultureRef.key = 'culture-ref',
+  c_CultureRef.name = 'CultureRef',
   c_CultureRef.realm = 'shared',
   c_CultureRef.layer = 'knowledge',
   c_CultureRef.display_name = 'CultureRef',
@@ -610,6 +646,7 @@ ON MATCH SET
 MERGE (c_CultureRefEnrichment:Schema:Class {label: 'CultureRefEnrichment'})
 ON CREATE SET
   c_CultureRefEnrichment.key = 'culture-ref-enrichment',
+  c_CultureRefEnrichment.name = 'CultureRefEnrichment',
   c_CultureRefEnrichment.realm = 'org',
   c_CultureRefEnrichment.layer = 'output',
   c_CultureRefEnrichment.display_name = 'CultureRefEnrichment',
@@ -626,6 +663,7 @@ ON CREATE SET
   c_CultureRefEnrichment.created_at = datetime()
 ON MATCH SET
   c_CultureRefEnrichment.key = 'culture-ref-enrichment',
+  c_CultureRefEnrichment.name = 'CultureRefEnrichment',
   c_CultureRefEnrichment.realm = 'org',
   c_CultureRefEnrichment.layer = 'output',
   c_CultureRefEnrichment.display_name = 'CultureRefEnrichment',
@@ -643,6 +681,7 @@ ON MATCH SET
 MERGE (c_CultureSet:Schema:Class {label: 'CultureSet'})
 ON CREATE SET
   c_CultureSet.key = 'culture-set',
+  c_CultureSet.name = 'CultureSet',
   c_CultureSet.realm = 'shared',
   c_CultureSet.layer = 'knowledge',
   c_CultureSet.display_name = 'CultureSet',
@@ -659,6 +698,7 @@ ON CREATE SET
   c_CultureSet.created_at = datetime()
 ON MATCH SET
   c_CultureSet.key = 'culture-set',
+  c_CultureSet.name = 'CultureSet',
   c_CultureSet.realm = 'shared',
   c_CultureSet.layer = 'knowledge',
   c_CultureSet.display_name = 'CultureSet',
@@ -676,6 +716,7 @@ ON MATCH SET
 MERGE (c_EconomicRegion:Schema:Class {label: 'EconomicRegion'})
 ON CREATE SET
   c_EconomicRegion.key = 'economic-region',
+  c_EconomicRegion.name = 'EconomicRegion',
   c_EconomicRegion.realm = 'shared',
   c_EconomicRegion.layer = 'geography',
   c_EconomicRegion.display_name = 'EconomicRegion',
@@ -692,6 +733,7 @@ ON CREATE SET
   c_EconomicRegion.created_at = datetime()
 ON MATCH SET
   c_EconomicRegion.key = 'economic-region',
+  c_EconomicRegion.name = 'EconomicRegion',
   c_EconomicRegion.realm = 'shared',
   c_EconomicRegion.layer = 'geography',
   c_EconomicRegion.display_name = 'EconomicRegion',
@@ -709,6 +751,7 @@ ON MATCH SET
 MERGE (c_Entity:Schema:Class {label: 'Entity'})
 ON CREATE SET
   c_Entity.key = 'entity',
+  c_Entity.name = 'Entity',
   c_Entity.realm = 'org',
   c_Entity.layer = 'semantic',
   c_Entity.display_name = 'Entity',
@@ -725,6 +768,7 @@ ON CREATE SET
   c_Entity.created_at = datetime()
 ON MATCH SET
   c_Entity.key = 'entity',
+  c_Entity.name = 'Entity',
   c_Entity.realm = 'org',
   c_Entity.layer = 'semantic',
   c_Entity.display_name = 'Entity',
@@ -742,6 +786,7 @@ ON MATCH SET
 MERGE (c_EntityCategory:Schema:Class {label: 'EntityCategory'})
 ON CREATE SET
   c_EntityCategory.key = 'entity-category',
+  c_EntityCategory.name = 'EntityCategory',
   c_EntityCategory.realm = 'shared',
   c_EntityCategory.layer = 'config',
   c_EntityCategory.display_name = 'EntityCategory',
@@ -758,6 +803,7 @@ ON CREATE SET
   c_EntityCategory.created_at = datetime()
 ON MATCH SET
   c_EntityCategory.key = 'entity-category',
+  c_EntityCategory.name = 'EntityCategory',
   c_EntityCategory.realm = 'shared',
   c_EntityCategory.layer = 'config',
   c_EntityCategory.display_name = 'EntityCategory',
@@ -775,6 +821,7 @@ ON MATCH SET
 MERGE (c_EntityNative:Schema:Class {label: 'EntityNative'})
 ON CREATE SET
   c_EntityNative.key = 'entity-native',
+  c_EntityNative.name = 'EntityNative',
   c_EntityNative.realm = 'org',
   c_EntityNative.layer = 'semantic',
   c_EntityNative.display_name = 'EntityNative',
@@ -791,6 +838,7 @@ ON CREATE SET
   c_EntityNative.created_at = datetime()
 ON MATCH SET
   c_EntityNative.key = 'entity-native',
+  c_EntityNative.name = 'EntityNative',
   c_EntityNative.realm = 'org',
   c_EntityNative.layer = 'semantic',
   c_EntityNative.display_name = 'EntityNative',
@@ -808,6 +856,7 @@ ON MATCH SET
 MERGE (c_Expression:Schema:Class {label: 'Expression'})
 ON CREATE SET
   c_Expression.key = 'expression',
+  c_Expression.name = 'Expression',
   c_Expression.realm = 'shared',
   c_Expression.layer = 'knowledge',
   c_Expression.display_name = 'Expression',
@@ -824,6 +873,7 @@ ON CREATE SET
   c_Expression.created_at = datetime()
 ON MATCH SET
   c_Expression.key = 'expression',
+  c_Expression.name = 'Expression',
   c_Expression.realm = 'shared',
   c_Expression.layer = 'knowledge',
   c_Expression.display_name = 'Expression',
@@ -841,6 +891,7 @@ ON MATCH SET
 MERGE (c_ExpressionEnrichment:Schema:Class {label: 'ExpressionEnrichment'})
 ON CREATE SET
   c_ExpressionEnrichment.key = 'expression-enrichment',
+  c_ExpressionEnrichment.name = 'ExpressionEnrichment',
   c_ExpressionEnrichment.realm = 'org',
   c_ExpressionEnrichment.layer = 'output',
   c_ExpressionEnrichment.display_name = 'ExpressionEnrichment',
@@ -857,6 +908,7 @@ ON CREATE SET
   c_ExpressionEnrichment.created_at = datetime()
 ON MATCH SET
   c_ExpressionEnrichment.key = 'expression-enrichment',
+  c_ExpressionEnrichment.name = 'ExpressionEnrichment',
   c_ExpressionEnrichment.realm = 'org',
   c_ExpressionEnrichment.layer = 'output',
   c_ExpressionEnrichment.display_name = 'ExpressionEnrichment',
@@ -874,6 +926,7 @@ ON MATCH SET
 MERGE (c_ExpressionSet:Schema:Class {label: 'ExpressionSet'})
 ON CREATE SET
   c_ExpressionSet.key = 'expression-set',
+  c_ExpressionSet.name = 'ExpressionSet',
   c_ExpressionSet.realm = 'shared',
   c_ExpressionSet.layer = 'knowledge',
   c_ExpressionSet.display_name = 'ExpressionSet',
@@ -890,6 +943,7 @@ ON CREATE SET
   c_ExpressionSet.created_at = datetime()
 ON MATCH SET
   c_ExpressionSet.key = 'expression-set',
+  c_ExpressionSet.name = 'ExpressionSet',
   c_ExpressionSet.realm = 'shared',
   c_ExpressionSet.layer = 'knowledge',
   c_ExpressionSet.display_name = 'ExpressionSet',
@@ -907,6 +961,7 @@ ON MATCH SET
 MERGE (c_Formatting:Schema:Class {label: 'Formatting'})
 ON CREATE SET
   c_Formatting.key = 'formatting',
+  c_Formatting.name = 'Formatting',
   c_Formatting.realm = 'shared',
   c_Formatting.layer = 'locale',
   c_Formatting.display_name = 'Formatting',
@@ -923,6 +978,7 @@ ON CREATE SET
   c_Formatting.created_at = datetime()
 ON MATCH SET
   c_Formatting.key = 'formatting',
+  c_Formatting.name = 'Formatting',
   c_Formatting.realm = 'shared',
   c_Formatting.layer = 'locale',
   c_Formatting.display_name = 'Formatting',
@@ -940,6 +996,7 @@ ON MATCH SET
 MERGE (c_GEOAnswer:Schema:Class {label: 'GEOAnswer'})
 ON CREATE SET
   c_GEOAnswer.key = 'geo-answer',
+  c_GEOAnswer.name = 'GEOAnswer',
   c_GEOAnswer.realm = 'shared',
   c_GEOAnswer.layer = 'knowledge',
   c_GEOAnswer.display_name = 'GEOAnswer',
@@ -956,6 +1013,7 @@ ON CREATE SET
   c_GEOAnswer.created_at = datetime()
 ON MATCH SET
   c_GEOAnswer.key = 'geo-answer',
+  c_GEOAnswer.name = 'GEOAnswer',
   c_GEOAnswer.realm = 'shared',
   c_GEOAnswer.layer = 'knowledge',
   c_GEOAnswer.display_name = 'GEOAnswer',
@@ -973,6 +1031,7 @@ ON MATCH SET
 MERGE (c_GEOQuery:Schema:Class {label: 'GEOQuery'})
 ON CREATE SET
   c_GEOQuery.key = 'geo-query',
+  c_GEOQuery.name = 'GEOQuery',
   c_GEOQuery.realm = 'shared',
   c_GEOQuery.layer = 'knowledge',
   c_GEOQuery.display_name = 'GEOQuery',
@@ -989,6 +1048,7 @@ ON CREATE SET
   c_GEOQuery.created_at = datetime()
 ON MATCH SET
   c_GEOQuery.key = 'geo-query',
+  c_GEOQuery.name = 'GEOQuery',
   c_GEOQuery.realm = 'shared',
   c_GEOQuery.layer = 'knowledge',
   c_GEOQuery.display_name = 'GEOQuery',
@@ -1006,6 +1066,7 @@ ON MATCH SET
 MERGE (c_GEOQuerySet:Schema:Class {label: 'GEOQuerySet'})
 ON CREATE SET
   c_GEOQuerySet.key = 'geo-query-set',
+  c_GEOQuerySet.name = 'GEOQuerySet',
   c_GEOQuerySet.realm = 'shared',
   c_GEOQuerySet.layer = 'knowledge',
   c_GEOQuerySet.display_name = 'GEOQuerySet',
@@ -1022,6 +1083,7 @@ ON CREATE SET
   c_GEOQuerySet.created_at = datetime()
 ON MATCH SET
   c_GEOQuerySet.key = 'geo-query-set',
+  c_GEOQuerySet.name = 'GEOQuerySet',
   c_GEOQuerySet.realm = 'shared',
   c_GEOQuerySet.layer = 'knowledge',
   c_GEOQuerySet.display_name = 'GEOQuerySet',
@@ -1039,6 +1101,7 @@ ON MATCH SET
 MERGE (c_GeoRegion:Schema:Class {label: 'GeoRegion'})
 ON CREATE SET
   c_GeoRegion.key = 'geo-region',
+  c_GeoRegion.name = 'GeoRegion',
   c_GeoRegion.realm = 'shared',
   c_GeoRegion.layer = 'geography',
   c_GeoRegion.display_name = 'GeoRegion',
@@ -1055,6 +1118,7 @@ ON CREATE SET
   c_GeoRegion.created_at = datetime()
 ON MATCH SET
   c_GeoRegion.key = 'geo-region',
+  c_GeoRegion.name = 'GeoRegion',
   c_GeoRegion.realm = 'shared',
   c_GeoRegion.layer = 'geography',
   c_GeoRegion.display_name = 'GeoRegion',
@@ -1072,6 +1136,7 @@ ON MATCH SET
 MERGE (c_GeoSubRegion:Schema:Class {label: 'GeoSubRegion'})
 ON CREATE SET
   c_GeoSubRegion.key = 'geo-sub-region',
+  c_GeoSubRegion.name = 'GeoSubRegion',
   c_GeoSubRegion.realm = 'shared',
   c_GeoSubRegion.layer = 'geography',
   c_GeoSubRegion.display_name = 'GeoSubRegion',
@@ -1088,6 +1153,7 @@ ON CREATE SET
   c_GeoSubRegion.created_at = datetime()
 ON MATCH SET
   c_GeoSubRegion.key = 'geo-sub-region',
+  c_GeoSubRegion.name = 'GeoSubRegion',
   c_GeoSubRegion.realm = 'shared',
   c_GeoSubRegion.layer = 'geography',
   c_GeoSubRegion.display_name = 'GeoSubRegion',
@@ -1105,6 +1171,7 @@ ON MATCH SET
 MERGE (c_IncomeGroup:Schema:Class {label: 'IncomeGroup'})
 ON CREATE SET
   c_IncomeGroup.key = 'income-group',
+  c_IncomeGroup.name = 'IncomeGroup',
   c_IncomeGroup.realm = 'shared',
   c_IncomeGroup.layer = 'geography',
   c_IncomeGroup.display_name = 'IncomeGroup',
@@ -1121,6 +1188,7 @@ ON CREATE SET
   c_IncomeGroup.created_at = datetime()
 ON MATCH SET
   c_IncomeGroup.key = 'income-group',
+  c_IncomeGroup.name = 'IncomeGroup',
   c_IncomeGroup.realm = 'shared',
   c_IncomeGroup.layer = 'geography',
   c_IncomeGroup.display_name = 'IncomeGroup',
@@ -1138,6 +1206,7 @@ ON MATCH SET
 MERGE (c_LanguageBranch:Schema:Class {label: 'LanguageBranch'})
 ON CREATE SET
   c_LanguageBranch.key = 'language-branch',
+  c_LanguageBranch.name = 'LanguageBranch',
   c_LanguageBranch.realm = 'shared',
   c_LanguageBranch.layer = 'knowledge',
   c_LanguageBranch.display_name = 'LanguageBranch',
@@ -1154,6 +1223,7 @@ ON CREATE SET
   c_LanguageBranch.created_at = datetime()
 ON MATCH SET
   c_LanguageBranch.key = 'language-branch',
+  c_LanguageBranch.name = 'LanguageBranch',
   c_LanguageBranch.realm = 'shared',
   c_LanguageBranch.layer = 'knowledge',
   c_LanguageBranch.display_name = 'LanguageBranch',
@@ -1171,6 +1241,7 @@ ON MATCH SET
 MERGE (c_LanguageFamily:Schema:Class {label: 'LanguageFamily'})
 ON CREATE SET
   c_LanguageFamily.key = 'language-family',
+  c_LanguageFamily.name = 'LanguageFamily',
   c_LanguageFamily.realm = 'shared',
   c_LanguageFamily.layer = 'knowledge',
   c_LanguageFamily.display_name = 'LanguageFamily',
@@ -1187,6 +1258,7 @@ ON CREATE SET
   c_LanguageFamily.created_at = datetime()
 ON MATCH SET
   c_LanguageFamily.key = 'language-family',
+  c_LanguageFamily.name = 'LanguageFamily',
   c_LanguageFamily.realm = 'shared',
   c_LanguageFamily.layer = 'knowledge',
   c_LanguageFamily.display_name = 'LanguageFamily',
@@ -1204,6 +1276,7 @@ ON MATCH SET
 MERGE (c_LendingCategory:Schema:Class {label: 'LendingCategory'})
 ON CREATE SET
   c_LendingCategory.key = 'lending-category',
+  c_LendingCategory.name = 'LendingCategory',
   c_LendingCategory.realm = 'shared',
   c_LendingCategory.layer = 'geography',
   c_LendingCategory.display_name = 'LendingCategory',
@@ -1220,6 +1293,7 @@ ON CREATE SET
   c_LendingCategory.created_at = datetime()
 ON MATCH SET
   c_LendingCategory.key = 'lending-category',
+  c_LendingCategory.name = 'LendingCategory',
   c_LendingCategory.realm = 'shared',
   c_LendingCategory.layer = 'geography',
   c_LendingCategory.display_name = 'LendingCategory',
@@ -1237,6 +1311,7 @@ ON MATCH SET
 MERGE (c_Locale:Schema:Class {label: 'Locale'})
 ON CREATE SET
   c_Locale.key = 'locale',
+  c_Locale.name = 'Locale',
   c_Locale.realm = 'shared',
   c_Locale.layer = 'config',
   c_Locale.display_name = 'Locale',
@@ -1253,6 +1328,7 @@ ON CREATE SET
   c_Locale.created_at = datetime()
 ON MATCH SET
   c_Locale.key = 'locale',
+  c_Locale.name = 'Locale',
   c_Locale.realm = 'shared',
   c_Locale.layer = 'config',
   c_Locale.display_name = 'Locale',
@@ -1270,6 +1346,7 @@ ON MATCH SET
 MERGE (c_OrgConfig:Schema:Class {label: 'OrgConfig'})
 ON CREATE SET
   c_OrgConfig.key = 'org-config',
+  c_OrgConfig.name = 'OrgConfig',
   c_OrgConfig.realm = 'org',
   c_OrgConfig.layer = 'config',
   c_OrgConfig.display_name = 'OrgConfig',
@@ -1286,6 +1363,7 @@ ON CREATE SET
   c_OrgConfig.created_at = datetime()
 ON MATCH SET
   c_OrgConfig.key = 'org-config',
+  c_OrgConfig.name = 'OrgConfig',
   c_OrgConfig.realm = 'org',
   c_OrgConfig.layer = 'config',
   c_OrgConfig.display_name = 'OrgConfig',
@@ -1303,6 +1381,7 @@ ON MATCH SET
 MERGE (c_OutputArtifact:Schema:Class {label: 'OutputArtifact'})
 ON CREATE SET
   c_OutputArtifact.key = 'output-artifact',
+  c_OutputArtifact.name = 'OutputArtifact',
   c_OutputArtifact.realm = 'org',
   c_OutputArtifact.layer = 'output',
   c_OutputArtifact.display_name = 'OutputArtifact',
@@ -1319,6 +1398,7 @@ ON CREATE SET
   c_OutputArtifact.created_at = datetime()
 ON MATCH SET
   c_OutputArtifact.key = 'output-artifact',
+  c_OutputArtifact.name = 'OutputArtifact',
   c_OutputArtifact.realm = 'org',
   c_OutputArtifact.layer = 'output',
   c_OutputArtifact.display_name = 'OutputArtifact',
@@ -1336,6 +1416,7 @@ ON MATCH SET
 MERGE (c_Page:Schema:Class {label: 'Page'})
 ON CREATE SET
   c_Page.key = 'page',
+  c_Page.name = 'Page',
   c_Page.realm = 'org',
   c_Page.layer = 'structure',
   c_Page.display_name = 'Page',
@@ -1352,6 +1433,7 @@ ON CREATE SET
   c_Page.created_at = datetime()
 ON MATCH SET
   c_Page.key = 'page',
+  c_Page.name = 'Page',
   c_Page.realm = 'org',
   c_Page.layer = 'structure',
   c_Page.display_name = 'Page',
@@ -1369,6 +1451,7 @@ ON MATCH SET
 MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
 ON CREATE SET
   c_PageNative.key = 'page-native',
+  c_PageNative.name = 'PageNative',
   c_PageNative.realm = 'org',
   c_PageNative.layer = 'output',
   c_PageNative.display_name = 'PageNative',
@@ -1385,6 +1468,7 @@ ON CREATE SET
   c_PageNative.created_at = datetime()
 ON MATCH SET
   c_PageNative.key = 'page-native',
+  c_PageNative.name = 'PageNative',
   c_PageNative.realm = 'org',
   c_PageNative.layer = 'output',
   c_PageNative.display_name = 'PageNative',
@@ -1402,6 +1486,7 @@ ON MATCH SET
 MERGE (c_Pattern:Schema:Class {label: 'Pattern'})
 ON CREATE SET
   c_Pattern.key = 'pattern',
+  c_Pattern.name = 'Pattern',
   c_Pattern.realm = 'shared',
   c_Pattern.layer = 'knowledge',
   c_Pattern.display_name = 'Pattern',
@@ -1418,6 +1503,7 @@ ON CREATE SET
   c_Pattern.created_at = datetime()
 ON MATCH SET
   c_Pattern.key = 'pattern',
+  c_Pattern.name = 'Pattern',
   c_Pattern.realm = 'shared',
   c_Pattern.layer = 'knowledge',
   c_Pattern.display_name = 'Pattern',
@@ -1435,6 +1521,7 @@ ON MATCH SET
 MERGE (c_PatternSet:Schema:Class {label: 'PatternSet'})
 ON CREATE SET
   c_PatternSet.key = 'pattern-set',
+  c_PatternSet.name = 'PatternSet',
   c_PatternSet.realm = 'shared',
   c_PatternSet.layer = 'knowledge',
   c_PatternSet.display_name = 'PatternSet',
@@ -1451,6 +1538,7 @@ ON CREATE SET
   c_PatternSet.created_at = datetime()
 ON MATCH SET
   c_PatternSet.key = 'pattern-set',
+  c_PatternSet.name = 'PatternSet',
   c_PatternSet.realm = 'shared',
   c_PatternSet.layer = 'knowledge',
   c_PatternSet.display_name = 'PatternSet',
@@ -1468,6 +1556,7 @@ ON MATCH SET
 MERGE (c_PopulationCluster:Schema:Class {label: 'PopulationCluster'})
 ON CREATE SET
   c_PopulationCluster.key = 'population-cluster',
+  c_PopulationCluster.name = 'PopulationCluster',
   c_PopulationCluster.realm = 'shared',
   c_PopulationCluster.layer = 'knowledge',
   c_PopulationCluster.display_name = 'PopulationCluster',
@@ -1484,6 +1573,7 @@ ON CREATE SET
   c_PopulationCluster.created_at = datetime()
 ON MATCH SET
   c_PopulationCluster.key = 'population-cluster',
+  c_PopulationCluster.name = 'PopulationCluster',
   c_PopulationCluster.realm = 'shared',
   c_PopulationCluster.layer = 'knowledge',
   c_PopulationCluster.display_name = 'PopulationCluster',
@@ -1501,6 +1591,7 @@ ON MATCH SET
 MERGE (c_PopulationSubCluster:Schema:Class {label: 'PopulationSubCluster'})
 ON CREATE SET
   c_PopulationSubCluster.key = 'population-sub-cluster',
+  c_PopulationSubCluster.name = 'PopulationSubCluster',
   c_PopulationSubCluster.realm = 'shared',
   c_PopulationSubCluster.layer = 'knowledge',
   c_PopulationSubCluster.display_name = 'PopulationSubCluster',
@@ -1517,6 +1608,7 @@ ON CREATE SET
   c_PopulationSubCluster.created_at = datetime()
 ON MATCH SET
   c_PopulationSubCluster.key = 'population-sub-cluster',
+  c_PopulationSubCluster.name = 'PopulationSubCluster',
   c_PopulationSubCluster.realm = 'shared',
   c_PopulationSubCluster.layer = 'knowledge',
   c_PopulationSubCluster.display_name = 'PopulationSubCluster',
@@ -1534,6 +1626,7 @@ ON MATCH SET
 MERGE (c_Project:Schema:Class {label: 'Project'})
 ON CREATE SET
   c_Project.key = 'project',
+  c_Project.name = 'Project',
   c_Project.realm = 'org',
   c_Project.layer = 'foundation',
   c_Project.display_name = 'Project',
@@ -1550,6 +1643,7 @@ ON CREATE SET
   c_Project.created_at = datetime()
 ON MATCH SET
   c_Project.key = 'project',
+  c_Project.name = 'Project',
   c_Project.realm = 'org',
   c_Project.layer = 'foundation',
   c_Project.display_name = 'Project',
@@ -1567,6 +1661,7 @@ ON MATCH SET
 MERGE (c_ProjectGEOScope:Schema:Class {label: 'ProjectGEOScope'})
 ON CREATE SET
   c_ProjectGEOScope.key = 'project-geo-scope',
+  c_ProjectGEOScope.name = 'ProjectGEOScope',
   c_ProjectGEOScope.realm = 'org',
   c_ProjectGEOScope.layer = 'foundation',
   c_ProjectGEOScope.display_name = 'ProjectGEOScope',
@@ -1583,6 +1678,7 @@ ON CREATE SET
   c_ProjectGEOScope.created_at = datetime()
 ON MATCH SET
   c_ProjectGEOScope.key = 'project-geo-scope',
+  c_ProjectGEOScope.name = 'ProjectGEOScope',
   c_ProjectGEOScope.realm = 'org',
   c_ProjectGEOScope.layer = 'foundation',
   c_ProjectGEOScope.display_name = 'ProjectGEOScope',
@@ -1600,6 +1696,7 @@ ON MATCH SET
 MERGE (c_ProjectNative:Schema:Class {label: 'ProjectNative'})
 ON CREATE SET
   c_ProjectNative.key = 'project-native',
+  c_ProjectNative.name = 'ProjectNative',
   c_ProjectNative.realm = 'org',
   c_ProjectNative.layer = 'foundation',
   c_ProjectNative.display_name = 'ProjectNative',
@@ -1616,6 +1713,7 @@ ON CREATE SET
   c_ProjectNative.created_at = datetime()
 ON MATCH SET
   c_ProjectNative.key = 'project-native',
+  c_ProjectNative.name = 'ProjectNative',
   c_ProjectNative.realm = 'org',
   c_ProjectNative.layer = 'foundation',
   c_ProjectNative.display_name = 'ProjectNative',
@@ -1633,6 +1731,7 @@ ON MATCH SET
 MERGE (c_ProjectSEOScope:Schema:Class {label: 'ProjectSEOScope'})
 ON CREATE SET
   c_ProjectSEOScope.key = 'project-seo-scope',
+  c_ProjectSEOScope.name = 'ProjectSEOScope',
   c_ProjectSEOScope.realm = 'org',
   c_ProjectSEOScope.layer = 'foundation',
   c_ProjectSEOScope.display_name = 'ProjectSEOScope',
@@ -1649,6 +1748,7 @@ ON CREATE SET
   c_ProjectSEOScope.created_at = datetime()
 ON MATCH SET
   c_ProjectSEOScope.key = 'project-seo-scope',
+  c_ProjectSEOScope.name = 'ProjectSEOScope',
   c_ProjectSEOScope.realm = 'org',
   c_ProjectSEOScope.layer = 'foundation',
   c_ProjectSEOScope.display_name = 'ProjectSEOScope',
@@ -1666,6 +1766,7 @@ ON MATCH SET
 MERGE (c_PromptArtifact:Schema:Class {label: 'PromptArtifact'})
 ON CREATE SET
   c_PromptArtifact.key = 'prompt-artifact',
+  c_PromptArtifact.name = 'PromptArtifact',
   c_PromptArtifact.realm = 'org',
   c_PromptArtifact.layer = 'instruction',
   c_PromptArtifact.display_name = 'PromptArtifact',
@@ -1682,6 +1783,7 @@ ON CREATE SET
   c_PromptArtifact.created_at = datetime()
 ON MATCH SET
   c_PromptArtifact.key = 'prompt-artifact',
+  c_PromptArtifact.name = 'PromptArtifact',
   c_PromptArtifact.realm = 'org',
   c_PromptArtifact.layer = 'instruction',
   c_PromptArtifact.display_name = 'PromptArtifact',
@@ -1699,6 +1801,7 @@ ON MATCH SET
 MERGE (c_PromptStyle:Schema:Class {label: 'PromptStyle'})
 ON CREATE SET
   c_PromptStyle.key = 'prompt-style',
+  c_PromptStyle.name = 'PromptStyle',
   c_PromptStyle.realm = 'org',
   c_PromptStyle.layer = 'foundation',
   c_PromptStyle.display_name = 'PromptStyle',
@@ -1715,6 +1818,7 @@ ON CREATE SET
   c_PromptStyle.created_at = datetime()
 ON MATCH SET
   c_PromptStyle.key = 'prompt-style',
+  c_PromptStyle.name = 'PromptStyle',
   c_PromptStyle.realm = 'org',
   c_PromptStyle.layer = 'foundation',
   c_PromptStyle.display_name = 'PromptStyle',
@@ -1732,6 +1836,7 @@ ON MATCH SET
 MERGE (c_SEOKeyword:Schema:Class {label: 'SEOKeyword'})
 ON CREATE SET
   c_SEOKeyword.key = 'seo-keyword',
+  c_SEOKeyword.name = 'SEOKeyword',
   c_SEOKeyword.realm = 'shared',
   c_SEOKeyword.layer = 'knowledge',
   c_SEOKeyword.display_name = 'SEOKeyword',
@@ -1748,6 +1853,7 @@ ON CREATE SET
   c_SEOKeyword.created_at = datetime()
 ON MATCH SET
   c_SEOKeyword.key = 'seo-keyword',
+  c_SEOKeyword.name = 'SEOKeyword',
   c_SEOKeyword.realm = 'shared',
   c_SEOKeyword.layer = 'knowledge',
   c_SEOKeyword.display_name = 'SEOKeyword',
@@ -1765,6 +1871,7 @@ ON MATCH SET
 MERGE (c_SEOKeywordFormat:Schema:Class {label: 'SEOKeywordFormat'})
 ON CREATE SET
   c_SEOKeywordFormat.key = 'seo-keyword-format',
+  c_SEOKeywordFormat.name = 'SEOKeywordFormat',
   c_SEOKeywordFormat.realm = 'shared',
   c_SEOKeywordFormat.layer = 'config',
   c_SEOKeywordFormat.display_name = 'SEOKeywordFormat',
@@ -1781,6 +1888,7 @@ ON CREATE SET
   c_SEOKeywordFormat.created_at = datetime()
 ON MATCH SET
   c_SEOKeywordFormat.key = 'seo-keyword-format',
+  c_SEOKeywordFormat.name = 'SEOKeywordFormat',
   c_SEOKeywordFormat.realm = 'shared',
   c_SEOKeywordFormat.layer = 'config',
   c_SEOKeywordFormat.display_name = 'SEOKeywordFormat',
@@ -1798,6 +1906,7 @@ ON MATCH SET
 MERGE (c_SEOKeywordSet:Schema:Class {label: 'SEOKeywordSet'})
 ON CREATE SET
   c_SEOKeywordSet.key = 'seo-keyword-set',
+  c_SEOKeywordSet.name = 'SEOKeywordSet',
   c_SEOKeywordSet.realm = 'shared',
   c_SEOKeywordSet.layer = 'knowledge',
   c_SEOKeywordSet.display_name = 'SEOKeywordSet',
@@ -1814,6 +1923,7 @@ ON CREATE SET
   c_SEOKeywordSet.created_at = datetime()
 ON MATCH SET
   c_SEOKeywordSet.key = 'seo-keyword-set',
+  c_SEOKeywordSet.name = 'SEOKeywordSet',
   c_SEOKeywordSet.realm = 'shared',
   c_SEOKeywordSet.layer = 'knowledge',
   c_SEOKeywordSet.display_name = 'SEOKeywordSet',
@@ -1831,6 +1941,7 @@ ON MATCH SET
 MERGE (c_Slugification:Schema:Class {label: 'Slugification'})
 ON CREATE SET
   c_Slugification.key = 'slugification',
+  c_Slugification.name = 'Slugification',
   c_Slugification.realm = 'shared',
   c_Slugification.layer = 'locale',
   c_Slugification.display_name = 'Slugification',
@@ -1847,6 +1958,7 @@ ON CREATE SET
   c_Slugification.created_at = datetime()
 ON MATCH SET
   c_Slugification.key = 'slugification',
+  c_Slugification.name = 'Slugification',
   c_Slugification.realm = 'shared',
   c_Slugification.layer = 'locale',
   c_Slugification.display_name = 'Slugification',
@@ -1864,6 +1976,7 @@ ON MATCH SET
 MERGE (c_Style:Schema:Class {label: 'Style'})
 ON CREATE SET
   c_Style.key = 'style',
+  c_Style.name = 'Style',
   c_Style.realm = 'shared',
   c_Style.layer = 'locale',
   c_Style.display_name = 'Style',
@@ -1880,6 +1993,7 @@ ON CREATE SET
   c_Style.created_at = datetime()
 ON MATCH SET
   c_Style.key = 'style',
+  c_Style.name = 'Style',
   c_Style.realm = 'shared',
   c_Style.layer = 'locale',
   c_Style.display_name = 'Style',
@@ -1897,6 +2011,7 @@ ON MATCH SET
 MERGE (c_Taboo:Schema:Class {label: 'Taboo'})
 ON CREATE SET
   c_Taboo.key = 'taboo',
+  c_Taboo.name = 'Taboo',
   c_Taboo.realm = 'shared',
   c_Taboo.layer = 'knowledge',
   c_Taboo.display_name = 'Taboo',
@@ -1913,6 +2028,7 @@ ON CREATE SET
   c_Taboo.created_at = datetime()
 ON MATCH SET
   c_Taboo.key = 'taboo',
+  c_Taboo.name = 'Taboo',
   c_Taboo.realm = 'shared',
   c_Taboo.layer = 'knowledge',
   c_Taboo.display_name = 'Taboo',
@@ -1930,6 +2046,7 @@ ON MATCH SET
 MERGE (c_TabooEnrichment:Schema:Class {label: 'TabooEnrichment'})
 ON CREATE SET
   c_TabooEnrichment.key = 'taboo-enrichment',
+  c_TabooEnrichment.name = 'TabooEnrichment',
   c_TabooEnrichment.realm = 'org',
   c_TabooEnrichment.layer = 'output',
   c_TabooEnrichment.display_name = 'TabooEnrichment',
@@ -1946,6 +2063,7 @@ ON CREATE SET
   c_TabooEnrichment.created_at = datetime()
 ON MATCH SET
   c_TabooEnrichment.key = 'taboo-enrichment',
+  c_TabooEnrichment.name = 'TabooEnrichment',
   c_TabooEnrichment.realm = 'org',
   c_TabooEnrichment.layer = 'output',
   c_TabooEnrichment.display_name = 'TabooEnrichment',
@@ -1963,6 +2081,7 @@ ON MATCH SET
 MERGE (c_TabooSet:Schema:Class {label: 'TabooSet'})
 ON CREATE SET
   c_TabooSet.key = 'taboo-set',
+  c_TabooSet.name = 'TabooSet',
   c_TabooSet.realm = 'shared',
   c_TabooSet.layer = 'knowledge',
   c_TabooSet.display_name = 'TabooSet',
@@ -1979,6 +2098,7 @@ ON CREATE SET
   c_TabooSet.created_at = datetime()
 ON MATCH SET
   c_TabooSet.key = 'taboo-set',
+  c_TabooSet.name = 'TabooSet',
   c_TabooSet.realm = 'shared',
   c_TabooSet.layer = 'knowledge',
   c_TabooSet.display_name = 'TabooSet',
