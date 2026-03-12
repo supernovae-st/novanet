@@ -613,42 +613,42 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
         }
     }
 
-    // Rule 16: BlockNative must have content in properties (ADR-030)
+    // Rule 16: BlockNative must have payload in properties (v0.19.0: renamed from content to avoid collision with standard_properties.content)
     if node.def.name == "BlockNative" {
-        let has_content = node
+        let has_payload = node
             .def
             .properties
             .as_ref()
-            .map(|p| p.contains_key("content"))
+            .map(|p| p.contains_key("payload"))
             .unwrap_or(false);
-        if !has_content {
+        if !has_payload {
             issues.push(SchemaIssue {
                 node_name: node.def.name.clone(),
                 severity: IssueSeverity::Error,
-                rule: "CONTENT_REQUIRED",
-                message: "BlockNative.properties must declare 'content' (ADR-030: slug lives in head-seo-meta BlockNative.content)"
+                rule: "PAYLOAD_REQUIRED",
+                message: "BlockNative.properties must declare 'payload' (v0.19.0: JSON matching BlockType.structure)"
                     .into(),
             });
         } else if let Some(props) = &node.def.properties {
-            if let Some(content) = props.get("content") {
-                // Verify content is required
-                if content.required != Some(true) {
+            if let Some(payload) = props.get("payload") {
+                // Verify payload is required
+                if payload.required != Some(true) {
                     issues.push(SchemaIssue {
                         node_name: node.def.name.clone(),
                         severity: IssueSeverity::Error,
-                        rule: "CONTENT_REQUIRED",
-                        message: "BlockNative.content must be required: true (ADR-030)".into(),
+                        rule: "PAYLOAD_REQUIRED",
+                        message: "BlockNative.payload must be required: true".into(),
                     });
                 }
-                // Verify content is type json
-                if content.prop_type != "json" {
+                // Verify payload is type json
+                if payload.prop_type != "json" {
                     issues.push(SchemaIssue {
                         node_name: node.def.name.clone(),
                         severity: IssueSeverity::Error,
-                        rule: "CONTENT_TYPE",
+                        rule: "PAYLOAD_TYPE",
                         message: format!(
-                            "BlockNative.content must be type 'json', found: '{}'",
-                            content.prop_type
+                            "BlockNative.payload must be type 'json', found: '{}'",
+                            payload.prop_type
                         ),
                     });
                 }
@@ -1599,7 +1599,7 @@ mod tests {
     }
 
     #[test]
-    fn blocknative_has_content_and_block_type() {
+    fn blocknative_has_payload_and_block_type() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
@@ -1621,13 +1621,13 @@ mod tests {
             .as_ref()
             .expect("BlockNative must have properties");
 
-        // v0.13.1 ADR-030: content as JSON blob for BlockType schema
+        // v0.19.0: payload as JSON blob for BlockType schema (renamed from content to avoid collision with standard_properties.content)
         assert!(
-            props.contains_key("content"),
-            "BlockNative.properties must contain 'content' (JSON matching BlockType.structure)"
+            props.contains_key("payload"),
+            "BlockNative.properties must contain 'payload' (JSON matching BlockType.structure)"
         );
-        let content = &props["content"];
-        assert_eq!(content.prop_type, "json", "content must be type json");
+        let payload = &props["payload"];
+        assert_eq!(payload.prop_type, "json", "payload must be type json");
 
         // v0.13.1: block_type denormalized for fast filtering
         assert!(
