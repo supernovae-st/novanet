@@ -1,10 +1,10 @@
 // packages/db/seed/32-entity-native-remediation.cypher
-// v0.13.0 - EntityNative Data Quality Remediation
+// v0.19.0 - EntityNative Data Quality Remediation
 //
 // Fixes:
 // 1. EntityNative with NULL locale (275 nodes) → extract from key
 // 2. Entity missing classification → link to EntityCategory via BELONGS_TO
-// 3. EntityNative missing title → derive from Entity.display_name
+// 3. EntityNative missing display_name → derive from Entity.display_name
 // 4. TARGETS arcs missing semantic_coef → set default 1.0
 //
 // Valid EntityCategory keys (from entity-category.yaml):
@@ -166,14 +166,14 @@ MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
 // ============================================================================
-// 3. SET title ON EntityNative FROM Entity.display_name (if NULL)
+// 3. SET display_name ON EntityNative FROM Entity.display_name (if NULL)
 // ============================================================================
 // Note: For fr-FR, these would ideally be French translations,
 // but Entity.display_name is English. A future pass can translate.
 
 MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)
-WHERE en.title IS NULL AND e.display_name IS NOT NULL
-SET en.title = e.display_name
+WHERE en.display_name IS NULL AND e.display_name IS NOT NULL
+SET en.display_name = e.display_name
 ;
 
 // ============================================================================

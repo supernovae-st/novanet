@@ -1,14 +1,9 @@
-// packages/db/seed/30-entity-semantic-arcs.cypher
-// v0.13.0 - Multi-Entity Keyword Convergence Architecture
+// packages/db/seed/32.5-entity-semantic-arcs.cypher
+// v0.19.0 - Multi-Entity Keyword Convergence Architecture
 //
 // ADR-029: *Native Pattern (EntityNative, PageNative)
 // ADR-030: Slug Ownership (Page owns URL, Entity owns semantics)
 // ADR-032: URL Slugification (convergence_boost = 1 + N × 0.2)
-//
-// Entity Types:
-//   TOOL   = qr-code-generator (the product)
-//   ACTION = create-qr-code (user intent, verb)
-//   OBJECT = qr-code-instagram, etc. (the created thing)
 //
 // Semantic Coefficients (ADR-032):
 //   used_for:     0.95 (tool is used_for action)
@@ -44,63 +39,52 @@ SET r.temperature = 0.85,
 ;
 
 // ============================================================================
-// 3. EntityNative fr-FR: TOOL
-// ============================================================================
-
-MATCH (e:Entity {key: 'entity:qr-code-generator'})
-MATCH (l:Locale {key: 'fr-FR'})
-MERGE (en:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
-SET en.locale = 'fr-FR',
-    en.title = 'Générateur de QR Code',
-    en.content = 'Outil de création de QR codes personnalisés',
-    en.entity_type = 'TOOL',
-    en.slug_terms = ['générateur', 'qr', 'code', 'créer'],
-    en.updated_at = datetime()
-MERGE (e)-[:HAS_NATIVE]->(en)
-MERGE (en)-[:FOR_LOCALE]->(l)
-;
-
-// ============================================================================
-// 4. EntityNative fr-FR: ACTION
+// 3. EntityNative fr-FR: ACTION (create-qr-code)
 // ============================================================================
 
 MATCH (e:Entity {key: 'entity:create-qr-code'})
 MATCH (l:Locale {key: 'fr-FR'})
 MERGE (en:EntityNative {key: 'entity:create-qr-code@fr-FR'})
-SET en.locale = 'fr-FR',
-    en.title = 'Créer un QR Code',
-    en.content = 'Action de générer un QR code personnalisé',
-    en.entity_type = 'ACTION',
-    en.slug_terms = ['créer', 'générer', 'qr', 'code'],
+SET en.display_name = 'Créer un QR Code',
+    en.node_class = 'EntityNative',
+    en.locale = 'fr-FR',
+    en.content = '{"definition": "Action de générer un QR code personnalisé", "context": "Intent utilisateur pour créer un nouveau QR code."}',
+    en.llm_context = '{"use": "Pour parler de la création de QR codes.", "triggers": ["créer", "générer", "faire"], "not_for": []}',
+    en.denomination_forms = '[{"type": "text", "value": "créer un qr code"}, {"type": "title", "value": "Créer un QR Code"}, {"type": "abbrev", "value": "créer qr"}]',
+    en.provenance = '{"source": "seed", "file": "32.5-entity-semantic-arcs.cypher"}',
+    en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime()
 MERGE (e)-[:HAS_NATIVE]->(en)
 MERGE (en)-[:FOR_LOCALE]->(l)
 ;
 
 // ============================================================================
-// 5. EntityNative fr-FR: OBJECTs
+// 4. EntityNative fr-FR: OBJECTs
 // ============================================================================
 
 MATCH (l:Locale {key: 'fr-FR'})
 UNWIND [
-  {key: 'entity:qr-code-instagram', title: 'QR Code Instagram', desc: 'QR code pour lien Instagram', type: 'OBJECT'},
-  {key: 'entity:qr-code-wifi', title: 'QR Code WiFi', desc: 'QR code pour partager un réseau WiFi', type: 'OBJECT'},
-  {key: 'entity:qr-code-vcard', title: 'QR Code vCard', desc: 'QR code carte de visite', type: 'OBJECT'},
-  {key: 'entity:qr-code-menu', title: 'QR Code Menu', desc: 'QR code pour menu restaurant', type: 'OBJECT'}
+  {key: 'entity:qr-code-instagram', displayName: 'QR Code Instagram', content: '{"definition": "QR code pour lien Instagram", "context": "Variante pour partager un profil Instagram."}'},
+  {key: 'entity:qr-code-wifi', displayName: 'QR Code WiFi', content: '{"definition": "QR code pour partager un réseau WiFi", "context": "Variante pour connexion WiFi automatique."}'},
+  {key: 'entity:qr-code-vcard', displayName: 'QR Code vCard', content: '{"definition": "QR code carte de visite", "context": "Variante pour partager des contacts."}'},
+  {key: 'entity:qr-code-menu', displayName: 'QR Code Menu', content: '{"definition": "QR code pour menu restaurant", "context": "Variante pour menus digitaux."}'}
 ] AS obj
 MATCH (e:Entity {key: obj.key})
 MERGE (en:EntityNative {key: obj.key + '@fr-FR'})
-SET en.locale = 'fr-FR',
-    en.title = obj.title,
-    en.content = obj.desc,
-    en.entity_type = obj.type,
+SET en.display_name = obj.displayName,
+    en.node_class = 'EntityNative',
+    en.locale = 'fr-FR',
+    en.content = obj.content,
+    en.llm_context = '{"use": "Pour parler de ce type de QR code.", "triggers": [], "not_for": []}',
+    en.provenance = '{"source": "seed", "file": "32.5-entity-semantic-arcs.cypher"}',
+    en.created_at = coalesce(en.created_at, datetime()),
     en.updated_at = datetime()
 MERGE (e)-[:HAS_NATIVE]->(en)
 MERGE (en)-[:FOR_LOCALE]->(l)
 ;
 
 // ============================================================================
-// 6. MULTI-ENTITY KEYWORD TARGETING (Convergence Boost)
+// 5. MULTI-ENTITY KEYWORD TARGETING (Convergence Boost)
 // ============================================================================
 // Keywords liés à PLUSIEURS entités pour convergence_boost = 1 + (N × 0.2)
 // "créer qr code" vol=6300 → create-qr-code (primary) + qr-code-generator (secondary)

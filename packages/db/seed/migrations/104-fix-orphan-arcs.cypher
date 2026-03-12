@@ -3,7 +3,11 @@
 // ============================================================================
 // Fixes CSR issues identified in audit:
 // 1. Pattern/CultureRef/Taboo/AudienceTrait missing FOR_LOCALE arcs
-// 2. EntityNative missing HAS_NATIVE arcs (create Entities if needed)
+// 2. EntityNative missing HAS_NATIVE arcs
+// 3. EntityNative missing FOR_LOCALE arcs
+//
+// NOTE: Entity creation is handled by 10-entities-bootstrap.cypher
+// This migration ONLY fixes missing arcs, not node properties.
 // ============================================================================
 
 // --- Fix FOR_LOCALE for Pattern nodes ---
@@ -34,79 +38,11 @@ AND NOT (at)-[:FOR_LOCALE]->(:Locale)
 MATCH (l:Locale {key: at.locale})
 MERGE (at)-[:FOR_LOCALE]->(l);
 
-// --- Create missing Entity nodes (9 core entities) ---
-MERGE (e:Entity {key: 'entity:qr-code'})
-SET e.display_name = 'QR Code',
-    e.content = 'Two-dimensional barcode storing data as square pattern',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:dynamic-qr-code'})
-SET e.display_name = 'Dynamic QR Code',
-    e.content = 'Editable QR code with analytics tracking',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:static-qr-code'})
-SET e.display_name = 'Static QR Code',
-    e.content = 'Fixed QR code with encoded data',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:custom-qr-code'})
-SET e.display_name = 'Custom QR Code',
-    e.content = 'QR code with configurable visual elements',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:qr-code-art'})
-SET e.display_name = 'QR Code Art',
-    e.content = 'AI-generated artistic QR code',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:qr-code-generator'})
-SET e.display_name = 'QR Code Generator',
-    e.content = 'Primary QR code creation tool',
-    e.entity_category = 'TOOL',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:barcode'})
-SET e.display_name = 'Barcode',
-    e.content = 'One-dimensional linear barcode formats',
-    e.entity_category = 'THING',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:smart-link'})
-SET e.display_name = 'Smart Link',
-    e.content = 'Intelligent shortened URL with conditional routing',
-    e.entity_category = 'FEATURE',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-MERGE (e:Entity {key: 'entity:landing-page'})
-SET e.display_name = 'Landing Page',
-    e.content = 'Mobile-optimized destination page',
-    e.entity_category = 'FEATURE',
-    e.created_at = coalesce(e.created_at, datetime()),
-    e.updated_at = datetime();
-
-// --- Link Entities to EntityCategory ---
-MATCH (e:Entity), (ec:EntityCategory {key: e.entity_category})
-MERGE (e)-[:BELONGS_TO_CATEGORY]->(ec);
-
 // --- Fix HAS_NATIVE arcs for EntityNative nodes ---
 MATCH (en:EntityNative)
 WHERE NOT (:Entity)-[:HAS_NATIVE]->(en)
-WITH en, split(en.key, '@')[0] AS entitySlug
-MATCH (e:Entity {key: 'entity:' + entitySlug})
+WITH en, split(en.key, '@')[0] AS entityKey
+MATCH (e:Entity {key: entityKey})
 MERGE (e)-[:HAS_NATIVE]->(en);
 
 // --- Fix FOR_LOCALE arcs for EntityNative nodes ---
