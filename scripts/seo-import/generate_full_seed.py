@@ -226,7 +226,7 @@ def parse_ahrefs_csv(filepath, locale_key):
         volume = parse_int(data.get('Volume'))
         difficulty = parse_int(data.get('Difficulty'))
         cpc = parse_float(data.get('CPC'))
-        cps = parse_float(data.get('CPS'))
+        clicks_per_search = parse_float(data.get('CPS'))
         traffic_potential = parse_int(data.get('Traffic potential'))
         global_volume = parse_int(data.get('Global volume'))
         global_traffic_potential = parse_int(data.get('Global traffic potential'))
@@ -253,7 +253,7 @@ def parse_ahrefs_csv(filepath, locale_key):
             'volume': volume,
             'difficulty': difficulty,
             'cpc': cpc,
-            'cps': cps,
+            'clicks_per_search': clicks_per_search,
             'intent': parse_intent(data.get('Intents')),
             'traffic_potential': traffic_potential,
             'global_volume': global_volume,
