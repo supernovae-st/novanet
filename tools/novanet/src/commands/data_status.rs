@@ -1,11 +1,11 @@
-//! Data diff command: `novanet data diff`.
+//! Data status command: `novanet data status`.
 //!
-//! Compares the current Neo4j state against previously exported YAML files,
+//! Compares the current Neo4j state against previously backed-up YAML files,
 //! reporting additions, modifications, and deletions per class.
 //!
-//! Part of the Data Management System (Track A: YAML Governance).
+//! Part of the Data Management System (simplified 2-command flow).
 //!
-//! **Flow**: Load export YAML → Query Neo4j → Compare by key → Report
+//! **Flow**: Load backup YAML → Query Neo4j → Compare by key → Report
 
 use clap::Parser;
 use colored::Colorize;
@@ -15,7 +15,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use tracing::instrument;
 
-use crate::commands::data_export::{extra_fields, ExportDocument, ExportedNode};
+use crate::commands::data_common::{self, ExportDocument, ExportedNode};
 use crate::db::Db;
 
 // =============================================================================
@@ -28,87 +28,68 @@ const SKIP_COMPARISON_FIELDS: &[&str] = &["created_at", "updated_at", "node_clas
 /// Maximum display length for property values in table output.
 const DIFF_VALUE_DISPLAY_MAX_LEN: usize = 60;
 
-/// JSON fields that need parsing from Neo4j string representation.
-const JSON_FIELDS: &[&str] = &["denomination_forms", "provenance"];
-
-/// Regex pattern for valid Neo4j labels (PascalCase).
-const LABEL_PATTERN: &str = r"^[A-Z][A-Za-z0-9]*$";
-
-/// Standard properties present on all nodes.
-const STANDARD_FIELDS: &[&str] = &[
-    "key",
-    "display_name",
-    "content",
-    "llm_context",
-    "node_class",
-];
-
-/// Timestamp fields.
-const TIMESTAMP_FIELDS: &[&str] = &["created_at", "updated_at"];
-
 // =============================================================================
 // CLI ARGUMENTS
 // =============================================================================
 
-/// Compare Neo4j state against exported YAML files.
+/// Compare Neo4j state against backed-up YAML files.
 #[derive(Debug, Clone, Parser)]
 #[command(
-    about = "Check what changed since last export",
-    long_about = "Check what changed since last export.\n\n\
-        Step 2 of 3 in the data management workflow:\n\
+    about = "Check what changed since last backup",
+    long_about = "Check what changed since last backup.\n\n\
+        Data management workflow:\n\
         \n\
-          Database (Neo4j)  ──1──>  Local backup  ──3──>  Git repo\n\
-                            <──2──\n\
+          Database (Neo4j)  ──backup──>  private-data/data/\n\
+                             <──status──\n\
         \n\
-          1. export   Save database content to local files\n\
-          2. diff     Check what changed since last export   << YOU ARE HERE\n\
-          3. promote  Copy local files to git for version control\n\
+          backup  Save database content to files\n\
+          status  Check what changed since last backup   << YOU ARE HERE\n\
         \n\
-        Compares your saved local files against the live database to see\n\
-        if anything was added, removed, or modified since the last export.\n\n\
+        Compares your saved files against the live database to see\n\
+        if anything was added, removed, or modified since the last backup.\n\n\
         Examples:\n  \
-          novanet data diff                  # Compare everything\n  \
-          novanet data diff --verbose        # Show property-level changes\n  \
-          novanet data diff --class=Entity   # Specific type only"
+          novanet data status                  # Compare everything\n  \
+          novanet data status --verbose        # Show property-level changes\n  \
+          novanet data status --class=Entity   # Specific type only"
 )]
-pub struct DataDiffArgs {
+pub struct DataStatusArgs {
     /// Filter by node class (Entity, EntityNative, Page...)
     #[arg(long, value_delimiter = ',')]
     pub class: Option<Vec<String>>,
 
     /// Output format
-    #[arg(long, value_enum, default_value_t = DiffFormat::Table)]
-    pub format: DiffFormat,
+    #[arg(long, value_enum, default_value_t = StatusFormat::Table)]
+    pub format: StatusFormat,
 
     /// Show property-level changes for modified nodes
     #[arg(long)]
     pub verbose: bool,
 
-    /// Source directory for exported YAML (default: ~/.novanet/export)
+    /// Source directory for backed-up YAML (default: private-data/data)
     #[arg(long)]
     pub source: Option<PathBuf>,
 }
 
-/// Output format for diff results.
+/// Output format for status results.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
-pub enum DiffFormat {
+pub enum StatusFormat {
     Table,
     Json,
 }
 
 // =============================================================================
-// DIFF RESULT TYPES
+// STATUS RESULT TYPES
 // =============================================================================
 
 /// Summary of differences for a single class.
 #[derive(Debug, Clone, serde::Serialize)]
-pub struct ClassDiffResult {
+pub struct ClassStatusResult {
     pub class: String,
     pub neo4j_count: usize,
     pub yaml_count: usize,
-    /// Keys only in Neo4j (not yet exported / new since export).
+    /// Keys only in Neo4j (not yet backed up / new since backup).
     pub only_in_neo4j: Vec<String>,
-    /// Keys only in YAML (deleted from Neo4j since export).
+    /// Keys only in YAML (deleted from Neo4j since backup).
     pub only_in_yaml: Vec<String>,
     /// Keys in both but with property differences.
     pub modified: Vec<ModifiedNode>,
@@ -135,39 +116,42 @@ pub struct PropertyDiff {
 // MAIN ENTRY POINT
 // =============================================================================
 
-/// Run the data diff command.
+/// Run the data status command.
 #[instrument(skip(db))]
-pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
+pub async fn run_data_status(db: &Db, args: DataStatusArgs) -> crate::Result<()> {
     use crate::core::ux;
 
     let source_dir = resolve_source_dir(&args)?;
 
     if !source_dir.exists() {
-        ux::step_warn("No export", &format!("No export directory at {}", ux::fmt_path(&source_dir)));
-        ux::print_next_step("run", "novanet data export");
+        ux::step_warn("No backup", &format!("No backup directory at {}", ux::fmt_path(&source_dir)));
+        ux::print_next_step("run", "novanet data backup");
         return Ok(());
     }
 
-    // Discover classes to diff
+    // Discover classes to compare
     let classes = discover_classes(&args, &source_dir)?;
 
     if classes.is_empty() {
-        ux::step_warn("No data", "No exported YAML files found to compare");
+        ux::step_warn("No data", "No backed-up YAML files found to compare");
         return Ok(());
     }
 
+    // -- FLOW DIAGRAM --
+    ux::print_data_flow(Some(2));
+
     // -- BANNER --
     ux::print_banner(
-        "NOVANET DATA DIFF  (step 2 of 3)",
-        "Check what changed since last export",
+        "NOVANET DATA STATUS",
+        "Check what changed since last backup",
         &[
-            ("Saved files", format!("Local backup ({})", ux::fmt_path(&source_dir))),
-            ("Live database", "Database (Neo4j in Docker)".to_string()),
-            ("Comparing", format!("{} content types", classes.len())),
+            ("Backup", format!("YAML files ({})", ux::fmt_path(&source_dir))),
+            ("Database", "Neo4j in Docker".to_string()),
+            ("Classes", classes.iter().map(|c| ux::class_label(c)).collect::<Vec<_>>().join("  ")),
         ],
     );
 
-    // Diff each class
+    // Compare each class
     let mut results = Vec::new();
 
     for class in &classes {
@@ -176,14 +160,14 @@ pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
             continue;
         }
 
-        let result = diff_class(db, class, &yaml_file).await?;
+        let result = status_class(db, class, &yaml_file).await?;
         results.push(result);
     }
 
     // Output
     match args.format {
-        DiffFormat::Table => print_table(&results, args.verbose),
-        DiffFormat::Json => print_json(&results)?,
+        StatusFormat::Table => print_table(&results, args.verbose),
+        StatusFormat::Json => print_json(&results)?,
     }
 
     Ok(())
@@ -193,30 +177,20 @@ pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
 // HELPERS
 // =============================================================================
 
-/// Resolve source directory: --source flag > ~/.novanet/export
-fn resolve_source_dir(args: &DataDiffArgs) -> crate::Result<PathBuf> {
+/// Resolve source directory: --source flag > {monorepo_root}/private-data/data
+fn resolve_source_dir(args: &DataStatusArgs) -> crate::Result<PathBuf> {
     if let Some(ref source) = args.source {
         return Ok(source.clone());
     }
 
-    let home = dirs::home_dir().ok_or_else(|| {
-        crate::NovaNetError::Validation("Cannot determine home directory".to_string())
-    })?;
-    Ok(home.join(".novanet").join("export"))
+    let root = crate::config::resolve_root(None)?;
+    Ok(root.join("private-data").join("data"))
 }
 
 /// Discover which classes have YAML files or are specified by --class.
-fn discover_classes(args: &DataDiffArgs, source_dir: &std::path::Path) -> crate::Result<Vec<String>> {
+fn discover_classes(args: &DataStatusArgs, source_dir: &std::path::Path) -> crate::Result<Vec<String>> {
     if let Some(ref classes) = args.class {
-        // Validate class names
-        let re = regex::Regex::new(LABEL_PATTERN).expect("valid regex");
-        for class in classes {
-            if !re.is_match(class) {
-                return Err(crate::NovaNetError::Validation(format!(
-                    "Invalid class name '{class}': must be PascalCase"
-                )));
-            }
-        }
+        data_common::validate_class_names(classes)?;
         return Ok(classes.clone());
     }
 
@@ -240,17 +214,17 @@ fn discover_classes(args: &DataDiffArgs, source_dir: &std::path::Path) -> crate:
     Ok(classes)
 }
 
-/// Diff a single class: load YAML + query Neo4j + compare.
-async fn diff_class(
+/// Compare a single class: load YAML + query Neo4j + compare.
+async fn status_class(
     db: &Db,
     class: &str,
     yaml_file: &std::path::Path,
-) -> crate::Result<ClassDiffResult> {
-    // 1. Load YAML export
-    let yaml_nodes = load_yaml_export(yaml_file)?;
+) -> crate::Result<ClassStatusResult> {
+    // 1. Load YAML backup
+    let yaml_nodes = load_yaml_backup(yaml_file)?;
 
     // 2. Query Neo4j for all nodes of this class
-    let neo4j_nodes = query_neo4j_nodes(db, class).await?;
+    let neo4j_nodes = data_common::query_nodes(db, class, None, None, None).await?;
 
     // 3. Build key-indexed maps
     let yaml_map: HashMap<String, &IndexMap<String, Value>> = yaml_nodes
@@ -311,7 +285,7 @@ async fn diff_class(
     }
     modified.sort_by(|a, b| a.key.cmp(&b.key));
 
-    Ok(ClassDiffResult {
+    Ok(ClassStatusResult {
         class: class.to_string(),
         neo4j_count: neo4j_map.len(),
         yaml_count: yaml_map.len(),
@@ -322,8 +296,8 @@ async fn diff_class(
     })
 }
 
-/// Load exported YAML file and return its nodes.
-fn load_yaml_export(path: &std::path::Path) -> crate::Result<Vec<ExportedNode>> {
+/// Load backed-up YAML file and return its nodes.
+fn load_yaml_backup(path: &std::path::Path) -> crate::Result<Vec<ExportedNode>> {
     let content = std::fs::read_to_string(path)?;
 
     // Strip header comments before parsing
@@ -335,81 +309,12 @@ fn load_yaml_export(path: &std::path::Path) -> crate::Result<Vec<ExportedNode>> 
 
     let doc: ExportDocument = serde_yaml::from_str(&yaml_content).map_err(|e| {
         crate::NovaNetError::Validation(format!(
-            "Failed to parse YAML export {}: {e}",
+            "Failed to parse YAML backup {}: {e}",
             path.display()
         ))
     })?;
 
     Ok(doc.nodes)
-}
-
-/// Query Neo4j for all nodes of a class, returning ExportedNode structs.
-async fn query_neo4j_nodes(db: &Db, class: &str) -> crate::Result<Vec<ExportedNode>> {
-    // Build RETURN clause from standard + extra fields
-    let extra = extra_fields(class);
-    let all_fields: Vec<&str> = STANDARD_FIELDS
-        .iter()
-        .chain(TIMESTAMP_FIELDS.iter())
-        .chain(extra.iter())
-        .copied()
-        .collect();
-
-    let return_clause: String = all_fields
-        .iter()
-        .map(|f| format!("n.{f} AS {f}"))
-        .collect::<Vec<_>>()
-        .join(", ");
-
-    let cypher = format!("MATCH (n:{class}) RETURN {return_clause} ORDER BY n.key");
-
-    let q = neo4rs::query(&cypher);
-    let mut result = db
-        .graph()
-        .execute(q)
-        .await
-        .map_err(|e| crate::NovaNetError::Query {
-            query: cypher.clone(),
-            source: e,
-        })?;
-
-    let mut nodes = Vec::new();
-    while let Some(row) = result
-        .next()
-        .await
-        .map_err(|e| crate::NovaNetError::Query {
-            query: cypher.clone(),
-            source: e,
-        })?
-    {
-        let mut map = IndexMap::new();
-        for field in &all_fields {
-            if let Ok(val) = row.get::<String>(field) {
-                if !val.is_empty() {
-                    // Parse JSON fields to match export YAML representation
-                    if JSON_FIELDS.contains(field)
-                        && (val.starts_with('{') || val.starts_with('['))
-                    {
-                        if let Ok(json) = serde_json::from_str::<Value>(&val) {
-                            map.insert(field.to_string(), json);
-                            continue;
-                        }
-                    }
-                    map.insert(field.to_string(), Value::String(val));
-                }
-                continue;
-            }
-            if let Ok(val) = row.get::<i64>(field) {
-                map.insert(field.to_string(), Value::Number(val.into()));
-                continue;
-            }
-            if let Ok(val) = row.get::<bool>(field) {
-                map.insert(field.to_string(), Value::Bool(val));
-            }
-        }
-        nodes.push(ExportedNode(map));
-    }
-
-    Ok(nodes)
 }
 
 /// Compare two property maps, returning differences.
@@ -466,8 +371,8 @@ fn compare_properties(
 // OUTPUT
 // =============================================================================
 
-/// Print diff results as a table.
-fn print_table(results: &[ClassDiffResult], verbose: bool) {
+/// Print status results as a table.
+fn print_table(results: &[ClassStatusResult], verbose: bool) {
     use crate::core::ux;
 
     if results.is_empty() {
@@ -475,29 +380,34 @@ fn print_table(results: &[ClassDiffResult], verbose: bool) {
         return;
     }
 
-    // -- STEP PER CLASS --
+    // -- PER-CLASS STATUS (git-status style) --
+    ux::print_section("Per-class comparison");
+
     for r in results {
         let is_clean = r.only_in_neo4j.is_empty()
             && r.only_in_yaml.is_empty()
             && r.modified.is_empty();
 
         if is_clean {
-            ux::step_ok(&r.class, &format!("{} nodes in sync", r.in_sync));
+            ux::step_class_status(
+                &r.class,
+                &format!("{} nodes in sync", r.in_sync),
+                true,
+            );
         } else {
-            let mut parts = Vec::new();
-            if !r.only_in_neo4j.is_empty() {
-                parts.push(format!("+{} new in Neo4j", r.only_in_neo4j.len()));
-            }
-            if !r.modified.is_empty() {
-                parts.push(format!("~{} modified", r.modified.len()));
-            }
-            if !r.only_in_yaml.is_empty() {
-                parts.push(format!("-{} only in YAML", r.only_in_yaml.len()));
-            }
-            ux::step_warn(&r.class, &parts.join(", "));
+            let diff_str = ux::fmt_diff_counts(
+                r.only_in_neo4j.len(),
+                r.modified.len(),
+                r.only_in_yaml.len(),
+            );
+            ux::step_class_status(
+                &r.class,
+                &diff_str,
+                false,
+            );
         }
 
-        // Verbose details under each class
+        // Verbose: drill down into individual nodes
         if verbose {
             if !r.only_in_neo4j.is_empty() {
                 for key in &r.only_in_neo4j {
@@ -535,63 +445,50 @@ fn print_table(results: &[ClassDiffResult], verbose: bool) {
         }
     }
 
-    // -- SUMMARY BOX --
+    // -- SYNC BAR --
     let total_neo4j: usize = results.iter().map(|r| r.only_in_neo4j.len()).sum();
     let total_modified: usize = results.iter().map(|r| r.modified.len()).sum();
     let total_yaml: usize = results.iter().map(|r| r.only_in_yaml.len()).sum();
     let total_sync: usize = results.iter().map(|r| r.in_sync).sum();
+    let total_all = total_sync + total_modified + total_neo4j + total_yaml;
 
+    eprintln!();
+    ux::print_sync_bar(total_sync, total_all);
+
+    // -- SUMMARY BOX --
     let has_drift = total_neo4j > 0 || total_modified > 0 || total_yaml > 0;
 
-    let mut summary_lines = Vec::new();
     if has_drift {
-        summary_lines.push(format!(
-            "Drift detected across {} {}",
-            results.len(),
-            if results.len() == 1 { "class" } else { "classes" }
-        ));
+        let summary_lines = vec![format!(
+            "Drift detected -- {}",
+            ux::fmt_diff_counts(total_neo4j, total_modified, total_yaml)
+        )];
+        ux::print_summary_warn(&summary_lines);
     } else {
-        summary_lines.push(format!(
+        let summary_lines = vec![format!(
             "All {} nodes in sync across {} classes",
             ux::fmt_count(total_sync),
             results.len()
-        ));
+        )];
+        ux::print_summary_ok(&summary_lines);
     }
-
-    let mut detail_parts = Vec::new();
-    if total_neo4j > 0 {
-        detail_parts.push(format!("+{total_neo4j} new in Neo4j"));
-    }
-    if total_modified > 0 {
-        detail_parts.push(format!("~{total_modified} modified"));
-    }
-    if total_yaml > 0 {
-        detail_parts.push(format!("-{total_yaml} only in YAML"));
-    }
-    if total_sync > 0 {
-        detail_parts.push(format!("={} in sync", ux::fmt_count(total_sync)));
-    }
-    if !detail_parts.is_empty() {
-        summary_lines.push(detail_parts.join("  |  "));
-    }
-    ux::print_summary_box(&summary_lines);
 
     // -- NEXT STEP --
     if total_neo4j > 0 || total_modified > 0 {
         ux::print_next_step(
-            "re-export with",
-            "novanet data export",
+            "update backup with",
+            "novanet data backup",
         );
     } else if !has_drift {
         ux::print_next_step(
-            "promote to version control with",
-            "novanet data promote",
+            "everything is in sync, review with",
+            "git diff private-data/",
         );
     }
 }
 
-/// Print diff results as JSON.
-fn print_json(results: &[ClassDiffResult]) -> crate::Result<()> {
+/// Print status results as JSON.
+fn print_json(results: &[ClassStatusResult]) -> crate::Result<()> {
     let json = serde_json::to_string_pretty(results).map_err(|e| {
         crate::NovaNetError::Validation(format!("Failed to serialize JSON: {e}"))
     })?;
@@ -712,9 +609,9 @@ mod tests {
 
     #[test]
     fn discover_classes_validates_names() {
-        let args = DataDiffArgs {
+        let args = DataStatusArgs {
             class: Some(vec!["Bad}Name".to_string()]),
-            format: DiffFormat::Table,
+            format: StatusFormat::Table,
             verbose: false,
             source: None,
         };
@@ -723,7 +620,7 @@ mod tests {
     }
 
     #[test]
-    fn load_yaml_export_parses_document() {
+    fn load_yaml_backup_parses_document() {
         let tmp = tempfile::NamedTempFile::new().unwrap();
         let content = r#"exported_at: "2026-03-13T14:30:22Z"
 class: Entity
@@ -733,7 +630,7 @@ nodes:
 "#;
         std::fs::write(tmp.path(), content).unwrap();
 
-        let nodes = load_yaml_export(tmp.path()).unwrap();
+        let nodes = load_yaml_backup(tmp.path()).unwrap();
         assert_eq!(nodes.len(), 1);
         assert_eq!(
             nodes[0].0.get("key").unwrap(),
