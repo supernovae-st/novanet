@@ -225,21 +225,16 @@ enum DataAction {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
     },
-    /// [Step 1] Save database content to local files
+    /// Save database content to private-data/data/
     ///
     /// Reads Entity, Page, Block... from the database and saves them
-    /// as files in ~/.novanet/export/.
-    Export(novanet::commands::data_export::DataExportArgs),
-    /// [Step 2] Check what changed since last export
+    /// as YAML files in private-data/data/ for git version control.
+    Backup(novanet::commands::data_backup::DataBackupArgs),
+    /// Check what changed since last backup
     ///
-    /// Compares your saved local files against the live database.
+    /// Compares your saved backup files against the live database.
     /// Shows what was added, removed, or modified.
-    Diff(novanet::commands::data_diff::DataDiffArgs),
-    /// [Step 3] Copy local files to git for version control
-    ///
-    /// Copies saved files from ~/.novanet/export/ into private-data/data/
-    /// so they can be committed and tracked with git.
-    Promote(novanet::commands::data_promote::DataPromoteArgs),
+    Status(novanet::commands::data_status::DataStatusArgs),
 }
 
 #[derive(clap::Args)]
@@ -570,16 +565,13 @@ async fn main() -> color_eyre::Result<()> {
                 eprintln!("novanet data show --format={format:?}");
                 novanet::commands::read::run_data(&db, format).await?;
             }
-            DataAction::Export(args) => {
+            DataAction::Backup(args) => {
                 let db = connect_db(&uri, &user, password.as_ref()).await?;
-                novanet::commands::data_export::run_data_export(&db, args).await?;
+                novanet::commands::data_backup::run_data_backup(&db, args).await?;
             }
-            DataAction::Diff(args) => {
+            DataAction::Status(args) => {
                 let db = connect_db(&uri, &user, password.as_ref()).await?;
-                novanet::commands::data_diff::run_data_diff(&db, args).await?;
-            }
-            DataAction::Promote(args) => {
-                novanet::commands::data_promote::run_data_promote(args).await?;
+                novanet::commands::data_status::run_data_status(&db, args).await?;
             }
         },
         Commands::Overlay { format } => {
