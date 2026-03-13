@@ -29,10 +29,10 @@ ON CREATE SET
 ON MATCH SET
   p.updated_at = datetime();
 
-// Create REPRESENTS relationship (Page represents Entity)
+// Create ABOUT relationship (Page is about Entity) - ADR-030 + Master Plan D4
 MATCH (p:Page {key: 'page:qr-code-landing'})
 MATCH (e:Entity {key: 'entity:qr-code'})
-MERGE (p)-[:REPRESENTS]->(e);
+MERGE (p)-[:ABOUT {role: 'focus', weight: 0.9}]->(e);
 
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -26,10 +26,10 @@ ON CREATE SET
 ON MATCH SET
   p.updated_at = datetime();
 
-// Link Page → Entity (REPRESENTS)
+// Link Page → Entity (ABOUT) - ADR-030 + Master Plan D4
 MATCH (p:Page {key: 'page:qr-code'})
 MATCH (e:Entity {key: 'entity:qr-code'})
-MERGE (p)-[:REPRESENTS]->(e);
+MERGE (p)-[:ABOUT {role: 'focus', weight: 0.9}]->(e);
 
 // -----------------------------------------------------------------------------
 // Block: QR Code SEO Meta
