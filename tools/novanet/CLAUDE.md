@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.17.2 | **Tests**: 1210 passing | **Clippy**: zero warnings
+**Version**: v0.19.0 | **Tests**: 1210 passing | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -323,7 +323,7 @@ src/
 - **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-classes/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v0.17.2: 2 realms (shared, org), 10 layers (4 shared + 6 org), 57 node types, all with standardized BLOC ordering
+  - v0.19.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 60 node types, all with standardized BLOC ordering
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
   - Schema mode uses CLASSES_QUERY + ARCS_QUERY to build the schema graph
   - `cargo run -- blueprint` executes these foundational queries

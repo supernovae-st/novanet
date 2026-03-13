@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.17.2 (PageNative.slug per ADR-030, 60 nodes, 149 arcs)
+**Current Version**: v0.19.0 (Traits deprecated, 60 nodes, 149 arcs)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -80,10 +80,10 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
 - **60 nodes** total: 36 shared + 24 org, **149 arcs** (6 families)
 
-**Architecture (v0.17.2):**
+**Architecture (v0.19.0):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (24 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
@@ -91,7 +91,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.17.2: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes, 149 arcs.
+v0.19.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes, 149 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -223,7 +223,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │  NOTE: Terms deferred — EntityNative.denomination_forms covers terminology  │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.17.2)                                                       │
+│  STATISTICS (v0.19.0)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (7): ExpressionSet, PatternSet, CultureSet, TabooSet,           │
@@ -342,7 +342,7 @@ pnpm infra:seed            # Seed database
 
 ---
 
-## MCP Server (v0.17.2)
+## MCP Server (v0.19.0)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 

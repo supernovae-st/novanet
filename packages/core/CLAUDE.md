@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v0.17.2
+**Current Version**: v0.19.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -31,7 +31,7 @@ v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 |------|--------|
 | **Realm** | shared / org |
 | **Layer** | 10 functional layers (4 shared + 6 org) |
-| **Trait** | defined / authored / imported / generated / retrieved |
+| ~~**Trait**~~ | ~~defined / authored / imported / generated / retrieved~~ *(deprecated v0.19.0 — provenance per-instance)* |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
 **Key v0.13.0 changes:**
@@ -105,9 +105,9 @@ RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.
 MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Schema:Class)
 RETURN r.key, l.key, collect(c.label) AS classes;
 
--- v0.12.0: Find all Classes with a specific Trait - ADR-024
-MATCH (c:Schema:Class)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
-RETURN c.label, t.key;
+-- v0.12.0: Find all Classes with a specific Trait - ADR-024 (DEPRECATED v0.19.0)
+-- MATCH (c:Schema:Class)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
+-- RETURN c.label, t.key;
 
 -- v0.12.0: Arc schema for a Class
 MATCH (ac:Schema:ArcClass)-[:FROM_CLASS]->(c:Schema:Class {label: "Block"})
@@ -165,7 +165,7 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 Realm           = WHERE? (shared / org)
 Layer           = WHAT? (10 functional layers: 4 shared + 6 org)
 Class           = Neo4j label as schema-node (was "Kind")
-Trait           = HOW? Data Origin (defined / authored / imported / generated / retrieved)
+Trait           = DEPRECATED v0.19.0 (was: HOW? Data Origin — provenance now per-instance)
 ArcFamily       = Relationship classification (ownership / localization / semantic / generation / mining)
 ArcClass        = Individual relationship type as schema-node (was "ArcKind")
 :Schema         = Double-label on all schema-nodes (was ":Meta")
@@ -173,14 +173,9 @@ OF_CLASS        = Instance -> Class bridge (was "OF_KIND")
 NavigationMode  = 2 modes (graph / nexus)
 ```
 
-**Trait definitions (ADR-024 Data Origin):**
-```
-defined         = Human-created once (templates, configs) — was "invariant"
-authored        = Human-written per locale (editorial content) — was "localized"
-imported        = External data brought in (corpora, SEO keywords) — was "knowledge"
-generated       = Produced by NovaNet LLM
-retrieved       = Fetched from external APIs (GEO snapshots) — was "aggregated"
-```
+**~~Trait definitions (ADR-024 Data Origin)~~ DEPRECATED v0.19.0:**
+> Traits removed from schema. Provenance is now tracked per-instance on nodes that need it.
+> The 5 former trait values (defined/authored/imported/generated/retrieved) are no longer schema-level classifications.
 
 ## Language Convention
 

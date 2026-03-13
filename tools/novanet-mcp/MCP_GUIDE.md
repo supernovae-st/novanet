@@ -1,6 +1,6 @@
 # NovaNet MCP Developer Guide
 
-Quick reference for integrating with NovaNet MCP Server (v0.17.2).
+Quick reference for integrating with NovaNet MCP Server (v0.19.0).
 
 ## Tool Selection Matrix
 
