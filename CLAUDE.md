@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.19.0 (Traits deprecated, 60 nodes, 151 arcs)
+**Current Version**: v0.20.0 (59 nodes, 159 arcs — BlockRules removed, pipeline arcs added)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -78,7 +78,7 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **60 nodes** total: 36 shared + 24 org, **151 arcs** (6 families)
+- **59 nodes** total: 36 shared + 23 org, **159 arcs** (6 families)
 
 **Architecture (v0.19.0):**
 - 2 realms: SHARED + ORG
@@ -91,7 +91,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.19.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes, 151 arcs.
+v0.20.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 59 nodes, 159 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -230,7 +230,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │                  AudienceSet, SEOKeywordSet, GEOQuerySet                    │
 │  Atoms (8):      Expression, Pattern, CultureRef, Taboo, AudienceTrait,     │
 │                  SEOKeyword, GEOQuery, GEOAnswer                            │
-│  Total:          60 nodes (36 shared + 24 org)                              │
+│  Total:          59 nodes (36 shared + 23 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -527,7 +527,7 @@ pnpm dev    # → http://localhost:3000
 
 1. **Read this file** — Understand the generation philosophy (not translation)
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
-3. **Read `models/_index.yaml`** — Complete schema overview with all 60 nodes
+3. **Read `models/_index.yaml`** — Complete schema overview with all 59 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer definitions with visual encoding
 5. **Check ADRs** — Use `/adr <number>` command for quick lookup (full ADRs in parent `supernovae-agi` workspace)
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000

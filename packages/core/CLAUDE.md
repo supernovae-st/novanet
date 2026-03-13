@@ -39,8 +39,8 @@ v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 - ADR-029: Unified arcs (HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF)
 - ADR-030: Slug Ownership (URL properties moved from EntityNative to PageNative)
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (24 nodes)
-- 60 node types, 151 arc types
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (23 nodes)
+- 59 node types, 159 arc types
 
 **v0.17.1 Schema Cleanup:**
 - Removed: Term, TermSet, SEOKeywordMetrics (YAGNI)
@@ -136,7 +136,7 @@ core/
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityNative)
 │   │       ├── instruction/   #   Layer: instruction (BlockType, BlockInstruction, PromptArtifact)
 │   │       └── output/        #   Layer: output (PageNative, BlockNative, OutputArtifact)
-│   ├── arc-classes/             # ONE FILE PER ARC TYPE (151 arcs)
+│   ├── arc-classes/             # ONE FILE PER ARC TYPE (159 arcs)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration

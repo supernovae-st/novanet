@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-NovaNet's Neo4j graph (~20K nodes, 60 classes, 151 arcs, 200+ locales) currently has a **one-way data pipeline**: YAML → Cypher → Neo4j. Runtime data created through MCP tools or Nika workflows is volatile — lost on `infra:reset`. This plan implements a **bidirectional, YAML-first data management system** with two complementary tracks:
+NovaNet's Neo4j graph (~20K nodes, 59 classes, 159 arcs, 200+ locales) currently has a **one-way data pipeline**: YAML → Cypher → Neo4j. Runtime data created through MCP tools or Nika workflows is volatile — lost on `infra:reset`. This plan implements a **bidirectional, YAML-first data management system** with two complementary tracks:
 
 - **Track A** (Governance): Neo4j → YAML → git — promote runtime data to version-controlled seeds
 - **Track C** (Safety): Docker volume binary snapshots — instant point-in-time recovery

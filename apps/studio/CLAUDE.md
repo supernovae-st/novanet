@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet native content generation engine.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for 60 node classes, 200 locales (~19,000 instances projected)
+**What:** Interactive 2D/3D graph visualization for 59 node classes, 200 locales (~19,000 instances projected)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D), @react-three/fiber (3D)
 **State:** Zustand 5 with persist/immer

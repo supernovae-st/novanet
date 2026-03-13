@@ -33,8 +33,8 @@ novanet <command>    # Run specific command
 
 ## Schema Stats
 
-- **60 nodes** (36 shared + 24 org)
-- **151 arcs** (6 families)
+- **59 nodes** (36 shared + 23 org)
+- **159 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 
 > v0.19.0: Traits removed from schema (ADR-024 deprecated). Provenance now tracked per-instance.
@@ -323,7 +323,7 @@ src/
 - **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-classes/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v0.19.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 60 node types, all with standardized BLOC ordering
+  - v0.20.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 59 node types, all with standardized BLOC ordering
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
   - Schema mode uses CLASSES_QUERY + ARCS_QUERY to build the schema graph
   - `cargo run -- blueprint` executes these foundational queries

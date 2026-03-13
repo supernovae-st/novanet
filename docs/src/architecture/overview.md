@@ -29,7 +29,7 @@ flowchart TB
         end
     end
 
-    YAML[("YAML Models\n60 node definitions")]
+    YAML[("YAML Models\n59 node definitions")]
     NEO4J[("Neo4j 5.26\n~19,000 nodes")]
 
     YAML --> RUST

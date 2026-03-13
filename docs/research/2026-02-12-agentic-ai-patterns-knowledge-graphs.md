@@ -8,7 +8,7 @@
 
 ## Summary
 
-This report analyzes the latest agentic AI patterns (2024-2025) for knowledge graph interaction, with specific focus on patterns applicable to NovaNet's architecture. NovaNet uses a Neo4j knowledge graph with 60 node types and 114 arc types to orchestrate native content generation across 200+ locales. The key finding is that NovaNet's existing architecture aligns well with cutting-edge patterns, particularly the **orchestrator-subagent pattern**, **Graph RAG**, and **MCP-based tool integration**.
+This report analyzes the latest agentic AI patterns (2024-2025) for knowledge graph interaction, with specific focus on patterns applicable to NovaNet's architecture. NovaNet uses a Neo4j knowledge graph with 59 node types and 159 arc types to orchestrate native content generation across 200+ locales. The key finding is that NovaNet's existing architecture aligns well with cutting-edge patterns, particularly the **orchestrator-subagent pattern**, **Graph RAG**, and **MCP-based tool integration**.
 
 ---
 

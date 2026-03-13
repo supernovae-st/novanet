@@ -74,9 +74,9 @@ db/
 | Realm | Nodes | Description |
 |-------|-------|-------------|
 | **Shared** | 36 | Config, locale, geography, knowledge atoms (READ-ONLY) |
-| **Org** | 24 | Organization structure, content, generation |
+| **Org** | 23 | Organization structure, content, generation |
 
-Total: **60 node types**, **151 arc types**, **~200 schema-nodes** (Realm/Layer/Class/ArcFamily/ArcClass)
+Total: **59 node types**, **159 arc types**, **~200 schema-nodes** (Realm/Layer/Class/ArcFamily/ArcClass)
 
 ---
 
