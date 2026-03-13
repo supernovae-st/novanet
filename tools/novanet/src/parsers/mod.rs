@@ -1,12 +1,11 @@
 //! YAML parsers for NovaNet model definitions.
 //!
-//! ## Core Schema Parsers (v0.12.5)
+//! ## Core Schema Parsers (v0.19.0)
 //!
 //! - `realm`: Parse realm YAML files (shared, org)
 //! - `layer`: Parse layer YAML files (config, semantic, output, etc.)
-//! - `trait_def`: Parse trait YAML files (defined, authored, imported, generated, retrieved)
 //! - `arc_family`: Parse arc family YAML files (ownership, localization, semantic, etc.)
-//! - `yaml_node`: Parse node-kind YAML files (61 classes with trait validation)
+//! - `yaml_node`: Parse node-kind YAML files (60 classes)
 //! - `arcs`: Parse arc-classes/ directory → arc definitions
 //!
 //! ## Legacy/Transitional Parsers
