@@ -10,7 +10,9 @@
 //!
 //! Output target: `packages/db/seed/00.5-taxonomy.cypher`
 
-use super::cypher_utils::{cypher_str, write_merge_meta, write_section_header_counted};
+use super::cypher_utils::{
+    cypher_list_owned, cypher_str, write_merge_meta, write_section_header_counted,
+};
 use crate::parsers::taxonomy::TaxonomyDoc;
 use std::fmt::Write;
 use std::path::Path;
@@ -77,7 +79,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         writeln!(out).unwrap();
         let var = format!("r_{}", realm.key);
         let content = cypher_str(&realm.content);
-        let llm = cypher_str(&realm.llm_context);
+        let triggers = cypher_list_owned(&realm.triggers);
         write_merge_meta(
             &mut out,
             &var,
@@ -86,9 +88,10 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             &[
                 ("display_name", &realm.display_name),
                 ("content", &content),
-                ("llm_context", &llm),
             ],
         );
+        // triggers is a native Cypher array, written outside write_merge_meta
+        writeln!(out, "SET {var}.triggers = {triggers};").unwrap();
     }
 
     // ── Layers + HAS_LAYER rels ──────────────────────────────────────────
@@ -103,7 +106,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             // Replace hyphens with underscores for valid Cypher variable names
             let var = format!("l_{}", layer.key.replace('-', "_"));
             let content = cypher_str(&layer.content);
-            let llm = cypher_str(&layer.llm_context);
+            let triggers = cypher_list_owned(&layer.triggers);
             write_merge_meta(
                 &mut out,
                 &var,
@@ -112,9 +115,10 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                 &[
                     ("display_name", &layer.display_name),
                     ("content", &content),
-                    ("llm_context", &llm),
                 ],
             );
+            // triggers is a native Cypher array, written outside write_merge_meta
+            writeln!(out, "SET {var}.triggers = {triggers};").unwrap();
             writeln!(out).unwrap();
             writeln!(
                 out,
@@ -135,7 +139,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     for af in &doc.arc_families {
         writeln!(out).unwrap();
         let var = format!("af_{}", af.key);
-        let llm = cypher_str(&af.llm_context);
+        let triggers = cypher_list_owned(&af.triggers);
 
         // Start MERGE
         writeln!(out, "MERGE ({var}:Schema:ArcFamily {{key: '{}'}})", af.key).unwrap();
@@ -168,7 +172,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             writeln!(out, "  {var}.default_traversal = '{traversal}',").unwrap();
         }
 
-        writeln!(out, "  {var}.llm_context = '{llm}';").unwrap();
+        writeln!(out, "  {var}.triggers = {triggers};").unwrap();
     }
 
     // ── Arc Scopes  ────────────────────────────────────────────────
@@ -189,6 +193,8 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                     ("content", &scope.description),
                 ],
             );
+            // Terminate MERGE statement (write_merge_meta no longer adds trailing semicolon)
+            writeln!(out, ";").unwrap();
         }
     }
 
@@ -210,6 +216,8 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                     ("content", &card.description),
                 ],
             );
+            // Terminate MERGE statement (write_merge_meta no longer adds trailing semicolon)
+            writeln!(out, ";").unwrap();
         }
     }
 
@@ -243,7 +251,7 @@ mod tests {
                     terminal: "🧪".to_string(),
                 },
                 color: "#000000".to_string(),
-                llm_context: "Test realm.".to_string(),
+                triggers: vec!["test".to_string(), "realm".to_string()],
                 layers: vec![NodeLayerDef {
                     key: "base".to_string(),
                     display_name: "Base".to_string(),
@@ -253,7 +261,7 @@ mod tests {
                         terminal: "📋".to_string(),
                     },
                     color: "#111111".to_string(),
-                    llm_context: "Base layer.".to_string(),
+                    triggers: vec!["base".to_string()],
                 }],
             }],
             // v0.17.3 (ADR-036): node_traits removed, provenance is per-instance
@@ -266,7 +274,7 @@ mod tests {
                 stroke_width: Some(2),
                 arrow_style: "-->".to_string(),
                 default_traversal: None,
-                llm_context: "Ownership.".to_string(),
+                triggers: vec!["ownership".to_string()],
             }],
             arc_scopes: vec![],
             arc_cardinalities: vec![],
@@ -315,7 +323,7 @@ mod tests {
     }
 
     #[test]
-    fn generate_multiline_llm_context() {
+    fn generate_triggers_as_cypher_array() {
         let doc = TaxonomyDoc {
             version: "10.5.0".to_string(),
             node_realms: vec![NodeRealmDef {
@@ -327,7 +335,11 @@ mod tests {
                     terminal: "X".to_string(),
                 },
                 color: "#fff".to_string(),
-                llm_context: "Line one.\n  Line two.\n  Line three.\n".to_string(),
+                triggers: vec![
+                    "keyword1".to_string(),
+                    "keyword2".to_string(),
+                    "keyword3".to_string(),
+                ],
                 layers: vec![NodeLayerDef {
                     key: "l".to_string(),
                     display_name: "L".to_string(),
@@ -337,7 +349,7 @@ mod tests {
                         terminal: "Y".to_string(),
                     },
                     color: "#000".to_string(),
-                    llm_context: "Layer.".to_string(),
+                    triggers: vec!["layer".to_string()],
                 }],
             }],
             // v0.17.3 (ADR-036): node_traits removed, provenance is per-instance
@@ -350,7 +362,7 @@ mod tests {
                 stroke_width: None,
                 arrow_style: "-->".to_string(),
                 default_traversal: None,
-                llm_context: "Arc.".to_string(),
+                triggers: vec!["arc".to_string()],
             }],
             arc_scopes: vec![],
             arc_cardinalities: vec![],
@@ -359,8 +371,12 @@ mod tests {
 
         let cypher = generate_cypher(&doc).unwrap();
 
-        // Multiline collapsed to single line
-        assert!(cypher.contains("r_r.llm_context = 'Line one. Line two. Line three.'"));
+        // Realm triggers as Cypher array
+        assert!(cypher.contains("r_r.triggers = ['keyword1', 'keyword2', 'keyword3']"));
+        // Layer triggers
+        assert!(cypher.contains("l_l.triggers = ['layer']"));
+        // ArcFamily triggers
+        assert!(cypher.contains("af_e.triggers = ['arc']"));
     }
 
     #[test]
@@ -461,7 +477,7 @@ mod tests {
                     terminal: "🧪".to_string(),
                 },
                 color: "#3b82f6".to_string(),
-                llm_context: "LLM context for test realm.".to_string(),
+                triggers: vec!["test".to_string(), "realm".to_string()],
                 layers: vec![
                     NodeLayerDef {
                         key: "base".to_string(),
@@ -472,7 +488,7 @@ mod tests {
                             terminal: "📋".to_string(),
                         },
                         color: "#10b981".to_string(),
-                        llm_context: "LLM context for base layer.".to_string(),
+                        triggers: vec!["base".to_string()],
                     },
                     NodeLayerDef {
                         key: "derived".to_string(),
@@ -483,7 +499,7 @@ mod tests {
                             terminal: "🔧".to_string(),
                         },
                         color: "#f59e0b".to_string(),
-                        llm_context: "LLM context for derived layer.".to_string(),
+                        triggers: vec!["derived".to_string()],
                     },
                 ],
             }],
@@ -497,7 +513,7 @@ mod tests {
                 stroke_width: Some(2),
                 arrow_style: ".->".to_string(),
                 default_traversal: None,
-                llm_context: "Semantic relationships.".to_string(),
+                triggers: vec!["semantic".to_string()],
             }],
             arc_scopes: vec![],
             arc_cardinalities: vec![],

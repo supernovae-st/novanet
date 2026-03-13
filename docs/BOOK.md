@@ -597,12 +597,11 @@ Every node MUST have these properties in this exact order:
 
 ### Nodes Without Key (Satellites)
 
-These 8 nodes are identified by relation chain, not key:
+These 7 nodes are identified by relation chain, not key:
 
 | Node | Identification Pattern |
 |------|----------------------|
 | ProjectNative | Project->HAS_NATIVE->ProjectNative->FOR_LOCALE->Locale |
-| BlockRules | BlockType->HAS_RULES->BlockRules |
 | TermSet | Locale->HAS_TERMS->TermSet + domain property |
 | ExpressionSet | Locale->HAS_EXPRESSIONS->ExpressionSet + domain property |
 | PatternSet | Locale->HAS_PATTERNS->PatternSet + domain property |

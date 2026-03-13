@@ -81,7 +81,7 @@ export const NODE_TYPES = [
   'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (24 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
+  // ORG REALM (23 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
   // v0.17.0: AudiencePersona, ChannelSurface removed; ProjectGEOScope added
   // v0.19.0: Added CultureRefEnrichment, ExpressionEnrichment, TabooEnrichment
   // ═══════════════════════════════════════════════════════════════════════════
@@ -93,8 +93,8 @@ export const NODE_TYPES = [
   'Page', 'Block', 'ContentSlot',
   // semantic (2) — v0.17.0: AudiencePersona, ChannelSurface removed
   'Entity', 'EntityNative',
-  // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
-  'BlockType', 'BlockInstruction', 'BlockRules', 'PromptArtifact',
+  // instruction (3) — v0.19.1: BlockRules removed (merged into BlockType.rules)
+  'BlockType', 'BlockInstruction', 'PromptArtifact',
   // output (6) — v0.13.0: *Native pattern + Enrichment nodes
   'PageNative', 'BlockNative', 'OutputArtifact',
   'CultureRefEnrichment', 'ExpressionEnrichment', 'TabooEnrichment',
@@ -152,7 +152,7 @@ export type Realm = 'shared' | 'org';
  * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative, ProjectSEOScope, ProjectGEOScope)
  * - **`structure`**: Page/Block hierarchy (Page, Block, ContentSlot)
  * - **`semantic`**: Business entities (Entity, EntityNative)
- * - **`instruction`**: Generation prompts (BlockType, BlockInstruction, BlockRules, PromptArtifact)
+ * - **`instruction`**: Generation prompts (BlockType, BlockInstruction, PromptArtifact)
  * - **`output`**: Native output per locale (PageNative, BlockNative)
  *
  * @example
@@ -314,10 +314,9 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   Entity:          { realm: 'org', layer: 'semantic', trait: 'defined' },
   EntityNative:    { realm: 'org', layer: 'semantic', trait: 'authored' },
 
-  // ORG REALM — instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
+  // ORG REALM — instruction (3) — v0.19.1: BlockRules removed (merged into BlockType.rules)
   BlockType:         { realm: 'org', layer: 'instruction', trait: 'defined' },
   BlockInstruction:  { realm: 'org', layer: 'instruction', trait: 'defined' },
-  BlockRules:        { realm: 'org', layer: 'instruction', trait: 'defined' },
   PromptArtifact:    { realm: 'org', layer: 'instruction', trait: 'generated' },
 
   // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared (v0.17.0: SEOKeywordMetrics removed)

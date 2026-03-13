@@ -161,8 +161,8 @@ pub struct ArcFamilyInfo {
     pub key: String,
     pub display_name: String,
     pub arc_classes: Vec<ArcClassInfo>,
-    /// LLM context for this arc family (from arc-families/*.yaml).
-    pub llm_context: String,
+    /// Content description for this arc family (from arc-families/*.yaml).
+    pub content: String,
 }
 
 /// A Class in the taxonomy tree.
@@ -198,8 +198,8 @@ pub struct LayerInfo {
     pub display_name: String,
     pub color: String,
     pub classes: Vec<ClassInfo>,
-    /// LLM context for this layer (from layers/*.yaml).
-    pub llm_context: String,
+    /// Content description for this layer (from layers/*.yaml).
+    pub content: String,
 }
 
 impl LayerInfo {
@@ -232,8 +232,8 @@ pub struct RealmInfo {
     pub color: String,
     pub icon: &'static str,
     pub layers: Vec<LayerInfo>,
-    /// LLM context for this realm (from realms/*.yaml).
-    pub llm_context: String,
+    /// Content description for this realm (from realms/*.yaml).
+    pub content: String,
 }
 
 impl RealmInfo {
@@ -716,8 +716,8 @@ pub struct EntityCategory {
     pub sort_order: i64,
     /// Category question (WHAT?, HOW?, WHY?, etc.)
     pub question: String,
-    /// LLM context for generation hints
-    pub llm_context: String,
+    /// Content description for generation hints
+    pub content: String,
     /// Number of Entity instances in this category.
     pub instance_count: i64,
 }
@@ -922,14 +922,14 @@ pub struct TaxonomyTree {
 }
 
 impl TaxonomyTree {
-    /// Load taxonomy tree from Neo4j, enriched with llm_context from individual YAML files.
+    /// Load taxonomy tree from Neo4j, enriched with content from individual YAML files.
     pub async fn load(db: &Db, root: &Path) -> crate::Result<Self> {
-        // v0.12.5: Load from individual YAML files for llm_context enrichment
+        // v0.12.5: Load from individual YAML files for content enrichment
         let taxonomy = load_taxonomy_from_files(root).ok();
 
-        // Build lookup maps for realm/layer llm_context
-        let (realm_llm_context, layer_llm_context, arc_family_llm_context) =
-            Self::build_llm_context_maps(&taxonomy);
+        // Build lookup maps for realm/layer content
+        let (realm_content, layer_content, arc_family_content) =
+            Self::build_content_maps(&taxonomy);
 
         // Query all Classes with their realm, layer, trait, and instance count
         // Note: Class uses 'label' property as identifier, not 'key'
@@ -943,7 +943,7 @@ WITH k, r, l, count(n) AS instances
 RETURN
     k.label AS class_key,
     coalesce(k.display_name, k.label) AS class_display,
-    coalesce(k.llm_context, '') AS class_desc,
+    coalesce(k.content, '') AS class_desc,
     coalesce(k.icon, '') AS class_icon,
     // v0.17.3 (ADR-036): trait removed from schema
     coalesce(r.key, 'unknown') AS realm_key,
@@ -1047,15 +1047,15 @@ ORDER BY realm_key, layer_key, class_key
                 .push(class_info);
         }
 
-        // Convert to RealmInfo vec with llm_context from realms/*.yaml
+        // Convert to RealmInfo vec with content from realms/*.yaml
         let realms: Vec<RealmInfo> = realm_map
             .into_iter()
             .map(|(realm_key, (realm_display, realm_color, layers_map))| {
                 let layers: Vec<LayerInfo> = layers_map
                     .into_iter()
                     .map(|(layer_key, (layer_display, layer_color, classes))| {
-                        // Look up llm_context from layers/*.yaml
-                        let llm_ctx = layer_llm_context
+                        // Look up content from layers/*.yaml
+                        let content_val = layer_content
                             .get(&layer_key)
                             .cloned()
                             .unwrap_or_default();
@@ -1064,13 +1064,13 @@ ORDER BY realm_key, layer_key, class_key
                             display_name: layer_display,
                             color: layer_color,
                             classes,
-                            llm_context: llm_ctx,
+                            content: content_val,
                         }
                     })
                     .collect();
 
-                // Look up realm llm_context from realms/*.yaml
-                let realm_llm_ctx = realm_llm_context
+                // Look up realm content from realms/*.yaml
+                let realm_content_val = realm_content
                     .get(&realm_key)
                     .cloned()
                     .unwrap_or_default();
@@ -1080,7 +1080,7 @@ ORDER BY realm_key, layer_key, class_key
                     display_name: realm_display,
                     color: realm_color,
                     layers,
-                    llm_context: realm_llm_ctx,
+                    content: realm_content_val,
                 }
             })
             .collect();
@@ -1094,10 +1094,10 @@ ORDER BY realm_key, layer_key, class_key
 
         let stats = stats_result?;
         let arc_map = arcs_result.unwrap_or_default();
-        // Enrich arc_families with llm_context from arc-families/*.yaml
-        let arc_families = Self::enrich_arc_families_with_llm_context(
+        // Enrich arc_families with content from arc-families/*.yaml
+        let arc_families = Self::enrich_arc_families_with_content(
             families_result.unwrap_or_default(),
-            &arc_family_llm_context,
+            &arc_family_content,
         );
 
         // Apply arcs to classes
@@ -1130,9 +1130,9 @@ ORDER BY realm_key, layer_key, class_key
         })
     }
 
-    /// Build lookup maps for llm_context from individual YAML files.
-    /// Returns (realm_llm_context, layer_llm_context, arc_family_llm_context).
-    fn build_llm_context_maps(
+    /// Build lookup maps for content from individual YAML files.
+    /// Returns (realm_content, layer_content, arc_family_content).
+    fn build_content_maps(
         taxonomy: &Option<TaxonomyDoc>,
     ) -> (
         FxHashMap<String, String>,
@@ -1144,32 +1144,32 @@ ORDER BY realm_key, layer_key, class_key
         let mut arc_family_map = FxHashMap::default();
 
         if let Some(tax) = taxonomy {
-            // Extract realm llm_context
+            // Extract realm content
             for realm in &tax.node_realms {
-                realm_map.insert(realm.key.clone(), realm.llm_context.clone());
-                // Extract layer llm_context (nested under realm)
+                realm_map.insert(realm.key.clone(), realm.content.clone());
+                // Extract layer content (nested under realm)
                 for layer in &realm.layers {
-                    layer_map.insert(layer.key.clone(), layer.llm_context.clone());
+                    layer_map.insert(layer.key.clone(), layer.content.clone());
                 }
             }
 
-            // Extract arc_family llm_context
+            // Extract arc_family content from triggers (taxonomy only has triggers, not content)
             for family in &tax.arc_families {
-                arc_family_map.insert(family.key.clone(), family.llm_context.clone());
+                arc_family_map.insert(family.key.clone(), family.triggers.join(", "));
             }
         }
 
         (realm_map, layer_map, arc_family_map)
     }
 
-    /// Enrich arc_families with llm_context from arc-families/*.yaml lookup map.
-    fn enrich_arc_families_with_llm_context(
+    /// Enrich arc_families with content from arc-families/*.yaml lookup map.
+    fn enrich_arc_families_with_content(
         mut families: Vec<ArcFamilyInfo>,
-        llm_context_map: &FxHashMap<String, String>,
+        content_map: &FxHashMap<String, String>,
     ) -> Vec<ArcFamilyInfo> {
         for family in &mut families {
-            if let Some(llm_ctx) = llm_context_map.get(&family.key) {
-                family.llm_context = llm_ctx.clone();
+            if let Some(content_val) = content_map.get(&family.key) {
+                family.content = content_val.clone();
             }
         }
         families
@@ -1249,7 +1249,7 @@ RETURN
     ak.key AS arc_key,
     coalesce(ak.display_name, ak.key) AS arc_display,
     coalesce(ak.cardinality, '') AS cardinality,
-    coalesce(ak.llm_context, '') AS arc_desc,
+    coalesce(ak.content, '') AS arc_desc,
     fromClass.label AS from_class,
     toClass.label AS to_class
 ORDER BY family_key, arc_key
@@ -1294,7 +1294,7 @@ ORDER BY family_key, arc_key
                 key,
                 display_name,
                 arc_classes,
-                llm_context: String::new(), // Enriched later from individual YAML files
+                content: String::new(), // Enriched later from individual YAML files
             })
             .collect())
     }
@@ -1778,7 +1778,7 @@ OPTIONAL MATCH (ac)-[:TO_CLASS]->(toClass:Class)
 OPTIONAL MATCH (toClass)-[:IN_LAYER]->(toLayer:Layer)
 OPTIONAL MATCH (toLayer)<-[:HAS_LAYER]-(toRealm:Realm)
 RETURN coalesce(ac.display_name, ac.key) as display_name,
-       coalesce(ac.llm_context, '') as description,
+       coalesce(ac.content, '') as description,
        coalesce(ac.cardinality, '') as cardinality,
        coalesce(ac.cypher_pattern, '') as cypher_pattern,
        coalesce(af.key, '') as family,
@@ -1845,7 +1845,7 @@ OPTIONAL MATCH (r)-[:HAS_LAYER]->(l:Layer)<-[:IN_LAYER]-(c:Class)
 OPTIONAL MATCH (c)<-[:OF_CLASS]-(n)
 RETURN r.key as realm_key,
        coalesce(r.display_name, r.key) as display_name,
-       coalesce(r.llm_context, '') as description,
+       coalesce(r.content, '') as description,
        count(DISTINCT c) as total_classes,
        count(DISTINCT n) as total_instances
 "#;
@@ -1912,7 +1912,7 @@ ORDER BY c.label
 WITH l, r, collect(coalesce(c.display_name, c.label)) as class_names, count(c) as total_classes, sum(inst_count) as total_instances
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as display_name,
-       coalesce(l.llm_context, '') as description,
+       coalesce(l.content, '') as description,
        coalesce(r.key, '') as realm,
        class_names,
        total_classes,
@@ -1963,7 +1963,7 @@ RETURN c.key AS key,
        coalesce(c.display_name, c.key) AS display_name,
        coalesce(c.sort_order, 0) AS sort_order,
        coalesce(c.question, '') AS question,
-       coalesce(c.llm_context, '') AS llm_context,
+       coalesce(c.content, '') AS content,
        instance_count
 ORDER BY c.sort_order, c.key
 "#;
@@ -1977,7 +1977,7 @@ ORDER BY c.sort_order, c.key
                 display_name: row.get("display_name").unwrap_or_default(),
                 sort_order: row.get("sort_order").unwrap_or(0),
                 question: row.get("question").unwrap_or_default(),
-                llm_context: row.get("llm_context").unwrap_or_default(),
+                content: row.get("content").unwrap_or_default(),
                 instance_count: row.get("instance_count").unwrap_or(0),
             });
         }
@@ -3859,7 +3859,7 @@ impl TaxonomyTree {
             display_name: "Config".to_string(),
             color: "#6c71c4".to_string(),
             classes: vec![app_config],
-            llm_context: String::new(),
+            content: String::new(),
         };
 
         let foundation_layer = LayerInfo {
@@ -3867,7 +3867,7 @@ impl TaxonomyTree {
             display_name: "Foundation".to_string(),
             color: "#268bd2".to_string(),
             classes: vec![entity],
-            llm_context: String::new(),
+            content: String::new(),
         };
 
         let shared_realm = RealmInfo {
@@ -3876,7 +3876,7 @@ impl TaxonomyTree {
             color: "#2aa198".to_string(),
             icon: "◉",
             layers: vec![config_layer],
-            llm_context: String::new(),
+            content: String::new(),
         };
 
         let org_realm = RealmInfo {
@@ -3885,7 +3885,7 @@ impl TaxonomyTree {
             color: "#d33682".to_string(),
             icon: "◎",
             layers: vec![foundation_layer],
-            llm_context: String::new(),
+            content: String::new(),
         };
 
         let realms = vec![shared_realm, org_realm];
@@ -4004,7 +4004,7 @@ mod tests {
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
             classes,
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 
@@ -4015,7 +4015,7 @@ mod tests {
             color: "#ffffff".to_string(),
             icon: "○",
             layers,
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 

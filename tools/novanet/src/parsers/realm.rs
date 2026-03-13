@@ -54,9 +54,9 @@ pub struct RealmDef {
     #[serde(default)]
     pub node_count: u32,
 
-    /// LLM context string (USE/TRIGGERS/NOT/RELATES pattern).
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
-    pub llm_context: Option<String>,
+    pub triggers: Vec<String>,
 }
 
 /// Document wrapper for realm YAML files.
@@ -154,16 +154,14 @@ realm:
     - geography
     - knowledge
   node_count: 39
-  llm_context: |
-    USE: when accessing universal locale knowledge.
-    TRIGGERS: "shared data", "universal", "read-only".
+  triggers: ["shared data", "universal", "read-only", "locale knowledge"]
 "##;
         let doc: RealmDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.realm.key, "shared");
         assert_eq!(doc.realm.layers.len(), 4);
         assert_eq!(doc.realm.layers[0], "config");
         assert_eq!(doc.realm.node_count, 39);
-        assert!(doc.realm.llm_context.is_some());
+        assert_eq!(doc.realm.triggers.len(), 4);
         assert_eq!(doc.realm.icon.web, "globe");
         assert_eq!(doc.realm.icon.terminal, "O");
     }

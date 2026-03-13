@@ -246,7 +246,7 @@ export {
   type EntityNativeNodeData,
 } from './presets/semantic';
 
-// Instruction Layer cards (BlockInstruction, BlockType, BlockRules, PromptArtifact)
+// Instruction Layer cards (BlockInstruction, BlockType, PromptArtifact)
 export {
   // Helper components
   CategoryBadge,
@@ -276,9 +276,6 @@ export {
   BlockTypeCardContent,
   type BlockTypeCardContentProps,
   type BlockTypeNodeData,
-  BlockRulesCardContent,
-  type BlockRulesCardContentProps,
-  type BlockRulesNodeData,
   PromptArtifactCardContent,
   type PromptArtifactCardContentProps,
   type PromptArtifactNodeData,

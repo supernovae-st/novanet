@@ -173,23 +173,6 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes BlockRules nodes via HAS_RULES.
-   * @param opts - Optional configuration
-   * @param opts.activeOnly - Only include active rules
-   */
-  includeRules(opts?: { activeOnly?: boolean }): this {
-    const rule: IncludeRule = {
-      relation: 'HAS_RULES',
-      direction: 'outgoing',
-    };
-    if (opts?.activeOnly) {
-      rule.filters = { active: true };
-    }
-    this.state.includes.push(rule);
-    return this;
-  }
-
-  /**
    * Includes all locale knowledge nodes (Culture, Market, Formatting, Slugification, ExpressionSet).
    * Typically used with fromLocale().
    * Safe to call multiple times - prevents duplicate relations.

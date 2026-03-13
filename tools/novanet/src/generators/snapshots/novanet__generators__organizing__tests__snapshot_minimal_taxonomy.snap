@@ -23,16 +23,15 @@ MERGE (r_test:Schema:Realm {key: 'test'})
 ON CREATE SET
   r_test.display_name = 'Test Realm',
   r_test.content = 'A test realm for snapshot testing.',
-  r_test.llm_context = 'LLM context for test realm.',
   r_test.node_class = 'realm',
   r_test.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   r_test.created_at = datetime()
 ON MATCH SET
   r_test.display_name = 'Test Realm',
   r_test.content = 'A test realm for snapshot testing.',
-  r_test.llm_context = 'LLM context for test realm.',
   r_test.node_class = 'realm',
-  r_test.updated_at = datetime();
+  r_test.updated_at = datetime()
+SET r_test.triggers = ['test', 'realm'];
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LAYERS (2)
@@ -43,16 +42,15 @@ MERGE (l_base:Schema:Layer {key: 'base'})
 ON CREATE SET
   l_base.display_name = 'Base Layer',
   l_base.content = 'The base layer.',
-  l_base.llm_context = 'LLM context for base layer.',
   l_base.node_class = 'layer',
   l_base.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   l_base.created_at = datetime()
 ON MATCH SET
   l_base.display_name = 'Base Layer',
   l_base.content = 'The base layer.',
-  l_base.llm_context = 'LLM context for base layer.',
   l_base.node_class = 'layer',
-  l_base.updated_at = datetime();
+  l_base.updated_at = datetime()
+SET l_base.triggers = ['base'];
 
 MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'base'})
 MERGE (r)-[:HAS_LAYER]->(l);
@@ -60,16 +58,15 @@ MERGE (l_derived:Schema:Layer {key: 'derived'})
 ON CREATE SET
   l_derived.display_name = 'Derived Layer',
   l_derived.content = 'A derived layer.',
-  l_derived.llm_context = 'LLM context for derived layer.',
   l_derived.node_class = 'layer',
   l_derived.provenance = '{"source": "seed:schema", "version": "v0.19.0"}',
   l_derived.created_at = datetime()
 ON MATCH SET
   l_derived.display_name = 'Derived Layer',
   l_derived.content = 'A derived layer.',
-  l_derived.llm_context = 'LLM context for derived layer.',
   l_derived.node_class = 'layer',
-  l_derived.updated_at = datetime();
+  l_derived.updated_at = datetime()
+SET l_derived.triggers = ['derived'];
 
 MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'derived'})
 MERGE (r)-[:HAS_LAYER]->(l);
@@ -93,4 +90,4 @@ SET
   af_semantic.arrow_style = '.->',
   af_semantic.stroke_style = 'solid',
   af_semantic.stroke_width = 2,
-  af_semantic.llm_context = 'Semantic relationships.';
+  af_semantic.triggers = ['semantic'];

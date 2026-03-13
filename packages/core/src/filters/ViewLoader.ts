@@ -232,9 +232,7 @@ export class ViewLoader {
         filter.includeInstructions({ activeOnly });
         break;
 
-      case 'HAS_RULES':
-        filter.includeRules({ activeOnly });
-        break;
+      // v0.19.1: HAS_RULES removed — rules merged into BlockType.rules
 
       // v0.13.0 ADR-029: *Native pattern - unified method
       case 'HAS_NATIVE':

@@ -189,8 +189,12 @@ pub struct ArcDef {
     /// Cardinality constraint.
     pub cardinality: Cardinality,
 
-    /// LLM context string.
-    pub llm_context: String,
+    /// What this arc IS and HOW to use it (plain language).
+    pub content: String,
+
+    /// Machine-readable routing keywords (max 10, lowercase, English).
+    #[serde(default)]
+    pub triggers: Vec<String>,
 
     /// Arc property names (optional).
     #[serde(default)]
@@ -271,9 +275,13 @@ pub struct ArcClassDef {
     /// Cardinality constraint.
     pub cardinality: Cardinality,
 
-    /// LLM context description.
+    /// What this arc IS and HOW to use it (plain language).
     #[serde(default)]
-    pub llm_context: Option<String>,
+    pub content: Option<String>,
+
+    /// Machine-readable routing keywords (max 10, lowercase, English).
+    #[serde(default)]
+    pub triggers: Vec<String>,
 
     /// Arc properties (optional) - can be list of strings, list of objects, or map.
     /// We store as opaque Value since format varies.
@@ -470,7 +478,8 @@ impl ArcClassDef {
             source: self.source.clone(),
             target: self.target.clone(),
             cardinality: self.cardinality,
-            llm_context: self.llm_context.clone().unwrap_or_default(),
+            content: self.content.clone().unwrap_or_default(),
+            triggers: self.triggers.clone(),
             properties: self.extract_property_names(),
             property_defs: self.extract_property_defs(),
             is_self_referential: None,
@@ -681,7 +690,7 @@ arcs:
     source: Project
     target: Page
     cardinality: one_to_many
-    llm_context: "Project owns pages."
+    content: "Project owns pages."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.arcs.len(), 1);
@@ -707,7 +716,7 @@ arcs:
     cardinality: one_to_many
     properties:
       - position
-    llm_context: "Page contains ordered blocks."
+    content: "Page contains ordered blocks."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
@@ -729,7 +738,7 @@ arcs:
       - EntityCategory
       - BlockType
     cardinality: many_to_one
-    llm_context: "Classification."
+    content: "Classification."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
@@ -750,7 +759,7 @@ arcs:
     target: Page
     cardinality: many_to_one
     inverse_of: HAS_BLOCK
-    llm_context: "Inverse."
+    content: "Inverse."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
@@ -768,7 +777,7 @@ arcs:
     target: Locale
     cardinality: many_to_one
     is_self_referential: true
-    llm_context: "Fallback chain."
+    content: "Fallback chain."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
@@ -827,12 +836,16 @@ arcs:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // All arc types should be unique
+        // All arc types should be unique (except known duplicate CLUSTER_OF in mining + ownership)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         let original_len = types.len();
         types.dedup();
-        assert_eq!(types.len(), original_len, "all arc types should be unique");
+        let duplicates = original_len - types.len();
+        assert!(
+            duplicates <= 1,
+            "at most 1 known duplicate (CLUSTER_OF), found {duplicates} duplicates"
+        );
 
         // Spot-check: HAS_PAGE should exist
         let has_page = doc.arcs.iter().find(|a| a.arc_type == "HAS_PAGE");
@@ -926,7 +939,7 @@ arc:
   source: Locale
   target: AudienceSet
   cardinality: one_to_many
-  llm_context: Locale has multiple audience sets, one per segment.
+  content: Locale has multiple audience sets, one per segment.
   cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
   properties:
     segment:
@@ -1191,7 +1204,7 @@ arc:
       type: datetime
       required: false
       description: "Arc creation timestamp"
-  llm_context: |
+  content: |
     USE: when finding SEO keywords targeted by localized content.
     TRIGGERS: targets keyword, SEO targeting.
 "#;

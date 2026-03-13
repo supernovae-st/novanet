@@ -58,8 +58,6 @@ pub struct EntityDef {
     #[serde(default)]
     pub entity_summary: Option<String>,
     #[serde(default)]
-    pub llm_context: Option<String>,
-    #[serde(default)]
     pub schema_org_type: Option<String>,
 }
 
@@ -310,13 +308,6 @@ fn generate_entity_cypher(entity: &EntityDef, project: &str) -> String {
         cypher.push_str(&format!(
             "  e.entity_summary = \"{}\",\n",
             escape_cypher(summary.trim())
-        ));
-    }
-
-    if let Some(llm_context) = &entity.llm_context {
-        cypher.push_str(&format!(
-            "  e.llm_context = \"{}\",\n",
-            escape_cypher(llm_context.trim())
         ));
     }
 
@@ -674,7 +665,6 @@ arcs:
             display_name: "Test Entity".to_string(),
             description: "A test entity".to_string(),
             entity_summary: Some("This is a summary.".to_string()),
-            llm_context: None,
             schema_org_type: None,
         };
 

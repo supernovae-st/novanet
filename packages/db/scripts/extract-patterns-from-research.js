@@ -96,7 +96,6 @@ function processResearchFile(filePath) {
       lines.push(`    p.tone = '${escapeCypher(tone)}',`);
       lines.push(`    p.constraints = '${escapeCypher(constraints)}',`);
       lines.push(`    p.variables = '${escapeCypher(variables)}',`);
-      lines.push(`    p.llm_context = 'USE: ${escapeCypher(patternType)} pattern for ${locale}. TEMPLATE: ${escapeCypher(template)}. TONE: ${escapeCypher(tone)}.',`);
       lines.push(`    p.provenance = 'perplexity-research',`);
       lines.push(`    p.confidence = 0.85,`);
       lines.push(`    p.created_at = datetime(),`);

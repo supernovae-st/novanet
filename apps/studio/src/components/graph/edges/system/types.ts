@@ -15,7 +15,7 @@
 export type RelationCategory =
   | 'structural'    // HAS_*, CONTAINS
   | 'localization'  // FOR_LOCALE, SUPPORTS, HAS_NATIVE
-  | 'generation'    // HAS_NATIVE, HAS_INSTRUCTION, HAS_RULES
+  | 'generation'    // HAS_NATIVE, HAS_INSTRUCTION
   | 'semantic'      // USES_ENTITY, SEMANTIC
   | 'seo'           // TARGETS_SEO, HAS_VARIATION
   | 'geo'           // TARGETS_GEO, HAS_CITATION
@@ -37,7 +37,6 @@ export type RelationType =
   // Generation
   | 'HAS_NATIVE'
   | 'HAS_INSTRUCTION'
-  | 'HAS_RULES'
   | 'GENERATED_BY'
   // Semantic
   | 'USES_ENTITY'

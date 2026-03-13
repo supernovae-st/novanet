@@ -1,10 +1,10 @@
 /**
  * @fileoverview NovaNet Shared Realm Schemas (was locale-knowledge, renamed v11.3)
  * @module @novanet/core/schemas/shared
- * @version 11.6.0
+ * @version 0.20.0
  *
  * Zod validation schemas for the shared realm in the NovaNet knowledge graph.
- * These schemas define the structure for locale identity, voice, culture, market data,
+ * These schemas define the structure for locale identity, voice, culture,
  * and lexicon resources used in native content generation.
  *
  * **Schema Hierarchy:**
@@ -12,8 +12,10 @@
  * - `LocaleIdentitySchema`: Script, geography, timezone, language family
  * - `LocaleVoiceSchema`: Tone, formality, communication style
  * - `LocaleCultureSchema`: Values, taboos, sensitivities
- * - `LocaleMarketSchema`: Demographics, digital adoption, commerce
  * - `LocaleLexiconSchema`: Expressions, idioms, loanwords policy
+ *
+ * v0.18.0: LocaleMarketSchema removed (market data from external APIs, not static graph)
+ * v0.20.0: Standard properties migrated (description+llm_context -> node_class+content+triggers+provenance)
  *
  * @example
  * ```typescript
@@ -365,128 +367,8 @@ export const LocaleCultureSchema = z.object({
     .describe('Timestamp when the culture was last updated'),
 }).describe('Cultural values, taboos, sensitivities, and content guidelines');
 
-// =============================================================================
-// LOCALE MARKET
-// =============================================================================
-
-/**
- * Locale market schema with demographics and digital adoption.
- *
- * Contains comprehensive market data including population demographics,
- * digital penetration, e-commerce metrics, social platforms, and
- * seasonal patterns essential for market strategy.
- *
- * @example
- * ```typescript
- * const market = LocaleMarketSchema.parse({
- *   population: 67000000,
- *   internet_penetration: 92,
- *   ecommerce_adoption: 78,
- *   // ... other properties
- * });
- * ```
- */
-export const LocaleMarketSchema = z.object({
-  population: z.number()
-    .positive()
-    .describe('Total population'),
-  growth_rate: z.number()
-    .describe('Annual population growth rate'),
-  median_age: z.number()
-    .positive()
-    .describe('Median age of population'),
-  age_distribution: z.array(z.object({
-    group: z.string().describe('Age group range'),
-    percentage: z.number().describe('Percentage of population'),
-    notes: z.string().describe('Behavioral notes for group'),
-  })).describe('Population distribution by age groups'),
-  income_levels: z.array(z.object({
-    level: z.string().describe('Income level category'),
-    percentage: z.number().describe('Percentage of population'),
-    threshold: z.string().describe('Income threshold'),
-  })).describe('Income distribution'),
-  urban_rural_split: z.record(z.string(), z.number())
-    .describe('Urban vs rural population percentages'),
-
-  internet_penetration: z.number()
-    .min(0).max(100)
-    .describe('Percentage of population with internet access'),
-  mobile_penetration: z.number()
-    .min(0).max(100)
-    .describe('Percentage of population with mobile devices'),
-  mobile_first_users: z.number()
-    .min(0).max(100)
-    .describe('Percentage who primarily use mobile'),
-  dominant_os: z.record(z.string(), z.number())
-    .describe('Operating system market share'),
-  ecommerce_adoption: z.number()
-    .min(0).max(100)
-    .describe('Percentage who shop online'),
-  ecommerce_revenue: z.number()
-    .describe('Total e-commerce revenue in local currency'),
-
-  payment_methods: z.array(z.object({
-    method: z.string().describe('Payment method name'),
-    usage: z.number().describe('Usage percentage'),
-    trend: z.string().describe('Growth trend'),
-  })).describe('Preferred payment methods'),
-
-  roi_score: z.number()
-    .min(0).max(100)
-    .describe('Overall ROI potential score'),
-  roi_factors: z.record(z.string(), z.number())
-    .describe('ROI factor breakdown'),
-
-  social_platforms: z.array(z.object({
-    platform: z.string().describe('Platform name'),
-    penetration: z.number().describe('User penetration percentage'),
-    audience: z.string().describe('Primary audience demographics'),
-  })).describe('Social media platform usage'),
-  messaging_apps: z.array(z.object({
-    app: z.string().describe('Messaging app name'),
-    penetration: z.number().describe('User penetration percentage'),
-    use_case: z.string().describe('Primary use case'),
-  })).describe('Messaging app usage'),
-  search_engines: z.array(z.object({
-    engine: z.string().describe('Search engine name'),
-    share: z.number().describe('Market share percentage'),
-  })).describe('Search engine market share'),
-
-  avg_order_value: z.record(z.string(), z.number())
-    .describe('Average order value by category'),
-  conversion_rate: z.number()
-    .describe('Average e-commerce conversion rate'),
-  cart_abandonment: z.number()
-    .describe('Cart abandonment rate'),
-
-  peak_periods: z.array(z.object({
-    name: z.string().describe('Period name'),
-    months: z.string().describe('Active months'),
-    impact: z.string().describe('Sales impact'),
-  })).describe('Peak shopping periods'),
-  low_periods: z.array(z.object({
-    name: z.string().describe('Period name'),
-    strategy: z.string().describe('Recommended strategy'),
-  })).describe('Low shopping periods'),
-  shopping_events: z.array(z.object({
-    event: z.string().describe('Shopping event name'),
-    date: z.string().describe('Event date(s)'),
-    impact: z.string().describe('Sales impact'),
-  })).describe('Major shopping events'),
-
-  major_players: z.array(z.object({
-    company: z.string().describe('Company name'),
-    share: z.number().describe('Market share'),
-    strength: z.string().describe('Competitive strength'),
-  })).describe('Major market players'),
-  market_concentration: z.enum(['fragmented', 'moderate', 'consolidated'])
-    .describe('Market concentration level'),
-
-  created_at: z.date()
-    .describe('Timestamp when the market data was created'),
-  updated_at: z.date()
-    .describe('Timestamp when the market data was last updated'),
-}).describe('Market demographics, digital adoption, e-commerce, and seasonal patterns');
+// v0.18.0: LocaleMarketSchema REMOVED — market data should come from external APIs, not static graph nodes
+// See ADR-024: Trait = Data Origin — market data is "retrieved", not "imported"
 
 // =============================================================================
 // LOCALE LEXICON & EXPRESSION
@@ -594,6 +476,6 @@ export type Locale = z.infer<typeof LocaleSchema>;
 export type LocaleIdentity = z.infer<typeof LocaleIdentitySchema>;
 export type LocaleVoice = z.infer<typeof LocaleVoiceSchema>;
 export type LocaleCulture = z.infer<typeof LocaleCultureSchema>;
-export type LocaleMarket = z.infer<typeof LocaleMarketSchema>;
+// v0.18.0: LocaleMarket removed (external API data, not static graph node)
 export type LocaleLexicon = z.infer<typeof LocaleLexiconSchema>;
 export type Expression = z.infer<typeof ExpressionSchema>;

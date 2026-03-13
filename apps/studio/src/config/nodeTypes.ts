@@ -519,15 +519,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 12,
     layer: 'instruction',
   },
-  BlockRules: {
-    type: 'BlockRules',
-    label: 'Block Rules',
-    icon: 'ruler',
-    color: '#93c5fd',
-    colorClass: 'bg-blue-300',
-    size: 12,
-    layer: 'instruction',
-  },
   PromptArtifact: {
     type: 'PromptArtifact',
     label: 'Prompt Artifact',
@@ -595,7 +586,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — OUTPUT LAYER (3 nodes)
+  // ORG REALM — OUTPUT LAYER (6 nodes) — v0.19.0: +3 Enrichments
   // ==========================================================================
   PageNative: {
     type: 'PageNative',
@@ -621,6 +612,33 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: 'folder',
     color: '#c2410c',
     colorClass: 'bg-orange-700',
+    size: 12,
+    layer: 'output',
+  },
+  CultureRefEnrichment: {
+    type: 'CultureRefEnrichment',
+    label: 'CultureRef Enrichment',
+    icon: 'globe',
+    color: '#ea580c',
+    colorClass: 'bg-orange-600',
+    size: 12,
+    layer: 'output',
+  },
+  ExpressionEnrichment: {
+    type: 'ExpressionEnrichment',
+    label: 'Expression Enrichment',
+    icon: 'message-circle',
+    color: '#d97706',
+    colorClass: 'bg-amber-600',
+    size: 12,
+    layer: 'output',
+  },
+  TabooEnrichment: {
+    type: 'TabooEnrichment',
+    label: 'Taboo Enrichment',
+    icon: 'shield-alert',
+    color: '#dc2626',
+    colorClass: 'bg-red-600',
     size: 12,
     layer: 'output',
   },

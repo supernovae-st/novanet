@@ -114,7 +114,7 @@ pub struct Formatting {
     pub key: String,
     pub display_name: String,
     pub description: String,
-    pub llm_context: String,
+    pub content: String,
     pub data_sources: Vec<String>,
     pub number: NumberFormatting,
     pub date: DateFormatting,
@@ -133,7 +133,7 @@ pub struct Formatting {
 
 impl Formatting {
     /// Generate LLM context from formatting data.
-    pub fn generate_llm_context(&mut self) {
+    pub fn generate_content(&mut self) {
         let mut parts = Vec::new();
 
         // Key formatting characteristics
@@ -168,7 +168,7 @@ impl Formatting {
             parts.push(format!("NEVER: {} -> {}", ex.input, ex.output));
         }
 
-        self.llm_context = parts.join(" ");
+        self.content = parts.join(" ");
     }
 }
 
@@ -533,7 +533,7 @@ pub fn parse_formatting_file(path: &Path) -> Result<Formatting> {
         key: locale.to_string(),
         display_name: format!("{} Formatting", locale),
         description: format!("Formatting rules for {}", locale),
-        llm_context: String::new(),
+        content: String::new(),
         data_sources,
         number,
         date,
@@ -550,7 +550,7 @@ pub fn parse_formatting_file(path: &Path) -> Result<Formatting> {
         last_updated,
     };
 
-    formatting.generate_llm_context();
+    formatting.generate_content();
 
     Ok(formatting)
 }

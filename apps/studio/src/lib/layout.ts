@@ -81,7 +81,6 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
 
   // Generation nodes (v0.12.4: PageInstruction removed, v0.13.0: PageOutput/BlockOutput → PageNative/BlockNative)
   BlockInstruction: { width: 190, height: 105 },
-  BlockRules: { width: 190, height: 105 },
   PageNative: { width: 200, height: 110 },
   BlockNative: { width: 190, height: 105 },
 

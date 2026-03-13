@@ -273,8 +273,8 @@ pub fn build_schema_context(meta: &ClassMetadata) -> SchemaContext {
         ctx = ctx.with_content(content.clone());
     }
 
-    if let Some(llm_ctx) = &meta.llm_context {
-        ctx = ctx.with_llm_context(llm_ctx.clone());
+    if let Some(triggers) = &meta.triggers {
+        ctx = ctx.with_triggers(triggers.clone());
     }
 
     // Add trait explanation
@@ -393,8 +393,8 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
                            c.trait AS trait_type,
                            c.required_properties AS required_properties,
                            c.optional_properties AS optional_properties,
-                           c.description AS description,
-                           c.llm_context AS llm_context
+                           c.content AS content,
+                           c.triggers AS triggers
                 "#;
 
                 let mut query_params = serde_json::Map::new();
@@ -440,7 +440,13 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
                         })
                         .unwrap_or_default(),
                     content: row["content"].as_str().map(String::from),
-                    llm_context: row["llm_context"].as_str().map(String::from),
+                    triggers: row["triggers"]
+                        .as_array()
+                        .map(|arr| {
+                            arr.iter()
+                                .filter_map(|v| v.as_str().map(String::from))
+                                .collect()
+                        }),
                     ..Default::default()
                 }
             }
@@ -554,7 +560,7 @@ fn estimate_result_tokens(result: &CheckResult) -> u32 {
         if ctx.class_description.is_some() {
             tokens += 20;
         }
-        if ctx.llm_context.is_some() {
+        if ctx.triggers.is_some() {
             tokens += 50;
         }
         tokens += (ctx.mandatory_arcs.len() * 5) as u32;
@@ -682,13 +688,13 @@ mod tests {
             required_properties: vec![],
             optional_properties: vec![],
             content: Some("Locale-native content".to_string()),
-            llm_context: Some("USE: when loading localized data".to_string()),
+            triggers: Some(vec!["localized".to_string(), "entity".to_string(), "native".to_string()]),
             ..Default::default()
         };
 
         let ctx = build_schema_context(&meta);
         assert!(ctx.class_description.is_some());
-        assert!(ctx.llm_context.is_some());
+        assert!(ctx.triggers.is_some());
         assert!(ctx.trait_explanation.unwrap().contains("authored"));
     }
 

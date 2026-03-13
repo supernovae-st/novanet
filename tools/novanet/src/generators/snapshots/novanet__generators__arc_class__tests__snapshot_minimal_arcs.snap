@@ -20,7 +20,7 @@ expression: cypher
 MERGE (ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'})
 ON CREATE SET
   ac_HAS_PAGE.display_name = 'Has Page',
-  ac_HAS_PAGE.llm_context = 'HAS_PAGE context.',
+  ac_HAS_PAGE.content = 'HAS_PAGE context.',
   ac_HAS_PAGE.family = 'ownership',
   ac_HAS_PAGE.scope = 'intra_realm',
   ac_HAS_PAGE.cardinality = 'one_to_many',
@@ -35,7 +35,7 @@ ON CREATE SET
   ac_HAS_PAGE.created_at = datetime()
 ON MATCH SET
   ac_HAS_PAGE.display_name = 'Has Page',
-  ac_HAS_PAGE.llm_context = 'HAS_PAGE context.',
+  ac_HAS_PAGE.content = 'HAS_PAGE context.',
   ac_HAS_PAGE.family = 'ownership',
   ac_HAS_PAGE.scope = 'intra_realm',
   ac_HAS_PAGE.cardinality = 'one_to_many',
@@ -51,7 +51,7 @@ ON MATCH SET
 MERGE (ac_USES_ENTITY:Schema:ArcClass {key: 'USES_ENTITY'})
 ON CREATE SET
   ac_USES_ENTITY.display_name = 'Uses Entity',
-  ac_USES_ENTITY.llm_context = 'USES_ENTITY context.',
+  ac_USES_ENTITY.content = 'USES_ENTITY context.',
   ac_USES_ENTITY.family = 'semantic',
   ac_USES_ENTITY.scope = 'intra_realm',
   ac_USES_ENTITY.cardinality = 'many_to_many',
@@ -66,7 +66,7 @@ ON CREATE SET
   ac_USES_ENTITY.created_at = datetime()
 ON MATCH SET
   ac_USES_ENTITY.display_name = 'Uses Entity',
-  ac_USES_ENTITY.llm_context = 'USES_ENTITY context.',
+  ac_USES_ENTITY.content = 'USES_ENTITY context.',
   ac_USES_ENTITY.family = 'semantic',
   ac_USES_ENTITY.scope = 'intra_realm',
   ac_USES_ENTITY.cardinality = 'many_to_many',
@@ -82,7 +82,7 @@ ON MATCH SET
 MERGE (ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'})
 ON CREATE SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'FOR_LOCALE context.',
+  ac_FOR_LOCALE.content = 'FOR_LOCALE context.',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',
@@ -97,7 +97,7 @@ ON CREATE SET
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'FOR_LOCALE context.',
+  ac_FOR_LOCALE.content = 'FOR_LOCALE context.',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',

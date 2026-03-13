@@ -136,7 +136,7 @@ SET sr.display_name = '{}',
     sr.romanization_systems = '{}',
     sr.locale_count = {},
     sr.locale_examples = '{}',
-    sr.llm_context = '{}';
+    sr.content = '{}';
 "#,
             rule.key,
             escape_cypher(&rule.display_name),
@@ -152,7 +152,7 @@ SET sr.display_name = '{}',
             escape_cypher(&romanization),
             rule.locale_count,
             escape_cypher(&examples_json),
-            escape_cypher(&rule.llm_context)
+            escape_cypher(&rule.content)
         )
     }
 
@@ -201,7 +201,7 @@ SET s.display_name = '{}',
     s.template_version = '{}',
     s.source_file = '{}',
     s.last_updated = '{}',
-    s.llm_context = '{}';
+    s.triggers = '{}';
 "#,
             s.key,
             escape_cypher(&s.display_name),
@@ -216,7 +216,7 @@ SET s.display_name = '{}',
             s.template_version,
             s.source_file,
             s.last_updated,
-            escape_cypher(&s.llm_context)
+            escape_cypher(&s.content)
         )
     }
 
@@ -320,7 +320,7 @@ mod tests {
         let mut rule = SlugRule::new("latin_strip");
         rule.locale_count = 150;
         rule.locale_examples = vec!["en-US".to_string(), "es-ES".to_string()];
-        rule.generate_llm_context();
+        rule.generate_content();
 
         let generator = SlugificationGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_slug_rule_cypher(&rule);
@@ -336,7 +336,7 @@ mod tests {
             key: "fr-FR".to_string(),
             display_name: "French (France) Slugification".to_string(),
             description: "URL slug generation rules for fr-FR".to_string(),
-            llm_context: String::new(),
+            content: String::new(),
             slug_rule: "latin_preserve".to_string(),
             stopwords: HashMap::from([(
                 "article".to_string(),
@@ -352,7 +352,7 @@ mod tests {
             source_file: "2-rules-slug/fr-FR.md".to_string(),
             last_updated: "2025-12-08".to_string(),
         };
-        s.generate_llm_context();
+        s.generate_content();
 
         let generator = SlugificationGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_slugification_cypher(&s);

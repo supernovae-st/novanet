@@ -3,19 +3,21 @@
 //
 // v0.13.0: ProjectNative → ProjectNative (ADR-029 *Native pattern)
 // v7.2.2: BrandL10n merged into ProjectNative (CTAs, meta, SEO keywords) - L10n suffix deprecated v10.9
-// v7.1.0 STANDARD PROPERTIES:
-//   key, display_name, description, llm_context, created_at, updated_at
+// v0.20.0 STANDARD PROPERTIES:
+//   key, display_name, node_class, content, triggers[], provenance, created_at, updated_at
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT (defined) - v7.1.0, trait renamed v0.12.0 ADR-024
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface Project {
-  // Standard properties (v7.1.0)
+  // Standard properties (v0.20.0)
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // Project-specific properties
   brand_name: string;
@@ -46,10 +48,12 @@ export interface VoiceTone {
  * Locale-specific project messaging, identity, and voice.
  */
 export interface ProjectNative {
-  // Standard properties (v7.1.0 - Content nodes don't have key)
+  // Standard properties (v0.20.0 - Content nodes don't have key)
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // v7.1.0: Locale is linked via :FOR_LOCALE relation, not stored as property
 
@@ -107,11 +111,13 @@ export interface TypographyScaleItem {
  * Owns: BrandDesign, BrandPrinciples, PromptStyle
  */
 export interface Brand {
-  // Standard properties
+  // Standard properties (v0.20.0)
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // Core Identity
   brand_name: string;
@@ -136,11 +142,13 @@ export interface Brand {
  * Colors, typography, UI patterns
  */
 export interface BrandDesign {
-  // Standard properties
+  // Standard properties (v0.20.0)
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // Colors
   color_primary: string;
@@ -169,11 +177,13 @@ export interface BrandDesign {
  * BrandPrinciples - Voice, tone, editorial guidelines (ADR-028)
  */
 export interface BrandPrinciples {
-  // Standard properties
+  // Standard properties (v0.20.0)
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // Voice & Tone
   voice_attributes: string[];
@@ -201,11 +211,13 @@ export interface BrandPrinciples {
  * Can be locale or region specific for cultural adaptation
  */
 export interface PromptStyle {
-  // Standard properties
+  // Standard properties (v0.20.0)
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // Visual Style
   style_keywords: string[];

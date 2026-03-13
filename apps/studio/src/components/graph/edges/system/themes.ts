@@ -205,11 +205,6 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
       glow: '#06b6d4',
     },
   },
-  HAS_RULES: {
-    lineStyle: 'dotted',
-    particlePreset: 'pulse',
-  },
-
   // ─── Semantic Overrides ───
   // v11.6.1: Effects now come from arc family (zigzag), not overrides
   USES_ENTITY: {

@@ -186,7 +186,6 @@ struct ParsedLocale {
     // Computed
     name_native: String,
     description: String,
-    llm_context: String,
     // v10.7: Geographic properties for LLM retrieval
     region: String,
     language_family: String,
@@ -345,16 +344,6 @@ fn build_parsed_locale(csv: &CsvLocale, enrichment: &IdentityEnrichment) -> Pars
         country_native
     );
 
-    // Construct llm_context
-    let llm_context = format!(
-        "USE: for {} content targeting {}. TRIGGERS: {}, {}, {}.",
-        extract_language_from_display(&csv.language),
-        country_native,
-        csv.locale_code,
-        language_native,
-        country_native.to_lowercase()
-    );
-
     // v10.7: Geographic properties
     let region = infer_region(&csv.country_code);
     let language_family = infer_language_family(&csv.language_code);
@@ -375,7 +364,6 @@ fn build_parsed_locale(csv: &CsvLocale, enrichment: &IdentityEnrichment) -> Pars
         _country_native: country_native,
         name_native,
         description,
-        llm_context,
         region,
         language_family,
         script,
@@ -535,10 +523,6 @@ fn generate_cypher(locales: &[ParsedLocale], primary_map: &HashMap<String, Strin
         cypher.push_str(&format!(
             "  l.content = \"{}\",\n",
             escape_cypher(&locale.description)
-        ));
-        cypher.push_str(&format!(
-            "  l.llm_context = \"{}\",\n",
-            escape_cypher(&locale.llm_context)
         ));
         cypher.push_str(&format!(
             "  l.language_code = \"{}\",\n",

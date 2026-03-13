@@ -2,7 +2,7 @@
  * Instruction Layer Card Components
  *
  * Layer color: Yellow #eab308
- * 4 nodes: BlockInstruction, BlockType, BlockRules, PromptArtifact
+ * 3 nodes: BlockInstruction, BlockType, PromptArtifact
  *
  * All components are performance-aware and support Framer Motion animations.
  */
@@ -43,12 +43,6 @@ export {
   type BlockTypeCardContentProps,
   type BlockTypeNodeData,
 } from './BlockTypeCardContent';
-
-export {
-  BlockRulesCardContent,
-  type BlockRulesCardContentProps,
-  type BlockRulesNodeData,
-} from './BlockRulesCardContent';
 
 export {
   PromptArtifactCardContent,

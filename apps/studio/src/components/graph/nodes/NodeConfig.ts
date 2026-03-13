@@ -131,16 +131,18 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Entity: { width: 360, height: 220 },
   EntityNative: { width: 340, height: 200 },
 
-  // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
+  // instruction (3) — v0.19.1: BlockRules removed (merged into BlockType.rules)
   BlockType: { width: 200, height: 100 },
   BlockInstruction: { width: 180, height: 90 },
-  BlockRules: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
-  // output (3) - v0.13.1: Increased sizes for parent reference indicator
+  // output (6) - v0.13.1: Increased sizes for parent reference indicator, v0.19.0: +Enrichments
   PageNative: { width: 320, height: 180 },
   BlockNative: { width: 300, height: 170 },
   OutputArtifact: { width: 200, height: 100 },
+  CultureRefEnrichment: { width: 200, height: 100 },
+  ExpressionEnrichment: { width: 200, height: 100 },
+  TabooEnrichment: { width: 200, height: 100 },
 };
 
 // =============================================================================
@@ -498,12 +500,6 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#93c5fd',
     glow: '#60a5fa40',
   },
-  BlockRules: {
-    primary: '#93c5fd',
-    secondary: '#60a5fa',
-    tertiary: '#bfdbfe',
-    glow: '#93c5fd40',
-  },
   PromptArtifact: {
     primary: '#1d4ed8',
     secondary: '#2563eb',
@@ -511,7 +507,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#1d4ed840',
   },
 
-  // output (3) — Orange/Red tones — v11.2: job nodes removed
+  // output (6) — Orange/Red tones — v11.2: job nodes removed, v0.19.0: +Enrichments
   PageNative: {
     primary: '#f97316',
     secondary: '#ef4444',
@@ -529,6 +525,24 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#ea580c',
     tertiary: '#f97316',
     glow: '#c2410c40',
+  },
+  CultureRefEnrichment: {
+    primary: '#ea580c',
+    secondary: '#f97316',
+    tertiary: '#fb923c',
+    glow: '#ea580c40',
+  },
+  ExpressionEnrichment: {
+    primary: '#d97706',
+    secondary: '#f59e0b',
+    tertiary: '#fbbf24',
+    glow: '#d9770640',
+  },
+  TabooEnrichment: {
+    primary: '#dc2626',
+    secondary: '#ef4444',
+    tertiary: '#f87171',
+    glow: '#dc262640',
   },
 };
 

@@ -219,9 +219,9 @@ pub struct SchemaContext {
     /// Human-readable description of the class
     #[serde(skip_serializing_if = "Option::is_none")]
     pub class_description: Option<String>,
-    /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
+    /// Keyword triggers for search boosting (max 10, lowercase, English)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm_context: Option<String>,
+    pub triggers: Option<Vec<String>>,
     /// Arcs that MUST be created after this node (e.g., FOR_LOCALE)
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub mandatory_arcs: Vec<String>,
@@ -238,7 +238,7 @@ impl SchemaContext {
     pub fn new() -> Self {
         Self {
             class_description: None,
-            llm_context: None,
+            triggers: None,
             mandatory_arcs: Vec::new(),
             related_classes: Vec::new(),
             trait_explanation: None,
@@ -251,9 +251,9 @@ impl SchemaContext {
         self
     }
 
-    /// Builder: set llm_context
-    pub fn with_llm_context(mut self, ctx: impl Into<String>) -> Self {
-        self.llm_context = Some(ctx.into());
+    /// Builder: set triggers
+    pub fn with_triggers(mut self, triggers: Vec<String>) -> Self {
+        self.triggers = Some(triggers);
         self
     }
 
@@ -284,7 +284,7 @@ impl Default for SchemaContext {
 
 /// A suggestion based on ontology rules
 ///
-/// Generated from :Schema:Class llm_context and relationship patterns.
+/// Generated from :Schema:Class triggers and relationship patterns.
 #[derive(Debug, Clone, Serialize, JsonSchema)]
 pub struct OntologySuggestion {
     /// Action type: "create_arc", "add_property", "check_exists", etc.
@@ -364,12 +364,12 @@ mod tests {
     fn test_schema_context_builders() {
         let ctx = SchemaContext::new()
             .with_content("LLM-generated content")
-            .with_llm_context("USE: when loading localized data")
+            .with_triggers(vec!["localized".to_string(), "entity".to_string(), "native".to_string()])
             .with_mandatory_arcs(vec!["FOR_LOCALE".to_string()])
             .with_related_classes(vec!["Entity".to_string(), "Locale".to_string()]);
 
         assert!(ctx.class_description.is_some());
-        assert!(ctx.llm_context.is_some());
+        assert!(ctx.triggers.is_some());
         assert_eq!(ctx.mandatory_arcs.len(), 1);
         assert_eq!(ctx.related_classes.len(), 2);
     }

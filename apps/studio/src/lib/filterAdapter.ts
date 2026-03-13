@@ -77,7 +77,6 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   ALTERNATIVE_TO: 'alternativeEntity',
   // Instructions
   HAS_INSTRUCTION: 'instruction',
-  HAS_RULES: 'rules',
   // Native content (v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED)
   HAS_NATIVE: 'native',
   NATIVE_OF: 'nativeParent',
@@ -232,18 +231,6 @@ export class NovaNetFilter {
   includeInstructions(opts?: { activeOnly?: boolean }): this {
     const rule: IncludeRule = {
       relation: 'HAS_INSTRUCTION',
-      direction: 'outgoing',
-    };
-    if (opts?.activeOnly) {
-      rule.filters = { active: true };
-    }
-    this.state.includes.push(rule);
-    return this;
-  }
-
-  includeRules(opts?: { activeOnly?: boolean }): this {
-    const rule: IncludeRule = {
-      relation: 'HAS_RULES',
       direction: 'outgoing',
     };
     if (opts?.activeOnly) {
@@ -604,7 +591,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     filter: () => NovaNetFilter.create()
       .byTypes(
         'Locale', 'Project', 'Brand', 'Page', 'Block', 'Entity',
-        'BlockType', 'BlockInstruction', 'BlockRules',
+        'BlockType', 'BlockInstruction',
       ),
   },
   {

@@ -68,7 +68,7 @@ pub struct SlugRule {
     pub romanization_systems: Option<HashMap<String, String>>,
     pub locale_count: u32,
     pub locale_examples: Vec<String>,
-    pub llm_context: String,
+    pub content: String,
 }
 
 impl SlugRule {
@@ -170,12 +170,12 @@ impl SlugRule {
             romanization_systems,
             locale_count: 0,
             locale_examples: Vec::new(),
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 
-    /// Generate llm_context from aggregated data.
-    pub fn generate_llm_context(&mut self) {
+    /// Generate content from aggregated data.
+    pub fn generate_content(&mut self) {
         let diacritics_desc = match self.diacritics.as_str() {
             "remove" => "removed via NFD normalization",
             "preserve" => "preserved in UTF-8",
@@ -199,7 +199,7 @@ impl SlugRule {
             self.locale_examples.join(", ")
         };
 
-        self.llm_context = format!(
+        self.content = format!(
             "The {} rule produces {} slugs. Diacritics are {}. Non-Latin scripts are {}. Used by {} locales including {}.",
             self.display_name,
             self.output_encoding,
@@ -217,7 +217,7 @@ pub struct Slugification {
     pub key: String,
     pub display_name: String,
     pub description: String,
-    pub llm_context: String,
+    pub content: String,
     pub slug_rule: String,
     pub stopwords: HashMap<String, Vec<String>>,
     pub stopwords_count: u32,
@@ -232,8 +232,8 @@ pub struct Slugification {
 }
 
 impl Slugification {
-    /// Generate llm_context from parsed data.
-    pub fn generate_llm_context(&mut self) {
+    /// Generate content from parsed data.
+    pub fn generate_content(&mut self) {
         let categories: Vec<&str> = self.stopwords.keys().map(|s| s.as_str()).collect();
         let category_count = categories.len();
 
@@ -249,7 +249,7 @@ impl Slugification {
             String::new()
         };
 
-        self.llm_context = format!(
+        self.content = format!(
             "URL slugification rules for {}. Uses {} rule. {} stopwords across {} categories including {}.{}",
             self.display_name.replace(" Slugification", ""),
             self.slug_rule,
@@ -347,7 +347,7 @@ pub fn parse_slugification(content: &str, source_path: &Path) -> Result<Slugific
         key: frontmatter.locale.clone(),
         display_name: format!("{} Slugification", display_name),
         description: format!("URL slug generation rules for {}", frontmatter.locale),
-        llm_context: String::new(),
+        content: String::new(),
         slug_rule,
         stopwords,
         stopwords_count,
@@ -367,7 +367,7 @@ pub fn parse_slugification(content: &str, source_path: &Path) -> Result<Slugific
         last_updated: frontmatter.last_updated,
     };
 
-    slugification.generate_llm_context();
+    slugification.generate_content();
 
     Ok(slugification)
 }
@@ -689,10 +689,10 @@ pub fn aggregate_slug_rules(slugifications: &[Slugification]) -> Vec<SlugRule> {
         }
     }
 
-    // Generate llm_context for each rule
+    // Generate content for each rule
     let mut result: Vec<SlugRule> = rules.into_values().collect();
     for rule in &mut result {
-        rule.generate_llm_context();
+        rule.generate_content();
     }
 
     // Sort by key for deterministic output
@@ -833,7 +833,7 @@ No regional additions for fr-FR.
         assert_eq!(s.key, "fr-FR");
         assert_eq!(s.slug_rule, "latin_preserve");
         assert_eq!(s.stopwords_count, 4);
-        assert!(s.llm_context.contains("latin_preserve"));
+        assert!(s.content.contains("latin_preserve"));
     }
 
     #[test]
@@ -856,7 +856,7 @@ No regional additions for fr-FR.
                 key: "en-US".to_string(),
                 display_name: "English (US) Slugification".to_string(),
                 description: String::new(),
-                llm_context: String::new(),
+                content: String::new(),
                 slug_rule: "latin_strip".to_string(),
                 stopwords: HashMap::new(),
                 stopwords_count: 0,
@@ -873,7 +873,7 @@ No regional additions for fr-FR.
                 key: "fr-FR".to_string(),
                 display_name: "French (France) Slugification".to_string(),
                 description: String::new(),
-                llm_context: String::new(),
+                content: String::new(),
                 slug_rule: "latin_preserve".to_string(),
                 stopwords: HashMap::new(),
                 stopwords_count: 0,

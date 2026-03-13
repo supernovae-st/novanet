@@ -88,22 +88,26 @@ describe('neo4j transformations', () => {
         properties: {
           key: 'free-tier',
           display_name: 'Free Tier',
-          description: 'A free tier concept',
+          content: 'A free tier concept',
+          triggers: ['free', 'tier', 'pricing'],
+          node_class: 'Entity',
+          provenance: 'seed',
           icon: 'gift',
         },
       };
 
       const result = transformNode(neo4jNode as never);
 
-      // v8.1.0: icon, priority, freshness are no longer top-level properties
-      // They now go into the data field as deprecated/extra properties
+      // v0.20.0: content, triggers, nodeClass, provenance are standard properties
       expect(result).toEqual({
         id: '4:abc:123',
         type: 'Entity',
         key: 'free-tier',
         displayName: 'Free Tier',
-        description: 'A free tier concept',
-        llmContext: undefined,
+        content: 'A free tier concept',
+        triggers: ['free', 'tier', 'pricing'],
+        nodeClass: 'Entity',
+        provenance: 'seed',
         createdAt: undefined,
         updatedAt: undefined,
         data: { icon: 'gift' },

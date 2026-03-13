@@ -1,58 +1,43 @@
 'use client';
 
 /**
- * LLMContextBadge - Visual display of llm_context from node YAML
+ * ContentBadge - Visual display of content + triggers for graph nodes
  *
- * Parses and displays the USE/TRIGGERS/NOT/RELATES pattern (ADR-027)
- * for AI-friendly graph context loading.
+ * v0.20.0: Replaces LLMContextBadge. Content and triggers are now
+ * direct properties (no parsing needed).
  *
  * Display modes:
- * - compact: Purpose badge + trigger count only
- * - expanded: Full context with all sections
+ * - compact: Content summary + trigger count only
+ * - expanded: Full content with trigger chips
  *
  * Layout (compact):
  * ┌─────────────────────────────────────────────────────┐
- * │  ⚡ load locale-specific content  │  5 triggers    │
+ * │  ⚡ what this node does              │  5 triggers  │
  * └─────────────────────────────────────────────────────┘
  *
  * Layout (expanded):
  * ┌─────────────────────────────────────────────────────┐
- * │  USE: when loading locale-specific content...      │
+ * │  ⚡ what this node does              │  5 triggers  │
  * │  ─────────────────────────────────────────────────  │
  * │  TRIGGERS: content • native • locale • l10n        │
- * │  ─────────────────────────────────────────────────  │
- * │  NOT: for structure (use HAS_BLOCK)                │
- * │  ─────────────────────────────────────────────────  │
- * │  RELATES: Entity (parent) → EntityNative (content) │
  * └─────────────────────────────────────────────────────┘
  */
 
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { Zap, ChevronDown, AlertTriangle, Link2 } from 'lucide-react';
+import { Zap, ChevronDown } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 
 // =============================================================================
 // Types
 // =============================================================================
 
-export interface ParsedLLMContext {
-  /** USE: when to load this node into context */
-  use?: string;
-  /** TRIGGERS: keywords for RAG activation */
+export interface ContentBadgeProps {
+  /** Content description (what this node IS) */
+  content?: string;
+  /** Trigger keywords for RAG activation */
   triggers?: string[];
-  /** NOT: disambiguation - what NOT to use this for */
-  not?: string;
-  /** RELATES: graph topology with roles */
-  relates?: string;
-}
-
-export interface LLMContextBadgeProps {
-  /** Raw llm_context string from YAML */
-  llmContext?: string;
-  /** Pre-parsed context (if already parsed) */
-  parsedContext?: ParsedLLMContext;
   /** Display mode */
   mode?: 'compact' | 'expanded';
   /** Color for styling */
@@ -63,57 +48,6 @@ export interface LLMContextBadgeProps {
   isHovered?: boolean;
   /** Allow toggling between compact/expanded */
   expandable?: boolean;
-}
-
-// =============================================================================
-// Parser
-// =============================================================================
-
-/**
- * Parse llm_context string into structured object
- *
- * Expected format:
- * ```
- * USE: when [primary use case].
- * TRIGGERS: "keyword1", "keyword2", "keyword3".
- * NOT: for [disambiguation] (use [alternative] instead).
- * RELATES: [Source] (role), [Target] (role).
- * ```
- */
-export function parseLLMContext(raw: string): ParsedLLMContext {
-  const result: ParsedLLMContext = {};
-
-  // Extract USE clause
-  const useMatch = raw.match(/USE:\s*(.+?)(?=\n|TRIGGERS:|NOT:|RELATES:|$)/is);
-  if (useMatch) {
-    result.use = useMatch[1].trim().replace(/\.$/, '');
-  }
-
-  // Extract TRIGGERS
-  const triggersMatch = raw.match(/TRIGGERS:\s*(.+?)(?=\n|USE:|NOT:|RELATES:|$)/is);
-  if (triggersMatch) {
-    // Parse quoted keywords or comma-separated
-    const triggersStr = triggersMatch[1].trim();
-    const keywords = triggersStr
-      .split(/[,،]/) // Support both comma types
-      .map(k => k.trim().replace(/^["']|["']$/g, '').replace(/\.$/, ''))
-      .filter(k => k.length > 0);
-    result.triggers = keywords;
-  }
-
-  // Extract NOT clause
-  const notMatch = raw.match(/NOT:\s*(.+?)(?=\n|USE:|TRIGGERS:|RELATES:|$)/is);
-  if (notMatch) {
-    result.not = notMatch[1].trim().replace(/\.$/, '');
-  }
-
-  // Extract RELATES clause
-  const relatesMatch = raw.match(/RELATES:\s*(.+?)(?=\n|USE:|TRIGGERS:|NOT:|$)/is);
-  if (relatesMatch) {
-    result.relates = relatesMatch[1].trim().replace(/\.$/, '');
-  }
-
-  return result;
 }
 
 // =============================================================================
@@ -141,61 +75,28 @@ const TriggerChip = memo(function TriggerChip({
   );
 });
 
-const ContextSection = memo(function ContextSection({
-  label,
-  icon: Icon,
-  content,
-  color,
-}: {
-  label: string;
-  icon: typeof Zap;
-  content: React.ReactNode;
-  color: string;
-}) {
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center gap-1.5">
-        <Icon size={10} color={color} />
-        <span className="text-[9px] font-semibold uppercase tracking-wider" style={{ color }}>
-          {label}
-        </span>
-      </div>
-      <div className="text-[10px] text-white/70 pl-4">
-        {content}
-      </div>
-    </div>
-  );
-});
-
 // =============================================================================
 // Main Component
 // =============================================================================
 
-export const LLMContextBadge = memo(function LLMContextBadge({
-  llmContext,
-  parsedContext: providedContext,
+export const ContentBadge = memo(function ContentBadge({
+  content,
+  triggers,
   mode: initialMode = 'compact',
   color = '#8b5cf6',
   selected = false,
   isHovered = false,
   expandable = true,
-}: LLMContextBadgeProps) {
+}: ContentBadgeProps) {
   const [isExpanded, setIsExpanded] = useState(initialMode === 'expanded');
 
-  // Parse context if not provided
-  const context = useMemo(() => {
-    if (providedContext) return providedContext;
-    if (!llmContext) return {};
-    return parseLLMContext(llmContext);
-  }, [llmContext, providedContext]);
-
   // Nothing to display
-  if (!context.use && !context.triggers?.length) {
+  if (!content && (!triggers || triggers.length === 0)) {
     return null;
   }
 
-  const triggerCount = context.triggers?.length ?? 0;
-  const showExpandToggle = expandable && (context.not || context.relates || triggerCount > 3);
+  const triggerCount = triggers?.length ?? 0;
+  const showExpandToggle = expandable && triggerCount > 0;
 
   return (
     <motion.div
@@ -206,7 +107,6 @@ export const LLMContextBadge = memo(function LLMContextBadge({
       style={{
         background: `${color}08`,
         border: `1px solid ${color}20`,
-        // Ring color via box-shadow since ringColor isn't a valid CSS prop
         boxShadow: (selected || isHovered) ? `0 0 0 1px ${color}30` : undefined,
       }}
       layout
@@ -227,9 +127,9 @@ export const LLMContextBadge = memo(function LLMContextBadge({
               filter: selected ? `drop-shadow(0 0 4px ${color})` : undefined,
             }}
           />
-          {context.use && (
+          {content && (
             <span className="text-[10px] text-white/80 truncate max-w-[180px]">
-              {context.use}
+              {content}
             </span>
           )}
         </div>
@@ -258,9 +158,9 @@ export const LLMContextBadge = memo(function LLMContextBadge({
         </div>
       </div>
 
-      {/* Expanded content */}
+      {/* Expanded content: trigger chips */}
       <AnimatePresence>
-        {isExpanded && (
+        {isExpanded && triggers && triggers.length > 0 && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -269,44 +169,22 @@ export const LLMContextBadge = memo(function LLMContextBadge({
             className="overflow-hidden"
           >
             <div
-              className="px-2 py-2 space-y-2 border-t"
+              className="px-2 py-2 border-t"
               style={{ borderColor: `${color}15` }}
             >
-              {/* TRIGGERS as chips */}
-              {context.triggers && context.triggers.length > 0 && (
-                <ContextSection
-                  label="Triggers"
-                  icon={Zap}
-                  color={color}
-                  content={
-                    <div className={cn('flex flex-wrap', gapTokens.compact)}>
-                      {context.triggers.map((keyword, i) => (
-                        <TriggerChip key={i} keyword={keyword} color={color} />
-                      ))}
-                    </div>
-                  }
-                />
-              )}
-
-              {/* NOT clause */}
-              {context.not && (
-                <ContextSection
-                  label="Not For"
-                  icon={AlertTriangle}
-                  color="#f59e0b"
-                  content={context.not}
-                />
-              )}
-
-              {/* RELATES clause */}
-              {context.relates && (
-                <ContextSection
-                  label="Relates"
-                  icon={Link2}
-                  color="#22c55e"
-                  content={context.relates}
-                />
-              )}
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <Zap size={10} color={color} />
+                  <span className="text-[9px] font-semibold uppercase tracking-wider" style={{ color }}>
+                    Triggers
+                  </span>
+                </div>
+                <div className={cn('flex flex-wrap pl-4', gapTokens.compact)}>
+                  {triggers.map((keyword, i) => (
+                    <TriggerChip key={i} keyword={keyword} color={color} />
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -315,4 +193,7 @@ export const LLMContextBadge = memo(function LLMContextBadge({
   );
 });
 
-export default LLMContextBadge;
+// Backward-compatible exports
+/** @deprecated Use ContentBadge instead */
+export const LLMContextBadge = ContentBadge;
+export default ContentBadge;

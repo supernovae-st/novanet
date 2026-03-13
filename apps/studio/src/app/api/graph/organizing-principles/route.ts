@@ -29,7 +29,7 @@ export async function GET() {
         r.display_name AS display_name,
         r.emoji AS emoji,
         r.color AS color,
-        r.llm_context AS llm_context
+        r.content AS content
       ORDER BY r.key
     `);
 
@@ -38,7 +38,7 @@ export async function GET() {
       display_name: record.get('display_name') as string,
       emoji: record.get('emoji') as string,
       color: record.get('color') as string,
-      llm_context: record.get('llm_context') as string | null,
+      content: record.get('content') as string | null,
     }));
 
     // Fetch layers with full display metadata
@@ -48,7 +48,7 @@ export async function GET() {
         l.key AS key,
         l.display_name AS display_name,
         l.emoji AS emoji,
-        l.llm_context AS llm_context,
+        l.content AS content,
         r.key AS realm_key
       ORDER BY r.key, l.key
     `);
@@ -57,7 +57,7 @@ export async function GET() {
       key: record.get('key') as string,
       display_name: record.get('display_name') as string,
       emoji: record.get('emoji') as string,
-      llm_context: record.get('llm_context') as string | null,
+      content: record.get('content') as string | null,
       realm_key: record.get('realm_key') as string,
     }));
 

@@ -39,7 +39,7 @@ struct TemplateLayer {
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Extract the first sentence from a multiline llm_context field.
+/// Extract the first sentence from a multiline content field.
 /// Collapses whitespace, splits at ". ", and escapes for TS single-quoted strings.
 fn first_sentence(text: &str) -> String {
     let collapsed: String = text.split_whitespace().collect::<Vec<_>>().join(" ");
@@ -164,7 +164,7 @@ fn render_hierarchy(doc: &organizing::OrganizingDoc) -> crate::Result<String> {
             key: r.key.clone(),
             display_name: r.display_name.clone(),
             emoji: r.emoji.clone(),
-            description: first_sentence(&r.llm_context),
+            description: first_sentence(&r.content),
             layer_count: r.layers.len(),
             layers: r
                 .layers
@@ -173,7 +173,7 @@ fn render_hierarchy(doc: &organizing::OrganizingDoc) -> crate::Result<String> {
                     key: l.key.clone(),
                     display_name: l.display_name.clone(),
                     emoji: l.emoji.clone(),
-                    description: first_sentence(&l.llm_context),
+                    description: first_sentence(&l.content),
                 })
                 .collect(),
         })
@@ -259,13 +259,15 @@ mod tests {
                     display_name: "Shared".to_string(),
                     emoji: "\u{1F30D}".to_string(),
                     color: "#2aa198".to_string(),
-                    llm_context: "Shared across ALL orgs. Universal locale knowledge.".to_string(),
+                    content: "Shared across ALL orgs. Universal locale knowledge.".to_string(),
+                    triggers: vec!["shared".to_string(), "global".to_string()],
                     layers: vec![LayerDef {
                         key: "config".to_string(),
                         display_name: "Configuration".to_string(),
                         emoji: "\u{2699}\u{FE0F}".to_string(),
                         color: "#64748b".to_string(),
-                        llm_context: "Core configuration nodes. Locale definitions.".to_string(),
+                        content: "Core configuration nodes. Locale definitions.".to_string(),
+                        triggers: vec!["config".to_string()],
                     }],
                 },
                 RealmDef {
@@ -273,22 +275,25 @@ mod tests {
                     display_name: "Org".to_string(),
                     emoji: "\u{1F3E2}".to_string(), // 🏢
                     color: "#6c71c4".to_string(),
-                    llm_context: "Organization-specific content. Contains OrgConfig and Projects."
+                    content: "Organization-specific content. Contains OrgConfig and Projects."
                         .to_string(),
+                    triggers: vec!["org".to_string()],
                     layers: vec![
                         LayerDef {
                             key: "foundation".to_string(),
                             display_name: "Foundation".to_string(),
                             emoji: "\u{1F3DB}\u{FE0F}".to_string(),
                             color: "#3b82f6".to_string(),
-                            llm_context: "Core project identity.".to_string(),
+                            content: "Core project identity.".to_string(),
+                            triggers: vec!["foundation".to_string()],
                         },
                         LayerDef {
                             key: "structure".to_string(),
                             display_name: "Structure".to_string(),
                             emoji: "\u{1F3D7}\u{FE0F}".to_string(),
                             color: "#06b6d4".to_string(),
-                            llm_context: "Information architecture. Pages and blocks.".to_string(),
+                            content: "Information architecture. Pages and blocks.".to_string(),
+                            triggers: vec!["structure".to_string()],
                         },
                     ],
                 },
@@ -300,7 +305,7 @@ mod tests {
                 display_name: "Ownership".to_string(),
                 color: "#3b82f6".to_string(),
                 arrow_style: "-->".to_string(),
-                llm_context: "Ownership edges.".to_string(),
+                triggers: vec!["ownership".to_string()],
             }],
         }
     }
@@ -441,13 +446,15 @@ mod tests {
                     display_name: "Shared".to_string(),
                     emoji: "🌍".to_string(),
                     color: "#2aa198".to_string(),
-                    llm_context: "Shared across ALL orgs.".to_string(),
+                    content: "Shared across ALL orgs.".to_string(),
+                    triggers: vec!["shared".to_string()],
                     layers: vec![LayerDef {
                         key: "config".to_string(),
                         display_name: "Configuration".to_string(),
                         emoji: "⚙️".to_string(),
                         color: "#64748b".to_string(),
-                        llm_context: "Core configuration nodes.".to_string(),
+                        content: "Core configuration nodes.".to_string(),
+                        triggers: vec!["config".to_string()],
                     }],
                 },
                 RealmDef {
@@ -455,21 +462,24 @@ mod tests {
                     display_name: "Org".to_string(),
                     emoji: "🏢".to_string(),
                     color: "#6c71c4".to_string(),
-                    llm_context: "Organization-specific content.".to_string(),
+                    content: "Organization-specific content.".to_string(),
+                    triggers: vec!["org".to_string()],
                     layers: vec![
                         LayerDef {
                             key: "foundation".to_string(),
                             display_name: "Foundation".to_string(),
                             emoji: "🏛️".to_string(),
                             color: "#b58900".to_string(),
-                            llm_context: "Core project identity.".to_string(),
+                            content: "Core project identity.".to_string(),
+                            triggers: vec!["foundation".to_string()],
                         },
                         LayerDef {
                             key: "structure".to_string(),
                             display_name: "Structure".to_string(),
                             emoji: "🏗️".to_string(),
                             color: "#268bd2".to_string(),
-                            llm_context: "Content structure.".to_string(),
+                            content: "Content structure.".to_string(),
+                            triggers: vec!["structure".to_string()],
                         },
                     ],
                 },
@@ -480,7 +490,7 @@ mod tests {
                 display_name: "Ownership".to_string(),
                 color: "#22c55e".to_string(),
                 arrow_style: "-->".to_string(),
-                llm_context: "Containment relationships.".to_string(),
+                triggers: vec!["ownership".to_string()],
             }],
         };
 

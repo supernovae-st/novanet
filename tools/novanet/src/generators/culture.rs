@@ -104,8 +104,8 @@ impl CultureGenerator {
         let communication_norms_json =
             serde_json::to_string(&c.communication_norms).unwrap_or_else(|_| "{}".to_string());
 
-        // Generate llm_context for retrieval guidance
-        let llm_context = format!(
+        // Generate content for retrieval guidance
+        let content = format!(
             "USE: {} culture ({} hemisphere, {} communication, {} hierarchy). \
              TRIGGERS: regional holidays, seasonal references, formality levels. \
              NOT: generic greetings, universal values.",
@@ -116,7 +116,7 @@ impl CultureGenerator {
             r"MERGE (c:Culture {{key: '{}'}})
 SET c.display_name = '{}',
     c.content = '{}',
-    c.llm_context = '{}',
+    c.triggers = '{}',
     c.hemisphere = '{}',
     c.work_week_start = '{}',
     c.communication_directness = '{}',
@@ -136,7 +136,7 @@ SET c.display_name = '{}',
             c.locale_key,
             escape_cypher(&format!("{} Culture Norms", c.locale_key)),
             escape_cypher(&format!("Cultural context and norms for {}", c.locale_key)),
-            escape_cypher(&llm_context),
+            escape_cypher(&content),
             c.hemisphere,
             c.work_week_start,
             c.communication_directness,

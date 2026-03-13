@@ -1,16 +1,17 @@
-// NovaNet Core Types v0.18.0 - *Native Pattern
+// NovaNet Core Types v0.20.0 - Self-Describing Properties
 //
-// v0.18.0: Added llm_context to all LocaleRules* and LocaleCultureReferences interfaces
-// v0.13.0: ADR-029 *Native pattern (EntityNative→EntityNative, ProjectNative→ProjectNative, PageNative→PageNative, BlockNative→BlockNative)
-// v11.8.0: ADR-023 terminology (Kind→Class, ArcKind→ArcClass), ADR-024 trait renames (defined/authored/imported/generated/retrieved)
+// v0.20.0: llm_context replaced by content (WHAT+HOW) + triggers[] (routing keywords)
+// v0.13.0: ADR-029 *Native pattern (EntityNative, ProjectNative, PageNative, BlockNative)
+// v11.8.0: ADR-023 terminology (Kind→Class, ArcKind→ArcClass), ADR-024 trait renames
 // v11.7.0: Unified tree where Realm, Layer, Class, Instance, ArcFamily, ArcClass are all clickable nodes
-// v11.2.0: 2 realms (shared, org), derived split into generated + retrieved
 //
-// STANDARD PROPERTIES (all nodes):
+// STANDARD PROPERTIES (all nodes, v0.20.0):
 //   key: string           - Unique identifier (with semantic prefix)
 //   display_name: string  - Human-readable name
-//   description: string   - Short description
-//   llm_context: string   - "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+//   node_class: string    - PascalCase=DATA, lowercase=SCHEMA
+//   content: string       - Plain language WHAT+HOW (replaces description + llm_context)
+//   triggers: string[]    - English routing keywords, max 10 (replaces llm_context TRIGGERS)
+//   provenance: string    - Data origin (seed/nika/mcp)
 //   created_at: datetime
 //   updated_at: datetime
 
@@ -35,14 +36,16 @@ export {
 // =============================================================================
 
 /**
- * Standard properties for all nodes (v8.2.0 - YAML v7.11.0 aligned)
- * REMOVED: icon, priority, freshness (presentation layer / YAGNI)
+ * Standard properties for all nodes (v0.20.0)
+ * v0.20.0: description+llm_context replaced by content+triggers
  */
 export interface StandardNodeProperties {
   key: string;
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -93,8 +96,8 @@ export {
 export interface Entity extends StandardNodeProperties, EmbeddableNode {
   // key: "action-create-qr" (semantic prefix + identifier)
   // display_name: "Create QR Code"
-  // description: "Core knowledge entity"
-  // llm_context: "USE: when creating QR codes. TRIGGERS: create, generate. NOT: editing."
+  // content: "Core knowledge entity for QR code creation actions"
+  // triggers: ["create", "generate", "qr-code"]
 
   // Entity-specific properties (same as former Concept)
   feature_category?: 'core' | 'analytics' | 'design' | 'integration' | 'api';
@@ -109,10 +112,12 @@ export interface Entity extends StandardNodeProperties, EmbeddableNode {
  * Locale-specific content for an Entity node.
  */
 export interface EntityNative extends EmbeddableNode {
-  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v0.20.0 - Content nodes don't have key)
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
   // EntityNative-specific properties
   title: string;
@@ -133,9 +138,8 @@ export interface EntityNative extends EmbeddableNode {
 export interface Page extends StandardNodeProperties, EmbeddableNode {
   // key: "page-pricing" (v7.1.0 prefix convention)
   // display_name: "Pricing Page"
-  // icon: "📄"
-  // description: "Main pricing page"
-  // llm_context: "USE: orchestrate pricing page. TRIGGERS: pricing, tarifs. NOT: individual blocks."
+  // content: "Main pricing page for QR Code AI subscription plans"
+  // triggers: ["pricing", "tarifs", "plans", "subscription"]
 }
 
 // v0.12.4: PageStructureCategory and PageStructure removed (ADR-028)
@@ -146,12 +150,14 @@ export interface Page extends StandardNodeProperties, EmbeddableNode {
  * LLM-generated page content for a specific locale.
  */
 export interface PageNative {
-  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v0.20.0 - Content nodes don't have key)
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
-  // PageNative-specific properties (v0.13.0: renamed from PageNative)
+  // PageNative-specific properties (v0.13.0)
   assembled: Record<string, unknown>;
   assembled_at: Date;
   assembler_version: string;
@@ -174,9 +180,8 @@ export interface PageNative {
 export interface BlockType extends StandardNodeProperties {
   // key: "blocktype-hero" (v7.1.0 prefix convention)
   // display_name: "Hero Block"
-  // icon: "🎯"
-  // description: "Hero section template"
-  // llm_context: "USE: generate hero sections. TRIGGERS: hero, header. NOT: body content."
+  // content: "Hero section template for landing pages"
+  // triggers: ["hero", "header", "banner", "above-fold"]
   category: string;
   structure?: string;
 }
@@ -193,12 +198,14 @@ export type Block = StandardNodeProperties;
  * LLM-generated block content for a specific locale.
  */
 export interface BlockNative {
-  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v0.20.0 - Content nodes don't have key)
   display_name: string;
-  description: string;
-  llm_context: string;
+  node_class: string;
+  content: string;
+  triggers: string[];
+  provenance: string;
 
-  // BlockNative-specific properties (v0.13.0: renamed from BlockNative)
+  // BlockNative-specific properties (v0.13.0)
   generated: Record<string, unknown>;
   generated_at: Date;
   generator_version: string;
@@ -240,9 +247,8 @@ export {
 export interface SEOKeyword extends StandardNodeProperties {
   // key: "creer-qr-code-gratuit-fr"
   // display_name: "créer qr code gratuit"
-  // icon: "🔍"
-  // description: "Primary SEO keyword for France"
-  // llm_context: "High-volume transactional keyword..."
+  // content: "Primary SEO keyword for France, high-volume transactional"
+  // triggers: ["seo", "keyword", "france", "qr-code"]
   value: string;
   volume: number;
   difficulty: number;
@@ -340,8 +346,8 @@ export interface LinksToProps {
 
 export {
   // v0.12.4: PageInstruction removed - instructions composed from BlockInstructions
+  // v0.19.1: BlockRules removed — merged into BlockType.rules property
   type BlockInstruction,
-  type BlockRules,
   type InstructionNode,
 } from './prompts.js';
 

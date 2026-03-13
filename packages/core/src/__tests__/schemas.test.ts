@@ -281,7 +281,7 @@ describe('Relation Naming Conventions', () => {
 // INSTRUCTION SCHEMAS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { BlockInstructionSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
+import { BlockInstructionSchema } from '../schemas/prompts.schema.js';
 
 // v0.12.4: PageInstructionSchema removed per ADR-028 - page instructions composed from BlockInstructions
 
@@ -290,8 +290,10 @@ describe('Instruction Schemas (v0.12.4)', () => {
     it('validates valid BlockInstruction', () => {
       const valid = {
         display_name: 'Hero Instruction v1.0',
-        description: 'Instructions for hero generation',
-        llm_context: 'USE: hero. TRIGGERS: block. NOT: other.',
+        node_class: 'BlockInstruction',
+        content: 'Instructions for hero generation',
+        triggers: ['instruction', 'hero', 'generation'],
+        provenance: 'seed',
         instruction: '[GENERATE] Hero highlighting @tier-pro',
         version: '1.0',
         active: true,
@@ -304,8 +306,10 @@ describe('Instruction Schemas (v0.12.4)', () => {
     it('rejects empty instruction', () => {
       const invalid = {
         display_name: 'Test',
-        description: 'Test',
-        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+        node_class: 'BlockInstruction',
+        content: 'Test instruction',
+        triggers: ['test'],
+        provenance: 'seed',
         instruction: '',
         version: '1.0',
         active: true,
@@ -316,35 +320,7 @@ describe('Instruction Schemas (v0.12.4)', () => {
     });
   });
 
-  describe('BlockRulesSchema', () => {
-    it('validates valid BlockRules', () => {
-      const valid = {
-        display_name: 'Hero Rules v1.0',
-        description: 'Generation rules for hero',
-        llm_context: 'USE: rules. TRIGGERS: hero. NOT: other.',
-        rules: 'Title: action verb. Subtitle: value prop.',
-        version: '1.0',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(BlockRulesSchema.parse(valid)).toBeDefined();
-    });
-
-    it('rejects empty rules', () => {
-      const invalid = {
-        display_name: 'Test',
-        description: 'Test',
-        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        rules: '',
-        version: '1.0',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(() => BlockRulesSchema.parse(invalid)).toThrow();
-    });
-  });
+  // v0.19.1: BlockRulesSchema removed — rules merged into BlockType.rules property
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -374,23 +350,7 @@ describe('Relations v0.12.4', () => {
     });
   });
 
-  describe('HAS_RULES relation', () => {
-    it('exists in RelationType and RelationRegistry', () => {
-      expect(RelationType.HAS_RULES).toBe('HAS_RULES');
-      expect(RelationRegistry[RelationType.HAS_RULES]).toBeDefined();
-    });
-
-    it('links BlockType to BlockRules', () => {
-      const rel = RelationRegistry[RelationType.HAS_RULES];
-      expect(rel.from).toBe('BlockType');
-      expect(rel.to).toBe('BlockRules');
-    });
-
-    it('has 1:N cardinality for versioning', () => {
-      const rel = RelationRegistry[RelationType.HAS_RULES];
-      expect(rel.cardinality).toBe('1:N');
-    });
-  });
+  // v0.19.1: HAS_RULES removed — rules merged into BlockType.rules property
 
   describe('GENERATED relation', () => {
     it('exists in RelationType and RelationRegistry', () => {
@@ -421,7 +381,7 @@ describe('Relations v0.12.4', () => {
     it('should include HAS_INSTRUCTION in HAS_* relations', () => {
       const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
       expect(hasRelations).toContain('HAS_INSTRUCTION');
-      expect(hasRelations).toContain('HAS_RULES');
+      // v0.19.1: HAS_RULES removed — merged into BlockType.rules
     });
 
   });

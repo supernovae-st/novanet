@@ -52,7 +52,7 @@ Complete redesign of the edge animation system for NovaNet Studio. Goals:
 export type RelationCategory =
   | 'structural'    // HAS_*, CONTAINS
   | 'localization'  // FOR_LOCALE, SUPPORTS, HAS_L10N
-  | 'generation'    // OUTPUT, GENERATED, HAS_PROMPT, HAS_RULES
+  | 'generation'    // OUTPUT, GENERATED, HAS_PROMPT
   | 'semantic'      // USES_CONCEPT, SEMANTIC
   | 'seo'           // TARGETS_SEO, HAS_VARIATION
   | 'geo'           // TARGETS_GEO, HAS_CITATION
@@ -63,7 +63,7 @@ export type RelationCategory =
  */
 export type RelationType =
   | 'HAS_CONCEPT' | 'HAS_PAGE' | 'HAS_BLOCK' | 'HAS_AUDIENCE'
-  | 'HAS_L10N' | 'HAS_OUTPUT' | 'HAS_PROMPT' | 'HAS_RULES'
+  | 'HAS_L10N' | 'HAS_OUTPUT' | 'HAS_PROMPT'
   | 'SUPPORTS_LOCALE' | 'FOR_LOCALE'
   | 'USES_CONCEPT' | 'OF_TYPE'
   | 'TARGETS_SEO' | 'TARGETS_GEO'

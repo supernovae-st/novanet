@@ -30,9 +30,10 @@ pub struct OrganizingDoc {
 pub struct RealmDef {
     pub key: String,
     pub display_name: String,
+    pub content: String,
     pub emoji: String,
     pub color: String,
-    pub llm_context: String,
+    pub triggers: Vec<String>,
     pub layers: Vec<LayerDef>,
 }
 
@@ -41,9 +42,10 @@ pub struct RealmDef {
 pub struct LayerDef {
     pub key: String,
     pub display_name: String,
+    pub content: String,
     pub emoji: String,
     pub color: String,
-    pub llm_context: String,
+    pub triggers: Vec<String>,
 }
 
 // v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
@@ -55,7 +57,7 @@ pub struct ArcFamilyDef {
     pub display_name: String,
     pub color: String,
     pub arrow_style: String,
-    pub llm_context: String,
+    pub triggers: Vec<String>,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -113,21 +115,23 @@ version: "9.0.0"
 realms:
   - key: shared
     display_name: Shared
+    content: "Universal knowledge (READ-ONLY)."
     emoji: "🌍"
     color: "#2aa198"
-    llm_context: "Shared context."
+    triggers: ["shared", "global", "universal"]
     layers:
       - key: config
         display_name: Configuration
+        content: "System configuration and locale definitions."
         emoji: "⚙️"
         color: "#64748b"
-        llm_context: "Config layer."
+        triggers: ["config", "settings"]
 arc_families:
   - key: ownership
     display_name: Ownership
     color: "#3b82f6"
     arrow_style: "-->"
-    llm_context: "Ownership arcs."
+    triggers: ["parent", "child", "owns"]
 "##;
         let doc: OrganizingDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "9.0.0");

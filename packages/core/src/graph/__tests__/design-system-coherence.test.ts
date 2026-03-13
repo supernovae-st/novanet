@@ -1,9 +1,10 @@
 // packages/core/src/graph/__tests__/design-system-coherence.test.ts
-// Comprehensive tests for design system coherence — v0.19.0 (60 nodes, 10 layers, 2 realms)
+// Comprehensive tests for design system coherence — v0.19.1 (59 nodes, 10 layers, 2 realms)
 // Validates taxonomy, visual encoding, and TypeScript consistency
 //
 // v0.12.5: Updated to load from individual YAML files (realms/, layers/, traits/, arc-families/)
-// v0.19.0: Traits deprecated (ADR-024), 60 nodes (36 shared + 24 org), +3 enrichment nodes
+// v0.19.0: Traits deprecated (ADR-024), +3 enrichment nodes
+// v0.19.1: BlockRules removed (merged into BlockType.rules), 59 nodes (36 shared + 23 org)
 // Philosophy: v0 clean architecture — no backward compatibility, no legacy patterns
 
 import { describe, it, expect } from 'vitest';
@@ -36,11 +37,11 @@ const V11_6_ARCHITECTURE = {
   // 6 arc families (v0.13.1: added schema family)
   arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining', 'schema'] as const,
 
-  // Node counts (v0.19.0)
+  // Node counts (v0.19.1: BlockRules removed, 60→59)
   nodeCounts: {
-    total: 60,
+    total: 59,
     shared: 36,
-    org: 24,
+    org: 23,
     byLayer: {
       // shared layers — v0.17.0: Market, TermSet, Term, SEOKeywordMetrics removed
       'shared/config': 3,
@@ -49,11 +50,12 @@ const V11_6_ARCHITECTURE = {
       'shared/knowledge': 21,
       // org layers — v0.17.0: ProjectGEOScope added, AudiencePersona+ChannelSurface removed
       // v0.19.0: Added CultureRefEnrichment, ExpressionEnrichment, TabooEnrichment to output
+      // v0.19.1: BlockRules removed (merged into BlockType.rules), instruction 4→3
       'org/config': 1,
       'org/semantic': 2,
       'org/foundation': 8,
       'org/structure': 3,
-      'org/instruction': 4,
+      'org/instruction': 3,
       'org/output': 6,
     },
   },
@@ -366,10 +368,10 @@ describe('Design System Coherence: Arc Families', () => {
 // =============================================================================
 
 describe('Design System Coherence: Node Counts', () => {
-  it('should have exactly 60 total nodes', () => {
-    expect(NODE_TYPES).toHaveLength(60);
-    expect(Object.keys(NODE_LAYERS)).toHaveLength(60);
-    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(60);
+  it('should have exactly 59 total nodes', () => {
+    expect(NODE_TYPES).toHaveLength(59);
+    expect(Object.keys(NODE_LAYERS)).toHaveLength(59);
+    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(59);
   });
 
   it('should have correct node distribution by realm', () => {

@@ -196,8 +196,6 @@ pub struct EntityData {
     #[serde(default)]
     pub schema_org_type: Option<String>,
     #[serde(default)]
-    pub llm_context: Option<String>,
-    #[serde(default)]
     pub created_at: Option<String>,
     #[serde(default)]
     pub updated_at: Option<String>,
@@ -403,10 +401,6 @@ pub fn generate_entity_cypher(entity: &EntityData) -> String {
     if let Some(ref s) = entity.schema_org_type {
         props.push(format!("schema_org_type: '{}'", cypher_escape(s)));
     }
-    if let Some(ref c) = entity.llm_context {
-        props.push(format!("llm_context: '{}'", cypher_escape(c)));
-    }
-
     // Timestamps (with validation to prevent injection)
     let now = chrono::Utc::now().to_rfc3339();
     let created = validate_timestamp(entity.created_at.as_deref());
@@ -978,7 +972,6 @@ mod tests {
             entity_type: Some("THING".to_string()),
             is_pillar: true,
             schema_org_type: None,
-            llm_context: None,
             created_at: None,
             updated_at: None,
         };

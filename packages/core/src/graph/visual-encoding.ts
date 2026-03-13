@@ -250,7 +250,7 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// CLASS ICONS (57) — Lucide icon names
+// CLASS ICONS (56) — Lucide icon names
 // =============================================================================
 
 export const CLASS_ICONS: Record<string, string> = {
@@ -260,7 +260,6 @@ export const CLASS_ICONS: Record<string, string> = {
   Block: 'square',
   BlockInstruction: 'terminal',
   BlockNative: 'check-square',
-  BlockRules: 'shield-check',
   BlockType: 'component',
   Brand: 'palette',
   BrandDesign: 'brush',

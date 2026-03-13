@@ -603,7 +603,7 @@ mod tests {
             color: "#2aa198".to_string(),
             icon: "◉",
             layers: vec![],
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 
@@ -613,7 +613,7 @@ mod tests {
             display_name: "Config".to_string(),
             color: "#64748b".to_string(),
             classes: vec![],
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 
@@ -642,7 +642,7 @@ mod tests {
             key: "ownership".to_string(),
             display_name: "Ownership".to_string(),
             arc_classes: vec![],
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 

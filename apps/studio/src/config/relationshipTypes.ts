@@ -38,7 +38,6 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PROMPT_STYLE',
     'HAS_BLOCK',
     'HAS_INSTRUCTION',
-    'HAS_RULES',
   ],
   // Localization: Locale assignment (5 relations)
   localization: [
@@ -177,13 +176,6 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#1d4ed8',  // blue-700
     category: 'ownership',
   },
-  HAS_RULES: {
-    type: 'HAS_RULES',
-    label: 'Has Rules',
-    color: '#1e40af',  // blue-800
-    category: 'ownership',
-  },
-
   // ==========================================================================
   // LOCALIZATION CATEGORY (5 relations) - green (from taxonomy.yaml)
   // ==========================================================================

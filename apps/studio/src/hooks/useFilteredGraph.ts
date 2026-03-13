@@ -144,7 +144,7 @@ export function useFilteredGraph(): FilteredGraphResult {
     return (
       node.key?.toLowerCase().includes(query) ||
       node.displayName?.toLowerCase().includes(query) ||
-      node.description?.toLowerCase().includes(query) ||
+      node.content?.toLowerCase().includes(query) ||
       node.type.toLowerCase().includes(query)
     );
   }, []);

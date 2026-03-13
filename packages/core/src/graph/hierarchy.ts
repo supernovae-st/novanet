@@ -16,8 +16,8 @@ import { getNodeTypesByRealmAndLayer } from './layers.js';
  * This is the single source of truth for the ontology structure.
  *
  * 2 Realms (10 layers):
- * - Organization: USE: when working with organization-specific content. (6 layers)
- * - Shared: USE: when accessing universal locale knowledge. (4 layers)
+ * - Organization: Organization-specific realm. (6 layers)
+ * - Shared: Universal knowledge (READ-ONLY). (4 layers)
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
   // ═══════════════════════════════════════════════════════════════════════════
@@ -27,41 +27,41 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
     realm: 'org',
     label: 'ORG',
     icon: '◎',
-    description: 'USE: when working with organization-specific content.',
+    description: 'Organization-specific realm.',
     layers: {
       'config': {
         label: 'Config',
-        description: 'USE: when accessing configuration and definitions.',
+        description: 'Configuration and definitions layer.',
         icon: '⚙',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'config'),
       },
       'foundation': {
         label: 'Foundation',
-        description: 'USE: when accessing project identity and branding.',
+        description: 'Project identity.',
         icon: '■',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'foundation'),
       },
       'instruction': {
         label: 'Instruction',
-        description: 'USE: when accessing generation instructions and rules.',
+        description: 'Generation directives.',
         icon: '▤',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'instruction'),
       },
       'output': {
         label: 'Output',
-        description: 'USE: when accessing generated content.',
+        description: 'LLM-generated content.',
         icon: '✦',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'output'),
       },
       'semantic': {
         label: 'Semantic',
-        description: 'USE: when working with semantic entities and their localized content.',
+        description: 'Meaning and knowledge relationships.',
         icon: '◆',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'semantic'),
       },
       'structure': {
         label: 'Structure',
-        description: 'USE: when accessing page and block structure.',
+        description: 'Information architecture.',
         icon: '▣',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'structure'),
       },
@@ -74,29 +74,29 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
     realm: 'shared',
     label: 'SHARED',
     icon: '◉',
-    description: 'USE: when accessing universal locale knowledge.',
+    description: 'Universal knowledge (READ-ONLY).',
     layers: {
       'config': {
         label: 'Config',
-        description: 'USE: when accessing configuration and definitions.',
+        description: 'Configuration and definitions layer.',
         icon: '⚙',
         nodeTypes: getNodeTypesByRealmAndLayer('shared', 'config'),
       },
       'geography': {
         label: 'Geography',
-        description: 'USE: when accessing geographic classifications.',
+        description: 'Geographic and economic classifications.',
         icon: '◆',
         nodeTypes: getNodeTypesByRealmAndLayer('shared', 'geography'),
       },
       'knowledge': {
         label: 'Knowledge',
-        description: 'USE: when accessing knowledge atoms for native content generation.',
+        description: 'Deep locale-specific knowledge for native content generation.',
         icon: '◊',
         nodeTypes: getNodeTypesByRealmAndLayer('shared', 'knowledge'),
       },
       'locale': {
         label: 'Locale',
-        description: 'USE: when accessing locale-specific settings.',
+        description: 'Locale-specific settings (1:1 with Locale).',
         icon: '●',
         nodeTypes: getNodeTypesByRealmAndLayer('shared', 'locale'),
       },

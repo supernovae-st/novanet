@@ -155,7 +155,7 @@ export const RelationType = {
   // INSTRUCTION RELATIONS (v0.12.4: PageInstruction deleted per ADR-028)
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_INSTRUCTION: 'HAS_INSTRUCTION',   // Page|Block → BlockInstruction (v0.12.4: PageInstruction deleted)
-  HAS_RULES: 'HAS_RULES',               // BlockType → BlockRules
+  // v0.19.1: HAS_RULES removed — rules merged into BlockType.rules property
   GENERATED: 'GENERATED',               // BlockInstruction → PageNative|BlockNative (provenance, v0.13.0 ADR-029)
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -746,13 +746,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     cardinality: '1:N',
     description: 'Links structure nodes to their AI instructions (v0.12.4: PageInstruction deleted)',
   },
-  [RelationType.HAS_RULES]: {
-    type: RelationType.HAS_RULES,
-    from: 'BlockType',
-    to: 'BlockRules',
-    cardinality: '1:N',
-    description: 'Links BlockType to generation rules',
-  },
+  // v0.19.1: HAS_RULES removed — rules merged into BlockType.rules property
   [RelationType.GENERATED]: {
     type: RelationType.GENERATED,
     from: 'BlockInstruction',

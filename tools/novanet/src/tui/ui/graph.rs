@@ -1052,7 +1052,7 @@ mod tests {
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
             classes,
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 
@@ -1063,7 +1063,7 @@ mod tests {
             color: "#ffffff".to_string(),
             icon: "○",
             layers,
-            llm_context: String::new(),
+            content: String::new(),
         }
     }
 

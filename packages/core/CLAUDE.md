@@ -134,7 +134,7 @@ core/
 │   │       ├── foundation/    #   Layer: foundation (8 nodes: Project, Brand, ProjectGEOScope, etc.)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityNative)
-│   │       ├── instruction/   #   Layer: instruction (BlockType, BlockRules, BlockInstruction, PromptArtifact)
+│   │       ├── instruction/   #   Layer: instruction (BlockType, BlockInstruction, PromptArtifact)
 │   │       └── output/        #   Layer: output (PageNative, BlockNative, OutputArtifact)
 │   ├── arc-classes/             # ONE FILE PER ARC TYPE (151 arcs)
 │   └── views/                 # YAML view definitions

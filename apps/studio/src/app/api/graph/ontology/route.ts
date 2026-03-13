@@ -38,7 +38,7 @@ RETURN
   c.layer AS layer,
   c.trait AS trait,
   c.display_name AS displayName,
-  c.llm_context AS llmContext,
+  c.content AS content,
   c.properties AS properties,
   c.required_properties AS requiredProperties,
   c.schema_hint AS schemaHint,
@@ -56,7 +56,7 @@ MATCH (source:Schema:Class)<-[:FROM_CLASS]-(ac:Schema:ArcClass)-[:TO_CLASS]->(ta
 RETURN
   ac.key AS arcKey,
   ac.display_name AS arcDisplayName,
-  ac.llm_context AS arcLlmContext,
+  ac.content AS arcContent,
   ac.family AS family,
   ac.scope AS scope,
   ac.cardinality AS cardinality,
@@ -99,8 +99,7 @@ export async function GET() {
         type: label as NodeType,
         key: record.get('key') as string || label.toLowerCase(),
         displayName: record.get('displayName') as string || label,
-        description: record.get('llmContext') as string | undefined,
-        llmContext: record.get('llmContext') as string | undefined,
+        content: record.get('content') as string | undefined,
         data: {
           isSchema: true,
           scope: record.get('realm') as string | undefined,
@@ -135,7 +134,7 @@ export async function GET() {
           target: `schema-${targetLabel}`,
           data: {
             isSchema: true,
-            description: record.get('arcLlmContext') as string | undefined,
+            content: record.get('arcContent') as string | undefined,
             cardinality: record.get('cardinality') as string | undefined,
             family: record.get('family') as string | undefined,
             scope: record.get('scope') as string | undefined,

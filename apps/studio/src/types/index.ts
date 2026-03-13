@@ -46,7 +46,6 @@ export type {
   // v0.17.0: SEOKeywordMetrics removed
   // Instructions (v0.12.4: PageInstruction removed per ADR-028)
   BlockInstruction,
-  BlockRules,
   // Relation props
   SemanticLinkProps,
   UsesEntityProps,
@@ -66,15 +65,21 @@ import type { NodeType } from '@novanet/core/types';
 /**
  * Normalized node for visualization
  * Aligned with neo4j.ts transformNode output
- * v9.0.0: Updated to use Realm, Layer, Trait terminology
+ * v0.20.0: Self-describing properties (content, triggers, nodeClass, provenance)
  */
 export interface GraphNode {
   id: string;
   type: NodeType;
   key: string;
   displayName: string;
-  description?: string;
-  llmContext?: string;
+  /** v0.20.0: What this node IS + HOW to use it (plain language, no structured format) */
+  content?: string;
+  /** v0.20.0: English routing keywords for search/spreading activation (max 10) */
+  triggers?: string[];
+  /** v0.20.0: Self-identifying class (PascalCase=DATA, lowercase=SCHEMA) */
+  nodeClass?: string;
+  /** v0.20.0: Data origin (seed/nika/mcp) */
+  provenance?: string;
   createdAt?: string;
   updatedAt?: string;
   /** Additional properties not in standard fields */

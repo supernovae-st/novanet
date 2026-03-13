@@ -1,7 +1,8 @@
-// NovaNet Core - Type Tests v10.3.0
+// NovaNet Core - Type Tests v0.20.0
 // TDD: Verify type exports and structure
 // v10.3.0: Entity-Centric Architecture (Concept → Entity, ConceptL10n → EntityNative)
 // v8.2.0: Removed icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
+// v0.20.0: Standard properties migrated (description+llm_context -> node_class+content+triggers+provenance)
 
 import { describe, it, expect } from 'vitest';
 import type {
@@ -29,21 +30,24 @@ import type {
 
 describe('Type Exports', () => {
   describe('StandardNodeProperties', () => {
-    it('should have v8.2.0 required properties (no icon/priority/freshness)', () => {
+    it('should have v0.20.0 required properties (node_class+content+triggers+provenance)', () => {
       // Type assertion test - compile-time verification
-      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
+      // v0.20.0: Standard properties migrated (description+llm_context -> node_class+content+triggers+provenance)
       const props: StandardNodeProperties = {
         key: 'test-key',
         display_name: 'Test Key',
-        description: 'Test description',
-        llm_context: 'USE: testing. TRIGGERS: test. NOT: production.',
+        node_class: 'TestNode',
+        content: 'Test node for unit tests',
+        triggers: ['test', 'unit'],
+        provenance: 'seed',
         created_at: new Date(),
         updated_at: new Date(),
       };
 
       expect(props.key).toBe('test-key');
       expect(props.display_name).toBe('Test Key');
-      expect(props.llm_context).toBeDefined();
+      expect(props.content).toBeDefined();
+      expect(props.triggers).toEqual(['test', 'unit']);
       expect(props.created_at).toBeDefined();
       expect(props.updated_at).toBeDefined();
     });
@@ -55,8 +59,10 @@ describe('Type Exports', () => {
       const entity: Entity = {
         key: 'action-create-qr',
         display_name: 'Create QR Code',
-        description: 'Core QR code entity',
-        llm_context: 'USE: creating QR codes. TRIGGERS: create, generate. NOT: editing.',
+        node_class: 'Entity',
+        content: 'Core QR code creation entity',
+        triggers: ['create', 'generate', 'qr-code'],
+        provenance: 'seed',
         created_at: new Date(),
         updated_at: new Date(),
         feature_category: 'core',
@@ -72,8 +78,10 @@ describe('Type Exports', () => {
       // v10.3: EntityNative replaces ConceptL10n (org realm, semantic layer)
       const l10n: EntityNative = {
         display_name: 'QR Code',
-        description: 'Localized entity',
-        llm_context: 'USE: French QR code content. TRIGGERS: fr-FR. NOT: translation.',
+        node_class: 'EntityNative',
+        content: 'French QR code locale content',
+        triggers: ['qr-code', 'entity-native', 'fr-fr'],
+        provenance: 'seed',
         title: 'Code QR',
         definition: 'Un code-barres 2D',
         version: 1,
@@ -91,8 +99,10 @@ describe('Type Exports', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const output: PageNative = {
         display_name: 'Pricing Output',
-        description: 'Generated pricing page',
-        llm_context: 'USE: assembled page content. TRIGGERS: render. NOT: regeneration.',
+        node_class: 'PageNative',
+        content: 'Generated pricing page output',
+        triggers: ['page-native', 'pricing', 'output'],
+        provenance: 'mcp',
         assembled: { hero: {}, pricing: {} },
         assembled_at: new Date(),
         assembler_version: '1.0.0',
@@ -110,8 +120,10 @@ describe('Type Exports', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const output: BlockNative = {
         display_name: 'Hero Output',
-        description: 'Generated hero block',
-        llm_context: 'USE: hero section content. TRIGGERS: render hero. NOT: regeneration.',
+        node_class: 'BlockNative',
+        content: 'Generated hero block output',
+        triggers: ['block-native', 'hero', 'output'],
+        provenance: 'mcp',
         generated: { title: 'Welcome' },
         generated_at: new Date(),
         generator_version: '1.0.0',
@@ -132,8 +144,10 @@ describe('Type Exports', () => {
       const locale: Locale = {
         key: 'fr-FR',
         display_name: 'French (France)',
-        description: 'Metropolitan French',
-        llm_context: 'USE: French content. TRIGGERS: fr-FR. NOT: Canadian French.',
+        node_class: 'Locale',
+        content: 'Metropolitan French locale configuration',
+        triggers: ['locale', 'french', 'fr-fr'],
+        provenance: 'seed',
         language_code: 'fr',
         country_code: 'FR',
         name_native: 'Français (France)',
@@ -152,8 +166,10 @@ describe('Type Exports', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const voice: LocaleVoice = {
         display_name: 'French Voice',
-        description: 'Voice characteristics',
-        llm_context: 'USE: tone/formality decisions. TRIGGERS: voice, tone. NOT: cultural norms.',
+        node_class: 'LocaleVoice',
+        content: 'Voice and tone characteristics for French locale',
+        triggers: ['voice', 'tone', 'formality'],
+        provenance: 'seed',
         formality_score: 75,
         default_formality: 'formal',
         default_pronoun: 'vous',
@@ -184,8 +200,10 @@ describe('Type Exports', () => {
       const keyword: SEOKeyword = {
         key: 'creer-qr-code-fr',
         display_name: 'créer qr code',
-        description: 'Main SEO keyword',
-        llm_context: 'USE: SEO targeting. TRIGGERS: keyword research. NOT: other.',
+        node_class: 'SEOKeyword',
+        content: 'Primary SEO keyword for QR code creation in French',
+        triggers: ['seo', 'keyword', 'qr-code', 'french'],
+        provenance: 'seed',
         created_at: new Date(),
         updated_at: new Date(),
         value: 'créer qr code gratuit',
@@ -238,16 +256,19 @@ describe('Type Exports', () => {
 // INSTRUCTION TYPES (v0.12.4: PageInstruction removed per ADR-028)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import type { BlockInstruction, BlockRules } from '../types/prompts.js';
+import type { BlockInstruction } from '../types/prompts.js';
 
 describe('Instruction Types (v0.12.4)', () => {
   // v0.12.4: PageInstruction removed per ADR-028 - page instructions composed from BlockInstructions
+  // v0.19.1: BlockRules removed — merged into BlockType.rules property
 
   it('BlockInstruction has required properties', () => {
     const instruction: BlockInstruction = {
       display_name: 'Pricing Hero Instruction v1.0',
-      description: 'Instructions for pricing hero generation',
-      llm_context: 'USE: hero generation. TRIGGERS: block hero. NOT: other blocks.',
+      node_class: 'BlockInstruction',
+      content: 'Instructions for pricing hero generation',
+      triggers: ['instruction', 'hero', 'pricing'],
+      provenance: 'seed',
       instruction: '[GENERATE] Hero highlighting @tier-pro benefits',
       version: '1.0',
       active: true,
@@ -255,19 +276,5 @@ describe('Instruction Types (v0.12.4)', () => {
       updated_at: new Date(),
     };
     expect(instruction.instruction).toBeDefined();
-  });
-
-  it('BlockRules has required properties', () => {
-    const rules: BlockRules = {
-      display_name: 'Hero Rules v1.0',
-      description: 'Generation rules for hero block type',
-      llm_context: 'USE: rule validation. TRIGGERS: hero rules. NOT: other types.',
-      rules: 'Title: action verb. Subtitle: value prop. CTA: urgency.',
-      version: '1.0',
-      active: true,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-    expect(rules.rules).toBeDefined();
   });
 });

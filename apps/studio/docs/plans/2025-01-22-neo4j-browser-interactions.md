@@ -726,7 +726,7 @@ export const QUICK_VIEWS: QuickView[] = [
     name: 'Generation Pipeline',
     description: 'Prompts → Rules → Outputs',
     icon: '🤖',
-    nodeTypes: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageOutput', 'BlockOutput'],
+    nodeTypes: ['PagePrompt', 'BlockPrompt', 'PageOutput', 'BlockOutput'],
   },
 ];
 ```

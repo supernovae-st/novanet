@@ -88,9 +88,9 @@ pub struct ArcFamilyDef {
     #[serde(default)]
     pub key_arcs: Vec<String>,
 
-    /// LLM context string (USE/TRIGGERS/NOT/RELATES pattern).
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
-    pub llm_context: Option<String>,
+    pub triggers: Vec<String>,
 }
 
 fn default_stroke_style() -> String {
@@ -209,9 +209,7 @@ arc_family:
     - HAS_PROJECT
     - HAS_PAGE
     - HAS_ENTITY
-  llm_context: |
-    USE: when traversing ownership hierarchies.
-    TRIGGERS: "parent", "child", "contains".
+  triggers: ["parent", "child", "contains", "belongs to", "owns"]
 "##;
         let doc: ArcFamilyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.arc_family.key, "ownership");
@@ -220,7 +218,7 @@ arc_family:
         assert_eq!(doc.arc_family.inverse_convention, Some("*_OF".to_string()));
         assert_eq!(doc.arc_family.tier_1_inverses.len(), 2);
         assert_eq!(doc.arc_family.key_arcs.len(), 3);
-        assert!(doc.arc_family.llm_context.is_some());
+        assert_eq!(doc.arc_family.triggers.len(), 5);
         assert_eq!(doc.arc_family.icon.terminal, "->");
     }
 

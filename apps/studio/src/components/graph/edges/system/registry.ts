@@ -53,7 +53,6 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp | string; category: RelationCat
   // Generation
   { pattern: 'HAS_NATIVE', category: 'generation' },
   { pattern: 'HAS_INSTRUCTION', category: 'generation' },
-  { pattern: 'HAS_RULES', category: 'generation' },
   { pattern: /GENERATED/, category: 'generation' },
 
   // Semantic

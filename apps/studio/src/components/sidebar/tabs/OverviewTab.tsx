@@ -1,19 +1,19 @@
 'use client';
 
 /**
- * OverviewTab - Node overview with classification and description
+ * OverviewTab - Node overview with classification and content
  *
  * Features:
  * - Side-by-side layout: info left, 3D preview right
  * - Type badge with layer icon
  * - Classification grid (realm, layer, trait)
- * - Description and LLM context
+ * - Content, triggers, and provenance (v0.20.0)
  * - Copy key functionality
  */
 
 import { memo } from 'react';
 import dynamic from 'next/dynamic';
-import { Hash, MapPin, Layers, Sparkles } from 'lucide-react';
+import { Hash, MapPin, Layers, Sparkles, Tag, Database } from 'lucide-react';
 import { CLASS_TAXONOMY } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
@@ -84,34 +84,50 @@ function ClassificationChip({
 }
 
 /**
- * Description block with optional LLM context
+ * Content block with triggers and provenance (v0.20.0)
  */
-function DescriptionBlock({
-  description,
-  llmContext,
+function ContentBlock({
+  content,
+  triggers,
+  provenance,
 }: {
-  description?: string;
-  llmContext?: string;
+  content?: string;
+  triggers?: string[];
+  provenance?: string;
 }) {
-  if (!description && !llmContext) return null;
+  if (!content && (!triggers || triggers.length === 0) && !provenance) return null;
 
   return (
     <div className="space-y-4">
-      {description && (
+      {content && (
         <div>
-          <h4 className="text-xs font-medium text-white/40 mb-2">Description</h4>
-          <p className="text-sm text-white/70 leading-relaxed">{description}</p>
+          <h4 className="text-xs font-medium text-white/40 mb-2">Content</h4>
+          <p className="text-sm text-white/70 leading-relaxed">{content}</p>
         </div>
       )}
-      {llmContext && (
-        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-          <div className="flex items-center gap-1.5 text-xs text-purple-400 mb-2">
-            <Sparkles className="w-3 h-3" />
-            LLM Context
+      {triggers && triggers.length > 0 && (
+        <div>
+          <div className="flex items-center gap-1.5 text-xs text-white/40 mb-2">
+            <Tag className="w-3 h-3" />
+            Triggers
           </div>
-          <p className="text-sm text-white/60 leading-relaxed font-mono">
-            {llmContext}
-          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {triggers.map((trigger) => (
+              <span
+                key={trigger}
+                className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/15 text-purple-300 border border-purple-500/20"
+              >
+                {trigger}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {provenance && (
+        <div className="flex items-center gap-1.5">
+          <Database className="w-3 h-3 text-white/30" />
+          <span className="text-xs text-white/40">Origin:</span>
+          <span className="text-xs font-mono text-white/60">{provenance}</span>
         </div>
       )}
     </div>
@@ -216,10 +232,11 @@ export const OverviewTab = memo(function OverviewTab({
         </div>
       </div>
 
-      {/* Description section */}
-      <DescriptionBlock
-        description={node.description}
-        llmContext={node.llmContext}
+      {/* Content section (v0.20.0) */}
+      <ContentBlock
+        content={node.content}
+        triggers={node.triggers}
+        provenance={node.provenance}
       />
 
       {/* Timestamps */}

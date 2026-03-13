@@ -155,7 +155,6 @@ function generateCultureRefsSeed(cultures) {
       lines.push(`    cr.importance = '${importance}',`);
       lines.push(`    cr.expression = '${expression}',`);
       lines.push(`    cr.marketing_angle = '${marketingAngle}',`);
-      lines.push(`    cr.llm_context = 'USE: when generating content for ${culture.locale}. VALUE: ${displayName} (${importance} importance). EXPRESSION: ${expression.substring(0, 100)}...',`);
       lines.push(`    cr.provenance = 'ath-know-l10n',`);
       lines.push(`    cr.confidence = 0.9,`);
       lines.push(`    cr.created_at = datetime(),`);
@@ -225,7 +224,6 @@ function generateTaboosSeed(cultures) {
       lines.push(`    t.category = 'cultural',`);
       lines.push(`    t.reason = 'Extracted from locale culture norms - critical taboo to avoid',`);
       lines.push(`    t.alternatives = [],`);
-      lines.push(`    t.llm_context = 'AVOID: ${displayName} in ${culture.locale} content. This is a CRITICAL taboo that can cause serious issues.',`);
       lines.push(`    t.provenance = 'ath-know-l10n',`);
       lines.push(`    t.confidence = 0.95,`);
       lines.push(`    t.created_at = datetime(),`);
@@ -309,7 +307,6 @@ function generateAudienceTraitsSeed(cultures) {
     lines.push(`    at.behavior = '${behaviorJson}',`);
     lines.push(`    at.preferences = '${preferencesJson}',`);
     lines.push(`    at.content_length = '${contentLength}',`);
-    lines.push(`    at.llm_context = 'USE: when generating content for ${culture.locale}. STYLE: ${directness} communication, ${hierarchy} hierarchy importance, ${contextType}.',`);
     lines.push(`    at.provenance = 'ath-know-l10n',`);
     lines.push(`    at.confidence = 0.9,`);
     lines.push(`    at.created_at = datetime(),`);

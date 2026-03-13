@@ -119,20 +119,7 @@ describe('NovaNetFilter', () => {
     // REMOVED v10.3: includeProjectConcepts tests (HAS_CONCEPT arc removed)
     // Entity is now in org realm, accessed via USES_ENTITY from Page/Block
 
-    it('includeRules() adds HAS_RULES include rule', () => {
-      const filter = NovaNetFilter.create().fromBlock('block-hero').includeRules();
-      const criteria = filter.getCriteria();
-      expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_RULES', direction: 'outgoing' })
-      );
-    });
-
-    it('includeRules({ activeOnly: true }) filters active rules', () => {
-      const filter = NovaNetFilter.create().fromBlock('block-hero').includeRules({ activeOnly: true });
-      const criteria = filter.getCriteria();
-      const rulesRule = criteria.includes.find(i => i.relation === 'HAS_RULES');
-      expect(rulesRule?.filters?.active).toBe(true);
-    });
+    // v0.19.1: includeRules() removed — rules merged into BlockType.rules property
 
     // v0.13.0 ADR-029: *Native pattern
     it('includeNative() adds HAS_NATIVE include rule (v0.13.0 ADR-029)', () => {
@@ -319,18 +306,18 @@ describe('CypherGenerator', () => {
       expect(result.query).toContain('WHERE');
       expect(result.query).toContain('toLower(root.key) CONTAINS toLower($searchQuery)');
       expect(result.query).toContain('toLower(root.display_name) CONTAINS toLower($searchQuery)');
-      expect(result.query).toContain('toLower(root.description) CONTAINS toLower($searchQuery)');
+      expect(result.query).toContain('toLower(root.content) CONTAINS toLower($searchQuery)');
       expect(result.params.searchQuery).toBe('pricing');
     });
 
     it('generates WHERE for search filter with custom fields', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .search('test', ['key', 'llm_context']);
+        .search('test', ['key', 'content']);
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('toLower(root.key) CONTAINS toLower($searchQuery)');
-      expect(result.query).toContain('toLower(root.llm_context) CONTAINS toLower($searchQuery)');
+      expect(result.query).toContain('toLower(root.content) CONTAINS toLower($searchQuery)');
       expect(result.query).not.toContain('root.display_name');
     });
 

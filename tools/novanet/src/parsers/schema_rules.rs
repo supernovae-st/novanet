@@ -1,7 +1,7 @@
 //! Schema validation rules for v0.19.0 standardization.
 //!
 //! Validates:
-//! - Standard properties presence (8 REQUIRED: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at)
+//! - Standard properties presence (8 REQUIRED: key, display_name, node_class, content, triggers, provenance, created_at, updated_at)
 //! - Composite key denormalization (entity_key, page_key, block_key, locale_key)
 //! - Property ordering (key → *_key → display_name → node_class → content → ... → created_at → updated_at)
 //! - ADR-030/032 compliance: slug derivation, TARGETS arc properties
@@ -56,7 +56,6 @@ pub enum IssueSeverity {
 /// These are identified by relation chains instead.
 const KEYLESS_NODES: &[&str] = &[
     "ProjectNative",
-    "BlockRules",
     "TermSet",
     "ExpressionSet",
     "PatternSet",
@@ -120,7 +119,7 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "display_name",
     "node_class",
     "content",
-    "llm_context",
+    "triggers",
     "provenance",
     "created_at",
     "updated_at",
@@ -838,17 +837,17 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
         }
     }
 
-    // Rule A2: TARGETS arc must document is_slug_source in llm_context
+    // Rule A2: TARGETS arc must document is_slug_source in content
     if arc.name == "TARGETS" {
-        if let Some(llm_context) = &arc.llm_context {
-            if !llm_context.contains("is_slug_source") && !llm_context.contains("slug source") {
+        if let Some(content) = &arc.content {
+            if !content.contains("is_slug_source") && !content.contains("slug source") {
                 issues.push(ArcIssue {
                     arc_name: arc.name.clone(),
                     severity: IssueSeverity::Warning,
-                    rule: "ARC_LLM_CONTEXT_SLUG",
-                    message: "TARGETS arc llm_context should mention 'is_slug_source' for ADR-030 compliance".into(),
+                    rule: "ARC_CONTENT_SLUG",
+                    message: "TARGETS arc content should mention 'is_slug_source' for ADR-030 compliance".into(),
                     fix_suggestion: Some(
-                        "Add to llm_context: 'CRITICAL: is_slug_source marks the keyword used for URL slug derivation.'".into()
+                        "Add to content: 'CRITICAL: is_slug_source marks the keyword used for URL slug derivation.'".into()
                     ),
                 });
             }
@@ -904,29 +903,29 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
         }
     }
 
-    // Rule A5: Semantic arcs should have llm_context
-    if arc.family == crate::parsers::arcs::ArcFamily::Semantic && arc.llm_context.is_none() {
+    // Rule A5: Semantic arcs should have content
+    if arc.family == crate::parsers::arcs::ArcFamily::Semantic && arc.content.is_none() {
         issues.push(ArcIssue {
             arc_name: arc.name.clone(),
             severity: IssueSeverity::Warning,
-            rule: "ARC_LLM_CONTEXT_REQUIRED",
-            message: "Semantic family arcs should have llm_context for LLM comprehension".into(),
+            rule: "ARC_CONTENT_REQUIRED",
+            message: "Semantic family arcs should have content for LLM comprehension".into(),
             fix_suggestion: Some(
-                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into(),
+                "Add content describing what this arc means and when to use it".into(),
             ),
         });
     }
 
-    // Rule A6: Generation arcs should have llm_context
-    if arc.family == crate::parsers::arcs::ArcFamily::Generation && arc.llm_context.is_none() {
+    // Rule A6: Generation arcs should have content
+    if arc.family == crate::parsers::arcs::ArcFamily::Generation && arc.content.is_none() {
         issues.push(ArcIssue {
             arc_name: arc.name.clone(),
             severity: IssueSeverity::Warning,
-            rule: "ARC_LLM_CONTEXT_REQUIRED",
-            message: "Generation family arcs should have llm_context for pipeline documentation"
+            rule: "ARC_CONTENT_REQUIRED",
+            message: "Generation family arcs should have content for pipeline documentation"
                 .into(),
             fix_suggestion: Some(
-                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into(),
+                "Add content describing what this arc means and when to use it".into(),
             ),
         });
     }
@@ -999,10 +998,10 @@ pub fn validate_all_arcs(arcs: &[crate::parsers::arcs::ArcDef]) -> Vec<ArcIssue>
                 source: arc.source.clone(),
                 target: arc.target.clone(),
                 cardinality: arc.cardinality,
-                llm_context: if arc.llm_context.is_empty() {
+                content: if arc.content.is_empty() {
                     None
                 } else {
-                    Some(arc.llm_context.clone())
+                    Some(arc.content.clone())
                 },
                 properties: arc.properties.as_ref().map(|props| {
                     serde_yaml::Value::Sequence(
@@ -1012,6 +1011,7 @@ pub fn validate_all_arcs(arcs: &[crate::parsers::arcs::ArcDef]) -> Vec<ArcIssue>
                             .collect(),
                     )
                 }),
+                triggers: Vec::new(),
                 inverse: arc.inverse_name.clone(),
                 cypher_pattern: None,
                 deprecated: arc.deprecated,
@@ -1827,7 +1827,7 @@ mod tests {
     }
 
     #[test]
-    fn arc_validation_targets_llm_context_mentions_slug() {
+    fn arc_validation_targets_content_mentions_slug() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
@@ -1835,22 +1835,22 @@ mod tests {
 
         let issues = validate_arc_files(&root).expect("should validate arc files");
 
-        // Check TARGETS arc llm_context mentions is_slug_source
-        let llm_issues: Vec<_> = issues
+        // Check TARGETS arc content mentions is_slug_source
+        let content_issues: Vec<_> = issues
             .iter()
-            .filter(|i| i.arc_name == "TARGETS" && i.rule == "ARC_LLM_CONTEXT_SLUG")
+            .filter(|i| i.arc_name == "TARGETS" && i.rule == "ARC_CONTENT_SLUG")
             .collect();
 
-        // TARGETS should mention slug source in llm_context
+        // TARGETS should mention slug source in content
         assert!(
-            llm_issues.is_empty(),
-            "TARGETS arc llm_context should mention 'is_slug_source'. Found issues: {:?}",
-            llm_issues.iter().map(|i| &i.message).collect::<Vec<_>>()
+            content_issues.is_empty(),
+            "TARGETS arc content should mention 'is_slug_source'. Found issues: {:?}",
+            content_issues.iter().map(|i| &i.message).collect::<Vec<_>>()
         );
     }
 
     #[test]
-    fn arc_validation_semantic_arcs_have_llm_context() {
+    fn arc_validation_semantic_arcs_have_content() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
@@ -1858,16 +1858,16 @@ mod tests {
 
         let issues = validate_arc_files(&root).expect("should validate arc files");
 
-        // Check semantic arcs have llm_context
+        // Check semantic arcs have content
         let semantic_issues: Vec<_> = issues
             .iter()
-            .filter(|i| i.rule == "ARC_LLM_CONTEXT_REQUIRED")
+            .filter(|i| i.rule == "ARC_CONTENT_REQUIRED")
             .collect();
 
-        // Log warnings but don't fail - some arcs may not need llm_context
+        // Log warnings but don't fail - some arcs may not need content
         if !semantic_issues.is_empty() {
             eprintln!(
-                "Warning: {} semantic/generation arcs missing llm_context:",
+                "Warning: {} semantic/generation arcs missing content:",
                 semantic_issues.len()
             );
             for issue in &semantic_issues {
@@ -1889,11 +1889,12 @@ mod tests {
             source: NodeRef::Single("EntityNative".to_string()),
             target: NodeRef::Single("SEOKeyword".to_string()),
             cardinality: Cardinality::ManyToMany,
-            llm_context: Some("Test context with is_slug_source mentioned".to_string()),
+            content: Some("Test context with is_slug_source mentioned".to_string()),
             properties: None, // Missing properties!
             inverse: None,
             cypher_pattern: None,
             deprecated: false,
+            triggers: Vec::new(),
         };
 
         let issues = validate_arc(&arc);
@@ -1922,7 +1923,7 @@ mod tests {
             source: NodeRef::Single("PageNative".to_string()), // Wrong! Should be BlockNative
             target: NodeRef::Single("EntityNative".to_string()),
             cardinality: Cardinality::ManyToOne,
-            llm_context: Some("Test context".to_string()),
+            content: Some("Test context".to_string()),
             properties: Some(serde_yaml::Value::Sequence(vec![
                 serde_yaml::Value::Mapping({
                     let mut m = serde_yaml::Mapping::new();
@@ -1940,6 +1941,7 @@ mod tests {
             inverse: None,
             cypher_pattern: None,
             deprecated: false,
+            triggers: Vec::new(),
         };
 
         let issues = validate_arc(&arc);
@@ -1995,11 +1997,12 @@ mod tests {
             source: NodeRef::Single("A".to_string()),
             target: NodeRef::Single("B".to_string()),
             cardinality: Cardinality::ManyToMany,
-            llm_context: None,
+            content: None,
             properties: Some(props),
             inverse: None,
             cypher_pattern: None,
             deprecated: false,
+            triggers: Vec::new(),
         };
 
         let extracted = extract_arc_property_names(&arc);
@@ -2046,11 +2049,12 @@ mod tests {
             source: NodeRef::Single("A".to_string()),
             target: NodeRef::Single("B".to_string()),
             cardinality: Cardinality::ManyToMany,
-            llm_context: None,
+            content: None,
             properties: Some(props),
             inverse: None,
             cypher_pattern: None,
             deprecated: false,
+            triggers: Vec::new(),
         };
 
         let extracted = extract_arc_property_names(&arc);

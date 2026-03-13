@@ -16,7 +16,7 @@
  * - foundation: Project, Brand, BrandDesign, PromptStyle
  * - structure: Page, Block, ContentSlot
  * - semantic: Entity, EntityNative
- * - instruction: BlockInstruction, BlockType, BlockRules, PromptArtifact
+ * - instruction: BlockInstruction, BlockType, PromptArtifact
  * - output: PageNative, BlockNative, OutputArtifact
  */
 

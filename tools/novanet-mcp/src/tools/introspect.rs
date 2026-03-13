@@ -143,7 +143,7 @@ async fn get_class(
             OPTIONAL MATCH (c)<-[:FROM_CLASS]-(outgoing:ArcClass)
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
                    c.trait AS trait_type, c.content AS content,
-                   c.llm_context AS llm_context,
+                   c.triggers AS triggers,
                    collect(DISTINCT incoming.name) AS incoming_arcs,
                    collect(DISTINCT outgoing.name) AS outgoing_arcs
             "#,
@@ -156,7 +156,7 @@ async fn get_class(
             MATCH (c:Class {name: $name})
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
                    c.trait AS trait_type, c.content AS content,
-                   c.llm_context AS llm_context
+                   c.triggers AS triggers
             "#,
             false,
         )
@@ -237,7 +237,7 @@ async fn get_arc(state: &State, name: Option<&str>) -> Result<IntrospectResult> 
         RETURN a.name AS name, a.family AS family,
                a.scope AS scope, a.cardinality AS cardinality,
                a.source AS source, a.target AS target,
-               a.content AS content, a.llm_context AS llm_context
+               a.content AS content, a.triggers AS triggers
     "#;
 
     let mut params = serde_json::Map::new();

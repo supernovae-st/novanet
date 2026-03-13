@@ -47,7 +47,7 @@ function nodeTypeToGraphNode(nodeType: NodeType): GraphNode {
     type: nodeType,
     key: nodeType,
     displayName: config.label,
-    description: `${config.layer} layer node`,
+    content: `${config.layer} layer node`,
   };
 }
 

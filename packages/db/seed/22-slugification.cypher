@@ -23,7 +23,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/af-ZA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Afrikaans (South Africa). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -42,7 +41,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-AE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Arabic (UAE). Uses native_script rule. 16 stopwords across 6 categories including currency, pronoun, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -61,7 +59,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-BH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (BH). Uses native_script rule. 0 stopwords across 0 categories including . Has 11 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -80,7 +77,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-DZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (DZ). Uses native_script rule. 1 stopwords across 1 categories including adverb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -99,7 +95,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-EG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (EG). Uses native_script rule. 29 stopwords across 10 categories including conjunction, pronoun, preposition. Has 12 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -118,7 +113,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-IQ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (IQ). Uses native_script rule. 23 stopwords across 8 categories including preposition, pronoun, interrogative. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -137,7 +131,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-JO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (JO). Uses native_script rule. 0 stopwords across 0 categories including . Has 12 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -156,7 +149,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-KW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (KW). Uses native_script rule. 16 stopwords across 6 categories including pronoun, verb, demonstrative. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -175,7 +167,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LB.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (LB). Uses native_script rule. 22 stopwords across 6 categories including verb, adverb, conjunction. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -194,7 +185,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (LY). Uses native_script rule. 23 stopwords across 6 categories including conjunction, adverb, article. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -213,7 +203,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-MA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (MA). Uses native_script rule. 25 stopwords across 8 categories including pronoun, conjunction, preposition. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -232,7 +221,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-OM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (OM). Uses native_script rule. 0 stopwords across 0 categories including . Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -251,7 +239,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-QA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (QA). Uses native_script rule. 12 stopwords across 5 categories including verb, preposition, demonstrative. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -270,7 +257,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-SA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Arabic (Saudi Arabia). Uses native_script rule. 11 stopwords across 6 categories including verb, negation, currency. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -289,7 +275,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-TN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AR (TN). Uses native_script rule. 22 stopwords across 8 categories including interrogative, article, pronoun. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -308,7 +293,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/as-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AS (IN). Uses native_script rule. 16 stopwords across 5 categories including verb, article, demonstrative. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -327,7 +311,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/az-AZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for AZ (AZ). Uses native_script rule. 17 stopwords across 5 categories including article, pronoun, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -346,7 +329,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/be-BY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for BE (BY). Uses native_script rule. 34 stopwords across 4 categories including pronoun, conjunction, preposition.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -365,7 +347,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bg-BG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Bulgarian (Bulgaria). Uses native_script rule. 15 stopwords across 3 categories including conjunction, preposition, verb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -384,7 +365,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-BD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Bengali (Bangladesh). Uses native_script rule. 35 stopwords across 6 categories including article, pronoun, verb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -403,7 +383,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for BN (IN). Uses native_script rule. 10 stopwords across 4 categories including article, verb, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -422,7 +401,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bs-BA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for BS (BA). Uses latin_preserve rule. 19 stopwords across 2 categories including conjunction, preposition. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -441,7 +419,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-AD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for CA (AD). Uses latin_preserve rule. 18 stopwords across 5 categories including article, conjunction, contraction. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -460,7 +437,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-ES.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for CA (ES). Uses latin_preserve rule. 34 stopwords across 5 categories including article, conjunction, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -479,7 +455,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ceb-PH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for CEB (PH). Uses latin_strip rule. 14 stopwords across 6 categories including demonstrative, preposition, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -498,7 +473,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/cs-CZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Czech (Czechia). Uses latin_preserve rule. 40 stopwords across 4 categories including verb, preposition, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -517,7 +491,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/cy-GB.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for CY (GB). Uses latin_preserve rule. 5 stopwords across 1 categories including preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -536,7 +509,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/da-DK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Danish (Denmark). Uses latin_preserve rule. 20 stopwords across 5 categories including pronoun, verb, article.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -555,7 +527,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-AT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for German (Austria). Uses latin_transform rule. 33 stopwords across 4 categories including verb, conjunction, article.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -574,7 +545,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-CH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for German (Switzerland). Uses latin_transform rule. 26 stopwords across 4 categories including conjunction, verb, preposition. Has 7 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -593,7 +563,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-DE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for German (Germany). Uses latin_transform rule. 31 stopwords across 5 categories including conjunction, verb, article. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -612,7 +581,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-LU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for DE (LU). Uses latin_strip rule. 31 stopwords across 5 categories including contraction, preposition, conjunction. Has 7 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -631,7 +599,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-CY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EL (CY). Uses native_script rule. 21 stopwords across 8 categories including adverb, interrogative, conjunction. Has 10 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -650,7 +617,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-GR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Greek (Greece). Uses native_script rule. 47 stopwords across 6 categories including conjunction, verb, article. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -669,7 +635,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (AE). Uses latin_strip rule. 22 stopwords across 6 categories including preposition, verb, pronoun. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -688,7 +653,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (AU). Uses latin_strip rule. 24 stopwords across 5 categories including preposition, article, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -707,7 +671,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BB.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (BB). Uses latin_strip rule. 30 stopwords across 5 categories including pronoun, conjunction, article. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -726,7 +689,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (BW). Uses latin_strip rule. 17 stopwords across 5 categories including conjunction, preposition, verb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -745,7 +707,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (CA). Uses latin_strip rule. 26 stopwords across 7 categories including pronoun, conjunction, adverb. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -764,7 +725,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (CY). Uses latin_strip rule. 26 stopwords across 5 categories including article, preposition, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -783,7 +743,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-FJ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (FJ). Uses latin_strip rule. 29 stopwords across 5 categories including conjunction, preposition, article. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -802,7 +761,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GB.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for English (United Kingdom). Uses latin_strip rule. 22 stopwords across 5 categories including preposition, article, verb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -821,7 +779,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (GH). Uses latin_strip rule. 27 stopwords across 6 categories including pronoun, article, verb. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -840,7 +797,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-HK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (HK). Uses latin_strip rule. 31 stopwords across 6 categories including conjunction, article, preposition. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -859,7 +815,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (IE). Uses latin_strip rule. 31 stopwords across 7 categories including contraction, article, preposition. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -878,7 +833,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (IN). Uses latin_strip rule. 22 stopwords across 5 categories including verb, pronoun, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -897,7 +851,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-JM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (JM). Uses latin_strip rule. 26 stopwords across 5 categories including verb, article, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -916,7 +869,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (KE). Uses latin_strip rule. 41 stopwords across 6 categories including adverb, preposition, conjunction. Has 16 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -935,7 +887,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (KY). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, preposition, verb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -954,7 +905,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (MU). Uses latin_strip rule. 19 stopwords across 5 categories including article, pronoun, verb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -973,7 +923,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (MY). Uses latin_strip rule. 25 stopwords across 5 categories including conjunction, article, verb. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -992,7 +941,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (NG). Uses latin_strip rule. 29 stopwords across 7 categories including conjunction, pronoun, auxiliary. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1011,7 +959,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (NZ). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, article, preposition. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1030,7 +977,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (PH). Uses latin_strip rule. 28 stopwords across 6 categories including pronoun, conjunction, preposition. Has 12 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1049,7 +995,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (PK). Uses latin_strip rule. 32 stopwords across 6 categories including preposition, verb, article. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1068,7 +1013,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (SA). Uses latin_strip rule. 16 stopwords across 4 categories including preposition, conjunction, verb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1087,7 +1031,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (SG). Uses latin_strip rule. 27 stopwords across 6 categories including classifier, preposition, article. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1106,7 +1049,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (TT). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, article. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1125,7 +1067,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (TZ). Uses latin_strip rule. 38 stopwords across 5 categories including conjunction, preposition, pronoun. Has 12 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1144,7 +1085,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-UG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (UG). Uses latin_strip rule. 37 stopwords across 6 categories including article, preposition, conjunction. Has 12 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1163,7 +1103,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-US.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for English (United States). Uses latin_strip rule. 26 stopwords across 5 categories including verb, preposition, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1182,7 +1121,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-VN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (VN). Uses latin_strip rule. 21 stopwords across 5 categories including article, verb, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1201,7 +1139,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (ZA). Uses latin_strip rule. 44 stopwords across 7 categories including adverb, article, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1220,7 +1157,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (ZM). Uses latin_strip rule. 24 stopwords across 5 categories including verb, adverb, article. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1239,7 +1175,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EN (ZW). Uses latin_strip rule. 54 stopwords across 6 categories including article, verb, adverb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1258,7 +1193,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-AR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (AR). Uses latin_preserve rule. 27 stopwords across 7 categories including verb, interjection, preposition. Has 10 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1277,7 +1211,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-BO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (BO). Uses latin_preserve rule. 23 stopwords across 8 categories including verb, adverb, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1296,7 +1229,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (CL). Uses latin_preserve rule. 26 stopwords across 7 categories including verb, article, contraction. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1315,7 +1247,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (CO). Uses latin_preserve rule. 21 stopwords across 6 categories including article, adverb, filler. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1334,7 +1265,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (CR). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, conjunction, verb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1353,7 +1283,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (CU). Uses latin_preserve rule. 20 stopwords across 7 categories including conjunction, article, pronoun. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1372,7 +1301,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-DO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (DO). Uses latin_preserve rule. 20 stopwords across 7 categories including verb, interjection, adverb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1391,7 +1319,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-EC.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (EC). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, contraction, conjunction. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1410,7 +1337,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-ES.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Spanish (Spain). Uses latin_preserve rule. 28 stopwords across 8 categories including conjunction, verb, adverb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1429,7 +1355,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-GT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (GT). Uses latin_preserve rule. 21 stopwords across 6 categories including pronoun, contraction, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1448,7 +1373,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-HN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (HN). Uses latin_preserve rule. 22 stopwords across 7 categories including article, verb, pronoun. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1467,7 +1391,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-MX.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Spanish (Mexico). Uses latin_preserve rule. 28 stopwords across 7 categories including adverb, article, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1486,7 +1409,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-NI.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (NI). Uses latin_preserve rule. 28 stopwords across 8 categories including preposition, conjunction, adverb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1505,7 +1427,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (PA). Uses latin_preserve rule. 28 stopwords across 4 categories including verb, article, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1524,7 +1445,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (PE). Uses latin_preserve rule. 22 stopwords across 7 categories including conjunction, pronoun, article. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1543,7 +1463,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (PR). Uses latin_preserve rule. 19 stopwords across 5 categories including verb, article, conjunction. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1562,7 +1481,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (PY). Uses latin_preserve rule. 20 stopwords across 8 categories including article, interjection, pronoun. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1581,7 +1499,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-SV.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (SV). Uses latin_preserve rule. 19 stopwords across 5 categories including article, preposition, contraction. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1600,7 +1517,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-UY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (UY). Uses latin_preserve rule. 31 stopwords across 8 categories including pronoun, conjunction, article. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1619,7 +1535,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-VE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ES (VE). Uses latin_preserve rule. 28 stopwords across 7 categories including verb, interjection, preposition. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1638,7 +1553,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/et-EE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Estonian (Estonia). Uses latin_preserve rule. 20 stopwords across 6 categories including conjunction, verb, pronoun. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1657,7 +1571,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/eu-ES.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for EU (ES). Uses latin_preserve rule. 2 stopwords across 1 categories including quantifier. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1676,7 +1589,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fa-IR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Persian (Iran). Uses native_script rule. 14 stopwords across 5 categories including preposition, auxiliary, adverb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1695,7 +1607,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fi-FI.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Finnish (Finland). Uses latin_preserve rule. 22 stopwords across 5 categories including verb, pronoun, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1714,7 +1625,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-BE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (BE). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1733,7 +1643,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-BF.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (BF). Uses latin_preserve rule. 26 stopwords across 6 categories including article, interjection, filler. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1752,7 +1661,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for French (Canada). Uses latin_preserve rule. 31 stopwords across 6 categories including adverb, pronoun, article. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1771,7 +1679,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (CD). Uses latin_preserve rule. 25 stopwords across 8 categories including verb, preposition, article. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1790,7 +1697,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (CH). Uses latin_preserve rule. 23 stopwords across 5 categories including conjunction, article, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1809,7 +1715,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CI.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (CI). Uses latin_preserve rule. 24 stopwords across 7 categories including filler, conjunction, adverb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1828,7 +1733,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (CM). Uses latin_preserve rule. 24 stopwords across 7 categories including adverb, conjunction, contraction. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1847,7 +1751,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-DZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (DZ). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, conjunction, article. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1866,7 +1769,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-FR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for French (France). Uses latin_preserve rule. 32 stopwords across 5 categories including conjunction, preposition, article.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1885,7 +1787,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-LU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (LU). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1904,7 +1805,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (MA). Uses latin_preserve rule. 22 stopwords across 5 categories including pronoun, conjunction, verb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1923,7 +1823,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (MG). Uses latin_preserve rule. 23 stopwords across 3 categories including preposition, article, conjunction. Has 9 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1942,7 +1841,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-RW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (RW). Uses latin_preserve rule. 29 stopwords across 6 categories including verb, conjunction, pronoun. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1961,7 +1859,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-SN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (SN). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, preposition, filler. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1980,7 +1877,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-TN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for FR (TN). Uses latin_preserve rule. 22 stopwords across 5 categories including abbreviation, conjunction, pronoun. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -1999,7 +1895,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ga-IE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for GA (IE). Uses latin_preserve rule. 19 stopwords across 6 categories including preposition, pronoun, conjunction. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2018,7 +1913,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gl-ES.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for GL (ES). Uses latin_preserve rule. 35 stopwords across 5 categories including conjunction, verb, article.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2037,7 +1931,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gn-PY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for GN (PY). Uses latin_strip rule. 3 stopwords across 1 categories including adverb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2056,7 +1949,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gu-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for GU (IN). Uses native_script rule. 5 stopwords across 2 categories including conjunction, quantifier.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2075,7 +1967,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ha-NG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for HA (NG). Uses latin_strip rule. 12 stopwords across 5 categories including conjunction, negation, preposition. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2094,7 +1985,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/he-IL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Hebrew (Israel). Uses native_script rule. 3 stopwords across 2 categories including conjunction, adverb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2113,7 +2003,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hi-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Hindi (India). Uses native_script rule. 2 stopwords across 2 categories including preposition, honorific. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2132,7 +2021,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hr-HR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Croatian (Croatia). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, adverb, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2151,7 +2039,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ht-HT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for HT (HT). Uses latin_strip rule. 4 stopwords across 4 categories including demonstrative, quantifier, verb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2170,7 +2057,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hu-HU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Hungarian (Hungary). Uses latin_preserve rule. 4 stopwords across 1 categories including conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2189,7 +2075,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hy-AM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for HY (AM). Uses native_script rule. 14 stopwords across 6 categories including article, adverb, verb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2208,7 +2093,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/id-ID.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Indonesian (Indonesia). Uses latin_strip rule. 14 stopwords across 3 categories including conjunction, adverb, preposition.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2227,7 +2111,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ig-NG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for IG (NG). Uses latin_strip rule. 1 stopwords across 1 categories including demonstrative. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2246,7 +2129,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/is-IS.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for IS (IS). Uses latin_preserve rule. 28 stopwords across 5 categories including pronoun, verb, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2265,7 +2147,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-CH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for IT (CH). Uses latin_preserve rule. 23 stopwords across 3 categories including article, preposition, conjunction. Has 10 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2284,7 +2165,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-IT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Italian (Italy). Uses latin_preserve rule. 21 stopwords across 3 categories including preposition, conjunction, article. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2303,7 +2183,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ja-JP.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Japanese (Japan). Uses native_script rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2322,7 +2201,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/jv-ID.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for JV (ID). Uses latin_strip rule. 10 stopwords across 3 categories including preposition, conjunction, adverb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2341,7 +2219,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ka-GE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KA (GE). Uses native_script rule. 20 stopwords across 4 categories including adverb, verb, conjunction. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2360,7 +2237,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kk-KZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KK (KZ). Uses native_script rule. 9 stopwords across 4 categories including currency, abbreviation, pronoun. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2379,7 +2255,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/km-KH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KM (KH). Uses native_script rule. 10 stopwords across 5 categories including preposition, adverb, demonstrative. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2398,7 +2273,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kn-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KN (IN). Uses native_script rule. 23 stopwords across 6 categories including verb, demonstrative, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2417,7 +2291,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ko-KR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Korean (South Korea). Uses native_script rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2436,7 +2309,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ku-TR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KU (TR). Uses native_script rule. 32 stopwords across 6 categories including conjunction, article, verb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2455,7 +2327,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ky-KG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for KY (KG). Uses native_script rule. 6 stopwords across 4 categories including conjunction, verb, pronoun. Has 2 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2474,7 +2345,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ln-CD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for LN (CD). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, adverb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2493,7 +2363,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/lt-LT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Lithuanian (Lithuania). Uses latin_preserve rule. 26 stopwords across 4 categories including verb, pronoun, preposition.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2512,7 +2381,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/lv-LV.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Latvian (Latvia). Uses latin_preserve rule. 25 stopwords across 4 categories including conjunction, pronoun, verb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2531,7 +2399,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mg-MG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MG (MG). Uses latin_strip rule. 16 stopwords across 3 categories including article, preposition, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2550,7 +2417,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mi-NZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MI (NZ). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2569,7 +2435,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mk-MK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MK (MK). Uses native_script rule. 31 stopwords across 5 categories including preposition, conjunction, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2588,7 +2453,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ml-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ML (IN). Uses native_script rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2607,7 +2471,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mn-MN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MN (MN). Uses native_script rule. 13 stopwords across 3 categories including interrogative, conjunction, demonstrative.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2626,7 +2489,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mr-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MR (IN). Uses native_script rule. 24 stopwords across 5 categories including interrogative, verb, quantifier. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2645,7 +2507,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-BN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MS (BN). Uses latin_strip rule. 20 stopwords across 6 categories including auxiliary, honorific, conjunction. Has 10 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2664,7 +2525,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-MY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Malay (Malaysia). Uses latin_strip rule. 18 stopwords across 6 categories including negation, preposition, demonstrative. Has 15 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2683,7 +2543,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-SG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MS (SG). Uses latin_strip rule. 14 stopwords across 7 categories including conjunction, possessive, demonstrative. Has 7 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2702,7 +2561,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mt-MT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MT (MT). Uses latin_preserve rule. 9 stopwords across 5 categories including demonstrative, adverb, quantifier. Has 9 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2721,7 +2579,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/my-MM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for MY (MM). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2740,7 +2597,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ne-NP.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for NE (NP). Uses native_script rule. 16 stopwords across 4 categories including pronoun, adverb, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2759,7 +2615,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-BE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for NL (BE). Uses latin_preserve rule. 29 stopwords across 5 categories including article, preposition, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2778,7 +2633,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-NL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Dutch (Netherlands). Uses latin_preserve rule. 36 stopwords across 6 categories including pronoun, conjunction, verb. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2797,7 +2651,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/no-NO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Norwegian (Norway). Uses latin_preserve rule. 4 stopwords across 1 categories including preposition. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2816,7 +2669,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ny-MW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for NY (MW). Uses latin_strip rule. 2 stopwords across 1 categories including interrogative. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2835,7 +2687,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/or-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for OR (IN). Uses native_script rule for Odia script.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2854,7 +2705,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pa-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PA (IN). Uses native_script rule. 1 stopwords across 1 categories including honorific. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2873,7 +2723,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pa-PK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PA (PK). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2892,7 +2741,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pl-PL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Polish (Poland). Uses latin_preserve rule. 23 stopwords across 5 categories including preposition, negation, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2911,7 +2759,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ps-AF.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PS (AF). Uses native_script rule. 3 stopwords across 2 categories including adverb, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2930,7 +2777,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-AO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PT (AO). Uses latin_preserve rule. 27 stopwords across 7 categories including adverb, verb, interjection. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2949,7 +2795,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-BR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Portuguese (Brazil). Uses latin_preserve rule. 27 stopwords across 6 categories including pronoun, article, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2968,7 +2813,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-CH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PT (CH). Uses latin_preserve rule. 29 stopwords across 5 categories including article, pronoun, verb. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -2987,7 +2831,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-MZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for PT (MZ). Uses latin_preserve rule. 25 stopwords across 6 categories including conjunction, article, pronoun. Has 7 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3006,7 +2849,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-PT.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Portuguese (Portugal). Uses latin_preserve rule. 32 stopwords across 5 categories including article, preposition, pronoun. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3025,7 +2867,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/qu-PE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for QU (PE). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3044,7 +2885,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ro-MD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RO (MD). Uses latin_preserve rule. 25 stopwords across 5 categories including pronoun, conjunction, preposition. Has 10 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3063,7 +2903,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ro-RO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Romanian (Romania). Uses latin_preserve rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3082,7 +2921,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-BY.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RU (BY). Uses native_script rule. 29 stopwords across 3 categories including conjunction, preposition, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3101,7 +2939,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-IL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RU (IL). Uses native_script rule. 35 stopwords across 4 categories including conjunction, preposition, pronoun. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3120,7 +2957,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RU (KG). Uses native_script rule. 20 stopwords across 4 categories including pronoun, adverb, preposition. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3139,7 +2975,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RU (KZ). Uses native_script rule. 35 stopwords across 5 categories including preposition, adverb, conjunction. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3158,7 +2993,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-MD.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RU (MD). Uses native_script rule. 23 stopwords across 4 categories including conjunction, adverb, preposition. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3177,7 +3011,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-RU.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Russian (Russia). Uses native_script rule. 29 stopwords across 3 categories including pronoun, preposition, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3196,7 +3029,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/rw-RW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for RW (RW). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, interrogative. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3215,7 +3047,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sd-PK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SD (PK). Uses native_script rule. 19 stopwords across 4 categories including article, conjunction, pronoun.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3234,7 +3065,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/si-LK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SI (LK). Uses native_script rule. 13 stopwords across 5 categories including verb, pronoun, demonstrative. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3253,7 +3083,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sk-SK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Slovak (Slovakia). Uses latin_preserve rule. 57 stopwords across 5 categories including conjunction, verb, pronoun. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3272,7 +3101,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sl-SI.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Slovenian (Slovenia). Uses latin_preserve rule. 75 stopwords across 6 categories including conjunction, pronoun, adverb.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3291,7 +3119,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sn-ZW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SN (ZW). Uses latin_strip rule. 3 stopwords across 2 categories including adverb, pronoun. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3310,7 +3137,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/so-SO.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SO (SO). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, adverb, pronoun. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3329,7 +3155,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sq-AL.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SQ (AL). Uses latin_preserve rule. 13 stopwords across 2 categories including preposition, conjunction. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3348,7 +3173,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sr-RS.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SR (RS). Uses native_script rule. 36 stopwords across 3 categories including preposition, pronoun, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3367,7 +3191,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/su-ID.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SU (ID). Uses latin_strip rule. 5 stopwords across 2 categories including preposition, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3386,7 +3209,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sv-SE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Swedish (Sweden). Uses latin_preserve rule. 28 stopwords across 5 categories including conjunction, preposition, article. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3405,7 +3227,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-KE.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Swahili (Kenya). Uses latin_strip rule. 4 stopwords across 2 categories including adverb, interjection. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3424,7 +3245,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-TZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for SW (TZ). Uses latin_strip rule. 15 stopwords across 4 categories including adverb, preposition, conjunction. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3443,7 +3263,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TA (IN). Uses native_script rule. 17 stopwords across 5 categories including verb, pronoun, interrogative. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3462,7 +3281,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-LK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TA (LK). Uses native_script rule. 8 stopwords across 3 categories including article, pronoun, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3481,7 +3299,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/te-IN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TE (IN). Uses native_script rule. 2 stopwords across 1 categories including quantifier. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3500,7 +3317,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tg-TJ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TG (TJ). Uses native_script rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3519,7 +3335,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/th-TH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Thai (Thailand). Uses native_script rule. 0 stopwords across 0 categories including .',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3538,7 +3353,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tk-TM.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TK (TM). Uses latin_preserve rule. 16 stopwords across 6 categories including article, verb, adverb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3557,7 +3371,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tl-PH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for TL (PH). Uses latin_strip rule. 1 stopwords across 1 categories including conjunction. Has 8 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3576,7 +3389,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tr-TR.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Turkish (Turkey). Uses latin_preserve rule. 15 stopwords across 5 categories including pronoun, article, adverb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3595,7 +3407,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uk-UA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Ukrainian (Ukraine). Uses native_script rule. 15 stopwords across 4 categories including adverb, conjunction, preposition.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3614,7 +3425,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ur-PK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for UR (PK). Uses native_script rule. 4 stopwords across 3 categories including adverb, demonstrative, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3633,7 +3443,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uz-UZ.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for UZ (UZ). Uses latin_preserve rule. 9 stopwords across 3 categories including conjunction, pronoun, adverb. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3652,7 +3461,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/vi-VN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Vietnamese (Vietnam). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, article, conjunction.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3671,7 +3479,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/wo-SN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for WO (SN). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3690,7 +3497,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/xh-ZA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for XH (ZA). Uses latin_strip rule. 23 stopwords across 5 categories including preposition, pronoun, demonstrative. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3709,7 +3515,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/yo-NG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for YO (NG). Uses latin_strip rule. 1 stopwords across 1 categories including negation. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3728,7 +3533,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-CN.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Chinese (Simplified). Uses romanized rule. 0 stopwords across 0 categories including . Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3747,7 +3551,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-HK.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ZH (HK). Uses native_script rule. 4 stopwords across 3 categories including preposition, verb, conjunction. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3766,7 +3569,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-SG.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ZH (SG). Uses romanized rule. 10 stopwords across 5 categories including verb, pronoun, classifier. Has 5 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3785,7 +3587,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-TH.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ZH (TH). Uses romanized rule. 7 stopwords across 5 categories including preposition, demonstrative, classifier. Has 3 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3804,7 +3605,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-TW.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for Chinese (Traditional). Uses native_script rule. 3 stopwords across 3 categories including preposition, adverb, conjunction. Has 6 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 
@@ -3823,7 +3623,6 @@ SET s.node_class = 'Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zu-ZA.md',
     s.updated_at = datetime(),
-    s.llm_context = 'URL slugification rules for ZU (ZA). Uses latin_strip rule. 3 stopwords across 2 categories including conjunction, adverb. Has 4 regional additions.',
     s.created_by = 'seed:locale',
     s.created_at = coalesce(s.created_at, datetime());
 

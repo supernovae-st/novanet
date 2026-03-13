@@ -1,23 +1,21 @@
 // novanet-core/src/types/shared.ts
-// Shared realm types v0.18.0 (was locale-knowledge.ts, renamed v11.3)
+// Shared realm types v0.20.0 (was locale-knowledge.ts, renamed v11.3)
 //
-// v8.2.0 CHANGES:
-//   - REMOVED: icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
-//   - Standard properties now: key, display_name, description, llm_context, created_at, updated_at
-//
-// v7.11.0 STANDARD PROPERTIES (all nodes):
-//   key, display_name, description, llm_context, created_at, updated_at
+// v0.20.0 STANDARD PROPERTIES:
+//   key, display_name, node_class, content, triggers[], provenance, created_at, updated_at
 
 // REMOVED v8.2.0: Priority and Freshness types (never implemented, YAGNI)
 // export type Priority = 'critical' | 'high' | 'medium' | 'low';
 // export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
 
 export interface Locale {
-  // Standard properties (v8.2.0)
+  // Standard properties (v0.20.0)
   key: string;               // BCP 47: "fr-FR"
   display_name: string;      // "French (France)"
-  description: string;       // "French locale for France market"
-  llm_context: string;       // "USE: French content. TRIGGERS: fr-FR. NOT: Canadian French."
+  node_class: string;        // "Locale"
+  content: string;           // "French locale for France market"
+  triggers: string[];        // ["french", "france", "fr-fr"]
+  provenance: string;        // "seed"
 
   // Locale-specific
   language_code: string;     // ISO 639-1: "fr"
@@ -30,10 +28,12 @@ export interface Locale {
 }
 
 export interface LocaleIdentity {
-  // Standard properties (v8.2.0 - no key, linked via HAS_IDENTITY)
+  // Standard properties (v0.20.0 - no key, linked via HAS_IDENTITY)
   display_name: string;      // "French Identity"
-  description: string;       // "Identity characteristics for fr-FR"
-  llm_context: string;       // "USE: script/encoding decisions."
+  node_class: string;        // "LocaleIdentity"
+  content: string;           // "Identity characteristics for fr-FR"
+  triggers: string[];        // ["identity", "script", "encoding"]
+  provenance: string;        // "seed"
 
   // Script & Writing
   script_code: string;
@@ -65,10 +65,12 @@ export interface LocaleIdentity {
 }
 
 export interface LocaleVoice {
-  // Standard properties (v8.2.0 - no key, linked via HAS_VOICE)
+  // Standard properties (v0.20.0 - no key, linked via HAS_VOICE)
   display_name: string;      // "French Voice"
-  description: string;       // "Voice characteristics for fr-FR"
-  llm_context: string;       // "USE: tone/formality decisions."
+  node_class: string;        // "LocaleVoice"
+  content: string;           // "Voice characteristics for fr-FR"
+  triggers: string[];        // ["voice", "tone", "formality"]
+  provenance: string;        // "seed"
 
   // Voice characteristics
   formality_score: number;      // 0-100
@@ -98,10 +100,12 @@ export interface LocaleVoice {
 }
 
 export interface LocaleCulture {
-  // Standard properties (v8.2.0 - no key, linked via HAS_CULTURE)
+  // Standard properties (v0.20.0 - no key, linked via HAS_CULTURE)
   display_name: string;      // "French Culture"
-  description: string;       // "Cultural norms for fr-FR"
-  llm_context: string;       // "USE: cultural sensitivity."
+  node_class: string;        // "LocaleCulture"
+  content: string;           // "Cultural norms for fr-FR"
+  triggers: string[];        // ["culture", "sensitivity", "norms"]
+  provenance: string;        // "seed"
 
   // Culture characteristics
   dominant_values: Array<{ value: string; importance: string; marketing_angle: string }>;
@@ -133,10 +137,12 @@ export interface LocaleCulture {
 // See ADR-024: Trait = Data Origin — market data is "retrieved", not "imported"
 
 export interface LocaleLexicon {
-  // Standard properties (v8.2.0 - no key, linked via HAS_LEXICON)
+  // Standard properties (v0.20.0 - no key, linked via HAS_LEXICON)
   display_name: string;      // "French Lexicon"
-  description: string;       // "Lexicon rules for fr-FR"
-  llm_context: string;       // "USE: vocabulary choices."
+  node_class: string;        // "LocaleLexicon"
+  content: string;           // "Lexicon rules for fr-FR"
+  triggers: string[];        // ["lexicon", "vocabulary", "loanwords"]
+  provenance: string;        // "seed"
 
   // Lexicon characteristics
   expression_density: string;
@@ -157,10 +163,12 @@ export interface LocaleLexicon {
 }
 
 export interface Expression {
-  // Standard properties (v8.2.0 - no key, linked via HAS_EXPRESSION)
+  // Standard properties (v0.20.0 - no key, linked via HAS_EXPRESSION)
   display_name: string;      // "Gratuit"
-  description: string;       // "Expression for value semantic field"
-  llm_context: string;       // "USE: expression selection."
+  node_class: string;        // "Expression"
+  content: string;           // "Expression for value semantic field"
+  triggers: string[];        // ["expression", "value", "gratuit"]
+  provenance: string;        // "seed"
 
   // Expression-specific
   semantic_field: string;
@@ -178,10 +186,12 @@ export interface Expression {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesAdaptation {
-  // Standard properties (v0.18.0)
+  // Standard properties (v0.20.0)
   display_name: string;      // "French Adaptation Rules"
-  description: string;       // "Adaptation rules for fr-FR"
-  llm_context: string;       // "USE: content adaptation decisions."
+  node_class: string;        // "LocaleRulesAdaptation"
+  content: string;           // "Adaptation rules for fr-FR"
+  triggers: string[];        // ["adaptation", "facts", "illustrations"]
+  provenance: string;        // "seed"
 
   // Core framework
   facts_categories: Array<{
@@ -240,10 +250,12 @@ export interface LocaleRulesAdaptation {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesFormatting {
-  // Standard properties (v0.18.0)
+  // Standard properties (v0.20.0)
   display_name: string;      // "French Formatting Rules"
-  description: string;       // "Formatting rules for fr-FR"
-  llm_context: string;       // "USE: number/date/currency formatting."
+  node_class: string;        // "LocaleRulesFormatting"
+  content: string;           // "Formatting rules for fr-FR"
+  triggers: string[];        // ["formatting", "number", "date", "currency"]
+  provenance: string;        // "seed"
 
   // Number formatting
   decimal_separator: string;
@@ -315,10 +327,12 @@ export interface LocaleRulesFormatting {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesSlug {
-  // Standard properties (v0.18.0)
+  // Standard properties (v0.20.0)
   display_name: string;      // "French Slug Rules"
-  description: string;       // "URL slug generation rules for fr-FR"
-  llm_context: string;       // "USE: URL slug generation."
+  node_class: string;        // "LocaleRulesSlug"
+  content: string;           // "URL slug generation rules for fr-FR"
+  triggers: string[];        // ["slug", "url", "transliteration"]
+  provenance: string;        // "seed"
 
   // Base rule
   slug_rule: 'latin_preserve' | 'latin_strip' | 'transliterate' | 'script_specific';
@@ -362,10 +376,12 @@ export interface LocaleRulesSlug {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleCultureReferences {
-  // Standard properties (v0.18.0)
+  // Standard properties (v0.20.0)
   display_name: string;      // "French Culture References"
-  description: string;       // "Concrete cultural references for fr-FR"
-  llm_context: string;       // "USE: cultural reference selection."
+  node_class: string;        // "LocaleCultureReferences"
+  content: string;           // "Concrete cultural references for fr-FR"
+  triggers: string[];        // ["culture", "references", "food", "sports"]
+  provenance: string;        // "seed"
 
   // Food & Cuisine
   emblematic_dishes: Array<{

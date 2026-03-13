@@ -24,7 +24,6 @@
 // In src/types/index.ts - add to NodeType union:
 | 'PagePrompt'
 | 'BlockPrompt'
-| 'BlockRules'
 ```
 
 **Step 2: Run type-check to verify it compiles**
@@ -60,14 +59,7 @@ category: 'invariant' | 'l10n' | 'output' | 'prompts' | 'knowledge' | 'seo' | 'g
     size: 12,
     category: 'prompts',
   },
-  BlockRules: {
-    type: 'BlockRules',
-    label: 'Block Rules',
-    icon: '📏',
-    color: '#93c5fd',
-    colorClass: 'bg-blue-300',
-    size: 12,
-    category: 'prompts',
+  // v0.19.1: BlockRules removed (merged into BlockType.rules property)
   },
 ```
 
@@ -102,7 +94,7 @@ Expected: PASS
 
 ```bash
 git add src/types/index.ts src/config/nodeTypes.ts src/components/sidebar/FilterSidebar.tsx
-git commit -m "feat(types): add novanet-core v7.2.0 types (PagePrompt, BlockPrompt, BlockRules)"
+git commit -m "feat(types): add novanet-core v7.2.0 types (PagePrompt, BlockPrompt)"
 ```
 
 ---

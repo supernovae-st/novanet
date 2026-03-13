@@ -9,7 +9,11 @@
  * v0.17.2 Changes (YAGNI Cleanup):
  * - Removed: Term, TermSet, SEOKeywordMetrics (unused)
  * - Added: ProjectGEOScope, ProjectSEOScope (project-level scope config)
- * - Net: 60 nodes (36 shared + 24 org)
+ * - Net: 59 nodes (36 shared + 23 org)
+ *
+ * v0.19.1 Changes:
+ * - Removed: BlockRules (merged into BlockType.rules)
+ * - Net: 59 nodes (36 shared + 23 org)
  *
  * v0.12.4 Changes:
  * - Country added to shared/geography
@@ -48,8 +52,8 @@ describe('Nomenclature Sync (v0.17.2)', () => {
   });
 
   describe('ADR-023: Class/Instance Terminology', () => {
-    it('should have correct node count (60 total = 36 shared + 24 org)', () => {
-      expect(NODE_TYPES).toHaveLength(57);
+    it('should have correct node count (59 total = 36 shared + 23 org)', () => {
+      expect(NODE_TYPES).toHaveLength(59);
     });
 
     it('should have 2 realms (shared, org)', () => {
@@ -63,7 +67,7 @@ describe('Nomenclature Sync (v0.17.2)', () => {
       const sharedCount = Object.values(NODE_REALMS).filter((r) => r === 'shared').length;
       const orgCount = Object.values(NODE_REALMS).filter((r) => r === 'org').length;
       expect(sharedCount).toBe(36); // v0.17.2: YAGNI cleanup removed Term, TermSet, SEOKeywordMetrics
-      expect(orgCount).toBe(21); // v0.17.2: Added ProjectGEOScope, ProjectSEOScope
+      expect(orgCount).toBe(23); // v0.19.0: +3 enrichments, v0.19.1: -BlockRules = 23
     });
 
     it('should not have deprecated node names', () => {
@@ -79,7 +83,7 @@ describe('Nomenclature Sync (v0.17.2)', () => {
       // Instructions are now composed from BlockInstructions at generation time
       expect(NODE_TYPES).toContain('BlockType');
       expect(NODE_TYPES).toContain('BlockInstruction');
-      expect(NODE_TYPES).toContain('BlockRules');
+      // v0.19.1: BlockRules removed (merged into BlockType.rules)
     });
 
     it('should have Brand Architecture nodes (v0.12.4)', () => {
@@ -121,9 +125,9 @@ describe('Nomenclature Sync (v0.17.2)', () => {
       expect(sharedLayers).toHaveLength(4);
     });
 
-    it('should have 24 org nodes (v0.19.0)', () => {
-      // Org realm: config(1) + foundation(8) + structure(3) + semantic(2) + instruction(4) + output(6) = 24
-      // v0.19.0: Updated org node distribution
+    it('should have 23 org nodes (v0.19.1)', () => {
+      // Org realm: config(1) + foundation(8) + structure(3) + semantic(2) + instruction(3) + output(6) = 23
+      // v0.19.1: BlockRules removed (merged into BlockType.rules)
       const orgLayers = ['config', 'foundation', 'structure', 'semantic', 'instruction', 'output'];
       expect(orgLayers).toHaveLength(6);
     });

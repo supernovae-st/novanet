@@ -37,7 +37,7 @@ Key principle: Generation, NOT Translation
 ## Graph Schema (v0.12.0 fallback — live schema injected below if available)
 
 ### Standard Properties (all nodes)
-All nodes have: key, display_name, icon, description, llm_context, created_at, updated_at
+All nodes have: key, display_name, node_class, content, triggers, provenance, created_at, updated_at
 
 ### 2-Realm Architecture (v0.12.0)
 - **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (40 nodes)
@@ -81,7 +81,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - AudiencePersona, ChannelSurface: Targeting
 
 **Org/Instruction** — Generation instructions (v0.12.4: PageInstruction removed)
-- BlockType, BlockInstruction, BlockRules: Block templates and instructions
+- BlockType, BlockInstruction: Block templates and instructions
 - PromptArtifact: Generated prompt artifacts
 
 **Org/Output** — Generation results

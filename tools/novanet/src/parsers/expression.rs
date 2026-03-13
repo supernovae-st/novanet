@@ -60,7 +60,7 @@ pub struct ExpressionData {
     pub semantic_fields: Vec<SemanticField>,
 
     /// LLM context summary
-    pub llm_context: String,
+    pub content: String,
 
     /// Full source markdown
     pub raw_markdown: String,
@@ -74,7 +74,7 @@ impl Default for ExpressionData {
             last_updated: String::new(),
             source_file: String::new(),
             semantic_fields: Vec::new(),
-            llm_context: String::new(),
+            content: String::new(),
             raw_markdown: String::new(),
         }
     }
@@ -82,7 +82,7 @@ impl Default for ExpressionData {
 
 impl ExpressionData {
     /// Generate LLM context summary from expression data.
-    pub fn generate_llm_context(&mut self) {
+    pub fn generate_content(&mut self) {
         let mut parts = Vec::new();
 
         parts.push(format!(
@@ -104,7 +104,7 @@ impl ExpressionData {
             ));
         }
 
-        self.llm_context = parts.join(" ");
+        self.content = parts.join(" ");
     }
 
     /// Get total expression count across all fields.
@@ -258,12 +258,12 @@ pub fn parse_expression_markdown(
         last_updated,
         source_file: format!("3-voice-lexicon/{}", source_file),
         semantic_fields,
-        llm_context: String::new(),
+        content: String::new(),
         raw_markdown: content.to_string(),
     };
 
     // Generate LLM context
-    data.generate_llm_context();
+    data.generate_content();
 
     Ok(data)
 }
@@ -520,13 +520,13 @@ last_updated: 2026-01-09
     }
 
     #[test]
-    fn test_llm_context_generated() {
+    fn test_content_generated() {
         let result = parse_expression_markdown(FR_FR_SAMPLE, "fr-FR", "fr-FR.md").unwrap();
 
-        assert!(!result.llm_context.is_empty());
-        assert!(result.llm_context.contains("fr-FR"));
-        assert!(result.llm_context.contains("3 semantic fields"));
-        assert!(result.llm_context.contains("7 total expressions"));
+        assert!(!result.content.is_empty());
+        assert!(result.content.contains("fr-FR"));
+        assert!(result.content.contains("3 semantic fields"));
+        assert!(result.content.contains("7 total expressions"));
     }
 
     #[test]

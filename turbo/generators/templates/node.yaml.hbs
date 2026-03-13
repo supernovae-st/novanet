@@ -9,15 +9,15 @@
 name: {{name}}
 realm: {{realm}}
 layer: {{layer}}
-description: "{{description}}"
 
-# Standard properties (all nodes have these)
+# Standard properties (all nodes have these — v0.20.0)
 standard_properties:
   - key           # Unique identifier with semantic prefix
   - display_name  # Human-readable name
-  - llm_context   # AI hints: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-  - priority      # 'critical' | 'high' | 'medium' | 'low'
-  - freshness     # 'realtime' | 'hourly' | 'daily' | 'static'
+  - node_class    # PascalCase class name (e.g., "Entity", "PageNative")
+  - content       # Plain language: what this node IS and HOW it works
+  - triggers      # English keywords for RAG activation (max 10)
+  - provenance    # Data origin: seed | nika | mcp
   - created_at    # Creation timestamp
   - updated_at    # Last update timestamp
 

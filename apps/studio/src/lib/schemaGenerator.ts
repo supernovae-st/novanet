@@ -71,8 +71,10 @@ export function generateSchemaGraph(): SchemaGraphResult {
       type: nodeType,
       key: nodeType.toLowerCase(),
       displayName: config.label,
-      description: `${REALM_DESCRIPTIONS[realm]}. ${BEHAVIOR_DESCRIPTIONS[behavior]}.`,
-      llmContext: `Schema node representing the ${nodeType} type. Realm: ${realm}. Behavior: ${behavior}.`,
+      nodeClass: nodeType,
+      content: `${REALM_DESCRIPTIONS[realm]}. ${BEHAVIOR_DESCRIPTIONS[behavior]}.`,
+      triggers: [nodeType.toLowerCase(), realm, behavior, config.layer],
+      provenance: 'seed',
       data: {
         isSchema: true,
         scope: realm,

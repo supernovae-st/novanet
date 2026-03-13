@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v0.19.0 (60 nodes, 10 layers, 2 realms)
+// Tests for REALM_HIERARCHY — v0.19.1 (59 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -52,12 +52,12 @@ describe('graph/hierarchy', () => {
     expect(REALM_HIERARCHY.shared.layers.geography.nodeTypes).toHaveLength(7);  // v0.12.4: Country added
     expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(21); // v0.17.0: TermSet, Term, SEOKeywordMetrics removed
 
-    // v0.19.0: Org realm (24 nodes total, +3 enrichment nodes in output)
+    // v0.19.1: Org realm (23 nodes total — BlockRules removed, merged into BlockType.rules)
     expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(1);  // OrgConfig
     expect(REALM_HIERARCHY.org.layers.foundation.nodeTypes).toHaveLength(8);  // v0.17.0: ProjectGEOScope added
     expect(REALM_HIERARCHY.org.layers.structure.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.semantic.nodeTypes).toHaveLength(2);  // v0.17.0: AudiencePersona, ChannelSurface removed
-    expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(4);  // v0.12.4: PageStructure, PageInstruction deleted
+    expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(3);  // v0.19.1: BlockRules removed (merged into BlockType.rules)
     expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(6);  // v0.19.0: +CultureRefEnrichment, ExpressionEnrichment, TabooEnrichment
   });
 
@@ -95,6 +95,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(60);  // v0.19.0: 60 nodes (36 shared + 24 org)
+    expect(totalNodes).toBe(59);  // v0.19.1: 59 nodes (36 shared + 23 org)
   });
 });

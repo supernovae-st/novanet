@@ -119,7 +119,7 @@ pub struct NodeDef {
     /// Human-readable description.
     pub description: String,
 
-    /// Standard properties (key, display_name, llm_context, etc.).
+    /// Standard properties (key, display_name, content, triggers, etc.).
     /// Uses IndexMap to preserve YAML definition order.
     #[serde(default)]
     pub standard_properties: Option<IndexMap<String, PropertyDef>>,
@@ -444,12 +444,12 @@ node:
             return;
         }
 
-        // v0.19.0: 60 nodes (36 shared + 24 org), trait removed (ADR-036)
-        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
+        // v0.20.0: 59 nodes (36 shared + 23 org)
+        let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
         assert_eq!(
             nodes.len(),
-            60,
-            "expected 60 YAML node files (v0.19.0: 36 shared + 24 org)"
+            59,
+            "expected 59 YAML node files (v0.20.0: 36 shared + 23 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -480,8 +480,8 @@ node:
         );
         assert_eq!(
             realm_count("org"),
-            24,
-            "org realm count (v0.19.0: 24 org nodes)"
+            23,
+            "org realm count (v0.20.0: 23 org nodes)"
         );
 
         // Spot-check known nodes (v0.17.3: trait checks removed)

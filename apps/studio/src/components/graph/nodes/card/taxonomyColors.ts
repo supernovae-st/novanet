@@ -178,7 +178,6 @@ export const CLASS_ICONS: Record<string, string> = {
   // Instruction
   BlockInstruction: 'terminal',
   BlockType: 'component',
-  BlockRules: 'shield-check',
   PromptArtifact: 'file-code',
   // Output
   PageNative: 'file-check',

@@ -62,7 +62,7 @@ import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
 // import { TaxonomyBadge } from '../TaxonomyBadge';
 import { LEVEL_VISUALS } from '../variants/levelVariants';
 import { GlowEffect, BorderBeam } from '../effects';
-import { LLMContextBadge } from '../LLMContextBadge';
+import { ContentBadge } from '../LLMContextBadge';
 
 // =============================================================================
 // Types
@@ -87,10 +87,10 @@ export interface ClassNodeData {
   target?: string;
   /** Arc family for ArcClass */
   family?: string;
-  /** LLM context string (USE/TRIGGERS/NOT/RELATES) */
-  llmContext?: string;
-  /** Description from YAML */
-  description?: string;
+  /** Content description (what this node IS) */
+  content?: string;
+  /** Trigger keywords for RAG activation */
+  triggers?: string[];
 }
 
 /** Optional taxonomy props for full visual encoding (ADR-005) */
@@ -487,11 +487,12 @@ export const ClassCardContent = memo(function ClassCardContent({
           {className}
         </div>
 
-        {/* LLM Context Badge (ADR-027) - Only show if present and space allows */}
-        {data.llmContext && (
+        {/* Content Badge (v0.20.0) - Only show if content or triggers present */}
+        {(data.content || (data.triggers && data.triggers.length > 0)) && (
           <div className="mt-1.5">
-            <LLMContextBadge
-              llmContext={data.llmContext}
+            <ContentBadge
+              content={data.content}
+              triggers={data.triggers}
               color={primaryColor}
               selected={selected}
               isHovered={isHovered}

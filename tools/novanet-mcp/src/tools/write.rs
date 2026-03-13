@@ -148,8 +148,8 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
                c.trait AS trait_type,
                c.required_properties AS required_properties,
                c.optional_properties AS optional_properties,
-               c.description AS description,
-               c.llm_context AS llm_context,
+               c.content AS content,
+               c.triggers AS triggers,
                c.schema_hint AS schema_hint,
                c.context_budget AS context_budget,
                c.visibility AS visibility
@@ -188,7 +188,13 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
             .unwrap_or_default(),
         // Ontology-driven fields (v0.17.0)
         content: row["content"].as_str().map(String::from),
-        llm_context: row["llm_context"].as_str().map(String::from),
+        triggers: row["triggers"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(String::from))
+                    .collect()
+            }),
         schema_hint: row["schema_hint"].as_str().map(String::from),
         context_budget: row["context_budget"]
             .as_str()

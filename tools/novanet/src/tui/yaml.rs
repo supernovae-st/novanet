@@ -1,7 +1,7 @@
 //! YAML section parser for contextual view in TUI.
 //!
 //! Splits a NodeClass YAML file into two sections:
-//! - **Class section**: name, realm, layer, trait, description, icon, llm_context
+//! - **Class section**: name, realm, layer, description, icon, content, triggers
 //! - **Instance section**: standard_properties, properties
 //!
 //! This enables the TUI to show only the relevant section based on context:
@@ -184,7 +184,7 @@ node:
   trait: defined  // v0.12.0 ADR-024: invariant→defined
   icon: "⊕"
   description: "First-class locale node (BCP 47)"
-  llm_context: "USE: for locale-specific content"
+  content: "First-class BCP 47 locale node for native content generation"
 
   standard_properties:
     key:

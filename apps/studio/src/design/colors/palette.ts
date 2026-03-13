@@ -254,7 +254,6 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   HAS_BRAND: 'ownership', // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY
   HAS_ENTITY: 'ownership',
   HAS_INSTRUCTION: 'ownership',
-  HAS_RULES: 'ownership',
   HAS_IDENTITY: 'ownership',
   HAS_VOICE: 'ownership',
   HAS_CULTURE: 'ownership',

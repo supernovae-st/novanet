@@ -185,6 +185,7 @@ function toNumber(value: Integer | number | undefined): number {
 
 /**
  * Convert Neo4j Node to GraphNode
+ * v0.20.0: Self-describing properties (content, triggers, node_class, provenance)
  */
 export function transformNode(node: Neo4jNode): GraphNode {
   const labels = node.labels;
@@ -201,20 +202,28 @@ export function transformNode(node: Neo4jNode): GraphNode {
     props.label?.toString() ||
     key;
 
+  // v0.20.0: triggers is stored as string[] in Neo4j
+  const rawTriggers = props.triggers;
+  const triggers = Array.isArray(rawTriggers)
+    ? rawTriggers.map((t: unknown) => String(t))
+    : undefined;
+
   return {
     id: node.elementId,
     type,
     key,
     displayName,
-    description: props.description?.toString(),
-    llmContext: props.llm_context?.toString(),
+    content: props.content?.toString(),
+    triggers,
+    nodeClass: props.node_class?.toString(),
+    provenance: props.provenance?.toString(),
     createdAt: props.created_at?.toString(),
     updatedAt: props.updated_at?.toString(),
     // Include all other properties in a generic data field
     data: Object.fromEntries(
       Object.entries(props).filter(
         ([k]) =>
-          !['key', 'display_name', 'name', 'label', 'description', 'llm_context', 'created_at', 'updated_at'].includes(k)
+          !['key', 'display_name', 'name', 'label', 'content', 'triggers', 'node_class', 'provenance', 'created_at', 'updated_at'].includes(k)
       )
     ),
   };
@@ -411,7 +420,7 @@ export async function fetchGraphData(options: QueryOptions = {}): Promise<QueryR
   if (search) {
     const searchClause = (hasNodeTypeFilter || locale) ? 'AND' : 'WHERE';
     cypherParts.push(
-      `${searchClause} (n.key CONTAINS $search OR n.display_name CONTAINS $search OR n.description CONTAINS $search)`
+      `${searchClause} (n.key CONTAINS $search OR n.display_name CONTAINS $search OR n.content CONTAINS $search)`
     );
     params.search = search;
   }

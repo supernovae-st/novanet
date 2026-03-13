@@ -1,20 +1,22 @@
 // novanet-core/src/types/prompts.ts
-// Instruction types v0.12.4 - AI Instructions with versioning
+// Instruction types v0.19.1 - AI Instructions with versioning
 //
 // BlockInstruction: Sub-agent instructions for block generation
-// BlockRules: Template rules (extracted from BlockType.rules)
 //
-// v0.12.4: PageInstruction removed per ADR-028 - instructions composed from BlockInstructions
+// v0.12.4: PageInstruction removed per ADR-028
+// v0.19.1: BlockRules removed — rules merged into BlockType.rules property
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // COMMON INSTRUCTION PROPERTIES
 // ═══════════════════════════════════════════════════════════════════════════════
 
 interface InstructionBase {
-  // Standard properties (v11.8.0 - no key, linked via :HAS_INSTRUCTION/:HAS_RULES)
+  // Standard properties (v0.20.0 - no key, linked via :HAS_INSTRUCTION)
   display_name: string;      // "Pricing Hero Instruction v1.0"
-  description: string;       // "Instructions for pricing hero generation"
-  llm_context: string;       // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+  node_class: string;        // "BlockInstruction"
+  content: string;           // "Instructions for pricing hero generation"
+  triggers: string[];        // ["instruction", "hero", "pricing"]
+  provenance: string;        // "seed"
 
   // Versioning (v7.2.0)
   version: string;           // "1.0", "1.1", "2.0"
@@ -37,17 +39,7 @@ export interface BlockInstruction extends InstructionBase {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// BLOCKRULES - Template generation rules (Category: INSTRUCTION)
-// ═══════════════════════════════════════════════════════════════════════════════
-
-export interface BlockRules extends InstructionBase {
-  // BlockRules-specific
-  rules: string;             // "Title: action verb. Subtitle: value prop. CTA: urgency."
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// v0.12.4: PageInstruction removed from union
-export type InstructionNode = BlockInstruction | BlockRules;
+export type InstructionNode = BlockInstruction;

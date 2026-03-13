@@ -42,7 +42,7 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 // 2. display_name   - Human-readable label
 // 3. node_class     - Type discriminator (PascalCase=DATA, lowercase=SCHEMA)
 // 4. content        - What this node IS (1-3 sentences)
-// 5. llm_context    - ADR-027 USE/TRIGGERS/NOT/RELATES pattern
+// 5. triggers       - Keyword triggers for search/spreading activation
 // 6. provenance     - Data origin {source, version}
 // 7. created_at     - Creation timestamp
 // 8. updated_at     - Last modification timestamp
@@ -61,7 +61,7 @@ const STANDARD_PROPERTIES: &[&str] = &[
     "display_name",
     "node_class", // v0.19.0: PascalCase = DATA, lowercase = SCHEMA
     "content",    // v0.19.0: unified name for all nodes
-    "llm_context",
+    "triggers",
     "provenance", // v0.19.0: {source, version} object
     "created_at",
     "updated_at",
@@ -1866,7 +1866,7 @@ mod tests {
     #[test]
     fn test_standard_properties_count() {
         // v0.19.0: 8 standard properties for DATA nodes (ADR-035)
-        // key, display_name, content, llm_context, node_class, provenance, created_at, updated_at
+        // key, display_name, content, triggers, node_class, provenance, created_at, updated_at
         assert_eq!(STANDARD_PROPERTIES.len(), 8);
     }
 

@@ -105,8 +105,8 @@ impl MarketGenerator {
         let demographics_json =
             serde_json::to_string(&m.demographics).unwrap_or_else(|_| "{}".to_string());
 
-        // Generate llm_context for retrieval guidance
-        let llm_context = format!(
+        // Generate content for retrieval guidance
+        let content = format!(
             "USE: {} market (pop {}M, internet {}%, {} e-commerce). \
              TRIGGERS: pricing strategy, payment methods, platform references. \
              NOT: generic business terms, universal e-commerce patterns.",
@@ -132,7 +132,7 @@ impl MarketGenerator {
             r#"MERGE (m:Market {{key: '{}'}})
 SET m.display_name = '{}',
     m.content = '{}',
-    m.llm_context = '{}',
+    m.triggers = '{}',
     m.population_millions = {},
 {}    m.internet_penetration = {},
     m.mobile_penetration = {},
@@ -150,7 +150,7 @@ SET m.display_name = '{}',
             m.locale_key,
             escape_cypher(&format!("{} Market Data", m.locale_key)),
             escape_cypher(&format!("Market intelligence for {}", m.locale_key)),
-            escape_cypher(&llm_context),
+            escape_cypher(&content),
             m.population_millions,
             gdp_property,
             m.internet_penetration,

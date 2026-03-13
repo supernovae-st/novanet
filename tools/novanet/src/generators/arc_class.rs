@@ -254,7 +254,7 @@ fn generate_arc_schema(
         let key = &rel.arc_type;
         let var = format!("ac_{key}");
         let dn = cypher_str(&display_name(key));
-        let llm = cypher_str(&rel.llm_context);
+        let content_val = cypher_str(&rel.content);
         let family = &rel.family.to_string();
         let scope = compute_scope(rel, class_realms);
         let card = cardinality_key(rel.cardinality);
@@ -284,7 +284,7 @@ fn generate_arc_schema(
         writeln!(out, "MERGE ({var}:Schema:ArcClass {{key: '{key}'}})").unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.display_name = '{dn}',").unwrap();
-        writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
+        writeln!(out, "  {var}.content = '{content_val}',").unwrap();
         writeln!(out, "  {var}.family = '{family}',").unwrap();
         if let Some(s) = scope {
             writeln!(out, "  {var}.scope = '{s}',").unwrap();
@@ -326,7 +326,7 @@ fn generate_arc_schema(
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
         writeln!(out, "  {var}.display_name = '{dn}',").unwrap();
-        writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
+        writeln!(out, "  {var}.content = '{content_val}',").unwrap();
         writeln!(out, "  {var}.family = '{family}',").unwrap();
         if let Some(s) = scope {
             writeln!(out, "  {var}.scope = '{s}',").unwrap();
@@ -474,7 +474,8 @@ mod tests {
             source: NodeRef::Single("B".to_string()),
             target: NodeRef::Single("A".to_string()),
             cardinality: Cardinality::ManyToOne,
-            llm_context: "Inverse.".to_string(),
+            content: "Inverse.".to_string(),
+            triggers: vec![],
             properties: None,
             property_defs: None,
             is_self_referential: None,
@@ -741,8 +742,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 151,
-            "expected 151 ArcClass MERGE statements (v0.19.0: ABOUT/ABOUT_OF added)"
+            ac_merges, 159,
+            "expected 159 ArcClass MERGE statements (v0.20.0: 159 arc YAML files)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -751,8 +752,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 151,
-            "expected 151 HAS_ARC_CLASS relationships (v0.19.0: ABOUT/ABOUT_OF added)"
+            has_ac, 159,
+            "expected 159 HAS_ARC_CLASS relationships (v0.20.0: 159 files)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -761,8 +762,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 151,
-            "expected 151 IN_FAMILY relationships (v0.19.0: ABOUT/ABOUT_OF added)"
+            in_family, 159,
+            "expected 159 IN_FAMILY relationships (v0.20.0: 159 files)"
         );
 
         // Family distribution (non-inverse counts)
@@ -823,8 +824,8 @@ mod tests {
             }
         }
 
-        // v0.19.0: Header reflects count (151 total ArcClass nodes)
-        assert!(cypher.contains("151 ArcClass nodes"));
+        // v0.20.0: Header reflects count (159 total ArcClass nodes from 159 files)
+        assert!(cypher.contains("159 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

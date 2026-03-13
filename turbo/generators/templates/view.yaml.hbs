@@ -51,7 +51,6 @@ cypher: |
 {{/if}}
 {{#if (includes 'prompts')}}
   OPTIONAL MATCH (root)-[:HAS_PROMPT]->(prompt)
-  OPTIONAL MATCH (root)-[:HAS_RULES]->(rules)
 {{/if}}
 {{#if (includes 'seo')}}
   OPTIONAL MATCH (entity)-[:HAS_SEO_KEYWORDS]->(seoKeyword:SEOKeyword)-[:FOR_LOCALE]->(locale)

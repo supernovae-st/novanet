@@ -127,7 +127,9 @@ pub struct NodeRealmDef {
     pub display_name: String,
     /// v0.19.0 (ADR-044): What this realm IS (1-3 sentences).
     pub content: String,
-    pub llm_context: String,
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    #[serde(default)]
+    pub triggers: Vec<String>,
     /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
     pub icon: TaxonomyIcon,
     /// Hex color for TUI display only, not in seeds.
@@ -149,7 +151,9 @@ pub struct NodeLayerDef {
     pub display_name: String,
     /// v0.19.0 (ADR-044): What this layer IS (1-3 sentences).
     pub content: String,
-    pub llm_context: String,
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    #[serde(default)]
+    pub triggers: Vec<String>,
     /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
     pub icon: TaxonomyIcon,
     /// Hex color for TUI display only, not in seeds.
@@ -180,7 +184,9 @@ pub struct ArcFamilyDef {
     /// v9.9: Default traversal behavior (eager/lazy/skip).
     #[serde(default)]
     pub default_traversal: Option<String>,
-    pub llm_context: String,
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    #[serde(default)]
+    pub triggers: Vec<String>,
 }
 
 /// Arc scope definition (intra_realm / cross_realm).
@@ -268,12 +274,11 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
     }
 
     for layer in &layers {
-        let llm_context = layer.llm_context.clone().unwrap_or_default();
         let layer_def = NodeLayerDef {
             key: layer.key.clone(),
             display_name: layer.display_name.clone(),
             content: layer.content.clone(),
-            llm_context,
+            triggers: layer.triggers.clone(),
             icon: TaxonomyIcon {
                 web: layer.icon.web.clone(),
                 terminal: layer.icon.terminal.clone(),
@@ -297,7 +302,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
                 key: r.key,
                 display_name: r.display_name,
                 content: r.content,
-                llm_context: r.llm_context.unwrap_or_default(),
+                triggers: r.triggers,
                 icon: TaxonomyIcon {
                     web: r.icon.web,
                     terminal: r.icon.terminal,
@@ -328,7 +333,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
                 stroke_width: Some(f.stroke_width as u8),
                 arrow_style: f.arrow_style,
                 default_traversal,
-                llm_context: f.llm_context.unwrap_or_default(),
+                triggers: f.triggers,
             }
         })
         .collect();
@@ -381,18 +386,20 @@ impl TaxonomyDoc {
                 .map(|r| crate::parsers::organizing::RealmDef {
                     key: r.key.clone(),
                     display_name: r.display_name.clone(),
+                    content: r.content.clone(),
                     emoji: r.emoji().to_string(),
                     color: r.color.clone(),
-                    llm_context: r.llm_context.clone(),
+                    triggers: r.triggers.clone(),
                     layers: r
                         .layers
                         .iter()
                         .map(|l| crate::parsers::organizing::LayerDef {
                             key: l.key.clone(),
                             display_name: l.display_name.clone(),
+                            content: l.content.clone(),
                             emoji: l.emoji().to_string(),
                             color: l.color.clone(),
-                            llm_context: l.llm_context.clone(),
+                            triggers: l.triggers.clone(),
                         })
                         .collect(),
                 })
@@ -406,7 +413,7 @@ impl TaxonomyDoc {
                     display_name: f.display_name.clone(),
                     color: f.color.clone(),
                     arrow_style: f.arrow_style.clone(),
-                    llm_context: f.llm_context.clone(),
+                    triggers: f.triggers.clone(),
                 })
                 .collect(),
         }
@@ -434,7 +441,7 @@ node_realms:
       web: globe
       terminal: "🌍"
     color: "#2aa198"
-    llm_context: "Shared context."
+    triggers: ["shared", "universal", "read-only"]
     layers:
       - key: config
         display_name: Configuration
@@ -443,7 +450,7 @@ node_realms:
           web: settings
           terminal: "⚙️"
         color: "#64748b"
-        llm_context: "Config layer."
+        triggers: ["config", "settings"]
 arc_families:
   - key: ownership
     display_name: Ownership
@@ -451,7 +458,7 @@ arc_families:
     stroke_style: solid
     stroke_width: 2
     arrow_style: "-->"
-    llm_context: "Ownership arcs."
+    triggers: ["parent", "child", "owns"]
 arc_scopes:
   - key: intra_realm
     display_name: Intra-Realm
@@ -496,7 +503,7 @@ node_realms:
       web: flask
       terminal: "🧪"
     color: "#000"
-    llm_context: "Test."
+    triggers: ["test"]
     layers:
       - key: base
         display_name: Base
@@ -505,13 +512,13 @@ node_realms:
           web: clipboard
           terminal: "📋"
         color: "#111"
-        llm_context: "Base."
+        triggers: ["base"]
 arc_families:
   - key: owns
     display_name: Owns
     color: "#333"
     arrow_style: "-->"
-    llm_context: "Ownership."
+    triggers: ["ownership"]
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "0.19.0");
@@ -534,7 +541,7 @@ node_realms:
       web: globe
       terminal: "🌍"
     color: "#2aa198"
-    llm_context: "Shared."
+    triggers: ["shared"]
     layers:
       - key: config
         display_name: Configuration
@@ -543,13 +550,13 @@ node_realms:
           web: settings
           terminal: "⚙️"
         color: "#64748b"
-        llm_context: "Config."
+        triggers: ["config"]
 arc_families:
   - key: ownership
     display_name: Ownership
     color: "#3b82f6"
     arrow_style: "-->"
-    llm_context: "Ownership."
+    triggers: ["ownership"]
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         let organizing = doc.to_organizing_doc();
@@ -629,7 +636,7 @@ node_realms:
       web: flask
       terminal: "🧪"
     color: "#000"
-    llm_context: "Test."
+    triggers: ["test"]
     layers:
       - key: semantic
         display_name: Semantic
@@ -638,7 +645,7 @@ node_realms:
           web: clipboard
           terminal: "📋"
         color: "#111"
-        llm_context: "Semantic."
+        triggers: ["semantic"]
       - key: output
         display_name: Output
         content: "Output layer for generated content."
@@ -646,7 +653,7 @@ node_realms:
           web: file-output
           terminal: "📤"
         color: "#222"
-        llm_context: "Output."
+        triggers: ["output"]
 layer_retrieval_defaults:
   semantic:
     traversal_depth: 2
@@ -662,13 +669,13 @@ arc_families:
     color: "#333"
     arrow_style: "-->"
     default_traversal: eager
-    llm_context: "Ownership."
+    triggers: ["ownership"]
   - key: semantic
     display_name: Semantic
     color: "#444"
     arrow_style: ".->"
     default_traversal: lazy
-    llm_context: "Semantic."
+    triggers: ["semantic"]
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "0.19.0");

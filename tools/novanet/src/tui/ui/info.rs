@@ -22,7 +22,6 @@ use serde_json::Value as JsonValue;
 
 use super::{
     STYLE_ACCENT,
-    STYLE_DESC,
     STYLE_DIM,
     STYLE_HIGHLIGHT,
     STYLE_INFO,
@@ -30,8 +29,6 @@ use super::{
     STYLE_PRIMARY,
     STYLE_SUCCESS,
     arc_family_badge_icon,
-    wrap_text,
-    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 
 // =============================================================================
@@ -92,14 +89,14 @@ const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 /// Standard properties that ALL nodes have (DATA and SCHEMA).
 /// v0.19.0: ALL nodes have THE SAME 8 standard properties.
 ///
-/// Order: key -> display_name -> node_class -> content -> llm_context -> provenance -> created_at -> updated_at
+/// Order: key -> display_name -> node_class -> content -> triggers -> provenance -> created_at -> updated_at
 ///
 /// ALL NODES (8 props):
 /// 1. key            - Unique identifier
 /// 2. display_name   - Human-readable label
 /// 3. node_class     - Type discriminator (PascalCase=DATA, lowercase=SCHEMA)
 /// 4. content        - What this node IS (1-3 sentences)
-/// 5. llm_context    - ADR-027 USE/TRIGGERS/NOT/RELATES pattern
+/// 5. triggers       - Keyword triggers for search/spreading activation
 /// 6. provenance     - Data origin {source, version}
 /// 7. created_at     - Creation timestamp
 /// 8. updated_at     - Last modification timestamp
@@ -110,7 +107,7 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "display_name",
     "node_class", // v0.19.0: PascalCase = DATA node, lowercase = SCHEMA node
     "content",    // v0.19.0: replaces "description" for Data nodes
-    "llm_context",
+    "triggers",
     "provenance", // v0.19.0: replaces created_by + created_by_meta
     "created_at",
     "updated_at",
@@ -533,6 +530,7 @@ fn build_provenance_section(provenance: Option<&JsonValue>) -> SectionContent<'s
 enum PropType {
     String,
     DateTime,
+    List,
 }
 
 impl PropType {
@@ -540,6 +538,7 @@ impl PropType {
         match self {
             PropType::String => "[str]",
             PropType::DateTime => "[dt]",
+            PropType::List => "[list]",
         }
     }
 
@@ -547,6 +546,7 @@ impl PropType {
         match self {
             PropType::String => COLOR_TYPE_STRING,
             PropType::DateTime => COLOR_TYPE_STRING, // Same color as string
+            PropType::List => COLOR_TYPE_STRING,
         }
     }
 }
@@ -909,7 +909,7 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
     }
 
     // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
-    // Standard: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
+    // Standard: key, display_name, node_class, content, triggers, provenance, created_at, updated_at
     content.properties.add_line(Line::from(vec![Span::styled(
         format!("── STANDARD ({}) ──", 8),
         Style::default().fg(COLOR_HEADER_STANDARD),
@@ -928,7 +928,7 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         .add_line(render_property_line("content", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("llm_context", true, PropType::String));
+        .add_line(render_property_line("triggers", true, PropType::List));
     content
         .properties
         .add_line(render_property_line("provenance", true, PropType::String));
@@ -1041,7 +1041,7 @@ fn build_layer_content(
     }
 
     // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
-    // Standard: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
+    // Standard: key, display_name, node_class, content, triggers, provenance, created_at, updated_at
     content.properties.add_line(Line::from(vec![Span::styled(
         format!("── STANDARD ({}) ──", 8),
         Style::default().fg(COLOR_HEADER_STANDARD),
@@ -1060,7 +1060,7 @@ fn build_layer_content(
         .add_line(render_property_line("content", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("llm_context", true, PropType::String));
+        .add_line(render_property_line("triggers", true, PropType::List));
     content
         .properties
         .add_line(render_property_line("provenance", true, PropType::String));
@@ -1590,16 +1590,36 @@ fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> Unified
     // COVERAGE - not applicable
     content.coverage.add_empty();
 
-    // PROPERTIES - LLM context
-    if !family.llm_context.is_empty() {
-        for wrapped_line in wrap_text(&family.llm_context, 38) {
-            content
-                .properties
-                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-        }
-    } else {
-        content.properties.add_empty();
-    }
+    // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
+    // Same pattern as Realm/Layer for display coherence
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── STANDARD ({}) ──", 8),
+        Style::default().fg(COLOR_HEADER_STANDARD),
+    )]));
+    content
+        .properties
+        .add_line(render_property_line("key", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("display_name", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("node_class", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("content", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("triggers", true, PropType::List));
+    content
+        .properties
+        .add_line(render_property_line("provenance", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("created_at", true, PropType::DateTime));
+    content
+        .properties
+        .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
     // RELATIONSHIPS
     content.relationships.add_line(Line::from(Span::styled(
@@ -1666,16 +1686,51 @@ fn build_arc_class_content(
     // COVERAGE - not applicable
     content.coverage.add_empty();
 
-    // PROPERTIES - description
-    if !arc_class.description.is_empty() {
-        for wrapped_line in wrap_text(&arc_class.description, 38) {
-            content
-                .properties
-                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-        }
-    } else {
-        content.properties.add_empty();
-    }
+    // PROPERTIES - v0.19.0: Show 8 standard properties (ADR-044)
+    // Same pattern as Realm/Layer/ArcFamily for display coherence
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── STANDARD ({}) ──", 8),
+        Style::default().fg(COLOR_HEADER_STANDARD),
+    )]));
+    content
+        .properties
+        .add_line(render_property_line("key", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("display_name", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("node_class", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("content", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("triggers", true, PropType::List));
+    content
+        .properties
+        .add_line(render_property_line("provenance", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("created_at", true, PropType::DateTime));
+    content
+        .properties
+        .add_line(render_property_line("updated_at", true, PropType::DateTime));
+
+    // SPECIFIC PROPERTIES - ArcClass-specific
+    content.properties.add_line(Line::from(vec![Span::styled(
+        "── SPECIFIC (3) ──",
+        Style::default().fg(COLOR_HEADER_SPECIFIC),
+    )]));
+    content
+        .properties
+        .add_line(render_property_line("from_class", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("to_class", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("cardinality", false, PropType::String));
 
     // RELATIONSHIPS - v0.13: from/to with family color
     content.relationships.add_line(Line::from(vec![
@@ -2260,8 +2315,8 @@ fn build_category_content(cat: &crate::tui::data::EntityCategory) -> UnifiedCont
         Span::styled("question: ", STYLE_DIM),
         Span::styled(cat.question.clone(), STYLE_MUTED),
     ]));
-    if !cat.llm_context.is_empty() {
-        for line in cat.llm_context.lines() {
+    if !cat.content.is_empty() {
+        for line in cat.content.lines() {
             content
                 .properties
                 .add_line(Line::from(Span::styled(format!("  {}", line), STYLE_DIM)));

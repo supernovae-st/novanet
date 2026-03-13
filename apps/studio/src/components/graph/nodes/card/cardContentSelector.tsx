@@ -114,8 +114,6 @@ import {
   type BlockInstructionNodeData,
   BlockTypeCardContent,
   type BlockTypeNodeData,
-  BlockRulesCardContent,
-  type BlockRulesNodeData,
   PromptArtifactCardContent,
   type PromptArtifactNodeData,
 } from './presets/instruction';
@@ -169,7 +167,6 @@ export type CardContentData =
   // Org realm - Instruction
   | BlockInstructionNodeData
   | BlockTypeNodeData
-  | BlockRulesNodeData
   | PromptArtifactNodeData
   // Org realm - Output
   | PageNativeNodeData
@@ -303,11 +300,10 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   EntityNative: EntityNativeCardContent as CardContentComponent,
 
   // =========================================================================
-  // ORG REALM - Instruction layer (4 types)
+  // ORG REALM - Instruction layer (3 types)
   // =========================================================================
   BlockInstruction: BlockInstructionCardContent as CardContentComponent,
   BlockType: BlockTypeCardContent as CardContentComponent,
-  BlockRules: BlockRulesCardContent as CardContentComponent,
   PromptArtifact: PromptArtifactCardContent as CardContentComponent,
 
   // =========================================================================

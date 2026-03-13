@@ -129,7 +129,7 @@ SET es.display_name = '{}',
     es.semantic_fields_count = {},
     es.total_expressions = {},
     es.semantic_fields = '{}',
-    es.llm_context = '{}',
+    es.triggers = '{}',
     es.template_version = '{}',
     es.source_file = '{}',
     es.last_updated = '{}';
@@ -144,7 +144,7 @@ SET es.display_name = '{}',
             e.semantic_fields.len(),
             e.total_expressions(),
             escape_cypher(&fields_json),
-            escape_cypher(&e.llm_context),
+            escape_cypher(&e.content),
             e.template_version,
             e.source_file,
             e.last_updated
@@ -190,8 +190,8 @@ SET es.display_name = '{}',
         // Generate unique key: locale/field/index (e.g., "fr-FR/SUCCESS/0")
         let atom_key = format!("{}/{}/{}", data.locale_key, field.name, idx);
 
-        // v10.7: Generate llm_context for retrieval optimization
-        let llm_context = format!(
+        // Generate content for retrieval
+        let content = format!(
             "USE: {} expression for {}. TRIGGERS: {}, {}, {}. NOT: other {} registers.",
             data.locale_key,
             expr.context,
@@ -214,7 +214,7 @@ SET e.locale_key = '{}',
     e.register = '{}',
     e.context = '{}',
     e.example = '{}',
-    e.llm_context = '{}';
+    e.triggers = '{}';
 "#,
             atom_key,
             data.locale_key,
@@ -224,7 +224,7 @@ SET e.locale_key = '{}',
             expr.register,
             escape_cypher(&expr.context),
             escape_cypher(&expr.example),
-            escape_cypher(&llm_context)
+            escape_cypher(&content)
         )
     }
 
@@ -339,10 +339,10 @@ mod tests {
                     cultural_note: None,
                 },
             ],
-            llm_context: String::new(),
+            content: String::new(),
             raw_markdown: "# Voice Lexicon".to_string(),
         };
-        data.generate_llm_context();
+        data.generate_content();
         data
     }
 
@@ -370,8 +370,8 @@ mod tests {
         assert!(cypher.contains("e.semantic_field = 'SUCCESS'"));
         assert!(cypher.contains("e.text = 'un succes retentissant'"));
         assert!(cypher.contains("e.register = 'formal'"));
-        // v10.7: Check llm_context is generated
-        assert!(cypher.contains("e.llm_context = '"));
+        // Check triggers is generated
+        assert!(cypher.contains("e.triggers = '"));
         assert!(cypher.contains("USE: fr-FR expression"));
     }
 

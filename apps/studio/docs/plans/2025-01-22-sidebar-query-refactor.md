@@ -120,9 +120,8 @@ RETURN p, bi, pl, pg LIMIT ${QUERY_LIMIT}`,
     category: 'workflow',
     cypher: `MATCH (b:Block)
 OPTIONAL MATCH (b)-[:HAS_PROMPT]->(bp:BlockPrompt)
-OPTIONAL MATCH (b)-[:HAS_RULES]->(br:BlockRules)
 OPTIONAL MATCH (b)-[:HAS_OUTPUT]->(bo:BlockOutput)
-RETURN b, bp, br, bo LIMIT ${QUERY_LIMIT}`,
+RETURN b, bp, bo LIMIT ${QUERY_LIMIT}`,
   },
 
   // === EXPLORATION QUERIES ===

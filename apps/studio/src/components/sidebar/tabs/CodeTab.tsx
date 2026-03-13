@@ -146,8 +146,10 @@ function toJson(node: GraphNode): string {
     type: node.type,
     key: node.key,
     displayName: node.displayName,
-    description: node.description,
-    llmContext: node.llmContext,
+    content: node.content,
+    triggers: node.triggers,
+    nodeClass: node.nodeClass,
+    provenance: node.provenance,
     data: node.data,
     createdAt: node.createdAt,
     updatedAt: node.updatedAt,
@@ -163,7 +165,6 @@ function toYaml(node: GraphNode): string {
   const classification = CLASS_TAXONOMY[node.type];
   const realm = classification?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = classification?.trait ?? 'defined'; // v11.8: ADR-024
 
   const lines: string[] = [
     `# ${node.type} Node`,
@@ -171,19 +172,23 @@ function toYaml(node: GraphNode): string {
     `  key: ${node.key}`,
     `  type: ${node.type}`,
     `  display_name: "${node.displayName}"`,
+    `  node_class: "${node.nodeClass ?? node.type}"`,
   ];
 
-  if (node.description) {
-    lines.push(`  description: "${node.description}"`);
+  if (node.content) {
+    lines.push(`  content: |`);
+    lines.push(`    ${node.content}`);
+  }
+
+  if (node.triggers && node.triggers.length > 0) {
+    lines.push(`  triggers: [${node.triggers.map(t => `"${t}"`).join(', ')}]`);
   }
 
   lines.push(`  realm: ${realm}`);
   lines.push(`  layer: ${layer}`);
-  lines.push(`  trait: ${trait}`);
 
-  if (node.llmContext) {
-    lines.push(`  llm_context: |`);
-    lines.push(`    ${node.llmContext}`);
+  if (node.provenance) {
+    lines.push(`  provenance: ${node.provenance}`);
   }
 
   if (node.data && Object.keys(node.data).length > 0) {
@@ -205,15 +210,20 @@ function toYaml(node: GraphNode): string {
 function toCypher(node: GraphNode): string {
   const props: string[] = [
     `key: "${node.key}"`,
-    `displayName: "${node.displayName}"`,
+    `display_name: "${node.displayName}"`,
+    `node_class: "${node.nodeClass ?? node.type}"`,
   ];
 
-  if (node.description) {
-    props.push(`description: "${node.description.replace(/"/g, '\\"')}"`);
+  if (node.content) {
+    props.push(`content: "${node.content.replace(/"/g, '\\"')}"`);
   }
 
-  if (node.llmContext) {
-    props.push(`llmContext: "${node.llmContext.replace(/"/g, '\\"')}"`);
+  if (node.triggers && node.triggers.length > 0) {
+    props.push(`triggers: [${node.triggers.map(t => `"${t}"`).join(', ')}]`);
+  }
+
+  if (node.provenance) {
+    props.push(`provenance: "${node.provenance}"`);
   }
 
   if (node.data) {
@@ -248,7 +258,6 @@ function toTypeScript(node: GraphNode): string {
   const classification = CLASS_TAXONOMY[node.type];
   const realm = classification?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = classification?.trait ?? 'defined'; // v11.8: ADR-024
   const properties = node.data || {};
 
   const propTypes = Object.entries(properties)
@@ -269,8 +278,10 @@ import type { NodeClass } from '@novanet/core';
 interface ${node.type}Data {
   key: string;
   displayName: string;
-  description?: string;
-  llmContext?: string;
+  content?: string;
+  triggers?: string[];
+  nodeClass?: string;
+  provenance?: string;
 ${propTypes}
 }
 
@@ -279,7 +290,6 @@ const ${node.type.toLowerCase()}Class: NodeClass = {
   name: '${node.type}',
   realm: '${realm}',
   layer: '${layer}',
-  trait: '${trait}',
   display_name: '${node.displayName}',
 };
 
@@ -287,7 +297,8 @@ const ${node.type.toLowerCase()}Class: NodeClass = {
 const ${node.key.replace(/-/g, '_')}: ${node.type}Data = ${JSON.stringify({
     key: node.key,
     displayName: node.displayName,
-    description: node.description,
+    content: node.content,
+    triggers: node.triggers,
     ...node.data,
   }, null, 2)};`;
 }

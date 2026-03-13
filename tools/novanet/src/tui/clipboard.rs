@@ -209,7 +209,7 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
-    "llm_context",
+    "triggers",
     "created_by",
     "created_by_meta",
     "created_at",

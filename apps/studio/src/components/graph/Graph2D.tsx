@@ -209,7 +209,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       displayName: node.displayName,
       // SchemaBadgeNode specific fields
       label: node.displayName || REALM_DISPLAY_NAMES[realmKey] || node.key,
-      description: node.description || `${REALM_DISPLAY_NAMES[realmKey] || node.key} realm`,
+      description: node.content || `${REALM_DISPLAY_NAMES[realmKey] || node.key} realm`,
       metaType: 'realm',
       color: REALM_COLORS[realmKey]?.color ?? '#2aa198',
       realmKey,
@@ -224,7 +224,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       displayName: node.displayName,
       // SchemaBadgeNode specific fields
       label: node.displayName || LAYER_DISPLAY_NAMES[layerKey] || node.key,
-      description: node.description || `${LAYER_DISPLAY_NAMES[layerKey] || node.key} layer`,
+      description: node.content || `${LAYER_DISPLAY_NAMES[layerKey] || node.key} layer`,
       metaType: 'layer',
       color: LAYER_COLORS[layerKey]?.color ?? '#64748b',
       layerKey,
@@ -238,7 +238,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       key: node.key,
       displayName: node.displayName,
       icon: nodeTypeConfigs[node.type]?.icon,
-      description: node.description,
+      description: node.content,
       category: config.layer,
       locale,
       // Include all other Neo4j properties (entity_key, locale_key, benefits, etc.)

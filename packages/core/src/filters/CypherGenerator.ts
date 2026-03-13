@@ -49,7 +49,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   // Instructions & rules
   HAS_INSTRUCTION: 'instruction',
   INSTRUCTION_OF: 'instructionParent',
-  HAS_RULES: 'rules',
+  // v0.19.1: HAS_RULES removed — merged into BlockType.rules
   HAS_ADAPTATION: 'adaptation',
   ADAPTATION_OF: 'adaptationParent',
   // Native content (v0.13.0 ADR-029)
@@ -334,7 +334,7 @@ export class CypherGenerator {
 
     // Fulltext search
     if (criteria.filters.searchQuery != null && criteria.filters.searchQuery !== '') {
-      const fields = criteria.filters.searchFields ?? ['key', 'display_name', 'description'];
+      const fields = criteria.filters.searchFields ?? ['key', 'display_name', 'content'];
       const searchConditions = fields.map(f => `toLower(root.${f}) CONTAINS toLower($searchQuery)`).join(' OR ');
       whereConditions.push(`(${searchConditions})`);
       params.searchQuery = criteria.filters.searchQuery;

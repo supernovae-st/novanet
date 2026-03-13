@@ -29,7 +29,7 @@ const STANDARD_PROPS_ORDER: &[&str] = &[
     "display_name",
     "node_class",
     "content",
-    "llm_context",
+    "triggers",
     "provenance",
     "created_at",
     "updated_at",
@@ -319,7 +319,7 @@ mod tests {
             "display_name".to_string(),
             "node_class".to_string(),
             "content".to_string(),
-            "llm_context".to_string(),
+            "triggers".to_string(),
             "provenance".to_string(),
             "created_at".to_string(),
             "updated_at".to_string(),
@@ -391,7 +391,7 @@ mod tests {
             // v0.19.0: ALL nodes have 8 standard properties (ADR-044)
             prop_assert_eq!(
                 keys_after,
-                vec!["key", "display_name", "node_class", "content", "llm_context", "provenance", "created_at", "updated_at"]
+                vec!["key", "display_name", "node_class", "content", "triggers", "provenance", "created_at", "updated_at"]
             );
         }
 

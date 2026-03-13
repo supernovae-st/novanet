@@ -124,7 +124,7 @@ pub fn write_merge_meta(
     }
     // v0.19.0 (ADR-037): Always set node_class on match too
     writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
-    writeln!(out, "  {var}.updated_at = datetime();").unwrap();
+    writeln!(out, "  {var}.updated_at = datetime()").unwrap();
 }
 
 /// Convert PascalCase or CamelCase to snake_case.

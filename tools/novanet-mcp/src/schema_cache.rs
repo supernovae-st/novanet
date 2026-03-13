@@ -79,8 +79,8 @@ impl From<&str> for ArcScope {
 /// Cached class metadata with ontology-driven fields
 ///
 /// Enhanced in v0.17.0 for neuro-symbolic validation:
-/// - `llm_context`: USE/TRIGGERS/NOT pattern for AI guidance
-/// - `content`: Human-readable purpose (v0.19.0: replaces description)
+/// - `content`: Human-readable purpose (v0.20.0: plain WHAT+HOW)
+/// - `triggers`: Keyword triggers for search boosting (v0.20.0: replaces llm_context)
 /// - `schema_hint`: Agent guidance for usage
 /// - `context_budget`: Token estimation hint
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -97,13 +97,13 @@ pub struct ClassMetadata {
     pub required_properties: Vec<String>,
     /// Properties that MAY be present
     pub optional_properties: Vec<String>,
-    // === Ontology-driven fields (v0.17.0, updated v0.19.0) ===
-    /// Human-readable content of this class (v0.19.0: replaces description)
+    // === Ontology-driven fields (v0.17.0, updated v0.20.0) ===
+    /// Human-readable content: what this class IS and how it works
     #[serde(default)]
     pub content: Option<String>,
-    /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
+    /// Keyword triggers for search boosting (max 10, lowercase, English)
     #[serde(default)]
-    pub llm_context: Option<String>,
+    pub triggers: Option<Vec<String>>,
     /// Agent guidance for when to use this class
     #[serde(default)]
     pub schema_hint: Option<String>,
@@ -133,17 +133,17 @@ pub struct ArcClassMetadata {
     pub family: String,
     /// Properties on the arc itself
     pub properties: Vec<String>,
-    // === Ontology-driven fields (v0.17.0, updated v0.19.0) ===
+    // === Ontology-driven fields (v0.17.0, updated v0.20.0) ===
     /// Cardinality: one_to_one, one_to_many, many_to_many
     #[serde(default)]
     pub cardinality: ArcCardinality,
     /// Scope: intra_realm or cross_realm
     #[serde(default)]
     pub scope: ArcScope,
-    /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
+    /// Keyword triggers for search boosting (max 10, lowercase, English)
     #[serde(default)]
-    pub llm_context: Option<String>,
-    /// Human-readable content (v0.19.0: replaces description)
+    pub triggers: Option<Vec<String>>,
+    /// Human-readable content: what this arc IS and how it works
     #[serde(default)]
     pub content: Option<String>,
     /// Inverse arc name (e.g., "NATIVE_OF" for "HAS_NATIVE")
@@ -365,7 +365,7 @@ mod tests {
             required_properties: vec!["key".to_string()],
             optional_properties: vec![],
             content: Some("LLM-generated locale-native content".to_string()),
-            llm_context: Some("USE: when loading localized entity data".to_string()),
+            triggers: Some(vec!["localized".to_string(), "entity".to_string(), "native".to_string()]),
             schema_hint: Some("Load via HAS_NATIVE from Entity".to_string()),
             context_budget: ContextBudget::Medium,
             visibility: Some("public".to_string()),
@@ -378,7 +378,7 @@ mod tests {
             retrieved.content,
             Some("LLM-generated locale-native content".to_string())
         );
-        assert!(retrieved.llm_context.as_ref().unwrap().contains("USE:"));
+        assert_eq!(retrieved.triggers.as_ref().unwrap().len(), 3);
         assert_eq!(retrieved.context_budget, ContextBudget::Medium);
     }
 
@@ -394,7 +394,7 @@ mod tests {
             properties: vec![],
             cardinality: ArcCardinality::OneToMany,
             scope: ArcScope::IntraRealm,
-            llm_context: Some("USE: when loading locale-specific content".to_string()),
+            triggers: Some(vec!["locale".to_string(), "content".to_string(), "native".to_string()]),
             content: Some("Links entity to its native content".to_string()),
             inverse_name: Some("NATIVE_OF".to_string()),
         };

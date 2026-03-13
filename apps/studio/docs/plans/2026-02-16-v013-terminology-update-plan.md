@@ -248,7 +248,6 @@ const arcStroke = getArcStroke(relationType);
 | Node | Generated | Should Be (YAML) |
 |------|-----------|------------------|
 | Adaptation | `droplet` | `sliders` |
-| BlockRules | `circle` | `shield-check` |
 | Brand | `circle` | `palette` |
 | BrandDesign | `circle` | `brush` |
 | BrandPrinciples | `circle` | `heart-handshake` |

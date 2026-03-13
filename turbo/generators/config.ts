@@ -87,7 +87,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       {
         type: 'input',
         name: 'description',
-        message: 'Short description (for llm_context):',
+        message: 'Short content description (what this node IS):',
       },
     ],
     actions: (answers) => {
@@ -236,7 +236,7 @@ View created! Next steps:
       {
         type: 'input',
         name: 'description',
-        message: 'Arc description (for llm_context):',
+        message: 'Arc content description (what this arc DOES):',
       },
     ],
     actions: [
@@ -250,7 +250,7 @@ View created! Next steps:
   source: {{source}}
   target: {{target}}
   cardinality: {{cardinality}}
-  llm_context: "{{description}}"
+  content: "{{description}}"
 `,
       },
       () => `

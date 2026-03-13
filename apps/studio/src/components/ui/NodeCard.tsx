@@ -138,9 +138,9 @@ export const NodeCard = memo(function NodeCard({
           'text-white/50 truncate',
           compact ? 'text-[11px]' : 'text-xs'
         )}
-        title={node.description || node.key}
+        title={node.content || node.key}
       >
-        {node.description || node.key}
+        {node.content || node.key}
       </p>
 
       {/* Instance count badge (for meta view) */}

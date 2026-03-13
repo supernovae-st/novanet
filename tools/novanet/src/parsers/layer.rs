@@ -119,9 +119,9 @@ pub struct LayerDef {
     #[serde(default)]
     pub class_count: u32,
 
-    /// LLM context string (USE/TRIGGERS/NOT/RELATES pattern).
+    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
-    pub llm_context: Option<String>,
+    pub triggers: Vec<String>,
 }
 
 /// Document wrapper for layer YAML files.
@@ -229,9 +229,7 @@ layer:
     - Entity
     - EntityNative
   class_count: 2
-  llm_context: |
-    USE: when working with semantic entities.
-    TRIGGERS: "entity", "meaning".
+  triggers: ["entity", "meaning", "semantic"]
 "##;
         let doc: LayerDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.layer.key, "semantic");
@@ -239,7 +237,7 @@ layer:
         assert_eq!(doc.layer.classes.len(), 2);
         assert!(doc.layer.classes.all().contains(&"Entity"));
         assert_eq!(doc.layer.class_count, 2);
-        assert!(doc.layer.llm_context.is_some());
+        assert_eq!(doc.layer.triggers.len(), 3);
         assert_eq!(doc.layer.icon.web, "brain");
     }
 

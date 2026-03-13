@@ -107,10 +107,10 @@ pub struct ClassResource {
     pub layer: String,
     /// Trait
     pub trait_type: String,
-    /// Description
-    pub description: Option<String>,
-    /// LLM context hint
-    pub llm_context: Option<String>,
+    /// Content description (WHAT+HOW)
+    pub content: Option<String>,
+    /// Keyword triggers for search boosting
+    pub triggers: Option<Vec<String>>,
     /// Properties schema
     pub properties: Vec<PropertyDefinition>,
     /// Outgoing arc classes
@@ -294,8 +294,8 @@ pub async fn fetch_class(state: &State, name: &str) -> Result<ClassResource> {
                c.realm AS realm,
                c.layer AS layer,
                c.trait AS trait_type,
-               c.description AS description,
-               c.llm_context AS llm_context,
+               c.content AS content,
+               c.triggers AS triggers,
                c.properties AS properties,
                instance_count,
                [a IN arcs WHERE a.source = c.name | a.name] AS outgoing_arcs,
@@ -331,8 +331,14 @@ pub async fn fetch_class(state: &State, name: &str) -> Result<ClassResource> {
         realm: row["realm"].as_str().unwrap_or("unknown").to_string(),
         layer: row["layer"].as_str().unwrap_or("unknown").to_string(),
         trait_type: row["trait_type"].as_str().unwrap_or("unknown").to_string(),
-        description: row["description"].as_str().map(|s| s.to_string()),
-        llm_context: row["llm_context"].as_str().map(|s| s.to_string()),
+        content: row["content"].as_str().map(|s| s.to_string()),
+        triggers: row["triggers"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            }),
         properties,
         outgoing_arcs: row["outgoing_arcs"]
             .as_array()

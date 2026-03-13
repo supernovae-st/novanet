@@ -92,16 +92,18 @@ const NODE_LABELS: Record<NodeType, string> = {
   Entity: 'Entity',
   EntityNative: 'Entity Native',
 
-  // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
+  // instruction (3) — v0.19.1: BlockRules removed (merged into BlockType.rules)
   BlockType: 'Block Type',
   BlockInstruction: 'Block Instruction',
-  BlockRules: 'Block Rules',
   PromptArtifact: 'Prompt Artifact',
 
-  // output (3) — v0.13.0: *Native Pattern (ADR-029)
+  // output (6) — v0.13.0: *Native Pattern (ADR-029), v0.19.0: +Enrichments
   PageNative: 'Page Native',
   BlockNative: 'Block Native',
   OutputArtifact: 'Output Artifact',
+  CultureRefEnrichment: 'CultureRef Enrichment',
+  ExpressionEnrichment: 'Expression Enrichment',
+  TabooEnrichment: 'Taboo Enrichment',
 };
 
 // =============================================================================

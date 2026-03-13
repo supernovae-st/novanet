@@ -3,7 +3,7 @@
 /**
  * Instruction Layer Helper Components
  *
- * Shared components for BlockInstruction, BlockType, BlockRules, PromptArtifact cards.
+ * Shared components for BlockInstruction, BlockType, PromptArtifact cards.
  * Layer color: Yellow #eab308
  *
  * Components:

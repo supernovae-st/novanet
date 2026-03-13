@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v0.19.0 (60 nodes, 10 layers, 2 realms)
+// Tests for NODE_LAYERS — v0.19.1 (59 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 60 node types to layers', () => {
+  it('should map all 59 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(60);
+    expect(mappedTypes).toHaveLength(59);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {
@@ -140,13 +140,12 @@ describe('graph/layers', () => {
     expect(geography).toContain('GeoRegion');
     expect(geography).toHaveLength(7);
 
-    // v0.12.4: instruction layer has 4 nodes (PageStructure, PageInstruction deleted)
+    // v0.19.1: instruction layer has 3 nodes (BlockRules removed, merged into BlockType.rules)
     const instruction = getNodeTypesByLayer('instruction');
     expect(instruction).toContain('BlockType');
     expect(instruction).toContain('BlockInstruction');
-    expect(instruction).toContain('BlockRules');
     expect(instruction).toContain('PromptArtifact');
-    expect(instruction).toHaveLength(4);
+    expect(instruction).toHaveLength(3);
 
     // v11.5: config layer has 4 nodes (3 shared + 1 org)
     const config = getNodeTypesByLayer('config');

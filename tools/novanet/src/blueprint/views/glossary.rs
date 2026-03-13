@@ -46,7 +46,7 @@ pub fn render(data: &BlueprintData) -> String {
         out.push_str(&format!(
             "│  ◉ {:<10} — {}│\n",
             realm.key,
-            pad_right(&realm.llm_context, 60)
+            pad_right(&realm.content, 60)
         ));
         out.push_str(&format!(
             "│               Layers: {}│\n",
@@ -85,7 +85,7 @@ pub fn render(data: &BlueprintData) -> String {
                 "│    {} {:<18} — {}│\n",
                 layer.emoji(),
                 layer.key,
-                pad_right(&truncate(&layer.llm_context, 45), 45)
+                pad_right(&truncate(&layer.content, 45), 45)
             ));
         }
     }
@@ -124,7 +124,7 @@ pub fn render(data: &BlueprintData) -> String {
             "│  {} {:<14} — {}│\n",
             arrow,
             family.key,
-            pad_right(&truncate(&family.llm_context, 50), 50)
+            pad_right(&truncate(&family.triggers.join(", "), 50), 50)
         ));
     }
     out.push_str(

@@ -261,16 +261,18 @@ export const DataTab = memo(function DataTab({
     return { incomingCount: incoming, outgoingCount: outgoing };
   }, [node.id, relatedEdges]);
 
-  // Build properties list from node
+  // Build properties list from node (v0.20.0: content, triggers, nodeClass, provenance)
   const coreProps = useMemo(() => {
-    const props = [
+    const props: { key: string; value: unknown; type: string }[] = [
       { key: 'id', value: node.id, type: 'string' },
       { key: 'type', value: node.type, type: 'string' },
       { key: 'key', value: node.key, type: 'string' },
       { key: 'displayName', value: node.displayName, type: 'string' },
     ];
-    if (node.description) props.push({ key: 'description', value: node.description, type: 'string' });
-    if (node.llmContext) props.push({ key: 'llmContext', value: node.llmContext, type: 'string' });
+    if (node.nodeClass) props.push({ key: 'nodeClass', value: node.nodeClass, type: 'string' });
+    if (node.content) props.push({ key: 'content', value: node.content, type: 'string' });
+    if (node.triggers && node.triggers.length > 0) props.push({ key: 'triggers', value: node.triggers.join(', '), type: 'array' });
+    if (node.provenance) props.push({ key: 'provenance', value: node.provenance, type: 'string' });
     return props;
   }, [node]);
 

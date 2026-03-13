@@ -1,33 +1,30 @@
 /**
  * @fileoverview NovaNet Instruction Node Schemas
  * @module @novanet/core/schemas/prompts
- * @version 0.12.4
+ * @version 0.20.0
  *
  * Zod validation schemas for Instruction nodes in the NovaNet knowledge graph.
  * Instructions are AI directives that guide content generation at the block level.
  *
  * **Instruction Node Types:**
  * - `BlockInstruction`: Specific instructions for individual block generation
- * - `BlockRules`: Constraints and guidelines for block types
  *
  * v0.12.4: PageInstruction removed per ADR-028 - page instructions are now
  * composed from BlockInstructions at generation time.
  *
- * **LLM Context Format:**
- * All instructions use a standardized `llm_context` format for efficient context loading:
- * ```
- * "USE: [when to use]. TRIGGERS: [relevant keywords]. NOT: [disambiguation]."
- * ```
+ * v0.20.0: Standard properties migrated (description+llm_context -> node_class+content+triggers+provenance)
  *
  * @example
  * ```typescript
- * import { BlockInstructionSchema, BlockRulesSchema } from '@novanet/core/schemas/prompts';
+ * import { BlockInstructionSchema } from '@novanet/core/schemas/prompts';
  *
  * // Validate a block instruction
  * const blockInstruction = BlockInstructionSchema.parse({
  *   display_name: 'Homepage Hero',
- *   description: 'Generates the hero section content',
- *   llm_context: 'USE: homepage hero generation. TRIGGERS: hero, banner, headline. NOT: product pages.',
+ *   node_class: 'BlockInstruction',
+ *   content: 'Generates the hero section content',
+ *   triggers: ['instruction', 'hero', 'homepage'],
+ *   provenance: 'seed',
  *   instruction: 'Generate an engaging hero section...',
  *   version: '1.0.0',
  *   active: true,
@@ -44,36 +41,35 @@
 import { z } from 'zod';
 
 // =============================================================================
-// BASE INSTRUCTION SCHEMA (v11.8.0 - no icon/priority/freshness)
+// BASE INSTRUCTION SCHEMA (v0.20.0 standard properties)
 // =============================================================================
 
 /**
  * Base schema shared by all instruction types.
  *
- * Contains the common properties required by PageInstruction, BlockInstruction, and BlockRules.
- * Note: icon, priority, and freshness were removed in v8.2.0 to align with YAML v7.11.0.
+ * Contains the common properties required by BlockInstruction.
+ * v0.20.0: Standard properties migrated to node_class + content + triggers + provenance.
  */
 const InstructionBaseSchema = z.object({
   /** Human-readable name displayed in Studio UI */
   display_name: z.string().min(1)
     .describe('Human-readable name for the instruction'),
 
-  /** Detailed description of what this instruction does and when to use it */
-  description: z.string().min(1)
-    .describe('Detailed description of instruction purpose'),
+  /** Node class identifier (PascalCase for DATA nodes) */
+  node_class: z.string().min(1)
+    .describe('Node class name (e.g., "BlockInstruction")'),
 
-  /**
-   * Structured context for LLM retrieval.
-   * Must follow format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-   *
-   * @example "USE: homepage hero generation. TRIGGERS: hero, banner, headline. NOT: product pages."
-   */
-  llm_context: z.string().regex(
-    /^USE:.*\. TRIGGERS:.*\. NOT:.*\.$/,
-    'llm_context must follow format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."'
-  ).describe('Structured LLM context in USE/TRIGGERS/NOT format'),
+  /** Plain language description of what this instruction is and how it works */
+  content: z.string().min(1)
+    .describe('Plain language WHAT+HOW description'),
 
-  // REMOVED v8.2.0: icon, priority, freshness (YAML v7.11.0 alignment)
+  /** English routing keywords for search and spreading activation (max 10) */
+  triggers: z.array(z.string()).max(10)
+    .describe('English routing keywords for search'),
+
+  /** Data origin: seed, nika, or mcp */
+  provenance: z.string().min(1)
+    .describe('Data origin (seed/nika/mcp)'),
 
   /** Semantic version for instruction versioning (allows rollback and A/B testing) */
   version: z.string().regex(/^\d+\.\d+(\.\d+)?$/, 'version must be semver format')
@@ -111,8 +107,10 @@ const InstructionBaseSchema = z.object({
  * ```typescript
  * const validated = BlockInstructionSchema.parse({
  *   display_name: 'FAQ Block Instruction',
- *   description: 'Generates FAQ accordion content',
- *   llm_context: 'USE: FAQ sections. TRIGGERS: questions, faq, help. NOT: contact forms.',
+ *   node_class: 'BlockInstruction',
+ *   content: 'Generates FAQ accordion content',
+ *   triggers: ['instruction', 'faq', 'questions'],
+ *   provenance: 'seed',
  *   instruction: 'Generate 5-7 frequently asked questions about...',
  *   version: '1.2.0',
  *   active: true,
@@ -129,39 +127,4 @@ export const BlockInstructionSchema = InstructionBaseSchema.extend({
 
 export type BlockInstruction = z.infer<typeof BlockInstructionSchema>;
 
-// =============================================================================
-// BLOCKRULES SCHEMA
-// =============================================================================
-
-/**
- * Schema for BlockRules nodes.
- *
- * BlockRules define constraints and guidelines for block types, ensuring
- * consistent output across all blocks of a given type.
- *
- * **Graph Position:**
- * ```
- * BlockType ─[:HAS_RULES]→ BlockRules
- * ```
- *
- * @example
- * ```typescript
- * const validated = BlockRulesSchema.parse({
- *   display_name: 'Hero Block Rules',
- *   description: 'Constraints for hero block generation',
- *   llm_context: 'USE: hero blocks. TRIGGERS: hero, banner, cta. NOT: body content.',
- *   rules: 'Headlines must be under 60 characters. Include exactly one CTA button...',
- *   version: '1.0.0',
- *   active: true,
- *   created_at: new Date(),
- *   updated_at: new Date(),
- * });
- * ```
- */
-export const BlockRulesSchema = InstructionBaseSchema.extend({
-  /** Rules and constraints text for block type compliance */
-  rules: z.string().min(1, 'rules cannot be empty')
-    .describe('Constraints and guidelines for block type'),
-});
-
-export type BlockRules = z.infer<typeof BlockRulesSchema>;
+// v0.19.1: BlockRulesSchema removed — rules merged into BlockType.rules property
