@@ -26,7 +26,7 @@ SET ec.display_name = 'Thing',
     ec.sort_order = 1,
     ec.llm_context = 'USE: for nouns representing products, concepts, or entities. TRIGGERS: thing, product, object, concept, item, entity. NOT: actions (use ACTION), content formats (use CONTENT_TYPE).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -37,7 +37,7 @@ SET ec.display_name = 'Content Type',
     ec.sort_order = 2,
     ec.llm_context = 'USE: for content formats and data types QR encodes. TRIGGERS: content, format, URL, WiFi, vCard, data type. NOT: features (use FEATURE), tools (use TOOL).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -48,7 +48,7 @@ SET ec.display_name = 'Feature',
     ec.sort_order = 3,
     ec.llm_context = 'USE: for software capabilities and functions. TRIGGERS: feature, capability, analytics, tracking, bulk. NOT: tools (use TOOL), things (use THING).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -59,7 +59,7 @@ SET ec.display_name = 'Tool',
     ec.sort_order = 4,
     ec.llm_context = 'USE: for generators, scanners, and builders. TRIGGERS: tool, generator, scanner, builder, app. NOT: features (use FEATURE), things (use THING).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -72,7 +72,7 @@ SET ec.display_name = 'Medium',
     ec.sort_order = 5,
     ec.llm_context = 'USE: for surfaces and placements for QR codes. TRIGGERS: medium, surface, poster, card, packaging, placement. NOT: content types (use CONTENT_TYPE).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -85,7 +85,7 @@ SET ec.display_name = 'Use Case',
     ec.sort_order = 6,
     ec.llm_context = 'USE: for application scenarios and business purposes. TRIGGERS: use case, scenario, marketing, events, purpose. NOT: industries (use INDUSTRY).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -98,7 +98,7 @@ SET ec.display_name = 'Industry',
     ec.sort_order = 7,
     ec.llm_context = 'USE: for vertical markets and business sectors. TRIGGERS: industry, vertical, restaurant, retail, healthcare, sector. NOT: use cases (use USE_CASE).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -111,7 +111,7 @@ SET ec.display_name = 'Action',
     ec.sort_order = 8,
     ec.llm_context = 'USE: for verbs and user operations. TRIGGERS: action, create, generate, scan, share, customize, track. NOT: features (use FEATURE), things (use THING).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -122,7 +122,7 @@ SET ec.display_name = 'Guide',
     ec.sort_order = 9,
     ec.llm_context = 'USE: for instructional how-to content. TRIGGERS: guide, how-to, tutorial, instructions, steps. NOT: actions (use ACTION).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -133,7 +133,7 @@ SET ec.display_name = 'Comparison',
     ec.sort_order = 10,
     ec.llm_context = 'USE: for versus and comparison content. TRIGGERS: comparison, versus, vs, compare, difference. NOT: guides (use GUIDE).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -146,7 +146,7 @@ SET ec.display_name = 'Concept',
     ec.sort_order = 11,
     ec.llm_context = 'USE: for educational ideas and terminology. TRIGGERS: concept, idea, theory, definition, explanation. NOT: things (use THING).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -159,7 +159,7 @@ SET ec.display_name = 'Brand',
     ec.sort_order = 12,
     ec.llm_context = 'USE: for third-party brand references. TRIGGERS: brand, Google, Instagram, PayPal, company. NOT: integrations (use INTEGRATION).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
 
@@ -170,6 +170,6 @@ SET ec.display_name = 'Integration',
     ec.sort_order = 13,
     ec.llm_context = 'USE: for third-party integrations and connections. TRIGGERS: integration, Zapier, HubSpot, API, connect. NOT: brands (use BRAND).',
     ec.node_class = 'EntityCategory',
-    ec.provenance = '{"source":"seed","file":"02.5-entity-categories.cypher"}',
+    ec.provenance = '{"source":"seed:content","version":"v0.19.0","file":"02.5-entity-categories.cypher"}',
     ec.created_at = coalesce(ec.created_at, datetime()),
     ec.updated_at = datetime();
