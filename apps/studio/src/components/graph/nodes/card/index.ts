@@ -5,7 +5,7 @@
  *
  * 3-Level Architecture:
  * - Level 1: Taxonomy (21 nodes) - Realm, Layer, Trait, ArcFamily
- * - Level 2: Schema (202 nodes) - 57 NodeClass + 145 ArcClass (v0.18.0)
+ * - Level 2: Schema (218 nodes) - 59 NodeClass + 159 ArcClass (v0.18.0)
  * - Level 3: Data (∞ instances) - Runtime instances per layer
  *
  * Visual Encoding (ADR-005):

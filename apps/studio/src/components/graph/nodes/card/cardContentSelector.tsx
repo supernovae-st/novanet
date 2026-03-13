@@ -219,7 +219,7 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   ArcFamily: TaxonomyCardContent as CardContentComponent,
 
   // =========================================================================
-  // SCHEMA LEVEL (M1) - Definitions (57 NodeClass + 145 ArcClass)
+  // SCHEMA LEVEL (M1) - Definitions (59 NodeClass + 159 ArcClass)
   // Elevated visual treatment: 2px border, single glow, interaction-based animation
   // v0.18.0: Updated counts after YAGNI cleanup
   // =========================================================================
