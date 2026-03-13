@@ -457,7 +457,7 @@ impl App {
     /// Returns a `ContentPanelMode` indicating what the center panel should show:
     /// - `Schema`: YAML definition for Class/ArcClass nodes
     /// - `InstanceInfo`: Info message pointing to PROPERTIES for instances
-    /// - `SectionInfo`: Section overview for Realm/Layer/Section headers
+    /// - `SectionInfo`: Section overview for Section headers
     /// - `Empty`: No content available
     pub fn content_panel_mode(&self) -> ContentPanelMode {
         match self.get_current_tree_item_data() {
@@ -483,17 +483,17 @@ impl App {
                 layer,
                 properties,
             },
-            TreeItemData::Realm { key } => ContentPanelMode::SectionInfo {
+            TreeItemData::Realm { key } => ContentPanelMode::Schema {
+                path: format!("packages/core/models/realms/{}.yaml", key),
                 name: format!("Realm: {}", key),
-                description: "Select a Layer to explore its classes.".to_string(),
             },
-            TreeItemData::Layer { key } => ContentPanelMode::SectionInfo {
+            TreeItemData::Layer { key } => ContentPanelMode::Schema {
+                path: format!("packages/core/models/layers/{}.yaml", key),
                 name: format!("Layer: {}", key),
-                description: "Select a Class to view its YAML schema.".to_string(),
             },
-            TreeItemData::ArcFamily { key } => ContentPanelMode::SectionInfo {
+            TreeItemData::ArcFamily { key } => ContentPanelMode::Schema {
+                path: format!("packages/core/models/arc-families/{}.yaml", key),
                 name: format!("Arc Family: {}", key),
-                description: "Select an ArcClass to view its definition.".to_string(),
             },
             TreeItemData::Section => ContentPanelMode::SectionInfo {
                 name: "Section".to_string(),
