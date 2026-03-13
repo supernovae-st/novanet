@@ -932,8 +932,14 @@ async fn execute_upsert_node(
     meta: &ClassMetadata,
 ) -> Result<ExecutedResult> {
     let start = std::time::Instant::now();
-    let key = params.key.as_ref().expect("key validated");
-    let class = params.class.as_ref().expect("class validated");
+    let key = params
+        .key
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("upsert_node requires 'key'".into()))?;
+    let class = params
+        .class
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("upsert_node requires 'class'".into()))?;
     let mut props = params.properties.clone().unwrap_or_default();
 
     // ADR-042: Auto-inject created_by provenance if not provided
@@ -1099,9 +1105,18 @@ async fn execute_upsert_node(
 /// Execute create_arc operation
 async fn execute_create_arc(state: &State, params: &WriteParams) -> Result<ExecutedResult> {
     let start = std::time::Instant::now();
-    let arc_class = params.arc_class.as_ref().expect("arc_class validated");
-    let from_key = params.from_key.as_ref().expect("from_key validated");
-    let to_key = params.to_key.as_ref().expect("to_key validated");
+    let arc_class = params
+        .arc_class
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("create_arc requires 'arc_class'".into()))?;
+    let from_key = params
+        .from_key
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("create_arc requires 'from_key'".into()))?;
+    let to_key = params
+        .to_key
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("create_arc requires 'to_key'".into()))?;
     let props = params.properties.clone().unwrap_or_default();
 
     // SECURITY: Validate arc class name before use in Cypher query
@@ -1217,9 +1232,18 @@ async fn execute_update_props(
     _meta: &ClassMetadata,
 ) -> Result<ExecutedResult> {
     let start = std::time::Instant::now();
-    let key = params.key.as_ref().expect("key validated");
-    let class = params.class.as_ref().expect("class validated");
-    let mut props = params.properties.clone().expect("properties validated");
+    let key = params
+        .key
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("update_props requires 'key'".into()))?;
+    let class = params
+        .class
+        .as_ref()
+        .ok_or_else(|| Error::InvalidParams("update_props requires 'class'".into()))?;
+    let mut props = params
+        .properties
+        .clone()
+        .ok_or_else(|| Error::InvalidParams("update_props requires 'properties'".into()))?;
 
     // ADR-042: Auto-inject updated_by provenance
     props.insert(
@@ -1308,13 +1332,19 @@ pub async fn execute(state: &State, params: WriteParams) -> Result<WriteResult> 
 
     let result = match params.operation {
         WriteOperation::UpsertNode => {
-            let class = params.class.as_ref().expect("validated");
+            let class = params
+                .class
+                .as_ref()
+                .ok_or_else(|| Error::InvalidParams("upsert_node requires 'class'".into()))?;
             let meta = fetch_and_validate_class(state, class).await?;
             execute_upsert_node(state, &params, &meta).await?
         }
         WriteOperation::CreateArc => execute_create_arc(state, &params).await?,
         WriteOperation::UpdateProps => {
-            let class = params.class.as_ref().expect("validated");
+            let class = params
+                .class
+                .as_ref()
+                .ok_or_else(|| Error::InvalidParams("update_props requires 'class'".into()))?;
             let meta = fetch_and_validate_class(state, class).await?;
             execute_update_props(state, &params, &meta).await?
         }
