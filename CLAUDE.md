@@ -80,14 +80,14 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
 - **59 nodes** total: 36 shared + 23 org, **159 arcs** (6 families)
 
-**Architecture (v0.19.0):**
+**Architecture (v0.20.0):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (24 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (23 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 1210 tests pass.
+schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 1258 tests pass.
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
@@ -223,7 +223,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │  NOTE: Terms deferred — EntityNative.denomination_forms covers terminology  │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.19.0)                                                       │
+│  STATISTICS (v0.20.0)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (7): ExpressionSet, PatternSet, CultureSet, TabooSet,           │
@@ -338,11 +338,11 @@ pnpm infra:seed            # Seed database
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (1255 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (1258 tests) |
 
 ---
 
-## MCP Server (v0.19.0)
+## MCP Server (v0.20.0)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 

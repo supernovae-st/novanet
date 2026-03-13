@@ -129,7 +129,7 @@ novanet/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (16 commands, 8 generators)
-│       └── Cargo.toml         # 1255 tests, zero clippy warnings
+│       └── Cargo.toml         # 1258 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router

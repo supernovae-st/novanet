@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.19.0 | **Tests**: 1210 passing | **Clippy**: zero warnings
+**Version**: v0.20.0 | **Tests**: 1258 passing | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
