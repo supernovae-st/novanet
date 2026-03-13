@@ -24,7 +24,8 @@ ON CREATE SET
   c.display_name = 'Africa',
   c.m49_code = '002',
   c.wikidata_id = 'Q15',
-  c.llm_context = 'USE: for African countries and markets. TRIGGERS: africa, african, subsaharan. CULTURAL_NOTES: Extremely diverse - 54 countries, 2000+ languages. Never generalize. Split by: Northern Africa (Arab/Berber), Sub-Saharan (diverse). ECONOMIC: Mix of LMIC/LIC, rapid mobile adoption, young population. AVOID: Treating as monolithic; colonial stereotypes; poverty focus.',
+  c.content = 'USE: for African countries and markets. CULTURAL_NOTES: Extremely diverse - 54 countries, 2000+ languages. Never generalize. Split by: Northern Africa (Arab/Berber), Sub-Saharan (diverse). ECONOMIC: Mix of LMIC/LIC, rapid mobile adoption, young population. AVOID: Treating as monolithic; colonial stereotypes; poverty focus.',
+  c.triggers = ['africa', 'african', 'subsaharan'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -33,7 +34,8 @@ ON MATCH SET
   c.display_name = 'Africa',
   c.m49_code = '002',
   c.wikidata_id = 'Q15',
-  c.llm_context = 'USE: for African countries and markets. TRIGGERS: africa, african, subsaharan. CULTURAL_NOTES: Extremely diverse - 54 countries, 2000+ languages. Never generalize. Split by: Northern Africa (Arab/Berber), Sub-Saharan (diverse). ECONOMIC: Mix of LMIC/LIC, rapid mobile adoption, young population. AVOID: Treating as monolithic; colonial stereotypes; poverty focus.';
+  c.content = 'USE: for African countries and markets. CULTURAL_NOTES: Extremely diverse - 54 countries, 2000+ languages. Never generalize. Split by: Northern Africa (Arab/Berber), Sub-Saharan (diverse). ECONOMIC: Mix of LMIC/LIC, rapid mobile adoption, young population. AVOID: Treating as monolithic; colonial stereotypes; poverty focus.',
+  c.triggers = ['africa', 'african', 'subsaharan'];
 
 MERGE (c:Continent {key: 'americas'})
 ON CREATE SET
@@ -42,7 +44,8 @@ ON CREATE SET
   c.display_name = 'Americas',
   c.m49_code = '019',
   c.wikidata_id = 'Q828',
-  c.llm_context = 'USE: for North, Central, South America + Caribbean. TRIGGERS: americas, american, western hemisphere. CULTURAL_NOTES: Split Occidental (NA, Southern Cone) vs Latin American. Indigenous influence varies: high (Guatemala, Peru) vs low (Argentina, USA). ECONOMIC: Full range HIC (US/CA) to LIC (Haiti). LANGUAGE: English north, Spanish/Portuguese south. AVOID: American = USA only.',
+  c.content = 'USE: for North, Central, South America + Caribbean. CULTURAL_NOTES: Split Occidental (NA, Southern Cone) vs Latin American. Indigenous influence varies: high (Guatemala, Peru) vs low (Argentina, USA). ECONOMIC: Full range HIC (US/CA) to LIC (Haiti). LANGUAGE: English north, Spanish/Portuguese south. AVOID: American = USA only.',
+  c.triggers = ['americas', 'american', 'western hemisphere'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -51,7 +54,8 @@ ON MATCH SET
   c.display_name = 'Americas',
   c.m49_code = '019',
   c.wikidata_id = 'Q828',
-  c.llm_context = 'USE: for North, Central, South America + Caribbean. TRIGGERS: americas, american, western hemisphere. CULTURAL_NOTES: Split Occidental (NA, Southern Cone) vs Latin American. Indigenous influence varies: high (Guatemala, Peru) vs low (Argentina, USA). ECONOMIC: Full range HIC (US/CA) to LIC (Haiti). LANGUAGE: English north, Spanish/Portuguese south. AVOID: American = USA only.';
+  c.content = 'USE: for North, Central, South America + Caribbean. CULTURAL_NOTES: Split Occidental (NA, Southern Cone) vs Latin American. Indigenous influence varies: high (Guatemala, Peru) vs low (Argentina, USA). ECONOMIC: Full range HIC (US/CA) to LIC (Haiti). LANGUAGE: English north, Spanish/Portuguese south. AVOID: American = USA only.',
+  c.triggers = ['americas', 'american', 'western hemisphere'];
 
 MERGE (c:Continent {key: 'asia'})
 ON CREATE SET
@@ -60,7 +64,8 @@ ON CREATE SET
   c.display_name = 'Asia',
   c.m49_code = '142',
   c.wikidata_id = 'Q48',
-  c.llm_context = 'USE: for Asian countries and markets. TRIGGERS: asia, asian, east, southeast, middle east. CULTURAL_NOTES: 4 major cultural realms: East Asian, South Asian, Southeast Asian, Islamic (Middle East/Central Asia). High-context communication common. ECONOMIC: Full range from HIC (Japan, Singapore) to LIC (Afghanistan). SCRIPTS: CJK, Arabic, Devanagari, Thai. RTL: Arabic regions.',
+  c.content = 'USE: for Asian countries and markets. CULTURAL_NOTES: 4 major cultural realms: East Asian, South Asian, Southeast Asian, Islamic (Middle East/Central Asia). High-context communication common. ECONOMIC: Full range from HIC (Japan, Singapore) to LIC (Afghanistan). SCRIPTS: CJK, Arabic, Devanagari, Thai. RTL: Arabic regions.',
+  c.triggers = ['asia', 'asian', 'east', 'southeast', 'middle east'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -69,7 +74,8 @@ ON MATCH SET
   c.display_name = 'Asia',
   c.m49_code = '142',
   c.wikidata_id = 'Q48',
-  c.llm_context = 'USE: for Asian countries and markets. TRIGGERS: asia, asian, east, southeast, middle east. CULTURAL_NOTES: 4 major cultural realms: East Asian, South Asian, Southeast Asian, Islamic (Middle East/Central Asia). High-context communication common. ECONOMIC: Full range from HIC (Japan, Singapore) to LIC (Afghanistan). SCRIPTS: CJK, Arabic, Devanagari, Thai. RTL: Arabic regions.';
+  c.content = 'USE: for Asian countries and markets. CULTURAL_NOTES: 4 major cultural realms: East Asian, South Asian, Southeast Asian, Islamic (Middle East/Central Asia). High-context communication common. ECONOMIC: Full range from HIC (Japan, Singapore) to LIC (Afghanistan). SCRIPTS: CJK, Arabic, Devanagari, Thai. RTL: Arabic regions.',
+  c.triggers = ['asia', 'asian', 'east', 'southeast', 'middle east'];
 
 MERGE (c:Continent {key: 'europe'})
 ON CREATE SET
@@ -78,7 +84,8 @@ ON CREATE SET
   c.display_name = 'Europe',
   c.m49_code = '150',
   c.wikidata_id = 'Q46',
-  c.llm_context = 'USE: for European countries and markets. TRIGGERS: europe, european, eu. CULTURAL_NOTES: Predominantly Occidental. Split: Western (low-context), Eastern (medium-context), Mediterranean (relationship-focused), Nordic (egalitarian). ECONOMIC: Mostly HIC/UMIC. EU integration in west, post-Soviet east. SCRIPTS: Latin west, Cyrillic east. AVOID: EU = Europe.',
+  c.content = 'USE: for European countries and markets. CULTURAL_NOTES: Predominantly Occidental. Split: Western (low-context), Eastern (medium-context), Mediterranean (relationship-focused), Nordic (egalitarian). ECONOMIC: Mostly HIC/UMIC. EU integration in west, post-Soviet east. SCRIPTS: Latin west, Cyrillic east. AVOID: EU = Europe.',
+  c.triggers = ['europe', 'european', 'eu'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -87,7 +94,8 @@ ON MATCH SET
   c.display_name = 'Europe',
   c.m49_code = '150',
   c.wikidata_id = 'Q46',
-  c.llm_context = 'USE: for European countries and markets. TRIGGERS: europe, european, eu. CULTURAL_NOTES: Predominantly Occidental. Split: Western (low-context), Eastern (medium-context), Mediterranean (relationship-focused), Nordic (egalitarian). ECONOMIC: Mostly HIC/UMIC. EU integration in west, post-Soviet east. SCRIPTS: Latin west, Cyrillic east. AVOID: EU = Europe.';
+  c.content = 'USE: for European countries and markets. CULTURAL_NOTES: Predominantly Occidental. Split: Western (low-context), Eastern (medium-context), Mediterranean (relationship-focused), Nordic (egalitarian). ECONOMIC: Mostly HIC/UMIC. EU integration in west, post-Soviet east. SCRIPTS: Latin west, Cyrillic east. AVOID: EU = Europe.',
+  c.triggers = ['europe', 'european', 'eu'];
 
 MERGE (c:Continent {key: 'oceania'})
 ON CREATE SET
@@ -96,7 +104,8 @@ ON CREATE SET
   c.display_name = 'Oceania',
   c.m49_code = '009',
   c.wikidata_id = 'Q538',
-  c.llm_context = 'USE: for Pacific region markets. TRIGGERS: oceania, pacific, australasia. CULTURAL_NOTES: Australia/NZ = Occidental (British-influenced). Pacific Islands = Melanesian, Polynesian, Micronesian cultures with strong community focus. ECONOMIC: AU/NZ = HIC. Pacific Islands = LMIC/LIC. LANGUAGE: English dominant in AU/NZ. 1000+ indigenous languages in Melanesia.',
+  c.content = 'USE: for Pacific region markets. CULTURAL_NOTES: Australia/NZ = Occidental (British-influenced). Pacific Islands = Melanesian, Polynesian, Micronesian cultures with strong community focus. ECONOMIC: AU/NZ = HIC. Pacific Islands = LMIC/LIC. LANGUAGE: English dominant in AU/NZ. 1000+ indigenous languages in Melanesia.',
+  c.triggers = ['oceania', 'pacific', 'australasia'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -105,7 +114,8 @@ ON MATCH SET
   c.display_name = 'Oceania',
   c.m49_code = '009',
   c.wikidata_id = 'Q538',
-  c.llm_context = 'USE: for Pacific region markets. TRIGGERS: oceania, pacific, australasia. CULTURAL_NOTES: Australia/NZ = Occidental (British-influenced). Pacific Islands = Melanesian, Polynesian, Micronesian cultures with strong community focus. ECONOMIC: AU/NZ = HIC. Pacific Islands = LMIC/LIC. LANGUAGE: English dominant in AU/NZ. 1000+ indigenous languages in Melanesia.';
+  c.content = 'USE: for Pacific region markets. CULTURAL_NOTES: Australia/NZ = Occidental (British-influenced). Pacific Islands = Melanesian, Polynesian, Micronesian cultures with strong community focus. ECONOMIC: AU/NZ = HIC. Pacific Islands = LMIC/LIC. LANGUAGE: English dominant in AU/NZ. 1000+ indigenous languages in Melanesia.',
+  c.triggers = ['oceania', 'pacific', 'australasia'];
 
 MERGE (c:Continent {key: 'antarctica'})
 ON CREATE SET
@@ -114,7 +124,8 @@ ON CREATE SET
   c.display_name = 'Antarctica',
   c.m49_code = '010',
   c.wikidata_id = 'Q51',
-  c.llm_context = 'USE: for scientific/research contexts only. TRIGGERS: antarctica, antarctic, polar. NOTES: No permanent population. Research stations only. No commercial markets. Skip for localization.',
+  c.content = 'USE: for scientific/research contexts only. NOTES: No permanent population. Research stations only. No commercial markets. Skip for localization.',
+  c.triggers = ['antarctica', 'antarctic', 'polar'],
   c.created_by = 'seed:immutable',
   c.created_at = datetime()
 ON MATCH SET
@@ -123,7 +134,8 @@ ON MATCH SET
   c.display_name = 'Antarctica',
   c.m49_code = '010',
   c.wikidata_id = 'Q51',
-  c.llm_context = 'USE: for scientific/research contexts only. TRIGGERS: antarctica, antarctic, polar. NOTES: No permanent population. Research stations only. No commercial markets. Skip for localization.';
+  c.content = 'USE: for scientific/research contexts only. NOTES: No permanent population. Research stations only. No commercial markets. Skip for localization.',
+  c.triggers = ['antarctica', 'antarctic', 'polar'];
 
 // -----------------------------------------------------------------------------
 // GEO REGIONS (UN M49 - 22 intermediate regions)
@@ -634,7 +646,8 @@ ON CREATE SET
   sr.m49_code = '830',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q42314',
-  sr.llm_context = 'USE: for Jersey, Guernsey markets. TRIGGERS: channel islands, jersey, guernsey. CULTURE: British Crown Dependencies, NOT part of UK. Unique tax status. English dominant, Norman French heritage. HIGH income. AVOID: Treating as UK.',
+  sr.content = 'USE: for Jersey, Guernsey markets. TRIGGERS: channel islands, jersey, guernsey. CULTURE: British Crown Dependencies, NOT part of UK. Unique tax status. English dominant, Norman French heritage. HIGH income. AVOID: Treating as UK.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -644,7 +657,8 @@ ON MATCH SET
   sr.m49_code = '830',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q42314',
-  sr.llm_context = 'USE: for Jersey, Guernsey markets. TRIGGERS: channel islands, jersey, guernsey. CULTURE: British Crown Dependencies, NOT part of UK. Unique tax status. English dominant, Norman French heritage. HIGH income. AVOID: Treating as UK.';
+  sr.content = 'USE: for Jersey, Guernsey markets. TRIGGERS: channel islands, jersey, guernsey. CULTURE: British Crown Dependencies, NOT part of UK. Unique tax status. English dominant, Norman French heritage. HIGH income. AVOID: Treating as UK.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'nordic-countries'})
 ON CREATE SET
@@ -653,7 +667,8 @@ ON CREATE SET
   sr.display_name = 'Nordic Countries',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q52062',
-  sr.llm_context = 'USE: for Denmark, Finland, Iceland, Norway, Sweden. TRIGGERS: nordic, scandinavian, norden. CULTURE: High trust, egalitarian, design-focused, sustainability-conscious. HIGH income. English proficiency excellent. AVOID: Conflating with Baltic states.',
+  sr.content = 'USE: for Denmark, Finland, Iceland, Norway, Sweden. TRIGGERS: nordic, scandinavian, norden. CULTURE: High trust, egalitarian, design-focused, sustainability-conscious. HIGH income. English proficiency excellent. AVOID: Conflating with Baltic states.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -662,7 +677,8 @@ ON MATCH SET
   sr.display_name = 'Nordic Countries',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q52062',
-  sr.llm_context = 'USE: for Denmark, Finland, Iceland, Norway, Sweden. TRIGGERS: nordic, scandinavian, norden. CULTURE: High trust, egalitarian, design-focused, sustainability-conscious. HIGH income. English proficiency excellent. AVOID: Conflating with Baltic states.';
+  sr.content = 'USE: for Denmark, Finland, Iceland, Norway, Sweden. TRIGGERS: nordic, scandinavian, norden. CULTURE: High trust, egalitarian, design-focused, sustainability-conscious. HIGH income. English proficiency excellent. AVOID: Conflating with Baltic states.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'baltic-states'})
 ON CREATE SET
@@ -671,7 +687,8 @@ ON CREATE SET
   sr.display_name = 'Baltic States',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q107426',
-  sr.llm_context = 'USE: for Estonia, Latvia, Lithuania. TRIGGERS: baltic, baltics. CULTURE: Post-Soviet, EU members, distinct from Nordic. Tech-savvy (Estonia especially). Russian minority influence. AVOID: Conflating with Nordic or Eastern Europe.',
+  sr.content = 'USE: for Estonia, Latvia, Lithuania. TRIGGERS: baltic, baltics. CULTURE: Post-Soviet, EU members, distinct from Nordic. Tech-savvy (Estonia especially). Russian minority influence. AVOID: Conflating with Nordic or Eastern Europe.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -680,7 +697,8 @@ ON MATCH SET
   sr.display_name = 'Baltic States',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q107426',
-  sr.llm_context = 'USE: for Estonia, Latvia, Lithuania. TRIGGERS: baltic, baltics. CULTURE: Post-Soviet, EU members, distinct from Nordic. Tech-savvy (Estonia especially). Russian minority influence. AVOID: Conflating with Nordic or Eastern Europe.';
+  sr.content = 'USE: for Estonia, Latvia, Lithuania. TRIGGERS: baltic, baltics. CULTURE: Post-Soviet, EU members, distinct from Nordic. Tech-savvy (Estonia especially). Russian minority influence. AVOID: Conflating with Nordic or Eastern Europe.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'british-isles'})
 ON CREATE SET
@@ -689,7 +707,8 @@ ON CREATE SET
   sr.display_name = 'British Isles',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q38272',
-  sr.llm_context = 'USE: for UK + Ireland grouping. TRIGGERS: british isles. CULTURE: English-speaking, shared history but distinct identities. UK = Brexit, Ireland = EU. SENSITIVE: Term controversial in Ireland. AVOID: Using for Ireland alone.',
+  sr.content = 'USE: for UK + Ireland grouping. TRIGGERS: british isles. CULTURE: English-speaking, shared history but distinct identities. UK = Brexit, Ireland = EU. SENSITIVE: Term controversial in Ireland. AVOID: Using for Ireland alone.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -698,7 +717,8 @@ ON MATCH SET
   sr.display_name = 'British Isles',
   sr.parent_region = 'northern-europe',
   sr.wikidata_id = 'Q38272',
-  sr.llm_context = 'USE: for UK + Ireland grouping. TRIGGERS: british isles. CULTURE: English-speaking, shared history but distinct identities. UK = Brexit, Ireland = EU. SENSITIVE: Term controversial in Ireland. AVOID: Using for Ireland alone.';
+  sr.content = 'USE: for UK + Ireland grouping. TRIGGERS: british isles. CULTURE: English-speaking, shared history but distinct identities. UK = Brexit, Ireland = EU. SENSITIVE: Term controversial in Ireland. AVOID: Using for Ireland alone.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'benelux'})
 ON CREATE SET
@@ -707,7 +727,8 @@ ON CREATE SET
   sr.display_name = 'Benelux',
   sr.parent_region = 'western-europe',
   sr.wikidata_id = 'Q12047',
-  sr.llm_context = 'USE: for Belgium, Netherlands, Luxembourg. TRIGGERS: benelux, low countries. CULTURE: Multilingual (Dutch, French, German), EU hub, high international business. LANGUAGE: NL has Dutch only, BE has Dutch+French+German, LU has French+German+Luxembourgish.',
+  sr.content = 'USE: for Belgium, Netherlands, Luxembourg. TRIGGERS: benelux, low countries. CULTURE: Multilingual (Dutch, French, German), EU hub, high international business. LANGUAGE: NL has Dutch only, BE has Dutch+French+German, LU has French+German+Luxembourgish.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -716,7 +737,8 @@ ON MATCH SET
   sr.display_name = 'Benelux',
   sr.parent_region = 'western-europe',
   sr.wikidata_id = 'Q12047',
-  sr.llm_context = 'USE: for Belgium, Netherlands, Luxembourg. TRIGGERS: benelux, low countries. CULTURE: Multilingual (Dutch, French, German), EU hub, high international business. LANGUAGE: NL has Dutch only, BE has Dutch+French+German, LU has French+German+Luxembourgish.';
+  sr.content = 'USE: for Belgium, Netherlands, Luxembourg. TRIGGERS: benelux, low countries. CULTURE: Multilingual (Dutch, French, German), EU hub, high international business. LANGUAGE: NL has Dutch only, BE has Dutch+French+German, LU has French+German+Luxembourgish.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'dach'})
 ON CREATE SET
@@ -725,7 +747,8 @@ ON CREATE SET
   sr.display_name = 'DACH',
   sr.parent_region = 'western-europe',
   sr.wikidata_id = 'Q1079962',
-  sr.llm_context = 'USE: for Germany, Austria, Switzerland German-speaking markets. TRIGGERS: dach, german-speaking. CULTURE: German language unifies but distinct varieties (Hochdeutsch, Österreichisch, Schweizerdeutsch). High precision, quality focus. AVOID: Assuming identical German.',
+  sr.content = 'USE: for Germany, Austria, Switzerland German-speaking markets. TRIGGERS: dach, german-speaking. CULTURE: German language unifies but distinct varieties (Hochdeutsch, Österreichisch, Schweizerdeutsch). High precision, quality focus. AVOID: Assuming identical German.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -734,7 +757,8 @@ ON MATCH SET
   sr.display_name = 'DACH',
   sr.parent_region = 'western-europe',
   sr.wikidata_id = 'Q1079962',
-  sr.llm_context = 'USE: for Germany, Austria, Switzerland German-speaking markets. TRIGGERS: dach, german-speaking. CULTURE: German language unifies but distinct varieties (Hochdeutsch, Österreichisch, Schweizerdeutsch). High precision, quality focus. AVOID: Assuming identical German.';
+  sr.content = 'USE: for Germany, Austria, Switzerland German-speaking markets. TRIGGERS: dach, german-speaking. CULTURE: German language unifies but distinct varieties (Hochdeutsch, Österreichisch, Schweizerdeutsch). High precision, quality focus. AVOID: Assuming identical German.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'iberian-peninsula'})
 ON CREATE SET
@@ -743,7 +767,8 @@ ON CREATE SET
   sr.display_name = 'Iberian Peninsula',
   sr.parent_region = 'southern-europe',
   sr.wikidata_id = 'Q12837',
-  sr.llm_context = 'USE: for Spain, Portugal, Andorra, Gibraltar. TRIGGERS: iberian, iberia. CULTURE: Romance languages (Spanish, Portuguese, Catalan, Basque). Mediterranean lifestyle. Regional identities strong (Catalonia, Basque Country). AVOID: Assuming Spanish = Castilian only.',
+  sr.content = 'USE: for Spain, Portugal, Andorra, Gibraltar. TRIGGERS: iberian, iberia. CULTURE: Romance languages (Spanish, Portuguese, Catalan, Basque). Mediterranean lifestyle. Regional identities strong (Catalonia, Basque Country). AVOID: Assuming Spanish = Castilian only.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -752,7 +777,8 @@ ON MATCH SET
   sr.display_name = 'Iberian Peninsula',
   sr.parent_region = 'southern-europe',
   sr.wikidata_id = 'Q12837',
-  sr.llm_context = 'USE: for Spain, Portugal, Andorra, Gibraltar. TRIGGERS: iberian, iberia. CULTURE: Romance languages (Spanish, Portuguese, Catalan, Basque). Mediterranean lifestyle. Regional identities strong (Catalonia, Basque Country). AVOID: Assuming Spanish = Castilian only.';
+  sr.content = 'USE: for Spain, Portugal, Andorra, Gibraltar. TRIGGERS: iberian, iberia. CULTURE: Romance languages (Spanish, Portuguese, Catalan, Basque). Mediterranean lifestyle. Regional identities strong (Catalonia, Basque Country). AVOID: Assuming Spanish = Castilian only.',
+  sr.triggers = [];
 
 // --- Africa ---
 
@@ -763,7 +789,8 @@ ON CREATE SET
   sr.display_name = 'Great Lakes Region',
   sr.parent_region = 'eastern-africa',
   sr.wikidata_id = 'Q186533',
-  sr.llm_context = 'USE: for Burundi, DRC, Kenya, Rwanda, Tanzania, Uganda. TRIGGERS: great lakes, african great lakes. CULTURE: Bantu languages dominant, Swahili lingua franca. Complex history (genocide, conflict). Rapid tech adoption (mobile money). SENSITIVE: Ethnic tensions.',
+  sr.content = 'USE: for Burundi, DRC, Kenya, Rwanda, Tanzania, Uganda. TRIGGERS: great lakes, african great lakes. CULTURE: Bantu languages dominant, Swahili lingua franca. Complex history (genocide, conflict). Rapid tech adoption (mobile money). SENSITIVE: Ethnic tensions.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -772,7 +799,8 @@ ON MATCH SET
   sr.display_name = 'Great Lakes Region',
   sr.parent_region = 'eastern-africa',
   sr.wikidata_id = 'Q186533',
-  sr.llm_context = 'USE: for Burundi, DRC, Kenya, Rwanda, Tanzania, Uganda. TRIGGERS: great lakes, african great lakes. CULTURE: Bantu languages dominant, Swahili lingua franca. Complex history (genocide, conflict). Rapid tech adoption (mobile money). SENSITIVE: Ethnic tensions.';
+  sr.content = 'USE: for Burundi, DRC, Kenya, Rwanda, Tanzania, Uganda. TRIGGERS: great lakes, african great lakes. CULTURE: Bantu languages dominant, Swahili lingua franca. Complex history (genocide, conflict). Rapid tech adoption (mobile money). SENSITIVE: Ethnic tensions.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'horn-of-africa'})
 ON CREATE SET
@@ -781,7 +809,8 @@ ON CREATE SET
   sr.display_name = 'Horn of Africa',
   sr.parent_region = 'eastern-africa',
   sr.wikidata_id = 'Q40530',
-  sr.llm_context = 'USE: for Djibouti, Eritrea, Ethiopia, Somalia. TRIGGERS: horn of africa. CULTURE: Cushitic + Semitic languages. Ethiopia unique (Amharic script, Orthodox Christianity, never colonized). Somalia = Islamic. SENSITIVE: Conflict zones, famine history.',
+  sr.content = 'USE: for Djibouti, Eritrea, Ethiopia, Somalia. TRIGGERS: horn of africa. CULTURE: Cushitic + Semitic languages. Ethiopia unique (Amharic script, Orthodox Christianity, never colonized). Somalia = Islamic. SENSITIVE: Conflict zones, famine history.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -790,7 +819,8 @@ ON MATCH SET
   sr.display_name = 'Horn of Africa',
   sr.parent_region = 'eastern-africa',
   sr.wikidata_id = 'Q40530',
-  sr.llm_context = 'USE: for Djibouti, Eritrea, Ethiopia, Somalia. TRIGGERS: horn of africa. CULTURE: Cushitic + Semitic languages. Ethiopia unique (Amharic script, Orthodox Christianity, never colonized). Somalia = Islamic. SENSITIVE: Conflict zones, famine history.';
+  sr.content = 'USE: for Djibouti, Eritrea, Ethiopia, Somalia. TRIGGERS: horn of africa. CULTURE: Cushitic + Semitic languages. Ethiopia unique (Amharic script, Orthodox Christianity, never colonized). Somalia = Islamic. SENSITIVE: Conflict zones, famine history.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'maghreb'})
 ON CREATE SET
@@ -799,7 +829,8 @@ ON CREATE SET
   sr.display_name = 'Maghreb',
   sr.parent_region = 'northern-africa',
   sr.wikidata_id = 'Q7835',
-  sr.llm_context = 'USE: for Algeria, Libya, Mauritania, Morocco, Tunisia. TRIGGERS: maghreb, north africa arab. CULTURE: Arab-Berber, Islamic, French colonial legacy. Arabic + French bilingual. Darija (Maghrebi Arabic) distinct from Middle Eastern Arabic. AVOID: Conflating with Middle East.',
+  sr.content = 'USE: for Algeria, Libya, Mauritania, Morocco, Tunisia. TRIGGERS: maghreb, north africa arab. CULTURE: Arab-Berber, Islamic, French colonial legacy. Arabic + French bilingual. Darija (Maghrebi Arabic) distinct from Middle Eastern Arabic. AVOID: Conflating with Middle East.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -808,7 +839,8 @@ ON MATCH SET
   sr.display_name = 'Maghreb',
   sr.parent_region = 'northern-africa',
   sr.wikidata_id = 'Q7835',
-  sr.llm_context = 'USE: for Algeria, Libya, Mauritania, Morocco, Tunisia. TRIGGERS: maghreb, north africa arab. CULTURE: Arab-Berber, Islamic, French colonial legacy. Arabic + French bilingual. Darija (Maghrebi Arabic) distinct from Middle Eastern Arabic. AVOID: Conflating with Middle East.';
+  sr.content = 'USE: for Algeria, Libya, Mauritania, Morocco, Tunisia. TRIGGERS: maghreb, north africa arab. CULTURE: Arab-Berber, Islamic, French colonial legacy. Arabic + French bilingual. Darija (Maghrebi Arabic) distinct from Middle Eastern Arabic. AVOID: Conflating with Middle East.',
+  sr.triggers = [];
 
 // --- Asia ---
 
@@ -819,7 +851,8 @@ ON CREATE SET
   sr.display_name = 'Mainland Southeast Asia',
   sr.parent_region = 'south-eastern-asia',
   sr.wikidata_id = 'Q11708',
-  sr.llm_context = 'USE: for Cambodia, Laos, Myanmar, Thailand, Vietnam. TRIGGERS: indochina, mainland southeast asia. CULTURE: Buddhist (Theravada) dominant except Vietnam (Mahayana + ancestor worship). Tonal languages. Rice culture. French colonial legacy (VN, LA, KH). SENSITIVE: Myanmar conflict.',
+  sr.content = 'USE: for Cambodia, Laos, Myanmar, Thailand, Vietnam. TRIGGERS: indochina, mainland southeast asia. CULTURE: Buddhist (Theravada) dominant except Vietnam (Mahayana + ancestor worship). Tonal languages. Rice culture. French colonial legacy (VN, LA, KH). SENSITIVE: Myanmar conflict.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -828,7 +861,8 @@ ON MATCH SET
   sr.display_name = 'Mainland Southeast Asia',
   sr.parent_region = 'south-eastern-asia',
   sr.wikidata_id = 'Q11708',
-  sr.llm_context = 'USE: for Cambodia, Laos, Myanmar, Thailand, Vietnam. TRIGGERS: indochina, mainland southeast asia. CULTURE: Buddhist (Theravada) dominant except Vietnam (Mahayana + ancestor worship). Tonal languages. Rice culture. French colonial legacy (VN, LA, KH). SENSITIVE: Myanmar conflict.';
+  sr.content = 'USE: for Cambodia, Laos, Myanmar, Thailand, Vietnam. TRIGGERS: indochina, mainland southeast asia. CULTURE: Buddhist (Theravada) dominant except Vietnam (Mahayana + ancestor worship). Tonal languages. Rice culture. French colonial legacy (VN, LA, KH). SENSITIVE: Myanmar conflict.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'maritime-southeast-asia'})
 ON CREATE SET
@@ -837,7 +871,8 @@ ON CREATE SET
   sr.display_name = 'Maritime Southeast Asia',
   sr.parent_region = 'south-eastern-asia',
   sr.wikidata_id = 'Q3922305',
-  sr.llm_context = 'USE: for Indonesia, Malaysia, Philippines, Singapore, Brunei, Timor-Leste. TRIGGERS: maritime southeast asia, malay world. CULTURE: Austronesian heritage. Islam dominant (ID, MY, BN) except Philippines (Catholic) and Singapore (diverse). Malay lingua franca in MY/ID/BN.',
+  sr.content = 'USE: for Indonesia, Malaysia, Philippines, Singapore, Brunei, Timor-Leste. TRIGGERS: maritime southeast asia, malay world. CULTURE: Austronesian heritage. Islam dominant (ID, MY, BN) except Philippines (Catholic) and Singapore (diverse). Malay lingua franca in MY/ID/BN.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -846,7 +881,8 @@ ON MATCH SET
   sr.display_name = 'Maritime Southeast Asia',
   sr.parent_region = 'south-eastern-asia',
   sr.wikidata_id = 'Q3922305',
-  sr.llm_context = 'USE: for Indonesia, Malaysia, Philippines, Singapore, Brunei, Timor-Leste. TRIGGERS: maritime southeast asia, malay world. CULTURE: Austronesian heritage. Islam dominant (ID, MY, BN) except Philippines (Catholic) and Singapore (diverse). Malay lingua franca in MY/ID/BN.';
+  sr.content = 'USE: for Indonesia, Malaysia, Philippines, Singapore, Brunei, Timor-Leste. TRIGGERS: maritime southeast asia, malay world. CULTURE: Austronesian heritage. Islam dominant (ID, MY, BN) except Philippines (Catholic) and Singapore (diverse). Malay lingua franca in MY/ID/BN.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'levant'})
 ON CREATE SET
@@ -855,7 +891,8 @@ ON CREATE SET
   sr.display_name = 'Levant',
   sr.parent_region = 'western-asia',
   sr.wikidata_id = 'Q81483',
-  sr.llm_context = 'USE: for Jordan, Lebanon, Palestine, Syria, Israel. TRIGGERS: levant, sham, eastern mediterranean. CULTURE: Levantine Arabic distinct. Christian minorities significant (Lebanon). HIGH complexity: Israeli-Palestinian conflict, Syrian crisis. SENSITIVE: Political terminology critical.',
+  sr.content = 'USE: for Jordan, Lebanon, Palestine, Syria, Israel. TRIGGERS: levant, sham, eastern mediterranean. CULTURE: Levantine Arabic distinct. Christian minorities significant (Lebanon). HIGH complexity: Israeli-Palestinian conflict, Syrian crisis. SENSITIVE: Political terminology critical.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -864,7 +901,8 @@ ON MATCH SET
   sr.display_name = 'Levant',
   sr.parent_region = 'western-asia',
   sr.wikidata_id = 'Q81483',
-  sr.llm_context = 'USE: for Jordan, Lebanon, Palestine, Syria, Israel. TRIGGERS: levant, sham, eastern mediterranean. CULTURE: Levantine Arabic distinct. Christian minorities significant (Lebanon). HIGH complexity: Israeli-Palestinian conflict, Syrian crisis. SENSITIVE: Political terminology critical.';
+  sr.content = 'USE: for Jordan, Lebanon, Palestine, Syria, Israel. TRIGGERS: levant, sham, eastern mediterranean. CULTURE: Levantine Arabic distinct. Christian minorities significant (Lebanon). HIGH complexity: Israeli-Palestinian conflict, Syrian crisis. SENSITIVE: Political terminology critical.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'gulf-states'})
 ON CREATE SET
@@ -873,7 +911,8 @@ ON CREATE SET
   sr.display_name = 'Gulf Cooperation Council',
   sr.parent_region = 'western-asia',
   sr.wikidata_id = 'Q217172',
-  sr.llm_context = 'USE: for Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, UAE. TRIGGERS: gcc, gulf states, khaleeji. CULTURE: Gulf Arabic, Islamic (Sunni majority, Shia in Bahrain). Oil wealth, expat workforce majority. Luxury + traditional values. AVOID: Assuming homogeneous.',
+  sr.content = 'USE: for Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, UAE. TRIGGERS: gcc, gulf states, khaleeji. CULTURE: Gulf Arabic, Islamic (Sunni majority, Shia in Bahrain). Oil wealth, expat workforce majority. Luxury + traditional values. AVOID: Assuming homogeneous.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -882,7 +921,8 @@ ON MATCH SET
   sr.display_name = 'Gulf Cooperation Council',
   sr.parent_region = 'western-asia',
   sr.wikidata_id = 'Q217172',
-  sr.llm_context = 'USE: for Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, UAE. TRIGGERS: gcc, gulf states, khaleeji. CULTURE: Gulf Arabic, Islamic (Sunni majority, Shia in Bahrain). Oil wealth, expat workforce majority. Luxury + traditional values. AVOID: Assuming homogeneous.';
+  sr.content = 'USE: for Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, UAE. TRIGGERS: gcc, gulf states, khaleeji. CULTURE: Gulf Arabic, Islamic (Sunni majority, Shia in Bahrain). Oil wealth, expat workforce majority. Luxury + traditional values. AVOID: Assuming homogeneous.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'indian-subcontinent'})
 ON CREATE SET
@@ -891,7 +931,8 @@ ON CREATE SET
   sr.display_name = 'Indian Subcontinent',
   sr.parent_region = 'southern-asia',
   sr.wikidata_id = 'Q60140',
-  sr.llm_context = 'USE: for India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives. TRIGGERS: south asia, indian subcontinent. CULTURE: Indo-Aryan + Dravidian languages. Hindu/Muslim/Buddhist. Cricket-loving. Huge linguistic diversity (22 official languages in India alone).',
+  sr.content = 'USE: for India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives. TRIGGERS: south asia, indian subcontinent. CULTURE: Indo-Aryan + Dravidian languages. Hindu/Muslim/Buddhist. Cricket-loving. Huge linguistic diversity (22 official languages in India alone).',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -900,7 +941,8 @@ ON MATCH SET
   sr.display_name = 'Indian Subcontinent',
   sr.parent_region = 'southern-asia',
   sr.wikidata_id = 'Q60140',
-  sr.llm_context = 'USE: for India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives. TRIGGERS: south asia, indian subcontinent. CULTURE: Indo-Aryan + Dravidian languages. Hindu/Muslim/Buddhist. Cricket-loving. Huge linguistic diversity (22 official languages in India alone).';
+  sr.content = 'USE: for India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives. TRIGGERS: south asia, indian subcontinent. CULTURE: Indo-Aryan + Dravidian languages. Hindu/Muslim/Buddhist. Cricket-loving. Huge linguistic diversity (22 official languages in India alone).',
+  sr.triggers = [];
 
 // --- Americas ---
 
@@ -911,7 +953,8 @@ ON CREATE SET
   sr.display_name = 'Central American Isthmus',
   sr.parent_region = 'central-america',
   sr.wikidata_id = 'Q27611',
-  sr.llm_context = 'USE: for Guatemala, Belize, El Salvador, Honduras, Nicaragua, Costa Rica, Panama. TRIGGERS: central america, isthmus. CULTURE: Spanish dominant (except Belize = English). Strong indigenous heritage (Guatemala). Catholic. Panama = more cosmopolitan.',
+  sr.content = 'USE: for Guatemala, Belize, El Salvador, Honduras, Nicaragua, Costa Rica, Panama. TRIGGERS: central america, isthmus. CULTURE: Spanish dominant (except Belize = English). Strong indigenous heritage (Guatemala). Catholic. Panama = more cosmopolitan.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -920,7 +963,8 @@ ON MATCH SET
   sr.display_name = 'Central American Isthmus',
   sr.parent_region = 'central-america',
   sr.wikidata_id = 'Q27611',
-  sr.llm_context = 'USE: for Guatemala, Belize, El Salvador, Honduras, Nicaragua, Costa Rica, Panama. TRIGGERS: central america, isthmus. CULTURE: Spanish dominant (except Belize = English). Strong indigenous heritage (Guatemala). Catholic. Panama = more cosmopolitan.';
+  sr.content = 'USE: for Guatemala, Belize, El Salvador, Honduras, Nicaragua, Costa Rica, Panama. TRIGGERS: central america, isthmus. CULTURE: Spanish dominant (except Belize = English). Strong indigenous heritage (Guatemala). Catholic. Panama = more cosmopolitan.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'southern-cone'})
 ON CREATE SET
@@ -929,7 +973,8 @@ ON CREATE SET
   sr.display_name = 'Southern Cone',
   sr.parent_region = 'south-america',
   sr.wikidata_id = 'Q110628',
-  sr.llm_context = 'USE: for Argentina, Chile, Uruguay, (sometimes Paraguay, S. Brazil). TRIGGERS: southern cone, cono sur. CULTURE: European immigrant influence (Italian, German). Rioplatense Spanish (voseo). Mate culture. More secular than rest of LatAm. Higher income.',
+  sr.content = 'USE: for Argentina, Chile, Uruguay, (sometimes Paraguay, S. Brazil). TRIGGERS: southern cone, cono sur. CULTURE: European immigrant influence (Italian, German). Rioplatense Spanish (voseo). Mate culture. More secular than rest of LatAm. Higher income.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -938,7 +983,8 @@ ON MATCH SET
   sr.display_name = 'Southern Cone',
   sr.parent_region = 'south-america',
   sr.wikidata_id = 'Q110628',
-  sr.llm_context = 'USE: for Argentina, Chile, Uruguay, (sometimes Paraguay, S. Brazil). TRIGGERS: southern cone, cono sur. CULTURE: European immigrant influence (Italian, German). Rioplatense Spanish (voseo). Mate culture. More secular than rest of LatAm. Higher income.';
+  sr.content = 'USE: for Argentina, Chile, Uruguay, (sometimes Paraguay, S. Brazil). TRIGGERS: southern cone, cono sur. CULTURE: European immigrant influence (Italian, German). Rioplatense Spanish (voseo). Mate culture. More secular than rest of LatAm. Higher income.',
+  sr.triggers = [];
 
 MERGE (sr:GeoSubRegion {key: 'andean-region'})
 ON CREATE SET
@@ -947,7 +993,8 @@ ON CREATE SET
   sr.display_name = 'Andean Region',
   sr.parent_region = 'south-america',
   sr.wikidata_id = 'Q188590',
-  sr.llm_context = 'USE: for Bolivia, Colombia, Ecuador, Peru, Venezuela. TRIGGERS: andean, andes. CULTURE: Strong indigenous heritage (Quechua, Aymara). Spanish + indigenous languages. Altitude influences lifestyle. SENSITIVE: Venezuela political situation.',
+  sr.content = 'USE: for Bolivia, Colombia, Ecuador, Peru, Venezuela. TRIGGERS: andean, andes. CULTURE: Strong indigenous heritage (Quechua, Aymara). Spanish + indigenous languages. Altitude influences lifestyle. SENSITIVE: Venezuela political situation.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -956,7 +1003,8 @@ ON MATCH SET
   sr.display_name = 'Andean Region',
   sr.parent_region = 'south-america',
   sr.wikidata_id = 'Q188590',
-  sr.llm_context = 'USE: for Bolivia, Colombia, Ecuador, Peru, Venezuela. TRIGGERS: andean, andes. CULTURE: Strong indigenous heritage (Quechua, Aymara). Spanish + indigenous languages. Altitude influences lifestyle. SENSITIVE: Venezuela political situation.';
+  sr.content = 'USE: for Bolivia, Colombia, Ecuador, Peru, Venezuela. TRIGGERS: andean, andes. CULTURE: Strong indigenous heritage (Quechua, Aymara). Spanish + indigenous languages. Altitude influences lifestyle. SENSITIVE: Venezuela political situation.',
+  sr.triggers = [];
 
 // --- Oceania ---
 
@@ -967,7 +1015,8 @@ ON CREATE SET
   sr.display_name = 'Pacific Islands Forum',
   sr.parent_region = 'polynesia',
   sr.wikidata_id = 'Q153541',
-  sr.llm_context = 'USE: for Pacific island nations excluding AU/NZ. TRIGGERS: pacific islands, south pacific. CULTURE: Polynesian, Melanesian, Micronesian. Community-focused. Climate change = existential threat. Small populations. Tourism + fishing economies.',
+  sr.content = 'USE: for Pacific island nations excluding AU/NZ. TRIGGERS: pacific islands, south pacific. CULTURE: Polynesian, Melanesian, Micronesian. Community-focused. Climate change = existential threat. Small populations. Tourism + fishing economies.',
+  sr.triggers = [],
   sr.created_by = 'seed:immutable',
   sr.created_at = datetime()
 ON MATCH SET
@@ -976,7 +1025,8 @@ ON MATCH SET
   sr.display_name = 'Pacific Islands Forum',
   sr.parent_region = 'polynesia',
   sr.wikidata_id = 'Q153541',
-  sr.llm_context = 'USE: for Pacific island nations excluding AU/NZ. TRIGGERS: pacific islands, south pacific. CULTURE: Polynesian, Melanesian, Micronesian. Community-focused. Climate change = existential threat. Small populations. Tourism + fishing economies.';
+  sr.content = 'USE: for Pacific island nations excluding AU/NZ. TRIGGERS: pacific islands, south pacific. CULTURE: Polynesian, Melanesian, Micronesian. Community-focused. Climate change = existential threat. Small populations. Tourism + fishing economies.',
+  sr.triggers = [];
 
 // -----------------------------------------------------------------------------
 // INCOME GROUPS (World Bank FY26)
@@ -990,7 +1040,8 @@ ON CREATE SET
   i.gni_threshold_max = 1135,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482814',
-  i.llm_context = 'USE: for markets with GNI ≤$1,135/capita. TRIGGERS: low income, developing, emerging. CONTENT_STYLE: Value-focused, practical benefits, mobile-first. AVOID: Luxury positioning, complex features.',
+  i.content = 'USE: for markets with GNI ≤$1,135/capita. TRIGGERS: low income, developing, emerging. CONTENT_STYLE: Value-focused, practical benefits, mobile-first. AVOID: Luxury positioning, complex features.',
+  i.triggers = [],
   i.content_style = 'value-focused, practical, mobile-first',
   i.market_characteristics = 'Price-sensitive, mobile-first, informal economy, youth demographic',
   i.created_by = 'seed:immutable',
@@ -1002,7 +1053,8 @@ ON MATCH SET
   i.gni_threshold_max = 1135,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482814',
-  i.llm_context = 'USE: for markets with GNI ≤$1,135/capita. TRIGGERS: low income, developing, emerging. CONTENT_STYLE: Value-focused, practical benefits, mobile-first. AVOID: Luxury positioning, complex features.',
+  i.content = 'USE: for markets with GNI ≤$1,135/capita. TRIGGERS: low income, developing, emerging. CONTENT_STYLE: Value-focused, practical benefits, mobile-first. AVOID: Luxury positioning, complex features.',
+  i.triggers = [],
   i.content_style = 'value-focused, practical, mobile-first',
   i.market_characteristics = 'Price-sensitive, mobile-first, informal economy, youth demographic';
 
@@ -1015,7 +1067,8 @@ ON CREATE SET
   i.gni_threshold_max = 4495,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482815',
-  i.llm_context = 'USE: for markets with GNI $1,136-$4,495/capita. TRIGGERS: lower-middle income, emerging. CONTENT_STYLE: Aspirational but accessible, growth messaging. AVOID: Premium-only positioning.',
+  i.content = 'USE: for markets with GNI $1,136-$4,495/capita. TRIGGERS: lower-middle income, emerging. CONTENT_STYLE: Aspirational but accessible, growth messaging. AVOID: Premium-only positioning.',
+  i.triggers = [],
   i.content_style = 'aspirational, accessible, growth-focused',
   i.market_characteristics = 'Growing middle class, mobile commerce, value-conscious aspirational',
   i.created_by = 'seed:immutable',
@@ -1028,7 +1081,8 @@ ON MATCH SET
   i.gni_threshold_max = 4495,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482815',
-  i.llm_context = 'USE: for markets with GNI $1,136-$4,495/capita. TRIGGERS: lower-middle income, emerging. CONTENT_STYLE: Aspirational but accessible, growth messaging. AVOID: Premium-only positioning.',
+  i.content = 'USE: for markets with GNI $1,136-$4,495/capita. TRIGGERS: lower-middle income, emerging. CONTENT_STYLE: Aspirational but accessible, growth messaging. AVOID: Premium-only positioning.',
+  i.triggers = [],
   i.content_style = 'aspirational, accessible, growth-focused',
   i.market_characteristics = 'Growing middle class, mobile commerce, value-conscious aspirational';
 
@@ -1041,7 +1095,8 @@ ON CREATE SET
   i.gni_threshold_max = 13935,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482816',
-  i.llm_context = 'USE: for markets with GNI $4,496-$13,935/capita. TRIGGERS: upper-middle income, emerging market. CONTENT_STYLE: Quality + value balance, brand awareness growing. Mix of premium and accessible.',
+  i.content = 'USE: for markets with GNI $4,496-$13,935/capita. TRIGGERS: upper-middle income, emerging market. CONTENT_STYLE: Quality + value balance, brand awareness growing. Mix of premium and accessible.',
+  i.triggers = [],
   i.content_style = 'quality-value balance, brand-aware',
   i.market_characteristics = 'Established middle class, brand-conscious, e-commerce growth',
   i.created_by = 'seed:immutable',
@@ -1054,7 +1109,8 @@ ON MATCH SET
   i.gni_threshold_max = 13935,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482816',
-  i.llm_context = 'USE: for markets with GNI $4,496-$13,935/capita. TRIGGERS: upper-middle income, emerging market. CONTENT_STYLE: Quality + value balance, brand awareness growing. Mix of premium and accessible.',
+  i.content = 'USE: for markets with GNI $4,496-$13,935/capita. TRIGGERS: upper-middle income, emerging market. CONTENT_STYLE: Quality + value balance, brand awareness growing. Mix of premium and accessible.',
+  i.triggers = [],
   i.content_style = 'quality-value balance, brand-aware',
   i.market_characteristics = 'Established middle class, brand-conscious, e-commerce growth';
 
@@ -1066,7 +1122,8 @@ ON CREATE SET
   i.gni_threshold_min = 13936,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482817',
-  i.llm_context = 'USE: for markets with GNI >$13,935/capita. TRIGGERS: high income, developed, advanced economy. CONTENT_STYLE: Quality, innovation, sustainability. Premium positioning acceptable.',
+  i.content = 'USE: for markets with GNI >$13,935/capita. TRIGGERS: high income, developed, advanced economy. CONTENT_STYLE: Quality, innovation, sustainability. Premium positioning acceptable.',
+  i.triggers = [],
   i.content_style = 'quality-focused, innovation, sustainability',
   i.market_characteristics = 'Mature market, quality over price, sustainability-conscious, omnichannel',
   i.created_by = 'seed:immutable',
@@ -1078,7 +1135,8 @@ ON MATCH SET
   i.gni_threshold_min = 13936,
   i.fiscal_year = 'FY26',
   i.wikidata_id = 'Q107482817',
-  i.llm_context = 'USE: for markets with GNI >$13,935/capita. TRIGGERS: high income, developed, advanced economy. CONTENT_STYLE: Quality, innovation, sustainability. Premium positioning acceptable.',
+  i.content = 'USE: for markets with GNI >$13,935/capita. TRIGGERS: high income, developed, advanced economy. CONTENT_STYLE: Quality, innovation, sustainability. Premium positioning acceptable.',
+  i.triggers = [],
   i.content_style = 'quality-focused, innovation, sustainability',
   i.market_characteristics = 'Mature market, quality over price, sustainability-conscious, omnichannel';
 
@@ -1093,7 +1151,8 @@ ON CREATE SET
   er.display_name = 'East Asia & Pacific',
   er.abbreviation = 'EAP',
   er.wikidata_id = 'Q4119134',
-  er.llm_context = 'USE: for China, Japan, Korea, SE Asia, Pacific islands markets. TRIGGERS: east asia, pacific rim, asia-pacific. CONTENT: Diverse from high-tech (Japan, Korea) to emerging (Vietnam, Indonesia). Mobile-first. E-commerce advanced.',
+  er.content = 'USE: for China, Japan, Korea, SE Asia, Pacific islands markets. TRIGGERS: east asia, pacific rim, asia-pacific. CONTENT: Diverse from high-tech (Japan, Korea) to emerging (Vietnam, Indonesia). Mobile-first. E-commerce advanced.',
+  er.triggers = [],
   er.country_examples = ['China', 'Japan', 'South Korea', 'Indonesia', 'Vietnam', 'Thailand', 'Philippines', 'Australia'],
   er.economic_characteristics = 'Manufacturing hub, tech-forward, mobile commerce, diverse income levels',
   er.created_by = 'seed:immutable',
@@ -1104,7 +1163,8 @@ ON MATCH SET
   er.display_name = 'East Asia & Pacific',
   er.abbreviation = 'EAP',
   er.wikidata_id = 'Q4119134',
-  er.llm_context = 'USE: for China, Japan, Korea, SE Asia, Pacific islands markets. TRIGGERS: east asia, pacific rim, asia-pacific. CONTENT: Diverse from high-tech (Japan, Korea) to emerging (Vietnam, Indonesia). Mobile-first. E-commerce advanced.',
+  er.content = 'USE: for China, Japan, Korea, SE Asia, Pacific islands markets. TRIGGERS: east asia, pacific rim, asia-pacific. CONTENT: Diverse from high-tech (Japan, Korea) to emerging (Vietnam, Indonesia). Mobile-first. E-commerce advanced.',
+  er.triggers = [],
   er.country_examples = ['China', 'Japan', 'South Korea', 'Indonesia', 'Vietnam', 'Thailand', 'Philippines', 'Australia'],
   er.economic_characteristics = 'Manufacturing hub, tech-forward, mobile commerce, diverse income levels';
 
@@ -1115,7 +1175,8 @@ ON CREATE SET
   er.display_name = 'Europe & Central Asia',
   er.abbreviation = 'ECA',
   er.wikidata_id = 'Q4119132',
-  er.llm_context = 'USE: for Eastern Europe, Russia, Turkey, Central Asia markets. TRIGGERS: eastern europe, central asia, eurasia. CONTENT: Post-Soviet transition economies to EU members. Cyrillic/Latin scripts. Orthodox Christian + Islamic influences.',
+  er.content = 'USE: for Eastern Europe, Russia, Turkey, Central Asia markets. TRIGGERS: eastern europe, central asia, eurasia. CONTENT: Post-Soviet transition economies to EU members. Cyrillic/Latin scripts. Orthodox Christian + Islamic influences.',
+  er.triggers = [],
   er.country_examples = ['Russia', 'Turkey', 'Poland', 'Ukraine', 'Romania', 'Kazakhstan', 'Uzbekistan'],
   er.economic_characteristics = 'Transition economies, EU integration path, energy exports, manufacturing',
   er.created_by = 'seed:immutable',
@@ -1126,7 +1187,8 @@ ON MATCH SET
   er.display_name = 'Europe & Central Asia',
   er.abbreviation = 'ECA',
   er.wikidata_id = 'Q4119132',
-  er.llm_context = 'USE: for Eastern Europe, Russia, Turkey, Central Asia markets. TRIGGERS: eastern europe, central asia, eurasia. CONTENT: Post-Soviet transition economies to EU members. Cyrillic/Latin scripts. Orthodox Christian + Islamic influences.',
+  er.content = 'USE: for Eastern Europe, Russia, Turkey, Central Asia markets. TRIGGERS: eastern europe, central asia, eurasia. CONTENT: Post-Soviet transition economies to EU members. Cyrillic/Latin scripts. Orthodox Christian + Islamic influences.',
+  er.triggers = [],
   er.country_examples = ['Russia', 'Turkey', 'Poland', 'Ukraine', 'Romania', 'Kazakhstan', 'Uzbekistan'],
   er.economic_characteristics = 'Transition economies, EU integration path, energy exports, manufacturing';
 
@@ -1137,7 +1199,8 @@ ON CREATE SET
   er.display_name = 'Latin America & Caribbean',
   er.abbreviation = 'LAC',
   er.wikidata_id = 'Q4119135',
-  er.llm_context = 'USE: for Central/South America, Caribbean markets. TRIGGERS: latin america, latam, caribbean. CONTENT: Spanish/Portuguese dominant. Catholic cultural base. High inequality. Urban concentration. Social media heavy.',
+  er.content = 'USE: for Central/South America, Caribbean markets. TRIGGERS: latin america, latam, caribbean. CONTENT: Spanish/Portuguese dominant. Catholic cultural base. High inequality. Urban concentration. Social media heavy.',
+  er.triggers = [],
   er.country_examples = ['Brazil', 'Mexico', 'Argentina', 'Colombia', 'Chile', 'Peru', 'Dominican Republic'],
   er.economic_characteristics = 'Commodity exports, inequality, urban concentration, social commerce growth',
   er.created_by = 'seed:immutable',
@@ -1148,7 +1211,8 @@ ON MATCH SET
   er.display_name = 'Latin America & Caribbean',
   er.abbreviation = 'LAC',
   er.wikidata_id = 'Q4119135',
-  er.llm_context = 'USE: for Central/South America, Caribbean markets. TRIGGERS: latin america, latam, caribbean. CONTENT: Spanish/Portuguese dominant. Catholic cultural base. High inequality. Urban concentration. Social media heavy.',
+  er.content = 'USE: for Central/South America, Caribbean markets. TRIGGERS: latin america, latam, caribbean. CONTENT: Spanish/Portuguese dominant. Catholic cultural base. High inequality. Urban concentration. Social media heavy.',
+  er.triggers = [],
   er.country_examples = ['Brazil', 'Mexico', 'Argentina', 'Colombia', 'Chile', 'Peru', 'Dominican Republic'],
   er.economic_characteristics = 'Commodity exports, inequality, urban concentration, social commerce growth';
 
@@ -1159,7 +1223,8 @@ ON CREATE SET
   er.display_name = 'Middle East & North Africa',
   er.abbreviation = 'MENA',
   er.wikidata_id = 'Q4119136',
-  er.llm_context = 'USE: for Arab world, Iran, Israel, Turkey markets. TRIGGERS: middle east, north africa, mena, arab world. CONTENT: Arabic dominant. Islamic cultural context. RTL scripts. Oil economies + diversification. High mobile penetration.',
+  er.content = 'USE: for Arab world, Iran, Israel, Turkey markets. TRIGGERS: middle east, north africa, mena, arab world. CONTENT: Arabic dominant. Islamic cultural context. RTL scripts. Oil economies + diversification. High mobile penetration.',
+  er.triggers = [],
   er.country_examples = ['Saudi Arabia', 'UAE', 'Egypt', 'Morocco', 'Iran', 'Israel', 'Qatar'],
   er.economic_characteristics = 'Oil-dependent to diversifying, high mobile adoption, luxury segments, Islamic finance',
   er.created_by = 'seed:immutable',
@@ -1170,7 +1235,8 @@ ON MATCH SET
   er.display_name = 'Middle East & North Africa',
   er.abbreviation = 'MENA',
   er.wikidata_id = 'Q4119136',
-  er.llm_context = 'USE: for Arab world, Iran, Israel, Turkey markets. TRIGGERS: middle east, north africa, mena, arab world. CONTENT: Arabic dominant. Islamic cultural context. RTL scripts. Oil economies + diversification. High mobile penetration.',
+  er.content = 'USE: for Arab world, Iran, Israel, Turkey markets. TRIGGERS: middle east, north africa, mena, arab world. CONTENT: Arabic dominant. Islamic cultural context. RTL scripts. Oil economies + diversification. High mobile penetration.',
+  er.triggers = [],
   er.country_examples = ['Saudi Arabia', 'UAE', 'Egypt', 'Morocco', 'Iran', 'Israel', 'Qatar'],
   er.economic_characteristics = 'Oil-dependent to diversifying, high mobile adoption, luxury segments, Islamic finance';
 
@@ -1181,7 +1247,8 @@ ON CREATE SET
   er.display_name = 'North America',
   er.abbreviation = 'NA',
   er.wikidata_id = 'Q4119137',
-  er.llm_context = 'USE: for USA, Canada markets. TRIGGERS: north america, usa, canada. CONTENT: English dominant (French in Quebec). Mature e-commerce. Innovation-driven. Multicultural. Sustainability-conscious. High expectations.',
+  er.content = 'USE: for USA, Canada markets. TRIGGERS: north america, usa, canada. CONTENT: English dominant (French in Quebec). Mature e-commerce. Innovation-driven. Multicultural. Sustainability-conscious. High expectations.',
+  er.triggers = [],
   er.country_examples = ['United States', 'Canada'],
   er.economic_characteristics = 'Mature market, innovation hub, high purchasing power, sustainability focus',
   er.created_by = 'seed:immutable',
@@ -1192,7 +1259,8 @@ ON MATCH SET
   er.display_name = 'North America',
   er.abbreviation = 'NA',
   er.wikidata_id = 'Q4119137',
-  er.llm_context = 'USE: for USA, Canada markets. TRIGGERS: north america, usa, canada. CONTENT: English dominant (French in Quebec). Mature e-commerce. Innovation-driven. Multicultural. Sustainability-conscious. High expectations.',
+  er.content = 'USE: for USA, Canada markets. TRIGGERS: north america, usa, canada. CONTENT: English dominant (French in Quebec). Mature e-commerce. Innovation-driven. Multicultural. Sustainability-conscious. High expectations.',
+  er.triggers = [],
   er.country_examples = ['United States', 'Canada'],
   er.economic_characteristics = 'Mature market, innovation hub, high purchasing power, sustainability focus';
 
@@ -1203,7 +1271,8 @@ ON CREATE SET
   er.display_name = 'South Asia',
   er.abbreviation = 'SA',
   er.wikidata_id = 'Q4119138',
-  er.llm_context = 'USE: for India, Pakistan, Bangladesh, Sri Lanka markets. TRIGGERS: south asia, subcontinent, indian subcontinent. CONTENT: Hindi/English + regional languages. Hindu/Muslim/Buddhist. Mobile-first. Value-conscious. Festivals important.',
+  er.content = 'USE: for India, Pakistan, Bangladesh, Sri Lanka markets. TRIGGERS: south asia, subcontinent, indian subcontinent. CONTENT: Hindi/English + regional languages. Hindu/Muslim/Buddhist. Mobile-first. Value-conscious. Festivals important.',
+  er.triggers = [],
   er.country_examples = ['India', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Nepal'],
   er.economic_characteristics = 'Mobile-first, value-conscious, young demographics, festival-driven commerce',
   er.created_by = 'seed:immutable',
@@ -1214,7 +1283,8 @@ ON MATCH SET
   er.display_name = 'South Asia',
   er.abbreviation = 'SA',
   er.wikidata_id = 'Q4119138',
-  er.llm_context = 'USE: for India, Pakistan, Bangladesh, Sri Lanka markets. TRIGGERS: south asia, subcontinent, indian subcontinent. CONTENT: Hindi/English + regional languages. Hindu/Muslim/Buddhist. Mobile-first. Value-conscious. Festivals important.',
+  er.content = 'USE: for India, Pakistan, Bangladesh, Sri Lanka markets. TRIGGERS: south asia, subcontinent, indian subcontinent. CONTENT: Hindi/English + regional languages. Hindu/Muslim/Buddhist. Mobile-first. Value-conscious. Festivals important.',
+  er.triggers = [],
   er.country_examples = ['India', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Nepal'],
   er.economic_characteristics = 'Mobile-first, value-conscious, young demographics, festival-driven commerce';
 
@@ -1225,7 +1295,8 @@ ON CREATE SET
   er.display_name = 'Sub-Saharan Africa',
   er.abbreviation = 'SSA',
   er.wikidata_id = 'Q4119133',
-  er.llm_context = 'USE: for Africa south of Sahara markets. TRIGGERS: sub-saharan africa, africa, ssa. CONTENT: Multilingual (colonial + indigenous). Mobile money dominant. Young population. Informal economy large. Community-oriented.',
+  er.content = 'USE: for Africa south of Sahara markets. TRIGGERS: sub-saharan africa, africa, ssa. CONTENT: Multilingual (colonial + indigenous). Mobile money dominant. Young population. Informal economy large. Community-oriented.',
+  er.triggers = [],
   er.country_examples = ['Nigeria', 'South Africa', 'Kenya', 'Ethiopia', 'Ghana', 'Tanzania'],
   er.economic_characteristics = 'Mobile money leaders, young demographics, informal economy, leapfrog tech adoption',
   er.created_by = 'seed:immutable',
@@ -1236,7 +1307,8 @@ ON MATCH SET
   er.display_name = 'Sub-Saharan Africa',
   er.abbreviation = 'SSA',
   er.wikidata_id = 'Q4119133',
-  er.llm_context = 'USE: for Africa south of Sahara markets. TRIGGERS: sub-saharan africa, africa, ssa. CONTENT: Multilingual (colonial + indigenous). Mobile money dominant. Young population. Informal economy large. Community-oriented.',
+  er.content = 'USE: for Africa south of Sahara markets. TRIGGERS: sub-saharan africa, africa, ssa. CONTENT: Multilingual (colonial + indigenous). Mobile money dominant. Young population. Informal economy large. Community-oriented.',
+  er.triggers = [],
   er.country_examples = ['Nigeria', 'South Africa', 'Kenya', 'Ethiopia', 'Ghana', 'Tanzania'],
   er.economic_characteristics = 'Mobile money leaders, young demographics, informal economy, leapfrog tech adoption';
 
@@ -1251,7 +1323,8 @@ ON CREATE SET
   lc.display_name = 'IDA',
   lc.full_name = 'International Development Association',
   lc.wikidata_id = 'Q827525',
-  lc.llm_context = 'USE: for poorest countries (GNI ≤ $1,315/capita). TRIGGERS: ida, least developed, poorest countries. CONTENT: Basic needs focus. NGO/aid sector presence. Infrastructure gaps. Affordability critical. Local language important.',
+  lc.content = 'USE: for poorest countries (GNI ≤ $1,315/capita). TRIGGERS: ida, least developed, poorest countries. CONTENT: Basic needs focus. NGO/aid sector presence. Infrastructure gaps. Affordability critical. Local language important.',
+  lc.triggers = [],
   lc.target_countries = 'Poorest countries with GNI per capita below $1,315',
   lc.content_implications = 'Affordability-first, basic needs, development messaging, NGO partnerships',
   lc.created_by = 'seed:immutable',
@@ -1262,7 +1335,8 @@ ON MATCH SET
   lc.display_name = 'IDA',
   lc.full_name = 'International Development Association',
   lc.wikidata_id = 'Q827525',
-  lc.llm_context = 'USE: for poorest countries (GNI ≤ $1,315/capita). TRIGGERS: ida, least developed, poorest countries. CONTENT: Basic needs focus. NGO/aid sector presence. Infrastructure gaps. Affordability critical. Local language important.',
+  lc.content = 'USE: for poorest countries (GNI ≤ $1,315/capita). TRIGGERS: ida, least developed, poorest countries. CONTENT: Basic needs focus. NGO/aid sector presence. Infrastructure gaps. Affordability critical. Local language important.',
+  lc.triggers = [],
   lc.target_countries = 'Poorest countries with GNI per capita below $1,315',
   lc.content_implications = 'Affordability-first, basic needs, development messaging, NGO partnerships';
 
@@ -1273,7 +1347,8 @@ ON CREATE SET
   lc.display_name = 'Blend',
   lc.full_name = 'Blend (IDA + IBRD eligible)',
   lc.wikidata_id = 'Q827525',
-  lc.llm_context = 'USE: for transition countries (IDA-eligible but IBRD creditworthy). TRIGGERS: blend, transitional. CONTENT: Emerging from poverty. Growing middle class. Mix of basic and aspirational. Infrastructure improving.',
+  lc.content = 'USE: for transition countries (IDA-eligible but IBRD creditworthy). TRIGGERS: blend, transitional. CONTENT: Emerging from poverty. Growing middle class. Mix of basic and aspirational. Infrastructure improving.',
+  lc.triggers = [],
   lc.target_countries = 'IDA-eligible but IBRD creditworthy (e.g., Pakistan, Nigeria, India historically)',
   lc.content_implications = 'Aspirational + accessible mix, emerging middle class, infrastructure growth',
   lc.created_by = 'seed:immutable',
@@ -1284,7 +1359,8 @@ ON MATCH SET
   lc.display_name = 'Blend',
   lc.full_name = 'Blend (IDA + IBRD eligible)',
   lc.wikidata_id = 'Q827525',
-  lc.llm_context = 'USE: for transition countries (IDA-eligible but IBRD creditworthy). TRIGGERS: blend, transitional. CONTENT: Emerging from poverty. Growing middle class. Mix of basic and aspirational. Infrastructure improving.',
+  lc.content = 'USE: for transition countries (IDA-eligible but IBRD creditworthy). TRIGGERS: blend, transitional. CONTENT: Emerging from poverty. Growing middle class. Mix of basic and aspirational. Infrastructure improving.',
+  lc.triggers = [],
   lc.target_countries = 'IDA-eligible but IBRD creditworthy (e.g., Pakistan, Nigeria, India historically)',
   lc.content_implications = 'Aspirational + accessible mix, emerging middle class, infrastructure growth';
 
@@ -1295,7 +1371,8 @@ ON CREATE SET
   lc.display_name = 'IBRD',
   lc.full_name = 'International Bank for Reconstruction and Development',
   lc.wikidata_id = 'Q189746',
-  lc.llm_context = 'USE: for middle-income countries (creditworthy). TRIGGERS: ibrd, middle-income, creditworthy. CONTENT: Standard commercial approach. Brand-conscious. Quality expectations. Sustainability messaging resonates.',
+  lc.content = 'USE: for middle-income countries (creditworthy). TRIGGERS: ibrd, middle-income, creditworthy. CONTENT: Standard commercial approach. Brand-conscious. Quality expectations. Sustainability messaging resonates.',
+  lc.triggers = [],
   lc.target_countries = 'Middle-income countries with IBRD creditworthiness',
   lc.content_implications = 'Standard commercial content, quality expectations, brand positioning',
   lc.created_by = 'seed:immutable',
@@ -1306,7 +1383,8 @@ ON MATCH SET
   lc.display_name = 'IBRD',
   lc.full_name = 'International Bank for Reconstruction and Development',
   lc.wikidata_id = 'Q189746',
-  lc.llm_context = 'USE: for middle-income countries (creditworthy). TRIGGERS: ibrd, middle-income, creditworthy. CONTENT: Standard commercial approach. Brand-conscious. Quality expectations. Sustainability messaging resonates.',
+  lc.content = 'USE: for middle-income countries (creditworthy). TRIGGERS: ibrd, middle-income, creditworthy. CONTENT: Standard commercial approach. Brand-conscious. Quality expectations. Sustainability messaging resonates.',
+  lc.triggers = [],
   lc.target_countries = 'Middle-income countries with IBRD creditworthiness',
   lc.content_implications = 'Standard commercial content, quality expectations, brand positioning';
 
@@ -1324,7 +1402,8 @@ ON CREATE SET
   f.wikidata_id = 'Q19860',
   f.primary_cultural_realm = 'occidental',
   f.writing_systems = ['Latin', 'Cyrillic', 'Greek', 'Armenian', 'Devanagari', 'Arabic'],
-  f.llm_context = 'USE: for European, South Asian, Iranian languages. INCLUDES: English, Spanish, French, German, Russian, Hindi, Portuguese, Bengali, Urdu, Persian. LARGEST family by speakers (46% of world).',
+  f.content = 'USE: for European, South Asian, Iranian languages. INCLUDES: English, Spanish, French, German, Russian, Hindi, Portuguese, Bengali, Urdu, Persian. LARGEST family by speakers (46% of world).',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1336,7 +1415,8 @@ ON MATCH SET
   f.wikidata_id = 'Q19860',
   f.primary_cultural_realm = 'occidental',
   f.writing_systems = ['Latin', 'Cyrillic', 'Greek', 'Armenian', 'Devanagari', 'Arabic'],
-  f.llm_context = 'USE: for European, South Asian, Iranian languages. INCLUDES: English, Spanish, French, German, Russian, Hindi, Portuguese, Bengali, Urdu, Persian. LARGEST family by speakers (46% of world).';
+  f.content = 'USE: for European, South Asian, Iranian languages. INCLUDES: English, Spanish, French, German, Russian, Hindi, Portuguese, Bengali, Urdu, Persian. LARGEST family by speakers (46% of world).',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'sit'})
 ON CREATE SET
@@ -1348,7 +1428,8 @@ ON CREATE SET
   f.wikidata_id = 'Q45961',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Chinese', 'Tibetan', 'Burmese'],
-  f.llm_context = 'USE: for Chinese, Tibetan, Burmese languages. INCLUDES: Mandarin, Cantonese, Wu, Min, Hakka, Tibetan, Burmese. TONAL languages. CJK scripts.',
+  f.content = 'USE: for Chinese, Tibetan, Burmese languages. INCLUDES: Mandarin, Cantonese, Wu, Min, Hakka, Tibetan, Burmese. TONAL languages. CJK scripts.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1360,7 +1441,8 @@ ON MATCH SET
   f.wikidata_id = 'Q45961',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Chinese', 'Tibetan', 'Burmese'],
-  f.llm_context = 'USE: for Chinese, Tibetan, Burmese languages. INCLUDES: Mandarin, Cantonese, Wu, Min, Hakka, Tibetan, Burmese. TONAL languages. CJK scripts.';
+  f.content = 'USE: for Chinese, Tibetan, Burmese languages. INCLUDES: Mandarin, Cantonese, Wu, Min, Hakka, Tibetan, Burmese. TONAL languages. CJK scripts.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'nic'})
 ON CREATE SET
@@ -1372,7 +1454,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33838',
   f.primary_cultural_realm = 'meso-african',
   f.writing_systems = ['Latin'],
-  f.llm_context = 'USE: for Sub-Saharan African languages. INCLUDES: Swahili, Yoruba, Igbo, Zulu, Shona, Fula. LARGEST African family. Bantu branch dominant in east/south.',
+  f.content = 'USE: for Sub-Saharan African languages. INCLUDES: Swahili, Yoruba, Igbo, Zulu, Shona, Fula. LARGEST African family. Bantu branch dominant in east/south.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1384,7 +1467,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33838',
   f.primary_cultural_realm = 'meso-african',
   f.writing_systems = ['Latin'],
-  f.llm_context = 'USE: for Sub-Saharan African languages. INCLUDES: Swahili, Yoruba, Igbo, Zulu, Shona, Fula. LARGEST African family. Bantu branch dominant in east/south.';
+  f.content = 'USE: for Sub-Saharan African languages. INCLUDES: Swahili, Yoruba, Igbo, Zulu, Shona, Fula. LARGEST African family. Bantu branch dominant in east/south.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'afa'})
 ON CREATE SET
@@ -1396,7 +1480,8 @@ ON CREATE SET
   f.wikidata_id = 'Q25268',
   f.primary_cultural_realm = 'islamic',
   f.writing_systems = ['Arabic', 'Hebrew', 'Latin', 'Ethiopic'],
-  f.llm_context = 'USE: for Arabic, Hebrew, Amharic, Hausa, Somali. INCLUDES: Semitic (Arabic, Hebrew), Berber, Cushitic, Chadic. RTL for Arabic/Hebrew. Islamic cultural context for most.',
+  f.content = 'USE: for Arabic, Hebrew, Amharic, Hausa, Somali. INCLUDES: Semitic (Arabic, Hebrew), Berber, Cushitic, Chadic. RTL for Arabic/Hebrew. Islamic cultural context for most.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1408,7 +1493,8 @@ ON MATCH SET
   f.wikidata_id = 'Q25268',
   f.primary_cultural_realm = 'islamic',
   f.writing_systems = ['Arabic', 'Hebrew', 'Latin', 'Ethiopic'],
-  f.llm_context = 'USE: for Arabic, Hebrew, Amharic, Hausa, Somali. INCLUDES: Semitic (Arabic, Hebrew), Berber, Cushitic, Chadic. RTL for Arabic/Hebrew. Islamic cultural context for most.';
+  f.content = 'USE: for Arabic, Hebrew, Amharic, Hausa, Somali. INCLUDES: Semitic (Arabic, Hebrew), Berber, Cushitic, Chadic. RTL for Arabic/Hebrew. Islamic cultural context for most.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'map'})
 ON CREATE SET
@@ -1420,7 +1506,8 @@ ON CREATE SET
   f.wikidata_id = 'Q49228',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Latin', 'Javanese', 'Balinese'],
-  f.llm_context = 'USE: for Indonesian, Malay, Filipino, Maori, Hawaiian. SPANS: Maritime SEA to Pacific to Madagascar. Latin script dominant today.',
+  f.content = 'USE: for Indonesian, Malay, Filipino, Maori, Hawaiian. SPANS: Maritime SEA to Pacific to Madagascar. Latin script dominant today.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1432,7 +1519,8 @@ ON MATCH SET
   f.wikidata_id = 'Q49228',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Latin', 'Javanese', 'Balinese'],
-  f.llm_context = 'USE: for Indonesian, Malay, Filipino, Maori, Hawaiian. SPANS: Maritime SEA to Pacific to Madagascar. Latin script dominant today.';
+  f.content = 'USE: for Indonesian, Malay, Filipino, Maori, Hawaiian. SPANS: Maritime SEA to Pacific to Madagascar. Latin script dominant today.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'dra'})
 ON CREATE SET
@@ -1444,7 +1532,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33311',
   f.primary_cultural_realm = 'indic',
   f.writing_systems = ['Tamil', 'Telugu', 'Kannada', 'Malayalam'],
-  f.llm_context = 'USE: for South Indian languages. INCLUDES: Tamil, Telugu, Kannada, Malayalam. DISTINCT from Indo-Aryan Hindi belt. Unique scripts. Strong regional identity.',
+  f.content = 'USE: for South Indian languages. INCLUDES: Tamil, Telugu, Kannada, Malayalam. DISTINCT from Indo-Aryan Hindi belt. Unique scripts. Strong regional identity.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1456,7 +1545,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33311',
   f.primary_cultural_realm = 'indic',
   f.writing_systems = ['Tamil', 'Telugu', 'Kannada', 'Malayalam'],
-  f.llm_context = 'USE: for South Indian languages. INCLUDES: Tamil, Telugu, Kannada, Malayalam. DISTINCT from Indo-Aryan Hindi belt. Unique scripts. Strong regional identity.';
+  f.content = 'USE: for South Indian languages. INCLUDES: Tamil, Telugu, Kannada, Malayalam. DISTINCT from Indo-Aryan Hindi belt. Unique scripts. Strong regional identity.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'trk'})
 ON CREATE SET
@@ -1468,7 +1558,8 @@ ON CREATE SET
   f.wikidata_id = 'Q34090',
   f.primary_cultural_realm = 'islamic',
   f.writing_systems = ['Latin', 'Cyrillic', 'Arabic'],
-  f.llm_context = 'USE: for Turkish, Azerbaijani, Uzbek, Kazakh. CULTURAL: Islamic despite linguistic isolation. Ottoman heritage. Latin in Turkey, Cyrillic in Central Asia.',
+  f.content = 'USE: for Turkish, Azerbaijani, Uzbek, Kazakh. CULTURAL: Islamic despite linguistic isolation. Ottoman heritage. Latin in Turkey, Cyrillic in Central Asia.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1480,7 +1571,8 @@ ON MATCH SET
   f.wikidata_id = 'Q34090',
   f.primary_cultural_realm = 'islamic',
   f.writing_systems = ['Latin', 'Cyrillic', 'Arabic'],
-  f.llm_context = 'USE: for Turkish, Azerbaijani, Uzbek, Kazakh. CULTURAL: Islamic despite linguistic isolation. Ottoman heritage. Latin in Turkey, Cyrillic in Central Asia.';
+  f.content = 'USE: for Turkish, Azerbaijani, Uzbek, Kazakh. CULTURAL: Islamic despite linguistic isolation. Ottoman heritage. Latin in Turkey, Cyrillic in Central Asia.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'jpx'})
 ON CREATE SET
@@ -1492,7 +1584,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33702',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Japanese (Kanji, Hiragana, Katakana)'],
-  f.llm_context = 'USE: for Japanese. ISOLATE family. Unique writing system (3 scripts). HIGH-CONTEXT culture. Honorifics essential. Polite forms required in business.',
+  f.content = 'USE: for Japanese. ISOLATE family. Unique writing system (3 scripts). HIGH-CONTEXT culture. Honorifics essential. Polite forms required in business.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1504,7 +1597,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33702',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Japanese (Kanji, Hiragana, Katakana)'],
-  f.llm_context = 'USE: for Japanese. ISOLATE family. Unique writing system (3 scripts). HIGH-CONTEXT culture. Honorifics essential. Polite forms required in business.';
+  f.content = 'USE: for Japanese. ISOLATE family. Unique writing system (3 scripts). HIGH-CONTEXT culture. Honorifics essential. Polite forms required in business.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'aav'})
 ON CREATE SET
@@ -1516,7 +1610,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33199',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Latin', 'Khmer'],
-  f.llm_context = 'USE: for Vietnamese, Khmer. NOTE: Vietnamese culturally Sinosphere despite Austroasiatic linguistic family. Khmer with unique script. Tonal (Vietnamese).',
+  f.content = 'USE: for Vietnamese, Khmer. NOTE: Vietnamese culturally Sinosphere despite Austroasiatic linguistic family. Khmer with unique script. Tonal (Vietnamese).',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1528,7 +1623,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33199',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Latin', 'Khmer'],
-  f.llm_context = 'USE: for Vietnamese, Khmer. NOTE: Vietnamese culturally Sinosphere despite Austroasiatic linguistic family. Khmer with unique script. Tonal (Vietnamese).';
+  f.content = 'USE: for Vietnamese, Khmer. NOTE: Vietnamese culturally Sinosphere despite Austroasiatic linguistic family. Khmer with unique script. Tonal (Vietnamese).',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'tai'})
 ON CREATE SET
@@ -1540,7 +1636,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33311',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Thai', 'Lao', 'Latin'],
-  f.llm_context = 'USE: for Thai, Lao. CULTURE: Theravada Buddhist. Unique scripts derived from Khmer. Tonal languages. Respectful forms important.',
+  f.content = 'USE: for Thai, Lao. CULTURE: Theravada Buddhist. Unique scripts derived from Khmer. Tonal languages. Respectful forms important.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1552,7 +1649,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33311',
   f.primary_cultural_realm = 'southeast-asian',
   f.writing_systems = ['Thai', 'Lao', 'Latin'],
-  f.llm_context = 'USE: for Thai, Lao. CULTURE: Theravada Buddhist. Unique scripts derived from Khmer. Tonal languages. Respectful forms important.';
+  f.content = 'USE: for Thai, Lao. CULTURE: Theravada Buddhist. Unique scripts derived from Khmer. Tonal languages. Respectful forms important.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'kor'})
 ON CREATE SET
@@ -1564,7 +1662,8 @@ ON CREATE SET
   f.wikidata_id = 'Q33552',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Hangul'],
-  f.llm_context = 'USE: for Korean. ISOLATE family. Hangul script (scientific design). HIGH-CONTEXT. Honorifics essential. Confucian heritage. K-culture global influence.',
+  f.content = 'USE: for Korean. ISOLATE family. Hangul script (scientific design). HIGH-CONTEXT. Honorifics essential. Confucian heritage. K-culture global influence.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1576,7 +1675,8 @@ ON MATCH SET
   f.wikidata_id = 'Q33552',
   f.primary_cultural_realm = 'east-asian',
   f.writing_systems = ['Hangul'],
-  f.llm_context = 'USE: for Korean. ISOLATE family. Hangul script (scientific design). HIGH-CONTEXT. Honorifics essential. Confucian heritage. K-culture global influence.';
+  f.content = 'USE: for Korean. ISOLATE family. Hangul script (scientific design). HIGH-CONTEXT. Honorifics essential. Confucian heritage. K-culture global influence.',
+  f.triggers = [];
 
 MERGE (f:LanguageFamily {key: 'ura'})
 ON CREATE SET
@@ -1588,7 +1688,8 @@ ON CREATE SET
   f.wikidata_id = 'Q47779',
   f.primary_cultural_realm = 'occidental',
   f.writing_systems = ['Latin', 'Cyrillic'],
-  f.llm_context = 'USE: for Finnish, Hungarian, Estonian. CULTURAL: Occidental despite linguistic isolation. EU members. Nordic (Finnish) vs Central European (Hungarian) cultures.',
+  f.content = 'USE: for Finnish, Hungarian, Estonian. CULTURAL: Occidental despite linguistic isolation. EU members. Nordic (Finnish) vs Central European (Hungarian) cultures.',
+  f.triggers = [],
   f.created_by = 'seed:immutable',
   f.created_at = datetime()
 ON MATCH SET
@@ -1600,7 +1701,8 @@ ON MATCH SET
   f.wikidata_id = 'Q47779',
   f.primary_cultural_realm = 'occidental',
   f.writing_systems = ['Latin', 'Cyrillic'],
-  f.llm_context = 'USE: for Finnish, Hungarian, Estonian. CULTURAL: Occidental despite linguistic isolation. EU members. Nordic (Finnish) vs Central European (Hungarian) cultures.';
+  f.content = 'USE: for Finnish, Hungarian, Estonian. CULTURAL: Occidental despite linguistic isolation. EU members. Nordic (Finnish) vs Central European (Hungarian) cultures.',
+  f.triggers = [];
 
 // -----------------------------------------------------------------------------
 // LANGUAGE BRANCHES (ISO 639-5 subgroups)
@@ -1615,7 +1717,8 @@ ON CREATE SET
   b.iso_639_5 = 'gem',
   b.parent_family = 'ine',
   b.includes = ['en', 'de', 'nl', 'sv', 'no', 'da', 'is', 'af'],
-  b.llm_context = 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.',
+  b.content = 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1625,7 +1728,8 @@ ON MATCH SET
   b.iso_639_5 = 'gem',
   b.parent_family = 'ine',
   b.includes = ['en', 'de', 'nl', 'sv', 'no', 'da', 'is', 'af'],
-  b.llm_context = 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.';
+  b.content = 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'roa'})
 ON CREATE SET
@@ -1635,7 +1739,8 @@ ON CREATE SET
   b.iso_639_5 = 'roa',
   b.parent_family = 'ine',
   b.includes = ['es', 'pt', 'fr', 'it', 'ro', 'ca'],
-  b.llm_context = 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.',
+  b.content = 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1645,7 +1750,8 @@ ON MATCH SET
   b.iso_639_5 = 'roa',
   b.parent_family = 'ine',
   b.includes = ['es', 'pt', 'fr', 'it', 'ro', 'ca'],
-  b.llm_context = 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.';
+  b.content = 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'sla'})
 ON CREATE SET
@@ -1655,7 +1761,8 @@ ON CREATE SET
   b.iso_639_5 = 'sla',
   b.parent_family = 'ine',
   b.includes = ['ru', 'pl', 'uk', 'cs', 'sr', 'hr', 'bg', 'sk'],
-  b.llm_context = 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.',
+  b.content = 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1665,7 +1772,8 @@ ON MATCH SET
   b.iso_639_5 = 'sla',
   b.parent_family = 'ine',
   b.includes = ['ru', 'pl', 'uk', 'cs', 'sr', 'hr', 'bg', 'sk'],
-  b.llm_context = 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.';
+  b.content = 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'inc'})
 ON CREATE SET
@@ -1675,7 +1783,8 @@ ON CREATE SET
   b.iso_639_5 = 'inc',
   b.parent_family = 'ine',
   b.includes = ['hi', 'bn', 'ur', 'pa', 'gu', 'mr', 'ne'],
-  b.llm_context = 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.',
+  b.content = 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1685,7 +1794,8 @@ ON MATCH SET
   b.iso_639_5 = 'inc',
   b.parent_family = 'ine',
   b.includes = ['hi', 'bn', 'ur', 'pa', 'gu', 'mr', 'ne'],
-  b.llm_context = 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.';
+  b.content = 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'ira'})
 ON CREATE SET
@@ -1695,7 +1805,8 @@ ON CREATE SET
   b.iso_639_5 = 'ira',
   b.parent_family = 'ine',
   b.includes = ['fa', 'ps', 'ku', 'tg'],
-  b.llm_context = 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.',
+  b.content = 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1705,7 +1816,8 @@ ON MATCH SET
   b.iso_639_5 = 'ira',
   b.parent_family = 'ine',
   b.includes = ['fa', 'ps', 'ku', 'tg'],
-  b.llm_context = 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.';
+  b.content = 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'cel'})
 ON CREATE SET
@@ -1715,7 +1827,8 @@ ON CREATE SET
   b.iso_639_5 = 'cel',
   b.parent_family = 'ine',
   b.includes = ['ga', 'cy', 'gd', 'br'],
-  b.llm_context = 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.',
+  b.content = 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1725,7 +1838,8 @@ ON MATCH SET
   b.iso_639_5 = 'cel',
   b.parent_family = 'ine',
   b.includes = ['ga', 'cy', 'gd', 'br'],
-  b.llm_context = 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.';
+  b.content = 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'grk'})
 ON CREATE SET
@@ -1735,7 +1849,8 @@ ON CREATE SET
   b.iso_639_5 = 'grk',
   b.parent_family = 'ine',
   b.includes = ['el'],
-  b.llm_context = 'Greek. Unique script. Mediterranean culture. Orthodox heritage.',
+  b.content = 'Greek. Unique script. Mediterranean culture. Orthodox heritage.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1745,7 +1860,8 @@ ON MATCH SET
   b.iso_639_5 = 'grk',
   b.parent_family = 'ine',
   b.includes = ['el'],
-  b.llm_context = 'Greek. Unique script. Mediterranean culture. Orthodox heritage.';
+  b.content = 'Greek. Unique script. Mediterranean culture. Orthodox heritage.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'bal'})
 ON CREATE SET
@@ -1755,7 +1871,8 @@ ON CREATE SET
   b.iso_639_5 = 'bat',
   b.parent_family = 'ine',
   b.includes = ['lt', 'lv'],
-  b.llm_context = 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.',
+  b.content = 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1765,7 +1882,8 @@ ON MATCH SET
   b.iso_639_5 = 'bat',
   b.parent_family = 'ine',
   b.includes = ['lt', 'lv'],
-  b.llm_context = 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.';
+  b.content = 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.',
+  b.triggers = [];
 
 // Sino-Tibetan branches
 MERGE (b:LanguageBranch {key: 'zhx'})
@@ -1776,7 +1894,8 @@ ON CREATE SET
   b.iso_639_5 = 'zhx',
   b.parent_family = 'sit',
   b.includes = ['zh', 'yue', 'nan', 'wuu'],
-  b.llm_context = 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.',
+  b.content = 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1786,7 +1905,8 @@ ON MATCH SET
   b.iso_639_5 = 'zhx',
   b.parent_family = 'sit',
   b.includes = ['zh', 'yue', 'nan', 'wuu'],
-  b.llm_context = 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.';
+  b.content = 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'tbq'})
 ON CREATE SET
@@ -1796,7 +1916,8 @@ ON CREATE SET
   b.iso_639_5 = 'tbq',
   b.parent_family = 'sit',
   b.includes = ['bo', 'my', 'dz'],
-  b.llm_context = 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.',
+  b.content = 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1806,7 +1927,8 @@ ON MATCH SET
   b.iso_639_5 = 'tbq',
   b.parent_family = 'sit',
   b.includes = ['bo', 'my', 'dz'],
-  b.llm_context = 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.';
+  b.content = 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.',
+  b.triggers = [];
 
 // Afroasiatic branches
 MERGE (b:LanguageBranch {key: 'sem'})
@@ -1817,7 +1939,8 @@ ON CREATE SET
   b.iso_639_5 = 'sem',
   b.parent_family = 'afa',
   b.includes = ['ar', 'he', 'am', 'ti', 'mt'],
-  b.llm_context = 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.',
+  b.content = 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1827,7 +1950,8 @@ ON MATCH SET
   b.iso_639_5 = 'sem',
   b.parent_family = 'afa',
   b.includes = ['ar', 'he', 'am', 'ti', 'mt'],
-  b.llm_context = 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.';
+  b.content = 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'ber'})
 ON CREATE SET
@@ -1837,7 +1961,8 @@ ON CREATE SET
   b.iso_639_5 = 'ber',
   b.parent_family = 'afa',
   b.includes = ['ber', 'tzm', 'kab'],
-  b.llm_context = 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.',
+  b.content = 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1847,7 +1972,8 @@ ON MATCH SET
   b.iso_639_5 = 'ber',
   b.parent_family = 'afa',
   b.includes = ['ber', 'tzm', 'kab'],
-  b.llm_context = 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.';
+  b.content = 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.',
+  b.triggers = [];
 
 // Niger-Congo branches
 MERGE (b:LanguageBranch {key: 'bnt'})
@@ -1858,7 +1984,8 @@ ON CREATE SET
   b.iso_639_5 = 'bnt',
   b.parent_family = 'nic',
   b.includes = ['sw', 'zu', 'xh', 'rw', 'rn', 'sn', 'lg'],
-  b.llm_context = 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.',
+  b.content = 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1868,7 +1995,8 @@ ON MATCH SET
   b.iso_639_5 = 'bnt',
   b.parent_family = 'nic',
   b.includes = ['sw', 'zu', 'xh', 'rw', 'rn', 'sn', 'lg'],
-  b.llm_context = 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.';
+  b.content = 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'alv'})
 ON CREATE SET
@@ -1878,7 +2006,8 @@ ON CREATE SET
   b.iso_639_5 = 'alv',
   b.parent_family = 'nic',
   b.includes = ['yo', 'ig', 'ha', 'wo', 'ff'],
-  b.llm_context = 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.',
+  b.content = 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1888,7 +2017,8 @@ ON MATCH SET
   b.iso_639_5 = 'alv',
   b.parent_family = 'nic',
   b.includes = ['yo', 'ig', 'ha', 'wo', 'ff'],
-  b.llm_context = 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.';
+  b.content = 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.',
+  b.triggers = [];
 
 // Turkic branches
 MERGE (b:LanguageBranch {key: 'ogz'})
@@ -1899,7 +2029,8 @@ ON CREATE SET
   b.iso_639_5 = 'ogz',
   b.parent_family = 'trk',
   b.includes = ['tr', 'az', 'tk'],
-  b.llm_context = 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.',
+  b.content = 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1909,7 +2040,8 @@ ON MATCH SET
   b.iso_639_5 = 'ogz',
   b.parent_family = 'trk',
   b.includes = ['tr', 'az', 'tk'],
-  b.llm_context = 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.';
+  b.content = 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.',
+  b.triggers = [];
 
 MERGE (b:LanguageBranch {key: 'kip'})
 ON CREATE SET
@@ -1919,7 +2051,8 @@ ON CREATE SET
   b.iso_639_5 = 'kip',
   b.parent_family = 'trk',
   b.includes = ['kk', 'ky', 'tt'],
-  b.llm_context = 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.',
+  b.content = 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1929,7 +2062,8 @@ ON MATCH SET
   b.iso_639_5 = 'kip',
   b.parent_family = 'trk',
   b.includes = ['kk', 'ky', 'tt'],
-  b.llm_context = 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.';
+  b.content = 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.',
+  b.triggers = [];
 
 // Austronesian branches
 MERGE (b:LanguageBranch {key: 'poz'})
@@ -1940,7 +2074,8 @@ ON CREATE SET
   b.iso_639_5 = 'poz',
   b.parent_family = 'map',
   b.includes = ['id', 'ms', 'tl', 'jv', 'mi', 'haw', 'sm', 'to'],
-  b.llm_context = 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.',
+  b.content = 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1950,7 +2085,8 @@ ON MATCH SET
   b.iso_639_5 = 'poz',
   b.parent_family = 'map',
   b.includes = ['id', 'ms', 'tl', 'jv', 'mi', 'haw', 'sm', 'to'],
-  b.llm_context = 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.';
+  b.content = 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.',
+  b.triggers = [];
 
 // Austroasiatic branches
 MERGE (b:LanguageBranch {key: 'mkh'})
@@ -1961,7 +2097,8 @@ ON CREATE SET
   b.iso_639_5 = 'mkh',
   b.parent_family = 'aav',
   b.includes = ['vi', 'km'],
-  b.llm_context = 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.',
+  b.content = 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1971,7 +2108,8 @@ ON MATCH SET
   b.iso_639_5 = 'mkh',
   b.parent_family = 'aav',
   b.includes = ['vi', 'km'],
-  b.llm_context = 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.';
+  b.content = 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.',
+  b.triggers = [];
 
 // Dravidian branches
 MERGE (b:LanguageBranch {key: 'sdv'})
@@ -1982,7 +2120,8 @@ ON CREATE SET
   b.iso_639_5 = 'sdv',
   b.parent_family = 'dra',
   b.includes = ['ta', 'te', 'kn', 'ml'],
-  b.llm_context = 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.',
+  b.content = 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -1992,7 +2131,8 @@ ON MATCH SET
   b.iso_639_5 = 'sdv',
   b.parent_family = 'dra',
   b.includes = ['ta', 'te', 'kn', 'ml'],
-  b.llm_context = 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.';
+  b.content = 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.',
+  b.triggers = [];
 
 // Uralic branches
 MERGE (b:LanguageBranch {key: 'fiu'})
@@ -2003,7 +2143,8 @@ ON CREATE SET
   b.iso_639_5 = 'fiu',
   b.parent_family = 'ura',
   b.includes = ['fi', 'hu', 'et'],
-  b.llm_context = 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).',
+  b.content = 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).',
+  b.triggers = [],
   b.created_by = 'seed:immutable',
   b.created_at = datetime()
 ON MATCH SET
@@ -2013,7 +2154,8 @@ ON MATCH SET
   b.iso_639_5 = 'fiu',
   b.parent_family = 'ura',
   b.includes = ['fi', 'hu', 'et'],
-  b.llm_context = 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).';
+  b.content = 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).',
+  b.triggers = [];
 
 // -----------------------------------------------------------------------------
 // CULTURAL REALMS (Broek & Webb)
@@ -2029,7 +2171,8 @@ ON CREATE SET
   cr.communication_style = 'low-context, direct, explicit, time-conscious',
   cr.power_distance = 'low to medium',
   cr.content_taboos = 'religious extremism, explicit nationalism, discrimination',
-  cr.llm_context = 'USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: Individual rights, direct communication, time efficiency. STYLE: Low-context, explicit, data-driven. AVOID: Vague claims, excessive formality.',
+  cr.content = 'USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: Individual rights, direct communication, time efficiency. STYLE: Low-context, explicit, data-driven. AVOID: Vague claims, excessive formality.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2041,7 +2184,8 @@ ON MATCH SET
   cr.communication_style = 'low-context, direct, explicit, time-conscious',
   cr.power_distance = 'low to medium',
   cr.content_taboos = 'religious extremism, explicit nationalism, discrimination',
-  cr.llm_context = 'USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: Individual rights, direct communication, time efficiency. STYLE: Low-context, explicit, data-driven. AVOID: Vague claims, excessive formality.';
+  cr.content = 'USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: Individual rights, direct communication, time efficiency. STYLE: Low-context, explicit, data-driven. AVOID: Vague claims, excessive formality.',
+  cr.triggers = [];
 
 MERGE (cr:CulturalRealm {key: 'islamic'})
 ON CREATE SET
@@ -2053,7 +2197,8 @@ ON CREATE SET
   cr.communication_style = 'high-context, relationship-focused, indirect at times',
   cr.power_distance = 'medium to high',
   cr.content_taboos = 'alcohol, pork, immodest imagery, religious disrespect, LGBTQ+',
-  cr.llm_context = 'USE: for Middle East, North Africa, Central Asia, parts of South/Southeast Asia. TRIGGERS: islamic, muslim, arab, middle-eastern. VALUES: Faith, family, hospitality. STYLE: Respectful, relationship-first. AVOID: Alcohol, pork, immodest images, religious imagery.',
+  cr.content = 'USE: for Middle East, North Africa, Central Asia, parts of South/Southeast Asia. TRIGGERS: islamic, muslim, arab, middle-eastern. VALUES: Faith, family, hospitality. STYLE: Respectful, relationship-first. AVOID: Alcohol, pork, immodest images, religious imagery.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2065,7 +2210,8 @@ ON MATCH SET
   cr.communication_style = 'high-context, relationship-focused, indirect at times',
   cr.power_distance = 'medium to high',
   cr.content_taboos = 'alcohol, pork, immodest imagery, religious disrespect, LGBTQ+',
-  cr.llm_context = 'USE: for Middle East, North Africa, Central Asia, parts of South/Southeast Asia. TRIGGERS: islamic, muslim, arab, middle-eastern. VALUES: Faith, family, hospitality. STYLE: Respectful, relationship-first. AVOID: Alcohol, pork, immodest images, religious imagery.';
+  cr.content = 'USE: for Middle East, North Africa, Central Asia, parts of South/Southeast Asia. TRIGGERS: islamic, muslim, arab, middle-eastern. VALUES: Faith, family, hospitality. STYLE: Respectful, relationship-first. AVOID: Alcohol, pork, immodest images, religious imagery.',
+  cr.triggers = [];
 
 MERGE (cr:CulturalRealm {key: 'indic'})
 ON CREATE SET
@@ -2077,7 +2223,8 @@ ON CREATE SET
   cr.communication_style = 'high-context, hierarchical, indirect',
   cr.power_distance = 'high',
   cr.content_taboos = 'beef (Hindu), religious disrespect, caste insensitivity',
-  cr.llm_context = 'USE: for India, Nepal, Sri Lanka, parts of Southeast Asia. TRIGGERS: indian, hindu, south-asian. VALUES: Family, education, spirituality. STYLE: Respectful of hierarchy, indirect. AVOID: Beef references (Hindu), religious insensitivity.',
+  cr.content = 'USE: for India, Nepal, Sri Lanka, parts of Southeast Asia. TRIGGERS: indian, hindu, south-asian. VALUES: Family, education, spirituality. STYLE: Respectful of hierarchy, indirect. AVOID: Beef references (Hindu), religious insensitivity.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2089,7 +2236,8 @@ ON MATCH SET
   cr.communication_style = 'high-context, hierarchical, indirect',
   cr.power_distance = 'high',
   cr.content_taboos = 'beef (Hindu), religious disrespect, caste insensitivity',
-  cr.llm_context = 'USE: for India, Nepal, Sri Lanka, parts of Southeast Asia. TRIGGERS: indian, hindu, south-asian. VALUES: Family, education, spirituality. STYLE: Respectful of hierarchy, indirect. AVOID: Beef references (Hindu), religious insensitivity.';
+  cr.content = 'USE: for India, Nepal, Sri Lanka, parts of Southeast Asia. TRIGGERS: indian, hindu, south-asian. VALUES: Family, education, spirituality. STYLE: Respectful of hierarchy, indirect. AVOID: Beef references (Hindu), religious insensitivity.',
+  cr.triggers = [];
 
 MERGE (cr:CulturalRealm {key: 'east-asian'})
 ON CREATE SET
@@ -2101,7 +2249,8 @@ ON CREATE SET
   cr.communication_style = 'high-context, indirect, face-saving, formal',
   cr.power_distance = 'high',
   cr.content_taboos = 'loss of face, direct criticism, number 4 (death association)',
-  cr.llm_context = 'USE: for China, Japan, Korea, Taiwan, Vietnam. TRIGGERS: east-asian, confucian, cjk. VALUES: Harmony, face, education, hierarchy. STYLE: Indirect, respectful, group-oriented. AVOID: Direct criticism, number 4, causing embarrassment.',
+  cr.content = 'USE: for China, Japan, Korea, Taiwan, Vietnam. TRIGGERS: east-asian, confucian, cjk. VALUES: Harmony, face, education, hierarchy. STYLE: Indirect, respectful, group-oriented. AVOID: Direct criticism, number 4, causing embarrassment.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2113,7 +2262,8 @@ ON MATCH SET
   cr.communication_style = 'high-context, indirect, face-saving, formal',
   cr.power_distance = 'high',
   cr.content_taboos = 'loss of face, direct criticism, number 4 (death association)',
-  cr.llm_context = 'USE: for China, Japan, Korea, Taiwan, Vietnam. TRIGGERS: east-asian, confucian, cjk. VALUES: Harmony, face, education, hierarchy. STYLE: Indirect, respectful, group-oriented. AVOID: Direct criticism, number 4, causing embarrassment.';
+  cr.content = 'USE: for China, Japan, Korea, Taiwan, Vietnam. TRIGGERS: east-asian, confucian, cjk. VALUES: Harmony, face, education, hierarchy. STYLE: Indirect, respectful, group-oriented. AVOID: Direct criticism, number 4, causing embarrassment.',
+  cr.triggers = [];
 
 MERGE (cr:CulturalRealm {key: 'southeast-asian'})
 ON CREATE SET
@@ -2125,7 +2275,8 @@ ON CREATE SET
   cr.communication_style = 'high-context, indirect, smile-based, non-confrontational',
   cr.power_distance = 'medium to high',
   cr.content_taboos = 'disrespect to royalty (Thailand), head-touching, feet pointing',
-  cr.llm_context = 'USE: for Thailand, Indonesia, Philippines, Malaysia, Myanmar. TRIGGERS: southeast-asian, asean. VALUES: Harmony, flexibility, smiles. STYLE: Non-confrontational, polite. AVOID: Confrontation, disrespect to elders/royalty.',
+  cr.content = 'USE: for Thailand, Indonesia, Philippines, Malaysia, Myanmar. TRIGGERS: southeast-asian, asean. VALUES: Harmony, flexibility, smiles. STYLE: Non-confrontational, polite. AVOID: Confrontation, disrespect to elders/royalty.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2137,7 +2288,8 @@ ON MATCH SET
   cr.communication_style = 'high-context, indirect, smile-based, non-confrontational',
   cr.power_distance = 'medium to high',
   cr.content_taboos = 'disrespect to royalty (Thailand), head-touching, feet pointing',
-  cr.llm_context = 'USE: for Thailand, Indonesia, Philippines, Malaysia, Myanmar. TRIGGERS: southeast-asian, asean. VALUES: Harmony, flexibility, smiles. STYLE: Non-confrontational, polite. AVOID: Confrontation, disrespect to elders/royalty.';
+  cr.content = 'USE: for Thailand, Indonesia, Philippines, Malaysia, Myanmar. TRIGGERS: southeast-asian, asean. VALUES: Harmony, flexibility, smiles. STYLE: Non-confrontational, polite. AVOID: Confrontation, disrespect to elders/royalty.',
+  cr.triggers = [];
 
 MERGE (cr:CulturalRealm {key: 'meso-african'})
 ON CREATE SET
@@ -2149,7 +2301,8 @@ ON CREATE SET
   cr.communication_style = 'high-context, community-focused, storytelling',
   cr.power_distance = 'varies by culture',
   cr.content_taboos = 'disrespect to elders, ignoring community values',
-  cr.llm_context = 'USE: for Sub-Saharan Africa. TRIGGERS: african, subsaharan. VALUES: Ubuntu (community), oral tradition, elders. STYLE: Community-focused, relationship-building. AVOID: Individualistic framing, poverty stereotypes.',
+  cr.content = 'USE: for Sub-Saharan Africa. TRIGGERS: african, subsaharan. VALUES: Ubuntu (community), oral tradition, elders. STYLE: Community-focused, relationship-building. AVOID: Individualistic framing, poverty stereotypes.',
+  cr.triggers = [],
   cr.created_by = 'seed:immutable',
   cr.created_at = datetime()
 ON MATCH SET
@@ -2161,7 +2314,8 @@ ON MATCH SET
   cr.communication_style = 'high-context, community-focused, storytelling',
   cr.power_distance = 'varies by culture',
   cr.content_taboos = 'disrespect to elders, ignoring community values',
-  cr.llm_context = 'USE: for Sub-Saharan Africa. TRIGGERS: african, subsaharan. VALUES: Ubuntu (community), oral tradition, elders. STYLE: Community-focused, relationship-building. AVOID: Individualistic framing, poverty stereotypes.';
+  cr.content = 'USE: for Sub-Saharan Africa. TRIGGERS: african, subsaharan. VALUES: Ubuntu (community), oral tradition, elders. STYLE: Community-focused, relationship-building. AVOID: Individualistic framing, poverty stereotypes.',
+  cr.triggers = [];
 
 // -----------------------------------------------------------------------------
 // CULTURAL SUB-REALMS
@@ -2175,7 +2329,8 @@ ON CREATE SET
   csr.display_name = 'Anglo-American',
   csr.parent_realm = 'occidental',
   csr.regions = ['northern-america', 'australia-new-zealand'],
-  csr.llm_context = 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.',
+  csr.content = 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2184,7 +2339,8 @@ ON MATCH SET
   csr.display_name = 'Anglo-American',
   csr.parent_realm = 'occidental',
   csr.regions = ['northern-america', 'australia-new-zealand'],
-  csr.llm_context = 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.';
+  csr.content = 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'west-european'})
 ON CREATE SET
@@ -2193,7 +2349,8 @@ ON CREATE SET
   csr.display_name = 'Western European',
   csr.parent_realm = 'occidental',
   csr.regions = ['western-europe'],
-  csr.llm_context = 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.',
+  csr.content = 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2202,7 +2359,8 @@ ON MATCH SET
   csr.display_name = 'Western European',
   csr.parent_realm = 'occidental',
   csr.regions = ['western-europe'],
-  csr.llm_context = 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.';
+  csr.content = 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'nordic'})
 ON CREATE SET
@@ -2211,7 +2369,8 @@ ON CREATE SET
   csr.display_name = 'Nordic',
   csr.parent_realm = 'occidental',
   csr.regions = ['northern-europe'],
-  csr.llm_context = 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.',
+  csr.content = 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2220,7 +2379,8 @@ ON MATCH SET
   csr.display_name = 'Nordic',
   csr.parent_realm = 'occidental',
   csr.regions = ['northern-europe'],
-  csr.llm_context = 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.';
+  csr.content = 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'mediterranean'})
 ON CREATE SET
@@ -2229,7 +2389,8 @@ ON CREATE SET
   csr.display_name = 'Mediterranean',
   csr.parent_realm = 'occidental',
   csr.regions = ['southern-europe'],
-  csr.llm_context = 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.',
+  csr.content = 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2238,7 +2399,8 @@ ON MATCH SET
   csr.display_name = 'Mediterranean',
   csr.parent_realm = 'occidental',
   csr.regions = ['southern-europe'],
-  csr.llm_context = 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.';
+  csr.content = 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'eastern-european'})
 ON CREATE SET
@@ -2247,7 +2409,8 @@ ON CREATE SET
   csr.display_name = 'Eastern European',
   csr.parent_realm = 'occidental',
   csr.regions = ['eastern-europe'],
-  csr.llm_context = 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.',
+  csr.content = 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2256,7 +2419,8 @@ ON MATCH SET
   csr.display_name = 'Eastern European',
   csr.parent_realm = 'occidental',
   csr.regions = ['eastern-europe'],
-  csr.llm_context = 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.';
+  csr.content = 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'latin-american'})
 ON CREATE SET
@@ -2265,7 +2429,8 @@ ON CREATE SET
   csr.display_name = 'Latin American',
   csr.parent_realm = 'occidental',
   csr.regions = ['central-america', 'south-america', 'caribbean'],
-  csr.llm_context = 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.',
+  csr.content = 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2274,7 +2439,8 @@ ON MATCH SET
   csr.display_name = 'Latin American',
   csr.parent_realm = 'occidental',
   csr.regions = ['central-america', 'south-america', 'caribbean'],
-  csr.llm_context = 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.';
+  csr.content = 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'slavic-orthodox'})
 ON CREATE SET
@@ -2283,7 +2449,8 @@ ON CREATE SET
   csr.display_name = 'Slavic Orthodox',
   csr.parent_realm = 'occidental',
   csr.regions = ['eastern-europe'],
-  csr.llm_context = 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.',
+  csr.content = 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2292,7 +2459,8 @@ ON MATCH SET
   csr.display_name = 'Slavic Orthodox',
   csr.parent_realm = 'occidental',
   csr.regions = ['eastern-europe'],
-  csr.llm_context = 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.';
+  csr.content = 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.',
+  csr.triggers = [];
 
 // Islamic sub-realms
 MERGE (csr:CulturalSubRealm {key: 'islamic-arab'})
@@ -2302,7 +2470,8 @@ ON CREATE SET
   csr.display_name = 'Islamic Arab',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'northern-africa'],
-  csr.llm_context = 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.',
+  csr.content = 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2311,7 +2480,8 @@ ON MATCH SET
   csr.display_name = 'Islamic Arab',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'northern-africa'],
-  csr.llm_context = 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.';
+  csr.content = 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'islamic-persian'})
 ON CREATE SET
@@ -2320,7 +2490,8 @@ ON CREATE SET
   csr.display_name = 'Islamic Persian',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'central-asia'],
-  csr.llm_context = 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.',
+  csr.content = 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2329,7 +2500,8 @@ ON MATCH SET
   csr.display_name = 'Islamic Persian',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'central-asia'],
-  csr.llm_context = 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.';
+  csr.content = 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'islamic-turkic'})
 ON CREATE SET
@@ -2338,7 +2510,8 @@ ON CREATE SET
   csr.display_name = 'Islamic Turkic',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'central-asia'],
-  csr.llm_context = 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.',
+  csr.content = 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2347,7 +2520,8 @@ ON MATCH SET
   csr.display_name = 'Islamic Turkic',
   csr.parent_realm = 'islamic',
   csr.regions = ['western-asia', 'central-asia'],
-  csr.llm_context = 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.';
+  csr.content = 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'south-asian-islamic'})
 ON CREATE SET
@@ -2356,7 +2530,8 @@ ON CREATE SET
   csr.display_name = 'South Asian Islamic',
   csr.parent_realm = 'islamic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.',
+  csr.content = 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2365,7 +2540,8 @@ ON MATCH SET
   csr.display_name = 'South Asian Islamic',
   csr.parent_realm = 'islamic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.';
+  csr.content = 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'maritime-islamic'})
 ON CREATE SET
@@ -2374,7 +2550,8 @@ ON CREATE SET
   csr.display_name = 'Maritime Islamic',
   csr.parent_realm = 'islamic',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.',
+  csr.content = 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2383,7 +2560,8 @@ ON MATCH SET
   csr.display_name = 'Maritime Islamic',
   csr.parent_realm = 'islamic',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.';
+  csr.content = 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.',
+  csr.triggers = [];
 
 // Indic sub-realms
 MERGE (csr:CulturalSubRealm {key: 'north-indian'})
@@ -2393,7 +2571,8 @@ ON CREATE SET
   csr.display_name = 'North Indian',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.',
+  csr.content = 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2402,7 +2581,8 @@ ON MATCH SET
   csr.display_name = 'North Indian',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.';
+  csr.content = 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'south-indian'})
 ON CREATE SET
@@ -2411,7 +2591,8 @@ ON CREATE SET
   csr.display_name = 'South Indian',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.',
+  csr.content = 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2420,7 +2601,8 @@ ON MATCH SET
   csr.display_name = 'South Indian',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.';
+  csr.content = 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'himalayan-buddhist'})
 ON CREATE SET
@@ -2429,7 +2611,8 @@ ON CREATE SET
   csr.display_name = 'Himalayan Buddhist',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.',
+  csr.content = 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2438,7 +2621,8 @@ ON MATCH SET
   csr.display_name = 'Himalayan Buddhist',
   csr.parent_realm = 'indic',
   csr.regions = ['southern-asia'],
-  csr.llm_context = 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.';
+  csr.content = 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.',
+  csr.triggers = [];
 
 // East Asian sub-realms
 MERGE (csr:CulturalSubRealm {key: 'sinosphere'})
@@ -2448,7 +2632,8 @@ ON CREATE SET
   csr.display_name = 'Sinosphere',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.',
+  csr.content = 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2457,7 +2642,8 @@ ON MATCH SET
   csr.display_name = 'Sinosphere',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.';
+  csr.content = 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'japanese'})
 ON CREATE SET
@@ -2466,7 +2652,8 @@ ON CREATE SET
   csr.display_name = 'Japanese',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.',
+  csr.content = 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2475,7 +2662,8 @@ ON MATCH SET
   csr.display_name = 'Japanese',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.';
+  csr.content = 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'korean'})
 ON CREATE SET
@@ -2484,7 +2672,8 @@ ON CREATE SET
   csr.display_name = 'Korean',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.',
+  csr.content = 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2493,7 +2682,8 @@ ON MATCH SET
   csr.display_name = 'Korean',
   csr.parent_realm = 'east-asian',
   csr.regions = ['eastern-asia'],
-  csr.llm_context = 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.';
+  csr.content = 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'vietnamese-sinosphere'})
 ON CREATE SET
@@ -2502,7 +2692,8 @@ ON CREATE SET
   csr.display_name = 'Vietnamese Sinosphere',
   csr.parent_realm = 'east-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.',
+  csr.content = 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2511,7 +2702,8 @@ ON MATCH SET
   csr.display_name = 'Vietnamese Sinosphere',
   csr.parent_realm = 'east-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.';
+  csr.content = 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.',
+  csr.triggers = [];
 
 // Southeast Asian sub-realms
 MERGE (csr:CulturalSubRealm {key: 'theravada-buddhist'})
@@ -2521,7 +2713,8 @@ ON CREATE SET
   csr.display_name = 'Theravada Buddhist',
   csr.parent_realm = 'southeast-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.',
+  csr.content = 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2530,7 +2723,8 @@ ON MATCH SET
   csr.display_name = 'Theravada Buddhist',
   csr.parent_realm = 'southeast-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.';
+  csr.content = 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'philippine-syncretic'})
 ON CREATE SET
@@ -2539,7 +2733,8 @@ ON CREATE SET
   csr.display_name = 'Philippine Syncretic',
   csr.parent_realm = 'southeast-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.',
+  csr.content = 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2548,7 +2743,8 @@ ON MATCH SET
   csr.display_name = 'Philippine Syncretic',
   csr.parent_realm = 'southeast-asian',
   csr.regions = ['south-eastern-asia'],
-  csr.llm_context = 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.';
+  csr.content = 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.',
+  csr.triggers = [];
 
 // Meso-African sub-realms
 MERGE (csr:CulturalSubRealm {key: 'west-african'})
@@ -2558,7 +2754,8 @@ ON CREATE SET
   csr.display_name = 'West African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['western-africa'],
-  csr.llm_context = 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.',
+  csr.content = 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2567,7 +2764,8 @@ ON MATCH SET
   csr.display_name = 'West African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['western-africa'],
-  csr.llm_context = 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.';
+  csr.content = 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'east-african'})
 ON CREATE SET
@@ -2576,7 +2774,8 @@ ON CREATE SET
   csr.display_name = 'East African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['eastern-africa'],
-  csr.llm_context = 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.',
+  csr.content = 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2585,7 +2784,8 @@ ON MATCH SET
   csr.display_name = 'East African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['eastern-africa'],
-  csr.llm_context = 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.';
+  csr.content = 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.',
+  csr.triggers = [];
 
 MERGE (csr:CulturalSubRealm {key: 'southern-african'})
 ON CREATE SET
@@ -2594,7 +2794,8 @@ ON CREATE SET
   csr.display_name = 'Southern African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['southern-africa'],
-  csr.llm_context = 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.',
+  csr.content = 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.',
+  csr.triggers = [],
   csr.created_by = 'seed:immutable',
   csr.created_at = datetime()
 ON MATCH SET
@@ -2603,7 +2804,8 @@ ON MATCH SET
   csr.display_name = 'Southern African',
   csr.parent_realm = 'meso-african',
   csr.regions = ['southern-africa'],
-  csr.llm_context = 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.';
+  csr.content = 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.',
+  csr.triggers = [];
 
 // -----------------------------------------------------------------------------
 // POPULATION CLUSTERS (for AI image generation diversity)
@@ -2616,7 +2818,8 @@ ON CREATE SET
   pc.display_name = 'West Eurasian',
   pc.regions = ['Europe', 'Middle East', 'North Africa', 'South Asia'],
   pc.visual_traits = 'Light to olive skin tones, varied eye colors (blue, green, brown, hazel), straight to wavy hair textures, narrow to medium nose bridge',
-  pc.llm_context = 'USE: for European, Middle Eastern, North African, South Asian phenotypes. DIVERSE: Nordic to Mediterranean to South Asian range.',
+  pc.content = 'USE: for European, Middle Eastern, North African, South Asian phenotypes. DIVERSE: Nordic to Mediterranean to South Asian range.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2625,7 +2828,8 @@ ON MATCH SET
   pc.display_name = 'West Eurasian',
   pc.regions = ['Europe', 'Middle East', 'North Africa', 'South Asia'],
   pc.visual_traits = 'Light to olive skin tones, varied eye colors (blue, green, brown, hazel), straight to wavy hair textures, narrow to medium nose bridge',
-  pc.llm_context = 'USE: for European, Middle Eastern, North African, South Asian phenotypes. DIVERSE: Nordic to Mediterranean to South Asian range.';
+  pc.content = 'USE: for European, Middle Eastern, North African, South Asian phenotypes. DIVERSE: Nordic to Mediterranean to South Asian range.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'east-asian'})
 ON CREATE SET
@@ -2634,7 +2838,8 @@ ON CREATE SET
   pc.display_name = 'East Asian',
   pc.regions = ['East Asia', 'Central Asia', 'Arctic'],
   pc.visual_traits = 'Warm ivory to golden skin tones, straight black hair, dark brown eyes, epicanthic fold, high flat cheekbones',
-  pc.llm_context = 'USE: for East Asian, Central Asian phenotypes. INCLUDES: Han Chinese, Japanese, Korean, Mongolian appearances.',
+  pc.content = 'USE: for East Asian, Central Asian phenotypes. INCLUDES: Han Chinese, Japanese, Korean, Mongolian appearances.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2643,7 +2848,8 @@ ON MATCH SET
   pc.display_name = 'East Asian',
   pc.regions = ['East Asia', 'Central Asia', 'Arctic'],
   pc.visual_traits = 'Warm ivory to golden skin tones, straight black hair, dark brown eyes, epicanthic fold, high flat cheekbones',
-  pc.llm_context = 'USE: for East Asian, Central Asian phenotypes. INCLUDES: Han Chinese, Japanese, Korean, Mongolian appearances.';
+  pc.content = 'USE: for East Asian, Central Asian phenotypes. INCLUDES: Han Chinese, Japanese, Korean, Mongolian appearances.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'southeast-asian'})
 ON CREATE SET
@@ -2652,7 +2858,8 @@ ON CREATE SET
   pc.display_name = 'Southeast Asian',
   pc.regions = ['Southeast Asia', 'Pacific Islands'],
   pc.visual_traits = 'Warm golden to brown skin tones, straight to wavy black hair, dark brown eyes, varied nose shapes, fuller lips possible',
-  pc.llm_context = 'USE: for Southeast Asian, Filipino, Indonesian, Thai, Vietnamese phenotypes. DIVERSE within region.',
+  pc.content = 'USE: for Southeast Asian, Filipino, Indonesian, Thai, Vietnamese phenotypes. DIVERSE within region.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2661,7 +2868,8 @@ ON MATCH SET
   pc.display_name = 'Southeast Asian',
   pc.regions = ['Southeast Asia', 'Pacific Islands'],
   pc.visual_traits = 'Warm golden to brown skin tones, straight to wavy black hair, dark brown eyes, varied nose shapes, fuller lips possible',
-  pc.llm_context = 'USE: for Southeast Asian, Filipino, Indonesian, Thai, Vietnamese phenotypes. DIVERSE within region.';
+  pc.content = 'USE: for Southeast Asian, Filipino, Indonesian, Thai, Vietnamese phenotypes. DIVERSE within region.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'south-asian'})
 ON CREATE SET
@@ -2670,7 +2878,8 @@ ON CREATE SET
   pc.display_name = 'South Asian',
   pc.regions = ['South Asia'],
   pc.visual_traits = 'Warm brown skin ranging light to dark, straight to wavy black hair, dark brown eyes, defined nose bridge',
-  pc.llm_context = 'USE: for Indian, Pakistani, Bangladeshi, Sri Lankan phenotypes. DIVERSE: North to South India range.',
+  pc.content = 'USE: for Indian, Pakistani, Bangladeshi, Sri Lankan phenotypes. DIVERSE: North to South India range.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2679,7 +2888,8 @@ ON MATCH SET
   pc.display_name = 'South Asian',
   pc.regions = ['South Asia'],
   pc.visual_traits = 'Warm brown skin ranging light to dark, straight to wavy black hair, dark brown eyes, defined nose bridge',
-  pc.llm_context = 'USE: for Indian, Pakistani, Bangladeshi, Sri Lankan phenotypes. DIVERSE: North to South India range.';
+  pc.content = 'USE: for Indian, Pakistani, Bangladeshi, Sri Lankan phenotypes. DIVERSE: North to South India range.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'sub-saharan'})
 ON CREATE SET
@@ -2688,7 +2898,8 @@ ON CREATE SET
   pc.display_name = 'Sub-Saharan African',
   pc.regions = ['Sub-Saharan Africa'],
   pc.visual_traits = 'Rich dark brown to deep black skin tones, tightly coiled to kinky hair textures, dark brown eyes, broad nose, full lips',
-  pc.llm_context = 'USE: for African phenotypes. MOST DIVERSE genetically. West, East, Southern variations.',
+  pc.content = 'USE: for African phenotypes. MOST DIVERSE genetically. West, East, Southern variations.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2697,7 +2908,8 @@ ON MATCH SET
   pc.display_name = 'Sub-Saharan African',
   pc.regions = ['Sub-Saharan Africa'],
   pc.visual_traits = 'Rich dark brown to deep black skin tones, tightly coiled to kinky hair textures, dark brown eyes, broad nose, full lips',
-  pc.llm_context = 'USE: for African phenotypes. MOST DIVERSE genetically. West, East, Southern variations.';
+  pc.content = 'USE: for African phenotypes. MOST DIVERSE genetically. West, East, Southern variations.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'native-american'})
 ON CREATE SET
@@ -2706,7 +2918,8 @@ ON CREATE SET
   pc.display_name = 'Native American',
   pc.regions = ['North America', 'Central America', 'South America'],
   pc.visual_traits = 'Warm bronze to copper skin tones, straight jet-black hair, dark brown eyes, high prominent cheekbones, varied nose shapes',
-  pc.llm_context = 'USE: for Indigenous Americas phenotypes. DIVERSE: Inuit to Mesoamerican to Andean variations.',
+  pc.content = 'USE: for Indigenous Americas phenotypes. DIVERSE: Inuit to Mesoamerican to Andean variations.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2715,7 +2928,8 @@ ON MATCH SET
   pc.display_name = 'Native American',
   pc.regions = ['North America', 'Central America', 'South America'],
   pc.visual_traits = 'Warm bronze to copper skin tones, straight jet-black hair, dark brown eyes, high prominent cheekbones, varied nose shapes',
-  pc.llm_context = 'USE: for Indigenous Americas phenotypes. DIVERSE: Inuit to Mesoamerican to Andean variations.';
+  pc.content = 'USE: for Indigenous Americas phenotypes. DIVERSE: Inuit to Mesoamerican to Andean variations.',
+  pc.triggers = [];
 
 MERGE (pc:PopulationCluster {key: 'oceanian'})
 ON CREATE SET
@@ -2724,7 +2938,8 @@ ON CREATE SET
   pc.display_name = 'Oceanian',
   pc.regions = ['Australia', 'Melanesia', 'Polynesia', 'Micronesia'],
   pc.visual_traits = 'Deep brown to dark skin, wavy to curly dark hair, dark brown eyes, broad nose, varied builds',
-  pc.llm_context = 'USE: for Pacific Islander, Aboriginal Australian phenotypes. Melanesian, Polynesian, Micronesian variations.',
+  pc.content = 'USE: for Pacific Islander, Aboriginal Australian phenotypes. Melanesian, Polynesian, Micronesian variations.',
+  pc.triggers = [],
   pc.created_by = 'seed:immutable',
   pc.created_at = datetime()
 ON MATCH SET
@@ -2733,7 +2948,8 @@ ON MATCH SET
   pc.display_name = 'Oceanian',
   pc.regions = ['Australia', 'Melanesia', 'Polynesia', 'Micronesia'],
   pc.visual_traits = 'Deep brown to dark skin, wavy to curly dark hair, dark brown eyes, broad nose, varied builds',
-  pc.llm_context = 'USE: for Pacific Islander, Aboriginal Australian phenotypes. Melanesian, Polynesian, Micronesian variations.';
+  pc.content = 'USE: for Pacific Islander, Aboriginal Australian phenotypes. Melanesian, Polynesian, Micronesian variations.',
+  pc.triggers = [];
 
 // -----------------------------------------------------------------------------
 // POPULATION SUB-CLUSTERS (more specific for image generation)
