@@ -458,45 +458,42 @@ mod security {
     }
 }
 
-mod generate_tool {
+mod context_tool {
     use super::*;
-    use novanet_mcp::tools::generate::{GenerateMode, GenerateParams};
+    use novanet_mcp::tools::context::{ContextMode, ContextParams};
 
     #[tokio::test]
-    async fn test_generate_params_default() {
+    async fn test_context_params_default() {
         // Verify default parameters work
-        let params = GenerateParams {
-            focus_key: "test-page".to_string(),
+        let params = ContextParams {
+            focus_key: Some("test-page".to_string()),
             locale: "fr-FR".to_string(),
-            mode: GenerateMode::default(),
-            token_budget: None,
-            include_examples: None,
-            spreading_depth: None,
-            block_type: None,
+            mode: ContextMode::default(),
+            ..Default::default()
         };
 
-        assert_eq!(params.focus_key, "test-page");
+        assert_eq!(params.focus_key, Some("test-page".to_string()));
         assert_eq!(params.locale, "fr-FR");
-        assert!(matches!(params.mode, GenerateMode::Block));
+        assert!(matches!(params.mode, ContextMode::Block));
     }
 
     #[tokio::test]
-    async fn test_generate_mode_block() {
-        let _mode = GenerateMode::Block;
+    async fn test_context_mode_block() {
+        let _mode = ContextMode::Block;
         // Block mode should be the default
-        let default_mode = GenerateMode::default();
-        assert!(matches!(default_mode, GenerateMode::Block));
+        let default_mode = ContextMode::default();
+        assert!(matches!(default_mode, ContextMode::Block));
     }
 
     #[tokio::test]
-    async fn test_generate_mode_page() {
-        let _mode = GenerateMode::Page;
+    async fn test_context_mode_page() {
+        let _mode = ContextMode::Page;
         // Page mode for full page orchestration
-        assert!(matches!(_mode, GenerateMode::Page));
+        assert!(matches!(_mode, ContextMode::Page));
     }
 
     #[tokio::test]
-    async fn test_generate_with_neo4j() {
+    async fn test_context_with_neo4j() {
         require_neo4j!();
 
         let uri = env::var("NEO4J_URI").unwrap();
@@ -512,12 +509,12 @@ mod generate_tool {
             .execute_query("MATCH (p:Page) RETURN p.key AS key LIMIT 1", None)
             .await;
 
-        // If we have a Page, we can test generate
+        // If we have a Page, we can test context
         if let Ok(rows) = result {
             if !rows.is_empty() {
                 let page_key = rows[0]["key"].as_str().unwrap_or("homepage");
-                eprintln!("Found page for generate test: {}", page_key);
-                // Full generate test would require State setup
+                eprintln!("Found page for context test: {}", page_key);
+                // Full context test would require State setup
             }
         }
     }
@@ -1579,22 +1576,22 @@ mod resource_uris {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// GENERATE TOOL EDGE CASES
+// CONTEXT TOOL EDGE CASES
 // ═══════════════════════════════════════════════════════════════════════════════
 
-mod generate_extended {
-    use novanet_mcp::tools::generate::{GenerateMode, GenerateParams};
+mod context_extended {
+    use novanet_mcp::tools::context::{ContextMode, ContextParams};
 
     #[test]
-    fn test_generate_params_with_zero_budget() {
-        let params = GenerateParams {
-            focus_key: "test".to_string(),
+    fn test_context_params_with_zero_budget() {
+        let params = ContextParams {
+            focus_key: Some("test".to_string()),
             locale: "en-US".to_string(),
-            mode: GenerateMode::Block,
+            mode: ContextMode::Block,
             token_budget: Some(0),
             include_examples: Some(false),
             spreading_depth: Some(0),
-            block_type: None,
+            ..Default::default()
         };
 
         // Should construct without panic
@@ -1603,33 +1600,30 @@ mod generate_extended {
     }
 
     #[test]
-    fn test_generate_params_with_large_budget() {
-        let params = GenerateParams {
-            focus_key: "test".to_string(),
+    fn test_context_params_with_large_budget() {
+        let params = ContextParams {
+            focus_key: Some("test".to_string()),
             locale: "en-US".to_string(),
-            mode: GenerateMode::Page,
+            mode: ContextMode::Page,
             token_budget: Some(1_000_000), // 1M tokens
             include_examples: Some(true),
             spreading_depth: Some(10),
-            block_type: None,
+            ..Default::default()
         };
 
         assert_eq!(params.token_budget, Some(1_000_000));
     }
 
     #[test]
-    fn test_generate_params_special_locale() {
+    fn test_context_params_special_locale() {
         let locales = ["zh-Hans-CN", "sr-Latn-RS", "es-419"];
 
         for locale in locales {
-            let params = GenerateParams {
-                focus_key: "test".to_string(),
+            let params = ContextParams {
+                focus_key: Some("test".to_string()),
                 locale: locale.to_string(),
-                mode: GenerateMode::Block,
-                token_budget: None,
-                include_examples: None,
-                spreading_depth: None,
-                block_type: None,
+                mode: ContextMode::Block,
+                ..Default::default()
             };
 
             assert_eq!(params.locale, locale);

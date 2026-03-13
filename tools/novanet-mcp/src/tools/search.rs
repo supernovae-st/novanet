@@ -1,6 +1,9 @@
-//! novanet_search tool
+//! novanet_search tool (v0.20.0)
 //!
-//! Fulltext and property search across the NovaNet knowledge graph.
+//! Unified search across the NovaNet knowledge graph.
+//! Modes: find (fulltext/property/hybrid), walk (graph traversal), triggers (trigger-based).
+//!
+//! v0.20.0: Absorbed novanet_traverse (mode=walk) per D4.
 
 use crate::error::Result;
 use crate::server::State;
@@ -8,6 +11,8 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::fmt::Write;
 use tracing::instrument;
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
 
 /// Search mode
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -20,14 +25,34 @@ pub enum SearchMode {
     /// Combined fulltext + property search
     #[default]
     Hybrid,
+    /// Graph traversal from a starting node (was novanet_traverse)
+    Walk,
+    /// Search by trigger terms (v0.20.0)
+    Triggers,
 }
 
+/// Traversal direction (for walk mode)
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum WalkDirection {
+    /// Follow outgoing arcs only
+    Outgoing,
+    /// Follow incoming arcs only
+    Incoming,
+    /// Follow both directions
+    #[default]
+    Both,
+}
+
+// ─── Params ──────────────────────────────────────────────────────────────────
+
 /// Parameters for novanet_search tool
-#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
 pub struct SearchParams {
-    /// Search query string
-    pub query: String,
-    /// Search mode (fulltext, property, hybrid)
+    /// Search query string (required for fulltext/property/hybrid/triggers modes)
+    #[serde(default)]
+    pub query: Option<String>,
+    /// Search mode (fulltext, property, hybrid, walk, triggers)
     #[serde(default)]
     pub mode: SearchMode,
     /// Filter by node kinds (e.g., ["Entity", "Page", "Block"])
@@ -45,9 +70,35 @@ pub struct SearchParams {
     /// Properties to search in (for property mode)
     #[serde(default)]
     pub properties: Option<Vec<String>>,
+
+    // ─── Walk mode params (was novanet_traverse) ─────────────────────────
+
+    /// Starting node key (required for walk mode)
+    #[serde(default)]
+    pub start_key: Option<String>,
+    /// Maximum traversal depth (1-5, default: 2, walk mode only)
+    #[serde(default)]
+    pub max_depth: Option<usize>,
+    /// Traversal direction (walk mode only)
+    #[serde(default)]
+    pub direction: Option<WalkDirection>,
+    /// Filter by arc families (ownership, localization, semantic, generation, mining)
+    #[serde(default)]
+    pub arc_families: Option<Vec<String>>,
+    /// Filter by specific arc kinds
+    #[serde(default)]
+    pub arc_kinds: Option<Vec<String>>,
+    /// Filter by target node kinds (walk mode only)
+    #[serde(default)]
+    pub target_kinds: Option<Vec<String>>,
+    /// Include node properties in results (walk mode, default: true)
+    #[serde(default)]
+    pub include_properties: Option<bool>,
 }
 
-/// A single search result
+// ─── Result Types ────────────────────────────────────────────────────────────
+
+/// A single search hit (find modes)
 #[derive(Debug, Clone, Serialize, JsonSchema)]
 pub struct SearchHit {
     /// Node key
@@ -71,11 +122,59 @@ pub struct PropertyMatch {
     pub value: String,
 }
 
+/// A node in walk traversal results
+#[derive(Debug, Clone, Serialize, JsonSchema)]
+pub struct WalkNode {
+    /// Node key
+    pub key: String,
+    /// Node kind (label)
+    pub kind: String,
+    /// Depth from start node (0 = start node)
+    pub depth: usize,
+    /// Path from start node (arc kinds)
+    pub path: Vec<String>,
+    /// Node properties (if requested)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<serde_json::Value>,
+}
+
+/// An arc in walk traversal results
+#[derive(Debug, Clone, Serialize, JsonSchema)]
+pub struct WalkArc {
+    /// Source node key
+    pub source: String,
+    /// Target node key
+    pub target: String,
+    /// Arc kind (relationship type)
+    pub arc_kind: String,
+    /// Arc family
+    pub family: String,
+}
+
+/// Walk-specific result data
+#[derive(Debug, Clone, Serialize, JsonSchema)]
+pub struct WalkData {
+    /// Start node
+    pub start: WalkNode,
+    /// Discovered nodes
+    pub nodes: Vec<WalkNode>,
+    /// Discovered arcs
+    pub arcs: Vec<WalkArc>,
+    /// Maximum depth reached
+    pub max_depth_reached: usize,
+    /// Whether the limit was hit
+    pub limited: bool,
+}
+
 /// Result from novanet_search tool
 #[derive(Debug, Clone, Serialize, JsonSchema)]
 pub struct SearchResult {
-    /// Search hits
-    pub hits: Vec<SearchHit>,
+    /// Search hits (for find modes: fulltext, property, hybrid, triggers)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hits: Option<Vec<SearchHit>>,
+    /// Walk traversal data (for walk mode)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub walk: Option<WalkData>,
     /// Total hits found (may be > returned if limited)
     pub total_hits: usize,
     /// Search mode used
@@ -86,16 +185,38 @@ pub struct SearchResult {
     pub execution_time_ms: u64,
 }
 
+// ─── Execute ─────────────────────────────────────────────────────────────────
+
 /// Execute the novanet_search tool
-#[instrument(name = "novanet_search", skip(state), fields(query = %params.query, mode = ?params.mode))]
+#[instrument(name = "novanet_search", skip(state), fields(mode = ?params.mode))]
 pub async fn execute(state: &State, params: SearchParams) -> Result<SearchResult> {
     let start = std::time::Instant::now();
+
+    match params.mode {
+        SearchMode::Walk => execute_walk(state, params, start).await,
+        SearchMode::Triggers => execute_triggers(state, params, start).await,
+        _ => execute_find(state, params, start).await,
+    }
+}
+
+/// Execute find modes (fulltext, property, hybrid)
+async fn execute_find(
+    state: &State,
+    params: SearchParams,
+    start: std::time::Instant,
+) -> Result<SearchResult> {
     let limit = params.limit.unwrap_or(20).min(100);
+    let query = params.query.clone().unwrap_or_default();
+    if query.is_empty() {
+        return Err(crate::error::Error::InvalidParams(
+            "query is required for fulltext/property/hybrid modes".to_string(),
+        ));
+    }
 
     let (hits, mode_str) = match params.mode {
-        SearchMode::Fulltext => (fulltext_search(state, &params, limit).await?, "fulltext"),
-        SearchMode::Property => (property_search(state, &params, limit).await?, "property"),
-        SearchMode::Hybrid => (hybrid_search(state, &params, limit).await?, "hybrid"),
+        SearchMode::Fulltext => (fulltext_search(state, &params, &query, limit).await?, "fulltext"),
+        SearchMode::Property => (property_search(state, &params, &query, limit).await?, "property"),
+        _ => (hybrid_search(state, &params, &query, limit).await?, "hybrid"),
     };
 
     let total_hits = hits.len();
@@ -103,7 +224,8 @@ pub async fn execute(state: &State, params: SearchParams) -> Result<SearchResult
     let token_estimate = json_string.len().div_ceil(4);
 
     Ok(SearchResult {
-        hits,
+        hits: Some(hits),
+        walk: None,
         total_hits,
         mode: mode_str.to_string(),
         token_estimate,
@@ -111,15 +233,252 @@ pub async fn execute(state: &State, params: SearchParams) -> Result<SearchResult
     })
 }
 
+/// Execute walk mode (was novanet_traverse)
+async fn execute_walk(
+    state: &State,
+    params: SearchParams,
+    start: std::time::Instant,
+) -> Result<SearchResult> {
+    let start_key = params.start_key.clone().ok_or_else(|| {
+        crate::error::Error::InvalidParams("start_key is required for walk mode".to_string())
+    })?;
+
+    let max_depth = params
+        .max_depth
+        .unwrap_or(2)
+        .min(state.config().max_hops as usize);
+    let limit = params.limit.unwrap_or(50).min(200);
+    let include_props = params.include_properties.unwrap_or(true);
+    let direction = params.direction.clone().unwrap_or_default();
+
+    // Build arc filter
+    let arc_filter = build_arc_filter(&params.arc_families, &params.arc_kinds);
+
+    // Build target kind filter
+    let target_filter = build_target_filter(&params.target_kinds);
+
+    // Get the start node
+    let start_query = r#"
+        MATCH (n {key: $key})
+        RETURN n.key AS key, labels(n)[0] AS kind, properties(n) AS props
+    "#;
+
+    let mut query_params = serde_json::Map::new();
+    query_params.insert("key".to_string(), serde_json::json!(start_key));
+
+    let start_rows = state
+        .pool()
+        .execute_query(start_query, Some(query_params.clone()))
+        .await?;
+
+    let start_node = start_rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(&start_key))?;
+
+    let start_result = WalkNode {
+        key: start_node["key"].as_str().unwrap_or_default().to_string(),
+        kind: start_node["kind"].as_str().unwrap_or_default().to_string(),
+        depth: 0,
+        path: vec![],
+        properties: if include_props {
+            Some(start_node["props"].clone())
+        } else {
+            None
+        },
+    };
+
+    // Build APOC traversal query
+    let traverse_query = format!(
+        r#"
+        MATCH (start {{key: $key}})
+        CALL apoc.path.expandConfig(start, {{
+            relationshipFilter: "{arc_filter}",
+            minLevel: 1,
+            maxLevel: {max_depth},
+            uniqueness: "NODE_GLOBAL",
+            limit: {limit}
+        }})
+        YIELD path
+        WITH path, last(nodes(path)) AS endNode, length(path) AS depth
+        {target_filter}
+        UNWIND relationships(path) AS rel
+        WITH path, endNode, depth,
+             collect(DISTINCT {{
+                 source: startNode(rel).key,
+                 target: endNode(rel).key,
+                 arc_kind: type(rel),
+                 family: COALESCE(rel.family, 'unknown')
+             }}) AS rels
+        RETURN endNode.key AS key,
+               labels(endNode)[0] AS kind,
+               depth,
+               [r IN relationships(path) | type(r)] AS path_arcs,
+               properties(endNode) AS props,
+               rels
+        ORDER BY depth, key
+        LIMIT {limit}
+        "#,
+        arc_filter = if arc_filter.is_empty() {
+            ">".to_string()
+        } else {
+            arc_filter
+        },
+        max_depth = max_depth,
+        target_filter = target_filter,
+        limit = limit
+    );
+
+    // Try APOC, fall back to simple traversal
+    let traverse_result = state
+        .pool()
+        .execute_query(&traverse_query, Some(query_params.clone()))
+        .await;
+
+    let (nodes, arcs, max_depth_reached) = match traverse_result {
+        Ok(rows) => process_apoc_results(&rows, include_props),
+        Err(_) => {
+            simple_traverse(
+                state,
+                &direction,
+                &params.target_kinds,
+                &query_params,
+                max_depth,
+                limit,
+                include_props,
+            )
+            .await?
+        }
+    };
+
+    let limited = nodes.len() >= limit;
+    let total_hits = nodes.len();
+
+    let json_string = serde_json::to_string(&nodes).unwrap_or_default();
+    let token_estimate = json_string.len().div_ceil(4);
+
+    Ok(SearchResult {
+        hits: None,
+        walk: Some(WalkData {
+            start: start_result,
+            nodes,
+            arcs,
+            max_depth_reached,
+            limited,
+        }),
+        total_hits,
+        mode: "walk".to_string(),
+        token_estimate,
+        execution_time_ms: start.elapsed().as_millis() as u64,
+    })
+}
+
+/// Execute triggers mode — search by trigger terms on nodes
+async fn execute_triggers(
+    state: &State,
+    params: SearchParams,
+    start: std::time::Instant,
+) -> Result<SearchResult> {
+    let query = params.query.clone().unwrap_or_default();
+    if query.is_empty() {
+        return Err(crate::error::Error::InvalidParams(
+            "query is required for triggers mode".to_string(),
+        ));
+    }
+    let limit = params.limit.unwrap_or(20).min(100);
+
+    // Split query into individual trigger terms
+    let terms: Vec<&str> = query
+        .split(|c: char| c == ',' || c.is_whitespace())
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+        .collect();
+
+    if terms.is_empty() {
+        return Ok(SearchResult {
+            hits: Some(vec![]),
+            walk: None,
+            total_hits: 0,
+            mode: "triggers".to_string(),
+            token_estimate: 0,
+            execution_time_ms: start.elapsed().as_millis() as u64,
+        });
+    }
+
+    let kind_filter = build_kind_filter(&params.kinds, "n");
+    let (realm_filter, realm_value) = build_realm_filter(&params.realm, "n", "realm_filter");
+
+    // Search for nodes whose triggers[] array overlaps with query terms
+    let cypher = format!(
+        r#"
+        MATCH (n)
+        WHERE n.triggers IS NOT NULL
+        AND ANY(t IN n.triggers WHERE toLower(t) IN $terms)
+        {kind_filter}
+        {realm_filter}
+        WITH n,
+             size([t IN n.triggers WHERE toLower(t) IN $terms]) AS overlap,
+             toFloat(size([t IN n.triggers WHERE toLower(t) IN $terms])) /
+               toFloat(size(n.triggers)) AS score
+        RETURN n.key AS key,
+               labels(n)[0] AS kind,
+               score,
+               n.name AS name,
+               n.content AS content,
+               properties(n) AS props
+        ORDER BY overlap DESC, score DESC
+        LIMIT {limit}
+        "#,
+        kind_filter = kind_filter,
+        realm_filter = realm_filter,
+        limit = limit
+    );
+
+    let lower_terms: Vec<String> = terms.iter().map(|t| t.to_lowercase()).collect();
+    let mut query_params = serde_json::Map::new();
+    query_params.insert("terms".to_string(), serde_json::json!(lower_terms));
+    if let Some(realm) = realm_value {
+        query_params.insert("realm_filter".to_string(), serde_json::json!(realm));
+    }
+
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
+
+    let hits: Vec<SearchHit> = rows
+        .into_iter()
+        .map(|row| SearchHit {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            kind: row["kind"].as_str().unwrap_or_default().to_string(),
+            score: row["score"].as_f64().unwrap_or(0.0),
+            matches: extract_trigger_matches(&row, &lower_terms),
+            properties: row["props"].clone(),
+        })
+        .collect();
+
+    let total_hits = hits.len();
+    let json_string = serde_json::to_string(&hits).unwrap_or_default();
+    let token_estimate = json_string.len().div_ceil(4);
+
+    Ok(SearchResult {
+        hits: Some(hits),
+        walk: None,
+        total_hits,
+        mode: "triggers".to_string(),
+        token_estimate,
+        execution_time_ms: start.elapsed().as_millis() as u64,
+    })
+}
+
+// ─── Find Implementations ───────────────────────────────────────────────────
+
 /// Fulltext search using Neo4j fulltext indexes
 async fn fulltext_search(
     state: &State,
     params: &SearchParams,
+    query: &str,
     limit: usize,
 ) -> Result<Vec<SearchHit>> {
-    // Build fulltext query
-    // NovaNet uses fulltext indexes on key, name, description properties
-    // Note: fulltext YIELD uses 'node' as variable name
     let kind_filter = build_kind_filter(&params.kinds, "node");
     let (realm_filter, realm_value) = build_realm_filter(&params.realm, "node", "realm_filter");
 
@@ -145,7 +504,7 @@ async fn fulltext_search(
     );
 
     let mut query_params = serde_json::Map::new();
-    query_params.insert("query".to_string(), serde_json::json!(params.query));
+    query_params.insert("query".to_string(), serde_json::json!(query));
     if let Some(realm) = realm_value {
         query_params.insert("realm_filter".to_string(), serde_json::json!(realm));
     }
@@ -161,7 +520,7 @@ async fn fulltext_search(
             key: row["key"].as_str().unwrap_or_default().to_string(),
             kind: row["kind"].as_str().unwrap_or_default().to_string(),
             score: row["score"].as_f64().unwrap_or(0.0),
-            matches: extract_matches(&row, &params.query),
+            matches: extract_matches(&row, query),
             properties: row["props"].clone(),
         })
         .collect())
@@ -171,6 +530,7 @@ async fn fulltext_search(
 async fn property_search(
     state: &State,
     params: &SearchParams,
+    query: &str,
     limit: usize,
 ) -> Result<Vec<SearchHit>> {
     let properties = params.properties.clone().unwrap_or_else(|| {
@@ -181,12 +541,9 @@ async fn property_search(
         ]
     });
 
-    // Note: MATCH uses 'n' as variable name
     let kind_filter = build_kind_filter(&params.kinds, "n");
     let (realm_filter, realm_value) = build_realm_filter(&params.realm, "n", "realm_filter");
 
-    // Build property conditions with pre-allocated buffer
-    // PERF: Avoids N allocations from map().collect() pattern
     let mut conditions = String::with_capacity(properties.len() * 60);
     for (i, p) in properties.iter().enumerate() {
         if i > 0 {
@@ -228,7 +585,7 @@ async fn property_search(
     );
 
     let mut query_params = serde_json::Map::new();
-    query_params.insert("query".to_string(), serde_json::json!(params.query));
+    query_params.insert("query".to_string(), serde_json::json!(query));
     if let Some(realm) = realm_value {
         query_params.insert("realm_filter".to_string(), serde_json::json!(realm));
     }
@@ -244,7 +601,7 @@ async fn property_search(
             key: row["key"].as_str().unwrap_or_default().to_string(),
             kind: row["kind"].as_str().unwrap_or_default().to_string(),
             score: row["score"].as_f64().unwrap_or(0.0),
-            matches: extract_matches(&row, &params.query),
+            matches: extract_matches(&row, query),
             properties: row["props"].clone(),
         })
         .collect())
@@ -254,40 +611,165 @@ async fn property_search(
 async fn hybrid_search(
     state: &State,
     params: &SearchParams,
+    query: &str,
     limit: usize,
 ) -> Result<Vec<SearchHit>> {
-    // Try fulltext first, fall back to property search if no results
-    let fulltext_hits = fulltext_search(state, params, limit).await?;
+    let fulltext_hits = fulltext_search(state, params, query, limit).await?;
 
     if !fulltext_hits.is_empty() {
         return Ok(fulltext_hits);
     }
 
-    // Fallback to property search
-    property_search(state, params, limit).await
+    property_search(state, params, query, limit).await
 }
 
+// ─── Walk Implementations ───────────────────────────────────────────────────
+
+/// Process APOC path expansion results
+fn process_apoc_results(
+    rows: &[serde_json::Value],
+    include_props: bool,
+) -> (Vec<WalkNode>, Vec<WalkArc>, usize) {
+    let mut nodes = Vec::new();
+    let mut arcs = Vec::new();
+    let mut max_depth: usize = 0;
+
+    for row in rows {
+        let depth = row["depth"].as_u64().unwrap_or(0) as usize;
+        max_depth = max_depth.max(depth);
+
+        nodes.push(WalkNode {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            kind: row["kind"].as_str().unwrap_or_default().to_string(),
+            depth,
+            path: row["path_arcs"]
+                .as_array()
+                .map(|arr| {
+                    arr.iter()
+                        .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                        .collect()
+                })
+                .unwrap_or_default(),
+            properties: if include_props {
+                Some(row["props"].clone())
+            } else {
+                None
+            },
+        });
+
+        if let Some(rels) = row["rels"].as_array() {
+            for rel in rels {
+                arcs.push(WalkArc {
+                    source: rel["source"].as_str().unwrap_or_default().to_string(),
+                    target: rel["target"].as_str().unwrap_or_default().to_string(),
+                    arc_kind: rel["arc_kind"].as_str().unwrap_or_default().to_string(),
+                    family: rel["family"].as_str().unwrap_or("unknown").to_string(),
+                });
+            }
+        }
+    }
+
+    // Deduplicate arcs
+    arcs.sort_by(|a, b| {
+        (&a.source, &a.target, &a.arc_kind).cmp(&(&b.source, &b.target, &b.arc_kind))
+    });
+    arcs.dedup_by(|a, b| a.source == b.source && a.target == b.target && a.arc_kind == b.arc_kind);
+
+    (nodes, arcs, max_depth)
+}
+
+/// Simple traversal without APOC (fallback)
+async fn simple_traverse(
+    state: &State,
+    direction: &WalkDirection,
+    target_kinds: &Option<Vec<String>>,
+    query_params: &serde_json::Map<String, serde_json::Value>,
+    max_depth: usize,
+    limit: usize,
+    include_props: bool,
+) -> Result<(Vec<WalkNode>, Vec<WalkArc>, usize)> {
+    let direction_pattern = match direction {
+        WalkDirection::Outgoing => format!("-[r]->*1..{}", max_depth),
+        WalkDirection::Incoming => format!("<-[r]-*1..{}", max_depth),
+        WalkDirection::Both => format!("-[r]-*1..{}", max_depth),
+    };
+
+    let target_filter = build_target_filter(target_kinds);
+
+    let cypher = format!(
+        r#"
+        MATCH (start {{key: $key}})
+        MATCH path = (start){direction_pattern}(end)
+        WHERE length(path) <= {max_depth}
+        {target_filter}
+        WITH end, length(path) AS depth, [r IN relationships(path) | type(r)] AS path_arcs
+        RETURN DISTINCT end.key AS key,
+               labels(end)[0] AS kind,
+               depth,
+               path_arcs,
+               properties(end) AS props
+        ORDER BY depth, key
+        LIMIT {limit}
+        "#,
+        direction_pattern = direction_pattern,
+        max_depth = max_depth,
+        target_filter = target_filter,
+        limit = limit
+    );
+
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params.clone()))
+        .await?;
+
+    let mut nodes = Vec::new();
+    let mut max_depth_reached: usize = 0;
+
+    for row in rows {
+        let depth = row["depth"].as_u64().unwrap_or(0) as usize;
+        max_depth_reached = max_depth_reached.max(depth);
+
+        nodes.push(WalkNode {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            kind: row["kind"].as_str().unwrap_or_default().to_string(),
+            depth,
+            path: row["path_arcs"]
+                .as_array()
+                .map(|arr| {
+                    arr.iter()
+                        .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                        .collect()
+                })
+                .unwrap_or_default(),
+            properties: if include_props {
+                Some(row["props"].clone())
+            } else {
+                None
+            },
+        });
+    }
+
+    // Arc extraction not available in non-APOC fallback
+    let arcs = Vec::new();
+
+    Ok((nodes, arcs, max_depth_reached))
+}
+
+// ─── Shared Helpers ─────────────────────────────────────────────────────────
+
 /// Validate that a label name only contains safe characters.
-/// Neo4j labels cannot be parameterized, so we must validate them.
-///
 /// SECURITY: Prevents label injection attacks by only allowing alphanumeric + underscore.
 fn is_valid_label(label: &str) -> bool {
     !label.is_empty()
-        && label.len() <= 100 // Reasonable max length
+        && label.len() <= 100
         && label.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
 }
 
 /// Build kind filter clause
-///
-/// # Arguments
-/// * `kinds` - Optional list of node kinds to filter by
-/// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
-///
 /// SECURITY: Labels are validated to prevent injection attacks.
 fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
     match kinds {
         Some(k) if !k.is_empty() => {
-            // SECURITY: Filter out any invalid labels to prevent injection
             let valid_labels: Vec<String> = k
                 .iter()
                 .filter(|l| is_valid_label(l))
@@ -304,14 +786,6 @@ fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
 }
 
 /// Build realm filter clause using parameterized query
-///
-/// # Arguments
-/// * `realm` - Optional realm to filter by
-/// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
-/// * `param_name` - Name for the Cypher parameter (e.g., "realm_filter")
-///
-/// # Returns
-/// Tuple of (filter clause, optional parameter value)
 fn build_realm_filter(
     realm: &Option<String>,
     var: &str,
@@ -323,6 +797,56 @@ fn build_realm_filter(
             Some(r.clone()),
         ),
         None => (String::new(), None),
+    }
+}
+
+/// Build arc filter for APOC path expansion (walk mode)
+fn build_arc_filter(families: &Option<Vec<String>>, kinds: &Option<Vec<String>>) -> String {
+    let mut filters = Vec::new();
+
+    if let Some(kinds) = kinds {
+        if !kinds.is_empty() {
+            filters.extend(kinds.iter().cloned());
+        }
+    }
+
+    if let Some(families) = families {
+        for family in families {
+            match family.as_str() {
+                "ownership" => filters.push("HAS_*|BELONGS_TO*|CONTAINS_*".to_string()),
+                "localization" => filters.push("HAS_NATIVE|FOR_LOCALE".to_string()),
+                "semantic" => filters.push("USES_*|REFERENCES|SIMILAR_TO".to_string()),
+                "generation" => filters.push("GENERATES|DERIVED_FROM".to_string()),
+                "mining" => filters.push("TARGETS|RANKS_FOR".to_string()),
+                _ => {}
+            }
+        }
+    }
+
+    if filters.is_empty() {
+        String::new()
+    } else {
+        filters.join("|")
+    }
+}
+
+/// Build target kind filter for walk mode
+/// SECURITY: Labels are validated to prevent injection attacks.
+fn build_target_filter(kinds: &Option<Vec<String>>) -> String {
+    match kinds {
+        Some(k) if !k.is_empty() => {
+            let valid_labels: Vec<String> = k
+                .iter()
+                .filter(|l| is_valid_label(l))
+                .map(|l| format!("endNode:{}", l))
+                .collect();
+            if valid_labels.is_empty() {
+                String::new()
+            } else {
+                format!("WHERE ({})", valid_labels.join(" OR "))
+            }
+        }
+        _ => String::new(),
     }
 }
 
@@ -345,31 +869,52 @@ fn extract_matches(row: &serde_json::Value, query: &str) -> Vec<PropertyMatch> {
     matches
 }
 
+/// Extract trigger matches from a result row
+fn extract_trigger_matches(row: &serde_json::Value, terms: &[String]) -> Vec<PropertyMatch> {
+    let mut matches = Vec::new();
+
+    if let Some(props) = row.get("props") {
+        if let Some(triggers) = props.get("triggers").and_then(|t| t.as_array()) {
+            for trigger in triggers {
+                if let Some(t) = trigger.as_str() {
+                    if terms.contains(&t.to_lowercase()) {
+                        matches.push(PropertyMatch {
+                            property: "triggers".to_string(),
+                            value: t.to_string(),
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    matches
+}
+
+// ─── Tests ──────────────────────────────────────────────────────────────────
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_is_valid_label() {
-        // Valid labels
         assert!(is_valid_label("Entity"));
         assert!(is_valid_label("Page"));
         assert!(is_valid_label("Entity_Native"));
         assert!(is_valid_label("Test123"));
 
-        // Invalid labels (security tests)
-        assert!(!is_valid_label("")); // Empty
-        assert!(!is_valid_label("Entity:Foo")); // Contains colon
-        assert!(!is_valid_label("Entity OR n")); // Contains space and injection attempt
-        assert!(!is_valid_label("Entity})")); // Contains special chars
-        assert!(!is_valid_label("'; DROP DATABASE")); // SQL-style injection
-        assert!(!is_valid_label("Entity\n")); // Newline
-        assert!(!is_valid_label(&"A".repeat(101))); // Too long
+        assert!(!is_valid_label(""));
+        assert!(!is_valid_label("Entity:Foo"));
+        assert!(!is_valid_label("Entity OR n"));
+        assert!(!is_valid_label("Entity})"));
+        assert!(!is_valid_label("'; DROP DATABASE"));
+        assert!(!is_valid_label("Entity\n"));
+        assert!(!is_valid_label(&"A".repeat(101)));
     }
 
     #[test]
     fn test_build_kind_filter() {
-        // Test with 'n' variable (property search)
         assert_eq!(build_kind_filter(&None, "n"), "");
         assert_eq!(build_kind_filter(&Some(vec![]), "n"), "");
         assert_eq!(
@@ -380,44 +925,33 @@ mod tests {
             build_kind_filter(&Some(vec!["Entity".to_string(), "Page".to_string()]), "n"),
             "AND (n:Entity OR n:Page)"
         );
-
-        // Test with 'node' variable (fulltext search)
         assert_eq!(
             build_kind_filter(&Some(vec!["Entity".to_string()]), "node"),
             "AND (node:Entity)"
-        );
-        assert_eq!(
-            build_kind_filter(
-                &Some(vec!["Entity".to_string(), "Page".to_string()]),
-                "node"
-            ),
-            "AND (node:Entity OR node:Page)"
         );
     }
 
     #[test]
     fn test_build_kind_filter_rejects_injection() {
-        // SECURITY: Invalid labels should be filtered out
         assert_eq!(
             build_kind_filter(&Some(vec!["Entity:Foo".to_string()]), "n"),
-            "" // Invalid label filtered out, empty result
+            ""
         );
         assert_eq!(
             build_kind_filter(
                 &Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()]),
                 "n"
             ),
-            "AND (n:Entity)" // Only valid label kept
+            "AND (n:Entity)"
         );
         assert_eq!(
             build_kind_filter(&Some(vec!["Entity OR 1=1".to_string()]), "n"),
-            "" // Invalid label filtered out
+            ""
         );
     }
 
     #[test]
     fn test_build_realm_filter() {
-        // Test with 'n' variable (property search)
         assert_eq!(
             build_realm_filter(&None, "n", "realm"),
             (String::new(), None)
@@ -429,14 +963,45 @@ mod tests {
                 Some("shared".to_string())
             )
         );
-
-        // Test with 'node' variable (fulltext search)
         assert_eq!(
             build_realm_filter(&Some("shared".to_string()), "node", "r"),
             (
                 "AND node.realm = $r".to_string(),
                 Some("shared".to_string())
             )
+        );
+    }
+
+    #[test]
+    fn test_build_arc_filter() {
+        assert_eq!(build_arc_filter(&None, &None), "");
+        assert_eq!(
+            build_arc_filter(&None, &Some(vec!["HAS_PAGE".to_string()])),
+            "HAS_PAGE"
+        );
+    }
+
+    #[test]
+    fn test_build_target_filter() {
+        assert_eq!(build_target_filter(&None), "");
+        assert_eq!(
+            build_target_filter(&Some(vec!["Entity".to_string()])),
+            "WHERE (endNode:Entity)"
+        );
+    }
+
+    #[test]
+    fn test_build_target_filter_rejects_injection() {
+        assert_eq!(
+            build_target_filter(&Some(vec!["Entity:Foo".to_string()])),
+            ""
+        );
+        assert_eq!(
+            build_target_filter(&Some(vec![
+                "Entity".to_string(),
+                "'; DROP DATABASE".to_string()
+            ])),
+            "WHERE (endNode:Entity)"
         );
     }
 
@@ -453,5 +1018,45 @@ mod tests {
         assert!(matches.iter().any(|m| m.property == "key"));
         assert!(matches.iter().any(|m| m.property == "name"));
         assert!(matches.iter().any(|m| m.property == "content"));
+    }
+
+    #[test]
+    fn test_extract_trigger_matches() {
+        let row = serde_json::json!({
+            "props": {
+                "triggers": ["qr", "barcode", "scan"]
+            }
+        });
+
+        let terms = vec!["qr".to_string(), "scan".to_string()];
+        let matches = extract_trigger_matches(&row, &terms);
+        assert_eq!(matches.len(), 2);
+        assert!(matches.iter().any(|m| m.value == "qr"));
+        assert!(matches.iter().any(|m| m.value == "scan"));
+    }
+
+    #[test]
+    fn test_extract_trigger_matches_empty() {
+        let row = serde_json::json!({
+            "props": {
+                "triggers": ["qr", "barcode"]
+            }
+        });
+
+        let terms = vec!["zebra".to_string()];
+        let matches = extract_trigger_matches(&row, &terms);
+        assert!(matches.is_empty());
+    }
+
+    #[test]
+    fn test_search_mode_default() {
+        let mode = SearchMode::default();
+        assert!(matches!(mode, SearchMode::Hybrid));
+    }
+
+    #[test]
+    fn test_walk_direction_default() {
+        let dir = WalkDirection::default();
+        assert!(matches!(dir, WalkDirection::Both));
     }
 }

@@ -1,14 +1,20 @@
-//! MCP Server Handler
+//! MCP Server Handler (v0.20.0)
 //!
-//! Implements rmcp::ServerHandler for NovaNet MCP tools using macro-based routing.
-//! Phase 3: Adds novanet_generate tool and 6 MCP prompts.
+//! 8 tools after The Great Cleanup (was 14):
+//!   novanet_query, novanet_describe, novanet_search, novanet_introspect,
+//!   novanet_context, novanet_write, novanet_audit, novanet_batch
+//!
+//! Removed tools:
+//!   - novanet_traverse → merged into novanet_search (mode=walk)
+//!   - novanet_assemble, novanet_atoms, novanet_generate → merged into novanet_context
+//!   - novanet_cache_stats, novanet_cache_invalidate → deleted (D7)
+//!   - novanet_check → absorbed into novanet_write (dry_run param, D6)
 
 use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMessage};
 use crate::server::State;
 use crate::tools::{
-    AssembleParams, AtomsParams, AuditParams, BatchParams, CacheInvalidateParams, CacheStatsParams,
-    CheckParams, DescribeParams, GenerateParams, IntrospectParams, QueryParams, SearchParams,
-    TraverseParams, WriteParams,
+    AuditParams, BatchParams, ContextParams, DescribeParams, IntrospectParams, QueryParams,
+    SearchParams, WriteParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -43,7 +49,7 @@ impl NovaNetHandler {
     /// All queries are validated for read-only operations (no CREATE, DELETE, MERGE, SET).
     #[tool(
         name = "novanet_query",
-        description = "⚠️ DEBUG/ANALYTICS ONLY - Execute raw Cypher query. Returns rows as JSON. 🚫 DO NOT USE for: finding nodes (use novanet_search), exploring relationships (use novanet_traverse), schema info (use novanet_introspect), content generation (use novanet_generate). ✅ USE ONLY for: custom aggregations, complex analytics, debugging. Most workflows should NEVER need this tool."
+        description = "⚠️ DEBUG/ANALYTICS ONLY - Execute raw Cypher query. Returns rows as JSON. 🚫 DO NOT USE for: finding nodes (use novanet_search), exploring relationships (use novanet_search mode=walk), schema info (use novanet_introspect), content generation (use novanet_context). ✅ USE ONLY for: custom aggregations, complex analytics, debugging. Most workflows should NEVER need this tool."
     )]
     async fn novanet_query(
         &self,
@@ -62,7 +68,7 @@ impl NovaNetHandler {
     /// Get self-description of the NovaNet knowledge graph.
     ///
     /// Supports describing: schema overview, specific entities, entity categories,
-    /// available relations (ArcKinds), locales, and graph statistics.
+    /// available relations (ArcClasses), locales, and graph statistics.
     #[tool(
         name = "novanet_describe",
         description = "🚀 START HERE - Bootstrap your understanding of NovaNet. Targets: 'schema' (overview of realms/layers/classes), 'entity' (specific entity details), 'category' (entity category members), 'relations' (arc families), 'locales' (available locales), 'stats' (graph statistics). Use this first to understand what's in the graph before using other tools."
@@ -81,13 +87,13 @@ impl NovaNetHandler {
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
 
-    /// Search the NovaNet knowledge graph using fulltext and property search.
+    /// Search the NovaNet knowledge graph.
     ///
-    /// Supports fulltext, property-based, and hybrid search modes.
-    /// Filter by node kinds, realm, and layer.
+    /// 5 modes: fulltext, property, hybrid, walk (graph traversal), triggers.
+    /// Walk mode replaces the former novanet_traverse tool.
     #[tool(
         name = "novanet_search",
-        description = "🔍 FIND NODES - Search the knowledge graph by text or properties. Modes: 'fulltext' (Neo4j fulltext index), 'property' (exact/partial match), 'hybrid' (both). Filter by: kinds (Entity, Page, Block...), realm (shared/org), layer. Returns matches with relevance scores. Use this to find nodes, then novanet_traverse to explore their relationships."
+        description = "🔍 FIND & EXPLORE - Search the knowledge graph. Modes: 'fulltext' (Neo4j fulltext index), 'property' (exact/partial match), 'hybrid' (both), 'walk' (graph traversal from a start node - replaces novanet_traverse), 'triggers' (match by triggers[] array). Filter by: kinds, realm, layer. Walk mode supports: start_key, max_depth, direction (outgoing/incoming/both), arc_families, target_kinds."
     )]
     async fn novanet_search(
         &self,
@@ -103,99 +109,10 @@ impl NovaNetHandler {
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
 
-    /// Traverse the NovaNet knowledge graph from a starting node.
-    ///
-    /// Configurable depth, direction, and arc filtering.
-    /// Implements RLM-on-KG hop-by-hop pattern.
-    #[tool(
-        name = "novanet_traverse",
-        description = "🧭 EXPLORE RELATIONSHIPS - Traverse graph from a starting node. Configure: max_depth (1-5), direction (outgoing/incoming/both), arc_families (ownership/semantic/localization/generation/mining), target_kinds. Returns connected nodes with paths. Use after novanet_search to explore an entity's relationships."
-    )]
-    async fn novanet_traverse(
-        &self,
-        params: Parameters<TraverseParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::traverse::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
-    /// Assemble context for LLM generation from the knowledge graph.
-    ///
-    /// Gathers entity definitions, locale knowledge, and structural context
-    /// with token budget management and evidence packet compression.
-    #[tool(
-        name = "novanet_assemble",
-        description = "🔧 ADVANCED - Low-level context assembly with token budget management. Gathers entities, locale knowledge, and structure. Strategies: breadth (default), depth, relevance, custom. ⚠️ Most users should use novanet_generate instead, which orchestrates assemble + atoms automatically. Use assemble only for custom context pipelines."
-    )]
-    async fn novanet_assemble(
-        &self,
-        params: Parameters<AssembleParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::assemble::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
-    /// Retrieve knowledge atoms for a specific locale.
-    ///
-    /// Returns Terms, Expressions, Patterns, CultureRefs, Taboos, and AudienceTraits.
-    /// Enables selective LLM context loading.
-    #[tool(
-        name = "novanet_atoms",
-        description = "🔤 LOCALE KNOWLEDGE - Retrieve knowledge atoms for a specific locale. Types: term (technical vocabulary), expression (idioms), pattern (templates), cultureref (cultural references), taboo (things to avoid), audiencetrait (audience characteristics), or 'all'. Filter by domain/register. Use for locale-specific content generation or exploring cultural nuances."
-    )]
-    async fn novanet_atoms(
-        &self,
-        params: Parameters<AtomsParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::atoms::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
-    /// Assemble complete generation context for block or page content.
-    ///
-    /// Orchestrates traverse, assemble, and atoms tools for AI agents.
-    /// Implements full RLM-on-KG pipeline with context anchors.
-    #[tool(
-        name = "novanet_generate",
-        description = "⭐ PRIMARY CONTENT TOOL - Assemble complete generation context for block or page content. Modes: 'block' (single block with entities + knowledge) or 'page' (full page with all blocks + cross-references). Automatically orchestrates traverse/assemble/atoms. Returns: prompt, evidence_summary, locale_context, context_anchors, denomination_forms. This is THE tool for Nika content generation workflows."
-    )]
-    async fn novanet_generate(
-        &self,
-        params: Parameters<GenerateParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::generate::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
     /// Introspect the NovaNet schema: query NodeClasses and ArcClasses.
     ///
     /// Enables agents to understand the knowledge graph schema for dynamic
     /// query generation and task decomposition.
-    /// MVP 8 Phase 3: 8th MCP tool for schema introspection.
     #[tool(
         name = "novanet_introspect",
         description = "📚 SCHEMA INFO - Query NodeClasses and ArcClasses with their relationships. Targets: 'classes' (list all, filter by realm/layer), 'class' (specific class with arcs), 'arcs' (list all, filter by family), 'arc' (specific arc). 💡 REQUIRED before novanet_write: use introspect(target='class', name='EntityNative', include_arcs=true) to discover required_properties and valid arc connections."
@@ -214,61 +131,19 @@ impl NovaNetHandler {
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
 
-    /// Execute multiple NovaNet tools in a single request.
+    /// Assemble context for LLM content generation.
     ///
-    /// Supports sequential and parallel execution modes with fail-fast behavior.
-    /// Task A1: 9th MCP tool for bulk operations.
+    /// Unified context tool with 4 modes: page, block, knowledge, assemble.
+    /// Replaces novanet_generate + novanet_assemble + novanet_atoms.
     #[tool(
-        name = "novanet_batch",
-        description = "📦 BULK OPERATIONS - Execute multiple MCP tools in a single request. Set parallel=true for concurrent execution (faster), fail_fast=true to stop on first error. Use cases: batch context assembly, parallel search, bulk schema introspection. Each operation has an id for result mapping. Returns aggregated results with timing."
+        name = "novanet_context",
+        description = "⭐ CONTEXT ASSEMBLY - Unified tool for LLM content generation context. 4 modes: 'page' (full page orchestration with all blocks + cross-references), 'block' (single block with entities + knowledge), 'knowledge' (locale atoms: term/expression/pattern/cultureref/taboo/audiencetrait), 'assemble' (low-level assembly with strategy: breadth/depth/relevance/custom). Replaces novanet_generate + novanet_assemble + novanet_atoms. Returns prompt, evidence, denomination_forms (ADR-033), context_anchors."
     )]
-    async fn novanet_batch(
+    async fn novanet_context(
         &self,
-        params: Parameters<BatchParams>,
+        params: Parameters<ContextParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::batch::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
-    /// Get cache statistics including hit rate, entry count, and memory usage.
-    ///
-    /// Task A3: 10th MCP tool for cache monitoring.
-    #[tool(
-        name = "novanet_cache_stats",
-        description = "🔧 OPS/DEBUG - Get cache statistics: entries count, hit rate percentage, hits/misses, memory usage, TTL settings. Use for monitoring cache performance and debugging. Low hit rate may indicate need for cache tuning."
-    )]
-    async fn novanet_cache_stats(
-        &self,
-        params: Parameters<CacheStatsParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::cache_stats::get_stats(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
-    /// Invalidate cache entries. Use pattern for selective invalidation or all=true for full clear.
-    ///
-    /// Task A3: 11th MCP tool for cache management.
-    #[tool(
-        name = "novanet_cache_invalidate",
-        description = "🔧 OPS/DEBUG - Invalidate cache entries. Use all=true to clear entire cache (after schema changes), or pattern for selective invalidation. ⚠️ Note: Pattern-based invalidation is NOT YET IMPLEMENTED - use all=true for now. Automatically called after novanet_write operations."
-    )]
-    async fn novanet_cache_invalidate(
-        &self,
-        params: Parameters<CacheInvalidateParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::cache_stats::invalidate(&self.state, params.0)
+        let result = crate::tools::context::execute(&self.state, params.0)
             .await
             .map_err(McpError::from)?;
 
@@ -282,10 +157,10 @@ impl NovaNetHandler {
     ///
     /// Operations: upsert_node, create_arc, update_props.
     /// Validates against schema, checks trait permissions, uses MERGE for idempotency.
-    /// Task A4: 12th MCP tool for intelligent data writes.
+    /// Use dry_run=true to validate without executing (replaces novanet_check).
     #[tool(
         name = "novanet_write",
-        description = "Write data to NovaNet with schema validation. ⚠️ ALWAYS call novanet_check FIRST to validate and discover required properties. Operations: upsert_node, create_arc, update_props. Enforces trait permissions (only authored/imported/generated/retrieved traits writable). Auto-creates FOR_LOCALE and HAS_NATIVE arcs for *Native classes."
+        description = "✍️ WRITE DATA - Write to NovaNet with schema validation. Operations: upsert_node, create_arc, update_props. Use dry_run=true to validate without executing (replaces novanet_check). Returns Cypher preview, validation issues, and suggestions when dry_run=true. Auto-creates FOR_LOCALE and HAS_NATIVE arcs for *Native classes."
     )]
     async fn novanet_write(
         &self,
@@ -301,34 +176,10 @@ impl NovaNetHandler {
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
 
-    /// Validate a write operation without executing it.
-    ///
-    /// Pre-write validation with Cypher preview and ontology-driven suggestions.
-    /// Returns issues, schema context, and actionable hints.
-    /// v0.17.0: 13th MCP tool for pre-write validation.
-    #[tool(
-        name = "novanet_check",
-        description = "⚠️ REQUIRED: Call this BEFORE novanet_write to validate operations. Returns: valid (bool), errors[], warnings[], suggestions[], cypher_preview, and schema_context with required_properties. Use the same parameters as novanet_write. If valid=false, fix issues before calling novanet_write."
-    )]
-    async fn novanet_check(
-        &self,
-        params: Parameters<CheckParams>,
-    ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::checker::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
-    }
-
     /// Audit the knowledge graph for quality issues.
     ///
     /// Post-write quality audit with CSR (Constraint Satisfaction Rate) metrics.
     /// Checks coverage, orphans, integrity, and freshness.
-    /// v0.17.0: 14th MCP tool for quality audit.
     #[tool(
         name = "novanet_audit",
         description = "📊 QUALITY AUDIT - Post-write quality checks with CSR (Constraint Satisfaction Rate) metrics. Targets: coverage (missing *Native for locales), orphans (missing FOR_LOCALE/HAS_NATIVE arcs), integrity (broken refs), freshness (stale >30 days), or 'all'. Returns issues by severity + recommendations. CSR ≥0.95 = healthy, 0.85-0.95 = warning, <0.85 = critical."
@@ -346,6 +197,27 @@ impl NovaNetHandler {
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
+
+    /// Execute multiple NovaNet tools in a single request.
+    ///
+    /// Supports sequential and parallel execution modes with fail-fast behavior.
+    #[tool(
+        name = "novanet_batch",
+        description = "📦 BULK OPERATIONS - Execute multiple MCP tools in a single request. Set parallel=true for concurrent execution (faster), fail_fast=true to stop on first error. Supports all 8 tools: query, describe, search, introspect, context, write, audit. Each operation has an id for result mapping. Returns aggregated results with timing."
+    )]
+    async fn novanet_batch(
+        &self,
+        params: Parameters<BatchParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::batch::execute(&self.state, params.0)
+            .await
+            .map_err(McpError::from)?;
+
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
 }
 
 /// Implement ServerHandler for NovaNetHandler
@@ -355,11 +227,11 @@ impl ServerHandler for NovaNetHandler {
         // rmcp 0.16: Use struct literals with ..Default::default()
         ServerInfo {
             instructions: Some(
-                "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
-                 14 tools available. TOOL SELECTION: \
-                 🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
-                 ⭐ novanet_generate (content context). \
-                 For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
+                "NovaNet MCP Server v0.20.0 - Knowledge Graph for AI Agents. \
+                 8 tools available (was 14, after The Great Cleanup). TOOL SELECTION: \
+                 🔍 novanet_search (find nodes + walk relationships) → \
+                 ⭐ novanet_context (content generation context). \
+                 For writes: 📚 novanet_introspect (schema) → ✍️ novanet_write (dry_run=true to validate). \
                  📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
                  6 prompts available.".into(),
             ),

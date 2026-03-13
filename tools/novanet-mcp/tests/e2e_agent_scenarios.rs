@@ -88,12 +88,9 @@ async fn create_test_state() -> Option<novanet_mcp::server::State> {
 mod content_generation_flow {
     use super::*;
     use novanet_mcp::tools::{
-        assemble::{AssembleParams, AssemblyStrategy},
-        atoms::{AtomType, AtomsParams},
+        context::{AssemblyStrategy, AtomType, ContextMode, ContextParams},
         describe::{DescribeParams, DescribeTarget},
-        generate::{GenerateMode, GenerateParams},
-        search::{SearchMode, SearchParams},
-        traverse::{TraversalDirection, TraverseParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Complete content generation workflow for a page in fr-FR locale
@@ -124,23 +121,22 @@ mod content_generation_flow {
         let search_result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "homepage".to_string(),
+                query: Some("homepage".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Page".to_string()]),
                 realm: Some("org".to_string()),
-                layer: None,
                 limit: Some(5),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
 
         // If no pages found, try generic query
         let page_key = if let Ok(ref result) = search_result {
-            if !result.hits.is_empty() {
-                result.hits[0].key.clone()
-            } else {
+            if result.hits.as_ref().is_none_or(|h| h.is_empty()) {
                 "homepage".to_string() // fallback
+            } else {
+                result.hits.as_ref().unwrap()[0].key.clone()
             }
         } else {
             "homepage".to_string()
@@ -148,15 +144,15 @@ mod content_generation_flow {
 
         eprintln!("Step 2: Found page '{}' for generation", page_key);
 
-        // Step 3: Traverse from page to discover structure and entities
-        let traverse_result = novanet_mcp::tools::traverse::execute(
+        // Step 3: Walk from page to discover structure and entities
+        let walk_result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: page_key.clone(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some(page_key.clone()),
                 max_depth: Some(3),
-                direction: TraversalDirection::Outgoing,
+                direction: Some(WalkDirection::Outgoing),
                 arc_families: Some(vec!["ownership".to_string(), "semantic".to_string()]),
-                arc_kinds: None,
                 target_kinds: Some(vec![
                     "Block".to_string(),
                     "Entity".to_string(),
@@ -164,33 +160,35 @@ mod content_generation_flow {
                 ]),
                 limit: Some(50),
                 include_properties: Some(true),
+                ..Default::default()
             },
         )
         .await;
 
-        if let Ok(ref result) = traverse_result {
+        if let Ok(ref result) = walk_result {
+            let walk = result.walk.as_ref().expect("walk data should exist");
             eprintln!(
-                "Step 3: Traversed {} nodes, {} arcs, max depth {}",
-                result.nodes.len(),
-                result.arcs.len(),
-                result.max_depth_reached
+                "Step 3: Walked {} nodes, {} arcs, max depth {}",
+                walk.nodes.len(),
+                walk.arcs.len(),
+                walk.max_depth_reached
             );
         }
 
         // Step 4: Assemble context with token budget
-        let assemble_result = novanet_mcp::tools::assemble::execute(
+        let assemble_result = novanet_mcp::tools::context::execute(
             &state,
-            AssembleParams {
-                focus_key: page_key.clone(),
+            ContextParams {
+                focus_key: Some(page_key.clone()),
                 locale: "fr-FR".to_string(),
+                mode: ContextMode::Assemble,
                 token_budget: Some(50_000),
-                strategy: AssemblyStrategy::Breadth,
+                strategy: Some(AssemblyStrategy::Breadth),
                 include_entities: Some(true),
                 include_knowledge: Some(true),
                 include_structure: Some(true),
-                arc_families: None,
                 max_depth: Some(3),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
@@ -198,27 +196,26 @@ mod content_generation_flow {
         if let Ok(ref result) = assemble_result {
             eprintln!(
                 "Step 4: Assembled {} evidence packets, {} tokens used, {} remaining",
-                result.evidence.len(),
-                result.total_tokens,
-                result.budget_remaining
+                result.evidence.as_ref().map_or(0, |e| e.len()),
+                result.total_tokens.unwrap_or(0),
+                result.budget_remaining.unwrap_or(0)
             );
             assert!(
-                result.total_tokens <= 50_000,
+                result.total_tokens.unwrap_or(0) <= 50_000,
                 "Should not exceed token budget"
             );
         }
 
         // Step 5: Get locale-specific knowledge atoms
-        let atoms_result = novanet_mcp::tools::atoms::execute(
+        let atoms_result = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "fr-FR".to_string(),
-                atom_type: AtomType::All,
-                domain: None,
-                register: None,
-                query: None,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::All),
                 limit: Some(30),
                 include_containers: Some(true),
+                ..Default::default()
             },
         )
         .await;
@@ -226,21 +223,21 @@ mod content_generation_flow {
         if let Ok(ref result) = atoms_result {
             eprintln!(
                 "Step 5: Loaded {} knowledge atoms for fr-FR",
-                result.atoms.len()
+                result.atoms.as_ref().map_or(0, |a| a.len())
             );
         }
 
         // Step 6: Generate complete context (composite tool)
-        let generate_result = novanet_mcp::tools::generate::execute(
+        let generate_result = novanet_mcp::tools::context::execute(
             &state,
-            GenerateParams {
-                focus_key: page_key.clone(),
+            ContextParams {
+                focus_key: Some(page_key.clone()),
                 locale: "fr-FR".to_string(),
-                mode: GenerateMode::Page,
+                mode: ContextMode::Page,
                 token_budget: Some(50_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
@@ -248,29 +245,29 @@ mod content_generation_flow {
         if let Ok(ref result) = generate_result {
             eprintln!(
                 "Step 6: Generated prompt ({} chars), {} evidence items, {} anchors",
-                result.prompt.len(),
-                result.evidence_summary.len(),
-                result.context_anchors.len()
+                result.prompt.as_ref().map_or(0, |p| p.len()),
+                result.evidence_summary.as_ref().map_or(0, |e| e.len()),
+                result.context_anchors.as_ref().map_or(0, |a| a.len())
             );
             eprintln!(
                 "Token usage: {} total ({} entities, {} knowledge, {} structure)",
-                result.token_usage.total,
-                result.token_usage.entities,
-                result.token_usage.knowledge,
-                result.token_usage.structure
+                result.token_usage.as_ref().map_or(0, |t| t.total),
+                result.token_usage.as_ref().map_or(0, |t| t.entities),
+                result.token_usage.as_ref().map_or(0, |t| t.knowledge),
+                result.token_usage.as_ref().map_or(0, |t| t.structure)
             );
 
             // Verify prompt structure
             assert!(
-                result.prompt.contains("# Generation Context"),
+                result.prompt.as_ref().is_some_and(|p| p.contains("# Generation Context")),
                 "Prompt should have header"
             );
             assert!(
-                result.prompt.contains("fr-FR"),
+                result.prompt.as_ref().is_some_and(|p| p.contains("fr-FR")),
                 "Prompt should mention locale"
             );
             assert!(
-                result.prompt.contains("## Instructions"),
+                result.prompt.as_ref().is_some_and(|p| p.contains("## Instructions")),
                 "Prompt should have instructions"
             );
         }
@@ -285,33 +282,31 @@ mod content_generation_flow {
         let search_result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "hero".to_string(),
+                query: Some("hero".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Block".to_string()]),
-                realm: None,
-                layer: None,
                 limit: Some(1),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
 
         let block_key = search_result
             .ok()
-            .and_then(|r| r.hits.first().map(|h| h.key.clone()))
+            .and_then(|r| r.hits.and_then(|h| h.first().map(|hit| hit.key.clone())))
             .unwrap_or_else(|| "hero-section".to_string());
 
         // Generate for single block
-        let generate_result = novanet_mcp::tools::generate::execute(
+        let generate_result = novanet_mcp::tools::context::execute(
             &state,
-            GenerateParams {
-                focus_key: block_key.clone(),
+            ContextParams {
+                focus_key: Some(block_key.clone()),
                 locale: "fr-FR".to_string(),
-                mode: GenerateMode::Block,  // Block mode, not Page
+                mode: ContextMode::Block,   // Block mode, not Page
                 token_budget: Some(10_000), // Smaller budget for single block
                 include_examples: Some(false),
                 spreading_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
@@ -319,13 +314,13 @@ mod content_generation_flow {
         if let Ok(ref result) = generate_result {
             eprintln!(
                 "Block generation: {} tokens, {} evidence",
-                result.token_usage.total,
-                result.evidence_summary.len()
+                result.token_usage.as_ref().map_or(0, |t| t.total),
+                result.evidence_summary.as_ref().map_or(0, |e| e.len())
             );
 
             // Block mode should use less tokens than page mode
             assert!(
-                result.token_usage.total <= 10_000,
+                result.token_usage.as_ref().map_or(0, |t| t.total) <= 10_000,
                 "Block should be within budget"
             );
         }
@@ -340,7 +335,7 @@ mod content_generation_flow {
 
 mod multi_locale_comparison {
     use super::*;
-    use novanet_mcp::tools::atoms::{AtomType, AtomsParams};
+    use novanet_mcp::tools::context::{AtomType, ContextMode, ContextParams};
 
     /// Compare technical terms between en-US and fr-FR
     #[tokio::test]
@@ -348,51 +343,55 @@ mod multi_locale_comparison {
         let state = get_test_state!();
 
         // Get en-US terms
-        let en_atoms = novanet_mcp::tools::atoms::execute(
+        let en_atoms = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "en-US".to_string(),
-                atom_type: AtomType::Term,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::Term),
                 domain: Some("technical".to_string()),
-                register: None,
-                query: None,
                 limit: Some(50),
                 include_containers: Some(false),
+                ..Default::default()
             },
         )
         .await;
 
         // Get fr-FR terms
-        let fr_atoms = novanet_mcp::tools::atoms::execute(
+        let fr_atoms = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "fr-FR".to_string(),
-                atom_type: AtomType::Term,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::Term),
                 domain: Some("technical".to_string()),
-                register: None,
-                query: None,
                 limit: Some(50),
                 include_containers: Some(false),
+                ..Default::default()
             },
         )
         .await;
 
         // Compare results
         if let (Ok(en), Ok(fr)) = (&en_atoms, &fr_atoms) {
-            eprintln!("en-US: {} technical terms", en.atoms.len());
-            eprintln!("fr-FR: {} technical terms", fr.atoms.len());
+            let en_atoms_list = en.atoms.as_deref().unwrap_or_default();
+            let fr_atoms_list = fr.atoms.as_deref().unwrap_or_default();
+            eprintln!("en-US: {} technical terms", en_atoms_list.len());
+            eprintln!("fr-FR: {} technical terms", fr_atoms_list.len());
 
             // Find common term keys
-            let en_keys: std::collections::HashSet<_> = en.atoms.iter().map(|a| &a.key).collect();
-            let fr_keys: std::collections::HashSet<_> = fr.atoms.iter().map(|a| &a.key).collect();
+            let en_keys: std::collections::HashSet<_> =
+                en_atoms_list.iter().map(|a| &a.key).collect();
+            let fr_keys: std::collections::HashSet<_> =
+                fr_atoms_list.iter().map(|a| &a.key).collect();
             let common: Vec<_> = en_keys.intersection(&fr_keys).collect();
 
             eprintln!("Common term keys: {}", common.len());
 
             // Display a few comparisons
             for key in common.iter().take(5) {
-                let en_term = en.atoms.iter().find(|a| &a.key == **key);
-                let fr_term = fr.atoms.iter().find(|a| &a.key == **key);
+                let en_term = en_atoms_list.iter().find(|a| &a.key == **key);
+                let fr_term = fr_atoms_list.iter().find(|a| &a.key == **key);
                 if let (Some(e), Some(f)) = (en_term, fr_term) {
                     eprintln!("  {} -> en:'{}' | fr:'{}'", key, e.value, f.value);
                 }
@@ -409,23 +408,27 @@ mod multi_locale_comparison {
         let mut results = Vec::new();
 
         for locale in locales {
-            let atoms = novanet_mcp::tools::atoms::execute(
+            let atoms = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: locale.to_string(),
-                    atom_type: AtomType::Expression,
-                    domain: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::Expression),
                     register: Some("formal".to_string()),
-                    query: None,
                     limit: Some(20),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await;
 
             if let Ok(result) = atoms {
-                results.push((locale, result.atoms.len()));
-                eprintln!("{}: {} formal expressions", locale, result.atoms.len());
+                results.push((locale, result.atoms.as_ref().map_or(0, |a| a.len())));
+                eprintln!(
+                    "{}: {} formal expressions",
+                    locale,
+                    result.atoms.as_ref().map_or(0, |a| a.len())
+                );
             }
         }
 
@@ -444,30 +447,28 @@ mod multi_locale_comparison {
 
         // Get culture refs for multiple locales
         for locale in ["fr-FR", "ja-JP", "de-DE"] {
-            let culture = novanet_mcp::tools::atoms::execute(
+            let culture = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: locale.to_string(),
-                    atom_type: AtomType::CultureRef,
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::CultureRef),
                     limit: Some(10),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await;
 
-            let taboos = novanet_mcp::tools::atoms::execute(
+            let taboos = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: locale.to_string(),
-                    atom_type: AtomType::Taboo,
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::Taboo),
                     limit: Some(10),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await;
@@ -476,8 +477,8 @@ mod multi_locale_comparison {
                 eprintln!(
                     "{}: {} culture refs, {} taboos",
                     locale,
-                    c.atoms.len(),
-                    t.atoms.len()
+                    c.atoms.as_ref().map_or(0, |a| a.len()),
+                    t.atoms.as_ref().map_or(0, |a| a.len())
                 );
             }
         }
@@ -493,9 +494,8 @@ mod multi_locale_comparison {
 mod seo_optimization_flow {
     use super::*;
     use novanet_mcp::tools::{
-        assemble::{AssembleParams, AssemblyStrategy},
-        search::{SearchMode, SearchParams},
-        traverse::{TraversalDirection, TraverseParams},
+        context::{AssemblyStrategy, ContextMode, ContextParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Gather SEO keyword context for content optimization
@@ -507,39 +507,45 @@ mod seo_optimization_flow {
         let keyword_search = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "QR code".to_string(),
+                query: Some("QR code".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["SEOKeyword".to_string()]),
                 realm: Some("shared".to_string()),
-                layer: None,
                 limit: Some(20),
                 properties: Some(vec![
                     "name".to_string(),
                     "volume".to_string(),
                     "difficulty".to_string(),
                 ]),
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(ref result) = keyword_search {
-            eprintln!("Found {} SEO keywords for 'QR code'", result.hits.len());
-            for hit in result.hits.iter().take(5) {
+            let hits = result.hits.as_deref().unwrap_or_default();
+            eprintln!("Found {} SEO keywords for 'QR code'", hits.len());
+            for hit in hits.iter().take(5) {
                 eprintln!("  - {} (score: {:.2})", hit.key, hit.score);
             }
         }
 
-        // Step 2: If we found keywords, traverse to find related entities
+        // Step 2: If we found keywords, walk to find related entities
         if let Ok(ref search_result) = keyword_search {
-            if let Some(first_keyword) = search_result.hits.first() {
-                let traverse_result = novanet_mcp::tools::traverse::execute(
+            if let Some(first_keyword) =
+                search_result.hits.as_ref().and_then(|h| h.first())
+            {
+                let walk_result = novanet_mcp::tools::search::execute(
                     &state,
-                    TraverseParams {
-                        start_key: first_keyword.key.clone(),
+                    SearchParams {
+                        mode: SearchMode::Walk,
+                        start_key: Some(first_keyword.key.clone()),
                         max_depth: Some(2),
-                        direction: TraversalDirection::Both,
-                        arc_families: Some(vec!["mining".to_string(), "semantic".to_string()]),
-                        arc_kinds: None,
+                        direction: Some(WalkDirection::Both),
+                        arc_families: Some(vec![
+                            "mining".to_string(),
+                            "semantic".to_string(),
+                        ]),
                         target_kinds: Some(vec![
                             "Entity".to_string(),
                             "Page".to_string(),
@@ -547,15 +553,17 @@ mod seo_optimization_flow {
                         ]),
                         limit: Some(30),
                         include_properties: Some(true),
+                        ..Default::default()
                     },
                 )
                 .await;
 
-                if let Ok(ref result) = traverse_result {
+                if let Ok(ref result) = walk_result {
+                    let walk = result.walk.as_ref().expect("walk data should exist");
                     eprintln!(
-                        "Traversed from keyword: {} related nodes, {} arcs",
-                        result.nodes.len(),
-                        result.arcs.len()
+                        "Walked from keyword: {} related nodes, {} arcs",
+                        walk.nodes.len(),
+                        walk.arcs.len()
                     );
                 }
             }
@@ -571,51 +579,51 @@ mod seo_optimization_flow {
         let page_search = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "generator".to_string(),
+                query: Some("generator".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Page".to_string()]),
-                realm: None,
-                layer: None,
                 limit: Some(1),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
 
         let page_key = page_search
             .ok()
-            .and_then(|r| r.hits.first().map(|h| h.key.clone()))
+            .and_then(|r| r.hits.and_then(|h| h.first().map(|hit| hit.key.clone())))
             .unwrap_or_else(|| "homepage".to_string());
 
         // Assemble with emphasis on mining arc family (SEO)
-        let assemble_result = novanet_mcp::tools::assemble::execute(
+        let assemble_result = novanet_mcp::tools::context::execute(
             &state,
-            AssembleParams {
-                focus_key: page_key.clone(),
+            ContextParams {
+                focus_key: Some(page_key.clone()),
                 locale: "en-US".to_string(),
+                mode: ContextMode::Assemble,
                 token_budget: Some(30_000),
-                strategy: AssemblyStrategy::Relevance, // Prioritize by relevance
+                strategy: Some(AssemblyStrategy::Relevance), // Prioritize by relevance
                 include_entities: Some(true),
                 include_knowledge: Some(true),
                 include_structure: Some(false), // Focus on content, not structure
                 arc_families: Some(vec!["mining".to_string(), "semantic".to_string()]),
                 max_depth: Some(3),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(ref result) = assemble_result {
+            let evidence = result.evidence.as_deref().unwrap_or_default();
             eprintln!(
                 "SEO assembly: {} evidence packets for '{}'",
-                result.evidence.len(),
+                evidence.len(),
                 page_key
             );
 
             // Count evidence by type
             let mut type_counts: std::collections::HashMap<String, usize> =
                 std::collections::HashMap::new();
-            for e in &result.evidence {
+            for e in evidence {
                 *type_counts.entry(e.evidence_type.clone()).or_insert(0) += 1;
             }
 
@@ -684,19 +692,17 @@ mod error_recovery_flow {
         let search_result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "entity".to_string(),
+                query: Some("entity".to_string()),
                 mode: SearchMode::Property, // Try property search instead
-                kinds: None,                // Don't filter by kind
-                realm: None,
-                layer: None,
                 limit: Some(5),
                 properties: Some(vec!["key".to_string(), "name".to_string()]),
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(result) = search_result {
-            eprintln!("Step 3: Property search found {} hits", result.hits.len());
+            eprintln!("Step 3: Property search found {} hits", result.hits.as_ref().map_or(0, |h| h.len()));
         }
     }
 
@@ -781,13 +787,11 @@ mod error_recovery_flow {
         let search_recovery = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "nonexistent".to_string(), // Use partial name
+                query: Some("nonexistent".to_string()), // Use partial name
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Entity".to_string()]),
-                realm: None,
-                layer: None,
                 limit: Some(5),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
@@ -795,7 +799,7 @@ mod error_recovery_flow {
         if let Ok(result) = search_recovery {
             eprintln!(
                 "Recovery search found {} potential matches",
-                result.hits.len()
+                result.hits.as_ref().map_or(0, |h| h.len())
             );
         }
     }
@@ -809,11 +813,7 @@ mod error_recovery_flow {
 
 mod budget_management_flow {
     use super::*;
-    use novanet_mcp::tools::{
-        assemble::{AssembleParams, AssemblyStrategy},
-        atoms::{AtomType, AtomsParams},
-        generate::{GenerateMode, GenerateParams},
-    };
+    use novanet_mcp::tools::context::{AssemblyStrategy, AtomType, ContextMode, ContextParams};
 
     /// Test assembly with progressively smaller budgets
     #[tokio::test]
@@ -824,41 +824,44 @@ mod budget_management_flow {
         let mut results = Vec::new();
 
         for budget in budgets {
-            let assemble_result = novanet_mcp::tools::assemble::execute(
+            let assemble_result = novanet_mcp::tools::context::execute(
                 &state,
-                AssembleParams {
-                    focus_key: "homepage".to_string(),
+                ContextParams {
+                    focus_key: Some("homepage".to_string()),
                     locale: "en-US".to_string(),
+                    mode: ContextMode::Assemble,
                     token_budget: Some(budget),
-                    strategy: AssemblyStrategy::Relevance,
+                    strategy: Some(AssemblyStrategy::Relevance),
                     include_entities: Some(true),
                     include_knowledge: Some(true),
                     include_structure: Some(true),
-                    arc_families: None,
                     max_depth: Some(3),
-                    block_type: None,
+                    ..Default::default()
                 },
             )
             .await;
 
             if let Ok(result) = assemble_result {
+                let evidence_count = result.evidence.as_ref().map_or(0, |e| e.len());
+                let total_tokens = result.total_tokens.unwrap_or(0);
+                let truncated = result.truncated.unwrap_or(false);
                 results.push((
                     budget,
-                    result.evidence.len(),
-                    result.total_tokens,
-                    result.truncated,
+                    evidence_count,
+                    total_tokens,
+                    truncated,
                 ));
                 eprintln!(
                     "Budget {}: {} evidence, {} tokens, truncated={}",
                     budget,
-                    result.evidence.len(),
-                    result.total_tokens,
-                    result.truncated
+                    evidence_count,
+                    total_tokens,
+                    truncated
                 );
 
                 // Verify budget respected
                 assert!(
-                    result.total_tokens <= budget,
+                    total_tokens <= budget,
                     "Should not exceed budget of {}",
                     budget
                 );
@@ -882,33 +885,34 @@ mod budget_management_flow {
         let state = get_test_state!();
 
         // Very small budget - should still work
-        let generate_result = novanet_mcp::tools::generate::execute(
+        let generate_result = novanet_mcp::tools::context::execute(
             &state,
-            GenerateParams {
-                focus_key: "homepage".to_string(),
+            ContextParams {
+                focus_key: Some("homepage".to_string()),
                 locale: "fr-FR".to_string(),
-                mode: GenerateMode::Block,
+                mode: ContextMode::Block,
                 token_budget: Some(2_000), // Very small
                 include_examples: Some(false),
                 spreading_depth: Some(1),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(result) = generate_result {
-            eprintln!("Minimal budget: {} tokens used", result.token_usage.total);
+            let total = result.token_usage.as_ref().map_or(0, |t| t.total);
+            eprintln!("Minimal budget: {} tokens used", total);
 
             // Verify prompt still has essential sections
-            assert!(!result.prompt.is_empty(), "Prompt should not be empty");
+            assert!(result.prompt.as_ref().is_some_and(|p| !p.is_empty()), "Prompt should not be empty");
             assert!(
-                result.prompt.contains("# Generation Context"),
+                result.prompt.as_ref().is_some_and(|p| p.contains("# Generation Context")),
                 "Should have header even with small budget"
             );
 
             // Token usage should be within budget
             assert!(
-                result.token_usage.total <= 2_000,
+                total <= 2_000,
                 "Should respect minimal budget"
             );
         }
@@ -921,28 +925,28 @@ mod budget_management_flow {
 
         // Test different limits
         for limit in [5, 20, 100, 200] {
-            let atoms_result = novanet_mcp::tools::atoms::execute(
+            let atoms_result = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: "en-US".to_string(),
-                    atom_type: AtomType::All,
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::All),
                     limit: Some(limit),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await;
 
             if let Ok(result) = atoms_result {
+                let atom_count = result.atoms.as_ref().map_or(0, |a| a.len());
                 assert!(
-                    result.atoms.len() <= limit,
+                    atom_count <= limit,
                     "Limit {} not enforced: got {}",
                     limit,
-                    result.atoms.len()
+                    atom_count
                 );
-                eprintln!("Limit {}: got {} atoms", limit, result.atoms.len());
+                eprintln!("Limit {}: got {} atoms", limit, atom_count);
             }
         }
     }
@@ -1095,10 +1099,9 @@ mod schema_discovery_flow {
 mod entity_analysis_flow {
     use super::*;
     use novanet_mcp::tools::{
-        assemble::{AssembleParams, AssemblyStrategy},
+        context::{AssemblyStrategy, ContextMode, ContextParams},
         describe::{DescribeParams, DescribeTarget},
-        search::{SearchMode, SearchParams},
-        traverse::{TraversalDirection, TraverseParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Complete entity analysis workflow
@@ -1110,20 +1113,18 @@ mod entity_analysis_flow {
         let search_result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "QR".to_string(),
+                query: Some("QR".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Entity".to_string()]),
-                realm: None,
-                layer: None,
                 limit: Some(5),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
 
         let entity_key = search_result
             .ok()
-            .and_then(|r| r.hits.first().map(|h| h.key.clone()))
+            .and_then(|r| r.hits.and_then(|h| h.first().map(|hit| hit.key.clone())))
             .unwrap_or_else(|| "qr-code-generator".to_string());
 
         eprintln!("Analyzing entity: {}", entity_key);
@@ -1143,33 +1144,33 @@ mod entity_analysis_flow {
             eprintln!("Entity details: {}", result.data);
         }
 
-        // Step 3: Traverse all relationships
-        let traverse_result = novanet_mcp::tools::traverse::execute(
+        // Step 3: Walk all relationships (was traverse)
+        let walk_result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: entity_key.clone(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some(entity_key.clone()),
                 max_depth: Some(2),
-                direction: TraversalDirection::Both, // All directions
-                arc_families: None,                  // All arc families
-                arc_kinds: None,
-                target_kinds: None, // All kinds
+                direction: Some(WalkDirection::Both),
                 limit: Some(100),
                 include_properties: Some(true),
+                ..Default::default()
             },
         )
         .await;
 
-        if let Ok(result) = &traverse_result {
+        if let Ok(result) = &walk_result {
+            let walk = result.walk.as_ref().expect("Walk mode should return walk data");
             eprintln!(
                 "Entity relationships: {} nodes, {} arcs",
-                result.nodes.len(),
-                result.arcs.len()
+                walk.nodes.len(),
+                walk.arcs.len()
             );
 
             // Group by arc kind
             let mut arc_counts: std::collections::HashMap<String, usize> =
                 std::collections::HashMap::new();
-            for arc in &result.arcs {
+            for arc in &walk.arcs {
                 *arc_counts.entry(arc.arc_kind.clone()).or_insert(0) += 1;
             }
 
@@ -1179,19 +1180,19 @@ mod entity_analysis_flow {
         }
 
         // Step 4: Assemble context for entity
-        let assemble_result = novanet_mcp::tools::assemble::execute(
+        let assemble_result = novanet_mcp::tools::context::execute(
             &state,
-            AssembleParams {
-                focus_key: entity_key.clone(),
+            ContextParams {
+                focus_key: Some(entity_key.clone()),
                 locale: "en-US".to_string(),
+                mode: ContextMode::Assemble,
                 token_budget: Some(20_000),
-                strategy: AssemblyStrategy::Breadth,
+                strategy: Some(AssemblyStrategy::Breadth),
                 include_entities: Some(true),
                 include_knowledge: Some(true),
                 include_structure: Some(true),
-                arc_families: None,
                 max_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
@@ -1199,8 +1200,8 @@ mod entity_analysis_flow {
         if let Ok(result) = &assemble_result {
             eprintln!(
                 "Entity context: {} evidence packets, {} tokens",
-                result.evidence.len(),
-                result.total_tokens
+                result.evidence.as_ref().map_or(0, |e| e.len()),
+                result.total_tokens.unwrap_or(0)
             );
         }
     }
@@ -1214,7 +1215,7 @@ mod entity_analysis_flow {
 
 mod knowledge_atom_assembly {
     use super::*;
-    use novanet_mcp::tools::atoms::{AtomType, AtomsParams};
+    use novanet_mcp::tools::context::{AtomType, ContextMode, ContextParams};
 
     /// Load atoms by type progressively
     #[tokio::test]
@@ -1231,16 +1232,15 @@ mod knowledge_atom_assembly {
         ];
 
         for atom_type in atom_types {
-            let result = novanet_mcp::tools::atoms::execute(
+            let result = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: "fr-FR".to_string(),
-                    atom_type: atom_type.clone(),
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(atom_type.clone()),
                     limit: Some(20),
                     include_containers: Some(true),
+                    ..Default::default()
                 },
             )
             .await;
@@ -1249,7 +1249,7 @@ mod knowledge_atom_assembly {
                 eprintln!(
                     "{:?}: {} atoms, {} tokens",
                     atom_type,
-                    r.atoms.len(),
+                    r.atoms.as_ref().map_or(0, |a| a.len()),
                     r.token_estimate
                 );
             }
@@ -1264,22 +1264,22 @@ mod knowledge_atom_assembly {
         let domains = ["technical", "legal", "marketing", "medical"];
 
         for domain in domains {
-            let result = novanet_mcp::tools::atoms::execute(
+            let result = novanet_mcp::tools::context::execute(
                 &state,
-                AtomsParams {
+                ContextParams {
                     locale: "en-US".to_string(),
-                    atom_type: AtomType::Term,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::Term),
                     domain: Some(domain.to_string()),
-                    register: None,
-                    query: None,
                     limit: Some(30),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await;
 
             if let Ok(r) = result {
-                eprintln!("Domain '{}': {} terms", domain, r.atoms.len());
+                eprintln!("Domain '{}': {} terms", domain, r.atoms.as_ref().map_or(0, |a| a.len()));
             }
         }
     }
@@ -1290,23 +1290,24 @@ mod knowledge_atom_assembly {
         let state = get_test_state!();
 
         // Search for specific terms
-        let result = novanet_mcp::tools::atoms::execute(
+        let result = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "fr-FR".to_string(),
-                atom_type: AtomType::Term,
-                domain: None,
-                register: None,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::Term),
                 query: Some("code".to_string()), // Filter by query
                 limit: Some(50),
                 include_containers: Some(false),
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(r) = result {
-            eprintln!("Terms containing 'code': {}", r.atoms.len());
-            for atom in r.atoms.iter().take(5) {
+            let atoms = r.atoms.as_deref().unwrap_or_default();
+            eprintln!("Terms containing 'code': {}", atoms.len());
+            for atom in atoms.iter().take(5) {
                 eprintln!("  - {}: {}", atom.key, atom.value);
             }
         }
@@ -1322,8 +1323,8 @@ mod knowledge_atom_assembly {
 mod context_anchor_resolution {
     use super::*;
     use novanet_mcp::tools::{
-        generate::{GenerateMode, GenerateParams},
-        traverse::{TraversalDirection, TraverseParams},
+        context::{ContextMode, ContextParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Discover cross-page references
@@ -1331,31 +1332,33 @@ mod context_anchor_resolution {
     async fn test_cross_page_reference_discovery() {
         let state = get_test_state!();
 
-        // Find pages with REFERENCES_PAGE arcs
-        let traverse_result = novanet_mcp::tools::traverse::execute(
+        // Find pages with REFERENCES_PAGE arcs (was traverse)
+        let walk_result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: "homepage".to_string(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some("homepage".to_string()),
                 max_depth: Some(2),
-                direction: TraversalDirection::Outgoing,
-                arc_families: None,
+                direction: Some(WalkDirection::Outgoing),
                 arc_kinds: Some(vec!["REFERENCES_PAGE".to_string(), "HAS_BLOCK".to_string()]),
                 target_kinds: Some(vec!["Page".to_string(), "Block".to_string()]),
                 limit: Some(50),
                 include_properties: Some(true),
+                ..Default::default()
             },
         )
         .await;
 
-        if let Ok(result) = traverse_result {
+        if let Ok(result) = walk_result {
+            let walk = result.walk.as_ref().expect("Walk mode should return walk data");
             eprintln!(
                 "Reference discovery: {} nodes, {} arcs",
-                result.nodes.len(),
-                result.arcs.len()
+                walk.nodes.len(),
+                walk.arcs.len()
             );
 
             // Find REFERENCES_PAGE arcs specifically
-            let ref_arcs: Vec<_> = result
+            let ref_arcs: Vec<_> = walk
                 .arcs
                 .iter()
                 .filter(|a| a.arc_kind == "REFERENCES_PAGE")
@@ -1369,24 +1372,25 @@ mod context_anchor_resolution {
     async fn test_generate_with_anchors() {
         let state = get_test_state!();
 
-        let generate_result = novanet_mcp::tools::generate::execute(
+        let generate_result = novanet_mcp::tools::context::execute(
             &state,
-            GenerateParams {
-                focus_key: "homepage".to_string(),
+            ContextParams {
+                focus_key: Some("homepage".to_string()),
                 locale: "fr-FR".to_string(),
-                mode: GenerateMode::Page,
+                mode: ContextMode::Page,
                 token_budget: Some(30_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(result) = generate_result {
-            eprintln!("Context anchors found: {}", result.context_anchors.len());
+            let anchors = result.context_anchors.as_deref().unwrap_or_default();
+            eprintln!("Context anchors found: {}", anchors.len());
 
-            for anchor in &result.context_anchors {
+            for anchor in anchors {
                 eprintln!(
                     "  {{{{anchor:{}|{}}}}} -> {}",
                     anchor.page_key, anchor.anchor_text, anchor.slug
@@ -1394,10 +1398,10 @@ mod context_anchor_resolution {
             }
 
             // Check if prompt mentions anchor syntax
-            if !result.context_anchors.is_empty() {
+            if !anchors.is_empty() {
                 assert!(
-                    result.prompt.contains("{{anchor:")
-                        || result.prompt.contains("Context Anchors"),
+                    result.prompt.as_ref().is_some_and(|p| p.contains("{{anchor:")
+                        || p.contains("Context Anchors")),
                     "Prompt should explain anchor syntax when anchors exist"
                 );
             }
@@ -1414,7 +1418,7 @@ mod context_anchor_resolution {
 mod concurrent_agent_operations {
     use super::*;
     use novanet_mcp::tools::{
-        atoms::{AtomType, AtomsParams},
+        context::{AtomType, ContextMode, ContextParams},
         describe::{DescribeParams, DescribeTarget},
         search::{SearchMode, SearchParams},
     };
@@ -1443,18 +1447,20 @@ mod concurrent_agent_operations {
                 let result = novanet_mcp::tools::search::execute(
                     &state_clone,
                     SearchParams {
-                        query: query_str.clone(),
+                        query: Some(query_str.clone()),
                         mode: SearchMode::Hybrid,
-                        kinds: None,
-                        realm: None,
-                        layer: None,
                         limit: Some(10),
-                        properties: None,
+                        ..Default::default()
                     },
                 )
                 .await;
 
-                (query_str, result.map(|r| r.hits.len()).unwrap_or(0))
+                (
+                    query_str,
+                    result
+                        .map(|r| r.hits.as_ref().map_or(0, |h| h.len()))
+                        .unwrap_or(0),
+                )
             }));
         }
 
@@ -1531,17 +1537,14 @@ mod concurrent_agent_operations {
             novanet_mcp::tools::search::execute(
                 &state1,
                 SearchParams {
-                    query: "test".to_string(),
+                    query: Some("test".to_string()),
                     mode: SearchMode::Hybrid,
-                    kinds: None,
-                    realm: None,
-                    layer: None,
                     limit: Some(5),
-                    properties: None,
+                    ..Default::default()
                 },
             )
             .await
-            .map(|r| ("search", r.hits.len()))
+            .map(|r| ("search", r.hits.as_ref().map_or(0, |h| h.len())))
         });
 
         // Describe
@@ -1566,20 +1569,19 @@ mod concurrent_agent_operations {
         let barrier3 = barrier.clone();
         let atoms_en_handle = tokio::spawn(async move {
             barrier3.wait().await;
-            novanet_mcp::tools::atoms::execute(
+            novanet_mcp::tools::context::execute(
                 &state3,
-                AtomsParams {
+                ContextParams {
                     locale: "en-US".to_string(),
-                    atom_type: AtomType::Term,
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::Term),
                     limit: Some(20),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await
-            .map(|r| ("atoms-en", r.atoms.len()))
+            .map(|r| ("atoms-en", r.atoms.as_ref().map_or(0, |a| a.len())))
         });
 
         // Atoms (fr-FR)
@@ -1587,20 +1589,19 @@ mod concurrent_agent_operations {
         let barrier4 = barrier.clone();
         let atoms_fr_handle = tokio::spawn(async move {
             barrier4.wait().await;
-            novanet_mcp::tools::atoms::execute(
+            novanet_mcp::tools::context::execute(
                 &state4,
-                AtomsParams {
+                ContextParams {
                     locale: "fr-FR".to_string(),
-                    atom_type: AtomType::Term,
-                    domain: None,
-                    register: None,
-                    query: None,
+                    mode: ContextMode::Knowledge,
+                    atom_type: Some(AtomType::Term),
                     limit: Some(20),
                     include_containers: Some(false),
+                    ..Default::default()
                 },
             )
             .await
-            .map(|r| ("atoms-fr", r.atoms.len()))
+            .map(|r| ("atoms-fr", r.atoms.as_ref().map_or(0, |a| a.len())))
         });
 
         // Collect all results
@@ -1742,12 +1743,9 @@ mod cache_behavior {
 mod complete_session {
     use super::*;
     use novanet_mcp::tools::{
-        assemble::{AssembleParams, AssemblyStrategy},
-        atoms::{AtomType, AtomsParams},
+        context::{AssemblyStrategy, AtomType, ContextMode, ContextParams},
         describe::{DescribeParams, DescribeTarget},
-        generate::{GenerateMode, GenerateParams},
-        search::{SearchMode, SearchParams},
-        traverse::{TraversalDirection, TraverseParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Simulate a complete agent session: bootstrap -> explore -> generate
@@ -1793,13 +1791,11 @@ mod complete_session {
         let search_result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "QR".to_string(),
+                query: Some("QR".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Entity".to_string(), "Page".to_string()]),
-                realm: None,
-                layer: None,
                 limit: Some(10),
-                properties: None,
+                ..Default::default()
             },
         )
         .await
@@ -1807,77 +1803,79 @@ mod complete_session {
         session_tokens += search_result.token_estimate;
         eprintln!(
             "Search 'QR': {} hits, {} tokens",
-            search_result.hits.len(),
+            search_result.hits.as_ref().map_or(0, |h| h.len()),
             search_result.token_estimate
         );
 
         // Pick first entity or page
         let focus_key = search_result
             .hits
-            .first()
-            .map(|h| h.key.clone())
+            .as_ref()
+            .and_then(|h| h.first().map(|hit| hit.key.clone()))
             .unwrap_or_else(|| "homepage".to_string());
 
-        let traverse_result = novanet_mcp::tools::traverse::execute(
+        let walk_result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: focus_key.clone(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some(focus_key.clone()),
                 max_depth: Some(2),
-                direction: TraversalDirection::Both,
-                arc_families: None,
-                arc_kinds: None,
-                target_kinds: None,
+                direction: Some(WalkDirection::Both),
                 limit: Some(30),
                 include_properties: Some(true),
+                ..Default::default()
             },
         )
         .await
-        .expect("Traverse failed");
-        session_tokens += traverse_result.token_estimate;
+        .expect("Walk failed");
+        session_tokens += walk_result.token_estimate;
+        let walk_data = walk_result
+            .walk
+            .as_ref()
+            .expect("Walk mode should return walk data");
         eprintln!(
-            "Traverse from '{}': {} nodes, {} tokens",
+            "Walk from '{}': {} nodes, {} tokens",
             focus_key,
-            traverse_result.nodes.len(),
-            traverse_result.token_estimate
+            walk_data.nodes.len(),
+            walk_result.token_estimate
         );
 
         // Phase 3: Gather context for generation
         eprintln!("\n--- Phase 3: Context Assembly ---");
 
-        let assemble_result = novanet_mcp::tools::assemble::execute(
+        let assemble_result = novanet_mcp::tools::context::execute(
             &state,
-            AssembleParams {
-                focus_key: focus_key.clone(),
+            ContextParams {
+                focus_key: Some(focus_key.clone()),
                 locale: "fr-FR".to_string(),
+                mode: ContextMode::Assemble,
                 token_budget: Some(30_000),
-                strategy: AssemblyStrategy::Relevance,
+                strategy: Some(AssemblyStrategy::Relevance),
                 include_entities: Some(true),
                 include_knowledge: Some(true),
                 include_structure: Some(true),
-                arc_families: None,
                 max_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await
         .expect("Assemble failed");
-        session_tokens += assemble_result.total_tokens;
+        session_tokens += assemble_result.total_tokens.unwrap_or(0);
         eprintln!(
             "Assemble: {} evidence, {} tokens",
-            assemble_result.evidence.len(),
-            assemble_result.total_tokens
+            assemble_result.evidence.as_ref().map_or(0, |e| e.len()),
+            assemble_result.total_tokens.unwrap_or(0)
         );
 
-        let atoms_result = novanet_mcp::tools::atoms::execute(
+        let atoms_result = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "fr-FR".to_string(),
-                atom_type: AtomType::All,
-                domain: None,
-                register: None,
-                query: None,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::All),
                 limit: Some(30),
                 include_containers: Some(false),
+                ..Default::default()
             },
         )
         .await
@@ -1885,31 +1883,37 @@ mod complete_session {
         session_tokens += atoms_result.token_estimate;
         eprintln!(
             "Atoms fr-FR: {} atoms, {} tokens",
-            atoms_result.atoms.len(),
+            atoms_result.atoms.as_ref().map_or(0, |a| a.len()),
             atoms_result.token_estimate
         );
 
         // Phase 4: Generate
         eprintln!("\n--- Phase 4: Generation ---");
 
-        let generate_result = novanet_mcp::tools::generate::execute(
+        let generate_result = novanet_mcp::tools::context::execute(
             &state,
-            GenerateParams {
-                focus_key: focus_key.clone(),
+            ContextParams {
+                focus_key: Some(focus_key.clone()),
                 locale: "fr-FR".to_string(),
-                mode: GenerateMode::Block,
+                mode: ContextMode::Block,
                 token_budget: Some(20_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
-                block_type: None,
+                ..Default::default()
             },
         )
         .await
         .expect("Generate failed");
         eprintln!(
             "Generate: {} total tokens, {} evidence items",
-            generate_result.token_usage.total,
-            generate_result.evidence_summary.len()
+            generate_result
+                .token_usage
+                .as_ref()
+                .map_or(0, |t| t.total),
+            generate_result
+                .evidence_summary
+                .as_ref()
+                .map_or(0, |e| e.len())
         );
 
         // Session summary
@@ -1917,17 +1921,27 @@ mod complete_session {
         eprintln!("Total session tokens: {}", session_tokens);
         eprintln!(
             "Generation prompt size: {} chars",
-            generate_result.prompt.len()
+            generate_result.prompt.as_ref().map_or(0, |p| p.len())
         );
-        eprintln!("Context anchors: {}", generate_result.context_anchors.len());
+        let anchors = generate_result
+            .context_anchors
+            .as_deref()
+            .unwrap_or_default();
+        eprintln!("Context anchors: {}", anchors.len());
 
         // Verify prompt has essential content
         assert!(
-            generate_result.prompt.contains("# Generation Context"),
+            generate_result
+                .prompt
+                .as_ref()
+                .map_or(false, |p| p.contains("# Generation Context")),
             "Prompt should have header"
         );
         assert!(
-            generate_result.prompt.contains("## Instructions"),
+            generate_result
+                .prompt
+                .as_ref()
+                .map_or(false, |p| p.contains("## Instructions")),
             "Prompt should have instructions"
         );
     }
@@ -1941,9 +1955,8 @@ mod complete_session {
 mod edge_cases {
     use super::*;
     use novanet_mcp::tools::{
-        atoms::{AtomType, AtomsParams},
-        search::{SearchMode, SearchParams},
-        traverse::{TraversalDirection, TraverseParams},
+        context::{AtomType, ContextMode, ContextParams},
+        search::{SearchMode, SearchParams, WalkDirection},
     };
 
     /// Test with empty search query
@@ -1954,13 +1967,10 @@ mod edge_cases {
         let result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "".to_string(), // Empty query
+                query: Some("".to_string()), // Empty query
                 mode: SearchMode::Property,
-                kinds: None,
-                realm: None,
-                layer: None,
                 limit: Some(5),
-                properties: None,
+                ..Default::default()
             },
         )
         .await;
@@ -1969,30 +1979,36 @@ mod edge_cases {
         eprintln!("Empty query result: {:?}", result.is_ok());
     }
 
-    /// Test with very deep traversal request
+    /// Test with very deep walk request
     #[tokio::test]
-    async fn test_deep_traversal_clamped() {
+    async fn test_deep_walk_clamped() {
         let state = get_test_state!();
 
         // Request depth 10, should be clamped to max (5)
-        let result = novanet_mcp::tools::traverse::execute(
+        let result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: "homepage".to_string(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some("homepage".to_string()),
                 max_depth: Some(10), // Will be clamped
-                direction: TraversalDirection::Outgoing,
-                arc_families: None,
-                arc_kinds: None,
-                target_kinds: None,
+                direction: Some(WalkDirection::Outgoing),
                 limit: Some(20),
                 include_properties: Some(false),
+                ..Default::default()
             },
         )
         .await;
 
         if let Ok(r) = result {
-            assert!(r.max_depth_reached <= 5, "Depth should be clamped to 5");
-            eprintln!("Deep traversal: max_depth_reached={}", r.max_depth_reached);
+            let walk = r.walk.as_ref().expect("Walk mode should return walk data");
+            assert!(
+                walk.max_depth_reached <= 5,
+                "Depth should be clamped to 5"
+            );
+            eprintln!(
+                "Deep walk: max_depth_reached={}",
+                walk.max_depth_reached
+            );
         }
     }
 
@@ -2001,16 +2017,15 @@ mod edge_cases {
     async fn test_nonexistent_locale_atoms() {
         let state = get_test_state!();
 
-        let result = novanet_mcp::tools::atoms::execute(
+        let result = novanet_mcp::tools::context::execute(
             &state,
-            AtomsParams {
+            ContextParams {
                 locale: "xx-XX".to_string(), // Nonexistent locale
-                atom_type: AtomType::Term,
-                domain: None,
-                register: None,
-                query: None,
+                mode: ContextMode::Knowledge,
+                atom_type: Some(AtomType::Term),
                 limit: Some(10),
                 include_containers: Some(false),
+                ..Default::default()
             },
         )
         .await;
@@ -2018,10 +2033,13 @@ mod edge_cases {
         // Should succeed with empty results
         if let Ok(r) = result {
             assert!(
-                r.atoms.is_empty(),
+                r.atoms.as_ref().is_none_or(|a| a.is_empty()),
                 "Nonexistent locale should return empty atoms"
             );
-            eprintln!("Nonexistent locale: {} atoms (expected 0)", r.atoms.len());
+            eprintln!(
+                "Nonexistent locale: {} atoms (expected 0)",
+                r.atoms.as_ref().map_or(0, |a| a.len())
+            );
         }
     }
 
@@ -2033,13 +2051,14 @@ mod edge_cases {
         let result = novanet_mcp::tools::search::execute(
             &state,
             SearchParams {
-                query: "test".to_string(),
+                query: Some("test".to_string()),
                 mode: SearchMode::Hybrid,
                 kinds: Some(vec!["Entity".to_string()]),
                 realm: Some("org".to_string()),
                 layer: Some("semantic".to_string()),
                 limit: Some(1),
                 properties: Some(vec!["key".to_string()]),
+                ..Default::default()
             },
         )
         .await;
@@ -2047,34 +2066,44 @@ mod edge_cases {
         // Should handle all filters correctly
         eprintln!(
             "Heavily filtered search: {} hits",
-            result.map(|r| r.hits.len()).unwrap_or(0)
+            result
+                .map(|r| r.hits.as_ref().map_or(0, |h| h.len()))
+                .unwrap_or(0)
         );
     }
 
-    /// Test traverse with conflicting filters
+    /// Test walk with restrictive filters
     #[tokio::test]
-    async fn test_traverse_with_restrictive_filters() {
+    async fn test_walk_with_restrictive_filters() {
         let state = get_test_state!();
 
-        let result = novanet_mcp::tools::traverse::execute(
+        let result = novanet_mcp::tools::search::execute(
             &state,
-            TraverseParams {
-                start_key: "homepage".to_string(),
+            SearchParams {
+                mode: SearchMode::Walk,
+                start_key: Some("homepage".to_string()),
                 max_depth: Some(3),
-                direction: TraversalDirection::Outgoing,
+                direction: Some(WalkDirection::Outgoing),
                 arc_families: Some(vec!["mining".to_string()]), // Very specific
                 arc_kinds: Some(vec!["TARGETS".to_string()]),   // Even more specific
                 target_kinds: Some(vec!["SEOKeyword".to_string()]),
                 limit: Some(10),
                 include_properties: Some(true),
+                ..Default::default()
             },
         )
         .await;
 
         // Should complete (possibly with empty results)
         eprintln!(
-            "Restrictive traverse: {} nodes",
-            result.map(|r| r.nodes.len()).unwrap_or(0)
+            "Restrictive walk: {} nodes",
+            result
+                .map(|r| {
+                    r.walk
+                        .as_ref()
+                        .map_or(0, |w| w.nodes.len())
+                })
+                .unwrap_or(0)
         );
     }
 }

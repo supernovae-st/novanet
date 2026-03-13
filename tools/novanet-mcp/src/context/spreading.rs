@@ -43,7 +43,7 @@ static DEFAULT_TASK_MODIFIER: LazyLock<TaskModifier> = LazyLock::new(|| TaskModi
 /// Spreading activation configuration
 ///
 /// Loaded from `spreading-activation.yaml` at startup.
-/// Used by `novanet_assemble` and `novanet_generate` for context assembly.
+/// Used by `novanet_context` for context assembly.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpreadingConfig {
     /// Default parameters for spreading activation

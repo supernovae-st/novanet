@@ -1,44 +1,33 @@
-//! MCP Tools module
+//! MCP Tools module (v0.20.0)
 //!
-//! Phase 1: novanet_query, novanet_describe
-//! Phase 2: novanet_search, novanet_traverse, novanet_assemble, novanet_atoms
-//! Phase 3: novanet_generate
-//! MVP 8 Phase 3: novanet_introspect (schema introspection)
-//! A1: novanet_batch (bulk operations)
-//! A3: novanet_cache_stats, novanet_cache_invalidate (cache management)
-//! A4: novanet_write (intelligent data writes)
-//! v0.17.0: novanet_check (pre-write validation), novanet_audit (quality audit)
+//! 8 tools after The Great Cleanup (was 14):
+//!   novanet_query, novanet_describe, novanet_search, novanet_introspect,
+//!   novanet_context, novanet_write, novanet_audit, novanet_batch
+//!
+//! Removed tools (absorbed or deleted):
+//!   - novanet_traverse → merged into novanet_search (mode=walk)
+//!   - novanet_assemble, novanet_atoms, novanet_generate → merged into novanet_context
+//!   - novanet_cache_stats, novanet_cache_invalidate → deleted (D7)
+//!   - novanet_check → absorbed into novanet_write (dry_run param, D6)
 
-pub mod assemble;
-pub mod atoms;
 pub mod auditor;
 pub mod batch;
-pub mod cache_stats;
-pub mod checker;
+pub mod context;
 pub mod describe;
-pub mod generate;
 pub mod introspect;
 pub mod query;
 pub mod search;
-pub mod traverse;
 pub mod write;
 
 // Re-export tool params and results
-pub use assemble::{AssembleParams, AssembleResult};
-pub use atoms::{AtomsParams, AtomsResult};
 pub use auditor::{
     AuditIssue, AuditParams, AuditResult, AuditSeverity, AuditSummary, AuditTarget,
     OntologyInsights,
 };
 pub use batch::{BatchParams, BatchResult};
-pub use cache_stats::{CacheInvalidateParams, CacheInvalidateResult, CacheStats, CacheStatsParams};
-pub use checker::{
-    CheckIssue, CheckParams, CheckResult, CheckSeverity, OntologySuggestion, SchemaContext,
-};
+pub use context::{ContextMode, ContextParams, ContextResult};
 pub use describe::{DescribeParams, DescribeResult, DescribeTarget};
-pub use generate::{GenerateParams, GenerateResult};
 pub use introspect::{IntrospectParams, IntrospectResult, IntrospectTarget};
 pub use query::{QueryParams, QueryResult};
-pub use search::{SearchParams, SearchResult};
-pub use traverse::{TraverseParams, TraverseResult};
+pub use search::{SearchMode, SearchParams, SearchResult};
 pub use write::{WriteParams, WriteResult};

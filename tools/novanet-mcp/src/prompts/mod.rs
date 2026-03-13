@@ -345,44 +345,25 @@ Content is generated NATIVELY in the target locale. The LLM receives all context
 
 ## Tool Orchestration
 
-Use these MCP tools in sequence:
+Use **novanet_context** to assemble generation context:
 
-1. **novanet_traverse** - Get block structure and connected entities
-   ```json
-   {
-     "start_key": "<block_key>",
-     "max_depth": 2,
-     "direction": "outgoing",
-     "arc_families": ["ownership", "semantic"]
-   }
-   ```
-
-2. **novanet_assemble** - Get semantic context for entities
-   ```json
-   {
-     "focus_key": "<block_key>",
-     "locale": "<locale>",
-     "token_budget": <budget/2>,
-     "include_entities": true
-   }
-   ```
-
-3. **novanet_atoms** - Get locale-specific knowledge atoms
-   ```json
-   {
-     "locale": "<locale>",
-     "atom_type": "all",
-     "limit": 50
-   }
-   ```
-
-Or use the composite **novanet_generate** tool:
 ```json
 {
   "focus_key": "<block_key>",
   "locale": "<locale>",
   "mode": "block",
   "token_budget": <budget>
+}
+```
+
+This returns entities, knowledge atoms, and locale context in a single call.
+
+For structure discovery, use **novanet_search** with walk mode:
+```json
+{
+  "query": "<block_key>",
+  "mode": "walk",
+  "max_depth": 2
 }
 ```
 
@@ -438,18 +419,19 @@ All content is generated NATIVELY in the target locale from universal entity def
 
 ## Page Generation Flow
 
-1. **Discover Structure** - Get page with all blocks
+1. **Assemble full page context** using `novanet_context`:
    ```json
-   novanet_traverse {
-     "start_key": "<page_key>",
-     "max_depth": 3,
-     "arc_families": ["ownership"],
-     "arc_kinds": ["HAS_BLOCK"]
+   {
+     "focus_key": "<page_key>",
+     "locale": "<locale>",
+     "mode": "page",
+     "token_budget": <budget>
    }
    ```
+   This returns all block structures, entity definitions, knowledge atoms, and context anchors in a single call.
 
-2. **For each block**, gather context and generate:
-   - Use `novanet_generate` with mode "block" for each block
+2. **For each block**, generate content:
+   - Use the block evidence from the page context
    - Maintain consistent voice across blocks
 
 3. **Generate page-level metadata**:
@@ -461,23 +443,15 @@ All content is generated NATIVELY in the target locale from universal entity def
    - Use `{{anchor:page_key|display text}}` syntax
    - Context anchors are resolved via REFERENCES_PAGE arcs
 
-## Composite Approach
-
-For simpler orchestration, use **novanet_generate** with page mode:
+For structure discovery, use **novanet_search** with walk mode:
 ```json
 {
-  "focus_key": "<page_key>",
-  "locale": "<locale>",
-  "mode": "page",
-  "token_budget": <budget>
+  "query": "<page_key>",
+  "mode": "walk",
+  "max_depth": 3,
+  "arc_families": ["ownership"]
 }
 ```
-
-This returns a complete context including:
-- All block structures
-- Entity definitions
-- Knowledge atoms
-- Context anchors
 
 ## Output Format
 

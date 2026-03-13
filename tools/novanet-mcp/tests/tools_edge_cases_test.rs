@@ -1,35 +1,33 @@
 //! Edge case tests for MCP tools
 //!
 //! Tests defaults, serialization, filter building, and parameter validation
-//! for all 7 NovaNet MCP tools. Unit tests only (no Neo4j required).
+//! for all NovaNet MCP tools. Unit tests only (no Neo4j required).
 
 use novanet_mcp::tools::{
-    assemble::{AssembleParams, AssemblyStrategy, EvidencePacket},
-    atoms::{AtomType, AtomsParams},
+    context::{
+        AssemblyStrategy, AtomType, ContextMode, ContextParams, DenominationForm, EvidencePacket,
+    },
     describe::{DescribeParams, DescribeTarget},
-    generate::{DenominationForm, GenerateMode, GenerateParams},
     query::QueryParams,
-    search::{PropertyMatch, SearchHit, SearchMode, SearchParams},
-    traverse::{TraversalDirection, TraverseParams},
+    search::{PropertyMatch, SearchHit, SearchMode, SearchParams, WalkDirection},
 };
 
 // =============================================================================
-// novanet_generate Edge Cases
+// novanet_context (generate mode) Edge Cases
 // =============================================================================
 
 #[test]
-fn test_generate_mode_from_str() {
+fn test_context_mode_from_str() {
     // Default
-    let mode: GenerateMode = Default::default();
-    assert!(matches!(mode, GenerateMode::Block));
+    let mode: ContextMode = Default::default();
+    assert!(matches!(mode, ContextMode::Block));
 }
 
 #[test]
-fn test_generate_params_defaults() {
-    let json = r#"{"focus_key": "homepage", "locale": "fr-FR"}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
+fn test_context_params_defaults() {
+    let json = r#"{"locale": "fr-FR"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.focus_key, "homepage");
     assert_eq!(params.locale, "fr-FR");
     // Verify defaults are applied
     assert!(params.token_budget.is_none());
@@ -37,7 +35,7 @@ fn test_generate_params_defaults() {
 }
 
 #[test]
-fn test_generate_params_with_all_options() {
+fn test_context_params_with_all_options() {
     let json = r#"{
         "focus_key": "pricing-page",
         "locale": "es-MX",
@@ -46,35 +44,52 @@ fn test_generate_params_with_all_options() {
         "spreading_depth": 3,
         "include_examples": true
     }"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.focus_key, "pricing-page");
+    assert_eq!(params.focus_key, Some("pricing-page".to_string()));
     assert_eq!(params.locale, "es-MX");
-    assert!(matches!(params.mode, GenerateMode::Page));
+    assert!(matches!(params.mode, ContextMode::Page));
     assert_eq!(params.token_budget, Some(50000));
     assert_eq!(params.spreading_depth, Some(3));
 }
 
 #[test]
-fn test_generate_params_mode_variants() {
+fn test_context_params_mode_variants() {
     // Test block mode (default)
-    let json = r#"{"focus_key": "test", "locale": "en-US"}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
-    assert!(matches!(params.mode, GenerateMode::Block));
+    let json = r#"{"locale": "en-US"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
+    assert!(matches!(params.mode, ContextMode::Block));
 
     // Test page mode
-    let json = r#"{"focus_key": "test", "locale": "en-US", "mode": "page"}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
-    assert!(matches!(params.mode, GenerateMode::Page));
+    let json = r#"{"locale": "en-US", "mode": "page"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
+    assert!(matches!(params.mode, ContextMode::Page));
+
+    // Test knowledge mode
+    let json = r#"{"locale": "en-US", "mode": "knowledge"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
+    assert!(matches!(params.mode, ContextMode::Knowledge));
+
+    // Test assemble mode
+    let json = r#"{"locale": "en-US", "mode": "assemble"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
+    assert!(matches!(params.mode, ContextMode::Assemble));
 }
 
 #[test]
-fn test_denomination_form_default() {
-    // DenominationForm has Default trait
-    let form: DenominationForm = Default::default();
-    assert_eq!(form.text, "");
-    assert_eq!(form.title, "");
-    assert_eq!(form.abbrev, "");
+fn test_denomination_form_construction() {
+    // DenominationForm with all None fields
+    let form = DenominationForm {
+        text: None,
+        title: None,
+        abbrev: None,
+        url: None,
+        mixed: None,
+        base: None,
+    };
+    assert!(form.text.is_none());
+    assert!(form.title.is_none());
+    assert!(form.abbrev.is_none());
     assert!(form.url.is_none());
     assert!(form.mixed.is_none());
     assert!(form.base.is_none());
@@ -83,9 +98,9 @@ fn test_denomination_form_default() {
 #[test]
 fn test_denomination_form_serialization() {
     let form = DenominationForm {
-        text: "código qr".to_string(),
-        title: "Código QR".to_string(),
-        abbrev: "qr".to_string(),
+        text: Some("código qr".to_string()),
+        title: Some("Código QR".to_string()),
+        abbrev: Some("qr".to_string()),
         url: Some("crear-codigo-qr".to_string()),
         mixed: None,
         base: None,
@@ -161,42 +176,43 @@ fn test_describe_params_category_optional_key() {
 }
 
 // =============================================================================
-// novanet_traverse Edge Cases
+// novanet_search Walk Mode (formerly traverse) Edge Cases
 // =============================================================================
 
 #[test]
-fn test_traverse_direction_default() {
-    let dir: TraversalDirection = Default::default();
-    assert!(matches!(dir, TraversalDirection::Both));
+fn test_walk_direction_default() {
+    let dir: WalkDirection = Default::default();
+    assert!(matches!(dir, WalkDirection::Both));
 }
 
 #[test]
-fn test_traverse_direction_all_variants() {
+fn test_walk_direction_all_variants() {
     let directions = ["outgoing", "incoming", "both"];
     for dir_str in directions {
         let json = format!(r#""{}""#, dir_str);
-        let dir: TraversalDirection = serde_json::from_str(&json).unwrap();
+        let dir: WalkDirection = serde_json::from_str(&json).unwrap();
         assert!(matches!(
             dir,
-            TraversalDirection::Outgoing | TraversalDirection::Incoming | TraversalDirection::Both
+            WalkDirection::Outgoing | WalkDirection::Incoming | WalkDirection::Both
         ));
     }
 }
 
 #[test]
-fn test_traverse_params_minimal() {
-    let json = r#"{"start_key": "homepage"}"#;
-    let params: TraverseParams = serde_json::from_str(json).unwrap();
+fn test_search_walk_params_minimal() {
+    let json = r#"{"mode": "walk", "start_key": "homepage"}"#;
+    let params: SearchParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.start_key, "homepage");
+    assert_eq!(params.start_key, Some("homepage".to_string()));
     assert!(params.max_depth.is_none());
     assert!(params.arc_families.is_none());
     assert!(params.target_kinds.is_none());
 }
 
 #[test]
-fn test_traverse_params_with_filters() {
+fn test_search_walk_params_with_filters() {
     let json = r#"{
+        "mode": "walk",
         "start_key": "homepage",
         "max_depth": 3,
         "direction": "both",
@@ -204,11 +220,14 @@ fn test_traverse_params_with_filters() {
         "target_kinds": ["Entity", "Block"],
         "limit": 50
     }"#;
-    let params: TraverseParams = serde_json::from_str(json).unwrap();
+    let params: SearchParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.start_key, "homepage");
+    assert_eq!(params.start_key, Some("homepage".to_string()));
     assert_eq!(params.max_depth, Some(3));
-    assert!(matches!(params.direction, TraversalDirection::Both));
+    assert!(matches!(
+        params.direction,
+        Some(WalkDirection::Both)
+    ));
     assert_eq!(
         params.arc_families,
         Some(vec!["ownership".to_string(), "semantic".to_string()])
@@ -221,13 +240,14 @@ fn test_traverse_params_with_filters() {
 }
 
 #[test]
-fn test_traverse_params_empty_arrays() {
+fn test_search_walk_params_empty_arrays() {
     let json = r#"{
+        "mode": "walk",
         "start_key": "test",
         "arc_families": [],
         "target_kinds": []
     }"#;
-    let params: TraverseParams = serde_json::from_str(json).unwrap();
+    let params: SearchParams = serde_json::from_str(json).unwrap();
 
     // Empty arrays should be treated as no filter
     assert_eq!(params.arc_families, Some(vec![]));
@@ -246,13 +266,17 @@ fn test_search_mode_default() {
 
 #[test]
 fn test_search_mode_all_variants() {
-    let modes = ["fulltext", "property", "hybrid"];
+    let modes = ["fulltext", "property", "hybrid", "walk", "triggers"];
     for mode_str in modes {
         let json = format!(r#""{}""#, mode_str);
         let mode: SearchMode = serde_json::from_str(&json).unwrap();
         assert!(matches!(
             mode,
-            SearchMode::Fulltext | SearchMode::Property | SearchMode::Hybrid
+            SearchMode::Fulltext
+                | SearchMode::Property
+                | SearchMode::Hybrid
+                | SearchMode::Walk
+                | SearchMode::Triggers
         ));
     }
 }
@@ -262,7 +286,7 @@ fn test_search_params_minimal() {
     let json = r#"{"query": "QR code"}"#;
     let params: SearchParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.query, "QR code");
+    assert_eq!(params.query, Some("QR code".to_string()));
     assert!(matches!(params.mode, SearchMode::Hybrid)); // default
     assert!(params.kinds.is_none());
     assert!(params.realm.is_none());
@@ -274,14 +298,20 @@ fn test_search_params_special_characters() {
     // Test with special characters that might break Cypher
     let json = r#"{"query": "test's \"quoted\" and [brackets]"}"#;
     let params: SearchParams = serde_json::from_str(json).unwrap();
-    assert_eq!(params.query, "test's \"quoted\" and [brackets]");
+    assert_eq!(
+        params.query,
+        Some("test's \"quoted\" and [brackets]".to_string())
+    );
 }
 
 #[test]
 fn test_search_params_unicode() {
     let json = r#"{"query": "código QR 二维码 Qコード"}"#;
     let params: SearchParams = serde_json::from_str(json).unwrap();
-    assert_eq!(params.query, "código QR 二维码 Qコード");
+    assert_eq!(
+        params.query,
+        Some("código QR 二维码 Qコード".to_string())
+    );
 }
 
 #[test]
@@ -303,7 +333,7 @@ fn test_search_hit_serialization() {
 }
 
 // =============================================================================
-// novanet_atoms Edge Cases
+// novanet_context (knowledge mode, formerly atoms) Edge Cases
 // =============================================================================
 
 #[test]
@@ -340,34 +370,40 @@ fn test_atom_type_all_variants() {
 }
 
 #[test]
-fn test_atom_params_minimal() {
-    let json = r#"{"locale": "fr-FR"}"#;
-    let params: AtomsParams = serde_json::from_str(json).unwrap();
+fn test_context_knowledge_params_minimal() {
+    let json = r#"{"locale": "fr-FR", "mode": "knowledge"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
     assert_eq!(params.locale, "fr-FR");
-    assert!(matches!(params.atom_type, AtomType::All)); // default
+    assert!(matches!(params.mode, ContextMode::Knowledge));
+    assert!(matches!(
+        params.atom_type.unwrap_or(AtomType::All),
+        AtomType::All
+    ));
     assert!(params.domain.is_none());
     assert!(params.limit.is_none());
 }
 
 #[test]
-fn test_atom_params_with_domain() {
+fn test_context_knowledge_params_with_domain() {
     let json = r#"{
         "locale": "es-MX",
+        "mode": "knowledge",
         "atom_type": "term",
         "domain": "technical",
         "limit": 100
     }"#;
-    let params: AtomsParams = serde_json::from_str(json).unwrap();
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
     assert_eq!(params.locale, "es-MX");
-    assert!(matches!(params.atom_type, AtomType::Term));
+    assert!(matches!(params.mode, ContextMode::Knowledge));
+    assert!(matches!(params.atom_type, Some(AtomType::Term)));
     assert_eq!(params.domain, Some("technical".to_string()));
     assert_eq!(params.limit, Some(100));
 }
 
 // =============================================================================
-// novanet_assemble Edge Cases
+// novanet_context (assemble mode) Edge Cases
 // =============================================================================
 
 #[test]
@@ -393,33 +429,36 @@ fn test_assemble_strategy_all_variants() {
 }
 
 #[test]
-fn test_assemble_params_minimal() {
-    // locale is required, so we must provide it
-    let json = r#"{"focus_key": "homepage", "locale": "en-US"}"#;
-    let params: AssembleParams = serde_json::from_str(json).unwrap();
+fn test_context_assemble_params_minimal() {
+    let json = r#"{"focus_key": "homepage", "locale": "en-US", "mode": "assemble"}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.focus_key, "homepage");
+    assert_eq!(params.focus_key, Some("homepage".to_string()));
     assert_eq!(params.locale, "en-US");
     assert!(params.token_budget.is_none());
 }
 
 #[test]
-fn test_assemble_params_full() {
+fn test_context_assemble_params_full() {
     let json = r#"{
         "focus_key": "homepage",
         "locale": "fr-FR",
+        "mode": "assemble",
         "token_budget": 50000,
         "strategy": "relevance",
         "include_entities": true,
         "include_knowledge": false,
         "max_depth": 4
     }"#;
-    let params: AssembleParams = serde_json::from_str(json).unwrap();
+    let params: ContextParams = serde_json::from_str(json).unwrap();
 
-    assert_eq!(params.focus_key, "homepage");
+    assert_eq!(params.focus_key, Some("homepage".to_string()));
     assert_eq!(params.locale, "fr-FR");
     assert_eq!(params.token_budget, Some(50000));
-    assert!(matches!(params.strategy, AssemblyStrategy::Relevance));
+    assert!(matches!(
+        params.strategy,
+        Some(AssemblyStrategy::Relevance)
+    ));
 }
 
 #[test]
@@ -509,8 +548,8 @@ fn test_locale_format_bcp47() {
     // Various BCP-47 format locales
     let locales = ["en", "en-US", "fr-FR", "zh-Hans-CN", "pt-BR"];
     for locale in locales {
-        let json = format!(r#"{{"focus_key": "test", "locale": "{}"}}"#, locale);
-        let params: GenerateParams = serde_json::from_str(&json).unwrap();
+        let json = format!(r#"{{"locale": "{}"}}"#, locale);
+        let params: ContextParams = serde_json::from_str(&json).unwrap();
         assert_eq!(params.locale, locale);
     }
 }
@@ -518,9 +557,8 @@ fn test_locale_format_bcp47() {
 #[test]
 fn test_empty_string_fields() {
     // Empty strings should be accepted (validation happens at execution)
-    let json = r#"{"focus_key": "", "locale": ""}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
-    assert_eq!(params.focus_key, "");
+    let json = r#"{"locale": ""}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
     assert_eq!(params.locale, "");
 }
 
@@ -528,8 +566,8 @@ fn test_empty_string_fields() {
 fn test_whitespace_in_keys() {
     // Keys with whitespace - should be preserved
     let json = r#"{"focus_key": "  homepage  ", "locale": "fr-FR"}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
-    assert_eq!(params.focus_key, "  homepage  ");
+    let params: ContextParams = serde_json::from_str(json).unwrap();
+    assert_eq!(params.focus_key, Some("  homepage  ".to_string()));
 }
 
 #[test]
@@ -542,7 +580,7 @@ fn test_very_large_limit() {
 
 #[test]
 fn test_zero_token_budget() {
-    let json = r#"{"focus_key": "test", "locale": "en", "token_budget": 0}"#;
-    let params: GenerateParams = serde_json::from_str(json).unwrap();
+    let json = r#"{"locale": "en", "token_budget": 0}"#;
+    let params: ContextParams = serde_json::from_str(json).unwrap();
     assert_eq!(params.token_budget, Some(0));
 }

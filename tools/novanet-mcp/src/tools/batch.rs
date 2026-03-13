@@ -1,11 +1,14 @@
-//! novanet_batch tool
+//! novanet_batch tool (v0.20.0)
 //!
 //! Execute multiple NovaNet tools in a single request.
 //! Supports sequential and parallel execution modes.
+//!
+//! Supported tools (8): novanet_query, novanet_describe, novanet_search,
+//! novanet_introspect, novanet_context, novanet_write, novanet_audit, novanet_batch.
 
 use crate::error::{Error, Result};
 use crate::server::State;
-use crate::tools::{assemble, atoms, describe, generate, introspect, query, search, traverse};
+use crate::tools::{auditor, context, describe, introspect, query, search, write};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -204,15 +207,15 @@ async fn execute_single(state: &State, op: &BatchOperation) -> Result<(Value, us
     match op.tool.as_str() {
         "novanet_query" => {
             let params: query::QueryParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| Error::Internal(format!("Invalid params for novanet_query: {}", e)))?;
+                .map_err(|e| Error::Internal(format!("Invalid params for novanet_query: {e}")))?;
             let result = query::execute(state, params).await?;
             let tokens = result.token_estimate;
             Ok((serde_json::to_value(result)?, tokens))
         }
         "novanet_describe" => {
-            let params: describe::DescribeParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_describe: {}", e))
+            let params: describe::DescribeParams =
+                serde_json::from_value(op.params.clone()).map_err(|e| {
+                    Error::Internal(format!("Invalid params for novanet_describe: {e}"))
                 })?;
             let result = describe::execute(state, params).await?;
             let tokens = result.token_estimate;
@@ -221,53 +224,48 @@ async fn execute_single(state: &State, op: &BatchOperation) -> Result<(Value, us
         "novanet_search" => {
             let params: search::SearchParams =
                 serde_json::from_value(op.params.clone()).map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_search: {}", e))
+                    Error::Internal(format!("Invalid params for novanet_search: {e}"))
                 })?;
             let result = search::execute(state, params).await?;
             let tokens = result.token_estimate;
             Ok((serde_json::to_value(result)?, tokens))
         }
-        "novanet_traverse" => {
-            let params: traverse::TraverseParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_traverse: {}", e))
-                })?;
-            let result = traverse::execute(state, params).await?;
-            let tokens = result.token_estimate;
-            Ok((serde_json::to_value(result)?, tokens))
-        }
-        "novanet_assemble" => {
-            let params: assemble::AssembleParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_assemble: {}", e))
-                })?;
-            let result = assemble::execute(state, params).await?;
-            let tokens = result.total_tokens;
-            Ok((serde_json::to_value(result)?, tokens))
-        }
-        "novanet_atoms" => {
-            let params: atoms::AtomsParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| Error::Internal(format!("Invalid params for novanet_atoms: {}", e)))?;
-            let result = atoms::execute(state, params).await?;
-            let tokens = result.token_estimate;
-            Ok((serde_json::to_value(result)?, tokens))
-        }
-        "novanet_generate" => {
-            let params: generate::GenerateParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_generate: {}", e))
-                })?;
-            let result = generate::execute(state, params).await?;
-            let tokens = result.token_usage.total;
-            Ok((serde_json::to_value(result)?, tokens))
-        }
         "novanet_introspect" => {
-            let params: introspect::IntrospectParams = serde_json::from_value(op.params.clone())
-                .map_err(|e| {
-                    Error::Internal(format!("Invalid params for novanet_introspect: {}", e))
+            let params: introspect::IntrospectParams =
+                serde_json::from_value(op.params.clone()).map_err(|e| {
+                    Error::Internal(format!("Invalid params for novanet_introspect: {e}"))
                 })?;
             let result = introspect::execute(state, params).await?;
             let tokens = result.token_estimate;
+            Ok((serde_json::to_value(result)?, tokens))
+        }
+        "novanet_context" => {
+            let params: context::ContextParams =
+                serde_json::from_value(op.params.clone()).map_err(|e| {
+                    Error::Internal(format!("Invalid params for novanet_context: {e}"))
+                })?;
+            let result = context::execute(state, params).await?;
+            let tokens = result.token_estimate;
+            Ok((serde_json::to_value(result)?, tokens))
+        }
+        "novanet_write" => {
+            let params: write::WriteParams =
+                serde_json::from_value(op.params.clone()).map_err(|e| {
+                    Error::Internal(format!("Invalid params for novanet_write: {e}"))
+                })?;
+            let result = write::execute(state, params).await?;
+            // WriteResult is an untagged enum — estimate tokens from serialized size
+            let value = serde_json::to_value(&result)?;
+            let tokens = value.to_string().len().div_ceil(4);
+            Ok((value, tokens))
+        }
+        "novanet_audit" => {
+            let params: auditor::AuditParams =
+                serde_json::from_value(op.params.clone()).map_err(|e| {
+                    Error::Internal(format!("Invalid params for novanet_audit: {e}"))
+                })?;
+            let result = auditor::execute(state, params).await?;
+            let tokens = result.token_estimate as usize;
             Ok((serde_json::to_value(result)?, tokens))
         }
         _ => Err(Error::invalid_tool(&op.tool)),
@@ -414,16 +412,16 @@ mod tests {
 
     #[test]
     fn test_supported_tools() {
-        // List of all 8 supported tools that should work in batch
+        // List of all 8 supported tools that should work in batch (v0.20.0)
         let supported_tools = vec![
             "novanet_query",
             "novanet_describe",
             "novanet_search",
-            "novanet_traverse",
-            "novanet_assemble",
-            "novanet_atoms",
-            "novanet_generate",
             "novanet_introspect",
+            "novanet_context",
+            "novanet_write",
+            "novanet_audit",
+            "novanet_batch",
         ];
 
         for tool in &supported_tools {
