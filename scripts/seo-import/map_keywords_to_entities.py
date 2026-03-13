@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map SEO keywords to EntityContent based on pattern matching.
+"""Map SEO keywords to EntityNative based on pattern matching.
 
 Mapping rules by category:
 1. Creation keywords -> create-qr-code, qr-code-generator
@@ -96,7 +96,7 @@ def find_entity_for_keyword(keyword: str, entity_keys: set) -> Optional[str]:
     return None
 
 def map_keywords_to_entities(keywords: list, entitycontent_list: list) -> tuple:
-    """Map each keyword to an EntityContent."""
+    """Map each keyword to an EntityNative."""
     entity_keys = {el["entity_key"] for el in entitycontent_list}
 
     mappings = []

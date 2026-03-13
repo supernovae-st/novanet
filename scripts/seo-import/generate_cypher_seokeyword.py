@@ -72,7 +72,7 @@ def generate_cypher(mappings: list, batch_size: int = 500) -> str:
             lines.append("")
 
             # Create TARGETS relationship
-            lines.append(f'MATCH (el:EntityContent {{entity_key: "{m["entity_key"]}", locale_key: "{m["locale_key"]}"}})')
+            lines.append(f'MATCH (el:EntityNative {{entity_key: "{m["entity_key"]}", locale_key: "{m["locale_key"]}"}})')
             lines.append(f'MATCH (kw:SEOKeyword {{key: "{kw_key}"}})')
             lines.append("MERGE (el)-[:TARGETS]->(kw);")
             lines.append("")

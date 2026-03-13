@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fix template descriptions in EntityContent fr-FR seed file.
+"""Fix template descriptions in EntityNative fr-FR seed file.
 
 Replaces lazy "La X pour vos projets QR Code" with proper French descriptions.
 """
@@ -184,7 +184,7 @@ def fix_descriptions(seed_path: Path) -> tuple:
     
     for entity_key, description in DESCRIPTIONS.items():
         # Find pattern: el.description = 'La/Le/L' X pour vos projets QR Code.'
-        pattern = rf"(MERGE \(el:EntityContent \{{key: 'entity:{entity_key}@fr-FR'\}}\).*?el\.description = ')[^']*pour vos projets QR Code\.'"
+        pattern = rf"(MERGE \(el:EntityNative \{{key: 'entity:{entity_key}@fr-FR'\}}\).*?el\.description = ')[^']*pour vos projets QR Code\.'"
         
         replacement = rf"\1{description}'"
         new_content, count = re.subn(pattern, replacement, content, flags=re.DOTALL)
@@ -199,6 +199,6 @@ def fix_descriptions(seed_path: Path) -> tuple:
     return fixed_count, len(DESCRIPTIONS)
 
 if __name__ == "__main__":
-    seed_path = Path("packages/db/seed/11-entity-content-fr-fr.cypher")
+    seed_path = Path("packages/db/seed/11-entity-native-fr-fr.cypher")
     fixed, total = fix_descriptions(seed_path)
     print(f"Fixed {fixed} descriptions out of {total} defined")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate EntityContent fr-FR content from Entity definitions.
+"""Generate EntityNative fr-FR content from Entity definitions.
 
 This script creates French localized content for each Entity.
 For production, this would use an LLM API. For now, uses rule-based translation.
@@ -108,7 +108,7 @@ def generate_french_llm_context(en_context: str) -> str:
     return result
 
 def generate_entitycontent(entities: list) -> list:
-    """Generate EntityContent fr-FR for all entities."""
+    """Generate EntityNative fr-FR for all entities."""
     entitycontent_list = []
 
     for entity in entities:
@@ -138,4 +138,4 @@ if __name__ == "__main__":
     with open(output_path, "w") as f:
         json.dump(entitycontent_list, f, indent=2, ensure_ascii=False)
 
-    print(f"Generated {len(entitycontent_list)} EntityContent fr-FR to {output_path}")
+    print(f"Generated {len(entitycontent_list)} EntityNative fr-FR to {output_path}")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fix ALL template descriptions in EntityContent fr-FR seed file (v3).
+"""Fix ALL template descriptions in EntityNative fr-FR seed file (v3).
 
 Comprehensive fix for all 160+ entity keys with template patterns.
 """
@@ -277,7 +277,7 @@ def fix_file(path: Path) -> int:
     return fixed
 
 if __name__ == "__main__":
-    path = Path("packages/db/seed/11-entity-content-fr-fr.cypher")
+    path = Path("packages/db/seed/11-entity-native-fr-fr.cypher")
     count = fix_file(path)
     print(f"Fixed {count} descriptions")
     
