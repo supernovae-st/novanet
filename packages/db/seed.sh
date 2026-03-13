@@ -191,36 +191,9 @@ else
     echo ""
 fi
 
-# Exécuter les migrations (si présentes)
-MIGRATION_DIR="$(dirname "$0")/migrations"
-if [ -d "$MIGRATION_DIR" ]; then
-    shopt -s nullglob
-    migration_files=("$MIGRATION_DIR"/*.cypher)
-    shopt -u nullglob
-    if [ ${#migration_files[@]} -gt 0 ]; then
-        echo -e "${YELLOW}[5/5] Exécution des migrations...${NC}"
-        echo ""
-
-        for file in "${migration_files[@]}"; do
-            filename=$(basename "$file")
-            echo -e "  ${YELLOW}→ $filename${NC}"
-
-            # Use --file option to read file inside container (preserves UTF-8 encoding)
-            # Files are mounted at /import/migrations/ via docker-compose.yml
-            # LANG/LC_ALL required for proper diacritics handling (ó, é, ñ, etc.)
-            if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/migrations/$filename" > /dev/null 2>&1; then
-                echo -e "    ${GREEN}✓ OK${NC}"
-            else
-                echo -e "    ${RED}✗ Erreur${NC}"
-                echo ""
-                echo "Détails de l'erreur:"
-                docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/migrations/$filename"
-                exit 1
-            fi
-        done
-        echo ""
-    fi
-fi
+# NOTE: Migrations removed per Master Plan D7 "Seeds propres, PAS de migrations"
+# All data changes now go through seed files directly
+# Historical migrations archived to docs/history/_migrations/
 
 echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
 echo -e "${GREEN}  ✓ Seed terminé avec succès !${NC}"
