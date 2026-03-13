@@ -11010,7 +11010,7 @@ MATCH (cs:CultureSet {key: 'culture-set:values@ru-KG'})
 MATCH (cr:CultureRef {key: 'cultureref:independence-and-pride@ru-KG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'cultureref:@ru-KG'})
+MERGE (cr:CultureRef {key: 'cultureref:manas-epic@ru-KG'})
 SET cr.display_name = 'Эпос "Манас"',
     cr.node_class = 'CultureRef',
     cr.content = cr.expression,
@@ -11024,10 +11024,10 @@ SET cr.display_name = 'Эпос "Манас"',
     cr.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-KG'})
-MATCH (cr:CultureRef {key: 'cultureref:@ru-KG'})
+MATCH (cr:CultureRef {key: 'cultureref:manas-epic@ru-KG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
-MERGE (cr:CultureRef {key: 'cultureref:@ru-KG'})
+MERGE (cr:CultureRef {key: 'cultureref:nomadic-heritage@ru-KG'})
 SET cr.display_name = 'Кочевое наследие',
     cr.node_class = 'CultureRef',
     cr.content = cr.expression,
@@ -11041,7 +11041,7 @@ SET cr.display_name = 'Кочевое наследие',
     cr.updated_at = datetime();
 
 MATCH (cs:CultureSet {key: 'culture-set:values@ru-KG'})
-MATCH (cr:CultureRef {key: 'cultureref:@ru-KG'})
+MATCH (cr:CultureRef {key: 'cultureref:nomadic-heritage@ru-KG'})
 MERGE (cs)-[:CONTAINS_CULTURE_REF]->(cr);
 
 // ----------------------------------------------------------------------------
