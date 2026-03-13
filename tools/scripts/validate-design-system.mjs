@@ -12,6 +12,8 @@
  *
  * v0.12.0 - Data Origin trait renames
  * v0.12.5 - Load arc families from individual YAML files
+ * v0.19.0 - Traits deprecated, node counts updated (59/36/23)
+ *           Fallback YAML parser handles individual arc-family files
  */
 
 import { readFileSync, existsSync, readdirSync } from 'fs';
@@ -30,10 +32,24 @@ try {
   } catch {
     // Fallback: simple YAML parser for our needs
     parseYaml = (content) => {
-      // Very basic YAML parser - just enough for validation
-      const result = { arc_families: [], terminal: { palette_256: {} }, icons: { arc_families: {} } };
+      const result = {};
 
-      // Parse arc_families
+      // Detect individual arc-family file format (arc_family: root key)
+      const arcFamilyMatch = content.match(/^arc_family:\s*\n([\s\S]*)/m);
+      if (arcFamilyMatch) {
+        const block = arcFamilyMatch[1];
+        const keyMatch = block.match(/^\s+key:\s*(\S+)/m);
+        const colorMatch = block.match(/^\s+color:\s*"([^"]+)"/m);
+        const displayMatch = block.match(/^\s+display_name:\s*(\S+)/m);
+        result.arc_family = {
+          key: keyMatch?.[1],
+          color: colorMatch?.[1],
+          display_name: displayMatch?.[1],
+        };
+        return result;
+      }
+
+      // Parse arc_families list (legacy taxonomy.yaml format)
       const arcFamiliesMatch = content.match(/^arc_families:\s*\n((?:  - .*\n)+)/m);
       if (arcFamiliesMatch) {
         const families = [...arcFamiliesMatch[1].matchAll(/  - key: (\w+)\n(?:.*\n)*?    color: "([^"]+)"/g)];
@@ -43,10 +59,16 @@ try {
       // Parse terminal palette
       const terminalMatch = content.match(/palette_256:\s*\n((?:    \w+: \d+\n)+)/m);
       if (terminalMatch) {
+        result.terminal = { palette_256: {} };
         const colors = [...terminalMatch[1].matchAll(/    (\w+): (\d+)/g)];
         for (const [_, key, value] of colors) {
           result.terminal.palette_256[key] = parseInt(value);
         }
+      }
+
+      // Parse icons section (visual-encoding.yaml)
+      if (content.includes('icons:')) {
+        result.icons = { arc_families: {} };
       }
 
       return result;
@@ -580,62 +602,38 @@ function validateLayers(realms, hierarchyTS, layersTS) {
 }
 
 function validateTraits(traits, typesTS) {
-  logSection('Node Traits (YAML ↔ TypeScript)');
+  logSection('Node Traits (v0.19.0: DEPRECATED)');
 
-  // v0.12.0: Data Origin trait renames
-  const expectedTraits = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
-  const yamlTraits = traits.map(t => t.key);
-
-  // Check YAML
-  for (const trait of expectedTraits) {
-    if (yamlTraits.includes(trait)) {
-      const traitDef = traits.find(t => t.key === trait);
-      logOk(`${trait}: border_style=${traitDef?.border_style || 'N/A'}`);
-    } else {
-      logError(`${trait}: missing from YAML`);
-    }
+  // v0.19.0: Traits removed from schema (ADR-024 deprecated)
+  // Provenance is now tracked per-instance on nodes that need it
+  if (traits.length === 0) {
+    logOk('Traits correctly removed from schema (v0.19.0 ADR-024 deprecated)');
+    return;
   }
 
-  // Check TypeScript Trait type (in core types)
-  const nodeTypesTS = loadTypeScript('packages/core/src/types/nodes.ts');
-  if (nodeTypesTS) {
-    // TypeScript uses `Trait` (short form) not `NodeTrait` (full form)
-    const traitMatch = nodeTypesTS.match(/export type Trait\s*=([^;]+);/s);
-    if (traitMatch) {
-      for (const trait of expectedTraits) {
-        if (traitMatch[1].includes(`'${trait}'`)) {
-          logOk(`${trait}: in Trait type`);
-        } else {
-          logError(`${trait}: missing from Trait type`);
-        }
-      }
-    } else {
-      logError('Trait type not found in nodes.ts');
-    }
-  }
+  logWarn(`${traits.length} traits still found — expected 0 after v0.19.0 deprecation`);
 }
 
 function validateNodeCounts(layersTS) {
   logSection('Node Counts (layers.ts consistency)');
 
-  // v0.12.4 + Brand Architecture: 61 nodes (40 shared + 21 org)
-  // Brand Architecture: +Brand, BrandDesign, BrandPrinciples, PromptStyle in foundation
+  // v0.19.0: 59 nodes (36 shared + 23 org)
   const expectedCounts = {
-    total: 61,
-    shared: 40,
-    org: 21,
+    total: 59,
+    shared: 36,
+    org: 23,
     sharedByLayer: {
       config: 3,
       geography: 7,
-      knowledge: 24,
-      locale: 6,
+      knowledge: 21,
+      locale: 5,
     },
     orgByLayer: {
       config: 1,
-      foundation: 6,  // +Brand, BrandDesign, BrandPrinciples, PromptStyle (-BrandIdentity)
-      instruction: 4,
-      output: 3,
-      semantic: 4,
+      foundation: 8,
+      instruction: 3,
+      output: 6,
+      semantic: 2,
       structure: 3,
     },
   };
@@ -706,23 +704,12 @@ function validateNodeCounts(layersTS) {
 }
 
 function validateVisualEncodingTraits(visualEncoding, traits) {
-  logSection('Visual Encoding Trait Icons');
+  logSection('Visual Encoding Trait Icons (v0.19.0: DEPRECATED)');
 
-  // v0.12.0: Data Origin trait renames
-  const expectedTraits = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
-  const traitIcons = visualEncoding.icons?.traits || {};
-
-  for (const trait of expectedTraits) {
-    if (traitIcons[trait]) {
-      const { web, terminal } = traitIcons[trait];
-      if (web && terminal) {
-        logOk(`${trait}: web=${web}, terminal=${terminal}`);
-      } else {
-        logWarn(`${trait}: missing web or terminal icon`);
-      }
-    } else {
-      logError(`${trait}: not defined in visual-encoding.yaml icons.traits`);
-    }
+  // v0.19.0: Traits deprecated — icons may still exist for backward compat
+  if (traits.length === 0) {
+    logOk('Traits deprecated — skipping visual encoding trait validation');
+    return;
   }
 }
 
