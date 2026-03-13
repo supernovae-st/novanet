@@ -71,6 +71,8 @@ tools/target/
 brain/
 
 # Private seed data (QR Code AI entities, content, SEO)
+# content/ is a symlink to private-data/seed/content/
+packages/db/seed/content
 packages/db/seed/10-*
 packages/db/seed/11-*
 packages/db/seed/3[1-9]-*
