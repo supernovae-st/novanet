@@ -544,8 +544,18 @@ async fn property_search(
     let kind_filter = build_kind_filter(&params.kinds, "n");
     let (realm_filter, realm_value) = build_realm_filter(&params.realm, "n", "realm_filter");
 
-    let mut conditions = String::with_capacity(properties.len() * 60);
-    for (i, p) in properties.iter().enumerate() {
+    // SECURITY: Validate property names to prevent Cypher injection
+    let safe_properties: Vec<&String> = properties
+        .iter()
+        .filter(|p| is_valid_property_name(p))
+        .collect();
+
+    if safe_properties.is_empty() {
+        return Ok(vec![]);
+    }
+
+    let mut conditions = String::with_capacity(safe_properties.len() * 60);
+    for (i, p) in safe_properties.iter().enumerate() {
         if i > 0 {
             conditions.push_str(" OR ");
         }
@@ -756,6 +766,17 @@ async fn simple_traverse(
 }
 
 // ─── Shared Helpers ─────────────────────────────────────────────────────────
+
+/// Validate that a property name only contains safe characters.
+/// SECURITY: Prevents Cypher injection via property names interpolated into queries.
+/// Allows lowercase alphanumeric + underscore (e.g., "display_name", "key", "content").
+fn is_valid_property_name(name: &str) -> bool {
+    !name.is_empty()
+        && name.len() <= 100
+        && name
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '_')
+}
 
 /// Validate that a label name only contains safe characters.
 /// SECURITY: Prevents label injection attacks by only allowing alphanumeric + underscore.
