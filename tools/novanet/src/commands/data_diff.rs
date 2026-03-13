@@ -53,15 +53,23 @@ const TIMESTAMP_FIELDS: &[&str] = &["created_at", "updated_at"];
 /// Compare Neo4j state against exported YAML files.
 #[derive(Debug, Clone, Parser)]
 #[command(
-    about = "Compare Neo4j state against exported YAML files",
-    long_about = "Compare Neo4j state against exported YAML files.\n\n\
-        Part of the data management workflow: export → diff → promote.\n\
-        Detects drift between your database and the exported YAML snapshot.\n\
-        Shows added, removed, and modified nodes per class.\n\n\
+    about = "Check what changed since last export",
+    long_about = "Check what changed since last export.\n\n\
+        Step 2 of 3 in the data management workflow:\n\
+        \n\
+          Database (Neo4j)  ──1──>  Local backup  ──3──>  Git repo\n\
+                            <──2──\n\
+        \n\
+          1. export   Save database content to local files\n\
+          2. diff     Check what changed since last export   << YOU ARE HERE\n\
+          3. promote  Copy local files to git for version control\n\
+        \n\
+        Compares your saved local files against the live database to see\n\
+        if anything was added, removed, or modified since the last export.\n\n\
         Examples:\n  \
-          novanet data diff                  # Compare all classes\n  \
+          novanet data diff                  # Compare everything\n  \
           novanet data diff --verbose        # Show property-level changes\n  \
-          novanet data diff --class=Entity   # Specific class only"
+          novanet data diff --class=Entity   # Specific type only"
 )]
 pub struct DataDiffArgs {
     /// Filter by node class (Entity, EntityNative, Page...)
@@ -150,12 +158,12 @@ pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
 
     // -- BANNER --
     ux::print_banner(
-        "NOVANET DATA DIFF",
-        "Compare Neo4j state against exported YAML files",
+        "NOVANET DATA DIFF  (step 2 of 3)",
+        "Check what changed since last export",
         &[
-            ("Source (YAML)", ux::fmt_path(&source_dir)),
-            ("Target (Neo4j)", "bolt://localhost:7687".to_string()),
-            ("Classes", format!("{} to compare", classes.len())),
+            ("Saved files", format!("Local backup ({})", ux::fmt_path(&source_dir))),
+            ("Live database", "Database (Neo4j in Docker)".to_string()),
+            ("Comparing", format!("{} content types", classes.len())),
         ],
     );
 

@@ -43,7 +43,7 @@ enum Commands {
         #[arg(long)]
         no_validate: bool,
     },
-    /// Data management: export → diff → promote workflow
+    /// Save, check, and version-control your database content
     Data {
         #[command(subcommand)]
         action: DataAction,
@@ -225,23 +225,20 @@ enum DataAction {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
     },
-    /// Export Neo4j data nodes to YAML for version control
+    /// [Step 1] Save database content to local files
     ///
-    /// Workflow: export → diff → promote.
-    /// Exports Entity, Page, Block, and other data classes to ~/.novanet/export/.
-    /// Use --incremental to export only changes since the last export.
+    /// Reads Entity, Page, Block... from the database and saves them
+    /// as files in ~/.novanet/export/.
     Export(novanet::commands::data_export::DataExportArgs),
-    /// Compare Neo4j state against exported YAML files
+    /// [Step 2] Check what changed since last export
     ///
-    /// Workflow: export → diff → promote.
-    /// Detects drift between your database and the exported YAML snapshot.
-    /// Shows added, removed, and modified nodes per class.
+    /// Compares your saved local files against the live database.
+    /// Shows what was added, removed, or modified.
     Diff(novanet::commands::data_diff::DataDiffArgs),
-    /// Promote exported YAML to version-controlled private-data
+    /// [Step 3] Copy local files to git for version control
     ///
-    /// Workflow: export → diff → promote.
-    /// Copies YAML files from ~/.novanet/export/ to private-data/data/
-    /// for git version control. Use --dry-run to preview.
+    /// Copies saved files from ~/.novanet/export/ into private-data/data/
+    /// so they can be committed and tracked with git.
     Promote(novanet::commands::data_promote::DataPromoteArgs),
 }
 

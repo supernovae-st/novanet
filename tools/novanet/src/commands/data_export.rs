@@ -53,16 +53,24 @@ const LABEL_PATTERN: &str = r"^[A-Z][A-Za-z0-9]*$";
 /// Export node data from Neo4j to YAML files.
 #[derive(Debug, Clone, Parser)]
 #[command(
-    about = "Export Neo4j data nodes to YAML for version control",
-    long_about = "Export Neo4j data nodes to YAML for version control.\n\n\
-        Part of the data management workflow: export → diff → promote.\n\
-        Exports Entity, Page, Block, and other data classes to ~/.novanet/export/.\n\
-        Use --incremental to export only changes since the last export.\n\n\
+    about = "Save your database content to local files",
+    long_about = "Save your database content to local files.\n\n\
+        Step 1 of 3 in the data management workflow:\n\
+        \n\
+          Database (Neo4j)  ──1──>  Local backup  ──3──>  Git repo\n\
+                            <──2──\n\
+        \n\
+          1. export   Save database content to local files   << YOU ARE HERE\n\
+          2. diff     Check what changed since last export\n\
+          3. promote  Copy local files to git for version control\n\
+        \n\
+        Reads your content (Entity, Page, Block...) from the database and\n\
+        saves it as YAML files in ~/.novanet/export/.\n\n\
         Examples:\n  \
-          novanet data export                      # Full export\n  \
-          novanet data export --incremental        # Delta only\n  \
-          novanet data export --class=Entity,Page  # Specific classes\n  \
-          novanet data export --dry-run            # Preview"
+          novanet data export                      # Save everything\n  \
+          novanet data export --incremental        # Only changes since last time\n  \
+          novanet data export --class=Entity,Page  # Specific types only\n  \
+          novanet data export --dry-run            # Preview without saving"
 )]
 pub struct DataExportArgs {
     /// Filter by node class (Entity, EntityNative, Page, PageNative, Block...)
@@ -154,8 +162,8 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
         "Full export (use --incremental for delta only)"
     };
     let mut metadata: Vec<(&str, String)> = vec![
-        ("Source", "bolt://localhost:7687 (neo4j)".to_string()),
-        ("Output", ux::fmt_path(&output_dir)),
+        ("From", "Database (Neo4j in Docker)".to_string()),
+        ("To", format!("Local files ({})", ux::fmt_path(&output_dir))),
         ("Mode", mode.to_string()),
     ];
     if let Some(ref project) = args.project {
@@ -165,8 +173,8 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
         metadata.push(("Locale", locale.clone()));
     }
     ux::print_banner(
-        "NOVANET DATA EXPORT",
-        "Export Neo4j data nodes to YAML for version control",
+        "NOVANET DATA EXPORT  (step 1 of 3)",
+        "Save your database content to local files",
         &metadata,
     );
 

@@ -22,13 +22,21 @@ use crate::core::ux;
 /// Promote exported YAML to version-controlled private-data.
 #[derive(Debug, Clone, Parser)]
 #[command(
-    about = "Promote exported YAML to version-controlled private-data",
-    long_about = "Promote exported YAML to version-controlled private-data.\n\n\
-        Part of the data management workflow: export → diff → promote.\n\
-        Copies YAML files from ~/.novanet/export/ to private-data/data/\n\
-        for git version control. Shows unified diffs for modified files.\n\n\
+    about = "Copy local files to git for version control",
+    long_about = "Copy local files to git for version control.\n\n\
+        Step 3 of 3 in the data management workflow:\n\
+        \n\
+          Database (Neo4j)  ──1──>  Local backup  ──3──>  Git repo\n\
+                            <──2──\n\
+        \n\
+          1. export   Save database content to local files\n\
+          2. diff     Check what changed since last export\n\
+          3. promote  Copy local files to git for version control   << YOU ARE HERE\n\
+        \n\
+        Copies your saved files from ~/.novanet/export/ into private-data/data/\n\
+        so they can be tracked with git (committed, pushed, reviewed).\n\n\
         Examples:\n  \
-          novanet data promote              # Promote all files\n  \
+          novanet data promote              # Copy all files to git folder\n  \
           novanet data promote --dry-run    # Preview without writing\n  \
           novanet data promote --no-diff    # Skip diff output"
 )]
@@ -104,12 +112,12 @@ pub async fn run_data_promote(args: DataPromoteArgs) -> crate::Result<()> {
 
     // -- BANNER --
     ux::print_banner(
-        "NOVANET DATA PROMOTE",
-        "Promote exported YAML to version-controlled private-data",
+        "NOVANET DATA PROMOTE  (step 3 of 3)",
+        "Copy local files to git for version control",
         &[
-            ("Source (export)", ux::fmt_path(&source_dir)),
-            ("Target (git)", ux::fmt_path(&target_dir)),
-            ("Files", format!("{} to promote", classes.len())),
+            ("From", format!("Local backup ({})", ux::fmt_path(&source_dir))),
+            ("To", format!("Git repo ({})", ux::fmt_path(&target_dir))),
+            ("Files", format!("{} to copy", classes.len())),
         ],
     );
 

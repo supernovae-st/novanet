@@ -149,6 +149,92 @@ pub fn print_next_step(hint: &str, command: &str) {
 }
 
 // =============================================================================
+// FLOW DIAGRAM
+// =============================================================================
+
+/// Print the data management workflow diagram.
+/// Shows the 3-step pipeline with the current step highlighted.
+///
+/// ```text
+///   HOW IT WORKS
+///   Your content lives in a Neo4j database (running in Docker).
+///   These commands let you save, check, and version-control that content.
+///
+///   ┌──────────┐       ┌──────────┐       ┌──────────┐
+///   │ Database │──1──> │  Local   │──3──> │   Git    │
+///   │ (Neo4j)  │       │  backup  │       │  repo    │
+///   └──────────┘       └──────────┘       └──────────┘
+///        ^                   │
+///        └────── 2. check ───┘
+///
+///   1. export   Save database content to local YAML files
+///   2. diff     Check what changed since last export
+///   3. promote  Copy local files to git for version control
+/// ```
+pub fn print_data_flow(active_step: Option<u8>) {
+    eprintln!();
+    eprintln!("  {}", "HOW IT WORKS".bold());
+    eprintln!(
+        "  {}",
+        "Your content lives in a Neo4j database (running in Docker).".dimmed()
+    );
+    eprintln!(
+        "  {}",
+        "These commands save, check, and version-control that content.".dimmed()
+    );
+    eprintln!();
+
+    // Simple 3-box diagram
+    eprintln!(
+        "  {}       {}       {}",
+        "Database".bold(),
+        "Local backup".bold(),
+        "Git repo".bold(),
+    );
+    eprintln!(
+        "  {}  ──1──>  {}  ──3──>  {}",
+        "(Neo4j)  ".dimmed(),
+        "(~/.novanet/) ".dimmed(),
+        "(private-data/)".dimmed(),
+    );
+    eprintln!(
+        "  {}  <──2──  {}",
+        "         ".dimmed(),
+        "              ".dimmed(),
+    );
+    eprintln!();
+
+    // Legend with active step highlighted
+    let labels: [(u8, &str, &str); 3] = [
+        (1, "1. export ", "Save database content to local files"),
+        (2, "2. diff   ", "Check what changed since last export"),
+        (3, "3. promote", "Copy local files to git for version control"),
+    ];
+
+    for (step, label, desc) in &labels {
+        if active_step == Some(*step) {
+            eprintln!("  {} {}  {}", ">>".cyan().bold(), label.cyan().bold(), desc);
+        } else {
+            eprintln!("     {}  {}", label.dimmed(), desc.dimmed());
+        }
+    }
+    eprintln!();
+}
+
+/// Print a simpler, cleaner flow diagram for command banners.
+/// Shows source → destination with human labels.
+pub fn print_flow_arrow(from_label: &str, from_detail: &str, to_label: &str, to_detail: &str) {
+    eprintln!(
+        "  {} {}  --->  {} {}",
+        from_label.bold(),
+        format!("({from_detail})").dimmed(),
+        to_label.bold(),
+        format!("({to_detail})").dimmed()
+    );
+    eprintln!();
+}
+
+// =============================================================================
 // DRY RUN NOTICE
 // =============================================================================
 
