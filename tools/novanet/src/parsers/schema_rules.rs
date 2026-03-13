@@ -1014,6 +1014,7 @@ pub fn validate_all_arcs(arcs: &[crate::parsers::arcs::ArcDef]) -> Vec<ArcIssue>
                 }),
                 inverse: arc.inverse_name.clone(),
                 cypher_pattern: None,
+                deprecated: arc.deprecated,
             };
             validate_arc(&arc_class)
         })
@@ -1892,6 +1893,7 @@ mod tests {
             properties: None, // Missing properties!
             inverse: None,
             cypher_pattern: None,
+            deprecated: false,
         };
 
         let issues = validate_arc(&arc);
@@ -1937,6 +1939,7 @@ mod tests {
             ])),
             inverse: None,
             cypher_pattern: None,
+            deprecated: false,
         };
 
         let issues = validate_arc(&arc);
@@ -1996,6 +1999,7 @@ mod tests {
             properties: Some(props),
             inverse: None,
             cypher_pattern: None,
+            deprecated: false,
         };
 
         let extracted = extract_arc_property_names(&arc);
@@ -2046,6 +2050,7 @@ mod tests {
             properties: Some(props),
             inverse: None,
             cypher_pattern: None,
+            deprecated: false,
         };
 
         let extracted = extract_arc_property_names(&arc);

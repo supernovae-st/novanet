@@ -480,6 +480,7 @@ mod tests {
             is_self_referential: None,
             inverse_of: Some(inverse_of.to_string()),
             inverse_name: None,
+            deprecated: false,
         }
     }
 
@@ -726,7 +727,8 @@ mod tests {
 
         // v0.13 ADR-029: 169 ArcClass nodes (merged HAS_CONTENT/HAS_GENERATED → HAS_NATIVE)
         // Brand Architecture: +HAS_BRAND, HAS_DESIGN, HAS_PRINCIPLES, HAS_PROMPT_STYLE, FOR_MARKET, INSPIRED_BY_REGION
-        // ADR-028: +REFERENCES, +MENTIONS, +REFERENCED_BY, +REPRESENTED_BY (inverse of REPRESENTS)
+        // ADR-028: +REFERENCES, +MENTIONS, +REFERENCED_BY
+        // v0.19.0: REPRESENTS/REPRESENTED_BY deprecated → use ABOUT/ABOUT_OF (ADR-046)
         // v0.16: HAS_KEYWORD removed — use TARGETS on EntityNative instead
         // ADR-028 inverses: +BRAND_OF, +DESIGN_OF, +PRINCIPLES_OF, +PROMPT_STYLE_OF
         // ADR-026 geographic inverses (11): CLASSIFIES, POPULATION_OF, PRIMARY_FOR, HAS_LOCALE,

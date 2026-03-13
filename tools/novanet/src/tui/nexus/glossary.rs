@@ -13,7 +13,7 @@
 //!
 //! Provides 15 core concepts organized into 5 categories:
 //! - Graph Basics (4): Class, Instance, Entity, EntityNative
-//! - Classification (3): Realm, Layer, Trait
+//! - Classification (3): Realm, Layer, Trait (deprecated v0.19.0)
 //! - Locale System (4): Locale, Term, Expression, Culture
 //! - Relationships (3): Arc, Family, Scope
 //! - Architecture (1): Native Generation

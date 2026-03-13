@@ -3,7 +3,7 @@
  * @module @novanet/core/types/nodes
  * @version 0.17.0
  *
- * Defines the complete taxonomy for all 57 NovaNet node types across 2 realms and 10 layers.
+ * Defines the complete taxonomy for all 60 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
  *
  * ## v0.13.0 *Native Pattern (ADR-029)
@@ -27,7 +27,7 @@
  * ## Realm Distribution
  *
  * - **SHARED** (36 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
- * - **ORG** (21 nodes): Organization-specific content, structure, generation pipeline
+ * - **ORG** (24 nodes): Organization-specific content, structure, generation pipeline
  *
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-terminology.md | Terminology Reference}
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-decisions.md | Architecture Decisions}
@@ -81,8 +81,9 @@ export const NODE_TYPES = [
   'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
+  // ORG REALM (24 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
   // v0.17.0: AudiencePersona, ChannelSurface removed; ProjectGEOScope added
+  // v0.19.0: Added CultureRefEnrichment, ExpressionEnrichment, TabooEnrichment
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged into OrgConfig
   'OrgConfig',
@@ -94,8 +95,9 @@ export const NODE_TYPES = [
   'Entity', 'EntityNative',
   // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   'BlockType', 'BlockInstruction', 'BlockRules', 'PromptArtifact',
-  // output (3) — v0.13.0: *Native pattern (PageNative → PageNative, BlockNative → BlockNative)
+  // output (6) — v0.13.0: *Native pattern + Enrichment nodes
   'PageNative', 'BlockNative', 'OutputArtifact',
+  'CultureRefEnrichment', 'ExpressionEnrichment', 'TabooEnrichment',
 ] as const;
 
 /**
@@ -325,10 +327,13 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   GEOAnswer:        { realm: 'shared', layer: 'knowledge', trait: 'retrieved' },
 
-  // ORG REALM — output (3) — v0.13.0: *Native pattern (PageNative → PageNative, BlockNative → BlockNative)
-  PageNative:     { realm: 'org', layer: 'output', trait: 'generated' },
-  BlockNative:    { realm: 'org', layer: 'output', trait: 'generated' },
-  OutputArtifact: { realm: 'org', layer: 'output', trait: 'generated' },
+  // ORG REALM — output (6) — v0.13.0: *Native pattern + v0.19.0: Enrichment nodes
+  PageNative:             { realm: 'org', layer: 'output', trait: 'generated' },
+  BlockNative:            { realm: 'org', layer: 'output', trait: 'generated' },
+  OutputArtifact:         { realm: 'org', layer: 'output', trait: 'generated' },
+  CultureRefEnrichment:   { realm: 'org', layer: 'output', trait: 'generated' },
+  ExpressionEnrichment:   { realm: 'org', layer: 'output', trait: 'generated' },
+  TabooEnrichment:        { realm: 'org', layer: 'output', trait: 'generated' },
 };
 
 // =============================================================================

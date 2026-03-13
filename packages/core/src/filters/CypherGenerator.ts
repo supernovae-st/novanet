@@ -19,8 +19,9 @@ import { NovaNetFilter } from './NovaNetFilter.js';
 
 // =============================================================================
 // RELATION TO ALIAS/TARGET TYPE MAPPINGS
-// v0.13.0 ADR-029: Complete mapping of all 169 arcs from YAML source of truth
+// v0.19.0 ADR-046: Complete mapping of arcs from YAML source of truth
 // Generated from: packages/core/models/arc-classes/**/*.yaml
+// Note: REPRESENTS/REPRESENTED_BY deprecated - use ABOUT/ABOUT_OF
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
@@ -168,8 +169,10 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   MENTIONS_BRAND: 'mentionsBrand',
   // Page relationships
   LINKS_TO: 'linksTo',
-  REPRESENTS: 'represents',
-  REPRESENTED_BY: 'representedBy',
+  ABOUT: 'about',          // v0.19.0 ADR-046: Replaces REPRESENTS (N:M with role+weight)
+  ABOUT_OF: 'aboutOf',     // v0.19.0 ADR-046: Inverse of ABOUT (replaces REPRESENTED_BY)
+  REPRESENTS: 'represents', // ⚠️ DEPRECATED v0.19.0 - use ABOUT with role="focus"
+  REPRESENTED_BY: 'representedBy', // ⚠️ DEPRECATED v0.19.0 - use ABOUT_OF
   SUBTOPIC_OF: 'subtopic',
   SEO_CLUSTER_OF: 'seoCluster',
   HAS_INTERNAL_LINK: 'internalLink',

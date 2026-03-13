@@ -1,0 +1,138 @@
+# packages/core/models/node-classes/org/semantic/entity.yaml
+# NodeClass: Entity - Pillar semantic concept (locale-independent)
+#
+# v0.19.0: Standard properties with MARKDOWN format (NOT JSON)
+# ADR-044: 8 standard properties
+# ADR-027: llm_context USE/TRIGGERS/NOT/RELATES pattern
+
+node:
+  # --- BLOC 1: IDENTITY ---
+  name: Entity
+  realm: org
+  layer: semantic
+
+  # --- BLOC 2: SEMANTIC (LLM-CRITICAL) ---
+  description: >
+    Pillar semantic concept representing a locale-independent definition.
+    Entity is the central node that anchors all locale-specific content (EntityNative),
+    pages (Page), and SEO targeting (SEOKeyword). Each Entity represents ONE concept.
+
+  llm_context: |
+    USE: when referencing the core semantic concept, creating new localized content, linking pages to topics.
+    TRIGGERS: entity, concept, topic, pillar, semantic, definition.
+    NOT: for locale-specific content (use EntityNative), for URL slugs (use Page.slug).
+    RELATES: EntityNative (localized content via HAS_NATIVE), Page (structure via REPRESENTS), Project (ownership via HAS_ENTITY).
+
+  # --- BLOC 3: STANDARD PROPERTIES (ADR-044) ---
+  properties:
+    # 1. key - Unique identifier
+    - name: key
+      type: string
+      required: true
+      indexed: true
+      description: "Unique identifier with entity: prefix"
+      example: "entity:qr-code"
+
+    # 2. display_name - Human-readable label
+    - name: display_name
+      type: string
+      required: true
+      description: "Human-readable name for UI display"
+      example: "QR Code"
+
+    # 3. node_class - Type identification
+    - name: node_class
+      type: string
+      required: true
+      description: "PascalCase class name for type identification"
+      example: "Entity"
+
+    # 4. content - STRUCTURED MARKDOWN: WHAT this node IS (ADR-044)
+    - name: content
+      type: string
+      required: true
+      description: |
+        Structured markdown with DEFINITION/ROLE/SPECS pattern.
+        NOT JSON. NOT free-form prose.
+      example: |
+        DEFINITION: Two-dimensional barcode encoding data in a scannable visual pattern.
+        ROLE: Pillar semantic concept anchoring all locale-specific content, pages, and SEO targeting for QR Code AI.
+        SPECS: Matrix barcode with position detection patterns; error correction L/M/Q/H; capacity up to 4,296 alphanumeric characters; ISO/IEC 18004 standard.
+
+    # 5. llm_context - MARKDOWN: HOW to USE it (ADR-027)
+    - name: llm_context
+      type: string
+      required: true
+      description: |
+        Markdown with ADR-027 pattern for LLM guidance.
+        USE/TRIGGERS/NOT/RELATES format.
+      example: |
+        USE: when discussing 2D barcodes, mobile scanning, contactless data transfer.
+        TRIGGERS: qr, qr code, scan, mobile, barcode, matrix.
+        NOT: for 1D barcodes (use Barcode), for NFC (use NFC Tag).
+        RELATES: Create QR Code (action), QR Code Types (variants), EntityNative (localized forms).
+
+    # 6. provenance - JSON: Data origin (Neo4j limitation)
+    - name: provenance
+      type: string
+      required: true
+      description: |
+        JSON string tracking data origin.
+        Only property that uses JSON (Neo4j limitation for complex objects).
+      example: '{"source": "authored", "created_by": "human", "version": "v0.19.0"}'
+
+    # 7. created_at - Creation timestamp
+    - name: created_at
+      type: datetime
+      required: true
+      description: "ISO 8601 creation timestamp"
+      example: "2026-03-12T10:00:00Z"
+
+    # 8. updated_at - Last modification
+    - name: updated_at
+      type: datetime
+      required: true
+      description: "ISO 8601 last update timestamp"
+      example: "2026-03-12T10:00:00Z"
+
+  # --- BLOC 4: SPECIFIC PROPERTIES ---
+  # (Entity has no specific properties beyond the 8 standard ones)
+
+  # --- BLOC 5: EXAMPLES ---
+  examples:
+    minimal:
+      key: "entity:qr-code"
+      display_name: "QR Code"
+      node_class: "Entity"
+      content: "DEFINITION: Two-dimensional barcode. ROLE: Pillar entity. SPECS: ISO 18004."
+      llm_context: "USE: when discussing 2D barcodes. TRIGGERS: qr, scan, barcode. NOT: for 1D barcodes (use Barcode). RELATES: EntityNative (HAS_NATIVE), Page (REPRESENTS)."
+      provenance: '{"source": "authored"}'
+      created_at: "2026-03-12T10:00:00Z"
+      updated_at: "2026-03-12T10:00:00Z"
+
+    complete:
+      key: "entity:qr-code"
+      display_name: "QR Code"
+      node_class: "Entity"
+      content: |
+        DEFINITION: Two-dimensional barcode encoding data in a scannable visual pattern.
+        ROLE: Pillar semantic concept anchoring all locale-specific content, pages, and SEO targeting for QR Code AI.
+        SPECS: Matrix barcode with position detection patterns; error correction L/M/Q/H; capacity up to 4,296 alphanumeric characters; ISO/IEC 18004 standard.
+      llm_context: |
+        USE: when discussing 2D barcodes, mobile scanning, contactless data transfer.
+        TRIGGERS: "qr", "qr code", "scan", "mobile", "barcode", "matrix".
+        NOT: for 1D barcodes (use Barcode), for NFC (use NFC Tag).
+        RELATES: EntityNative (HAS_NATIVE), Page (REPRESENTS), Project (HAS_ENTITY).
+      provenance: '{"source": "authored", "created_by": "human", "version": "v0.19.0"}'
+      created_at: "2026-03-12T10:00:00Z"
+      updated_at: "2026-03-12T10:00:00Z"
+
+  # --- BLOC 6: ARCS ---
+  # Outgoing arcs from Entity
+  arcs:
+    outgoing:
+      - HAS_NATIVE       # Entity → EntityNative (locale-specific content)
+    incoming:
+      - HAS_ENTITY       # Project → Entity (ownership)
+      - REPRESENTS       # Page → Entity (1:1 mandatory)
+      - TARGETS          # SEOKeyword → Entity (SEO targeting)

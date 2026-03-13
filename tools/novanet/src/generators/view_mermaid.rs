@@ -520,6 +520,7 @@ mod tests {
             is_self_referential: None,
             inverse_of: None,
             inverse_name: None,
+            deprecated: false,
         };
         let view = make_view("Block", vec![rule("BELONGS_TO", Direction::Outgoing)]);
         let graph = resolve_view_graph(&view, &[rel]);

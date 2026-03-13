@@ -52,13 +52,13 @@ describe('graph/hierarchy', () => {
     expect(REALM_HIERARCHY.shared.layers.geography.nodeTypes).toHaveLength(7);  // v0.12.4: Country added
     expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(21); // v0.17.0: TermSet, Term, SEOKeywordMetrics removed
 
-    // v0.17.0: Org realm (21 nodes total)
+    // v0.19.0: Org realm (24 nodes total, +3 enrichment nodes in output)
     expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(1);  // OrgConfig
     expect(REALM_HIERARCHY.org.layers.foundation.nodeTypes).toHaveLength(8);  // v0.17.0: ProjectGEOScope added
     expect(REALM_HIERARCHY.org.layers.structure.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.semantic.nodeTypes).toHaveLength(2);  // v0.17.0: AudiencePersona, ChannelSurface removed
     expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(4);  // v0.12.4: PageStructure, PageInstruction deleted
-    expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(6);  // v0.19.0: +CultureRefEnrichment, ExpressionEnrichment, TabooEnrichment
   });
 
   it('should have valid realm definitions with required fields', () => {
@@ -85,7 +85,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 57 nodes across all realms', () => {
+  it('should have total of 60 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['shared', 'org'] as Realm[]) {
@@ -95,6 +95,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(57);  // v0.17.0: 57 nodes (36 shared + 21 org)
+    expect(totalNodes).toBe(60);  // v0.19.0: 60 nodes (36 shared + 24 org)
   });
 });

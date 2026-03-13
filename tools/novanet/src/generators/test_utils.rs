@@ -118,6 +118,7 @@ pub fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -
         is_self_referential: None,
         inverse_of: None,
         inverse_name: None,
+        deprecated: false,
     }
 }
 
@@ -153,6 +154,7 @@ pub fn make_rel_full(
         is_self_referential: None,
         inverse_of: None,
         inverse_name: None,
+        deprecated: false,
     }
 }
 

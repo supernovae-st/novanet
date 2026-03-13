@@ -108,6 +108,37 @@
 
 ---
 
+## Checkpoint Protocol
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  CHECKPOINT PROTOCOL — EVERY PHASE ENDS WITH VERIFICATION                     ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  AFTER EACH PHASE:                                                            ║
+║  ─────────────────────────────────────────────────────────────────────────    ║
+║  1. ✅ Run verification commands (schema validate, tests, clippy)             ║
+║  2. ✅ Check CSR if applicable (novanet_audit target=all)                     ║
+║  3. ✅ Commit changes with granular message: type(scope): description         ║
+║  4. ✅ Document blockers before proceeding                                    ║
+║                                                                               ║
+║  COMMIT PATTERN:                                                              ║
+║  ─────────────────────────────────────────────────────────────────────────    ║
+║  feat(schema): add node_class property to Entity YAML                         ║
+║  fix(seed): rename description to content in 10-entities-bootstrap            ║
+║  refactor(mcp): update queries to use content instead of description          ║
+║                                                                               ║
+║  CSR THRESHOLDS:                                                              ║
+║  ─────────────────────────────────────────────────────────────────────────    ║
+║  ≥0.95  → Healthy (green)  → Proceed                                          ║
+║  0.85-0.95 → Warning (yellow) → Fix before proceeding                         ║
+║  <0.85  → Critical (red)   → STOP, rollback if needed                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
 ## Phase 0: Documentation & ADRs
 
 ### 0.1 ADRs à créer/mettre à jour
@@ -128,6 +159,26 @@
 | `docs/plans/2026-03-11-v019-migration-master-plan.md` | CE FICHIER |
 | `CLAUDE.md` (novanet) | Mettre à jour section "Required Properties" |
 | `CHANGELOG.md` | Préparer entry v0.19.0 |
+
+### CHECKPOINT 0: Documentation Ready
+
+```bash
+# Verification
+ls -la docs/plans/2026-03-11-*.md  # Both plans exist
+grep "ADR-044" dx/adr/novanet/*.md   # ADR updated
+
+# Commit
+git add docs/ dx/adr/
+git commit -m "docs(adr): add ADR-044 eight standard properties
+
+- Define DEFINITION/ROLE/SPECS pattern for content
+- Define USE/TRIGGERS/NOT/RELATES pattern for llm_context
+- Document 8 required properties for all nodes
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: All ADRs and docs created before proceeding.
 
 ---
 
@@ -200,6 +251,26 @@ standard_properties:
 }
 ```
 
+### CHECKPOINT 1: Templates Created
+
+```bash
+# Verification
+ls packages/core/models/_standard-properties-template.yaml
+cat packages/core/models/_standard-properties-template.yaml | grep -c "required: true"  # Should be 8
+
+# Commit
+git add packages/core/models/_standard-properties-template.yaml
+git commit -m "feat(schema): add standard properties template
+
+- 8 required properties: key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
+- Canonical order defined
+- provenance JSON schema documented
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: Template file exists and validated.
+
 ---
 
 ## Phase 2: YAML Node Classes (61 files)
@@ -230,6 +301,47 @@ Pour CHAQUE fichier:
 - [ ] Vérifier `llm_context` présent et required
 - [ ] Réordonner dans l'ordre canonical (1-8)
 - [ ] Vérifier `created_at` et `updated_at` présents
+
+### CHECKPOINT 2: YAML Schema Valid
+
+```bash
+# Verification - Schema validation
+cargo run -- schema validate --strict
+# Expected: "✅ Schema valid: 57 node classes, 145 arc classes"
+
+# Verification - Property count check
+find packages/core/models/node-classes -name "*.yaml" | wc -l  # Should be 57
+
+# Verification - No description property (should be content now)
+grep -r "description:" packages/core/models/node-classes/ | grep -v "# description" | wc -l  # Should be 0
+
+# Tests
+cargo test --lib -- schema
+# Expected: All schema tests pass
+
+# Commit (per layer for granularity)
+git add packages/core/models/node-classes/shared/
+git commit -m "feat(schema): update shared realm YAMLs to v0.19.0 standard properties
+
+- Renamed description to content
+- Added node_class property
+- Added provenance property
+- Reordered to canonical (key, display_name, node_class, content, llm_context, provenance, created_at, updated_at)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+git add packages/core/models/node-classes/org/
+git commit -m "feat(schema): update org realm YAMLs to v0.19.0 standard properties
+
+- Renamed description to content
+- Added node_class property
+- Added provenance property
+- Reordered to canonical order
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: `cargo run -- schema validate` passes with zero warnings.
 
 ---
 
@@ -279,6 +391,45 @@ ON CREATE SET
   e.updated_at = datetime()
 ```
 
+### CHECKPOINT 3: Seeds Validated
+
+```bash
+# Reset and reseed database
+cargo run -- db reset
+cargo run -- db seed
+# Expected: "✅ Seeded X nodes, Y arcs"
+
+# Verify in Neo4j
+cypher-shell -u neo4j -p novanetpassword "MATCH (n) WHERE n.content IS NULL RETURN count(n)"
+# Expected: 0 (all nodes have content)
+
+cypher-shell -u neo4j -p novanetpassword "MATCH (n) WHERE n.node_class IS NULL RETURN count(n)"
+# Expected: 0 (all nodes have node_class)
+
+cypher-shell -u neo4j -p novanetpassword "MATCH (n) WHERE n.provenance IS NULL RETURN count(n)"
+# Expected: 0 (all nodes have provenance)
+
+# CSR Check
+cargo run -- mcp-server &
+# Then via MCP: novanet_audit(target="all")
+# Expected: CSR ≥ 0.95
+
+# Commit (per seed category)
+git add packages/db/seed/00-*.cypher
+git commit -m "fix(db): update schema seeds to v0.19.0 standard properties"
+
+git add packages/db/seed/01-*.cypher packages/db/seed/02-*.cypher
+git commit -m "fix(db): update locale seeds to v0.19.0 standard properties"
+
+git add packages/db/seed/10-*.cypher packages/db/seed/11-*.cypher
+git commit -m "fix(db): update entity seeds to v0.19.0 standard properties"
+
+git add packages/db/seed/40-*.cypher packages/db/seed/48-*.cypher packages/db/seed/49-*.cypher
+git commit -m "fix(db): update page/block seeds to v0.19.0 standard properties"
+```
+
+**Gate**: `cargo run -- db seed` succeeds AND CSR ≥ 0.95.
+
 ---
 
 ## Phase 4: MCP Server (Rust)
@@ -303,6 +454,41 @@ let query = "MATCH (n) RETURN n.key, n.display_name, n.description";
 // AFTER
 let query = "MATCH (n) RETURN n.key, n.display_name, n.node_class, n.content, n.llm_context, n.provenance, n.created_at, n.updated_at";
 ```
+
+### CHECKPOINT 4: MCP Server Updated
+
+```bash
+# Run MCP tests
+cd tools/novanet-mcp
+cargo test
+# Expected: All tests pass
+
+# Clippy
+cargo clippy -- -D warnings
+# Expected: Zero warnings
+
+# Integration test with novanet_generate
+# Start MCP server and call:
+# novanet_generate(focus_key="entity:qr-code", locale="fr-FR", mode="block")
+# Expected: Response contains 'content' field, not 'description'
+
+# novanet_check validation test
+# novanet_check(operation="upsert_node", class="EntityNative", key="test", properties={})
+# Expected: errors[] contains "missing required property: content"
+
+# Commit
+git add tools/novanet-mcp/src/tools/
+git commit -m "refactor(mcp): update queries to use content instead of description
+
+- generate.rs: Query content not description
+- write.rs: Validate provenance JSON, require all 8 props
+- check.rs: Validate property order, provenance schema
+- search.rs: Return content not description
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: MCP tests pass AND `novanet_generate` returns `content`.
 
 ---
 
@@ -333,6 +519,34 @@ pub const STANDARD_PROPERTIES: &[&str] = &[
 
 pub const STANDARD_PROPERTIES_COUNT: usize = 8;
 ```
+
+### CHECKPOINT 5: TUI Updated
+
+```bash
+# Run TUI tests
+cd tools/novanet
+cargo test --lib -- tui
+# Expected: All TUI tests pass
+
+# Manual verification
+cargo run -- tui
+# Navigate to any node
+# Expected: YAML panel shows properties in order:
+#   key, display_name, node_class, content, llm_context, provenance, created_at, updated_at
+# Expected: Info panel shows "STANDARD: 8"
+
+# Commit
+git add tools/novanet/src/tui/
+git commit -m "refactor(tui): update STANDARD_PROPERTIES to v0.19.0 canonical order
+
+- yaml_panel.rs: 8 properties in canonical order
+- info.rs: Display content instead of description
+- Removed description from property list
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: TUI displays 8 standard properties in correct order.
 
 ---
 
@@ -369,6 +583,42 @@ interface ProvenanceObject {
 }
 ```
 
+### CHECKPOINT 6: Generators Updated
+
+```bash
+# Regenerate all artifacts
+cargo run -- schema generate
+# Expected: "✅ Generated: cypher, typescript, mermaid"
+
+# Verify TypeScript output
+cat packages/core/src/graph/types.ts | grep "content: string"
+# Expected: Line exists (not description)
+
+cat packages/core/src/graph/types.ts | grep "node_class: string"
+# Expected: Line exists
+
+# TypeScript type-check
+cd packages/core && pnpm type-check
+# Expected: Zero errors
+
+# Commit
+git add tools/novanet/src/generators/
+git commit -m "refactor(generators): update Cypher/TypeScript generation for v0.19.0
+
+- cypher.rs: Generate with canonical property order
+- typescript.rs: StandardProperties interface with 8 props
+- ProvenanceObject type added
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+git add packages/core/src/graph/
+git commit -m "feat(core): regenerate TypeScript types for v0.19.0 standard properties
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: `pnpm type-check` passes AND generated files reflect new schema.
+
 ---
 
 ## Phase 7: Validators (Rust)
@@ -390,6 +640,36 @@ RULE_STANDARD_PROPS_ORDER: "Properties must be in canonical order (1-8)"
 RULE_PROVENANCE_JSON: "provenance must be valid JSON with 'source' field"
 RULE_NODE_CLASS_CASE: "node_class must be PascalCase (DATA) or lowercase (SCHEMA)"
 ```
+
+### CHECKPOINT 7: Validators Updated
+
+```bash
+# Run validator tests
+cargo test --lib -- validation
+# Expected: All validation tests pass
+
+# Test new validation rules
+cargo run -- schema validate --strict
+# Expected: Reports any violations of new rules
+
+# Test autofix
+cargo run -- schema validate --fix
+# Expected: Auto-fixes property order violations
+
+# Commit
+git add tools/novanet/src/validation/
+git commit -m "feat(validation): add v0.19.0 standard properties validation rules
+
+- RULE_STANDARD_PROPS_COUNT: Must have 8 properties
+- RULE_STANDARD_PROPS_ORDER: Canonical order validation
+- RULE_PROVENANCE_JSON: Valid JSON with source field
+- RULE_NODE_CLASS_CASE: PascalCase for DATA, lowercase for SCHEMA
+- property_order.rs autofix updated
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**Gate**: `cargo run -- schema validate --strict` passes.
 
 ---
 
@@ -427,6 +707,80 @@ cargo run -- tui
 - [ ] MCP `novanet_check` validates new schema
 - [ ] MCP `novanet_generate` returns `content` not `description`
 - [ ] MCP `novanet_audit` finds no missing props
+
+### CHECKPOINT 8: FINAL VERIFICATION
+
+```bash
+# ═══════════════════════════════════════════════════════════════════════════════
+# FINAL VERIFICATION CHECKLIST — ALL MUST PASS BEFORE v0.19.0 RELEASE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# 1. Schema validation
+cargo run -- schema validate --strict
+# Expected: "✅ Schema valid: 57 node classes, 145 arc classes"
+
+# 2. All Rust tests
+cargo test
+# Expected: "test result: ok. 1210+ passed"
+
+# 3. Clippy clean
+cargo clippy -- -D warnings
+# Expected: Zero warnings
+
+# 4. Database seed
+cargo run -- db reset && cargo run -- db seed
+# Expected: "✅ Seeded X nodes, Y arcs"
+
+# 5. CSR audit
+# Via MCP: novanet_audit(target="all")
+# Expected: CSR ≥ 0.95 (healthy)
+
+# 6. TypeScript build
+cd packages/core && pnpm build
+cd apps/studio && pnpm build
+# Expected: Zero errors
+
+# 7. TypeScript tests
+pnpm test
+# Expected: All tests pass
+
+# 8. Neo4j property verification
+cypher-shell -u neo4j -p novanetpassword "
+  MATCH (n)
+  WHERE n.content IS NULL OR n.node_class IS NULL OR n.provenance IS NULL
+  RETURN count(n) AS missing_props
+"
+# Expected: 0
+
+# 9. TUI manual check
+cargo run -- tui
+# Verify: Properties display in canonical order
+
+# 10. MCP integration test
+# novanet_generate(focus_key="entity:qr-code", locale="fr-FR", mode="block")
+# Expected: Response contains 'content', 'denomination_forms', 'context_anchors'
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELEASE COMMIT
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Update CHANGELOG
+git add CHANGELOG.md CHANGELOG-LATEST.md
+git commit -m "docs(changelog): add v0.19.0 release notes
+
+- 8 standard properties for all nodes
+- description → content migration
+- provenance JSON format
+- Canonical property order
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# Tag release
+git tag -a v0.19.0 -m "v0.19.0 - Standard Properties Migration"
+git push origin main --tags
+```
+
+**Gate**: All 10 verification steps pass → v0.19.0 RELEASED.
 
 ---
 

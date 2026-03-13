@@ -1,0 +1,184 @@
+# packages/core/models/node-classes/org/semantic/entity-native.yaml
+# NodeClass: EntityNative - Locale-specific content for an Entity
+#
+# v0.19.0: Standard properties with MARKDOWN format (NOT JSON)
+# ADR-044: 8 standard properties
+# ADR-027: llm_context USE/TRIGGERS/NOT/RELATES pattern
+# ADR-033: denomination_forms for canonical LLM references
+
+node:
+  # --- BLOC 1: IDENTITY ---
+  name: EntityNative
+  realm: org
+  layer: semantic
+
+  # --- BLOC 2: SEMANTIC (LLM-CRITICAL) ---
+  description: >
+    Locale-specific content for an Entity. Contains authored human content
+    including denomination_forms (text, title, abbrev, url) that the LLM
+    MUST use when referencing the entity in generated content.
+
+  llm_context: |
+    USE: when generating locale-specific content, retrieving canonical entity names, building SEO-optimized text.
+    TRIGGERS: native, localized, locale content, entity content, denomination, canonical name.
+    NOT: for the semantic definition (use Entity), for generated page content (use PageNative).
+    RELATES: Entity (parent via NATIVE_OF), Locale (language via FOR_LOCALE), Page (slug derivation).
+
+  # --- BLOC 3: STANDARD PROPERTIES (ADR-044) ---
+  properties:
+    # 1. key - Unique identifier with @locale suffix
+    - name: key
+      type: string
+      required: true
+      indexed: true
+      description: "Unique identifier: entity:{concept}@{locale}"
+      example: "entity:qr-code@fr-FR"
+
+    # 2. display_name - Human-readable label
+    - name: display_name
+      type: string
+      required: true
+      description: "Human-readable name in target locale"
+      example: "Code QR"
+
+    # 3. node_class - Type identification
+    - name: node_class
+      type: string
+      required: true
+      description: "PascalCase class name"
+      example: "EntityNative"
+
+    # 4. content - STRUCTURED MARKDOWN: WHAT this localized entity IS (ADR-044)
+    - name: content
+      type: string
+      required: true
+      description: |
+        Structured markdown with DEFINITION/ROLE/SPECS pattern in target locale.
+        NOT JSON. NOT free-form prose.
+      example: |
+        DEFINITION: Code-barres bidimensionnel encodant des données dans un motif visuel scannable.
+        ROLE: Contenu natif localisé en français pour l'entité QR Code, fournissant les formes canoniques.
+        SPECS: Inventé au Japon en 1994 par Denso Wave; jusqu'à 4 296 caractères; correction d'erreurs intégrée.
+
+    # 5. llm_context - MARKDOWN: HOW to USE it (ADR-027)
+    - name: llm_context
+      type: string
+      required: true
+      description: |
+        Markdown with ADR-027 pattern for LLM guidance.
+        USE/TRIGGERS/NOT/RELATES format in target locale context.
+      example: |
+        USE: when generating French content about QR codes, mobile scanning, contactless technology.
+        TRIGGERS: code qr, qr code, scanner, mobile, code-barres matriciel.
+        NOT: for English content (use entity:qr-code@en-US), for 1D barcodes.
+        RELATES: denomination_forms (canonical names), Page (slug derivation), Entity (parent definition).
+
+    # 6. provenance - JSON: Data origin (Neo4j limitation)
+    - name: provenance
+      type: string
+      required: true
+      description: "JSON string tracking data origin"
+      example: '{"source": "authored", "created_by": "human", "locale": "fr-FR"}'
+
+    # 7. created_at - Creation timestamp
+    - name: created_at
+      type: datetime
+      required: true
+      description: "ISO 8601 creation timestamp"
+
+    # 8. updated_at - Last modification
+    - name: updated_at
+      type: datetime
+      required: true
+      description: "ISO 8601 last update timestamp"
+
+  # --- BLOC 4: SPECIFIC PROPERTIES ---
+  specific_properties:
+    # ADR-033: Denomination Forms - CRITICAL for LLM content generation
+    - name: denomination_forms
+      type: json
+      required: true
+      description: |
+        JSON array of canonical forms the LLM MUST use when referencing this entity.
+        These are PRESCRIPTIVE, not descriptive. The LLM cannot invent new forms.
+      example: |
+        [
+          {"type": "text", "value": "code QR", "priority": 1},
+          {"type": "title", "value": "Code QR", "priority": 1},
+          {"type": "abbrev", "value": "QR", "priority": 1},
+          {"type": "url", "value": "code-qr", "priority": 1}
+        ]
+      notes: |
+        Form types (ADR-033):
+        - text: For prose, body content (lowercase per locale rules)
+        - title: For H1, H2, meta_title (title case per locale)
+        - abbrev: Short form after first mention
+        - url: URL-safe slug for SEO (derived by slugification pipeline)
+
+    # Locale reference
+    - name: locale
+      type: string
+      required: true
+      indexed: true
+      description: "BCP-47 locale code"
+      example: "fr-FR"
+
+  # --- BLOC 5: EXAMPLES ---
+  examples:
+    french:
+      key: "entity:qr-code@fr-FR"
+      display_name: "Code QR"
+      node_class: "EntityNative"
+      locale: "fr-FR"
+      content: |
+        DEFINITION: Code-barres bidimensionnel encodant des données dans un motif visuel scannable.
+        ROLE: Contenu natif localisé en français pour l'entité QR Code, fournissant les formes canoniques.
+        SPECS: Jusqu'à 4 296 caractères alphanumériques; correction d'erreurs intégrée; ISO/IEC 18004.
+      llm_context: |
+        USE: when generating French content about QR codes, mobile scanning.
+        TRIGGERS: "code qr", "scanner", "mobile", "code-barres matriciel".
+        NOT: for English content (use entity:qr-code@en-US), for 1D barcodes (use Barcode).
+        RELATES: Entity (NATIVE_OF), Locale (FOR_LOCALE), Page (slug derivation).
+      denomination_forms: |
+        [
+          {"type": "text", "value": "code QR", "priority": 1},
+          {"type": "title", "value": "Code QR", "priority": 1},
+          {"type": "abbrev", "value": "QR", "priority": 1},
+          {"type": "url", "value": "code-qr", "priority": 1}
+        ]
+      provenance: '{"source": "authored", "locale": "fr-FR"}'
+      created_at: "2026-03-12T10:00:00Z"
+      updated_at: "2026-03-12T10:00:00Z"
+
+    spanish_mexico:
+      key: "entity:qr-code@es-MX"
+      display_name: "Código QR"
+      node_class: "EntityNative"
+      locale: "es-MX"
+      content: |
+        DEFINITION: Código de barras bidimensional que codifica datos en un patrón visual escaneable.
+        ROLE: Contenido nativo localizado en español mexicano para la entidad QR Code.
+        SPECS: Hasta 4,296 caracteres alfanuméricos; corrección de errores integrada; ISO/IEC 18004.
+      llm_context: |
+        USE: when generating Mexican Spanish content about QR codes.
+        TRIGGERS: "código qr", "escanear", "móvil", "código de barras".
+        NOT: for Spain Spanish (use entity:qr-code@es-ES), for 1D barcodes (use Barcode).
+        RELATES: Entity (NATIVE_OF), Locale (FOR_LOCALE), Page (slug derivation).
+      denomination_forms: |
+        [
+          {"type": "text", "value": "código QR", "priority": 1},
+          {"type": "title", "value": "Código QR", "priority": 1},
+          {"type": "abbrev", "value": "QR", "priority": 1},
+          {"type": "url", "value": "codigo-qr", "priority": 1}
+        ]
+      provenance: '{"source": "authored", "locale": "es-MX"}'
+      created_at: "2026-03-12T10:00:00Z"
+      updated_at: "2026-03-12T10:00:00Z"
+
+  # --- BLOC 6: ARCS ---
+  arcs:
+    outgoing:
+      - NATIVE_OF        # EntityNative → Entity (parent)
+      - FOR_LOCALE       # EntityNative → Locale (language)
+    incoming:
+      - HAS_NATIVE       # Entity → EntityNative

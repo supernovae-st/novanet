@@ -214,6 +214,11 @@ pub struct ArcDef {
     /// e.g., HAS_PAGE has inverse "PAGE_OF"
     #[serde(skip)]
     pub inverse_name: Option<String>,
+
+    /// True if this arc is deprecated (v0.19.0).
+    /// Deprecated arcs are excluded from generated artifacts (Mermaid, etc.).
+    #[serde(default)]
+    pub deprecated: bool,
 }
 
 impl ArcDef {
@@ -282,6 +287,11 @@ pub struct ArcClassDef {
     /// Cypher pattern (optional, can be auto-generated).
     #[serde(default)]
     pub cypher_pattern: Option<String>,
+
+    /// True if this arc is deprecated (v0.19.0).
+    /// Deprecated arcs are excluded from generated artifacts (Mermaid, etc.).
+    #[serde(default)]
+    pub deprecated: bool,
 }
 
 impl ArcClassDef {
@@ -470,6 +480,8 @@ impl ArcClassDef {
             inverse_of: None,
             // Store the inverse name for display in the generator
             inverse_name: self.inverse.clone(),
+            // v0.19.0: Deprecated arcs filtered from generated artifacts
+            deprecated: self.deprecated,
         }
     }
 }

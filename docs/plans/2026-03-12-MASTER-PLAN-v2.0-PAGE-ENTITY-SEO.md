@@ -1,9 +1,223 @@
 # MASTER PLAN v2.0 — Page-Entity-SEO Architecture
 
-> **Version**: 2.0
+> **Version**: 2.2
 > **Date**: 2026-03-12
-> **Status**: EN ATTENTE CONFIRMATION
+> **Status**: EN COURS - BRAINSTORMING DOCUMENTÉ
 > **Auteur**: Claude + Thibaut
+
+---
+
+## Today's Brainstorming Summary (2026-03-12)
+
+### Session Overview
+
+4 Opus 4.5 agents ont analysé l'architecture en parallèle pour vérifier la cohérence du plan.
+
+### Agent 1: Entity → EntityNative Analysis
+
+**Findings validés:**
+- Entity (org/semantic, defined) → EntityNative (org/semantic, authored) via HAS_NATIVE
+- EntityNative → Locale (shared/config) via FOR_LOCALE
+- denomination_forms sur Entity: [text, title, abbrev] — PAS de url (ADR-030)
+- denomination_forms sur EntityNative: [text, title, abbrev, url] — url ajouté par SEO pipeline write-back
+- Statut workflow: draft → reviewed → published
+
+**Décision:** Ski Slope #1 conforme aux ADRs.
+
+### Agent 2: Page → PageNative Analysis
+
+**Findings validés:**
+- Page (org/structure, defined) → Entity via ABOUT arc (remplace REPRESENTS)
+- Système de rôles: focus (exactement 1), support (0..N), reference (0..N), compare (0..N)
+- Weight property (0.0-1.0) pour spreading activation
+- ANCHORS arc pour références spreading activation (Page → Entity)
+- Page → PageNative via HAS_NATIVE, slug copié depuis EntityNative.denomination_forms.url
+
+**Décision:** ADR-046 à créer pour documenter ABOUT arc.
+
+### Agent 3: Slugification Pipeline Analysis
+
+**Règles par type de script identifiées:**
+
+| Type | Locales | Règle | Exemple |
+|------|---------|-------|---------|
+| latin_strip | en-US, es-ES | Supprimer diacritiques | "créer" → "creer" |
+| latin_preserve | fr-FR | Garder diacritiques | "créer" → "créer" |
+| latin_transform | de-DE | Transformer umlauts | "für" → "fuer" |
+| native_script | ja-JP, zh-CN, ko-KR | Romaniser toujours | "作成" → "sakusei" |
+| transliterate | ru-RU, uk-UA, el-GR | Translittérer | "код" → "kod" |
+
+**Décision:** URLs toujours en ASCII-safe pour compatibilité universelle.
+
+### Agent 4: Arc Inventory Audit
+
+**Résultat:** 153 arc classes actuellement (après ajout des 5 inverse arcs)
+
+**Arcs manquants par rapport au plan:**
+
+| Arc | Status | Action |
+|-----|--------|--------|
+| ABOUT | ❌ Manquant | À créer (remplace REPRESENTS) |
+| ABOUT_OF | ❌ Manquant | À créer (inverse) |
+| COMPETES_WITH | ❌ Manquant | À créer (Entity↔Entity) |
+| HAS_PART | ❌ Manquant | À créer (Entity→Entity) |
+| PART_OF | ❌ Manquant | À créer (inverse) |
+| ENABLES | ❌ Manquant | À créer (Entity→Entity) |
+| ENABLED_BY | ❌ Manquant | À créer (inverse) |
+| MENTIONS | ❌ Manquant | À créer (Block→Entity) |
+
+**Arcs à déprécier:**
+
+| Arc | Status | Action |
+|-----|--------|--------|
+| REPRESENTS | ⚠️ Encore actif | Déplacer vers deprecated/ |
+| REPRESENTED_BY | ⚠️ Encore actif | Déplacer vers deprecated/ |
+
+### Key Architectural Insights
+
+1. **ABOUT vs ANCHORS clarification:**
+   - ABOUT: Relation sémantique "de quoi parle la page" (obligatoire, 1 focus)
+   - ANCHORS: Références spreading activation pour context assembly (optionnel)
+   - Les deux ont role + weight mais usages différents
+
+2. **Weight property universelle:**
+   - Tous les arcs sémantiques doivent avoir weight: 0.0-1.0
+   - Utilisé pour spreading activation: `activation = parent × weight × decay^distance`
+
+3. **Validation stricte:**
+   - Exactement 1 ABOUT avec role="focus" par Page (constraint Neo4j)
+   - Weight doit être dans range [0.0, 1.0]
+
+4. **SEO Pipeline Write-back:**
+   - EntityNative.denomination_forms.url est calculé APRÈS Entity bootstrap
+   - PageNative.slug copie cette valeur
+   - Pas de calcul de slug à la volée
+
+---
+
+## Today's Progress (2026-03-12)
+
+| Item | Status | Details |
+|------|--------|---------|
+| 5 inverse arcs created | ✅ | about.yaml, anchor-of.yaml, targets-geo.yaml, scope-of.yaml, enrichment-of.yaml |
+| Tests updated | ✅ | 148 → 153 arc classes |
+| Schema validation | ✅ | 0 errors, 0 warnings |
+| Clippy | ✅ | Zero warnings |
+| Ski slope diagrams | ✅ | Entity, Page, Slugification documented |
+
+---
+
+## Ski Slope #1: Entity → EntityNative
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  ENTITY → ENTITYNATIVE FLOW (ADR-029 *Native Pattern)                         ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Entity (org/semantic - defined)                                              ║
+║  ├── key: "entity:qr-code"                                                    ║
+║  ├── display_name: "QR Code"                                                  ║
+║  ├── denomination_forms: [text, title, abbrev] (NO url - ADR-030)             ║
+║  └── is_pillar: true                                                          ║
+║       │                                                                       ║
+║       │ [:HAS_NATIVE] (ownership, one_to_many)                                ║
+║       ▼                                                                       ║
+║  EntityNative (org/semantic - authored)                                       ║
+║  ├── key: "entity:qr-code@fr-FR"                                              ║
+║  ├── denomination_forms: [                                                    ║
+║  │     {type: "text",   value: "code qr"},                                    ║
+║  │     {type: "title",  value: "Code QR"},                                    ║
+║  │     {type: "abbrev", value: "qr"},                                         ║
+║  │     {type: "url",    value: "code-qr"}  ← POST-SEO pipeline write-back     ║
+║  │   ]                                                                        ║
+║  ├── semantic_content: {definition, context, cultural_context}                ║
+║  └── status: draft | reviewed | published                                     ║
+║       │                                                                       ║
+║       │ [:FOR_LOCALE] (localization, many_to_one)                             ║
+║       ▼                                                                       ║
+║  Locale (shared/config)                                                       ║
+║  ├── key: "fr-FR"                                                             ║
+║  ├── script: latin | cyrillic | cjk | arabic                                  ║
+║  └── region: europe | asia | americas                                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## Ski Slope #2: Page → PageNative
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PAGE → PAGENATIVE FLOW (ADR-046 ABOUT Arc)                                   ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Page (org/structure - defined)                                               ║
+║  ├── key: "page:qr-code-generator"                                            ║
+║  ├── display_name: "QR Code Generator"                                        ║
+║  └── is_pillar: true                                                          ║
+║       │                                                                       ║
+║       ├──[:ABOUT {role:"focus", weight:0.9}]──→ Entity (EXACTLY 1)            ║
+║       ├──[:ABOUT {role:"support", weight:0.6}]──→ Entity (0..N)               ║
+║       ├──[:ABOUT {role:"reference", weight:0.3}]──→ Entity (0..N)             ║
+║       ├──[:ABOUT {role:"compare", weight:0.5}]──→ Entity (0..N)               ║
+║       │                                                                       ║
+║       ├──[:ANCHORS {role, weight}]──→ Entity (spreading activation refs)      ║
+║       │                                                                       ║
+║       ├──[:HAS_NATIVE]──→ PageNative (org/output - generated)                 ║
+║       │                    ├── key: "page:qr-code-generator@fr-FR"            ║
+║       │                    ├── slug: "code-qr" ← from EntityNative.url        ║
+║       │                    ├── meta_title: "Créer un Code QR"                 ║
+║       │                    └── status: draft | published                      ║
+║       │                                                                       ║
+║       └──[:HAS_BLOCK {order: 1}]──→ Block                                     ║
+║                                     ├── key: "qr-code-generator:hero:1"       ║
+║                                     └──[:HAS_NATIVE]──→ BlockNative           ║
+║                                                                               ║
+║  VALIDATION: Exactly 1 ABOUT arc with role="focus" per Page                   ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## Ski Slope #3: Slugification Pipeline (ADR-030 + ADR-032 + ADR-033)
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  SLUGIFICATION PIPELINE                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Entity.key = "entity:qr-code"                                                ║
+║       │                                                                       ║
+║       │ [:HAS_NATIVE]                                                         ║
+║       ▼                                                                       ║
+║  EntityNative (per locale)                                                    ║
+║       │                                                                       ║
+║       ├── en-US: denomination_forms.url = "qr-code-generator"                 ║
+║       │          (latin_strip: remove diacritics)                             ║
+║       │                                                                       ║
+║       ├── fr-FR: denomination_forms.url = "créer-qr-code"                     ║
+║       │          (latin_preserve: keep diacritics)                            ║
+║       │                                                                       ║
+║       ├── de-DE: denomination_forms.url = "qr-code-erstellen"                 ║
+║       │          (latin_transform: ü→ue, ö→oe)                                ║
+║       │                                                                       ║
+║       ├── ja-JP: denomination_forms.url = "qr-code-sakusei"                   ║
+║       │          (native_script: ALWAYS romanized ASCII for URL)              ║
+║       │                                                                       ║
+║       └── ru-RU: denomination_forms.url = "qr-kod"                            ║
+║                  (transliterate: Cyrillic → Latin)                            ║
+║       │                                                                       ║
+║       │ SEO Pipeline Write-Back                                               ║
+║       ▼                                                                       ║
+║  PageNative.slug = EntityNative.denomination_forms.url                        ║
+║       │                                                                       ║
+║       ▼                                                                       ║
+║  URL: /{locale}/{slug} → /fr-FR/créer-qr-code                                 ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
 
 ---
 

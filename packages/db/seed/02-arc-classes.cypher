@@ -4400,7 +4400,7 @@ ON MATCH SET
 MERGE (ac_REPRESENTED_BY:Schema:ArcClass {key: 'REPRESENTED_BY'})
 ON CREATE SET
   ac_REPRESENTED_BY.display_name = 'Represented By',
-  ac_REPRESENTED_BY.llm_context = 'USE: when finding which Page represents an Entity. TRIGGERS: "entity\'s page", "how is entity shown", "entity manifestation". NOT: for finding the Entity of a Page (use REPRESENTS instead). RELATES: Entity (source), Page (target), REPRESENTS (inverse). Example: Entity qr-code-generator -[:REPRESENTED_BY]-> Page qr-code-generator',
+  ac_REPRESENTED_BY.llm_context = 'USE: ⚠️ DEPRECATED - do not use for new code. TRIGGERS: none - use ABOUT_OF instead. NOT: any new implementations - migrate to ABOUT_OF. RELATES: Replaced by ABOUT_OF arc (ADR-044). MIGRATION: (Entity)-[:REPRESENTED_BY]->(Page) → (Entity)-[:ABOUT_OF]->(Page)',
   ac_REPRESENTED_BY.family = 'semantic',
   ac_REPRESENTED_BY.scope = 'intra_realm',
   ac_REPRESENTED_BY.cardinality = 'one_to_one',
@@ -4415,7 +4415,7 @@ ON CREATE SET
   ac_REPRESENTED_BY.created_at = datetime()
 ON MATCH SET
   ac_REPRESENTED_BY.display_name = 'Represented By',
-  ac_REPRESENTED_BY.llm_context = 'USE: when finding which Page represents an Entity. TRIGGERS: "entity\'s page", "how is entity shown", "entity manifestation". NOT: for finding the Entity of a Page (use REPRESENTS instead). RELATES: Entity (source), Page (target), REPRESENTS (inverse). Example: Entity qr-code-generator -[:REPRESENTED_BY]-> Page qr-code-generator',
+  ac_REPRESENTED_BY.llm_context = 'USE: ⚠️ DEPRECATED - do not use for new code. TRIGGERS: none - use ABOUT_OF instead. NOT: any new implementations - migrate to ABOUT_OF. RELATES: Replaced by ABOUT_OF arc (ADR-044). MIGRATION: (Entity)-[:REPRESENTED_BY]->(Page) → (Entity)-[:ABOUT_OF]->(Page)',
   ac_REPRESENTED_BY.family = 'semantic',
   ac_REPRESENTED_BY.scope = 'intra_realm',
   ac_REPRESENTED_BY.cardinality = 'one_to_one',
@@ -4431,7 +4431,7 @@ ON MATCH SET
 MERGE (ac_REPRESENTS:Schema:ArcClass {key: 'REPRESENTS'})
 ON CREATE SET
   ac_REPRESENTS.display_name = 'Represents',
-  ac_REPRESENTS.llm_context = 'USE: when finding which entity a page represents. TRIGGERS: "page entity", "page represents", "canonical entity", "page semantics". NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES). RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory. NOTE: Page is created AFTER Entity exists. Page owns the URL slug.',
+  ac_REPRESENTS.llm_context = 'USE: ⚠️ DEPRECATED - do not use for new code. TRIGGERS: none - use ABOUT instead. NOT: any new implementations - migrate to ABOUT with role="focus". RELATES: Replaced by ABOUT arc (ADR-044). MIGRATION: (Page)-[:REPRESENTS]->(Entity) → (Page)-[:ABOUT {role:"focus", weight:0.9}]->(Entity)',
   ac_REPRESENTS.family = 'semantic',
   ac_REPRESENTS.scope = 'intra_realm',
   ac_REPRESENTS.cardinality = 'one_to_one',
@@ -4446,7 +4446,7 @@ ON CREATE SET
   ac_REPRESENTS.created_at = datetime()
 ON MATCH SET
   ac_REPRESENTS.display_name = 'Represents',
-  ac_REPRESENTS.llm_context = 'USE: when finding which entity a page represents. TRIGGERS: "page entity", "page represents", "canonical entity", "page semantics". NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES). RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory. NOTE: Page is created AFTER Entity exists. Page owns the URL slug.',
+  ac_REPRESENTS.llm_context = 'USE: ⚠️ DEPRECATED - do not use for new code. TRIGGERS: none - use ABOUT instead. NOT: any new implementations - migrate to ABOUT with role="focus". RELATES: Replaced by ABOUT arc (ADR-044). MIGRATION: (Page)-[:REPRESENTS]->(Entity) → (Page)-[:ABOUT {role:"focus", weight:0.9}]->(Entity)',
   ac_REPRESENTS.family = 'semantic',
   ac_REPRESENTS.scope = 'intra_realm',
   ac_REPRESENTS.cardinality = 'one_to_one',

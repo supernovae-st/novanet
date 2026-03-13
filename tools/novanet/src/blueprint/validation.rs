@@ -802,10 +802,10 @@ mod tests {
             "Missing HAS_INSTRUCTION arc (Page/Block -> BlockInstruction)"
         );
 
-        // v0.12.5: REPRESENTS added for Page -> Entity (1:1)
+        // v0.19.0: ABOUT replaces REPRESENTS (N:M with role + weight) - ADR-046
         assert!(
-            arc_names.contains(&"REPRESENTS"),
-            "Missing REPRESENTS arc (Page -> Entity, ADR-028)"
+            arc_names.contains(&"ABOUT"),
+            "Missing ABOUT arc (Page -> Entity, ADR-046)"
         );
 
         // v0.12.5: HAS_STRUCTURE deleted (PageStructure no longer exists)

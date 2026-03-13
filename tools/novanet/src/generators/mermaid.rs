@@ -147,10 +147,14 @@ pub struct ExpandedArc {
     pub family: ArcFamily,
 }
 
-/// Expand multi-source/target relations into concrete arcs, filtering wildcards.
+/// Expand multi-source/target relations into concrete arcs, filtering wildcards and deprecated.
 pub fn expand_arcs(relations: &[ArcDef]) -> Vec<ExpandedArc> {
     let mut arcs = Vec::new();
     for rel in relations {
+        // v0.19.0: Skip deprecated arcs (e.g., REPRESENTS, REPRESENTED_BY)
+        if rel.deprecated {
+            continue;
+        }
         let sources = rel.source.labels();
         let targets = rel.target.labels();
         for &src in &sources {
@@ -539,6 +543,7 @@ mod tests {
             is_self_referential: None,
             inverse_of: None,
             inverse_name: None,
+            deprecated: false,
         };
         let expanded = expand_arcs(&[rel]);
         assert_eq!(expanded.len(), 4); // 2 sources × 2 targets

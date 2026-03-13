@@ -11,6 +11,9 @@ dist/
 .env.local
 .env*.local
 
+# MCP Configuration (may contain secrets)
+.mcp.json
+
 # OS
 .DS_Store
 Thumbs.db
