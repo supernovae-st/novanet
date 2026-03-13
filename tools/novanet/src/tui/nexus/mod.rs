@@ -17,7 +17,7 @@
 //! - [Q] Quiz: Interactive taxonomy quiz
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //!
-//! v0.19.0: Traits removed (ADR-024 simplified). 60 nodes, 10 layers.
+//! v0.20.0: Traits removed (ADR-024 simplified). 59 nodes, 10 layers.
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arch;
@@ -63,7 +63,7 @@ pub const TIPS: &[&str] = &[
     "Shared realm is READ-ONLY - all business content lives in Org",
     "Arc families: ownership, localization, semantic, generation, mining",
     "Layers define WHAT a node does (config, foundation, structure, etc.)",
-    "2 realms: Shared (36 nodes) + Org (21 nodes) = 57 total",
+    "2 realms: Shared (36 nodes) + Org (23 nodes) = 59 total",
     "Press 'n' to see the next tip!",
 ];
 

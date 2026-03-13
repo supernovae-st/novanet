@@ -280,10 +280,10 @@ mod tests {
 
         let stats = compute_node_stats(&root).expect("should compute node stats");
 
-        // v0.19.0: 60 node classes (36 shared + 24 org)
+        // v0.20.0: 59 node classes (36 shared + 23 org)
         assert!(
-            stats.total >= 60,
-            "expected at least 60 node classes, got {}",
+            stats.total >= 59,
+            "expected at least 59 node classes, got {}",
             stats.total
         );
 
@@ -332,10 +332,10 @@ mod tests {
 
         let stats = compute_arc_stats(&root).expect("should compute arc stats");
 
-        // v0.19.0: 151 arc classes
+        // v0.20.0: 159 arc classes (157 active + 2 deprecated)
         assert!(
-            stats.total >= 151,
-            "expected at least 151 arc classes, got {}",
+            stats.total >= 157,
+            "expected at least 157 arc classes, got {}",
             stats.total
         );
 

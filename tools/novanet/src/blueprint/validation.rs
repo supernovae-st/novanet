@@ -701,8 +701,8 @@ mod tests {
     // terminology is consistent across YAML.
     // v0.17.3 (ADR-036): Schema-level trait tests removed, provenance is per-instance
 
-    /// ADR-028: Must have exactly 60 node classes (36 shared + 24 org)
-    /// v0.19.0: 60 nodes (36 shared + 24 org)
+    /// ADR-028: Must have exactly 59 node classes (36 shared + 23 org)
+    /// v0.20.0: 59 nodes (36 shared + 23 org) — BlockRules removed from instruction layer
     #[test]
     #[ignore = "requires private models (brain/)"]
     fn test_adr023_node_count() {
@@ -725,8 +725,8 @@ mod tests {
         let org_count = node_classes.iter().filter(|n| n.realm == "org").count();
 
         assert_eq!(
-            total, 60,
-            "Expected 60 total nodes (v0.19.0), got {}",
+            total, 59,
+            "Expected 59 total nodes (v0.20.0), got {}",
             total
         );
         assert_eq!(
@@ -735,8 +735,8 @@ mod tests {
             shared_count
         );
         assert_eq!(
-            org_count, 24,
-            "Expected 24 org nodes, got {}",
+            org_count, 23,
+            "Expected 23 org nodes, got {}",
             org_count
         );
     }
