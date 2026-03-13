@@ -1934,14 +1934,14 @@ mod complete_session {
             generate_result
                 .prompt
                 .as_ref()
-                .map_or(false, |p| p.contains("# Generation Context")),
+                .is_some_and(|p| p.contains("# Generation Context")),
             "Prompt should have header"
         );
         assert!(
             generate_result
                 .prompt
                 .as_ref()
-                .map_or(false, |p| p.contains("## Instructions")),
+                .is_some_and(|p| p.contains("## Instructions")),
             "Prompt should have instructions"
         );
     }
