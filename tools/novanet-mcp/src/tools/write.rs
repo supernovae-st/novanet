@@ -8,7 +8,7 @@
 //! When dry_run=false/None: validates then executes.
 
 use crate::error::{Error, Result};
-use crate::schema_cache::{ClassMetadata, ContextBudget, SchemaCache};
+use crate::schema_cache::{ClassMetadata, ContextBudget};
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -626,12 +626,12 @@ fn validate_params(params: &WriteParams) -> Result<()> {
 }
 
 /// Fetch and validate class metadata for write permission
+///
+/// v0.19.0: Trait-based write permissions removed (ADR-024 deprecated).
+/// Provenance is now per-instance, not per-class.
 async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<ClassMetadata> {
     // Check cache first
     if let Some(meta) = state.schema_cache().get_class(class_name) {
-        if !SchemaCache::is_writable_trait(&meta.trait_type) {
-            return Err(Error::trait_not_writable(class_name, &meta.trait_type));
-        }
         return Ok(meta);
     }
 
@@ -641,7 +641,6 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
         RETURN c.label AS name,
                c.realm AS realm,
                c.layer AS layer,
-               c.trait AS trait_type,
                c.required_properties AS required_properties,
                c.optional_properties AS optional_properties,
                c.content AS content,
@@ -665,7 +664,6 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
         name: row["name"].as_str().unwrap_or_default().to_string(),
         realm: row["realm"].as_str().unwrap_or_default().to_string(),
         layer: row["layer"].as_str().unwrap_or_default().to_string(),
-        trait_type: row["trait_type"].as_str().unwrap_or_default().to_string(),
         required_properties: row["required_properties"]
             .as_array()
             .map(|arr| {
@@ -698,11 +696,6 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
             .unwrap_or_default(),
         visibility: row["visibility"].as_str().map(String::from),
     };
-
-    // Validate trait allows writes
-    if !SchemaCache::is_writable_trait(&meta.trait_type) {
-        return Err(Error::trait_not_writable(class_name, &meta.trait_type));
-    }
 
     // Cache the metadata
     state
@@ -1664,7 +1657,7 @@ mod tests {
             name: "SEOKeyword".to_string(),
             realm: "shared".to_string(),
             layer: "knowledge".to_string(),
-            trait_type: "imported".to_string(),
+
             required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
             optional_properties: vec!["search_volume".to_string()],
             ..Default::default()
@@ -1690,7 +1683,7 @@ mod tests {
             name: "SEOKeyword".to_string(),
             realm: "shared".to_string(),
             layer: "knowledge".to_string(),
-            trait_type: "imported".to_string(),
+
             required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
             optional_properties: vec!["search_volume".to_string()],
             ..Default::default()
@@ -1713,7 +1706,7 @@ mod tests {
             name: "SEOKeyword".to_string(),
             realm: "shared".to_string(),
             layer: "knowledge".to_string(),
-            trait_type: "imported".to_string(),
+
             required_properties: vec![
                 "key".to_string(),
                 "keyword".to_string(),
@@ -1744,7 +1737,7 @@ mod tests {
             name: "EntityNative".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "authored".to_string(),
+
             required_properties: vec!["name".to_string()],
             optional_properties: vec!["description".to_string()],
             content: Some("Locale-specific entity content".to_string()),
@@ -1766,7 +1759,7 @@ mod tests {
             name: "EntityNative".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "authored".to_string(),
+
             ..Default::default()
         };
 
@@ -1861,7 +1854,7 @@ mod tests {
             name: "EntityNative".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "authored".to_string(),
+
             ..Default::default()
         };
 
