@@ -508,7 +508,14 @@ fn strip_cypher_comments(cypher: &str) -> String {
             continue;
         }
         if in_string && c == string_char {
-            // Check for escaped quote
+            // Handle Cypher's doubled-quote escape convention ('' or "")
+            if chars.peek() == Some(&string_char) {
+                // Escaped quote — push both characters and stay in string
+                result.push(c);
+                result.push(chars.next().unwrap());
+                continue;
+            }
+            // End of string
             in_string = false;
             result.push(c);
             continue;
