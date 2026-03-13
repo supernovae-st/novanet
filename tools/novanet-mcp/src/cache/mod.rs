@@ -29,6 +29,31 @@ pub struct QueryCache {
     cache: Arc<Cache<String, serde_json::Value>>,
 }
 
+/// Estimate the character-weight of a JSON value by walking the tree recursively.
+/// Avoids allocating a full serialized string on every cache insert.
+fn estimate_json_weight(value: &serde_json::Value) -> usize {
+    match value {
+        serde_json::Value::Null => 4,       // "null"
+        serde_json::Value::Bool(b) => if *b { 4 } else { 5 }, // "true" / "false"
+        serde_json::Value::Number(n) => {
+            // Approximate: integer digits or decimal representation
+            let s = n.to_string();
+            s.len()
+        }
+        serde_json::Value::String(s) => s.len() + 2, // quotes
+        serde_json::Value::Array(arr) => {
+            // brackets + commas + elements
+            2 + arr.iter().map(estimate_json_weight).sum::<usize>()
+                + arr.len().saturating_sub(1) // commas
+        }
+        serde_json::Value::Object(map) => {
+            // braces + commas + key-value pairs
+            2 + map.iter().map(|(k, v)| k.len() + 3 + estimate_json_weight(v)).sum::<usize>()
+                + map.len().saturating_sub(1) // commas
+        }
+    }
+}
+
 impl QueryCache {
     /// Create a new cache with the given settings
     ///
@@ -42,14 +67,8 @@ impl QueryCache {
             // Phase 2 Optimization: Size-aware eviction
             // Weight each entry by its estimated token count
             .weigher(|_key: &String, value: &serde_json::Value| -> u32 {
-                // Estimate tokens from JSON: serialize and divide by 4
-                // This is fast because serde_json is optimized for this
-                let weight = match serde_json::to_string(value) {
-                    Ok(s) => s.len() / 4,
-                    Err(_) => 1, // Minimum weight on error
-                };
-                // Clamp to u32 range (moka weigher returns u32)
-                // Minimum weight of 1 to ensure all entries have some cost
+                // Estimate tokens by walking the JSON tree without allocating
+                let weight = estimate_json_weight(value) / 4;
                 weight.clamp(1, u32::MAX as usize) as u32
             })
             .build();
