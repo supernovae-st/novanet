@@ -43,7 +43,7 @@ enum Commands {
         #[arg(long)]
         no_validate: bool,
     },
-    /// Data management (show, export, promote)
+    /// Data management: export → diff → promote workflow
     Data {
         #[command(subcommand)]
         action: DataAction,
@@ -225,11 +225,23 @@ enum DataAction {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
     },
-    /// Export node data from Neo4j to YAML files
+    /// Export Neo4j data nodes to YAML for version control
+    ///
+    /// Workflow: export → diff → promote.
+    /// Exports Entity, Page, Block, and other data classes to ~/.novanet/export/.
+    /// Use --incremental to export only changes since the last export.
     Export(novanet::commands::data_export::DataExportArgs),
     /// Compare Neo4j state against exported YAML files
+    ///
+    /// Workflow: export → diff → promote.
+    /// Detects drift between your database and the exported YAML snapshot.
+    /// Shows added, removed, and modified nodes per class.
     Diff(novanet::commands::data_diff::DataDiffArgs),
     /// Promote exported YAML to version-controlled private-data
+    ///
+    /// Workflow: export → diff → promote.
+    /// Copies YAML files from ~/.novanet/export/ to private-data/data/
+    /// for git version control. Use --dry-run to preview.
     Promote(novanet::commands::data_promote::DataPromoteArgs),
 }
 
@@ -563,16 +575,13 @@ async fn main() -> color_eyre::Result<()> {
             }
             DataAction::Export(args) => {
                 let db = connect_db(&uri, &user, password.as_ref()).await?;
-                eprintln!("novanet data export");
                 novanet::commands::data_export::run_data_export(&db, args).await?;
             }
             DataAction::Diff(args) => {
                 let db = connect_db(&uri, &user, password.as_ref()).await?;
-                eprintln!("novanet data diff");
                 novanet::commands::data_diff::run_data_diff(&db, args).await?;
             }
             DataAction::Promote(args) => {
-                eprintln!("novanet data promote");
                 novanet::commands::data_promote::run_data_promote(args).await?;
             }
         },

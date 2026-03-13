@@ -52,7 +52,17 @@ const TIMESTAMP_FIELDS: &[&str] = &["created_at", "updated_at"];
 
 /// Compare Neo4j state against exported YAML files.
 #[derive(Debug, Clone, Parser)]
-#[command(about = "Compare Neo4j state against exported YAML files")]
+#[command(
+    about = "Compare Neo4j state against exported YAML files",
+    long_about = "Compare Neo4j state against exported YAML files.\n\n\
+        Part of the data management workflow: export → diff → promote.\n\
+        Detects drift between your database and the exported YAML snapshot.\n\
+        Shows added, removed, and modified nodes per class.\n\n\
+        Examples:\n  \
+          novanet data diff                  # Compare all classes\n  \
+          novanet data diff --verbose        # Show property-level changes\n  \
+          novanet data diff --class=Entity   # Specific class only"
+)]
 pub struct DataDiffArgs {
     /// Filter by node class (Entity, EntityNative, Page...)
     #[arg(long, value_delimiter = ',')]
@@ -120,18 +130,13 @@ pub struct PropertyDiff {
 /// Run the data diff command.
 #[instrument(skip(db))]
 pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
+    use crate::core::ux;
+
     let source_dir = resolve_source_dir(&args)?;
 
     if !source_dir.exists() {
-        eprintln!(
-            "{} No export directory found at {}",
-            "warning:".yellow().bold(),
-            source_dir.display()
-        );
-        eprintln!(
-            "  Run {} first to create an export.",
-            "novanet data export".cyan()
-        );
+        ux::step_warn("No export", &format!("No export directory at {}", ux::fmt_path(&source_dir)));
+        ux::print_next_step("run", "novanet data export");
         return Ok(());
     }
 
@@ -139,9 +144,20 @@ pub async fn run_data_diff(db: &Db, args: DataDiffArgs) -> crate::Result<()> {
     let classes = discover_classes(&args, &source_dir)?;
 
     if classes.is_empty() {
-        eprintln!("{}", "No exported YAML files found to compare.".yellow());
+        ux::step_warn("No data", "No exported YAML files found to compare");
         return Ok(());
     }
+
+    // -- BANNER --
+    ux::print_banner(
+        "NOVANET DATA DIFF",
+        "Compare Neo4j state against exported YAML files",
+        &[
+            ("Source (YAML)", ux::fmt_path(&source_dir)),
+            ("Target (Neo4j)", "bolt://localhost:7687".to_string()),
+            ("Classes", format!("{} to compare", classes.len())),
+        ],
+    );
 
     // Diff each class
     let mut results = Vec::new();
@@ -444,54 +460,45 @@ fn compare_properties(
 
 /// Print diff results as a table.
 fn print_table(results: &[ClassDiffResult], verbose: bool) {
+    use crate::core::ux;
+
     if results.is_empty() {
-        eprintln!("{}", "No differences to report.".yellow());
+        ux::step_warn("No data", "No differences to report");
         return;
     }
 
-    eprintln!();
-    eprintln!("{}", "Data Diff: Neo4j vs Exported YAML".bold());
-    eprintln!();
-
+    // -- STEP PER CLASS --
     for r in results {
-        let status = if r.only_in_neo4j.is_empty()
+        let is_clean = r.only_in_neo4j.is_empty()
             && r.only_in_yaml.is_empty()
-            && r.modified.is_empty()
-        {
-            "in sync".green().to_string()
+            && r.modified.is_empty();
+
+        if is_clean {
+            ux::step_ok(&r.class, &format!("{} nodes in sync", r.in_sync));
         } else {
-            "drift detected".red().to_string()
-        };
-
-        eprintln!("  {} ({})", r.class.bold(), status);
-        eprintln!(
-            "    In Neo4j: {:>6}  │  In YAML: {:>6}",
-            r.neo4j_count, r.yaml_count
-        );
-        eprintln!();
-
-        if !r.only_in_neo4j.is_empty() {
-            eprintln!(
-                "    {} {} only in Neo4j (not yet exported)",
-                format!("+{}", r.only_in_neo4j.len()).green(),
-                if r.only_in_neo4j.len() == 1 { "node" } else { "nodes" }
-            );
-            if verbose {
-                for key in &r.only_in_neo4j {
-                    eprintln!("      {} {}", "+".green(), key);
-                }
+            let mut parts = Vec::new();
+            if !r.only_in_neo4j.is_empty() {
+                parts.push(format!("+{} new in Neo4j", r.only_in_neo4j.len()));
             }
+            if !r.modified.is_empty() {
+                parts.push(format!("~{} modified", r.modified.len()));
+            }
+            if !r.only_in_yaml.is_empty() {
+                parts.push(format!("-{} only in YAML", r.only_in_yaml.len()));
+            }
+            ux::step_warn(&r.class, &parts.join(", "));
         }
 
-        if !r.modified.is_empty() {
-            eprintln!(
-                "    {} {} modified since last export",
-                format!("~{}", r.modified.len()).yellow(),
-                if r.modified.len() == 1 { "node" } else { "nodes" }
-            );
-            if verbose {
+        // Verbose details under each class
+        if verbose {
+            if !r.only_in_neo4j.is_empty() {
+                for key in &r.only_in_neo4j {
+                    eprintln!("        {} {}", "+".green(), key);
+                }
+            }
+            if !r.modified.is_empty() {
                 for m in &r.modified {
-                    eprintln!("      {} {}", "~".yellow(), m.key);
+                    eprintln!("        {} {}", "~".yellow(), m.key);
                     for diff in &m.changed_properties {
                         let yaml_str = diff
                             .yaml_value
@@ -504,7 +511,7 @@ fn print_table(results: &[ClassDiffResult], verbose: bool) {
                             .map(|v| truncate_value(v, DIFF_VALUE_DISPLAY_MAX_LEN))
                             .unwrap_or_else(|| "(absent)".to_string());
                         eprintln!(
-                            "        {}: {} → {}",
+                            "          {}: {} -> {}",
                             diff.property.dimmed(),
                             yaml_str.red(),
                             neo4j_str.green()
@@ -512,47 +519,65 @@ fn print_table(results: &[ClassDiffResult], verbose: bool) {
                     }
                 }
             }
-        }
-
-        if !r.only_in_yaml.is_empty() {
-            eprintln!(
-                "    {} {} only in YAML (deleted from Neo4j?)",
-                format!("-{}", r.only_in_yaml.len()).red(),
-                if r.only_in_yaml.len() == 1 { "node" } else { "nodes" }
-            );
-            if verbose {
+            if !r.only_in_yaml.is_empty() {
                 for key in &r.only_in_yaml {
-                    eprintln!("      {} {}", "-".red(), key);
+                    eprintln!("        {} {}", "-".red(), key);
                 }
             }
         }
-
-        if r.in_sync > 0 {
-            eprintln!(
-                "    {} {} in sync",
-                format!("={}", r.in_sync).dimmed(),
-                if r.in_sync == 1 { "node" } else { "nodes" }
-            );
-        }
-
-        eprintln!();
     }
 
-    // Summary line
+    // -- SUMMARY BOX --
     let total_neo4j: usize = results.iter().map(|r| r.only_in_neo4j.len()).sum();
     let total_modified: usize = results.iter().map(|r| r.modified.len()).sum();
     let total_yaml: usize = results.iter().map(|r| r.only_in_yaml.len()).sum();
+    let total_sync: usize = results.iter().map(|r| r.in_sync).sum();
 
-    if total_neo4j > 0 || total_modified > 0 {
-        eprintln!(
-            "  Run {} to capture Neo4j changes.",
-            "novanet data export".cyan()
-        );
+    let has_drift = total_neo4j > 0 || total_modified > 0 || total_yaml > 0;
+
+    let mut summary_lines = Vec::new();
+    if has_drift {
+        summary_lines.push(format!(
+            "Drift detected across {} {}",
+            results.len(),
+            if results.len() == 1 { "class" } else { "classes" }
+        ));
+    } else {
+        summary_lines.push(format!(
+            "All {} nodes in sync across {} classes",
+            ux::fmt_count(total_sync),
+            results.len()
+        ));
+    }
+
+    let mut detail_parts = Vec::new();
+    if total_neo4j > 0 {
+        detail_parts.push(format!("+{total_neo4j} new in Neo4j"));
+    }
+    if total_modified > 0 {
+        detail_parts.push(format!("~{total_modified} modified"));
     }
     if total_yaml > 0 {
-        eprintln!(
-            "  {} nodes in YAML but not in Neo4j. YAML is authoritative.",
-            total_yaml.to_string().yellow()
+        detail_parts.push(format!("-{total_yaml} only in YAML"));
+    }
+    if total_sync > 0 {
+        detail_parts.push(format!("={} in sync", ux::fmt_count(total_sync)));
+    }
+    if !detail_parts.is_empty() {
+        summary_lines.push(detail_parts.join("  |  "));
+    }
+    ux::print_summary_box(&summary_lines);
+
+    // -- NEXT STEP --
+    if total_neo4j > 0 || total_modified > 0 {
+        ux::print_next_step(
+            "re-export with",
+            "novanet data export",
+        );
+    } else if !has_drift {
+        ux::print_next_step(
+            "promote to version control with",
+            "novanet data promote",
         );
     }
 }

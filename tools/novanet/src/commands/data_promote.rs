@@ -13,13 +13,25 @@ use similar::{ChangeTag, TextDiff};
 use std::path::PathBuf;
 use tracing::instrument;
 
+use crate::core::ux;
+
 // =============================================================================
 // CLI ARGUMENTS
 // =============================================================================
 
 /// Promote exported YAML to version-controlled private-data.
 #[derive(Debug, Clone, Parser)]
-#[command(about = "Promote exported YAML to version-controlled private-data")]
+#[command(
+    about = "Promote exported YAML to version-controlled private-data",
+    long_about = "Promote exported YAML to version-controlled private-data.\n\n\
+        Part of the data management workflow: export → diff → promote.\n\
+        Copies YAML files from ~/.novanet/export/ to private-data/data/\n\
+        for git version control. Shows unified diffs for modified files.\n\n\
+        Examples:\n  \
+          novanet data promote              # Promote all files\n  \
+          novanet data promote --dry-run    # Preview without writing\n  \
+          novanet data promote --no-diff    # Skip diff output"
+)]
 pub struct DataPromoteArgs {
     /// Preview without writing
     #[arg(long)]
@@ -74,15 +86,11 @@ pub async fn run_data_promote(args: DataPromoteArgs) -> crate::Result<()> {
     let target_dir = resolve_target_dir(&args)?;
 
     if !source_dir.exists() {
-        eprintln!(
-            "{} No export directory found at {}",
-            "warning:".yellow().bold(),
-            source_dir.display()
+        ux::step_warn(
+            "No export",
+            &format!("No export directory at {}", ux::fmt_path(&source_dir)),
         );
-        eprintln!(
-            "  Run {} first to create an export.",
-            "novanet data export".cyan()
-        );
+        ux::print_next_step("run", "novanet data export");
         return Ok(());
     }
 
@@ -90,32 +98,31 @@ pub async fn run_data_promote(args: DataPromoteArgs) -> crate::Result<()> {
     let classes = discover_yaml_files(&source_dir)?;
 
     if classes.is_empty() {
-        eprintln!("{}", "No exported YAML files found to promote.".yellow());
+        ux::step_warn("No data", "No exported YAML files found to promote");
         return Ok(());
     }
 
-    eprintln!(
-        "{}",
-        format!(
-            "Promoting {} files from {} → {}",
-            classes.len(),
-            source_dir.display(),
-            target_dir.display()
-        )
-        .bold()
+    // -- BANNER --
+    ux::print_banner(
+        "NOVANET DATA PROMOTE",
+        "Promote exported YAML to version-controlled private-data",
+        &[
+            ("Source (export)", ux::fmt_path(&source_dir)),
+            ("Target (git)", ux::fmt_path(&target_dir)),
+            ("Files", format!("{} to promote", classes.len())),
+        ],
     );
 
     if args.dry_run {
-        eprintln!("{}", "  (dry run — no files will be written)".dimmed());
+        ux::print_dry_run_notice();
     }
-    eprintln!();
 
     // Ensure target directory exists
     if !args.dry_run {
         std::fs::create_dir_all(&target_dir)?;
     }
 
-    // Promote each file
+    // -- STEP-BY-STEP --
     let mut results = Vec::new();
 
     for class in &classes {
@@ -126,8 +133,8 @@ pub async fn run_data_promote(args: DataPromoteArgs) -> crate::Result<()> {
         results.push(result);
     }
 
-    // Print summary
-    print_summary(&results);
+    // -- SUMMARY BOX --
+    print_summary(&results, &target_dir, args.dry_run);
 
     Ok(())
 }
@@ -191,12 +198,6 @@ fn promote_file(
 
     // Check if target exists
     if !target_file.exists() {
-        // New file
-        if args.show_diff {
-            eprintln!("  {} {}", "+".green().bold(), class.bold());
-            eprintln!("    {} (new file, {} bytes)", "NEW".green(), source_content.len());
-        }
-
         let status = if args.dry_run {
             PromoteStatus::DryRun(Box::new(PromoteStatus::New))
         } else {
@@ -206,6 +207,11 @@ fn promote_file(
             std::fs::write(target_file, &source_content)?;
             PromoteStatus::New
         };
+
+        ux::step_ok(
+            class,
+            &format!("new file ({} bytes)", ux::fmt_count(source_content.len())),
+        );
 
         return Ok(FilePromoteResult {
             class: class.to_string(),
@@ -217,27 +223,25 @@ fn promote_file(
     let target_content = std::fs::read_to_string(target_file)?;
 
     if source_content == target_content {
-        if args.show_diff {
-            eprintln!("  {} {}", "=".dimmed(), class.dimmed());
-        }
+        ux::step_skip(class, "unchanged");
         return Ok(FilePromoteResult {
             class: class.to_string(),
             status: PromoteStatus::Unchanged,
         });
     }
 
-    // Modified — show diff
-    if args.show_diff {
-        eprintln!("  {} {}", "~".yellow().bold(), class.bold());
-        print_unified_diff(&target_content, &source_content);
-    }
-
+    // Modified — write + show diff
     let status = if args.dry_run {
         PromoteStatus::DryRun(Box::new(PromoteStatus::Updated))
     } else {
         std::fs::write(target_file, &source_content)?;
         PromoteStatus::Updated
     };
+
+    ux::step_warn(class, "updated (content changed)");
+    if args.show_diff {
+        print_unified_diff(&target_content, &source_content);
+    }
 
     Ok(FilePromoteResult {
         class: class.to_string(),
@@ -266,41 +270,61 @@ fn print_unified_diff(old: &str, new: &str) {
 }
 
 /// Print summary of all promotions.
-fn print_summary(results: &[FilePromoteResult]) {
+fn print_summary(results: &[FilePromoteResult], target_dir: &std::path::Path, dry_run: bool) {
     let new_count = results
         .iter()
-        .filter(|r| matches!(r.status, PromoteStatus::New)
-            || matches!(&r.status, PromoteStatus::DryRun(s) if matches!(**s, PromoteStatus::New)))
+        .filter(|r| {
+            matches!(r.status, PromoteStatus::New)
+                || matches!(&r.status, PromoteStatus::DryRun(s) if matches!(**s, PromoteStatus::New))
+        })
         .count();
     let updated_count = results
         .iter()
-        .filter(|r| matches!(r.status, PromoteStatus::Updated)
-            || matches!(&r.status, PromoteStatus::DryRun(s) if matches!(**s, PromoteStatus::Updated)))
+        .filter(|r| {
+            matches!(r.status, PromoteStatus::Updated)
+                || matches!(&r.status, PromoteStatus::DryRun(s) if matches!(**s, PromoteStatus::Updated))
+        })
         .count();
     let unchanged_count = results
         .iter()
         .filter(|r| matches!(r.status, PromoteStatus::Unchanged))
         .count();
 
-    eprintln!();
-    eprintln!(
-        "  {} {} new, {} {} updated, {} {} unchanged",
-        new_count.to_string().green(),
-        if new_count == 1 { "file" } else { "files" },
-        updated_count.to_string().yellow(),
-        if updated_count == 1 { "file" } else { "files" },
-        unchanged_count.to_string().dimmed(),
-        if unchanged_count == 1 { "file" } else { "files" },
-    );
+    let verb = if dry_run { "Would promote" } else { "Promote complete" };
+    let changed = new_count + updated_count;
 
-    let is_dry_run = results
-        .iter()
-        .any(|r| matches!(r.status, PromoteStatus::DryRun(_)));
-    if is_dry_run {
-        eprintln!(
-            "  {}",
-            "(dry run — no files written, re-run without --dry-run to promote)".dimmed()
-        );
+    let mut summary_lines = vec![format!(
+        "{verb} -- {changed} changed, {unchanged_count} unchanged"
+    )];
+
+    if new_count > 0 {
+        summary_lines.push(format!(
+            "  {} new {}",
+            new_count,
+            if new_count == 1 { "file" } else { "files" }
+        ));
+    }
+    if updated_count > 0 {
+        summary_lines.push(format!(
+            "  {} updated {}",
+            updated_count,
+            if updated_count == 1 { "file" } else { "files" }
+        ));
+    }
+
+    summary_lines.push(format!("Output: {}", ux::fmt_path(target_dir)));
+
+    if dry_run {
+        summary_lines.push("Re-run without --dry-run to write files".to_string());
+    }
+
+    ux::print_summary_box(&summary_lines);
+
+    // -- NEXT STEP --
+    if !dry_run && changed > 0 {
+        ux::print_next_step("review and commit", "git diff private-data/");
+    } else if !dry_run && changed == 0 {
+        ux::print_next_step("everything up to date, run", "novanet data diff");
     }
 }
 

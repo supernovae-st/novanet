@@ -9,9 +9,7 @@
 
 use chrono::{DateTime, Utc};
 use clap::Parser;
-use colored::Colorize;
 use indexmap::IndexMap;
-use indicatif::{ProgressBar, ProgressStyle};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use tracing::instrument;
@@ -54,7 +52,18 @@ const LABEL_PATTERN: &str = r"^[A-Z][A-Za-z0-9]*$";
 
 /// Export node data from Neo4j to YAML files.
 #[derive(Debug, Clone, Parser)]
-#[command(about = "Export node data from Neo4j to YAML files")]
+#[command(
+    about = "Export Neo4j data nodes to YAML for version control",
+    long_about = "Export Neo4j data nodes to YAML for version control.\n\n\
+        Part of the data management workflow: export → diff → promote.\n\
+        Exports Entity, Page, Block, and other data classes to ~/.novanet/export/.\n\
+        Use --incremental to export only changes since the last export.\n\n\
+        Examples:\n  \
+          novanet data export                      # Full export\n  \
+          novanet data export --incremental        # Delta only\n  \
+          novanet data export --class=Entity,Page  # Specific classes\n  \
+          novanet data export --dry-run            # Preview"
+)]
 pub struct DataExportArgs {
     /// Filter by node class (Entity, EntityNative, Page, PageNative, Block...)
     #[arg(long, value_delimiter = ',')]
@@ -113,9 +122,7 @@ pub struct ExportDocument {
 /// Summary of a single class export.
 #[derive(Debug)]
 struct ClassExportResult {
-    class: String,
     count: usize,
-    file_path: PathBuf,
 }
 
 // =============================================================================
@@ -125,6 +132,8 @@ struct ClassExportResult {
 /// Run the data export command.
 #[instrument(skip(db))]
 pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()> {
+    use crate::core::ux;
+
     // 1. Resolve output directory
     let output_dir = resolve_output_dir(&args)?;
 
@@ -138,22 +147,46 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
         ExportCheckpoint::new()
     };
 
-    // 4. Progress bar
-    let pb = ProgressBar::new(classes.len() as u64);
-    pb.set_style(
-        ProgressStyle::default_bar()
-            .template("{spinner:.green} [{bar:30.cyan/blue}] {pos}/{len} {msg}")
-            .expect("valid progress template")
-            .progress_chars("█▓░"),
+    // -- BANNER --
+    let mode = if args.incremental {
+        "Incremental (delta since last export)"
+    } else {
+        "Full export (use --incremental for delta only)"
+    };
+    let mut metadata: Vec<(&str, String)> = vec![
+        ("Source", "bolt://localhost:7687 (neo4j)".to_string()),
+        ("Output", ux::fmt_path(&output_dir)),
+        ("Mode", mode.to_string()),
+    ];
+    if let Some(ref project) = args.project {
+        metadata.push(("Project", project.clone()));
+    }
+    if let Some(ref locale) = args.locale {
+        metadata.push(("Locale", locale.clone()));
+    }
+    ux::print_banner(
+        "NOVANET DATA EXPORT",
+        "Export Neo4j data nodes to YAML for version control",
+        &metadata,
     );
 
-    // 5. Export each class
+    if args.dry_run {
+        ux::print_dry_run_notice();
+    }
+
+    // -- PRE-FLIGHT --
+    eprintln!(
+        "  Exporting {} {}...",
+        classes.len(),
+        if classes.len() == 1 { "class" } else { "classes" }
+    );
+    eprintln!();
+
+    // 4. Export each class
     let mut results = Vec::new();
     let export_time = Utc::now();
 
     for class in &classes {
-        pb.set_message(class.clone());
-
         // Determine "since" timestamp
         let since = resolve_since(&args, &checkpoint, class);
 
@@ -161,7 +194,7 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
         let rows = query_class(db, class, &args.project, &args.locale, since.as_ref()).await?;
 
         if rows.is_empty() {
-            pb.inc(1);
+            ux::step_skip(class, "0 nodes");
             continue;
         }
 
@@ -180,22 +213,15 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
         // Determine output file path
         let file_path = output_dir.join(format!("{class}.yaml"));
 
-        if args.dry_run {
-            eprintln!(
-                "  {} {} ({} nodes → {})",
-                "would write".yellow(),
-                class,
-                doc.nodes.len(),
-                file_path.display()
-            );
-        } else {
+        if !args.dry_run {
             write_yaml(&file_path, &doc)?;
         }
 
+        // -- STEP --
+        ux::step_ok_count(class, doc.nodes.len(), &format!("nodes  -> {class}.yaml"));
+
         results.push(ClassExportResult {
-            class: class.clone(),
             count: doc.nodes.len(),
-            file_path,
         });
 
         // Update checkpoint
@@ -205,19 +231,44 @@ pub async fn run_data_export(db: &Db, args: DataExportArgs) -> crate::Result<()>
             args.project.as_deref(),
             args.locale.as_deref(),
         );
-
-        pb.inc(1);
     }
 
-    pb.finish_and_clear();
-
-    // 6. Save checkpoint (unless dry run)
+    // 5. Save checkpoint (unless dry run)
     if !args.dry_run && !results.is_empty() {
         checkpoint.save(&output_dir)?;
     }
 
-    // 7. Print summary
-    print_summary(&results, &output_dir, args.dry_run);
+    // -- SUMMARY BOX --
+    if results.is_empty() {
+        eprintln!();
+        ux::step_warn("No data", "No nodes found to export");
+        return Ok(());
+    }
+
+    let total: usize = results.iter().map(|r| r.count).sum();
+    let verb = if args.dry_run { "Would export" } else { "Export complete" };
+
+    let mut summary_lines = vec![
+        format!(
+            "{verb} -- {} nodes -> {} files",
+            ux::fmt_count(total),
+            results.len()
+        ),
+        format!("Output: {}", ux::fmt_path(&output_dir)),
+    ];
+    if !args.dry_run {
+        summary_lines
+            .push("Checkpoint saved (use --incremental next time for delta)".to_string());
+    }
+    ux::print_summary_box(&summary_lines);
+
+    // -- NEXT STEP --
+    if !args.dry_run {
+        ux::print_next_step(
+            "run",
+            "novanet data diff",
+        );
+    }
 
     Ok(())
 }
@@ -462,35 +513,6 @@ fn write_yaml(path: &std::path::Path, doc: &ExportDocument) -> crate::Result<()>
     Ok(())
 }
 
-/// Print export summary.
-fn print_summary(results: &[ClassExportResult], output_dir: &std::path::Path, dry_run: bool) {
-    if results.is_empty() {
-        eprintln!("{}", "No nodes found to export.".yellow());
-        return;
-    }
-
-    let verb = if dry_run { "Would export" } else { "Exported" };
-    let total: usize = results.iter().map(|r| r.count).sum();
-
-    eprintln!();
-    eprintln!("{}", format!("{verb} {total} nodes:").green().bold());
-    for r in results {
-        eprintln!(
-            "  {} {} → {}",
-            format!("{:>6}", r.count).cyan(),
-            r.class,
-            r.file_path.display()
-        );
-    }
-    eprintln!();
-    eprintln!("  Output: {}", output_dir.display());
-    if !dry_run {
-        eprintln!(
-            "  Checkpoint: {}",
-            output_dir.join(".checkpoint.json").display()
-        );
-    }
-}
 
 // =============================================================================
 // TESTS
