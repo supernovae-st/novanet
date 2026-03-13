@@ -47,12 +47,14 @@
 // Keyword: "qr code generator" — 699K SV, KD93, Transactional (Ahrefs 2026-02-17)
 MERGE (bn:BlockNative {key: 'block:qr-code:head-seo-meta:1@en-US'})
 ON CREATE SET
+  bn.node_class = 'BlockNative',
+  bn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   bn.block_key = 'qr-code:head-seo-meta:1',
   bn.locale_key = 'en-US',
   bn.display_name = 'QR Code Generator SEO Meta (en-US)',
-  bn.content = 'SEO metadata for qr-code page - en-US',
   bn.block_type = 'head-seo-meta',
   bn.content = '{"slug": "qr-code-generator", "meta_title": "QR Code Generator - Create Custom QR Codes Free", "meta_description": "Generate custom QR codes instantly. Free QR code generator for URLs, WiFi, contacts, and more."}',
+  bn.llm_context = 'USE: head-seo-meta block for en-US qr-code page. TRIGGERS: slug, meta, seo. NOT: for page structure (use Page). RELATES: Page (qr-code), Locale (en-US).',
   bn.status = 'published',
   bn.created_at = datetime(),
   bn.updated_at = datetime()
@@ -65,12 +67,14 @@ ON MATCH SET
 // latin_preserve rule: keep accent on "créer"
 MERGE (bn:BlockNative {key: 'block:qr-code:head-seo-meta:1@fr-FR'})
 ON CREATE SET
+  bn.node_class = 'BlockNative',
+  bn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   bn.block_key = 'qr-code:head-seo-meta:1',
   bn.locale_key = 'fr-FR',
   bn.display_name = 'Créer un QR Code SEO Meta (fr-FR)',
-  bn.content = 'SEO metadata for qr-code page - fr-FR',
   bn.block_type = 'head-seo-meta',
   bn.content = '{"slug": "créer-un-qr-code", "meta_title": "Créer un QR Code - Générateur Gratuit en Ligne", "meta_description": "Créez un QR code personnalisé en quelques secondes. Générateur de QR code gratuit pour URL, WiFi, contacts et plus."}',
+  bn.llm_context = 'USE: head-seo-meta block for fr-FR qr-code page. TRIGGERS: slug, meta, seo. NOT: for page structure (use Page). RELATES: Page (qr-code), Locale (fr-FR).',
   bn.status = 'published',
   bn.created_at = datetime(),
   bn.updated_at = datetime()
@@ -86,12 +90,14 @@ ON MATCH SET
 // NOTE: meta_title/H1 mentionneront "generador" aussi pour capturer les deux intents
 MERGE (bn:BlockNative {key: 'block:qr-code:head-seo-meta:1@es-MX'})
 ON CREATE SET
+  bn.node_class = 'BlockNative',
+  bn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   bn.block_key = 'qr-code:head-seo-meta:1',
   bn.locale_key = 'es-MX',
   bn.display_name = 'Crear Código QR SEO Meta (es-MX)',
-  bn.content = 'SEO metadata for qr-code page - es-MX',
   bn.block_type = 'head-seo-meta',
   bn.content = '{"slug": "crear-código-qr", "meta_title": "Crear Código QR Gratis - Sin Registro", "meta_description": "Crea tu código QR personalizado en segundos. Gratis para URLs, WiFi, WhatsApp, contactos y más."}',
+  bn.llm_context = 'USE: head-seo-meta block for es-MX qr-code page. TRIGGERS: slug, meta, seo. NOT: for page structure (use Page). RELATES: Page (qr-code), Locale (es-MX).',
   bn.status = 'published',
   bn.created_at = datetime(),
   bn.updated_at = datetime()
@@ -104,12 +110,14 @@ ON MATCH SET
 // native_script rule: Japanese characters allowed in slug (atomic opportunity)
 MERGE (bn:BlockNative {key: 'block:qr-code:head-seo-meta:1@ja-JP'})
 ON CREATE SET
+  bn.node_class = 'BlockNative',
+  bn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   bn.block_key = 'qr-code:head-seo-meta:1',
   bn.locale_key = 'ja-JP',
   bn.display_name = 'QRコード作成 SEO Meta (ja-JP)',
-  bn.content = 'SEO metadata for qr-code page - ja-JP',
   bn.block_type = 'head-seo-meta',
   bn.content = '{"slug": "qrコード作成", "meta_title": "QRコード作成 - 無料でカスタムQRコードを生成", "meta_description": "カスタムQRコードを瞬時に生成。URL、WiFi、連絡先など用の無料QRコードジェネレーター。"}',
+  bn.llm_context = 'USE: head-seo-meta block for ja-JP qr-code page. TRIGGERS: slug, meta, seo. NOT: for page structure (use Page). RELATES: Page (qr-code), Locale (ja-JP).',
   bn.status = 'published',
   bn.created_at = datetime(),
   bn.updated_at = datetime()
@@ -122,12 +130,14 @@ ON MATCH SET
 // latin_transform rule: ü→ue, ö→oe, ä→ae, ß→ss (no umlauts in this slug)
 MERGE (bn:BlockNative {key: 'block:qr-code:head-seo-meta:1@de-DE'})
 ON CREATE SET
+  bn.node_class = 'BlockNative',
+  bn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   bn.block_key = 'qr-code:head-seo-meta:1',
   bn.locale_key = 'de-DE',
   bn.display_name = 'QR-Code erstellen SEO Meta (de-DE)',
-  bn.content = 'SEO metadata for qr-code page - de-DE',
   bn.block_type = 'head-seo-meta',
   bn.content = '{"slug": "qr-code-erstellen", "meta_title": "QR Code erstellen - Kostenloser QR-Code-Generator", "meta_description": "QR Code kostenlos erstellen in Sekunden. QR-Code-Generator für URLs, WLAN, Kontakte und mehr."}',
+  bn.llm_context = 'USE: head-seo-meta block for de-DE qr-code page. TRIGGERS: slug, meta, seo. NOT: for page structure (use Page). RELATES: Page (qr-code), Locale (de-DE).',
   bn.status = 'published',
   bn.created_at = datetime(),
   bn.updated_at = datetime()

@@ -24,6 +24,8 @@
 // -----------------------------------------------------------------------------
 MERGE (pn:PageNative {key: 'page:qr-code@en-US'})
 ON CREATE SET
+  pn.node_class = 'PageNative',
+  pn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   pn.page_key = 'qr-code',
   pn.locale_key = 'en-US',
   pn.display_name = 'QR Code Generator (en-US)',
@@ -46,6 +48,8 @@ ON MATCH SET
 // -----------------------------------------------------------------------------
 MERGE (pn:PageNative {key: 'page:qr-code@fr-FR'})
 ON CREATE SET
+  pn.node_class = 'PageNative',
+  pn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   pn.page_key = 'qr-code',
   pn.locale_key = 'fr-FR',
   pn.display_name = 'Générateur de QR Code (fr-FR)',
@@ -69,6 +73,8 @@ ON MATCH SET
 // -----------------------------------------------------------------------------
 MERGE (pn:PageNative {key: 'page:qr-code@es-MX'})
 ON CREATE SET
+  pn.node_class = 'PageNative',
+  pn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   pn.page_key = 'qr-code',
   pn.locale_key = 'es-MX',
   pn.display_name = 'Generador de Código QR (es-MX)',
@@ -92,6 +98,8 @@ ON MATCH SET
 // -----------------------------------------------------------------------------
 MERGE (pn:PageNative {key: 'page:qr-code@ja-JP'})
 ON CREATE SET
+  pn.node_class = 'PageNative',
+  pn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   pn.page_key = 'qr-code',
   pn.locale_key = 'ja-JP',
   pn.display_name = 'QRコード作成 (ja-JP)',
@@ -115,6 +123,8 @@ ON MATCH SET
 // -----------------------------------------------------------------------------
 MERGE (pn:PageNative {key: 'page:qr-code@de-DE'})
 ON CREATE SET
+  pn.node_class = 'PageNative',
+  pn.provenance = '{"source": "seed:content", "version": "v0.19.0"}',
   pn.page_key = 'qr-code',
   pn.locale_key = 'de-DE',
   pn.display_name = 'QR-Code Generator (de-DE)',
