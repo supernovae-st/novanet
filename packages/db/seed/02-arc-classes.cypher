@@ -3873,7 +3873,7 @@ ON MATCH SET
 MERGE (ac_CATEGORY_OF:Schema:ArcClass {key: 'CATEGORY_OF'})
 ON CREATE SET
   ac_CATEGORY_OF.display_name = 'Category Of',
-  ac_CATEGORY_OF.llm_context = 'USE: when traversing from category to its member entities. TRIGGERS: "category contains", "includes entity", "has member". NOT: for entity lookup (start from entity, use OF_CATEGORY instead). RELATES: EntityCategory (container, org/semantic), Entity (member, org/semantic). PATTERN: Inverse of OF_CATEGORY for bidirectional traversal.',
+  ac_CATEGORY_OF.llm_context = 'USE: when traversing from category to its member entities. TRIGGERS: "category contains", "includes entity", "has member". NOT: for entity lookup (start from entity, use OF_CATEGORY instead). RELATES: EntityCategory (container, shared/config), Entity (member, org/semantic). PATTERN: Inverse of OF_CATEGORY for bidirectional traversal.',
   ac_CATEGORY_OF.family = 'semantic',
   ac_CATEGORY_OF.scope = 'cross_realm',
   ac_CATEGORY_OF.cardinality = 'one_to_many',
@@ -3888,7 +3888,7 @@ ON CREATE SET
   ac_CATEGORY_OF.created_at = datetime()
 ON MATCH SET
   ac_CATEGORY_OF.display_name = 'Category Of',
-  ac_CATEGORY_OF.llm_context = 'USE: when traversing from category to its member entities. TRIGGERS: "category contains", "includes entity", "has member". NOT: for entity lookup (start from entity, use OF_CATEGORY instead). RELATES: EntityCategory (container, org/semantic), Entity (member, org/semantic). PATTERN: Inverse of OF_CATEGORY for bidirectional traversal.',
+  ac_CATEGORY_OF.llm_context = 'USE: when traversing from category to its member entities. TRIGGERS: "category contains", "includes entity", "has member". NOT: for entity lookup (start from entity, use OF_CATEGORY instead). RELATES: EntityCategory (container, shared/config), Entity (member, org/semantic). PATTERN: Inverse of OF_CATEGORY for bidirectional traversal.',
   ac_CATEGORY_OF.family = 'semantic',
   ac_CATEGORY_OF.scope = 'cross_realm',
   ac_CATEGORY_OF.cardinality = 'one_to_many',
@@ -4214,7 +4214,7 @@ ON MATCH SET
 MERGE (ac_OF_CATEGORY:Schema:ArcClass {key: 'OF_CATEGORY'})
 ON CREATE SET
   ac_OF_CATEGORY.display_name = 'Of Category',
-  ac_OF_CATEGORY.llm_context = 'USE: when grouping entities under shared categories for navigation and taxonomy. TRIGGERS: "category", "belongs to", "classified as", "grouped under", "in category". NOT: for hierarchical parent-child (use CHILD_OF), for localization (use FOR_LOCALE). RELATES: Entity (member, org/semantic), EntityCategory (container, org/semantic). PATTERN: Many-to-many: entities can belong to multiple categories.',
+  ac_OF_CATEGORY.llm_context = 'USE: when grouping entities under shared categories for navigation and taxonomy. TRIGGERS: "category", "belongs to", "classified as", "grouped under", "in category". NOT: for hierarchical parent-child (use CHILD_OF), for localization (use FOR_LOCALE). RELATES: Entity (member, org/semantic), EntityCategory (container, shared/config). PATTERN: Many-to-many: entities can belong to multiple categories.',
   ac_OF_CATEGORY.family = 'semantic',
   ac_OF_CATEGORY.scope = 'cross_realm',
   ac_OF_CATEGORY.cardinality = 'many_to_many',
@@ -4229,7 +4229,7 @@ ON CREATE SET
   ac_OF_CATEGORY.created_at = datetime()
 ON MATCH SET
   ac_OF_CATEGORY.display_name = 'Of Category',
-  ac_OF_CATEGORY.llm_context = 'USE: when grouping entities under shared categories for navigation and taxonomy. TRIGGERS: "category", "belongs to", "classified as", "grouped under", "in category". NOT: for hierarchical parent-child (use CHILD_OF), for localization (use FOR_LOCALE). RELATES: Entity (member, org/semantic), EntityCategory (container, org/semantic). PATTERN: Many-to-many: entities can belong to multiple categories.',
+  ac_OF_CATEGORY.llm_context = 'USE: when grouping entities under shared categories for navigation and taxonomy. TRIGGERS: "category", "belongs to", "classified as", "grouped under", "in category". NOT: for hierarchical parent-child (use CHILD_OF), for localization (use FOR_LOCALE). RELATES: Entity (member, org/semantic), EntityCategory (container, shared/config). PATTERN: Many-to-many: entities can belong to multiple categories.',
   ac_OF_CATEGORY.family = 'semantic',
   ac_OF_CATEGORY.scope = 'cross_realm',
   ac_OF_CATEGORY.cardinality = 'many_to_many',

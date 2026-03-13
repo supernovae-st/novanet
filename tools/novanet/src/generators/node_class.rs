@@ -114,6 +114,13 @@ fn derive_visibility(realm: &str, layer: &str, class_name: &str) -> &'static str
 
 /// Compute the YAML path relative to models directory.
 fn yaml_path(node: &ParsedNode) -> String {
+    // Extract relative path after "node-classes/" from source_path.
+    // This preserves subdirectories like atoms/ (e.g. shared/knowledge/atoms/culture-ref.yaml).
+    let path_str = node.source_path.to_string_lossy();
+    if let Some(idx) = path_str.find("node-classes/") {
+        return path_str[idx..].to_string();
+    }
+    // Fallback: construct from realm/layer + filename (loses subdirectories)
     let filename = node
         .source_path
         .file_name()
