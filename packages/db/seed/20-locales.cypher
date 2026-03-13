@@ -3411,6 +3411,32 @@ ON MATCH SET
   l.text_direction = "ltr",
   l.updated_at = datetime();
 
+MERGE (l:Locale {key: "lo-LA"})
+ON CREATE SET
+  l.node_class = 'Locale',
+  l.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+  l.display_name = "Lao (Laos)",
+  l.content = "Lao locale for ລາວ market",
+  l.llm_context = "USE: for Lao content targeting ລາວ. TRIGGERS: lo-LA, ພາສາລາວ, ລາວ.",
+  l.language_code = "lo",
+  l.country_code = "LA",
+  l.name_native = "ພາສາລາວ (ລາວ)",
+  l.is_primary = true,
+  l.region = "asia",
+  l.language_family = "tai_kadai",
+  l.script = "other",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "Lao (Laos)",
+  l.region = "asia",
+  l.language_family = "tai_kadai",
+  l.script = "other",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
 MERGE (l:Locale {key: "lt-LT"})
 ON CREATE SET
   l.node_class = 'Locale',
