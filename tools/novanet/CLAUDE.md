@@ -27,6 +27,8 @@ novanet <command>    # Run specific command
 | `novanet search --query=X` | Fulltext search | Yes |
 | `novanet doctor` | System health check | Optional |
 | `novanet doctor --fix` | Auto-fix schema sync issues | No |
+| `novanet data backup` | Save Neo4j data to private-data/data/ | Yes |
+| `novanet data status` | Compare backup vs live database | Yes |
 | `novanet export` | Export graph to Cypher/JSON/GraphML/CSV | Yes |
 | `novanet stats` | Schema statistics from YAML | No |
 | `novanet diff` | Compare YAML schema with Neo4j | Yes |
@@ -160,6 +162,16 @@ novanet search --query="page"        # Fulltext search
 novanet search --query="qr" --class=Entity --limit=20
 ```
 
+### Data Management (Neo4j Required)
+
+```bash
+novanet data backup                  # Save Neo4j data to private-data/data/ (YAML)
+novanet data backup --classes Entity,Page  # Backup specific classes only
+novanet data backup --dry-run        # Preview without writing
+novanet data status                  # Compare backup files vs live database
+novanet data status --classes Entity # Status for specific classes
+```
+
 ### Write Operations (Neo4j Required)
 
 ```bash
@@ -291,9 +303,15 @@ src/
     schema.rs     schema generate/validate (YAML → artifacts)
     doc.rs        doc generate/list (YAML views → Mermaid)
     filter.rs     filter build (JSON stdin → Cypher stdout)
+    data_backup.rs  data backup (Neo4j → private-data/data/ YAML export)
+    data_status.rs  data status (backup vs Neo4j comparison with colored diffs)
+    data_common.rs  shared constants, types, and query logic for data commands
     export.rs     export (Cypher/JSON/GraphML/CSV graph export)
     stats.rs      stats (YAML schema statistics)
     diff.rs       diff (YAML vs Neo4j comparison)
+  core/
+    backup.rs     brain directory backup/restore operations
+    ux.rs         CLI UX helpers (colored summaries, ASCII schemas, fmt_count)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
   validation/     Schema validation + auto-fix system
