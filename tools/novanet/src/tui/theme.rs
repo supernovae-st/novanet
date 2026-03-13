@@ -547,9 +547,8 @@ impl Icons {
         icons.quality.insert("optional".into(), " ".into());
         icons.quality.insert("chart".into(), "≡".into());
 
-        // Modes (v11.7: Graph + Nexus only)
+        // Modes (v0.20.0: Graph only)
         icons.modes.insert("graph".into(), "G".into());
-        icons.modes.insert("nexus".into(), "N".into());
 
         icons
     }
@@ -703,50 +702,43 @@ impl Theme {
 // NAV MODE COLORS — Colors for navigation modes
 // =============================================================================
 
-/// Navigation mode color definitions (v11.7: Graph + Nexus only).
+/// Navigation mode color definitions (v0.20.0: Graph only).
 pub mod nav_mode {
     use super::*;
 
-    // Mode colors (hex) — v11.7: 2-mode structure
+    // Mode colors (hex) — v0.20.0: Graph only
     pub const GRAPH_HEX: &str = "#06b6d4"; // Cyan - unified tree exploration
-    pub const NEXUS_HEX: &str = "#8b5cf6"; // Purple - hub (Quiz, Stats, Help)
 
     // 256-color palette
     pub const GRAPH_256: u8 = 45;
-    pub const NEXUS_256: u8 = 141;
 
     // 16-color palette
     pub const GRAPH_16: Color = Color::Cyan;
-    pub const NEXUS_16: Color = Color::Magenta;
 
     /// Get nav mode color for a given color mode.
-    /// v11.7: 2-mode structure (Graph, Nexus)
+    /// v0.20.0: Graph only
     pub fn color(nav_mode: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match nav_mode {
                 "graph" | "Graph" => hex_to_color(GRAPH_HEX),
-                "nexus" | "Nexus" => hex_to_color(NEXUS_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match nav_mode {
                 "graph" | "Graph" => Color::Indexed(GRAPH_256),
-                "nexus" | "Nexus" => Color::Indexed(NEXUS_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match nav_mode {
                 "graph" | "Graph" => GRAPH_16,
-                "nexus" | "Nexus" => NEXUS_16,
                 _ => Color::White,
             },
         }
     }
 
     /// Get icon for nav mode.
-    /// v11.7: 2-mode structure (Graph, Nexus)
+    /// v0.20.0: Graph only
     pub fn icon(nav_mode: &str) -> &'static str {
         match nav_mode {
             "graph" | "Graph" => "◈",
-            "nexus" | "Nexus" => "✦",
             _ => "○",
         }
     }
@@ -1050,9 +1042,8 @@ mod tests {
         assert_eq!(icons.quality("required"), "*");
         assert_eq!(icons.quality("chart"), "≡");
 
-        // Modes (v11.7: Graph + Nexus only)
+        // Modes (v0.20.0: Graph only)
         assert_eq!(icons.mode("graph"), "G");
-        assert_eq!(icons.mode("nexus"), "N");
     }
 
     #[test]

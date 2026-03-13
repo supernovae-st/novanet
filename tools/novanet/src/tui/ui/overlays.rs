@@ -109,137 +109,12 @@ pub fn render_search(f: &mut Frame, app: &App) {
 }
 
 /// Help overlay: keyboard shortcuts.
-/// Shows Guide-specific shortcuts when in Guide mode.
-pub fn render_help(f: &mut Frame, app: &App) {
-    use super::super::app::NavMode;
-
+pub fn render_help(f: &mut Frame, _app: &App) {
     let area = f.area();
     let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
 
-    // Check if we're in Nexus mode (renamed from Guide in v11.3)
-    let is_nexus_mode = app.mode == NavMode::Nexus;
-
-    let lines: Vec<Line> = if is_nexus_mode {
-        // Nexus mode specific help
-        vec![
-            Line::from(Span::styled(
-                " Nexus Mode — Keyboard Shortcuts",
-                Style::default()
-                    .fg(Color::Magenta)
-                    .add_modifier(Modifier::BOLD),
-            )),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Tab Navigation", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    1        ", STYLE_PRIMARY),
-                Span::styled("Traits tab", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    2        ", STYLE_PRIMARY),
-                Span::styled("Layers tab", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    3        ", STYLE_PRIMARY),
-                Span::styled("Arcs tab", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    4        ", STYLE_PRIMARY),
-                Span::styled("Pipeline tab", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    Tab      ", STYLE_PRIMARY),
-                Span::styled("Next tab", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    Shift+Tab", STYLE_PRIMARY),
-                Span::styled("Previous tab", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Navigation", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
-                Span::styled("Move cursor up/down", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    h/l ←→   ", STYLE_PRIMARY),
-                Span::styled("Drill up/down (or switch realm)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    Enter    ", STYLE_PRIMARY),
-                Span::styled("Drill down into selection", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    Esc      ", STYLE_PRIMARY),
-                Span::styled("Drill up / back", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Pipeline Tab", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    Space    ", STYLE_PRIMARY),
-                Span::styled("Play/pause animation", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Layers Tab", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    h/←      ", STYLE_PRIMARY),
-                Span::styled("Switch to Shared realm", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    l/→      ", STYLE_PRIMARY),
-                Span::styled("Switch to Org realm", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Quick Jump (Traits)", STYLE_HIGHLIGHT)]),
-            // v0.12.0 ADR-024: Updated trait names
-            Line::from(vec![
-                Span::styled("    gi       ", STYLE_PRIMARY),
-                Span::styled("Jump to defined trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    gl       ", STYLE_PRIMARY),
-                Span::styled("Jump to authored trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    gk       ", STYLE_PRIMARY),
-                Span::styled("Jump to imported trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    gg       ", STYLE_PRIMARY),
-                Span::styled("Jump to generated trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    ga       ", STYLE_PRIMARY),
-                Span::styled("Jump to retrieved trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    g0       ", STYLE_PRIMARY),
-                Span::styled("Go to top (reset cursors)", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Tips", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    n        ", STYLE_PRIMARY),
-                Span::styled("Next tip (Did you know?)", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(vec![Span::styled("  Exit", STYLE_HIGHLIGHT)]),
-            Line::from(vec![
-                Span::styled("    1-2      ", STYLE_PRIMARY),
-                Span::styled("Switch to Graph mode", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    N        ", STYLE_PRIMARY),
-                Span::styled("Cycle modes (exit Nexus)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    q        ", STYLE_PRIMARY),
-                Span::styled("Quit TUI", STYLE_DIM),
-            ]),
-            Line::from(""),
-            Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
-        ]
-    } else {
-        // Default help (non-Guide modes)
+    let lines: Vec<Line> = {
+        // Graph mode help
         vec![
             Line::from(Span::styled(
                 " NovaNet TUI — Keyboard Shortcuts",
@@ -307,7 +182,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(vec![
                 Span::styled("    2        ", STYLE_PRIMARY),
-                Span::styled("Nexus mode (gamified learning)", STYLE_DIM),
+                Span::styled("(reserved)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    t        ", STYLE_PRIMARY),
@@ -418,11 +293,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
     let help_area = Rect::new(x, y, width, height);
     f.render_widget(Clear, help_area);
 
-    let title = if is_nexus_mode {
-        " Nexus Help "
-    } else {
-        " Help "
-    };
+    let title = " Help ";
 
     let block = Block::default()
         .title(Span::styled(title, STYLE_ACCENT))
@@ -933,49 +804,8 @@ mod tests {
     }
 
     #[test]
-    fn test_nexus_help_has_tab_navigation() {
-        // Nexus mode help should include "Tab Navigation" section
-        let expected_section = "Tab Navigation";
-        assert!(expected_section.contains("Tab"));
-    }
-
-    #[test]
-    fn test_nexus_help_has_quick_jump() {
-        // Nexus mode help should include "Quick Jump" section for traits
-        let expected_section = "Quick Jump (Traits)";
-        assert!(expected_section.contains("Quick Jump"));
-    }
-
-    #[test]
-    fn test_nexus_help_has_pipeline_tab() {
-        // Nexus mode help should mention "Pipeline Tab" with Space key
-        let expected_section = "Pipeline Tab";
-        assert!(expected_section.contains("Pipeline"));
-    }
-
-    // =========================================================================
-    // Help title differentiation tests
-    // =========================================================================
-
-    #[test]
-    fn test_nexus_help_title_differs_from_default() {
-        // Nexus mode should use " Nexus Help " title
-        let nexus_title = " Nexus Help ";
-        let default_title = " Help ";
-        assert_ne!(nexus_title, default_title);
-        assert!(nexus_title.contains("Nexus"));
-    }
-
-    #[test]
-    fn test_nexus_help_uses_magenta_header() {
-        // Nexus mode header should mention "Nexus Mode" with Magenta color
-        let expected_header = "Nexus Mode — Keyboard Shortcuts";
-        assert!(expected_header.contains("Nexus Mode"));
-    }
-
-    #[test]
-    fn test_default_help_uses_cyan_header() {
-        // Default mode header should be "NovaNet TUI — Keyboard Shortcuts"
+    fn test_help_uses_cyan_header() {
+        // Help header should be "NovaNet TUI — Keyboard Shortcuts"
         let expected_header = "NovaNet TUI — Keyboard Shortcuts";
         assert!(expected_header.contains("NovaNet TUI"));
     }

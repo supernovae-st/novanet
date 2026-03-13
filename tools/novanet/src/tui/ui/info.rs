@@ -135,7 +135,7 @@ fn is_standard_property(name: &str) -> bool {
 ///   runtime:nika     │  No    │  Yes   │  Yes     │ Orange-500
 ///   runtime:mcp      │  No    │  Yes   │  Yes     │ Purple-500
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum DataCategory {
+pub(crate) enum DataCategory {
     Schema,    // seed:schema - regenerable from YAML models
     Immutable, // seed:immutable - static reference data (geography, culture)
     Locale,    // seed:locale - locale knowledge atoms (expressions, patterns)
@@ -147,7 +147,7 @@ enum DataCategory {
 impl DataCategory {
     /// Parse category from provenance source value.
     /// v0.19.0: 6 sources with distinct lifecycle properties.
-    fn from_source(source: &str) -> Self {
+    pub(crate) fn from_source(source: &str) -> Self {
         match source {
             "seed:schema" => DataCategory::Schema,
             "seed:immutable" => DataCategory::Immutable,
@@ -169,7 +169,7 @@ impl DataCategory {
     }
 
     /// Human-readable category name (concise).
-    fn label(&self) -> &'static str {
+    pub(crate) fn label(&self) -> &'static str {
         match self {
             DataCategory::Schema => "Schema",
             DataCategory::Immutable => "Immutable",
@@ -181,7 +181,7 @@ impl DataCategory {
     }
 
     /// Short description for the category (shown after label).
-    fn description(&self) -> &'static str {
+    pub(crate) fn description(&self) -> &'static str {
         match self {
             DataCategory::Schema => "regenerable from YAML",
             DataCategory::Immutable => "static reference data",
@@ -194,7 +194,7 @@ impl DataCategory {
 
     /// Terminal icon for the category (Unicode).
     /// Consistent with visual-encoding.yaml dual-icon pattern.
-    fn icon(&self) -> &'static str {
+    pub(crate) fn icon(&self) -> &'static str {
         match self {
             DataCategory::Schema => "◆",    // filled diamond — structured definitions
             DataCategory::Immutable => "◇",  // outline diamond — fixed reference
@@ -206,7 +206,7 @@ impl DataCategory {
     }
 
     /// Color for the category badge.
-    fn color(&self) -> Color {
+    pub(crate) fn color(&self) -> Color {
         match self {
             DataCategory::Schema => Color::Rgb(100, 116, 139),  // Slate-500
             DataCategory::Immutable => Color::Rgb(34, 197, 94), // Green-500
@@ -218,7 +218,7 @@ impl DataCategory {
     }
 
     /// Whether this data survives reseed (seed sources are regenerable).
-    fn reseed_safe(&self) -> bool {
+    pub(crate) fn reseed_safe(&self) -> bool {
         matches!(
             self,
             DataCategory::Schema
@@ -229,7 +229,7 @@ impl DataCategory {
     }
 
     /// Whether this data needs backup (content + runtime data is unique).
-    fn needs_backup(&self) -> bool {
+    pub(crate) fn needs_backup(&self) -> bool {
         matches!(
             self,
             DataCategory::Content | DataCategory::Nika | DataCategory::Mcp
@@ -237,7 +237,7 @@ impl DataCategory {
     }
 
     /// Whether this data is editable by users.
-    fn is_editable(&self) -> bool {
+    pub(crate) fn is_editable(&self) -> bool {
         matches!(
             self,
             DataCategory::Content | DataCategory::Nika | DataCategory::Mcp
@@ -252,25 +252,25 @@ impl DataCategory {
 ///   seed:*       → { source, version, file? }
 ///   runtime:nika → { source, version, workflow_id?, task_id?, provider?, model?, generated_at? }
 ///   runtime:mcp  → { source, version, tool?, user? }
-struct ProvenanceMeta {
-    source: Option<String>,
-    version: Option<String>,
+pub(crate) struct ProvenanceMeta {
+    pub(crate) source: Option<String>,
+    pub(crate) version: Option<String>,
     // Seed fields
-    file: Option<String>,
+    pub(crate) file: Option<String>,
     // Nika fields
-    workflow_id: Option<String>,
-    task_id: Option<String>,
-    provider: Option<String>,
-    model: Option<String>,
-    generated_at: Option<String>,
+    pub(crate) workflow_id: Option<String>,
+    pub(crate) task_id: Option<String>,
+    pub(crate) provider: Option<String>,
+    pub(crate) model: Option<String>,
+    pub(crate) generated_at: Option<String>,
     // MCP fields
-    tool: Option<String>,
-    user: Option<String>,
+    pub(crate) tool: Option<String>,
+    pub(crate) user: Option<String>,
 }
 
 impl ProvenanceMeta {
     /// Parse from provenance JSON value.
-    fn from_json(value: &JsonValue) -> Self {
+    pub(crate) fn from_json(value: &JsonValue) -> Self {
         let obj = value.as_object();
         let get_str = |key: &str| -> Option<String> {
             obj.and_then(|o| o.get(key))

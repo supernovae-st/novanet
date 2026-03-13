@@ -1,8 +1,7 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
-//! v11.7: Two navigation modes:
-//! - [1] Graph: Unified tree view (Realm > Layer > Class)
-//! - [2] Nexus: Hub for Quiz, Stats, Help
+//! Single navigation mode:
+//! - Graph: Unified tree view (Realm > Layer > Class)
 //!
 //! ## Crash Recovery
 //!
@@ -21,7 +20,6 @@ pub mod colors;
 mod data;
 mod handlers;
 pub mod icons;
-pub mod nexus;
 mod schema;
 pub mod theme;
 mod ui;

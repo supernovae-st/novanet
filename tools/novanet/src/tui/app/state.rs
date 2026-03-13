@@ -16,42 +16,32 @@ use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, Vali
 // NAVIGATION ENUMS
 // =============================================================================
 
-/// Navigation mode — 3 modes in v0.12.5.
-/// Order: 1:Graph 2:Views 3:Nexus
-/// Keys 1-3 switch modes GLOBALLY from anywhere.
+/// Navigation mode — Graph-only since v0.20.0.
+/// Nexus and Views modes removed in Phase 1 cleanup.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     /// Graph mode: Unified tree view (Realm > Layer > Class hierarchy with instances)
-    /// Replaces Meta/Data/Overlay modes from v11.6
     #[default]
     Graph,
-    /// Views mode: Schema views explorer (Query-First architecture)
-    Views,
-    /// Nexus mode: Hub for Quiz, Stats, Help
-    Nexus,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
             NavMode::Graph => "Graph",
-            NavMode::Views => "Views",
-            NavMode::Nexus => "Nexus",
         }
     }
 
-    /// Get array index for mode_cursors (0-2).
+    /// Get array index for mode_cursors.
     pub fn index(&self) -> usize {
         match self {
             NavMode::Graph => 0,
-            NavMode::Views => 1,
-            NavMode::Nexus => 2,
         }
     }
 
     /// Get all modes in order.
     pub fn all() -> &'static [NavMode] {
-        &[NavMode::Graph, NavMode::Views, NavMode::Nexus]
+        &[NavMode::Graph]
     }
 }
 
@@ -616,28 +606,19 @@ mod tests {
 
     #[test]
     fn test_navmode_labels() {
-        insta::assert_snapshot!(format!(
-            "Graph: {}\nViews: {}\nNexus: {}",
-            NavMode::Graph.label(),
-            NavMode::Views.label(),
-            NavMode::Nexus.label()
-        ));
+        assert_eq!(NavMode::Graph.label(), "Graph");
     }
 
     #[test]
     fn test_navmode_indices() {
         assert_eq!(NavMode::Graph.index(), 0);
-        assert_eq!(NavMode::Views.index(), 1);
-        assert_eq!(NavMode::Nexus.index(), 2);
     }
 
     #[test]
     fn test_navmode_all() {
         let all = NavMode::all();
-        assert_eq!(all.len(), 3);
+        assert_eq!(all.len(), 1);
         assert_eq!(all[0], NavMode::Graph);
-        assert_eq!(all[1], NavMode::Views);
-        assert_eq!(all[2], NavMode::Nexus);
     }
 
     // -------------------------------------------------------------------------

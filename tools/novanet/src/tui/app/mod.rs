@@ -28,11 +28,8 @@ use crossterm::event::{KeyCode, KeyEvent, MouseButton, MouseEvent, MouseEventKin
 use super::cache::RenderCache;
 use super::data::{
     ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
-    get_all_adrs, get_architecture_diagram,
 };
 use super::handlers::dispatch_mode_handler;
-use super::nexus::views::LoadedViews;
-use super::nexus::{NexusState, NexusTab};
 use super::theme::Theme;
 
 use ratatui::text::Span;
@@ -57,8 +54,8 @@ pub struct App {
     /// Currently selected info box for copy/scroll (Graph mode).
     pub selected_box: InfoBox,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Graph, Nexus, Views).
-    pub mode_cursors: [usize; 3],
+    /// Remember cursor position per mode.
+    pub mode_cursors: [usize; 1],
     pub tree_scroll: usize,
     pub tree_height: usize,
     pub tree: TaxonomyTree,
@@ -79,8 +76,6 @@ pub struct App {
     pub details: LoadedDetails,
     /// Schema overlay state for Data mode.
     pub schema_overlay: SchemaOverlayState,
-    /// Nexus mode state (gamified learning hub).
-    pub nexus: NexusState,
 
     // ==========================================================================
     // Navigation & History
@@ -107,10 +102,12 @@ pub struct App {
     pub arcs_scroll: usize,
     /// Arcs panel total line count.
     pub arcs_line_count: usize,
+    /// Identity panel scroll position.
+    pub identity_scroll: usize,
+    /// Identity panel total line count.
+    pub identity_line_count: usize,
     /// Cache of YAML file contents (path -> content).
     pub yaml_cache: FxHashMap<String, String>,
-    /// Loaded views from views.yaml (single source of truth for TUI + Studio).
-    pub loaded_views: LoadedViews,
     /// Animation tick counter (increments each frame, used for spinners).
     pub tick: u16,
     /// Panel rectangles for mouse hit-testing (updated each render).
@@ -155,9 +152,6 @@ pub struct App {
 
 impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
-        // Load views before root_path is moved
-        let loaded_views = LoadedViews::load(&root_path);
-
         let mut app = Self {
             // Core state
             theme: Theme::with_root(&root_path),
@@ -165,7 +159,7 @@ impl App {
             focus: Focus::Tree,
             selected_box: InfoBox::default(),
             tree_cursor: 0,
-            mode_cursors: [0; 3],
+            mode_cursors: [0; 1],
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -178,7 +172,6 @@ impl App {
             pending: PendingLoads::default(),
             details: LoadedDetails::default(),
             schema_overlay: SchemaOverlayState::default(),
-            nexus: NexusState::with_persistence(),
 
             // Navigation & history
             nav_history: Vec::with_capacity(100),
@@ -193,8 +186,9 @@ impl App {
             props_line_count: 0,
             arcs_scroll: 0,
             arcs_line_count: 0,
+            identity_scroll: 0,
+            identity_line_count: 0,
             yaml_cache: FxHashMap::default(),
-            loaded_views,
             tick: 0,
             panel_rects: PanelRects::default(),
 
@@ -826,7 +820,11 @@ impl App {
                             }
                         },
                         Panel::Identity => {
-                            // v0.18.3: Identity panel - no scroll (static content)
+                            if self.identity_scroll > 0 {
+                                self.identity_scroll =
+                                    self.identity_scroll.saturating_sub(MOUSE_SCROLL_LINES);
+                                return true;
+                            }
                         },
                         Panel::Content => {
                             if self.yaml.scroll > 0 {
@@ -866,7 +864,13 @@ impl App {
                             }
                         },
                         Panel::Identity => {
-                            // v0.18.3: Identity panel - no scroll (static content)
+                            let max_scroll =
+                                self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            if self.identity_scroll < max_scroll {
+                                self.identity_scroll =
+                                    (self.identity_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
+                                return true;
+                            }
                         },
                         Panel::Content => {
                             let max_scroll =
@@ -969,7 +973,7 @@ impl App {
             }
         }
 
-        // Mode-specific key handling (Graph, Nexus)
+        // Mode-specific key handling (Graph only)
         // Returns early if handled, falls through to global handlers otherwise
         if let Some(result) = dispatch_mode_handler(self, key) {
             return result;
@@ -1005,33 +1009,9 @@ impl App {
                 true
             },
 
-            // Mode switching: 1-3 global (1=Graph, 2=Views, 3=Nexus)
+            // Mode switching: only Graph mode available
             KeyCode::Char('1') => {
-                // Switch to Graph mode (unified tree view)
-                if self.mode != NavMode::Graph {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Graph;
-                    self.restore_mode_cursor(NavMode::Graph);
-                    self.load_yaml_for_current();
-                }
-                true
-            },
-            KeyCode::Char('2') => {
-                // Switch to Views mode (Schema views explorer)
-                if self.mode != NavMode::Views {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Views;
-                    self.restore_mode_cursor(NavMode::Views);
-                }
-                true
-            },
-            KeyCode::Char('3') => {
-                // Switch to Nexus mode (hub for Quiz, Stats, Help)
-                if self.mode != NavMode::Nexus {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Nexus;
-                    self.restore_mode_cursor(NavMode::Nexus);
-                }
+                // Already in Graph mode (only mode available)
                 true
             },
 
@@ -1199,7 +1179,7 @@ impl App {
                         // Note: Instance loading removed - use Space/Enter to expand
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        self.identity_scroll = 0;
                     },
                     Focus::Content => {
                         self.yaml.scroll = 0;
@@ -1223,7 +1203,8 @@ impl App {
                         // Note: Instance loading removed - use Space/Enter to expand
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        let max_scroll = self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.identity_scroll = max_scroll;
                     },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -1252,7 +1233,9 @@ impl App {
                         }
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        if self.identity_scroll > 0 {
+                            self.identity_scroll -= 1;
+                        }
                     },
                     Focus::Content => {
                         if self.yaml.scroll > 0 {
@@ -1289,7 +1272,11 @@ impl App {
                         }
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        let max_scroll =
+                            self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        if self.identity_scroll < max_scroll {
+                            self.identity_scroll += 1;
+                        }
                     },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -1333,7 +1320,9 @@ impl App {
                         self.load_yaml_for_current();
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        let max_scroll = self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.identity_scroll =
+                            (self.identity_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     },
                     Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
@@ -1359,7 +1348,8 @@ impl App {
                         self.load_yaml_for_current();
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no scroll (static content)
+                        self.identity_scroll =
+                            self.identity_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     },
                     Focus::Content => {
                         self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
@@ -1374,23 +1364,8 @@ impl App {
                 true
             },
 
-            // 'r' key: Jump to ADR if architecture diagram exists, else refresh
+            // 'r' key: Refresh
             KeyCode::Char('r') => {
-                // Check if current item has an architecture diagram
-                if let Some(adr_id) = self.get_current_adr_id() {
-                    // Find the ADR index
-                    let adrs = get_all_adrs();
-                    if let Some(idx) = adrs.iter().position(|adr| adr.id == adr_id) {
-                        // Switch to Nexus mode, Arch tab
-                        self.save_mode_cursor();
-                        self.mode = NavMode::Nexus;
-                        self.nexus.tab = NexusTab::Arch;
-                        self.nexus.arch_adr_index = idx;
-                        self.set_status(&format!("Jumped to {}", adr_id));
-                        return true;
-                    }
-                }
-                // No diagram or ADR not found — fall back to refresh
                 self.pending_refresh = true;
                 self.set_status("Refreshing...");
                 true
@@ -1626,14 +1601,7 @@ impl App {
         self.mode_cursors[self.mode.index()] = self.tree_cursor;
     }
 
-    /// Restore cursor from mode_cursors for the new mode.
-    fn restore_mode_cursor(&mut self, new_mode: NavMode) {
-        // v0.16.5: Clamp restored cursor to valid bounds for the new mode
-        let restored = self.mode_cursors[new_mode.index()];
-        let max_cursor = self.current_item_count().saturating_sub(1);
-        self.tree_cursor = restored.min(max_cursor);
-        self.ensure_cursor_visible();
-    }
+    // restore_mode_cursor removed — single mode (Graph only)
 
     /// Set a temporary status message (auto-clears after ~3 seconds).
     pub fn set_status(&mut self, msg: &str) {
@@ -1916,22 +1884,6 @@ impl App {
             // v0.17.3 (ADR-036): Meta mode - trait filtering removed
             self.tree.item_count()
         }
-    }
-
-    /// Get the ADR ID for the current item's architecture diagram (if any).
-    /// Returns None if the current item doesn't have an associated ADR diagram.
-    /// Used by 'r' keybinding to jump from Graph mode to Nexus Arch tab.
-    pub fn get_current_adr_id(&self) -> Option<String> {
-        // Get class name from current tree item
-        let class_key = match self.current_item() {
-            Some(TreeItem::Class(_, _, info)) => Some(info.key.as_str()),
-            Some(TreeItem::Instance(_, _, class_info, _)) => Some(class_info.key.as_str()),
-            _ => None,
-        }?;
-
-        // Get architecture diagram for this class
-        let diagram = get_architecture_diagram(class_key)?;
-        Some(diagram.adr_id.clone())
     }
 
     /// Enter filtered Data mode for a specific Class.

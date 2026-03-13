@@ -1,6 +1,6 @@
 //! UI rendering for TUI v2.
 //!
-//! v11.7: Two modes (Graph, Nexus). Renders tree, info, yaml, graph panels.
+//! v0.20.0: Single mode (Graph). Renders tree, info, yaml, graph panels.
 //! v0.13.1: Architecture panel removed (panel simplification).
 
 mod graph;
@@ -93,8 +93,8 @@ const LAYOUT_CENTER_PCT: u16 = 40;
 const LAYOUT_RIGHT_PCT: u16 = 35;
 
 /// Center column split: Identity+Provenance (top) | Data Viewer (bottom)
-const LAYOUT_IDENTITY_PCT: u16 = 30;
-const LAYOUT_DATA_VIEWER_PCT: u16 = 70;
+const LAYOUT_IDENTITY_PCT: u16 = 35;
+const LAYOUT_DATA_VIEWER_PCT: u16 = 65;
 
 /// Right column split: Properties+Stats (top) | Arcs (bottom)
 const LAYOUT_PROPS_STATS_PCT: u16 = 50;
@@ -521,8 +521,7 @@ pub fn render(f: &mut Frame, app: &mut App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Graph, [2]Nexus, [3]Views
-/// v0.12.5: 3 modes with keys 1-3
+/// Shows: [1]Graph
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = NavMode::all()
         .iter()
@@ -595,19 +594,7 @@ impl LayoutMode {
 
 /// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
-    // Nexus mode has its own rendering (v11.7: hub for Quiz, Stats, Help)
-    if app.mode == NavMode::Nexus {
-        super::nexus::render_nexus(f, area, app);
-        return;
-    }
-
-    // Views mode has its own rendering (v0.12.5: Schema views explorer)
-    if app.mode == NavMode::Views {
-        super::nexus::views::render_views_tab(f, app, area);
-        return;
-    }
-
-    // Graph mode: standard 3-panel layout (v11.7: unified tree)
+    // Graph mode: standard panel layout (unified tree)
     let layout_mode = LayoutMode::detect(area.width);
 
     match layout_mode {
@@ -815,11 +802,8 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
-            // v11.7: 3 modes (Graph, Nexus, Views)
             let mode_badge = match mode {
                 crate::tui::app::NavMode::Graph => "[G]",
-                crate::tui::app::NavMode::Nexus => "[N]",
-                crate::tui::app::NavMode::Views => "[V]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };
