@@ -1,10 +1,12 @@
 //! Shared UX helpers for polished CLI output.
 //!
 //! Provides consistent visual patterns across all CLI commands:
-//! - **Banners**: Header boxes with title, description, and metadata
+//! - **Banners**: Header boxes with colored title, description, and metadata
 //! - **Steps**: Narrated step-by-step progress with status indicators
-//! - **Summaries**: Result boxes with key metrics
-//! - **Next steps**: Actionable hints for the next command
+//! - **Summaries**: Result boxes with key metrics and status-colored borders
+//! - **Next steps**: Actionable hints with distinct call-to-action styling
+//! - **Flow diagrams**: Compact horizontal diagram of the 2-command pipeline
+//! - **Class icons**: Unicode glyphs per node type (◆ Entity, ▣ Page, etc.)
 
 use colored::Colorize;
 
@@ -12,49 +14,65 @@ use colored::Colorize;
 // BANNER
 // =============================================================================
 
-/// Print a command header banner with title, description, and key-value metadata.
+/// Print a command header banner with colored title, description, and metadata.
 ///
 /// ```text
 /// ┌─────────────────────────────────────────────────────────────────────┐
-/// │  NOVANET DATA EXPORT                                                │
-/// │  Export Neo4j data nodes to YAML for version control                │
+/// │  NOVANET DATA BACKUP                                                │
+/// │  Save database content to version-controlled files                  │
 /// │                                                                     │
-/// │  Source: bolt://localhost:7687 (neo4j)                               │
-/// │  Output: ~/.novanet/export/                                         │
+/// │  From     Database (Neo4j in Docker)                                │
+/// │  To       YAML files (private-data/data/)                           │
 /// └─────────────────────────────────────────────────────────────────────┘
 /// ```
 pub fn print_banner(title: &str, description: &str, metadata: &[(&str, String)]) {
-    // Calculate width from content
-    let content_lines: Vec<String> = {
-        let mut lines = vec![title.to_string(), description.to_string()];
-        if !metadata.is_empty() {
-            lines.push(String::new()); // blank separator
-            for (label, value) in metadata {
-                lines.push(format!("{label}: {value}"));
-            }
-        }
-        lines
-    };
+    // Build content lines with colored parts
+    let title_colored = title.cyan().bold().to_string();
+    let desc_colored = description.dimmed().to_string();
 
-    let max_content = content_lines
+    // Find the longest label for alignment
+    let label_width = metadata
         .iter()
-        .map(|l| visible_len(l))
+        .map(|(l, _)| l.len())
         .max()
-        .unwrap_or(40);
-    let width = (max_content + 6).max(60); // padding + minimum
+        .unwrap_or(0);
+
+    let metadata_lines: Vec<String> = metadata
+        .iter()
+        .map(|(label, value)| {
+            format!(
+                "{}  {}",
+                format!("{label:<label_width$}").dimmed(),
+                value
+            )
+        })
+        .collect();
+
+    // Calculate width from visible content
+    let mut all_visible: Vec<usize> = vec![
+        visible_len(title),
+        visible_len(description),
+    ];
+    for (label, value) in metadata {
+        all_visible.push(label.len() + 2 + visible_len(value));
+    }
+
+    let max_content = all_visible.into_iter().max().unwrap_or(40);
+    let width = (max_content + 6).max(60);
 
     eprintln!();
-    eprintln!("  {}", border_top(width));
+    eprintln!("  {}", border_top(width).dimmed());
+    eprintln!("  {}", border_line_raw(&title_colored, visible_len(title), width));
+    eprintln!("  {}", border_line_raw(&desc_colored, visible_len(description), width));
 
-    for line in &content_lines {
-        if line.is_empty() {
-            eprintln!("  {}", border_empty(width));
-        } else {
-            eprintln!("  {}", border_line(line, width));
+    if !metadata.is_empty() {
+        eprintln!("  {}", border_empty(width));
+        for line in &metadata_lines {
+            eprintln!("  {}", border_line_raw(line, visible_len(line), width));
         }
     }
 
-    eprintln!("  {}", border_bottom(width));
+    eprintln!("  {}", border_bottom(width).dimmed());
     eprintln!();
 }
 
@@ -62,23 +80,24 @@ pub fn print_banner(title: &str, description: &str, metadata: &[(&str, String)])
 // STEP INDICATORS
 // =============================================================================
 
-/// Print a completed step with a check mark.
+/// Print a completed step with a green check mark.
 pub fn step_ok(label: &str, detail: &str) {
     eprintln!(
         "  {} {}  {}",
-        "OK".green().bold(),
+        "✓".green().bold(),
         label.bold(),
         detail.dimmed()
     );
 }
 
-/// Print a completed step with count alignment.
+/// Print a completed step with a count (right-aligned).
 pub fn step_ok_count(label: &str, count: usize, suffix: &str) {
+    let count_str = fmt_count(count);
     eprintln!(
-        "  {} {:>16}  {:>6} {}",
-        "OK".green().bold(),
+        "  {} {:<20}  {} {}",
+        "✓".green().bold(),
         label.bold(),
-        count.to_string().cyan(),
+        count_str.cyan().bold(),
         suffix.dimmed()
     );
 }
@@ -87,7 +106,7 @@ pub fn step_ok_count(label: &str, count: usize, suffix: &str) {
 pub fn step_skip(label: &str, reason: &str) {
     eprintln!(
         "  {} {}  {}",
-        "--".dimmed(),
+        "·".dimmed(),
         label.dimmed(),
         reason.dimmed()
     );
@@ -97,8 +116,8 @@ pub fn step_skip(label: &str, reason: &str) {
 pub fn step_warn(label: &str, detail: &str) {
     eprintln!(
         "  {} {}  {}",
-        "!!".yellow().bold(),
-        label.bold(),
+        "!".yellow().bold(),
+        label.yellow().bold(),
         detail.yellow()
     );
 }
@@ -107,16 +126,28 @@ pub fn step_warn(label: &str, detail: &str) {
 // SUMMARY BOX
 // =============================================================================
 
-/// Print a summary box with a status icon and key metrics.
-///
-/// ```text
-/// ┌─────────────────────────────────────────────────────────────────────┐
-/// │  Export complete -- 1,816 nodes -> 6 files                          │
-/// │  Output: ~/.novanet/export/                                         │
-/// │  Checkpoint saved (use --incremental next time for delta)           │
-/// └─────────────────────────────────────────────────────────────────────┘
-/// ```
+/// Print a success summary box (green border).
+pub fn print_summary_ok(lines: &[String]) {
+    print_summary_colored(lines, SummaryStyle::Ok);
+}
+
+/// Print a warning summary box (yellow border).
+pub fn print_summary_warn(lines: &[String]) {
+    print_summary_colored(lines, SummaryStyle::Warn);
+}
+
+/// Print a summary box with default style (for backward compat).
 pub fn print_summary_box(lines: &[String]) {
+    print_summary_colored(lines, SummaryStyle::Default);
+}
+
+enum SummaryStyle {
+    Ok,
+    Warn,
+    Default,
+}
+
+fn print_summary_colored(lines: &[String], style: SummaryStyle) {
     let max_content = lines
         .iter()
         .map(|l| visible_len(l))
@@ -124,26 +155,56 @@ pub fn print_summary_box(lines: &[String]) {
         .unwrap_or(40);
     let width = (max_content + 6).max(60);
 
+    let (top, bottom, pipe) = match style {
+        SummaryStyle::Ok => (
+            format!("  {}{}{}", "┌".green(), "─".repeat(width).green(), "┐".green()),
+            format!("  {}{}{}", "└".green(), "─".repeat(width).green(), "┘".green()),
+            "│".green().to_string(),
+        ),
+        SummaryStyle::Warn => (
+            format!("  {}{}{}", "┌".yellow(), "─".repeat(width).yellow(), "┐".yellow()),
+            format!("  {}{}{}", "└".yellow(), "─".repeat(width).yellow(), "┘".yellow()),
+            "│".yellow().to_string(),
+        ),
+        SummaryStyle::Default => (
+            format!("  {}", border_top(width).dimmed()),
+            format!("  {}", border_bottom(width).dimmed()),
+            "│".dimmed().to_string(),
+        ),
+    };
+
     eprintln!();
-    eprintln!("  {}", border_top(width));
+    eprintln!("{top}");
     for line in lines {
-        eprintln!("  {}", border_line(line, width));
+        let content_len = visible_len(line);
+        let padding = if width > content_len + 4 {
+            width - content_len - 4
+        } else {
+            1
+        };
+        eprintln!(
+            "  {}  {}{}  {}",
+            pipe,
+            line,
+            " ".repeat(padding),
+            pipe
+        );
     }
-    eprintln!("  {}", border_bottom(width));
+    eprintln!("{bottom}");
 }
 
 // =============================================================================
 // NEXT STEPS
 // =============================================================================
 
-/// Print a "next step" hint pointing to the next command in the workflow.
+/// Print a "next step" hint with a prominent arrow and colored command.
 pub fn print_next_step(hint: &str, command: &str) {
     eprintln!();
     eprintln!(
         "  {} {} {}",
-        "Next:".bold(),
-        hint,
-        command.cyan()
+        "→".cyan().bold(),
+        hint.dimmed(),
+        command.cyan().bold()
     );
     eprintln!();
 }
@@ -152,86 +213,209 @@ pub fn print_next_step(hint: &str, command: &str) {
 // FLOW DIAGRAM
 // =============================================================================
 
-/// Print the data management workflow diagram.
-/// Shows the 3-step pipeline with the current step highlighted.
+/// Print a compact horizontal flow diagram for the 2-command data pipeline.
 ///
 /// ```text
-///   HOW IT WORKS
-///   Your content lives in a Neo4j database (running in Docker).
-///   These commands let you save, check, and version-control that content.
+///   DATA MANAGEMENT
 ///
-///   ┌──────────┐       ┌──────────┐       ┌──────────┐
-///   │ Database │──1──> │  Local   │──3──> │   Git    │
-///   │ (Neo4j)  │       │  backup  │       │  repo    │
-///   └──────────┘       └──────────┘       └──────────┘
-///        ^                   │
-///        └────── 2. check ───┘
+///   ┌──────────┐  ──backup──>  ┌──────────────┐
+///   │ Database │  <──status──  │  YAML Backup  │
+///   └──────────┘               └──────────────┘
 ///
-///   1. export   Save database content to local YAML files
-///   2. diff     Check what changed since last export
-///   3. promote  Copy local files to git for version control
+///   ▸ backup   Save database content to YAML files
+///     status   Check what changed since last backup
 /// ```
 pub fn print_data_flow(active_step: Option<u8>) {
     eprintln!();
-    eprintln!("  {}", "HOW IT WORKS".bold());
+    eprintln!("  {}", "DATA MANAGEMENT".bold());
     eprintln!(
         "  {}",
-        "Your content lives in a Neo4j database (running in Docker).".dimmed()
-    );
-    eprintln!(
-        "  {}",
-        "These commands save, check, and version-control that content.".dimmed()
+        "Two commands keep your YAML backup in sync with Neo4j.".dimmed()
     );
     eprintln!();
 
-    // Simple 3-box diagram
-    eprintln!(
-        "  {}       {}       {}",
-        "Database".bold(),
-        "Local backup".bold(),
-        "Git repo".bold(),
-    );
-    eprintln!(
-        "  {}  ──1──>  {}  ──3──>  {}",
-        "(Neo4j)  ".dimmed(),
-        "(~/.novanet/) ".dimmed(),
-        "(private-data/)".dimmed(),
-    );
-    eprintln!(
-        "  {}  <──2──  {}",
-        "         ".dimmed(),
-        "              ".dimmed(),
-    );
+    // Compact horizontal diagram
+    let db_box_t = format!("{}{}{}",   "┌".cyan().dimmed(), "────────────".cyan().dimmed(), "┐".cyan().dimmed());
+    let db_box_m = format!("{} {} {}",  "│".cyan().dimmed(), " Database ".bold(), "│".cyan().dimmed());
+    let db_box_b = format!("{}{}{}",   "└".cyan().dimmed(), "────────────".cyan().dimmed(), "┘".cyan().dimmed());
+
+    let yaml_box_t = format!("{}{}{}",  "┌".green().dimmed(), "──────────────".green().dimmed(), "┐".green().dimmed());
+    let yaml_box_m = format!("{} {} {}","│".green().dimmed(), " YAML Backup ".bold(), "│".green().dimmed());
+    let yaml_box_b = format!("{}{}{}",  "└".green().dimmed(), "──────────────".green().dimmed(), "┘".green().dimmed());
+
+    let arrow_fwd = format!(" {} ", "──backup──▸".cyan());
+    let arrow_rev = format!(" {} ", "◂──status──".yellow());
+
+    eprintln!("   {}              {}", db_box_t, yaml_box_t);
+    eprintln!("   {}{}{}",           db_box_m, arrow_fwd, yaml_box_m);
+    eprintln!("   {}{}{}",           db_box_b, arrow_rev, yaml_box_b);
     eprintln!();
 
-    // Legend with active step highlighted
-    let labels: [(u8, &str, &str); 3] = [
-        (1, "1. export ", "Save database content to local files"),
-        (2, "2. diff   ", "Check what changed since last export"),
-        (3, "3. promote", "Copy local files to git for version control"),
+    // Legend
+    let labels = [
+        (1, "backup", "Save database content to YAML files"),
+        (2, "status", "Check what changed since last backup"),
     ];
 
     for (step, label, desc) in &labels {
         if active_step == Some(*step) {
-            eprintln!("  {} {}  {}", ">>".cyan().bold(), label.cyan().bold(), desc);
+            eprintln!(
+                "   {} {:<9} {}",
+                "▸".cyan().bold(),
+                label.cyan().bold(),
+                desc
+            );
         } else {
-            eprintln!("     {}  {}", label.dimmed(), desc.dimmed());
+            eprintln!(
+                "     {:<9} {}",
+                label.dimmed(),
+                desc.dimmed()
+            );
         }
     }
     eprintln!();
 }
 
-/// Print a simpler, cleaner flow diagram for command banners.
-/// Shows source → destination with human labels.
+/// Print a simpler flow arrow for command banners.
 pub fn print_flow_arrow(from_label: &str, from_detail: &str, to_label: &str, to_detail: &str) {
     eprintln!(
-        "  {} {}  --->  {} {}",
+        "  {} {}  {}  {} {}",
         from_label.bold(),
         format!("({from_detail})").dimmed(),
+        "───▸".cyan().bold(),
         to_label.bold(),
         format!("({to_detail})").dimmed()
     );
     eprintln!();
+}
+
+// =============================================================================
+// CLASS ICONS
+// =============================================================================
+
+/// Return a Unicode icon for a node class name.
+#[must_use]
+pub fn class_icon(class: &str) -> &'static str {
+    match class {
+        "Entity"       => "◆",
+        "EntityNative" => "◇",
+        "Page"         => "▣",
+        "PageNative"   => "▢",
+        "Block"        => "▪",
+        "BlockNative"  => "▫",
+        "Project"      => "★",
+        "Brand"        => "◎",
+        _              => "●",
+    }
+}
+
+/// Return a class label with its icon (plain, no ANSI).
+#[must_use]
+pub fn class_label(class: &str) -> String {
+    let icon = class_icon(class);
+    format!("{icon} {class}")
+}
+
+// =============================================================================
+// STATUS INDICATORS
+// =============================================================================
+
+/// Print a status line for a class with colored indicator.
+///
+/// - Clean: green checkmark + dimmed detail
+/// - Drift: yellow triangle + detail passed through as-is (caller controls color)
+pub fn step_class_status(class: &str, detail: &str, is_clean: bool) {
+    let icon = class_icon(class);
+    if is_clean {
+        eprintln!(
+            "  {} {} {:<16} {}",
+            "✓".green().bold(),
+            icon.green(),
+            class.green(),
+            detail.dimmed()
+        );
+    } else {
+        // detail is pre-colored by fmt_diff_counts(), don't re-wrap
+        eprintln!(
+            "  {} {} {:<16} {}",
+            "△".yellow().bold(),
+            icon.yellow(),
+            class.yellow().bold(),
+            detail
+        );
+    }
+}
+
+/// Print a colored summary bar showing sync vs drift percentage.
+///
+/// ```text
+///   ████████████████░░░░  80% in sync  (160/200 nodes)
+/// ```
+pub fn print_sync_bar(in_sync: usize, total: usize) {
+    if total == 0 {
+        return;
+    }
+
+    let pct = (in_sync as f64 / total as f64 * 100.0) as usize;
+    let bar_width = 24;
+    let filled = (in_sync * bar_width) / total.max(1);
+    let empty = bar_width - filled;
+
+    let bar = format!(
+        "{}{}",
+        "█".repeat(filled),
+        "░".repeat(empty),
+    );
+
+    let bar_colored = if pct == 100 {
+        bar.green().bold()
+    } else if pct >= 90 {
+        bar.green()
+    } else if pct >= 50 {
+        bar.yellow()
+    } else {
+        bar.red()
+    };
+
+    let pct_str = if pct == 100 {
+        format!("{}% in sync", pct).green().bold().to_string()
+    } else {
+        format!("{}% in sync", pct).to_string()
+    };
+
+    eprintln!(
+        "  {}  {}  ({}/{})",
+        bar_colored,
+        pct_str,
+        fmt_count(in_sync),
+        fmt_count(total),
+    );
+}
+
+/// Format colored diff counts: +N / ~N / -N in green/yellow/red.
+#[must_use]
+pub fn fmt_diff_counts(added: usize, modified: usize, removed: usize) -> String {
+    let mut parts = Vec::new();
+    if added > 0 {
+        parts.push(format!("+{added}").green().bold().to_string());
+    }
+    if modified > 0 {
+        parts.push(format!("~{modified}").yellow().bold().to_string());
+    }
+    if removed > 0 {
+        parts.push(format!("-{removed}").red().bold().to_string());
+    }
+    if parts.is_empty() {
+        "in sync".green().to_string()
+    } else {
+        parts.join(" ")
+    }
+}
+
+/// Print a section header with a colored underline.
+pub fn print_section(title: &str) {
+    eprintln!();
+    eprintln!("  {} {}", "│".cyan().dimmed(), title.bold());
 }
 
 // =============================================================================
@@ -241,8 +425,9 @@ pub fn print_flow_arrow(from_label: &str, from_detail: &str, to_label: &str, to_
 /// Print a dry-run notice under the banner.
 pub fn print_dry_run_notice() {
     eprintln!(
-        "  {}",
-        "(dry run -- no files will be written)".dimmed()
+        "  {} {}",
+        "▸".yellow().bold(),
+        "DRY RUN — no files will be written".yellow().bold()
     );
     eprintln!();
 }
@@ -258,14 +443,17 @@ pub fn fmt_count(n: usize) -> String {
         return n.to_string();
     }
     let s = n.to_string();
-    let mut result = String::with_capacity(s.len() + s.len() / 3);
-    for (i, c) in s.chars().rev().enumerate() {
-        if i > 0 && i % 3 == 0 {
+    let bytes = s.as_bytes();
+    let len = bytes.len();
+    let commas = (len - 1) / 3;
+    let mut result = String::with_capacity(len + commas);
+    for (i, &b) in bytes.iter().enumerate() {
+        if i > 0 && (len - i) % 3 == 0 {
             result.push(',');
         }
-        result.push(c);
+        result.push(b as char);
     }
-    result.chars().rev().collect()
+    result
 }
 
 /// Format a path, replacing home dir with ~ for readability.
@@ -293,27 +481,33 @@ fn border_bottom(width: usize) -> String {
     format!("\u{2514}{}\u{2518}", "\u{2500}".repeat(width))
 }
 
-fn border_line(content: &str, width: usize) -> String {
-    let content_len = visible_len(content);
-    let padding = if width > content_len + 4 {
-        width - content_len - 4
+/// Build a border line with explicit visible length (for pre-colored content).
+fn border_line_raw(content: &str, content_visible_len: usize, width: usize) -> String {
+    let padding = if width > content_visible_len + 4 {
+        width - content_visible_len - 4
     } else {
         1
     };
     format!(
-        "\u{2502}  {}{}  \u{2502}",
+        "{}  {}{}  {}",
+        "\u{2502}".dimmed(),
         content,
-        " ".repeat(padding)
+        " ".repeat(padding),
+        "\u{2502}".dimmed()
     )
 }
 
 fn border_empty(width: usize) -> String {
-    format!("\u{2502}{}  \u{2502}", " ".repeat(width - 2))
+    format!(
+        "{}{}  {}",
+        "\u{2502}".dimmed(),
+        " ".repeat(width - 2),
+        "\u{2502}".dimmed()
+    )
 }
 
 /// Get the visible length of a string (ignoring ANSI escape sequences).
 fn visible_len(s: &str) -> usize {
-    // Strip ANSI escape sequences for length calculation
     let mut len = 0;
     let mut in_escape = false;
     for c in s.chars() {
@@ -377,7 +571,6 @@ mod tests {
 
     #[test]
     fn visible_len_with_ansi() {
-        // Simulate colored text: \x1b[32mhello\x1b[0m
         assert_eq!(visible_len("\x1b[32mhello\x1b[0m"), 5);
     }
 
@@ -388,15 +581,7 @@ mod tests {
         assert!(top.ends_with('\u{2510}'));
     }
 
-    #[test]
-    fn border_line_pads_content() {
-        let line = border_line("test", 20);
-        assert!(line.starts_with('\u{2502}'));
-        assert!(line.ends_with('\u{2502}'));
-        assert!(line.contains("test"));
-    }
-
-    // Smoke tests: just verify they don't panic
+    // Smoke tests: verify they don't panic
     #[test]
     fn print_banner_smoke() {
         print_banner(
@@ -412,6 +597,16 @@ mod tests {
     }
 
     #[test]
+    fn print_summary_ok_smoke() {
+        print_summary_ok(&["All good".to_string()]);
+    }
+
+    #[test]
+    fn print_summary_warn_smoke() {
+        print_summary_warn(&["Drift detected".to_string()]);
+    }
+
+    #[test]
     fn step_ok_smoke() {
         step_ok("Entity", "42 nodes");
     }
@@ -419,5 +614,77 @@ mod tests {
     #[test]
     fn step_skip_smoke() {
         step_skip("Entity", "0 nodes");
+    }
+
+    #[test]
+    fn print_data_flow_smoke() {
+        print_data_flow(None);
+        print_data_flow(Some(1));
+        print_data_flow(Some(2));
+    }
+
+    #[test]
+    fn class_icon_known() {
+        assert_eq!(class_icon("Entity"), "◆");
+        assert_eq!(class_icon("EntityNative"), "◇");
+        assert_eq!(class_icon("Page"), "▣");
+        assert_eq!(class_icon("PageNative"), "▢");
+        assert_eq!(class_icon("Block"), "▪");
+        assert_eq!(class_icon("BlockNative"), "▫");
+        assert_eq!(class_icon("Project"), "★");
+    }
+
+    #[test]
+    fn class_icon_unknown_fallback() {
+        assert_eq!(class_icon("CustomThing"), "●");
+    }
+
+    #[test]
+    fn class_label_format() {
+        let label = class_label("Entity");
+        assert!(label.contains("◆"));
+        assert!(label.contains("Entity"));
+    }
+
+    #[test]
+    fn fmt_diff_counts_empty() {
+        let s = fmt_diff_counts(0, 0, 0);
+        assert!(s.contains("in sync"));
+    }
+
+    #[test]
+    fn fmt_diff_counts_with_values() {
+        let s = fmt_diff_counts(3, 1, 2);
+        // Should contain colored +3, ~1, -2 (ANSI codes present)
+        assert!(s.contains("+3") || s.contains("3"));
+    }
+
+    #[test]
+    fn step_class_status_smoke() {
+        step_class_status("Entity", "42 nodes", true);
+        step_class_status("Page", "+3 ~1 -2", false);
+    }
+
+    #[test]
+    fn print_sync_bar_smoke() {
+        print_sync_bar(18, 24);
+        print_sync_bar(24, 24);
+        print_sync_bar(2, 24);
+        print_sync_bar(0, 0);
+    }
+
+    #[test]
+    fn print_section_smoke() {
+        print_section("Test Section");
+    }
+
+    #[test]
+    fn print_next_step_smoke() {
+        print_next_step("run", "novanet data status");
+    }
+
+    #[test]
+    fn print_flow_arrow_smoke() {
+        print_flow_arrow("Database", "Neo4j", "Files", "YAML");
     }
 }
