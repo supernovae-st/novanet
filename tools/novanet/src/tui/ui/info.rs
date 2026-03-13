@@ -928,7 +928,7 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         .add_line(render_property_line("content", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("llm_context", false, PropType::String));
+        .add_line(render_property_line("llm_context", true, PropType::String));
     content
         .properties
         .add_line(render_property_line("provenance", true, PropType::String));
@@ -1060,7 +1060,7 @@ fn build_layer_content(
         .add_line(render_property_line("content", true, PropType::String));
     content
         .properties
-        .add_line(render_property_line("llm_context", false, PropType::String));
+        .add_line(render_property_line("llm_context", true, PropType::String));
     content
         .properties
         .add_line(render_property_line("provenance", true, PropType::String));
