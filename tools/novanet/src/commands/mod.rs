@@ -3,6 +3,9 @@
 pub mod arc;
 pub mod backup;
 pub mod blueprint;
+pub mod data_diff;
+pub mod data_export;
+pub mod data_promote;
 pub mod completions;
 pub mod db;
 pub mod diff;

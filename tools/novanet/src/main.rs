@@ -43,10 +43,10 @@ enum Commands {
         #[arg(long)]
         no_validate: bool,
     },
-    /// Mode 2: Data nodes only (WHERE NOT n:Meta)
+    /// Data management (show, export, promote)
     Data {
-        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
-        format: OutputFormat,
+        #[command(subcommand)]
+        action: DataAction,
     },
     /// Mode 3: Data + Meta overlay
     Overlay {
@@ -216,6 +216,21 @@ enum SeedAction {
         #[arg(long, name = "class")]
         class: Option<String>,
     },
+}
+
+#[derive(Subcommand)]
+enum DataAction {
+    /// Show data nodes (WHERE NOT n:Meta) — original `novanet data` behavior
+    Show {
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Export node data from Neo4j to YAML files
+    Export(novanet::commands::data_export::DataExportArgs),
+    /// Compare Neo4j state against exported YAML files
+    Diff(novanet::commands::data_diff::DataDiffArgs),
+    /// Promote exported YAML to version-controlled private-data
+    Promote(novanet::commands::data_promote::DataPromoteArgs),
 }
 
 #[derive(clap::Args)]
@@ -540,11 +555,27 @@ async fn main() -> color_eyre::Result<()> {
         }
 
         // ── Read commands (Neo4j) ────────────────────────────────
-        Commands::Data { format } => {
-            let db = connect_db(&uri, &user, password.as_ref()).await?;
-            eprintln!("novanet data --format={format:?}");
-            novanet::commands::read::run_data(&db, format).await?;
-        }
+        Commands::Data { action } => match action {
+            DataAction::Show { format } => {
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
+                eprintln!("novanet data show --format={format:?}");
+                novanet::commands::read::run_data(&db, format).await?;
+            }
+            DataAction::Export(args) => {
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
+                eprintln!("novanet data export");
+                novanet::commands::data_export::run_data_export(&db, args).await?;
+            }
+            DataAction::Diff(args) => {
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
+                eprintln!("novanet data diff");
+                novanet::commands::data_diff::run_data_diff(&db, args).await?;
+            }
+            DataAction::Promote(args) => {
+                eprintln!("novanet data promote");
+                novanet::commands::data_promote::run_data_promote(args).await?;
+            }
+        },
         Commands::Overlay { format } => {
             let db = connect_db(&uri, &user, password.as_ref()).await?;
             eprintln!("novanet overlay --format={format:?}");
