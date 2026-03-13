@@ -46,7 +46,8 @@
       "esbuild": ">=0.25.0",
       "tmp": ">=0.2.4",
       "@tootallnate/once": ">=3.0.1",
-      "dompurify": ">=3.3.2"
+      "dompurify": ">=3.3.2",
+      "flatted": ">=3.4.0"
     }
   }
 }
