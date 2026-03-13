@@ -845,18 +845,21 @@ async fn execute_knowledge(state: &State, params: ContextParams) -> Result<Conte
         }
         AtomType::All => {
             let per_type_limit = (limit / 6).max(5);
-            all_atoms.extend(fetch_atoms(state, &params, &TERM_CONFIG, per_type_limit).await?);
-            all_atoms
-                .extend(fetch_atoms(state, &params, &EXPRESSION_CONFIG, per_type_limit).await?);
-            all_atoms
-                .extend(fetch_atoms(state, &params, &PATTERN_CONFIG, per_type_limit).await?);
-            all_atoms
-                .extend(fetch_atoms(state, &params, &CULTURE_REF_CONFIG, per_type_limit).await?);
-            all_atoms
-                .extend(fetch_atoms(state, &params, &TABOO_CONFIG, per_type_limit).await?);
-            all_atoms.extend(
-                fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, per_type_limit).await?,
-            );
+            let (terms, expressions, patterns, culture_refs, taboos, audience_traits) =
+                tokio::try_join!(
+                    fetch_atoms(state, &params, &TERM_CONFIG, per_type_limit),
+                    fetch_atoms(state, &params, &EXPRESSION_CONFIG, per_type_limit),
+                    fetch_atoms(state, &params, &PATTERN_CONFIG, per_type_limit),
+                    fetch_atoms(state, &params, &CULTURE_REF_CONFIG, per_type_limit),
+                    fetch_atoms(state, &params, &TABOO_CONFIG, per_type_limit),
+                    fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, per_type_limit),
+                )?;
+            all_atoms.extend(terms);
+            all_atoms.extend(expressions);
+            all_atoms.extend(patterns);
+            all_atoms.extend(culture_refs);
+            all_atoms.extend(taboos);
+            all_atoms.extend(audience_traits);
         }
     }
 
