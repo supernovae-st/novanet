@@ -17,7 +17,7 @@
 //! - [Q] Quiz: Interactive taxonomy quiz
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //!
-//! v0.19.0: Traits removed (ADR-024 simplified). 57 nodes, 10 layers.
+//! v0.19.0: Traits removed (ADR-024 simplified). 60 nodes, 10 layers.
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arch;

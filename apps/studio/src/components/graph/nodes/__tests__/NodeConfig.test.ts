@@ -18,12 +18,12 @@ import {
 import type { NodeType } from '@novanet/core/types';
 import { NODE_TYPES } from '@novanet/core/types';
 
-// All 57 node types in v0.17.2 (from Core - Single Source of Truth)
+// All 60 node types in v0.19.0 (from Core - Single Source of Truth)
 const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 57 node types', () => {
+    it('should have predefined sizes for all 60 node types', () => {
       expect(Object.keys(NODE_SIZES)).toHaveLength(57);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
@@ -53,7 +53,7 @@ describe('NodeConfig', () => {
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 57 node types', () => {
+    it('should have predefined colors for all 60 node types', () => {
       expect(Object.keys(NODE_COLORS)).toHaveLength(57);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();

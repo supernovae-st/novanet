@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v0.17.0 (57 nodes, 10 layers, 2 realms)
+// Tests for REALM_HIERARCHY — v0.19.0 (60 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';

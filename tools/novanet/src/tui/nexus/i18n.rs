@@ -600,9 +600,9 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
     },
     QuizQuestionI18n {
         question: "How many node types are in NovaNet v0.13.0?",
-        options: &["45", "61", "75", "90"],
+        options: &["45", "60", "75", "90"],
         correct: 1,
-        explanation: "61 nodes: 40 in Shared realm + 21 in Org realm.",
+        explanation: "60 nodes: 36 in Shared realm + 24 in Org realm.",
     },
     QuizQuestionI18n {
         question: "What does the 'defined' trait mean?",

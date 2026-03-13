@@ -1,7 +1,7 @@
 // =============================================================================
 // NODE TYPE CONFIGURATION (v0.17.0)
 // =============================================================================
-// Visual configuration for all 57 NovaNet node types
+// Visual configuration for all 60 NovaNet node types
 // 10 layers (4 shared + 6 org), 2 realms
 // NodeType, Layer, CLASS_TAXONOMY imported from @novanet/core (Single Source of Truth)
 // v0.17.0: Market, Term, TermSet, SEOKeywordMetrics, AudiencePersona, ChannelSurface removed
@@ -11,12 +11,12 @@ import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (10 layers, 57 nodes)
+// NODE LAYERS (10 layers, 60 nodes)
 // Derived from CLASS_TAXONOMY — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (57 nodes across 10 layers)
+ * Node layers with their types (60 nodes across 10 layers)
  * Derived from CLASS_TAXONOMY in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(CLASS_TAXONOMY).reduce(
@@ -47,7 +47,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (57 nodes)
+ * All node type configurations (60 nodes)
  * Aligned with @novanet/core NODE_TYPES
  * v0.17.0: Market, Term, TermSet, SEOKeywordMetrics, AudiencePersona, ChannelSurface removed
  *          ProjectSEOScope, ProjectGEOScope added

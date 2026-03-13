@@ -11,7 +11,7 @@
  * - Border style → Trait
  * - Icon → Class
  *
- * Coverage: 57 node types across 10 layers (SHARED + ORG realms)
+ * Coverage: 60 node types across 10 layers (SHARED + ORG realms)
  * v0.18.0: Term/TermSet removed (YAGNI), LocaleMarket removed (external API data)
  */
 

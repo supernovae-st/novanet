@@ -34,7 +34,7 @@ novanet <command>    # Run specific command
 ## Schema Stats
 
 - **60 nodes** (36 shared + 24 org)
-- **149 arcs** (6 families)
+- **151 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 
 > v0.19.0: Traits removed from schema (ADR-024 deprecated). Provenance now tracked per-instance.

@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v0.17.3 — 57 nodes (36 shared + 21 org), YAGNI cleanup complete
+// v0.19.0 — 60 nodes (36 shared + 24 org), traits deprecated
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,8 +18,8 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (40 nodes) — 4 layers: config, locale, geography, knowledge
-  // v0.12.4: 61 total nodes (40 shared + 21 org)
+  // SHARED REALM (36 nodes) — 4 layers: config, locale, geography, knowledge
+  // v0.19.0: 60 total nodes (36 shared + 24 org)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
   EntityCategory: 'Entity Category',
@@ -130,7 +130,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 57 node types and 140 arcs.
+ * Generate flat schema graph with all 60 node types and 151 arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -139,7 +139,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "57 nodes, 140 arcs"
+ * // Output: "60 nodes, 151 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -147,7 +147,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 57 node types
+  // GENERATE NODES - All 60 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {

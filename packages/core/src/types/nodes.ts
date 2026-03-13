@@ -34,15 +34,15 @@
  */
 
 // =============================================================================
-// NODE TYPES (57 nodes across 2 realms, 10 layers)
+// NODE TYPES (60 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 /**
- * Complete list of all 57 NovaNet node types.
+ * Complete list of all 60 NovaNet node types.
  *
  * Organized by realm and layer:
  * - **SHARED** (36 nodes): config (3) + locale (5) + geography (7) + knowledge (21)
- * - **ORG** (21 nodes): config (1) + foundation (8) + structure (3) + semantic (2) + instruction (4) + output (3)
+ * - **ORG** (24 nodes): config (1) + foundation (8) + structure (3) + semantic (2) + instruction (4) + output (6)
  *
  * @example
  * ```typescript
@@ -195,7 +195,7 @@ export type Layer =
 export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
-// CLASS_TAXONOMY — unified classification for all 57 node types
+// CLASS_TAXONOMY — unified classification for all 60 node types
 // =============================================================================
 
 /**

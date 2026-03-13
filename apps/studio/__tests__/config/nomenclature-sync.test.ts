@@ -9,7 +9,7 @@
  * v0.17.2 Changes (YAGNI Cleanup):
  * - Removed: Term, TermSet, SEOKeywordMetrics (unused)
  * - Added: ProjectGEOScope, ProjectSEOScope (project-level scope config)
- * - Net: 57 nodes (36 shared + 21 org)
+ * - Net: 60 nodes (36 shared + 24 org)
  *
  * v0.12.4 Changes:
  * - Country added to shared/geography
@@ -48,7 +48,7 @@ describe('Nomenclature Sync (v0.17.2)', () => {
   });
 
   describe('ADR-023: Class/Instance Terminology', () => {
-    it('should have correct node count (57 total = 36 shared + 21 org)', () => {
+    it('should have correct node count (60 total = 36 shared + 24 org)', () => {
       expect(NODE_TYPES).toHaveLength(57);
     });
 
@@ -121,9 +121,9 @@ describe('Nomenclature Sync (v0.17.2)', () => {
       expect(sharedLayers).toHaveLength(4);
     });
 
-    it('should have 21 org nodes (v0.17.2)', () => {
-      // Org realm: config(1) + foundation(6) + structure(3) + semantic(4) + instruction(4) + output(3) = 21
-      // v0.17.2: Added ProjectGEOScope, ProjectSEOScope to foundation
+    it('should have 24 org nodes (v0.19.0)', () => {
+      // Org realm: config(1) + foundation(8) + structure(3) + semantic(2) + instruction(4) + output(6) = 24
+      // v0.19.0: Updated org node distribution
       const orgLayers = ['config', 'foundation', 'structure', 'semantic', 'instruction', 'output'];
       expect(orgLayers).toHaveLength(6);
     });
