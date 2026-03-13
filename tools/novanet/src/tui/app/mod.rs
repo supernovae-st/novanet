@@ -2207,6 +2207,7 @@ impl App {
             || self.pending.realm.is_some()
             || self.pending.layer.is_some()
             || self.pending.entity_categories
+            || self.pending.entity_natives
             || self.pending.category_instances.is_some()
     }
 
