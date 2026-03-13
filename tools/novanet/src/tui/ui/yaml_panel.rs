@@ -170,13 +170,6 @@ const COLOR_LAYER_SEMANTIC: Color = Color::Rgb(249, 115, 22); // #F97316 Orange
 const COLOR_LAYER_OUTPUT: Color = Color::Rgb(34, 197, 94); // #22C55E Green
 const COLOR_LAYER_KNOWLEDGE: Color = Color::Rgb(139, 92, 246); // #8B5CF6 Violet
 
-/// Trait colors (ADR-024 Data Origin)
-const COLOR_TRAIT_DEFINED: Color = Color::Rgb(59, 130, 246); // #3B82F6 Blue
-const COLOR_TRAIT_AUTHORED: Color = Color::Rgb(34, 197, 94); // #22C55E Green
-const COLOR_TRAIT_IMPORTED: Color = Color::Rgb(139, 92, 246); // #8B5CF6 Violet
-const COLOR_TRAIT_GENERATED: Color = Color::Rgb(181, 137, 0); // #B58900 Gold
-const COLOR_TRAIT_RETRIEVED: Color = Color::Rgb(108, 113, 196); // #6C71C4 Violet
-
 /// Arc family colors
 const COLOR_FAMILY_OWNERSHIP: Color = Color::Rgb(59, 130, 246); // Blue
 const COLOR_FAMILY_SEMANTIC: Color = Color::Rgb(249, 115, 22); // Orange
@@ -1040,31 +1033,6 @@ fn realm_color(key: &str) -> Color {
     }
 }
 
-/// Get trait color from name (ADR-024 Data Origin).
-fn trait_color(trait_name: &str) -> Color {
-    match trait_name {
-        "defined" => COLOR_TRAIT_DEFINED,
-        "authored" => COLOR_TRAIT_AUTHORED,
-        "imported" => COLOR_TRAIT_IMPORTED,
-        "generated" => COLOR_TRAIT_GENERATED,
-        "retrieved" => COLOR_TRAIT_RETRIEVED,
-        _ => Color::White,
-    }
-}
-
-/// Get trait icon from name.
-#[allow(dead_code)] // v0.13.1: May be used for PROPERTIES panel styling
-fn trait_icon(trait_name: &str) -> &'static str {
-    match trait_name {
-        "defined" => "■",
-        "authored" => "□",
-        "imported" => "◊",
-        "generated" => "✦",
-        "retrieved" => "⋆",
-        _ => "○",
-    }
-}
-
 /// Get arc family color from key.
 fn arc_family_color(family: &str) -> Color {
     match family {
@@ -1122,7 +1090,6 @@ fn semantic_value_color(key: &str, value: &str) -> Option<Color> {
     match key_trimmed {
         "realm" => Some(realm_color(value_trimmed)),
         "layer" => Some(layer_color(value_trimmed)),
-        "trait" => Some(trait_color(value_trimmed)),
         "family" => Some(arc_family_color(value_trimmed)),
         "scope" => Some(scope_color(value_trimmed)),
         "cardinality" => Some(cardinality_color(value_trimmed)),
@@ -1690,36 +1657,6 @@ mod tests {
     fn test_semantic_value_color_layer_output() {
         let color = semantic_value_color("layer", " output");
         assert_eq!(color, Some(COLOR_LAYER_OUTPUT));
-    }
-
-    #[test]
-    fn test_semantic_value_color_trait_defined() {
-        let color = semantic_value_color("trait", " defined");
-        assert_eq!(color, Some(COLOR_TRAIT_DEFINED));
-    }
-
-    #[test]
-    fn test_semantic_value_color_trait_authored() {
-        let color = semantic_value_color("trait", " authored");
-        assert_eq!(color, Some(COLOR_TRAIT_AUTHORED));
-    }
-
-    #[test]
-    fn test_semantic_value_color_trait_imported() {
-        let color = semantic_value_color("trait", " imported");
-        assert_eq!(color, Some(COLOR_TRAIT_IMPORTED));
-    }
-
-    #[test]
-    fn test_semantic_value_color_trait_generated() {
-        let color = semantic_value_color("trait", " generated");
-        assert_eq!(color, Some(COLOR_TRAIT_GENERATED));
-    }
-
-    #[test]
-    fn test_semantic_value_color_trait_retrieved() {
-        let color = semantic_value_color("trait", " retrieved");
-        assert_eq!(color, Some(COLOR_TRAIT_RETRIEVED));
     }
 
     #[test]
