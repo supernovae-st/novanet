@@ -1255,6 +1255,31 @@ ON MATCH SET
   l.text_direction = "ltr",
   l.updated_at = datetime();
 
+MERGE (l:Locale {key: "en-LK"})
+ON CREATE SET
+  l.node_class = 'Locale',
+  l.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+  l.display_name = "English (Sri Lanka)",
+  l.content = "English locale for Sri Lanka market",
+  l.language_code = "en",
+  l.country_code = "LK",
+  l.name_native = "English (Sri Lanka)",
+  l.is_primary = false,
+  l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "English (Sri Lanka)",
+  l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
 MERGE (l:Locale {key: "en-KY"})
 ON CREATE SET
   l.node_class = 'Locale',
@@ -1305,6 +1330,31 @@ ON MATCH SET
   l.text_direction = "ltr",
   l.updated_at = datetime();
 
+MERGE (l:Locale {key: "en-MM"})
+ON CREATE SET
+  l.node_class = 'Locale',
+  l.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+  l.display_name = "English (Myanmar)",
+  l.content = "English locale for Myanmar market",
+  l.language_code = "en",
+  l.country_code = "MM",
+  l.name_native = "English (Myanmar)",
+  l.is_primary = false,
+  l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "English (Myanmar)",
+  l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
 MERGE (l:Locale {key: "en-MY"})
 ON CREATE SET
   l.node_class = 'Locale',
@@ -1350,6 +1400,31 @@ ON CREATE SET
 ON MATCH SET
   l.display_name = "English (Nigeria)",
   l.region = "africa",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
+MERGE (l:Locale {key: "en-NP"})
+ON CREATE SET
+  l.node_class = 'Locale',
+  l.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+  l.display_name = "English (Nepal)",
+  l.content = "English locale for Nepal market",
+  l.language_code = "en",
+  l.country_code = "NP",
+  l.name_native = "English (Nepal)",
+  l.is_primary = false,
+  l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "English (Nepal)",
+  l.region = "asia",
   l.language_family = "germanic",
   l.script = "latin",
   l.text_direction = "ltr",
@@ -1425,6 +1500,31 @@ ON CREATE SET
 ON MATCH SET
   l.display_name = "English (Pakistan)",
   l.region = "asia",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.updated_at = datetime();
+
+MERGE (l:Locale {key: "en-RW"})
+ON CREATE SET
+  l.node_class = 'Locale',
+  l.provenance = '{"source": "seed:locale", "version": "v0.19.0"}',
+  l.display_name = "English (Rwanda)",
+  l.content = "English locale for Rwanda market",
+  l.language_code = "en",
+  l.country_code = "RW",
+  l.name_native = "English (Rwanda)",
+  l.is_primary = false,
+  l.region = "africa",
+  l.language_family = "germanic",
+  l.script = "latin",
+  l.text_direction = "ltr",
+  l.created_by = 'seed:immutable',
+  l.created_at = datetime(),
+  l.updated_at = datetime()
+ON MATCH SET
+  l.display_name = "English (Rwanda)",
+  l.region = "africa",
   l.language_family = "germanic",
   l.script = "latin",
   l.text_direction = "ltr",
