@@ -1,9 +1,9 @@
 /**
  * @fileoverview NovaNet Node Type Taxonomy
  * @module @novanet/core/types/nodes
- * @version 0.17.0
+ * @version 0.19.1
  *
- * Defines the complete taxonomy for all 60 NovaNet node types across 2 realms and 10 layers.
+ * Defines the complete taxonomy for all 59 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
  *
  * ## v0.13.0 *Native Pattern (ADR-029)
@@ -16,33 +16,32 @@
  *
  * ## Architecture Overview
  *
- * NovaNet uses a **faceted classification system** with 3 axes:
+ * NovaNet uses a **faceted classification system** with 2 axes:
  *
  * | Axis   | Question | Values |
  * |--------|----------|--------|
  * | Realm  | WHERE?   | `shared` (universal, READ-ONLY) or `org` (organization-specific) |
  * | Layer  | WHAT?    | 10 functional layers (4 shared + 6 org) |
- * | Trait  | HOW?     | Data origin behavior (defined, authored, imported, generated, retrieved) |
  *
  * ## Realm Distribution
  *
  * - **SHARED** (36 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
- * - **ORG** (24 nodes): Organization-specific content, structure, generation pipeline
+ * - **ORG** (23 nodes): Organization-specific content, structure, generation pipeline
  *
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-terminology.md | Terminology Reference}
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-decisions.md | Architecture Decisions}
  */
 
 // =============================================================================
-// NODE TYPES (60 nodes across 2 realms, 10 layers)
+// NODE TYPES (59 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 /**
- * Complete list of all 60 NovaNet node types.
+ * Complete list of all 59 NovaNet node types.
  *
  * Organized by realm and layer:
  * - **SHARED** (36 nodes): config (3) + locale (5) + geography (7) + knowledge (21)
- * - **ORG** (24 nodes): config (1) + foundation (8) + structure (3) + semantic (2) + instruction (4) + output (6)
+ * - **ORG** (23 nodes): config (1) + foundation (8) + structure (3) + semantic (2) + instruction (3) + output (6)
  *
  * @example
  * ```typescript
@@ -56,7 +55,7 @@
  *
  * // Filter by realm
  * const sharedTypes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'shared');
- * // → 40 shared realm node types
+ * // → 36 shared realm node types
  * ```
  *
  * @since 7.1.0
