@@ -4,11 +4,10 @@
 //! to AI agents. Implements RLM-on-KG (Recursive Language Model on Knowledge Graph)
 //! patterns for efficient context assembly.
 //!
-//! # Architecture
+//! # Architecture (v0.20.0 — The Great Cleanup)
 //!
-//! - 14 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect,
-//!   batch, cache_stats, cache_invalidate, write, check, audit
-//! - 4 Resources: entity://, kind://, locale://, view://
+//! - 8 Tools: query, describe, search, introspect, context, write, audit, batch
+//! - 4 Resources: entity://, class://, locale://, view://
 //! - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation,
 //!   entity_analysis, locale_briefing
 //!

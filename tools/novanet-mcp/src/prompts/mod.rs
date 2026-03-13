@@ -202,24 +202,23 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 
 ## Schema Overview
 
-**Realms (2)**: shared (39 nodes, READ-ONLY), org (21 nodes)
+**Realms (2)**: shared (36 nodes, READ-ONLY), org (24 nodes)
 **Layers (10)**: config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
-**Traits (5)**: defined, authored, imported, generated, retrieved
 
 **Key Node Types:**
 - Entity (org/semantic) - Core semantic entities
-- EntityNative (org/semantic) - Locale-specific content for entities (v0.13.0: was EntityContent)
+- EntityNative (org/semantic) - Locale-specific content for entities
 - Page (org/structure) - Website pages
 - Block (org/structure) - Content blocks within pages
 - Locale (shared/config) - BCP-47 locale definitions
-- Class (schema) - Node type definitions with :Schema label (v0.12.0: was Kind)
+- Class (schema) - Node type definitions with :Schema label
 
 **Key Relationships:**
-- HAS_NATIVE: Entity → EntityNative (ownership, v0.13.0: was HAS_CONTENT)
+- HAS_NATIVE: Entity → EntityNative (ownership)
 - HAS_BLOCK: Page → Block (ownership)
 - USES_ENTITY: Block → Entity (semantic)
 - FOR_LOCALE: EntityNative → Locale (localization)
-- OF_CLASS: Instance → Class (schema-bridge, v0.12.0: was OF_KIND)
+- OF_CLASS: Instance → Class (schema-bridge)
 
 ## Rules
 
@@ -227,12 +226,12 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 2. Always include LIMIT (default 100) to prevent unbounded results
 3. Use parameterized queries with $param syntax for user inputs
 4. Filter by realm/layer when appropriate for performance
-5. Use :Schema label for schema queries (v0.12.0: was :Meta)
+5. Use :Schema label for schema queries
 
 ## Examples
 
 ```cypher
--- Get entities with content for a locale (v0.13.0: HAS_NATIVE, EntityNative)
+-- Get entities with content for a locale
 MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN e.key, e.name, en.title, en.description
 LIMIT 50
@@ -242,7 +241,7 @@ MATCH (p:Page {key: $key})-[:HAS_BLOCK]->(b:Block)
 OPTIONAL MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 RETURN p.key, collect({block: b.key, type: bt.name}) AS blocks
 
--- Schema overview (v0.12.0: Class, was Kind)
+-- Schema overview
 MATCH (c:Class)
 WITH c.realm AS realm, c.layer AS layer, collect(c.name) AS classes
 RETURN realm, layer, classes ORDER BY realm, layer
@@ -507,7 +506,7 @@ fn render_entity_analysis(args: &serde_json::Map<String, serde_json::Value>) -> 
 
 In NovaNet:
 - **Entity** (defined): Core semantic concept, defined once
-- **EntityNative** (authored): Locale-specific content (title, description, etc.) — v0.13.0: was EntityContent
+- **EntityNative** (authored): Locale-specific content (title, description, etc.)
 - **EntityCategory**: Categorical grouping (product, service, concept, etc.)
 
 ## Analysis Queries
@@ -521,7 +520,7 @@ Use these to gather comprehensive entity data:
    RETURN e, c.category_key AS category
    ```
 
-2. **Locale adaptations** (v0.13.0: HAS_NATIVE, EntityNative):
+2. **Locale adaptations**:
    ```cypher
    MATCH (e:Entity {key: $key})-[:HAS_NATIVE]->(en:EntityNative)-[:FOR_LOCALE]->(l:Locale)
    RETURN l.key AS locale, en.title, en.description, en.keywords
