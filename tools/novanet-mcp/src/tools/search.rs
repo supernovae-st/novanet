@@ -811,12 +811,13 @@ fn build_realm_filter(
 }
 
 /// Build arc filter for APOC path expansion (walk mode)
+/// SECURITY: arc_kinds are validated through is_valid_label() to prevent Cypher injection.
 fn build_arc_filter(families: &Option<Vec<String>>, kinds: &Option<Vec<String>>) -> String {
     let mut filters = Vec::new();
 
     if let Some(kinds) = kinds {
         if !kinds.is_empty() {
-            filters.extend(kinds.iter().cloned());
+            filters.extend(kinds.iter().filter(|k| is_valid_label(k)).cloned());
         }
     }
 
@@ -988,6 +989,47 @@ mod tests {
         assert_eq!(
             build_arc_filter(&None, &Some(vec!["HAS_PAGE".to_string()])),
             "HAS_PAGE"
+        );
+    }
+
+    #[test]
+    fn test_arc_filter_rejects_injection() {
+        // Injection payload with pipe and destructive Cypher
+        assert_eq!(
+            build_arc_filter(&None, &Some(vec!["HAS_NATIVE|DETACH DELETE n".to_string()])),
+            ""
+        );
+        // Mixed valid and invalid: only the valid arc kind survives
+        assert_eq!(
+            build_arc_filter(
+                &None,
+                &Some(vec![
+                    "HAS_PAGE".to_string(),
+                    "HAS_NATIVE|DETACH DELETE n".to_string()
+                ])
+            ),
+            "HAS_PAGE"
+        );
+        // Injection via semicolon
+        assert_eq!(
+            build_arc_filter(&None, &Some(vec!["HAS_PAGE; DROP DATABASE".to_string()])),
+            ""
+        );
+        // Injection via curly braces
+        assert_eq!(
+            build_arc_filter(&None, &Some(vec!["HAS_PAGE}) RETURN n".to_string()])),
+            ""
+        );
+        // All invalid means empty filter
+        assert_eq!(
+            build_arc_filter(
+                &None,
+                &Some(vec![
+                    "'; DROP DATABASE".to_string(),
+                    "MERGE (n:Evil)".to_string()
+                ])
+            ),
+            ""
         );
     }
 
