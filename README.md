@@ -7,7 +7,7 @@
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet/actions)
-[![Tests](https://img.shields.io/badge/tests-1249_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Tests](https://img.shields.io/badge/tests-1258_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -222,7 +222,7 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 | Realm | Layers | Description |
 |-------|--------|-------------|
 | **Shared** | config, locale, geography, knowledge | Universal definitions + locale knowledge (READ-ONLY) — 36 nodes |
-| **Org** | config, foundation, structure, semantic, instruction, output | Organization-specific content — 24 nodes |
+| **Org** | config, foundation, structure, semantic, instruction, output | Organization-specific content — 23 nodes |
 
 **v11.5 changes:** Locale definition moved to shared/config. SEO/GEO nodes consolidated to shared/knowledge.
 

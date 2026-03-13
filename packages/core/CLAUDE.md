@@ -129,7 +129,7 @@ core/
 │   │   │   ├── locale/        #   Layer: locale (5 nodes)
 │   │   │   ├── geography/     #   Layer: geography (7 nodes)
 │   │   │   └── knowledge/     #   Layer: knowledge (21 nodes incl. SEO/GEO)
-│   │   └── org/               # Realm: org (24 nodes)
+│   │   └── org/               # Realm: org (23 nodes)
 │   │       ├── config/        #   Layer: config (1 node: OrgConfig)
 │   │       ├── foundation/    #   Layer: foundation (8 nodes: Project, Brand, ProjectGEOScope, etc.)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
