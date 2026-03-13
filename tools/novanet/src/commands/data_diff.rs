@@ -15,12 +15,21 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use tracing::instrument;
 
-use crate::commands::data_export::{ExportDocument, ExportedNode};
+use crate::commands::data_export::{extra_fields, ExportDocument, ExportedNode};
 use crate::db::Db;
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
+
+/// Fields to skip during property comparison (change frequently, not meaningful).
+const SKIP_COMPARISON_FIELDS: &[&str] = &["created_at", "updated_at", "node_class"];
+
+/// Maximum display length for property values in table output.
+const DIFF_VALUE_DISPLAY_MAX_LEN: usize = 60;
+
+/// JSON fields that need parsing from Neo4j string representation.
+const JSON_FIELDS: &[&str] = &["denomination_forms", "provenance"];
 
 /// Regex pattern for valid Neo4j labels (PascalCase).
 const LABEL_PATTERN: &str = r"^[A-Z][A-Za-z0-9]*$";
@@ -313,7 +322,7 @@ fn load_yaml_export(path: &std::path::Path) -> crate::Result<Vec<ExportedNode>> 
 /// Query Neo4j for all nodes of a class, returning ExportedNode structs.
 async fn query_neo4j_nodes(db: &Db, class: &str) -> crate::Result<Vec<ExportedNode>> {
     // Build RETURN clause from standard + extra fields
-    let extra = crate::commands::data_export::extra_fields(class);
+    let extra = extra_fields(class);
     let all_fields: Vec<&str> = STANDARD_FIELDS
         .iter()
         .chain(TIMESTAMP_FIELDS.iter())
@@ -352,6 +361,15 @@ async fn query_neo4j_nodes(db: &Db, class: &str) -> crate::Result<Vec<ExportedNo
         for field in &all_fields {
             if let Ok(val) = row.get::<String>(field) {
                 if !val.is_empty() {
+                    // Parse JSON fields to match export YAML representation
+                    if JSON_FIELDS.contains(field)
+                        && (val.starts_with('{') || val.starts_with('['))
+                    {
+                        if let Ok(json) = serde_json::from_str::<Value>(&val) {
+                            map.insert(field.to_string(), json);
+                            continue;
+                        }
+                    }
                     map.insert(field.to_string(), Value::String(val));
                 }
                 continue;
@@ -378,12 +396,9 @@ fn compare_properties(
 ) -> Vec<PropertyDiff> {
     let mut diffs = Vec::new();
 
-    // Skip timestamps and node_class for comparison
-    let skip_fields = ["created_at", "updated_at", "node_class"];
-
     // Check all YAML properties against Neo4j
     for (key, yaml_val) in yaml_props {
-        if skip_fields.contains(&key.as_str()) {
+        if SKIP_COMPARISON_FIELDS.contains(&key.as_str()) {
             continue;
         }
 
@@ -408,7 +423,7 @@ fn compare_properties(
 
     // Check Neo4j properties missing from YAML
     for (key, neo4j_val) in neo4j_props {
-        if skip_fields.contains(&key.as_str()) {
+        if SKIP_COMPARISON_FIELDS.contains(&key.as_str()) {
             continue;
         }
         if !yaml_props.contains_key(key) {
@@ -481,12 +496,12 @@ fn print_table(results: &[ClassDiffResult], verbose: bool) {
                         let yaml_str = diff
                             .yaml_value
                             .as_ref()
-                            .map(|v| truncate_value(v, 60))
+                            .map(|v| truncate_value(v, DIFF_VALUE_DISPLAY_MAX_LEN))
                             .unwrap_or_else(|| "(absent)".to_string());
                         let neo4j_str = diff
                             .neo4j_value
                             .as_ref()
-                            .map(|v| truncate_value(v, 60))
+                            .map(|v| truncate_value(v, DIFF_VALUE_DISPLAY_MAX_LEN))
                             .unwrap_or_else(|| "(absent)".to_string());
                         eprintln!(
                             "        {}: {} → {}",

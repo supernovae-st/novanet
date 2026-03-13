@@ -403,7 +403,7 @@ fn transform_rows(rows: &[neo4rs::Row], class: &str) -> Vec<ExportedNode> {
                     if !val.is_empty() {
                         // Check if it looks like JSON (denomination_forms, provenance)
                         if (*field == "denomination_forms" || *field == "provenance")
-                            && val.starts_with('{') || val.starts_with('[')
+                            && (val.starts_with('{') || val.starts_with('['))
                         {
                             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val) {
                                 map.insert(field.to_string(), json);

@@ -148,17 +148,15 @@ fn resolve_source_dir(args: &DataPromoteArgs) -> crate::Result<PathBuf> {
     Ok(home.join(".novanet").join("export"))
 }
 
-/// Resolve target directory: --target flag > private-data/data
+/// Resolve target directory: --target flag > {monorepo_root}/private-data/data
 fn resolve_target_dir(args: &DataPromoteArgs) -> crate::Result<PathBuf> {
     if let Some(ref target) = args.target {
         return Ok(target.clone());
     }
 
     // Default: private-data/data relative to monorepo root
-    let home = dirs::home_dir().ok_or_else(|| {
-        crate::NovaNetError::Validation("Cannot determine home directory".to_string())
-    })?;
-    Ok(home.join("dev").join("supernovae").join("private-data").join("data"))
+    let root = crate::config::resolve_root(None)?;
+    Ok(root.join("private-data").join("data"))
 }
 
 /// Discover PascalCase YAML files in the source directory.
