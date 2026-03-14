@@ -581,11 +581,9 @@ src/
 |-------|---------|---------|
 | `rmcp` | 0.16 | MCP protocol SDK (Nika client compatible) |
 | `neo4rs` | 0.8 | Neo4j driver with serde support |
-| `tokio` | 1.43 | Async runtime |
+| `tokio` | 1.50 | Async runtime |
 | `moka` | 0.12 | High-performance concurrent cache |
 | `tiktoken-rs` | 0.9 | Token counting (cl100k_base) |
-| `parking_lot` | 0.12 | Fast Mutex/RwLock |
-| `dashmap` | 6.1 | Concurrent HashMap |
 | `schemars` | 1 | JSON Schema generation (rmcp requirement) |
 
 ---
