@@ -7,6 +7,7 @@
 //! Added circuit breaker pattern for resilience under load.
 
 mod circuit_breaker;
+pub(crate) mod cypher_guard;
 mod pool;
 
 pub use circuit_breaker::CircuitBreaker;
