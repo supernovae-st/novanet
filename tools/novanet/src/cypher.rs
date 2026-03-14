@@ -146,9 +146,6 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     let where_clause = where_clauses.join("\n  AND ");
 
-    // Arc families filter arcs, not nodes — handled separately in output
-    // (included in params for display but not in the WHERE clause for class resolution)
-
     params.push(("limit".to_string(), ParamValue::Int(limit)));
 
     let cypher = format!(
@@ -351,12 +348,10 @@ mod tests {
 
     #[test]
     fn faceted_query_all_axes_active() {
-        // v0.17.3 (ADR-036): trait_filters removed
         let filter = FacetFilter {
             realms: vec!["shared".to_string(), "org".to_string()],
             layers: vec!["knowledge".to_string(), "structure".to_string()],
             classes: vec!["Locale".to_string()],
-            arc_families: vec!["taxonomy".to_string()],
         };
         let stmt = faceted_query(&filter, 100);
         assert!(stmt.cypher.contains("IN_REALM"));

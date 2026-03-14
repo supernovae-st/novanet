@@ -19,9 +19,6 @@ pub struct FacetFilter {
     pub realms: Vec<String>,
     #[serde(default)]
     pub layers: Vec<String>,
-    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
-    #[serde(default)]
-    pub arc_families: Vec<String>,
     #[serde(default)]
     pub classes: Vec<String>,
 }
@@ -32,7 +29,7 @@ impl FacetFilter {
     /// ```
     /// use novanet::facets::FacetFilter;
     /// let f = FacetFilter::from_cli(
-    ///     Some("shared,org"), Some("knowledge"), None, None,
+    ///     Some("shared,org"), Some("knowledge"), None,
     /// );
     /// assert_eq!(f.realms, vec!["shared", "org"]);
     /// assert_eq!(f.layers, vec!["knowledge"]);
@@ -41,14 +38,11 @@ impl FacetFilter {
     pub fn from_cli(
         realm: Option<&str>,
         layer: Option<&str>,
-        // v0.17.3 (ADR-036): trait_filter param removed
-        arc_family: Option<&str>,
         class: Option<&str>,
     ) -> Self {
         Self {
             realms: parse_csv(realm),
             layers: parse_csv(layer),
-            arc_families: parse_csv(arc_family),
             classes: parse_csv(class),
         }
     }
@@ -62,22 +56,15 @@ impl FacetFilter {
     /// Whether all facets are empty (no filters active).
     #[must_use]
     pub fn is_empty(&self) -> bool {
-        self.realms.is_empty()
-            && self.layers.is_empty()
-            // v0.17.3 (ADR-036): trait_filters removed
-            && self.arc_families.is_empty()
-            && self.classes.is_empty()
+        self.realms.is_empty() && self.layers.is_empty() && self.classes.is_empty()
     }
 
-    /// Count of active facet axes (0–4).
-    /// v0.17.3 (ADR-036): Was 0-5, now 0-4 (trait_filters removed)
+    /// Count of active facet axes (0–3).
     #[must_use]
     pub fn active_count(&self) -> usize {
         [
             !self.realms.is_empty(),
             !self.layers.is_empty(),
-            // v0.17.3 (ADR-036): trait_filters removed
-            !self.arc_families.is_empty(),
             !self.classes.is_empty(),
         ]
         .iter()
@@ -130,16 +117,13 @@ mod tests {
 
     #[test]
     fn from_cli_mixed() {
-        // v0.17.3 (ADR-036): trait_filter param removed
         let f = FacetFilter::from_cli(
             Some("shared,org"),
             Some("knowledge"),
-            None,
             Some("Locale,Expression"),
         );
         assert_eq!(f.realms, vec!["shared", "org"]);
         assert_eq!(f.layers, vec!["knowledge"]);
-        assert!(f.arc_families.is_empty());
         assert_eq!(f.classes, vec!["Locale", "Expression"]);
         assert!(!f.is_empty());
         assert_eq!(f.active_count(), 3);
@@ -147,25 +131,21 @@ mod tests {
 
     #[test]
     fn from_cli_empty_is_empty() {
-        // v0.17.3 (ADR-036): trait_filter param removed
-        let f = FacetFilter::from_cli(None, None, None, None);
+        let f = FacetFilter::from_cli(None, None, None);
         assert!(f.is_empty());
         assert_eq!(f.active_count(), 0);
     }
 
     #[test]
     fn from_json_full() {
-        // v0.17.3 (ADR-036): traits removed from JSON
         let json = r#"{
             "realms": ["shared"],
             "layers": ["knowledge", "config"],
-            "arc_families": [],
             "classes": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
         assert_eq!(f.realms, vec!["shared"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
-        assert!(f.arc_families.is_empty());
         assert!(f.classes.is_empty());
     }
 
@@ -184,9 +164,7 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
-        // v0.17.3 (ADR-036): trait_filter param removed
-        let original =
-            FacetFilter::from_cli(Some("shared"), Some("knowledge"), Some("mining"), None);
+        let original = FacetFilter::from_cli(Some("shared"), Some("knowledge"), None);
         let json = serde_json::to_string(&original).unwrap();
         let parsed = FacetFilter::from_json(&json).unwrap();
         assert_eq!(original, parsed);

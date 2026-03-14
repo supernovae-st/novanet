@@ -42,7 +42,7 @@ pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
     Ok(())
 }
 
-/// Mode 4: Faceted query driven by realm/layer/trait/arc-family/kind filters.
+/// Mode 4: Faceted query driven by realm/layer/class filters.
 #[instrument(skip(db))]
 pub async fn run_query(db: &Db, filter: FacetFilter, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::faceted_query(&filter, DEFAULT_LIMIT);
