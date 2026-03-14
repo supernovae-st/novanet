@@ -148,7 +148,7 @@ novanet/
 | **@novanet/db** | `0.19.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
 | **@novanet/studio** | `0.19.0` | Interactive graph visualization with AI chat |
 | **tools/novanet** | `0.19.0` | Rust CLI + TUI for schema generation, validation, queries |
-| **tools/novanet-mcp** | `0.19.0` | MCP Server for AI agent integration (14 tools) |
+| **tools/novanet-mcp** | `0.20.0` | MCP Server for AI agent integration (8 tools) |
 
 ---
 

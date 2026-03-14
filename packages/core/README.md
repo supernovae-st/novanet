@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v0.13.0-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v0.19.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -62,12 +62,12 @@ pnpm --filter=@novanet/core validate
 core/
 +-- models/                    # YAML schema definitions (source of truth)
 |   +-- _index.yaml            # Graph structure overview
-|   +-- taxonomy.yaml          # v0.13.0: 2 Realms (shared/org), 10 Layers
+|   +-- taxonomy.yaml          # v0.19.0: 2 Realms (shared/org), 10 Layers
 |   +-- relations.yaml         # Legacy format (parser compatibility)
-|   +-- node-classes/            # One file per node type (61 files)
-|   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 40 nodes
-|   |   +-- org/               # Realm: org (6 layers) - 21 nodes
-|   +-- arc-classes/             # One file per arc type (169 files)
+|   +-- node-classes/            # One file per node type (59 classes)
+|   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 36 nodes
+|   |   +-- org/               # Realm: org (6 layers) - 23 nodes
+|   +-- arc-classes/             # One file per arc type (159 arcs)
 |   +-- views/                 # Predefined view definitions
 +-- src/
 |   +-- types/                 # TypeScript definitions
@@ -78,12 +78,12 @@ core/
 
 ---
 
-## Node Types (v0.13.0)
+## Node Types (v0.19.0)
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Shared** | config, locale, geography, knowledge | Universal locale knowledge (READ-ONLY) - 40 nodes |
-| **Org** | config, foundation, structure, semantic, instruction, output | Business-specific content - 21 nodes |
+| **Shared** | config, locale, geography, knowledge | Universal locale knowledge (READ-ONLY) - 36 nodes |
+| **Org** | config, foundation, structure, semantic, instruction, output | Business-specific content - 23 nodes |
 
 ---
 
