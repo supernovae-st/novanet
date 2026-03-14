@@ -167,7 +167,6 @@ pub struct ArcFamilyInfo {
 
 /// A Class in the taxonomy tree.
 #[derive(Debug, Clone)]
-#[allow(dead_code)] // schema_hint reserved for future use
 pub struct ClassInfo {
     pub key: String,
     pub display_name: String,

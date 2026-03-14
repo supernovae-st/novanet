@@ -1966,7 +1966,6 @@ impl App {
 
     /// Exit filtered Data mode, restore cursor position.
     /// Clamps cursor to valid range in case tree structure changed.
-    #[allow(dead_code)]
     pub fn exit_filtered_data_mode(&mut self) {
         if self.data_filter_class.is_some() {
             self.data_filter_class = None;
