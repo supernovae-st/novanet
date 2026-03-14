@@ -115,7 +115,12 @@ pub fn write_merge_meta(
     // node_class discriminator (lowercase = SCHEMA node)
     writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
     // Provenance as JSON object
-    writeln!(out, "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}}',").unwrap();
+    writeln!(
+        out,
+        "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v{}\"}}',",
+        env!("CARGO_PKG_VERSION")
+    )
+    .unwrap();
     writeln!(out, "  {var}.created_at = datetime()").unwrap();
 
     writeln!(out, "ON MATCH SET").unwrap();
@@ -308,7 +313,11 @@ mod tests {
         // node_class discriminator
         assert!(out.contains("r.node_class = 'realm'"));
         // Provenance tracking
-        assert!(out.contains("r.provenance = '{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}'"));
+        let expected_prov = format!(
+            "r.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v{}\"}}'",
+            env!("CARGO_PKG_VERSION")
+        );
+        assert!(out.contains(&expected_prov));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));
     }
