@@ -1,11 +1,11 @@
 //! Clipboard utilities for TUI.
 //!
 //! Provides cross-platform clipboard access using arboard crate.
-//! Supports smart copy based on selected InfoBox type.
+//! Supports smart copy based on Focus panel.
 
 use arboard::Clipboard;
 
-use super::app::{App, InfoBox};
+use super::app::{App, Focus};
 use super::data::TreeItem;
 
 /// Copy text to system clipboard.
@@ -17,16 +17,15 @@ pub fn copy_to_clipboard(text: &str) -> Result<(), String> {
         .map_err(|e| format!("Clipboard set failed: {}", e))
 }
 
-/// Copy content based on the currently selected box.
+/// Copy content based on the currently focused panel.
 /// Returns (content, format_name) for status message.
-/// v0.13.1: Diagram and Architecture removed
 pub fn get_box_content(app: &App) -> Option<(String, &'static str)> {
-    match app.selected_box {
-        InfoBox::Tree => get_tree_content(app),
-        InfoBox::Header => get_header_content(app),
-        InfoBox::Properties => get_properties_content(app),
-        InfoBox::Arcs => get_arcs_content(app),
-        InfoBox::Source => get_source_content(app),
+    match app.focus {
+        Focus::Tree => get_tree_content(app),
+        Focus::Identity => get_header_content(app),
+        Focus::Props => get_properties_content(app),
+        Focus::Arcs => get_arcs_content(app),
+        Focus::Content => get_source_content(app),
     }
 }
 

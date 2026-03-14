@@ -11,7 +11,7 @@ use ratatui::widgets::{
     Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
 
-use crate::tui::app::{App, Focus, InfoBox};
+use crate::tui::app::{App, Focus};
 use crate::tui::colors;
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::ValidationStatus;
@@ -713,7 +713,7 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
                 display_name: native.display_name.clone(),
                 class_key: class.key.clone(),
                 properties: native.properties.clone(),
-                outgoing_arcs: vec![], // TODO: Load arcs from Neo4j
+                outgoing_arcs: vec![], // Arcs loaded on-demand via detail panel, not during construction
                 incoming_arcs: vec![],
                 arcs_loading: false,
                 missing_required_count: missing_required,
@@ -1948,7 +1948,7 @@ fn build_instance_content(
             .min(18); // Same cap as Class for visual alignment
 
         // Check if properties box is focused for highlighting
-        let is_props_focused = app.focus == Focus::Props && app.selected_box == InfoBox::Properties;
+        let is_props_focused = app.focus == Focus::Props;
         let mut property_idx: usize = 0;
 
         // STANDARD section (teal header)
@@ -2731,13 +2731,8 @@ fn render_scrollable_section_box(
 }
 
 /// Compute visual state for a box in the Detail panel.
-/// Simplified to use only panel_focused (Focus enum is source of truth).
-/// Old selected_box parameter is deprecated and ignored.
-fn detail_box_state(
-    panel_focused: bool,
-    _selected_box: InfoBox,
-    _this_box: InfoBox,
-) -> BoxVisualState {
+/// Focus enum is the source of truth for panel selection.
+fn detail_box_state(panel_focused: bool) -> BoxVisualState {
     if panel_focused {
         BoxVisualState::Selected
     } else {
@@ -2754,10 +2749,9 @@ fn detail_box_state(
 pub fn render_props_panel(f: &mut Frame, area: Rect, app: &mut App, content: &UnifiedContent) {
     // Props panel focused when Focus::Props
     let panel_focused = app.focus == Focus::Props;
-    let selected_box = app.selected_box;
 
     // Render the PROPERTIES section as a scrollable panel
-    let props_state = detail_box_state(panel_focused, selected_box, InfoBox::Properties);
+    let props_state = detail_box_state(panel_focused);
     let total_lines = render_scrollable_section_box(
         f,
         area,

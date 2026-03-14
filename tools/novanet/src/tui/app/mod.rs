@@ -12,9 +12,8 @@ pub use constants::*;
 
 // Re-export state types
 pub use state::{
-    ContentPanelMode, FlowState, FlowTab, Focus, InfoBox, LoadedDetails, NavMode, OverlayState,
-    Panel, PanelRects, PendingLoads, SchemaOverlayState, SearchState, TreeItemData,
-    YamlPreviewState,
+    ContentPanelMode, FlowState, FlowTab, Focus, LoadedDetails, NavMode, OverlayState, Panel,
+    PanelRects, PendingLoads, SchemaOverlayState, SearchState, TreeItemData, YamlPreviewState,
 };
 
 use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
@@ -49,8 +48,6 @@ pub struct App {
     pub theme: Theme,
     pub mode: NavMode,
     pub focus: Focus,
-    /// Currently selected info box for copy/scroll (Graph mode).
-    pub selected_box: InfoBox,
     pub tree_cursor: usize,
     /// Remember cursor position per mode.
     pub mode_cursors: [usize; 2],
@@ -156,7 +153,6 @@ impl App {
             theme: Theme::with_root(&root_path),
             mode: NavMode::Graph,
             focus: Focus::Tree,
-            selected_box: InfoBox::default(),
             tree_cursor: 0,
             mode_cursors: [0; 2],
             tree_scroll: 0,
@@ -216,20 +212,6 @@ impl App {
         app
     }
 
-
-    /// Map selected_box to the appropriate Focus panel.
-    /// Updated for 4-panel layout (Tree/Yaml/Props/Arcs).
-    /// DEPRECATED - use Focus directly instead of InfoBox.
-    #[deprecated(since = "0.18.3", note = "Use Focus enum directly")]
-    #[allow(deprecated)]
-    pub fn focus_for_selected_box(&self) -> Focus {
-        match self.selected_box {
-            InfoBox::Tree => Focus::Tree,
-            InfoBox::Header | InfoBox::Properties => Focus::Props,
-            InfoBox::Arcs => Focus::Arcs,
-            InfoBox::Source => Focus::Content,
-        }
-    }
 
     /// Load YAML content for the current cursor position.
     /// Uses mode-aware item lookup to handle filtered Data mode correctly.
@@ -1114,7 +1096,7 @@ impl App {
                     {
                         self.tree.collapse_subtree(&key);
                     }
-                } else if self.focus == Focus::Props && self.selected_box == InfoBox::Properties {
+                } else if self.focus == Focus::Props {
                     // Copy focused property value
                     self.copy_focused_property();
                 }
@@ -1248,7 +1230,7 @@ impl App {
 
             // Yank (smart copy based on selected box)
             KeyCode::Char('y') => {
-                self.yank_selected_box();
+                self.yank_focused_content();
                 true
             },
 
@@ -1659,8 +1641,8 @@ impl App {
         }
     }
 
-    /// Yank (copy) content based on the selected box (smart copy).
-    pub fn yank_selected_box(&mut self) {
+    /// Yank (copy) content based on the focused panel (smart copy).
+    pub fn yank_focused_content(&mut self) {
         use super::clipboard::{copy_to_clipboard, get_box_content};
         if let Some((content, format_name)) = get_box_content(self) {
             match copy_to_clipboard(&content) {

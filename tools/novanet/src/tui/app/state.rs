@@ -154,78 +154,6 @@ impl Focus {
     }
 }
 
-/// DEPRECATED: Use Focus enum instead.
-/// v0.18.3: Scheduled for removal. Use Focus enum for panel navigation.
-///
-/// Which info box is selected for copy/scroll within the Graph mode.
-/// Implements "Focusable Box" pattern from TUI Box Navigation design.
-///
-/// Layout (3 columns):
-/// ```text
-/// ┌─────────┬─────────────────┬───────────────┐
-/// │  TREE   │ HEADER          │ SOURCE        │
-/// │         │ PROPERTIES      │               │
-/// │         │ ARCS            │ (empty)       │
-/// └─────────┴─────────────────┴───────────────┘
-/// ```
-/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Tree
-/// v0.13.1: Diagram and Architecture removed (panel simplification)
-// NOTE: InfoBox tracks the selected sub-box within Info panel.
-// Focus enum tracks which panel has keyboard focus.
-// Both are needed - Focus is panel-level, InfoBox is sub-panel level.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum InfoBox {
-    #[default]
-    Tree,
-    Header,
-    Properties,
-    Arcs, // v0.13: Consolidated arc relationships panel (was Graph + Arcs)
-    Source,
-    // v0.13.1: Diagram and Architecture removed (panel simplification)
-}
-
-impl InfoBox {
-    /// Cycle to next box (Tab or right arrow).
-    /// 5-box cycle: Tree → Header → Properties → Arcs → Source → Tree
-    /// v0.13.1: Diagram and Architecture removed
-    pub fn next(self) -> Self {
-        match self {
-            Self::Tree => Self::Header,
-            Self::Header => Self::Properties,
-            Self::Properties => Self::Arcs,
-            Self::Arcs => Self::Source,
-            Self::Source => Self::Tree,
-        }
-    }
-
-    /// Cycle to previous box (Shift+Tab or left arrow).
-    pub fn prev(self) -> Self {
-        match self {
-            Self::Tree => Self::Source,
-            Self::Header => Self::Tree,
-            Self::Properties => Self::Header,
-            Self::Arcs => Self::Properties,
-            Self::Source => Self::Arcs,
-        }
-    }
-
-    /// Display name for status bar.
-    pub fn name(self) -> &'static str {
-        match self {
-            Self::Tree => "TREE",
-            Self::Header => "HEADER",
-            Self::Properties => "PROPERTIES",
-            Self::Arcs => "ARCS",
-            Self::Source => "SOURCE",
-        }
-    }
-
-    /// Check if this box is in the right panel (YAML column).
-    pub fn is_right_panel(self) -> bool {
-        matches!(self, Self::Source)
-    }
-}
-
 // =============================================================================
 // CONTENT PANEL
 // =============================================================================
@@ -750,44 +678,6 @@ mod tests {
         assert_eq!(Focus::Content.name(), "CONTENT");
         assert_eq!(Focus::Props.name(), "PROPS");
         assert_eq!(Focus::Arcs.name(), "ARCS");
-    }
-
-    // -------------------------------------------------------------------------
-    // InfoBox Tests (DEPRECATED: v0.18.3 - will be removed)
-    // -------------------------------------------------------------------------
-
-    #[test]
-    #[allow(deprecated)]
-    fn test_infobox_cycle() {
-        let box_ = InfoBox::Tree;
-        assert_eq!(box_.next(), InfoBox::Header);
-        assert_eq!(box_.next().next(), InfoBox::Properties);
-        assert_eq!(box_.next().next().next(), InfoBox::Arcs);
-        assert_eq!(box_.next().next().next().next(), InfoBox::Source);
-        assert_eq!(box_.next().next().next().next().next(), InfoBox::Tree);
-    }
-
-    #[test]
-    #[allow(deprecated)]
-    fn test_infobox_names() {
-        insta::assert_snapshot!(format!(
-            "Tree: {}\nHeader: {}\nProperties: {}\nArcs: {}\nSource: {}",
-            InfoBox::Tree.name(),
-            InfoBox::Header.name(),
-            InfoBox::Properties.name(),
-            InfoBox::Arcs.name(),
-            InfoBox::Source.name()
-        ));
-    }
-
-    #[test]
-    #[allow(deprecated)]
-    fn test_infobox_right_panel() {
-        assert!(!InfoBox::Tree.is_right_panel());
-        assert!(!InfoBox::Header.is_right_panel());
-        assert!(!InfoBox::Properties.is_right_panel());
-        assert!(!InfoBox::Arcs.is_right_panel());
-        assert!(InfoBox::Source.is_right_panel());
     }
 
     // -------------------------------------------------------------------------

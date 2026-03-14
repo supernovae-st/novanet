@@ -89,7 +89,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
     use super::super::app::Focus;
     let theme = &app.theme; // Use cached theme from App
 
-    // Use Focus instead of selected_box for panel focus
+    // Use Focus for panel focus
     let selected = app.focus == Focus::Arcs;
     let border_color = if selected {
         BOX_BORDER_SELECTED

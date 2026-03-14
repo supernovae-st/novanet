@@ -1,9 +1,0 @@
----
-source: novanet/src/tui/app/state.rs
-expression: "format!(\"Tree: {}\\nHeader: {}\\nProperties: {}\\nArcs: {}\\nSource: {}\",\nInfoBox::Tree.name(), InfoBox::Header.name(), InfoBox::Properties.name(),\nInfoBox::Arcs.name(), InfoBox::Source.name())"
----
-Tree: TREE
-Header: HEADER
-Properties: PROPERTIES
-Arcs: ARCS
-Source: SOURCE
