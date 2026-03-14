@@ -99,20 +99,9 @@ LIMIT $limit"
 // Mode 4: Faceted query — resolve classes via schema-graph, then fetch data nodes
 // ---------------------------------------------------------------------------
 
-/// Build a faceted Cypher query from a `FacetFilter`.
-///
-/// Strategy (v0.12.0 ADR-023):
-/// 1. MATCH Class nodes satisfying all active facets (AND across axes, OR within axis)
-/// 2. Collect resolved Class labels
-/// 3. MATCH data nodes linked to those Classes via OF_CLASS
-///
-/// If no facets are active, falls back to data_query (all non-Schema nodes).
-#[must_use]
-pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
-    if filter.is_empty() {
-        return data_query(limit);
-    }
-
+/// Build WHERE clauses and params from a `FacetFilter`.
+/// Shared by `faceted_query` and `filter_build_query`.
+fn build_facet_where(filter: &FacetFilter) -> (String, Vec<(String, ParamValue)>) {
     let mut where_clauses: Vec<String> = Vec::new();
     let mut params: Vec<(String, ParamValue)> = Vec::new();
 
@@ -134,8 +123,6 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
         ));
     }
 
-    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
-
     if !filter.classes.is_empty() {
         where_clauses.push("c.label IN $classes".to_string());
         params.push((
@@ -144,8 +131,24 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
         ));
     }
 
-    let where_clause = where_clauses.join("\n  AND ");
+    (where_clauses.join("\n  AND "), params)
+}
 
+/// Build a faceted Cypher query from a `FacetFilter`.
+///
+/// Strategy (v0.12.0 ADR-023):
+/// 1. MATCH Class nodes satisfying all active facets (AND across axes, OR within axis)
+/// 2. Collect resolved Class labels
+/// 3. MATCH data nodes linked to those Classes via OF_CLASS
+///
+/// If no facets are active, falls back to data_query (all non-Schema nodes).
+#[must_use]
+pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
+    if filter.is_empty() {
+        return data_query(limit);
+    }
+
+    let (where_clause, mut params) = build_facet_where(filter);
     params.push(("limit".to_string(), ParamValue::Int(limit)));
 
     let cypher = format!(
@@ -177,39 +180,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
         };
     }
 
-    // Reuse faceted_query but without limit and with RETURN n for Studio
-    let mut where_clauses: Vec<String> = Vec::new();
-    let mut params: Vec<(String, ParamValue)> = Vec::new();
-
-    if !filter.realms.is_empty() {
-        where_clauses
-            .push("EXISTS { MATCH (c)-[:IN_REALM]->(r:Realm) WHERE r.key IN $realms }".to_string());
-        params.push((
-            "realms".to_string(),
-            ParamValue::StringList(filter.realms.clone()),
-        ));
-    }
-
-    if !filter.layers.is_empty() {
-        where_clauses
-            .push("EXISTS { MATCH (c)-[:IN_LAYER]->(l:Layer) WHERE l.key IN $layers }".to_string());
-        params.push((
-            "layers".to_string(),
-            ParamValue::StringList(filter.layers.clone()),
-        ));
-    }
-
-    // v0.17.3 (ADR-036): trait_filters removed - traits no longer in schema
-
-    if !filter.classes.is_empty() {
-        where_clauses.push("c.label IN $classes".to_string());
-        params.push((
-            "classes".to_string(),
-            ParamValue::StringList(filter.classes.clone()),
-        ));
-    }
-
-    let where_clause = where_clauses.join("\n  AND ");
+    let (where_clause, params) = build_facet_where(filter);
 
     let cypher = format!(
         "\
