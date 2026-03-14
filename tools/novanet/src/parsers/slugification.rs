@@ -485,9 +485,16 @@ fn extract_examples(content: &str) -> Vec<SlugExample> {
     let section = &section_content[..section_end];
 
     for caps in RE_EXAMPLE.captures_iter(section) {
-        let input = caps.get(1).unwrap().as_str().trim().to_string();
-        let output = caps.get(2).unwrap().as_str().trim().to_string();
-        let rules_str = caps.get(3).unwrap().as_str().trim();
+        // Groups guaranteed to exist after successful regex match, but use defensive pattern
+        let Some(input) = caps.get(1).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(output) = caps.get(2).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(rules_str) = caps.get(3).map(|m| m.as_str().trim().to_owned()) else {
+            continue;
+        };
 
         // Skip header rows
         if input == "Input" || input.contains("---") {
@@ -529,8 +536,13 @@ fn extract_warnings(content: &str) -> Vec<Warning> {
     let section = &section_content[..section_end];
 
     for caps in RE_WARNING.captures_iter(section) {
-        let condition = caps.get(1).unwrap().as_str().trim().to_string();
-        let message = caps.get(2).unwrap().as_str().trim().to_string();
+        // Groups guaranteed to exist after successful regex match, but use defensive pattern
+        let Some(condition) = caps.get(1).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(message) = caps.get(2).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
 
         // Skip header rows
         if condition == "Condition" || condition.contains("---") {
