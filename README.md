@@ -55,10 +55,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v0.19.0\nTypes · Schemas · Filters"]
-        DB["@novanet/db v0.19.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.19.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v0.19.0\nRust · 16 commands · TUI"]
+        CORE["@novanet/core v0.20.0\nTypes · Schemas · Filters"]
+        DB["@novanet/db v0.20.0\nDocker · Seeds · Migrations"]
+        STUDIO["@novanet/studio v0.20.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v0.20.0\nRust · 16 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -217,7 +217,7 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.19.0):
+NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.20.0):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
