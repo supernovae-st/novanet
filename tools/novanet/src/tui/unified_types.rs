@@ -130,8 +130,6 @@ pub struct NodeDisplay {
     pub count: Option<usize>,
     /// Arc and property statistics
     pub stats: Option<NodeStats>,
-    /// Trait abbreviation for Class nodes (e.g., "def", "aut", "gen")
-    pub trait_abbrev: Option<&'static str>,
 }
 
 /// Badge displayed on the right side of a tree line.
