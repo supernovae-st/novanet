@@ -86,7 +86,7 @@ async fn get_classes(
         WHERE ($realm IS NULL OR c.realm = $realm)
           AND ($layer IS NULL OR c.layer = $layer)
         RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-               c.trait AS trait_type, c.content AS content
+               c.content AS content
         ORDER BY c.realm, c.layer, c.name
     "#;
 
@@ -142,8 +142,7 @@ async fn get_class(
             OPTIONAL MATCH (c)<-[:TO_CLASS]-(incoming:ArcClass)
             OPTIONAL MATCH (c)<-[:FROM_CLASS]-(outgoing:ArcClass)
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-                   c.trait AS trait_type, c.content AS content,
-                   c.triggers AS triggers,
+                   c.content AS content, c.triggers AS triggers,
                    collect(DISTINCT incoming.name) AS incoming_arcs,
                    collect(DISTINCT outgoing.name) AS outgoing_arcs
             "#,
@@ -155,8 +154,7 @@ async fn get_class(
             r#"
             MATCH (c:Class {name: $name})
             RETURN c.name AS name, c.realm AS realm, c.layer AS layer,
-                   c.trait AS trait_type, c.content AS content,
-                   c.triggers AS triggers
+                   c.content AS content, c.triggers AS triggers
             "#,
             false,
         )

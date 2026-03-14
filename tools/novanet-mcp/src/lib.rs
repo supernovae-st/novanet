@@ -25,7 +25,7 @@
 //! ```
 
 pub mod cache;
-pub mod context;
+pub mod activation;
 pub mod error;
 pub mod hints;
 pub mod metrics;

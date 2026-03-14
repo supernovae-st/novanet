@@ -82,12 +82,6 @@ pub enum Error {
     #[error("Not implemented: {0}")]
     NotImplemented(String),
 
-    /// Trait does not allow writes
-    #[error(
-        "Class '{class}' has trait '{trait_type}' which is not writable. Only authored/imported/generated/retrieved allow writes."
-    )]
-    TraitNotWritable { class: String, trait_type: String },
-
     /// Slug is locked after deployment
     #[error(
         "Slug is locked on '{key}'. Current slug: '{current_slug}'. Create a redirect instead of modifying."
@@ -174,14 +168,6 @@ impl Error {
         Self::InvalidTool(tool.into())
     }
 
-    /// Create a trait not writable error
-    pub fn trait_not_writable(class: impl Into<String>, trait_type: impl Into<String>) -> Self {
-        Self::TraitNotWritable {
-            class: class.into(),
-            trait_type: trait_type.into(),
-        }
-    }
-
     /// Create a slug locked error
     pub fn slug_locked(key: impl Into<String>, current_slug: impl Into<String>) -> Self {
         Self::SlugLocked {
@@ -258,7 +244,6 @@ impl From<Error> for McpError {
             Error::InvalidParams(_) => INVALID_PARAMS,
             Error::NotImplemented(_) => NOT_IMPLEMENTED,
             // Write-specific error mappings
-            Error::TraitNotWritable { .. } => INVALID_PARAMS,
             Error::SlugLocked { .. } => INVALID_PARAMS,
             Error::SingletonViolation { .. } => INVALID_PARAMS,
             Error::SchemaNotFound { .. } => RESOURCE_NOT_FOUND,
@@ -276,13 +261,6 @@ impl From<Error> for McpError {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_trait_not_writable_error() {
-        let err = Error::trait_not_writable("Entity", "defined");
-        assert!(err.to_string().contains("Entity"));
-        assert!(err.to_string().contains("defined"));
-    }
 
     #[test]
     fn test_slug_locked_error() {

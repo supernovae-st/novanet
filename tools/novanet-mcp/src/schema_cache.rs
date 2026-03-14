@@ -83,6 +83,9 @@ impl From<&str> for ArcScope {
 /// - `triggers`: Keyword triggers for search boosting (v0.20.0: replaces llm_context)
 /// - `schema_hint`: Agent guidance for usage
 /// - `context_budget`: Token estimation hint
+///
+/// v0.20.0: Removed `trait_type` — traits deprecated per ADR-024 (v0.19.0).
+/// Provenance is now per-instance, not per-class.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ClassMetadata {
     /// Class name (e.g., "EntityNative")
@@ -91,8 +94,6 @@ pub struct ClassMetadata {
     pub realm: String,
     /// Layer within realm (e.g., "semantic", "knowledge")
     pub layer: String,
-    /// Trait determines writability: defined (RO), authored/imported/generated/retrieved (RW)
-    pub trait_type: String,
     /// Properties that MUST be present for valid writes
     pub required_properties: Vec<String>,
     /// Properties that MAY be present
@@ -223,13 +224,6 @@ impl SchemaCache {
         self.classes.entry_count() + self.arcs.entry_count()
     }
 
-    /// Check if class trait allows writes
-    pub fn is_writable_trait(trait_type: &str) -> bool {
-        matches!(
-            trait_type,
-            "authored" | "imported" | "generated" | "retrieved"
-        )
-    }
 }
 
 #[cfg(test)]
@@ -243,7 +237,7 @@ mod tests {
             name: "SEOKeyword".to_string(),
             realm: "shared".to_string(),
             layer: "knowledge".to_string(),
-            trait_type: "imported".to_string(),
+
             required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
             optional_properties: vec!["search_volume".to_string()],
             ..Default::default()
@@ -253,7 +247,7 @@ mod tests {
 
         let retrieved = cache.get_class("SEOKeyword");
         assert!(retrieved.is_some());
-        assert_eq!(retrieved.unwrap().trait_type, "imported");
+        assert_eq!(retrieved.unwrap().name, "SEOKeyword");
     }
 
     #[test]
@@ -264,22 +258,13 @@ mod tests {
     }
 
     #[test]
-    fn test_is_writable_trait() {
-        assert!(!SchemaCache::is_writable_trait("defined"));
-        assert!(SchemaCache::is_writable_trait("authored"));
-        assert!(SchemaCache::is_writable_trait("imported"));
-        assert!(SchemaCache::is_writable_trait("generated"));
-        assert!(SchemaCache::is_writable_trait("retrieved"));
-    }
-
-    #[test]
     fn test_invalidate_all() {
         let cache = SchemaCache::new(300);
         let meta = ClassMetadata {
             name: "Test".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "authored".to_string(),
+
             required_properties: vec![],
             optional_properties: vec![],
             ..Default::default()
@@ -319,7 +304,7 @@ mod tests {
             name: "Test".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "authored".to_string(),
+
             required_properties: vec![],
             optional_properties: vec![],
             ..Default::default()
@@ -340,7 +325,7 @@ mod tests {
                 name: format!("Class{}", i),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                trait_type: "authored".to_string(),
+    
                 required_properties: vec![],
                 optional_properties: vec![],
                 ..Default::default()
@@ -361,7 +346,6 @@ mod tests {
             name: "EntityNative".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
-            trait_type: "generated".to_string(),
             required_properties: vec!["key".to_string()],
             optional_properties: vec![],
             content: Some("LLM-generated locale-native content".to_string()),

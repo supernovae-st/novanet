@@ -768,20 +768,6 @@ async fn execute_dry_run(state: &State, params: &WriteParams) -> Result<DryRunRe
                         );
                         None
                     }
-                    Err(Error::TraitNotWritable { class, trait_type }) => {
-                        all_issues.push(
-                            CheckIssue::error(
-                                "E012",
-                                format!(
-                                    "Class '{}' has trait '{}' which is read-only",
-                                    class, trait_type
-                                ),
-                            )
-                            .with_field("class")
-                            .with_hint("Only authored/imported/generated/retrieved traits allow writes"),
-                        );
-                        None
-                    }
                     Err(e) => return Err(e),
                 }
             }

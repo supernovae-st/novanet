@@ -952,7 +952,7 @@ async fn execute_assemble(state: &State, params: ContextParams) -> Result<Contex
         .as_deref()
         .unwrap_or("DEFAULT")
         .to_uppercase();
-    let default_modifier = crate::context::TaskModifier {
+    let default_modifier = crate::activation::TaskModifier {
         activation_threshold: Some(0.30),
         propagation_steps: Some(2),
         semantic_boosts: HashMap::new(),

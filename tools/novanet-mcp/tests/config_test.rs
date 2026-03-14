@@ -312,6 +312,9 @@ fn test_config_struct_construction() {
         pool_size: 8,
         // Phase 3 fields
         fetch_size: 500,
+        // Retry settings
+        max_retries: 3,
+        retry_base_delay: Duration::from_millis(100),
         circuit_breaker_threshold: 5,
         circuit_breaker_reset_timeout: Duration::from_secs(30),
         // Original fields

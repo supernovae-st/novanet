@@ -105,8 +105,6 @@ pub struct ClassResource {
     pub realm: String,
     /// Layer
     pub layer: String,
-    /// Trait
-    pub trait_type: String,
     /// Content description (WHAT+HOW)
     pub content: Option<String>,
     /// Keyword triggers for search boosting
@@ -293,7 +291,6 @@ pub async fn fetch_class(state: &State, name: &str) -> Result<ClassResource> {
                c.display_name AS display_name,
                c.realm AS realm,
                c.layer AS layer,
-               c.trait AS trait_type,
                c.content AS content,
                c.triggers AS triggers,
                c.properties AS properties,
@@ -330,7 +327,6 @@ pub async fn fetch_class(state: &State, name: &str) -> Result<ClassResource> {
         display_name: row["display_name"].as_str().map(|s| s.to_string()),
         realm: row["realm"].as_str().unwrap_or("unknown").to_string(),
         layer: row["layer"].as_str().unwrap_or("unknown").to_string(),
-        trait_type: row["trait_type"].as_str().unwrap_or("unknown").to_string(),
         content: row["content"].as_str().map(|s| s.to_string()),
         triggers: row["triggers"]
             .as_array()
