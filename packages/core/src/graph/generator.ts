@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v0.19.0 — 60 nodes (36 shared + 24 org), traits deprecated
+// v0.20.0 — 59 nodes (36 shared + 23 org), traits deprecated
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -19,7 +19,7 @@ import { REALM_HIERARCHY } from './hierarchy.js';
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM (36 nodes) — 4 layers: config, locale, geography, knowledge
-  // v0.19.0: 60 total nodes (36 shared + 24 org)
+  // v0.20.0: 59 total nodes (36 shared + 23 org)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
   EntityCategory: 'Entity Category',
@@ -68,7 +68,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   GEOAnswer: 'GEO Answer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — 6 layers — v0.12.4: Brand Architecture
+  // ORG REALM (23 nodes) — 6 layers — v0.12.4: Brand Architecture
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
@@ -132,7 +132,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 60 node types and 151 arcs.
+ * Generate flat schema graph with all 59 node types and 159 arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -141,7 +141,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "60 nodes, 151 arcs"
+ * // Output: "59 nodes, 159 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -149,7 +149,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 60 node types
+  // GENERATE NODES - All 59 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -213,7 +213,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 61, totalArcs: 146, nodesByRealm: { shared: 40, org: 21 } }
+ * // Output: { totalNodes: 59, totalArcs: 159, nodesByRealm: { shared: 36, org: 23 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
