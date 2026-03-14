@@ -31,7 +31,7 @@ import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import type { Layer } from '@novanet/core/types';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 import { TaxonomyBadge } from '../TaxonomyBadge';
 import { BorderBeam, GlowEffect } from '../effects';
 import { SPRING_CONFIGS } from '../animationPresets';
@@ -53,7 +53,6 @@ export interface LocaleNodeData {
 export interface LocaleTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface LocaleCardContentProps extends CardContext {
@@ -274,14 +273,12 @@ export const LocaleCardContent = memo(function LocaleCardContent({
             <TaxonomyBadge
               layer={taxonomy.layer}
               realm={taxonomy.realm}
-              trait={taxonomy.trait}
               className={data.type}
               selected={selected}
               isHovered={isHovered}
               performanceConfig={performanceConfig}
               size="sm"
               showLayerLabel={true}
-              showTraitIndicator={true}
             />
           </div>
         ) : (

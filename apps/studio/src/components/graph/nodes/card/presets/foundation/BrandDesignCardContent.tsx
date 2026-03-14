@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = foundation) → violet #8b5cf6
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows color swatches and typography preview
  *
  * Layout:
@@ -170,12 +170,11 @@ export const BrandDesignCardContent = memo(function BrandDesignCardContent({
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Trait (defined) + Class (BrandDesign) */}
+      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Class (BrandDesign) */}
       <div className="mb-3">
         <TaxonomyBadge
           layer="foundation"
           realm="org"
-          trait="defined"
           className="BrandDesign"
           selected={selected}
           isHovered={isHovered}

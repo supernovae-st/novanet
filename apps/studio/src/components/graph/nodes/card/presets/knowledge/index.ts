@@ -11,8 +11,6 @@
  *
  * v0.18.0: Term/TermSet removed (YAGNI), SEOKeywordMetrics removed (metrics on SEOKeyword)
  *
- * Trait: imported (double borders) for most nodes
- *
  * All components are performance-aware and support Motion animations.
  */
 

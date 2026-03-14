@@ -5,12 +5,12 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows query, platform, locale, category, difficulty, context
  *
  * Premium Effects (v0.13.1):
  * - GridPattern: Neural network / AI matrix background
- * - BorderBeam: Animated border respecting double style (imported trait)
+ * - BorderBeam: Animated border respecting double style
  * - AuroraBackground: Subtle "AI thinking" aurora effect
  * - MotionTechCorners: AI/tech corners
  * - Enhanced GlowEffect: AI-themed intensity
@@ -18,7 +18,7 @@
  * Layout:
  * ┌──────────────────────────────────────┐
  * │ ✦ GEO QUERY      ◇ perplexity       │  <- Sparkles icon + platform badge
- * │ ═════════════════════════════════   │  <- Double separator (imported)
+ * │ ═════════════════════════════════   │  <- Double separator
  * │ geo-qr-code-generator-fr-FR          │
  * │ ┌────────────────────────────────┐   │
  * │ │ "comment créer un qr code"     │   │  <- Query text (monospace)
@@ -431,12 +431,11 @@ export const GEOQueryCardContent = memo(function GEOQueryCardContent({
 
       {/* Content Layer */}
       <div className="relative z-10">
-        {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Trait (imported) + Class (GEOQuery) */}
+        {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Class (GEOQuery) */}
         <div className="mb-3">
           <TaxonomyBadge
             layer="knowledge"
             realm="shared"
-            trait="imported"
             className="GEOQuery"
             selected={selected}
             isHovered={isHovered}

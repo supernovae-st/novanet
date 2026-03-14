@@ -3,7 +3,7 @@
  *
  * Layer color: Green #22c55e
  * 3 nodes: PageNative, BlockNative, OutputArtifact
- * Trait: generated (dotted borders)
+ * Output layer (dotted borders)
  *
  * All components are performance-aware and support Framer Motion animations.
  */

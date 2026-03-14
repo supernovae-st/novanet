@@ -13,13 +13,12 @@ import { memo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
-import type { Layer, Realm, Trait } from '@novanet/core/types';
+import type { Layer, Realm } from '@novanet/core/types';
 import { LAYER_COLORS, REALM_COLORS } from '@/lib/graph3d/colorPalette';
 
 interface NodePreview3DSimpleProps {
   layer: Layer;
   realm: Realm;
-  trait: Trait;
   size?: number;
   className?: string;
 }

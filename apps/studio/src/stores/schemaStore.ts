@@ -2,7 +2,7 @@
 // v12: Schema Discovery Store for Unified View System
 //
 // Provides:
-// - Database schema discovery (60 node labels, 151 relationship types)
+// - Database schema discovery (59 node labels, 159 relationship types)
 // - Taxonomy metadata merging (colors, icons, layers from CLASS_TAXONOMY)
 // - Current query counts (updated after each query execution)
 // - Realm > Layer > Class hierarchy for Schema Explorer Panel

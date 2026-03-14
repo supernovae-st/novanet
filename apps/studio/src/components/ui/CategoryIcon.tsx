@@ -7,7 +7,7 @@
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per layer/trait/realm
+ * - One icon per layer/realm (+ legacy trait icons)
  * - Consistent styling with glow effects
  *
  * Layers (v11.7 - 10 layers across 2 realms):
@@ -17,7 +17,8 @@
  * - foundation: Package, structure: LayoutGrid, semantic: Lightbulb
  * - instruction: FileText, output: Sparkles
  *
- * Traits (5) - v11.8: renamed per ADR-024 Data Origin:
+ * Traits — DEPRECATED in v0.19.0 (ADR-024):
+ * TraitIcon component retained for backward compatibility.
  * - defined: Lock, authored: Pen, imported: Download
  * - generated: Sparkles, retrieved: CloudDownload
  */
@@ -193,6 +194,9 @@ export const RealmIcon = memo(function RealmIcon({
 
 /**
  * TraitIcon - Renders the appropriate Lucide icon for a trait
+ *
+ * @deprecated Traits removed from schema in v0.19.0 (ADR-024).
+ * Retained for backward compatibility in existing UI surfaces.
  *
  * @example
  * <TraitIcon trait="defined" size={24} className="text-blue-500" />

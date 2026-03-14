@@ -5,7 +5,7 @@
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * v0.19.0: 60 nodes across 2 realms (36 SHARED + 24 ORG)
+ * v0.20.0: 59 nodes across 2 realms (36 SHARED + 23 ORG)
  *
  * @example
  * // Fast lookup
@@ -42,11 +42,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v0.19.0: 60 nodes)
+// Size Lookup Table (v0.20.0: 59 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 60 node types (v0.19.0)
+ * Pre-computed sizes for all 59 node types (v0.20.0)
  *
  * Size categories:
  * - Large (280x140): Root nodes (Project, OrgConfig)
@@ -150,7 +150,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 // =============================================================================
 
 /**
- * Pre-computed colors for all 60 node types (v0.19.0)
+ * Pre-computed colors for all 59 node types (v0.20.0)
  *
  * Color palette by realm and layer:
  * - SHARED config: Emerald/Cyan tones

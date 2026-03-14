@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = structure) → blue #3b82f6
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows block type, order position, property count
  *
  * Layout:
@@ -145,12 +145,11 @@ export const BlockCardContent = memo(function BlockCardContent({
         </>
       )}
 
-      {/* Taxonomy Badge: Layer (structure) + Realm (org) + Trait (defined) + Class (Block) */}
+      {/* Taxonomy Badge: Layer (structure) + Realm (org) + Class (Block) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="structure"
           realm="org"
-          trait="defined"
           className="Block"
           selected={selected}
           isHovered={isHovered}

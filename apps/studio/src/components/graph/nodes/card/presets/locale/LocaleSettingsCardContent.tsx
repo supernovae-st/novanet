@@ -7,7 +7,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = locale) -> indigo #6366f1
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows locale settings type, key properties, and indicators
  *
  * Types handled (6 nodes):
@@ -45,7 +45,7 @@ import {
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { GlowEffect, BorderBeam } from '../../effects';
 import { SPRING_CONFIGS } from '../../animationPresets';
@@ -144,7 +144,6 @@ export type LocaleSettingsNodeData =
 export interface LocaleSettingsTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface LocaleSettingsCardContentProps extends CardContext {
@@ -526,14 +525,12 @@ export const LocaleSettingsCardContent = memo(function LocaleSettingsCardContent
             <TaxonomyBadge
               layer={taxonomy.layer}
               realm={taxonomy.realm}
-              trait={taxonomy.trait}
               className={data.type}
               selected={selected}
               isHovered={isHovered}
               performanceConfig={performanceConfig}
               size="sm"
               showLayerLabel={true}
-              showTraitIndicator={true}
             />
           ) : (
             <span

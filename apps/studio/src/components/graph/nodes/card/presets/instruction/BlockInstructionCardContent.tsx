@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = instruction) → yellow #eab308
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows markdown content with @entity: and @link: references
  *
  * Layout:
@@ -130,12 +130,11 @@ export const BlockInstructionCardContent = memo(function BlockInstructionCardCon
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Trait (defined) + Class (BlockInstruction) */}
+      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Class (BlockInstruction) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="instruction"
           realm="org"
-          trait="defined"
           className="BlockInstruction"
           selected={selected}
           isHovered={isHovered}

@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows taboo topic, severity, affected regions
  *
  * Layout:
@@ -28,7 +28,7 @@ import { ShieldAlert } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 
 // =============================================================================
@@ -72,7 +72,6 @@ export interface TabooNodeData {
 export interface TabooTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface TabooCardContentProps extends CardContext {
@@ -157,14 +156,12 @@ export const TabooCardContent = memo(function TabooCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className="Taboo"
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (
@@ -203,7 +200,7 @@ export const TabooCardContent = memo(function TabooCardContent({
         </div>
       )}
 
-      {/* Double line separator (imported trait) - warning color */}
+      {/* Double line separator - warning color */}
       <div className="relative mb-3">
         <div
           className="h-[2px] mb-[2px]"

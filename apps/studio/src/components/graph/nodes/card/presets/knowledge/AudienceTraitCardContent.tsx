@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows audience trait, category, relevance
  *
  * Layout:
@@ -28,7 +28,7 @@ import { UserCircle } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { GlowEffect } from '../../effects';
 
@@ -73,7 +73,6 @@ export interface AudienceTraitNodeData {
 export interface AudienceTraitTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface AudienceTraitCardContentProps extends CardContext {
@@ -169,14 +168,12 @@ export const AudienceTraitCardContent = memo(function AudienceTraitCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className="AudienceTrait"
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (
@@ -216,7 +213,7 @@ export const AudienceTraitCardContent = memo(function AudienceTraitCardContent({
         </div>
       )}
 
-      {/* Double line separator (imported trait) */}
+      {/* Double line separator */}
       <div className="mb-3">
         <div
           className="h-[2px] mb-[2px]"

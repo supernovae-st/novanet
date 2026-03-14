@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = semantic) → orange #f97316
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows pillar status, schema.org type, semantic links
  *
  * Design Philosophy (v0.13.1):
@@ -202,7 +202,6 @@ export const EntityCardContent = memo(function EntityCardContent({
         <TaxonomyBadge
           layer="semantic"
           realm="org"
-          trait="defined"
           className="Entity"
           selected={selected}
           isHovered={isHovered}
@@ -263,7 +262,7 @@ export const EntityCardContent = memo(function EntityCardContent({
 
       {/* Row 4: Icon + DisplayName (horizontal layout) */}
       <div className="flex items-center gap-4 mb-4">
-        {/* Single filled Diamond icon — SOLID border (defined trait) */}
+        {/* Single filled Diamond icon — SOLID border */}
         <IconWrapper
           className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center"
           style={{

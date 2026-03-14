@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  *
  * Helper components for Term, Expression, and SEOKeyword cards.
  */

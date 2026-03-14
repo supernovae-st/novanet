@@ -5,8 +5,8 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = foundation) → violet #8b5cf6
- * - Border style → solid (defined trait)
- * - Shows Brand soul/pitch/voice triad with trait badges
+ * - Border style → solid
+ * - Shows Brand soul/pitch/voice triad with voice trait badges
  *
  * Layout:
  * ┌────────────────────────────────┐
@@ -137,12 +137,11 @@ export const BrandCardContent = memo(function BrandCardContent({
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Trait (defined) + Class (Brand) */}
+      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Class (Brand) */}
       <div className="mb-3">
         <TaxonomyBadge
           layer="foundation"
           realm="org"
-          trait="defined"
           className="Brand"
           selected={selected}
           isHovered={isHovered}

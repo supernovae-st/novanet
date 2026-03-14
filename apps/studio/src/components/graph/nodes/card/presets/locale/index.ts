@@ -11,8 +11,6 @@
  * - Slugification: URL slug rules, transliteration, stop words
  * - Market: demographics, digital maturity, e-commerce landscape
  *
- * Trait: imported (double borders) for all nodes
- *
  * All components are performance-aware and support Motion animations.
  */
 

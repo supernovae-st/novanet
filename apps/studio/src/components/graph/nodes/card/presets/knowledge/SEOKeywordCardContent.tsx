@@ -5,13 +5,13 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows keyword, volume, difficulty, traffic potential, SERP features
  *
  * Layout:
  * ┌──────────────────────────────────────┐
  * │ ⌕ SEO KEYWORD     ◆ transactional   │  <- Search icon + intent badge
- * │ ═════════════════════════════════   │  <- Double separator (imported)
+ * │ ═════════════════════════════════   │  <- Double separator
  * │ seo-creer-qr-code-gratuit-fr         │
  * │ ┌────────────────────────────────┐   │
  * │ │ "créer qr code gratuit"        │   │  <- Keyword value
@@ -159,12 +159,11 @@ export const SEOKeywordCardContent = memo(function SEOKeywordCardContent({
         />
       )}
 
-      {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Trait (imported) + Class (SEOKeyword) */}
+      {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Class (SEOKeyword) */}
       <div className="mb-3">
         <TaxonomyBadge
           layer="knowledge"
           realm="shared"
-          trait="imported"
           className="SEOKeyword"
           selected={selected}
           isHovered={isHovered}

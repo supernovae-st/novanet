@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = structure) → blue #3b82f6
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows URL paths, block count, SEO score
  *
  * Layout:
@@ -159,7 +159,6 @@ export const PageCardContent = memo(function PageCardContent({
         <TaxonomyBadge
           layer="structure"
           realm="org"
-          trait="defined"
           className="Page"
           selected={selected}
           isHovered={isHovered}

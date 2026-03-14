@@ -5,13 +5,13 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows expression text, tone, formality, use case
  *
  * Layout:
  * ┌──────────────────────────────────────┐
  * │ ◇ EXPRESSION      ★ closing         │  <- Diamond icon + use case badge
- * │ ═════════════════════════════════   │  <- Double separator (imported)
+ * │ ═════════════════════════════════   │  <- Double separator
  * │ closing_formal_fr                    │
  * │ ┌────────────────────────────────┐   │
  * │ │ "Veuillez agréer l'expression  │   │  <- The phrase text
@@ -146,12 +146,11 @@ export const ExpressionCardContent = memo(function ExpressionCardContent({
         />
       )}
 
-      {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Trait (imported) + Class (Expression) */}
+      {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Class (Expression) */}
       <div className="mb-3">
         <TaxonomyBadge
           layer="knowledge"
           realm="shared"
-          trait="imported"
           className="Expression"
           selected={selected}
           isHovered={isHovered}

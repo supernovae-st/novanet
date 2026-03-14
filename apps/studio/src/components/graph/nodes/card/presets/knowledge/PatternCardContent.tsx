@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows pattern template, placeholders, and usage
  *
  * Layout:
@@ -28,7 +28,7 @@ import { Regex } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { DomainBadge } from './KnowledgeHelpers';
 import { GlowEffect } from '../../effects';
@@ -60,7 +60,6 @@ export interface PatternNodeData {
 export interface PatternTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface PatternCardContentProps extends CardContext {
@@ -171,14 +170,12 @@ export const PatternCardContent = memo(function PatternCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className="Pattern"
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (
@@ -208,7 +205,7 @@ export const PatternCardContent = memo(function PatternCardContent({
         </div>
       )}
 
-      {/* Double line separator (imported trait) */}
+      {/* Double line separator */}
       <div className="mb-3">
         <div
           className="h-[2px] mb-[2px]"

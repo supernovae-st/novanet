@@ -105,12 +105,11 @@ export const ContentSlotCardContent = memo(function ContentSlotCardContent({
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (structure) + Realm (org) + Trait (defined) + Class (ContentSlot) */}
+      {/* Taxonomy Badge: Layer (structure) + Realm (org) + Class (ContentSlot) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="structure"
           realm="org"
-          trait="defined"
           className="ContentSlot"
           selected={selected}
           isHovered={isHovered}

@@ -7,7 +7,7 @@
  * Layer color: Green #22c55e
  *
  * Components:
- * - GeneratedBadge: Shows generated trait indicator
+ * - GeneratedBadge: Shows generated output indicator
  * - StatusBadge: Shows publication status (draft/published/archived)
  * - LocaleBadge: Shows locale with flag
  * - VersionHistory: Shows version chain
@@ -23,7 +23,7 @@ import { motion } from 'motion/react';
 // import { DURATIONS } from '../../animationPresets';
 
 // =============================================================================
-// GeneratedBadge - Shows generated trait indicator
+// GeneratedBadge - Shows generated output indicator
 // =============================================================================
 
 export interface GeneratedBadgeProps {

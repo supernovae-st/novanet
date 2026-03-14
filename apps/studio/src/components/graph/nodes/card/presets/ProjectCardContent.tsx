@@ -11,7 +11,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = foundation) → violet #8b5cf6
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Full premium effects: Aurora, GridPattern, BorderBeam, Spotlight
  *
  * Layout:
@@ -63,7 +63,7 @@ import {
 import type { CardContext } from '../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { SPRING_CONFIGS } from '../animationPresets';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 import {
   LAYER_COLORS,
   REALM_COLORS,
@@ -112,7 +112,6 @@ export interface ProjectNodeData {
 export interface ProjectTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface ProjectCardContentProps extends CardContext {

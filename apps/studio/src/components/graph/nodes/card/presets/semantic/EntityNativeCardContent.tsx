@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = semantic) → orange #f97316
- * - Border style → dashed (authored trait)
+ * - Border style → dashed
  * - SUBTLE effects only (parent Entity has premium effects)
  * - Locale badge with locale-specific accent color
  *
@@ -31,7 +31,7 @@
  * │ │ ✍️ Human  │  ● Published  │ v1   │  │  ← Curation + Status + Version
  * │ └──────────────────────────────────┘  │
  * └────────────────────────────────────────┘
- *    ↑ Simple dashed border (authored trait)
+ *    ↑ Simple dashed border
  */
 
 import { memo, useMemo } from 'react';
@@ -167,8 +167,8 @@ export const EntityNativeCardContent = memo(function EntityNativeCardContent({
 
   return (
     <div className="relative px-5 py-5">
-      {/* === DASHED BORDER EFFECT (ADR-005: authored = dashed) === */}
-      {/* Simple dashed border instead of heavy BorderBeam for authored trait */}
+      {/* === DASHED BORDER EFFECT (ADR-005) === */}
+      {/* Simple dashed border instead of heavy BorderBeam */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -188,7 +188,6 @@ export const EntityNativeCardContent = memo(function EntityNativeCardContent({
         <TaxonomyBadge
           layer="semantic"
           realm="org"
-          trait="authored"
           className="EntityNative"
           selected={selected}
           isHovered={isHovered}
@@ -255,7 +254,7 @@ export const EntityNativeCardContent = memo(function EntityNativeCardContent({
 
       {/* Row 4: Icon + DisplayName (horizontal layout) */}
       <div className="flex items-center gap-4 mb-4">
-        {/* Diamond OUTLINE icon — dashed border (authored trait), NO fill */}
+        {/* Diamond OUTLINE icon — dashed border, NO fill */}
         <IconWrapper
           className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center"
           style={{

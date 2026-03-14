@@ -88,7 +88,7 @@ All nodes have: key, display_name, node_class, content, triggers, provenance, cr
 - PageNative, BlockNative: Generated content → FOR_LOCALE
 - OutputArtifact: Pipeline output
 
-### Key Relationships (151 arc types — v0.19.0)
+### Key Relationships (159 arc types — v0.20.0)
 
 **Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_BRAND, SUPPORTS_LOCALE
 **Localization**: FOR_LOCALE, HAS_NATIVE, NATIVE_OF, FALLBACK_TO

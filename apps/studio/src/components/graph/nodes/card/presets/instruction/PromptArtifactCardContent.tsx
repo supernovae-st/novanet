@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = instruction) → yellow #eab308
- * - Border style → dotted (generated trait)
+ * - Border style → dotted
  * - Shows compiled prompt, token count, status
  *
  * Layout:
@@ -125,12 +125,11 @@ export const PromptArtifactCardContent = memo(function PromptArtifactCardContent
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Trait (generated) + Class (PromptArtifact) */}
+      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Class (PromptArtifact) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="instruction"
           realm="org"
-          trait="generated"
           className="PromptArtifact"
           selected={selected}
           isHovered={isHovered}

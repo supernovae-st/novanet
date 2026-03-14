@@ -38,7 +38,7 @@ import {
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { DomainBadge } from './KnowledgeHelpers';
 
@@ -75,7 +75,6 @@ export interface KnowledgeSetNodeData {
 export interface KnowledgeSetTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface KnowledgeSetCardContentProps extends CardContext {
@@ -175,14 +174,12 @@ export const KnowledgeSetCardContent = memo(function KnowledgeSetCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className={data.type}
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (

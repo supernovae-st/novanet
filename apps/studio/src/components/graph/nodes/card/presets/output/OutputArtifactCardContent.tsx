@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = output) → green #22c55e
- * - Border style → dotted (generated trait)
+ * - Border style → dotted (output layer)
  * - Shows bundle stats, locale, checksum, deployment info
  *
  * Layout:
@@ -141,12 +141,11 @@ export const OutputArtifactCardContent = memo(function OutputArtifactCardContent
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (output) + Realm (org) + Trait (generated) + Class (OutputArtifact) */}
+      {/* Taxonomy Badge: Layer (output) + Realm (org) + Class (OutputArtifact) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="output"
           realm="org"
-          trait="generated"
           className="OutputArtifact"
           selected={selected}
           isHovered={isHovered}

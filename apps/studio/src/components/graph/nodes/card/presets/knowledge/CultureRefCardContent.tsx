@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> double (imported trait)
+ * - Border style -> double
  * - Shows cultural reference, category, sensitivity level
  *
  * Layout:
@@ -28,7 +28,7 @@ import { Theater } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { GlowEffect } from '../../effects';
 
@@ -74,7 +74,6 @@ export interface CultureRefNodeData {
 export interface CultureRefTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface CultureRefCardContentProps extends CardContext {
@@ -166,14 +165,12 @@ export const CultureRefCardContent = memo(function CultureRefCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className="CultureRef"
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (
@@ -212,7 +209,7 @@ export const CultureRefCardContent = memo(function CultureRefCardContent({
         </div>
       )}
 
-      {/* Double line separator (imported trait) */}
+      {/* Double line separator */}
       <div className="mb-3">
         <div
           className="h-[2px] mb-[2px]"

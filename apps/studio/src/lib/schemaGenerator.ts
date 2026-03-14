@@ -9,10 +9,10 @@
  *
  * ---
  *
- * (Legacy) Generates the ontological schema graph (60 node types + relationships)
+ * (Legacy) Generates the ontological schema graph (59 node types + relationships)
  * for "Schema Mode" visualization.
  *
- * v0.19.0: 60 nodes, 10 layers, 2 realms (*Native Pattern architecture)
+ * v0.20.0: 59 nodes, 10 layers, 2 realms (*Native Pattern architecture)
  * Uses RelationRegistry from @novanet/core as single source of truth
  * for relations. This ensures the schema visualization is always in sync
  * with the actual graph schema.
@@ -51,8 +51,8 @@ export interface SchemaGraphResult {
 }
 
 /**
- * Generate schema graph with all 60 node types and their relationships
- * v0.19.0: 60 nodes, 10 layers, 2 realms
+ * Generate schema graph with all 59 node types and their relationships
+ * v0.20.0: 59 nodes, 10 layers, 2 realms
  *
  * NOTE: Use /api/graph/ontology instead (Query-First Architecture)
  */
@@ -60,7 +60,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
 
-  // Generate nodes for all 60 node types
+  // Generate nodes for all 59 node types
   for (const nodeType of NODE_TYPES) {
     const config = nodeTypeConfigs[nodeType];
     const realm = NODE_REALMS[nodeType];

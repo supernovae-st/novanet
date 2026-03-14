@@ -105,7 +105,6 @@ export interface EntityCategoryNodeData {
 export interface EntityCategoryTaxonomyProps {
   layer: 'config';
   realm: 'shared';
-  trait: 'defined';
 }
 
 export interface EntityCategoryCardContentProps extends CardContext {

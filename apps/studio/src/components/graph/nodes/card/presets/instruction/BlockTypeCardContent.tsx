@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = instruction) → yellow #eab308
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows JSON schema, category, block_type
  *
  * Layout:
@@ -116,12 +116,11 @@ export const BlockTypeCardContent = memo(function BlockTypeCardContent({
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Trait (defined) + Class (BlockType) */}
+      {/* Taxonomy Badge: Layer (instruction) + Realm (org) + Class (BlockType) */}
       <div className="flex items-center justify-between mb-3">
         <TaxonomyBadge
           layer="instruction"
           realm="org"
-          trait="defined"
           className="BlockType"
           selected={selected}
           isHovered={isHovered}

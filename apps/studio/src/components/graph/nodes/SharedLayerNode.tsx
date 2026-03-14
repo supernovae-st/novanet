@@ -13,7 +13,6 @@
  * v0.13.1 Enhancements:
  * - Layer-based gradient fills with smooth color encoding
  * - Realm-specific border styling (teal for shared realm)
- * - Trait indicator visualization (border style per ADR-005)
  * - Premium hover/select states with glass morphism
  * - Passport card design language alignment
  */
@@ -22,7 +21,7 @@ import { memo, useMemo } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { getSharedKnowledgeColors } from '@/design/nodeColors';
 import type { BaseNodeData } from './BaseNodeWrapper';
-import { CardShell, getCardContentComponent, type NodeTrait } from './card';
+import { CardShell, getCardContentComponent } from './card';
 
 export type SharedLayerNodeType = Node<BaseNodeData>;
 
@@ -60,55 +59,6 @@ function getLayerForType(type: string): SharedLayer {
     // Knowledge layer (default)
     default:
       return 'knowledge';
-  }
-}
-
-/**
- * Map node type to its trait (data origin per ADR-024)
- */
-function getTraitForType(type: string): NodeTrait {
-  switch (type) {
-    // Defined: human-created once
-    case 'Locale':
-    case 'EntityCategory':
-    case 'SEOKeywordFormat':
-    case 'Continent':
-    case 'GeoRegion':
-    case 'GeoSubRegion':
-    case 'Country':
-    case 'Region':
-    case 'TermSet':
-    case 'ExpressionSet':
-    case 'PatternSet':
-    case 'CultureSet':
-    case 'TabooSet':
-    case 'AudienceSet':
-    case 'CategorySet':
-      return 'defined';
-    // Imported: external data brought in
-    case 'Term':
-    case 'Expression':
-    case 'Pattern':
-    case 'CultureRef':
-    case 'Taboo':
-    case 'AudienceTrait':
-    case 'SEOKeyword':
-    case 'GEOQuery':
-      return 'imported';
-    // Retrieved: fetched from external APIs
-    case 'GEOAnswer':
-    case 'SEOKeywordMetrics':
-      return 'retrieved';
-    // Locale settings: defined
-    case 'Culture':
-    case 'Style':
-    case 'Formatting':
-    case 'Adaptation':
-    case 'Slugification':
-    case 'Market':
-      return 'defined';
-    default:
-      return 'defined';
   }
 }
 
@@ -231,16 +181,14 @@ function adjustColorForGradient(hex: string, satMod: number, lightMod: number): 
  * Features:
  * - Layer-based gradient fills with smooth transitions
  * - Shared realm border styling (teal accent)
- * - Trait indicator via border style (ADR-005)
  * - Enhanced hover/select states with glass morphism effects
  * - Specialized card content routing per node type
  */
 export const SharedLayerNode = memo(function SharedLayerNode(props: NodeProps<SharedLayerNodeType>) {
   const { data, selected = false } = props;
 
-  // Determine layer and trait for visual encoding
+  // Determine layer for visual encoding
   const layer = useMemo(() => getLayerForType(data.type), [data.type]);
-  const trait = useMemo(() => getTraitForType(data.type), [data.type]);
 
   // Enhanced colors with layer-specific gradients
   const colors = useMemo(
@@ -270,7 +218,6 @@ export const SharedLayerNode = memo(function SharedLayerNode(props: NodeProps<Sh
       colors={colors}
       selected={selected}
       width={width}
-      trait={trait}
       isDimmed={data.dimmed === true}
       isHoverDimmed={data.hoverDimmed === true}
       isSchemaMode={data.isSchemaMode === true}

@@ -5,7 +5,7 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = foundation) → violet #8b5cf6
- * - Border style → solid (defined trait)
+ * - Border style → solid
  * - Shows AI platform badges and style attributes
  *
  * Layout:
@@ -152,12 +152,11 @@ export const PromptStyleCardContent = memo(function PromptStyleCardContent({
 
   return (
     <div className="px-4 py-4">
-      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Trait (defined) + Class (PromptStyle) */}
+      {/* Taxonomy Badge: Layer (foundation) + Realm (org) + Class (PromptStyle) */}
       <div className="mb-3">
         <TaxonomyBadge
           layer="foundation"
           realm="org"
-          trait="defined"
           className="PromptStyle"
           selected={selected}
           isHovered={isHovered}

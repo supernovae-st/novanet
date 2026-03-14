@@ -5,12 +5,12 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = knowledge) -> purple #8b5cf6
- * - Border style -> dotted (retrieved trait - ADR-024)
+ * - Border style -> dotted
  * - Shows answer preview, brand mention status, competitors, quality
  *
  * Premium Effects (v0.13.1):
  * - GridPattern: AI response matrix background
- * - BorderBeam: Animated border with DOTTED style (retrieved trait)
+ * - BorderBeam: Animated border with DOTTED style
  * - MotionTechCorners: AI response corners
  * - GlowEffect: Green (brand mentioned), Amber (competitors), Gray (absent)
  * - LightRays: Radiating answer effect on selection
@@ -369,7 +369,7 @@ export const GEOAnswerCardContent = memo(function GEOAnswerCardContent({
         />
       )}
 
-      {/* Layer 1: BorderBeam - Animated DOTTED border (retrieved trait per ADR-005) (MEDIUM+ tier) */}
+      {/* Layer 1: BorderBeam - Animated DOTTED border (MEDIUM+ tier) */}
       {showPremiumEffects && (selected || isHovered) && (
         <BorderBeam
           color={glowColor}
@@ -425,12 +425,11 @@ export const GEOAnswerCardContent = memo(function GEOAnswerCardContent({
 
       {/* Content Layer */}
       <div className="relative z-10">
-        {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Trait (retrieved) + Class (GEOAnswer) */}
+        {/* Taxonomy Badge: Layer (knowledge) + Realm (shared) + Class (GEOAnswer) */}
         <div className="mb-3">
           <TaxonomyBadge
             layer="knowledge"
             realm="shared"
-            trait="retrieved"
             className="GEOAnswer"
             selected={selected}
             isHovered={isHovered}
