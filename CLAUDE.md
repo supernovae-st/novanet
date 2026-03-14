@@ -35,7 +35,7 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 **Related docs**:
 - `.claude/rules/novanet-decisions.md` — ADR index (quick reference)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
-- `../.claude/rules/adr/` — Full ADR content by domain (32 ADRs, in parent workspace)
+- `../.claude/rules/adr/` — Full ADR content by domain (52 ADRs, in parent workspace)
 - Use `/adr <number>` command for quick lookup
 
 ```
