@@ -5,7 +5,7 @@
 //!
 //! Output target: `tools/novanet/src/tui/icons.generated.rs`
 //!
-//! Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
+//! Categories: realms, layers, arc_families, states, navigation, quality, modes
 
 #![allow(clippy::needless_raw_string_hashes)]
 
@@ -95,7 +95,6 @@ impl IconDef {{
 
     generate_category("realms", &icons.realms);
     generate_category("layers", &icons.layers);
-    generate_category("traits", &icons.traits);
     generate_category("arc_families", &icons.arc_families);
     generate_category("states", &icons.states);
     generate_category("navigation", &icons.navigation);
@@ -138,16 +137,6 @@ pub fn realm_icons() -> HashMap<&'static str, IconDef> {
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, _) in items {
         let const_name = format!("LAYERS_{}", key.to_uppercase().replace('-', "_"));
-        output.push_str(&format!("        \"{}\" => {},\n", key, const_name));
-    }
-    output.push_str("    }\n}\n\n");
-
-    // Traits
-    output.push_str("/// Get all trait icons.\npub fn trait_icons() -> HashMap<&'static str, IconDef> {\n    icon_map! {\n");
-    let mut items: Vec<_> = icons.traits.iter().collect();
-    items.sort_by(|a, b| a.0.cmp(b.0));
-    for (key, _) in items {
-        let const_name = format!("TRAITS_{}", key.to_uppercase().replace('-', "_"));
         output.push_str(&format!("        \"{}\" => {},\n", key, const_name));
     }
     output.push_str("    }\n}\n\n");
@@ -234,19 +223,6 @@ pub fn layer_terminal_icon(key: &str) -> &'static str {
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
     output.push_str(
-        r#"/// Get terminal icon for a trait.
-pub fn trait_terminal_icon(key: &str) -> &'static str {
-    match key {
-"#,
-    );
-    let mut items: Vec<_> = icons.traits.iter().collect();
-    items.sort_by(|a, b| a.0.cmp(b.0));
-    for (key, icon) in items {
-        output.push_str(&format!("        \"{}\" => \"{}\",\n", key, icon.terminal));
-    }
-    output.push_str("        _ => \"·\",\n    }\n}\n\n");
-
-    output.push_str(
         r#"/// Get terminal icon for a navigation action.
 pub fn navigation_terminal_icon(key: &str) -> &'static str {
     match key {
@@ -325,40 +301,33 @@ mod tests {
         // Categories
         assert!(output.contains("// REALMS ICONS"));
         assert!(output.contains("// LAYERS ICONS"));
-        assert!(output.contains("// TRAITS ICONS"));
         assert!(output.contains("// ARC_FAMILIES ICONS"));
         assert!(output.contains("// STATES ICONS"));
         assert!(output.contains("// NAVIGATION ICONS"));
         assert!(output.contains("// QUALITY ICONS"));
         assert!(output.contains("// MODES ICONS"));
 
-        // Constants (spot check) — v0.12.0: traits renamed
+        // Constants (spot check)
         assert!(output.contains("pub const REALMS_SHARED: IconDef"));
         assert!(output.contains("pub const REALMS_ORG: IconDef"));
-        assert!(output.contains("pub const TRAITS_DEFINED: IconDef"));
-        assert!(output.contains("pub const TRAITS_AUTHORED: IconDef"));
         assert!(output.contains("pub const NAVIGATION_EXPANDED: IconDef"));
         assert!(output.contains("pub const NAVIGATION_COLLAPSED: IconDef"));
 
         // Terminal icons (spot check)
         assert!(output.contains("\"◉\"")); // shared
         assert!(output.contains("\"◎\"")); // org
-        assert!(output.contains("\"■\"")); // defined
-        assert!(output.contains("\"□\"")); // authored
         assert!(output.contains("\"▼\"")); // expanded
         assert!(output.contains("\"▶\"")); // collapsed
 
         // Lookup functions
         assert!(output.contains("pub fn realm_icons()"));
         assert!(output.contains("pub fn layer_icons()"));
-        assert!(output.contains("pub fn trait_icons()"));
         assert!(output.contains("pub fn state_icons()"));
         assert!(output.contains("pub fn navigation_icons()"));
 
         // Convenience functions
         assert!(output.contains("pub fn realm_terminal_icon(key: &str)"));
         assert!(output.contains("pub fn layer_terminal_icon(key: &str)"));
-        assert!(output.contains("pub fn trait_terminal_icon(key: &str)"));
         assert!(output.contains("pub fn navigation_terminal_icon(key: &str)"));
         assert!(output.contains("pub fn state_terminal_icon(key: &str)"));
         assert!(output.contains("pub fn mode_terminal_icon(key: &str)"));
