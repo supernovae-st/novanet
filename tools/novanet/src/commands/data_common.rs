@@ -4,7 +4,9 @@
 //! Both commands share constants, types, and Neo4j query logic.
 
 use indexmap::IndexMap;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
+use std::sync::LazyLock;
 
 // =============================================================================
 // CONSTANTS
@@ -34,6 +36,10 @@ pub const TIMESTAMP_FIELDS: &[&str] = &["created_at", "updated_at"];
 
 /// Regex pattern for valid Neo4j labels (PascalCase).
 pub const LABEL_PATTERN: &str = r"^[A-Z][A-Za-z0-9]*$";
+
+/// Pre-compiled PascalCase label regex.
+static RE_LABEL: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(LABEL_PATTERN).expect("valid label regex"));
 
 /// JSON fields that need parsing from Neo4j string representation.
 pub const JSON_FIELDS: &[&str] = &["denomination_forms", "provenance"];
@@ -101,9 +107,8 @@ pub fn return_clause(fields: &[&str]) -> String {
 
 /// Validate class names against injection (PascalCase only).
 pub fn validate_class_names(classes: &[String]) -> crate::Result<()> {
-    let re = regex::Regex::new(LABEL_PATTERN).expect("valid regex");
     for class in classes {
-        if !re.is_match(class) {
+        if !RE_LABEL.is_match(class) {
             return Err(crate::NovaNetError::Validation(format!(
                 "Invalid class name '{class}': must be PascalCase (e.g. Entity, EntityNative)"
             )));

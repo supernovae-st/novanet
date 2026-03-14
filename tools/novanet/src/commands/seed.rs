@@ -27,6 +27,7 @@ use std::time::Instant;
 use fs2::FileExt;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use std::sync::LazyLock;
 use tracing::{info, instrument, warn};
 
 use crate::Result;
@@ -66,12 +67,32 @@ const SECRET_PATTERNS: &[&str] = &[
 /// Maximum YAML file size (1 MB) — prevents DoS via large files.
 const MAX_YAML_FILE_SIZE: u64 = 1024 * 1024;
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// COMPILED REGEX PATTERNS (LazyLock for one-time compilation)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// PascalCase class name validation (shared with data_common::LABEL_PATTERN).
+static RE_CLASS_NAME: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[A-Z][A-Za-z0-9]*$").expect("valid class name regex"));
+
+/// RFC 3339 timestamp validation.
+static RE_TIMESTAMP: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$")
+        .expect("valid timestamp regex")
+});
+
+/// Pre-compiled secret detection patterns.
+static RE_SECRETS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+    SECRET_PATTERNS
+        .iter()
+        .filter_map(|p| Regex::new(p).ok())
+        .collect()
+});
+
 /// Validate a Neo4j node class name (PascalCase, no injection).
 /// Returns error if the class name could cause Cypher injection.
 pub fn validate_class_name(class: &str) -> Result<()> {
-    // Must be PascalCase: starts with uppercase, alphanumeric only
-    let re = Regex::new(r"^[A-Z][A-Za-z0-9]*$").expect("valid regex");
-    if !re.is_match(class) {
+    if !RE_CLASS_NAME.is_match(class) {
         return Err(NovaNetError::Validation(format!(
             "Invalid class name '{}': must be PascalCase (e.g., Entity, EntityNative)",
             class
@@ -83,12 +104,8 @@ pub fn validate_class_name(class: &str) -> Result<()> {
 /// Validate and sanitize a timestamp string.
 /// Returns a safe timestamp string or generates a new one if invalid.
 pub fn validate_timestamp(ts: Option<&str>) -> String {
-    // RFC 3339 timestamp pattern (strict validation)
-    let re = Regex::new(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$")
-        .expect("valid regex");
-
     match ts {
-        Some(timestamp) if re.is_match(timestamp) => timestamp.to_string(),
+        Some(timestamp) if RE_TIMESTAMP.is_match(timestamp) => timestamp.to_string(),
         _ => chrono::Utc::now().to_rfc3339(),
     }
 }
@@ -252,11 +269,9 @@ fn default_priority() -> u8 {
 
 /// Check if content contains secrets.
 pub fn detect_secrets(content: &str) -> Option<String> {
-    for pattern in SECRET_PATTERNS {
-        if let Ok(re) = Regex::new(pattern) {
-            if re.is_match(content) {
-                return Some(format!("Secret detected matching pattern: {}", pattern));
-            }
+    for (re, pattern) in RE_SECRETS.iter().zip(SECRET_PATTERNS.iter()) {
+        if re.is_match(content) {
+            return Some(format!("Secret detected matching pattern: {}", pattern));
         }
     }
     None
