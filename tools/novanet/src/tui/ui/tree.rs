@@ -593,7 +593,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // text_color: color for icon and text
     // match_positions: optional fuzzy match positions for highlighting
     // bg_color: optional background color for the line (e.g., active Class highlight)
-    // trait_icon_opt: optional (trait_icon, trait_color) for colored trait icons
     let make_line = |idx: usize,
                      cursor: usize,
                      focused: bool,
@@ -603,25 +602,19 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                      line_color: Color,
                      text_color: Color,
                      match_positions: Option<&[u32]>,
-                     bg_color: Option<Color>,
-                     trait_icon_opt: Option<(&str, Color)>|
+                     bg_color: Option<Color>|
      -> Line {
         let is_cursor = idx == cursor;
         let cursor_char = if is_cursor { ">" } else { " " };
         let icon_space = if icon.is_empty() { "" } else { " " };
-
-        // Build trait icon string if provided
-        let trait_str = trait_icon_opt
-            .map(|(ti, _)| format!("{} ", ti))
-            .unwrap_or_default();
 
         if is_cursor && focused {
             // When focused/selected, use white on highlight bg for entire line
             let style = Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White);
             Line::from(Span::styled(
                 format!(
-                    "{}{}{}{}{}{}",
-                    cursor_char, tree_prefix, icon, icon_space, trait_str, text
+                    "{}{}{}{}{}",
+                    cursor_char, tree_prefix, icon, icon_space, text
                 ),
                 style,
             ))
@@ -645,10 +638,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 format!("{}{}", icon, icon_space),
                 base_style.fg(text_color),
             ));
-            // Add colored trait icon if provided
-            if let Some((ti, tc)) = trait_icon_opt {
-                spans.push(Span::styled(format!("{} ", ti), base_style.fg(tc)));
-            }
             // Apply fuzzy match highlighting to text if positions provided
             spans.extend(highlight_matches_with_bg(
                 &text,
@@ -685,13 +674,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         Color::Magenta, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),
         None, // bg_color
-        None, // trait_icon_opt
     ));
     idx += 1;
 
     let has_arcs = !app.tree.arc_families.is_empty();
 
-    // v0.17.3 (ADR-036): trait filter removed - show all realms
+    // Show all realms
     if !classes_collapsed {
         let visible_realms: Vec<_> = app.tree.realms.iter().collect();
         let realm_count = visible_realms.len();
@@ -1504,7 +1492,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         Color::Yellow, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),
         None, // bg_color
-        None, // trait_icon_opt
     ));
     idx += 1;
 
