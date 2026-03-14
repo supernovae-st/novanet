@@ -82,7 +82,7 @@ pnpm test            # Tests
 | `G` | Focus mode (Zen) |
 | `M` | Toggle minimap |
 | `L` | Toggle edge labels |
-| `T` | Cycle trait filter (Defined → Authored → ... → None) |
+| ~~`T`~~ | ~~Cycle trait filter~~ *(removed v0.19.0 — traits deprecated)* |
 | `E` | Cycle arc family filter (Ownership → ... → None) |
 | `⇧L` | Cycle locale filter |
 | `[` | Toggle left sidebar |
@@ -158,34 +158,23 @@ pnpm test            # Tests
 │                                                                                 │
 │  SCHEMA NODES = Classes (structure)        DATA NODES = Instances (content)     │
 │  ───────────────────────────────────       ─────────────────────────────────    │
-│  :Schema:Class     (61 types)              :Locale, :Page, :Entity (200K+)      │
+│  :Schema:Class     (59 types)              :Locale, :Page, :Entity (200K+)      │
 │  :Schema:Realm     (2: shared, org)        Actual content nodes                 │
 │  :Schema:Layer     (10 layers)             Business data                        │
-│  :Schema:Trait     (5 data origins)                                             │
-│  :Schema:ArcFamily (5 families)            Link: (data)-[:OF_CLASS]->(schema)   │
-│  :Schema:ArcClass  (169 relationships)                                          │
+│  :Schema:ArcFamily (6 families)            Link: (data)-[:OF_CLASS]->(schema)   │
+│  :Schema:ArcClass  (159 relationships)                                          │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  CLASSIFICATION AXES (on NodeClass)        CLASSIFICATION VALUES                │
 │  ──────────────────────────────────        ─────────────────────────────────    │
-│  WHERE? → Realm                            shared (40 nodes, READ-ONLY)         │
-│  WHAT?  → Layer                            org (21 nodes, multi-tenant)         │
-│  HOW?   → Trait (Data Origin)                                                   │
+│  WHERE? → Realm                            shared (36 nodes, READ-ONLY)         │
+│  WHAT?  → Layer                            org (23 nodes)                       │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  LAYERS (v0.13: 10 total = 4 shared + 6 org)                                    │
 │  ────────────────────────────────────────────                                   │
 │  SHARED: config → locale → geography → knowledge                                │
 │  ORG:    config → foundation → structure → semantic → instruction → output      │
-│                                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│  TRAITS (5 data origins - WHERE does data come from?)                           │
-│  ─────────────────────────────────────────────────────                          │
-│  defined    : Human-created once (Entity, Page, Block)                          │
-│  authored   : Human-written per locale (EntityNative, ProjectNative)          │
-│  imported   : External data brought in (Term, Expression, Pattern)              │
-│  generated  : LLM output (PageNative, BlockNative)                        │
-│  retrieved  : Fetched from external APIs (SEOKeywordMetrics, GEOAnswer)         │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  NATIVE GENERATION (not translation!)                                           │
@@ -206,10 +195,9 @@ v0.13.0 establishes faceted classification where **everything is a clickable nod
 |-------------|-------|---------|-----------|
 | **Realm** | 2 | WHERE? (shared / org) | Yes |
 | **Layer** | 10 | WHAT? (4 shared + 6 org) | Yes |
-| **Trait** | 5 | Data Origin (defined / authored / imported / generated / retrieved) | Yes |
-| **ArcFamily** | 5 | Relationship classification | Yes |
-| **ArcClass** | 169 | Individual relationship type | Yes |
-| **Class** | 61 | Node type definitions (40 shared + 21 org) | Yes |
+| **ArcFamily** | 6 | Relationship classification | Yes |
+| **ArcClass** | 159 | Individual relationship type | Yes |
+| **Class** | 59 | Node type definitions (36 shared + 23 org) | Yes |
 
 All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 
@@ -217,8 +205,8 @@ All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| **Shared** | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
-| **Org** | config, foundation, structure, semantic, instruction, output | 21 | Business-specific content |
+| **Shared** | config, locale, geography, knowledge | 36 | Universal knowledge (READ-ONLY) |
+| **Org** | config, foundation, structure, semantic, instruction, output | 23 | Business-specific content |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `HAS_PROJECT`

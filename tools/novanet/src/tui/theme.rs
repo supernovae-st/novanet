@@ -104,26 +104,6 @@ pub fn hex_to_color(hex: &str) -> Color {
 }
 
 // =============================================================================
-// HEATMAP COLORS
-// =============================================================================
-
-/// Generate a heatmap color based on count relative to max.
-/// Returns cyan spectrum: dim (few) → bright (many).
-///
-/// Used in Guide mode to visualize class density per layer/trait.
-pub fn heatmap_color(count: usize, max_count: usize) -> Color {
-    if max_count == 0 {
-        return Color::Rgb(60, 60, 70); // No data = dim gray
-    }
-
-    let ratio = (count as f64) / (max_count as f64);
-    let intensity = (ratio * 180.0) as u8 + 60; // Range: 60-240
-
-    // Cyan spectrum: dim gray → bright cyan
-    Color::Rgb(intensity / 3, intensity, intensity)
-}
-
-// =============================================================================
 // REALM COLORS (from realms/*.yaml)
 // =============================================================================
 
@@ -247,100 +227,6 @@ pub mod layer {
                 "output" => OUTPUT_16,
                 _ => Color::White,
             },
-        }
-    }
-}
-
-// =============================================================================
-// TRAIT STYLES (from traits/*.yaml)
-// =============================================================================
-
-/// Trait border styles for visual encoding.
-/// v11.8: ADR-024 Data Origin renames:
-///   invariant → defined, localized → authored, knowledge → imported,
-///   generated (unchanged), aggregated → retrieved
-pub mod traits {
-    use super::*;
-
-    // Unicode border characters for trait encoding
-    // v11.8: ADR-024 renamed traits (defined, authored, imported, generated, retrieved)
-    pub const DEFINED_BORDER: &str = "─";
-    pub const AUTHORED_BORDER: &str = "┄";
-    pub const IMPORTED_BORDER: &str = "┈";
-    pub const GENERATED_BORDER: &str = "═";
-    pub const RETRIEVED_BORDER: &str = "┅";
-
-    // Trait colors (hex)
-    pub const DEFINED_HEX: &str = "#3b82f6";
-    pub const AUTHORED_HEX: &str = "#22c55e";
-    pub const IMPORTED_HEX: &str = "#8b5cf6";
-    pub const GENERATED_HEX: &str = "#b58900";
-    pub const RETRIEVED_HEX: &str = "#6c71c4";
-
-    // 256-color palette
-    pub const DEFINED_256: u8 = 33;
-    pub const AUTHORED_256: u8 = 41;
-    pub const IMPORTED_256: u8 = 141;
-    pub const GENERATED_256: u8 = 136;
-    pub const RETRIEVED_256: u8 = 141;
-
-    // 16-color palette
-    pub const DEFINED_16: Color = Color::Blue;
-    pub const AUTHORED_16: Color = Color::Green;
-    pub const IMPORTED_16: Color = Color::Magenta;
-    pub const GENERATED_16: Color = Color::Yellow;
-    pub const RETRIEVED_16: Color = Color::Magenta;
-
-    /// Get trait border character.
-    /// v11.8: ADR-024 trait renames
-    pub fn border_char(trait_key: &str) -> &'static str {
-        match trait_key {
-            "defined" => DEFINED_BORDER,
-            "authored" => AUTHORED_BORDER,
-            "imported" => IMPORTED_BORDER,
-            "generated" => GENERATED_BORDER,
-            "retrieved" => RETRIEVED_BORDER,
-            _ => DEFINED_BORDER,
-        }
-    }
-
-    /// Get trait color for a given color mode.
-    /// v11.8: ADR-024 trait renames
-    pub fn color(trait_key: &str, mode: ColorMode) -> Color {
-        match mode {
-            ColorMode::TrueColor => match trait_key {
-                "defined" => hex_to_color(DEFINED_HEX),
-                "authored" => hex_to_color(AUTHORED_HEX),
-                "imported" => hex_to_color(IMPORTED_HEX),
-                "generated" => hex_to_color(GENERATED_HEX),
-                "retrieved" => hex_to_color(RETRIEVED_HEX),
-                _ => Color::White,
-            },
-            ColorMode::Color256 => match trait_key {
-                "defined" => Color::Indexed(DEFINED_256),
-                "authored" => Color::Indexed(AUTHORED_256),
-                "imported" => Color::Indexed(IMPORTED_256),
-                "generated" => Color::Indexed(GENERATED_256),
-                "retrieved" => Color::Indexed(RETRIEVED_256),
-                _ => Color::White,
-            },
-            ColorMode::Color16 => match trait_key {
-                "defined" => DEFINED_16,
-                "authored" => AUTHORED_16,
-                "imported" => IMPORTED_16,
-                "generated" => GENERATED_16,
-                "retrieved" => RETRIEVED_16,
-                _ => Color::White,
-            },
-        }
-    }
-
-    /// Get modifier for trait (bold for defined).
-    /// v11.8: ADR-024 trait renames
-    pub fn modifier(trait_key: &str) -> Modifier {
-        match trait_key {
-            "defined" => Modifier::BOLD,
-            _ => Modifier::empty(),
         }
     }
 }
@@ -643,11 +529,6 @@ impl Theme {
         layer::color(layer_key, self.mode)
     }
 
-    /// Get trait color.
-    pub fn trait_color(&self, trait_key: &str) -> Color {
-        traits::color(trait_key, self.mode)
-    }
-
     /// Get arc family color.
     pub fn arc_family_color(&self, family: &str) -> Color {
         arc_family::color(family, self.mode)
@@ -663,21 +544,9 @@ impl Theme {
         Style::default().fg(self.layer_color(layer_key))
     }
 
-    /// Get styled text for a trait (with appropriate modifier).
-    pub fn trait_style(&self, trait_key: &str) -> Style {
-        Style::default()
-            .fg(self.trait_color(trait_key))
-            .add_modifier(traits::modifier(trait_key))
-    }
-
     /// Get styled text for an arc family.
     pub fn arc_family_style(&self, family: &str) -> Style {
         Style::default().fg(self.arc_family_color(family))
-    }
-
-    /// Get trait border character.
-    pub fn trait_border(&self, trait_key: &str) -> &'static str {
-        traits::border_char(trait_key)
     }
 
     /// Get nav mode color.
@@ -1260,45 +1129,4 @@ mod tests {
         );
     }
 
-    // =========================================================================
-    // Heatmap color tests
-    // =========================================================================
-
-    #[test]
-    fn test_heatmap_color_zero() {
-        let color = heatmap_color(0, 50);
-        // Zero count = dim (intensity = 60)
-        assert!(matches!(color, Color::Rgb(r, _, _) if r < 100));
-    }
-
-    #[test]
-    fn test_heatmap_color_max() {
-        let color = heatmap_color(50, 50);
-        // Max count = bright (intensity = 240)
-        assert!(matches!(color, Color::Rgb(r, _, _) if r > 50));
-    }
-
-    #[test]
-    fn test_heatmap_color_half() {
-        let color = heatmap_color(25, 50);
-        // Half count = medium intensity (ratio 0.5, intensity ~150)
-        assert!(matches!(color, Color::Rgb(_, g, _) if g > 100 && g < 200));
-    }
-
-    #[test]
-    fn test_heatmap_color_zero_max() {
-        let color = heatmap_color(0, 0);
-        // Zero max = dim gray fallback
-        assert_eq!(color, Color::Rgb(60, 60, 70));
-    }
-
-    #[test]
-    fn test_heatmap_color_gradient() {
-        // Verify gradient: lower counts should have lower intensity
-        let color_low = heatmap_color(10, 100);
-        let color_high = heatmap_color(90, 100);
-        if let (Color::Rgb(_, g_low, _), Color::Rgb(_, g_high, _)) = (color_low, color_high) {
-            assert!(g_high > g_low, "higher count should have higher intensity");
-        }
-    }
 }
