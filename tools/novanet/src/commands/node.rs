@@ -72,7 +72,8 @@ pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> cra
     let props = parse_props_json(props_json)?;
     let (set_fragment, params) = build_set_fragment(&props, "n");
 
-    // Build Cypher: CREATE node with dynamic label, SET props, wire OF_CLASS
+    // SAFETY: kind is validated by validate_label() to contain only [A-Za-z0-9_].
+    // Property keys use backtick-escaping; values are parameterized.
     let mut cypher = format!(
         "CREATE (n:{kind} {{key: $key}})\n\
          SET n.created_at = datetime(), n.updated_at = datetime()"

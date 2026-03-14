@@ -75,6 +75,8 @@ pub async fn run_create(
         format!("\nSET {}", set_parts.join(", "))
     };
 
+    // SAFETY: rel_type is validated by validate_rel_type() to contain only [A-Z0-9_].
+    // Property keys use backtick-escaping; values are parameterized.
     let cypher = format!(
         "MATCH (from {{key: $from_key}}), (to {{key: $to_key}})\n\
          CREATE (from)-[r:{rel_type}]->(to){set_clause}\n\
@@ -127,7 +129,7 @@ pub async fn run_delete(
 ) -> crate::Result<()> {
     validate_rel_type(rel_type)?;
 
-    // Use type() function to match the relationship type dynamically
+    // SAFETY: rel_type is validated by validate_rel_type() to contain only [A-Z0-9_].
     let cypher = format!(
         "MATCH (from {{key: $from_key}})-[r:{rel_type}]->(to {{key: $to_key}})\n\
          DELETE r\n\
