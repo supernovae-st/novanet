@@ -55,14 +55,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<QueryParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::query::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::query::execute(&self.state, params.0)).await
     }
 
     /// Get self-description of the NovaNet knowledge graph.
@@ -77,14 +70,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<DescribeParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::describe::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::describe::execute(&self.state, params.0)).await
     }
 
     /// Search the NovaNet knowledge graph.
@@ -99,14 +85,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<SearchParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::search::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::search::execute(&self.state, params.0)).await
     }
 
     /// Introspect the NovaNet schema: query NodeClasses and ArcClasses.
@@ -121,14 +100,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<IntrospectParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::introspect::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::introspect::execute(&self.state, params.0)).await
     }
 
     /// Assemble context for LLM content generation.
@@ -143,14 +115,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<ContextParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::context::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::context::execute(&self.state, params.0)).await
     }
 
     /// Write data to Neo4j with schema validation.
@@ -166,14 +131,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<WriteParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::write::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::write::execute(&self.state, params.0)).await
     }
 
     /// Audit the knowledge graph for quality issues.
@@ -188,14 +146,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<AuditParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::auditor::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::auditor::execute(&self.state, params.0)).await
     }
 
     /// Execute multiple NovaNet tools in a single request.
@@ -209,14 +160,7 @@ impl NovaNetHandler {
         &self,
         params: Parameters<BatchParams>,
     ) -> Result<CallToolResult, McpError> {
-        let result = crate::tools::batch::execute(&self.state, params.0)
-            .await
-            .map_err(McpError::from)?;
-
-        let json = serde_json::to_string_pretty(&result)
-            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
-
-        Ok(CallToolResult::success(vec![Content::text(json)]))
+        execute_and_serialize(|| crate::tools::batch::execute(&self.state, params.0)).await
     }
 }
 
@@ -317,6 +261,20 @@ fn convert_prompt_message(msg: InternalPromptMessage) -> PromptMessage {
     };
 
     PromptMessage::new_text(role, msg.content)
+}
+
+/// Execute a tool operation and serialize the result to a CallToolResult.
+/// Shared by all 8 tool handlers to eliminate boilerplate.
+async fn execute_and_serialize<F, T, Fut>(f: F) -> Result<CallToolResult, McpError>
+where
+    F: FnOnce() -> Fut,
+    Fut: std::future::Future<Output = crate::Result<T>>,
+    T: serde::Serialize,
+{
+    let result = f().await.map_err(McpError::from)?;
+    let json = serde_json::to_string_pretty(&result)
+        .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+    Ok(CallToolResult::success(vec![Content::text(json)]))
 }
 
 #[cfg(test)]
