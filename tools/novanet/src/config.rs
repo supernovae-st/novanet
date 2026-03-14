@@ -56,7 +56,7 @@ pub fn node_classes_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/node-classes")
 }
 
-/// Path to taxonomy.yaml (v9.5 - realms, layers, traits, arc families)
+/// Path to taxonomy.yaml (realms, layers, arc families)
 #[must_use]
 pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
@@ -78,12 +78,6 @@ pub fn realms_dir(root: &Path) -> PathBuf {
 #[must_use]
 pub fn layers_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/layers")
-}
-
-/// Directory containing trait YAML files (v0.12.5)
-#[must_use]
-pub fn traits_dir(root: &Path) -> PathBuf {
-    root.join("packages/core/models/traits")
 }
 
 /// Directory containing arc-family YAML files (v0.12.5)
