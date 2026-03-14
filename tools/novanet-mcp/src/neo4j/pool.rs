@@ -11,11 +11,17 @@
 use crate::error::{Error, Result};
 use neo4rs::{BoltType, ConfigBuilder, Graph, Query};
 use std::sync::Arc;
+use std::time::Duration;
+use tracing::warn;
 
 /// Neo4j connection pool wrapper
 #[derive(Clone)]
 pub struct Neo4jPool {
     graph: Arc<Graph>,
+    /// Maximum number of retries on transient failures (default: 3)
+    max_retries: u32,
+    /// Base delay for exponential backoff (default: 100ms)
+    retry_base_delay: Duration,
 }
 
 /// Result of streaming query execution
@@ -60,6 +66,28 @@ impl Neo4jPool {
         pool_size: usize,
         fetch_size: usize,
     ) -> Result<Self> {
+        Self::with_retry_config(uri, user, password, pool_size, fetch_size, 3, Duration::from_millis(100)).await
+    }
+
+    /// Create a new pool with full configuration including retry settings
+    ///
+    /// # Arguments
+    /// * `uri` - Neo4j connection URI
+    /// * `user` - Neo4j username
+    /// * `password` - Neo4j password
+    /// * `pool_size` - Maximum number of connections
+    /// * `fetch_size` - Number of rows to fetch per batch
+    /// * `max_retries` - Maximum retry attempts on transient failures (0 = no retry)
+    /// * `retry_base_delay` - Base delay for exponential backoff (doubles each attempt)
+    pub async fn with_retry_config(
+        uri: &str,
+        user: &str,
+        password: &str,
+        pool_size: usize,
+        fetch_size: usize,
+        max_retries: u32,
+        retry_base_delay: Duration,
+    ) -> Result<Self> {
         let config = ConfigBuilder::default()
             .uri(uri)
             .user(user)
@@ -75,7 +103,59 @@ impl Neo4jPool {
 
         Ok(Self {
             graph: Arc::new(graph),
+            max_retries,
+            retry_base_delay,
         })
+    }
+
+    /// Execute a query with exponential backoff retry on transient failures,
+    /// then collect all rows as JSON.
+    ///
+    /// Only retries the `graph.execute()` call, NOT row iteration.
+    /// Backoff: base_delay * 2^(attempt-1) — e.g. 100ms, 200ms, 400ms
+    async fn execute_with_retry(
+        &self,
+        cypher: &str,
+        params: &Option<serde_json::Map<String, serde_json::Value>>,
+    ) -> Result<Vec<serde_json::Value>> {
+        let mut last_err = None;
+
+        for attempt in 0..=self.max_retries {
+            if attempt > 0 {
+                let delay = self.retry_base_delay * 2u32.pow(attempt - 1);
+                tokio::time::sleep(delay).await;
+                warn!(
+                    attempt,
+                    max_retries = self.max_retries,
+                    delay_ms = delay.as_millis() as u64,
+                    cypher = &cypher[..cypher.len().min(80)],
+                    "Retrying Neo4j query after transient error"
+                );
+            }
+
+            let query = build_query(cypher, params);
+            match self.graph.execute(query).await {
+                Ok(mut stream) => {
+                    // Collect rows from the stream
+                    let mut rows = Vec::new();
+                    while let Some(row) = stream.next().await.map_err(|e| Error::query(cypher, e))? {
+                        let json_row: serde_json::Value = row
+                            .to()
+                            .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
+                        rows.push(json_row);
+                    }
+                    return Ok(rows);
+                }
+                Err(e) => {
+                    last_err = Some(e);
+                }
+            }
+        }
+
+        Err(Error::query(
+            cypher,
+            last_err.expect("retry loop executed at least once"),
+        ))
     }
 
     /// Execute a read-only query and return results as JSON
@@ -87,32 +167,8 @@ impl Neo4jPool {
         // Validate read-only
         validate_read_only(cypher)?;
 
-        // Build query with parameters
-        let mut query = Query::new(cypher.to_string());
-        if let Some(params) = params {
-            for (key, value) in params {
-                query = add_param(query, &key, value);
-            }
-        }
-
-        // Execute query
-        let mut result = self
-            .graph
-            .execute(query)
-            .await
-            .map_err(|e| Error::query(cypher, e))?;
-
-        // Collect results - deserialize each row to JSON
-        let mut rows = Vec::new();
-        while let Some(row) = result.next().await.map_err(|e| Error::query(cypher, e))? {
-            // Use row.to() to deserialize entire row to serde_json::Value
-            let json_row: serde_json::Value = row
-                .to()
-                .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
-            rows.push(json_row);
-        }
-
-        Ok(rows)
+        // Execute with retry and collect rows
+        self.execute_with_retry(cypher, &params).await
     }
 
     /// Execute a query and return the first result
@@ -139,32 +195,8 @@ impl Neo4jPool {
         // Validate against dangerous operations (APOC, LOAD CSV) but allow MERGE/SET
         validate_write_safe(cypher)?;
 
-        // Build query with parameters
-        let mut query = Query::new(cypher.to_string());
-        if let Some(params) = params {
-            for (key, value) in params {
-                query = add_param(query, &key, value);
-            }
-        }
-
-        // Execute query
-        let mut result = self
-            .graph
-            .execute(query)
-            .await
-            .map_err(|e| Error::query(cypher, e))?;
-
-        // Collect results - deserialize each row to JSON
-        let mut rows = Vec::new();
-        while let Some(row) = result.next().await.map_err(|e| Error::query(cypher, e))? {
-            // Use row.to() to deserialize entire row to serde_json::Value
-            let json_row: serde_json::Value = row
-                .to()
-                .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
-            rows.push(json_row);
-        }
-
-        Ok(rows)
+        // Execute with retry and collect rows
+        self.execute_with_retry(cypher, &params).await
     }
 
     /// Test connection health
@@ -206,52 +238,67 @@ impl Neo4jPool {
         // Validate read-only
         validate_read_only(cypher)?;
 
-        // Build query with parameters
-        let mut query = Query::new(cypher.to_string());
-        if let Some(params) = params {
-            for (key, value) in params {
-                query = add_param(query, &key, value);
+        // Execute with retry (only retries graph.execute(), not row iteration)
+        let mut last_err = None;
+
+        for attempt in 0..=self.max_retries {
+            if attempt > 0 {
+                let delay = self.retry_base_delay * 2u32.pow(attempt - 1);
+                tokio::time::sleep(delay).await;
+                warn!(
+                    attempt,
+                    max_retries = self.max_retries,
+                    delay_ms = delay.as_millis() as u64,
+                    cypher = &cypher[..cypher.len().min(80)],
+                    "Retrying Neo4j streaming query after transient error"
+                );
+            }
+
+            let query = build_query(cypher, &params);
+            match self.graph.execute(query).await {
+                Ok(mut stream) => {
+                    // Stream results with token budget
+                    let mut rows = Vec::new();
+                    let mut total_tokens = 0;
+                    let mut terminated_early = false;
+
+                    while let Some(row) = stream.next().await.map_err(|e| Error::query(cypher, e))? {
+                        let json_row: serde_json::Value = row
+                            .to()
+                            .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
+
+                        // Estimate tokens for this row (chars / 4 heuristic)
+                        let row_tokens = match serde_json::to_string(&json_row) {
+                            Ok(s) => s.len() / 4,
+                            Err(_) => 25, // Default estimate for failed serialization
+                        };
+
+                        // Check budget BEFORE adding row
+                        if total_tokens + row_tokens > token_budget {
+                            terminated_early = true;
+                            break;
+                        }
+
+                        total_tokens += row_tokens;
+                        rows.push(json_row);
+                    }
+
+                    return Ok(StreamingResult {
+                        rows,
+                        terminated_early,
+                        total_tokens,
+                    });
+                }
+                Err(e) => {
+                    last_err = Some(e);
+                }
             }
         }
 
-        // Execute query
-        let mut result = self
-            .graph
-            .execute(query)
-            .await
-            .map_err(|e| Error::query(cypher, e))?;
-
-        // Stream results with token budget
-        let mut rows = Vec::new();
-        let mut total_tokens = 0;
-        let mut terminated_early = false;
-
-        while let Some(row) = result.next().await.map_err(|e| Error::query(cypher, e))? {
-            let json_row: serde_json::Value = row
-                .to()
-                .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
-
-            // Estimate tokens for this row (chars / 4 heuristic)
-            let row_tokens = match serde_json::to_string(&json_row) {
-                Ok(s) => s.len() / 4,
-                Err(_) => 25, // Default estimate for failed serialization
-            };
-
-            // Check budget BEFORE adding row
-            if total_tokens + row_tokens > token_budget {
-                terminated_early = true;
-                break;
-            }
-
-            total_tokens += row_tokens;
-            rows.push(json_row);
-        }
-
-        Ok(StreamingResult {
-            rows,
-            terminated_early,
-            total_tokens,
-        })
+        Err(Error::query(
+            cypher,
+            last_err.expect("retry loop executed at least once"),
+        ))
     }
 }
 
@@ -569,6 +616,17 @@ fn strip_cypher_comments(cypher: &str) -> String {
     }
 
     result
+}
+
+/// Build a neo4rs Query from cypher and optional params, cloning values for retry safety
+fn build_query(cypher: &str, params: &Option<serde_json::Map<String, serde_json::Value>>) -> Query {
+    let mut query = Query::new(cypher.to_string());
+    if let Some(params) = params {
+        for (key, value) in params {
+            query = add_param(query, key, value.clone());
+        }
+    }
+    query
 }
 
 /// Add a JSON parameter to a Query, converting to appropriate BoltType

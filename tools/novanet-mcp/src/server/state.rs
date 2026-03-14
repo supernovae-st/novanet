@@ -17,7 +17,7 @@
 //! and task-specific modifiers.
 
 use crate::cache::QueryCache;
-use crate::context::SpreadingConfig;
+use crate::activation::SpreadingConfig;
 use crate::error::Result;
 use crate::neo4j::{CircuitBreaker, Neo4jPool};
 use crate::schema_cache::SchemaCache;
@@ -58,13 +58,15 @@ pub struct ServerStats {
 impl State {
     /// Create new state with the given configuration
     pub async fn new(config: Config) -> Result<Self> {
-        // Create Neo4j pool with custom fetch_size (Phase 3)
-        let pool = Neo4jPool::with_fetch_size(
+        // Create Neo4j pool with retry config
+        let pool = Neo4jPool::with_retry_config(
             &config.neo4j_uri,
             &config.neo4j_user,
             &config.neo4j_password,
             config.pool_size,
             config.fetch_size,
+            config.max_retries,
+            config.retry_base_delay,
         )
         .await?;
 
@@ -199,7 +201,7 @@ impl State {
     /// Called automatically during server startup.
     ///
     /// **Queries warmed:**
-    /// - NodeClasses (realm, layer, trait)
+    /// - NodeClasses (realm, layer)
     /// - ArcClasses (family, scope)
     /// - Locales (language, region)
     pub async fn warm_cache(&self) -> Result<()> {
@@ -207,7 +209,7 @@ impl State {
             // Schema introspection - most common queries
             (
                 "warm:classes",
-                "MATCH (c:Schema:Class) RETURN c.name AS name, c.realm AS realm, c.layer AS layer, c.trait_type AS trait LIMIT 100",
+                "MATCH (c:Schema:Class) RETURN c.name AS name, c.realm AS realm, c.layer AS layer LIMIT 100",
             ),
             // Arc classes
             (

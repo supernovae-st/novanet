@@ -27,6 +27,10 @@ pub struct Config {
     // Connection pool tuning (Phase 3)
     pub fetch_size: usize,
 
+    // Retry settings
+    pub max_retries: u32,
+    pub retry_base_delay: Duration,
+
     // Circuit breaker settings (Phase 3)
     pub circuit_breaker_threshold: u32,
     pub circuit_breaker_reset_timeout: Duration,
@@ -68,6 +72,18 @@ impl Config {
                 .ok()
                 .and_then(|s| s.parse().ok())
                 .unwrap_or(500),
+
+            // Retry settings
+            max_retries: std::env::var("NOVANET_MCP_MAX_RETRIES")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(3),
+            retry_base_delay: Duration::from_millis(
+                std::env::var("NOVANET_MCP_RETRY_BASE_DELAY_MS")
+                    .ok()
+                    .and_then(|s| s.parse().ok())
+                    .unwrap_or(100),
+            ),
 
             // Circuit breaker settings (Phase 3)
             circuit_breaker_threshold: std::env::var("NOVANET_MCP_CIRCUIT_BREAKER_THRESHOLD")
@@ -124,6 +140,9 @@ impl Default for Config {
             pool_size: 16,
             // Connection pool tuning (Phase 3)
             fetch_size: 500,
+            // Retry settings
+            max_retries: 3,
+            retry_base_delay: Duration::from_millis(100),
             // Circuit breaker (Phase 3)
             circuit_breaker_threshold: 5,
             circuit_breaker_reset_timeout: Duration::from_secs(30),
@@ -150,5 +169,7 @@ mod tests {
         assert_eq!(config.pool_size, 16);
         assert_eq!(config.max_hops, 5);
         assert_eq!(config.evidence_packet_size, 200);
+        assert_eq!(config.max_retries, 3);
+        assert_eq!(config.retry_base_delay, Duration::from_millis(100));
     }
 }
