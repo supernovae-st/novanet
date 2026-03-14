@@ -31,6 +31,8 @@ services:
       - novanet_neo4j_logs:/logs
       - novanet_neo4j_plugins:/plugins
       - ./seed:/import/seed
+      # Explicit mount for content/ symlink (Docker doesn't follow symlinks)
+      - ${CONTENT_SEED_PATH:-../../../private-data/seed/content}:/import/seed/content
       - ./migrations:/import/migrations
     networks:
       - novanet-network
