@@ -7,7 +7,7 @@
 //! - `ArcsDocument` — top-level document with all arc definitions
 //! - `ArcDef` — single arc definition (type, family, source, target, cardinality)
 //! - `ArcFamily` — the 6 arc families
-//! - `ArcPropertyDef` — detailed arc property definition (v0.13.1: ADR-030 alignment)
+//! - `ArcPropertyDef` — detailed arc property definition (ADR-030)
 
 use serde::Deserialize;
 use smallvec::{SmallVec, smallvec};
@@ -17,7 +17,7 @@ use std::path::Path;
 // Enums
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 6 arc families in v0.13.1.
+/// The 6 arc families.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ArcFamily {
@@ -111,7 +111,7 @@ impl NodeRef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ArcPropertyDef — detailed arc property definition (v0.13.1: ADR-030 alignment)
+// ArcPropertyDef — detailed arc property definition (ADR-030)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Detailed arc property definition extracted from YAML.
@@ -153,7 +153,7 @@ impl ArcPropertyDef {
 /// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
 pub struct ArcsDocument {
-    /// The arc definitions (v0.12.5: 146 arcs across 5 families).
+    /// The arc definitions.
     pub arcs: Vec<ArcDef>,
 
     /// SEMANTIC_LINK subtypes (10 entries: is_action_on, includes, etc.).
@@ -200,7 +200,7 @@ pub struct ArcDef {
     #[serde(default)]
     pub properties: Option<Vec<String>>,
 
-    /// Detailed arc property definitions (v0.13.1: ADR-030).
+    /// Detailed arc property definitions (ADR-030).
     /// Populated by load_arc_classes_from_files() for detailed property info.
     #[serde(skip)]
     pub property_defs: Option<Vec<ArcPropertyDef>>,
@@ -335,7 +335,7 @@ impl ArcClassDef {
         })
     }
 
-    /// Extract detailed property definitions (v0.13.1: ADR-030 alignment).
+    /// Extract detailed property definitions (ADR-030).
     /// Returns full property info including type, required, enum values.
     fn extract_property_defs(&self) -> Option<Vec<ArcPropertyDef>> {
         self.properties.as_ref().and_then(|v| match v {
@@ -728,7 +728,7 @@ arcs:
     fn parse_multi_source_target() {
         let yaml = r#"
 arcs:
-  # v0.12.5: PageStructure deleted, use BELONGS_TO as multi-source/target example
+  # BELONGS_TO as multi-source/target example
   - type: BELONGS_TO
     family: semantic
     source:
@@ -979,7 +979,7 @@ fn parse_has_audience_file() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// v0.13.1: YAML/Cypher Alignment Tests for Arc Properties (ADR-030, ADR-032)
+// YAML/Cypher Alignment Tests for Arc Properties (ADR-030, ADR-032)
 // ─────────────────────────────────────────────────────────────────────────────
 
 #[cfg(test)]
