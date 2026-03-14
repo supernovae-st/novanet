@@ -96,27 +96,7 @@ impl Db {
 
     /// Execute a read query, return rows.
     pub async fn execute(&self, cypher: &str) -> crate::Result<Vec<neo4rs::Row>> {
-        let q = query(cypher);
-        let mut result = self
-            .graph
-            .execute(q)
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: cypher.to_string(),
-                source: e,
-            })?;
-        let mut rows = Vec::new();
-        while let Some(row) = result
-            .next()
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: cypher.to_string(),
-                source: e,
-            })?
-        {
-            rows.push(row);
-        }
-        Ok(rows)
+        self.run_query(query(cypher), cypher.to_string()).await
     }
 
     /// Execute a read query with parameters.
@@ -129,26 +109,7 @@ impl Db {
         for (k, v) in params {
             q = q.param(k, v);
         }
-        let mut result = self
-            .graph
-            .execute(q)
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: cypher.to_string(),
-                source: e,
-            })?;
-        let mut rows = Vec::new();
-        while let Some(row) = result
-            .next()
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: cypher.to_string(),
-                source: e,
-            })?
-        {
-            rows.push(row);
-        }
-        Ok(rows)
+        self.run_query(q, cypher.to_string()).await
     }
 
     /// Execute a `CypherStatement` with mixed param types (StringList, Int).
@@ -171,23 +132,28 @@ impl Db {
                 },
             }
         }
-        let mut result = self
-            .graph
-            .execute(q)
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: stmt.cypher.clone(),
-                source: e,
-            })?;
+        self.run_query(q, stmt.cypher.clone()).await
+    }
+
+    /// Execute a query and collect all rows. Shared by all execute_* methods.
+    async fn run_query(
+        &self,
+        q: neo4rs::Query,
+        cypher_for_error: String,
+    ) -> crate::Result<Vec<neo4rs::Row>> {
+        let mut result =
+            self.graph
+                .execute(q)
+                .await
+                .map_err(|e| crate::NovaNetError::Query {
+                    query: cypher_for_error.clone(),
+                    source: e,
+                })?;
         let mut rows = Vec::new();
-        while let Some(row) = result
-            .next()
-            .await
-            .map_err(|e| crate::NovaNetError::Query {
-                query: stmt.cypher.clone(),
-                source: e,
-            })?
-        {
+        while let Some(row) = result.next().await.map_err(|e| crate::NovaNetError::Query {
+            query: cypher_for_error.clone(),
+            source: e,
+        })? {
             rows.push(row);
         }
         Ok(rows)
