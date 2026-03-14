@@ -106,30 +106,29 @@ pub fn write_merge_meta(
     // Convert PascalCase/CamelCase to snake_case for node_class
     let node_class = to_snake_case(label);
 
-    writeln!(out, "MERGE ({var}:Schema:{label} {{key: '{key}'}})").unwrap();
+    cy!(out, "MERGE ({var}:Schema:{label} {{key: '{key}'}})");
 
-    writeln!(out, "ON CREATE SET").unwrap();
+    cy!(out, "ON CREATE SET");
     for (name, value) in props {
-        writeln!(out, "  {var}.{name} = '{value}',").unwrap();
+        cy!(out, "  {var}.{name} = '{value}',");
     }
     // node_class discriminator (lowercase = SCHEMA node)
-    writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
+    cy!(out, "  {var}.node_class = '{node_class}',");
     // Provenance as JSON object
-    writeln!(
+    cy!(
         out,
         "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v{}\"}}',",
         env!("CARGO_PKG_VERSION")
-    )
-    .unwrap();
-    writeln!(out, "  {var}.created_at = datetime()").unwrap();
+    );
+    cy!(out, "  {var}.created_at = datetime()");
 
-    writeln!(out, "ON MATCH SET").unwrap();
+    cy!(out, "ON MATCH SET");
     for (name, value) in props {
-        writeln!(out, "  {var}.{name} = '{value}',").unwrap();
+        cy!(out, "  {var}.{name} = '{value}',");
     }
     // Always set node_class on match too
-    writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
-    writeln!(out, "  {var}.updated_at = datetime()").unwrap();
+    cy!(out, "  {var}.node_class = '{node_class}',");
+    cy!(out, "  {var}.updated_at = datetime()");
 }
 
 /// Convert PascalCase or CamelCase to snake_case.
@@ -157,18 +156,16 @@ fn to_snake_case(s: &str) -> String {
 
 /// Write a section header comment in Cypher format.
 pub fn write_section_header(out: &mut String, title: &str) {
-    writeln!(
+    cy!(
         out,
         "// ─────────────────────────────────────────────────────────────────────────────"
-    )
-    .unwrap();
-    writeln!(out, "// {title}").unwrap();
-    writeln!(
+    );
+    cy!(out, "// {title}");
+    cy!(
         out,
         "// ─────────────────────────────────────────────────────────────────────────────"
-    )
-    .unwrap();
-    writeln!(out).unwrap();
+    );
+    cy!(out);
 }
 
 /// Write a visual section header with item count (double-line style).
@@ -183,9 +180,9 @@ pub fn write_section_header(out: &mut String, title: &str) {
 /// ```
 pub fn write_section_header_counted(out: &mut String, title: &str, count: usize) {
     let bar = "// ═══════════════════════════════════════════════════════════════════════════════";
-    writeln!(out, "{bar}").unwrap();
-    writeln!(out, "// {title} ({count})").unwrap();
-    writeln!(out, "{bar}").unwrap();
+    cy!(out, "{bar}");
+    cy!(out, "// {title} ({count})");
+    cy!(out, "{bar}");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

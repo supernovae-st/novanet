@@ -8,6 +8,8 @@
 //! - Rust code (via string building)
 //! - Mermaid diagrams (for documentation)
 
+#[macro_use]
+mod macros;
 pub mod arc_class;
 pub mod autowire;
 pub mod colors;

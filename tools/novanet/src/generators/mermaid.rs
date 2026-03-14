@@ -181,32 +181,31 @@ pub fn expand_arcs(relations: &[ArcDef]) -> Vec<ExpandedArc> {
 
 /// Write Mermaid `classDef` lines for all layers.
 pub fn write_classdefs(out: &mut String) {
-    writeln!(out, "  %% Layer styling").unwrap();
+    cy!(out, "  %% Layer styling");
     for &(layer, fill, stroke) in LAYER_STYLES {
-        writeln!(
+        cy!(
             out,
             "  classDef {layer} fill:{fill},stroke:{stroke},color:#fff"
-        )
-        .unwrap();
+        );
     }
-    writeln!(out).unwrap();
+    cy!(out);
 }
 
 /// Write arcs with family-based arrow styles + `linkStyle` coloring.
 pub fn write_arcs_and_styles(out: &mut String, arcs: &[ExpandedArc]) {
-    writeln!(out, "  %% Relationships (styled by arc family)").unwrap();
+    cy!(out, "  %% Relationships (styled by arc family)");
     let mut arc_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
     for (i, arc) in arcs.iter().enumerate() {
         let arrow = family_arrow(arc.family);
-        writeln!(out, "  {} {}|{}| {}", arc.from, arrow, arc.arc_type, arc.to).unwrap();
+        cy!(out, "  {} {}|{}| {}", arc.from, arrow, arc.arc_type, arc.to);
         arc_indices_by_family
             .entry(arc.family.to_string())
             .or_default()
             .push(i);
     }
-    writeln!(out).unwrap();
+    cy!(out);
 
-    writeln!(out, "  %% Arc colors by family").unwrap();
+    cy!(out, "  %% Arc colors by family");
     for (family_str, indices) in &arc_indices_by_family {
         let family = match family_str.as_str() {
             "ownership" => ArcFamily::Ownership,
@@ -218,23 +217,22 @@ pub fn write_arcs_and_styles(out: &mut String, arcs: &[ExpandedArc]) {
         };
         let color = family_color(family);
         let idx_str: Vec<String> = indices.iter().map(|i| i.to_string()).collect();
-        writeln!(
+        cy!(
             out,
             "  linkStyle {} stroke:{color},stroke-width:2px",
             idx_str.join(",")
-        )
-        .unwrap();
+        );
     }
-    writeln!(out).unwrap();
+    cy!(out);
 }
 
 /// Write `class` assignments for all nodes.
 pub fn write_class_assignments(out: &mut String, nodes: &[&ParsedNode]) {
-    writeln!(out, "  %% Class assignments (by layer)").unwrap();
+    cy!(out, "  %% Class assignments (by layer)");
     let mut sorted: Vec<&&ParsedNode> = nodes.iter().collect();
     sorted.sort_by_key(|n| &n.def.name);
     for node in sorted {
-        writeln!(out, "  class {} {}", node.def.name, node.def.layer).unwrap();
+        cy!(out, "  class {} {}", node.def.name, node.def.layer);
     }
 }
 
@@ -289,15 +287,14 @@ fn render_mermaid(
     let mut out = String::with_capacity(8192);
 
     // ── Header ────────────────────────────────────────────────────────────
-    writeln!(out, "flowchart TB").unwrap();
-    writeln!(out, "  %% NovaNet Graph v0.13.0").unwrap();
-    writeln!(out, "  %% Generated: {node_count} nodes, {arc_count} arcs").unwrap();
-    writeln!(
+    cy!(out, "flowchart TB");
+    cy!(out, "  %% NovaNet Graph v0.13.0");
+    cy!(out, "  %% Generated: {node_count} nodes, {arc_count} arcs");
+    cy!(
         out,
         "  %% Source: node-classes/ + arc-classes/ + taxonomy.yaml"
-    )
-    .unwrap();
-    writeln!(out).unwrap();
+    );
+    cy!(out);
 
     // ── classDef — Trait-based node styling ────────────────────────────────
     write_classdefs(&mut out);
@@ -311,13 +308,12 @@ fn render_mermaid(
 
         let emoji = realm_emoji(&realm_def.key, org_doc);
         let realm_id = format!("{}_REALM", realm_def.key.to_uppercase());
-        writeln!(
+        cy!(
             out,
             "  subgraph {realm_id}[\"{emoji} {}\"]",
             realm_def.key.to_uppercase()
-        )
-        .unwrap();
-        writeln!(out, "    direction TB").unwrap();
+        );
+        cy!(out, "    direction TB");
 
         for layer_def in &realm_def.layers {
             let Some(node_list) = layer_map.get(&layer_def.key) else {
@@ -329,22 +325,21 @@ fn render_mermaid(
 
             let display = layer_display_name(&layer_def.key, org_doc);
             let layer_id = format!("{}_{}", realm_def.key.to_uppercase(), layer_def.key);
-            writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
+            cy!(out, "    subgraph {layer_id}[\"{display}\"]");
 
             for node in node_list {
                 let emoji = layer_emoji(&node.def.layer);
-                writeln!(
+                cy!(
                     out,
                     "      {}[\"{} {}\"]",
                     node.def.name, emoji, node.def.name
-                )
-                .unwrap();
+                );
             }
-            writeln!(out, "    end").unwrap();
+            cy!(out, "    end");
         }
 
-        writeln!(out, "  end").unwrap();
-        writeln!(out).unwrap();
+        cy!(out, "  end");
+        cy!(out);
     }
 
     // ── Arcs — styled by ArcFamily ──────────────────────────────────────
@@ -361,93 +356,82 @@ fn render_mermaid(
 pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     let mut out = String::with_capacity(mermaid_code.len() + 1024);
 
-    writeln!(out, "# NovaNet Complete Graph").unwrap();
-    writeln!(out).unwrap();
-    writeln!(
+    cy!(out, "# NovaNet Complete Graph");
+    cy!(out);
+    cy!(
         out,
         "> Auto-generated by novanet v0.13.0. Do not edit manually."
-    )
-    .unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "## Overview").unwrap();
-    writeln!(out).unwrap();
-    writeln!(
+    );
+    cy!(out);
+    cy!(out, "## Overview");
+    cy!(out);
+    cy!(
         out,
         "This diagram shows the complete NovaNet graph schema with all 59 node types and their relationships."
-    )
-    .unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "### Legend (ADR-024)").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "| Color | Trait | Description |").unwrap();
-    writeln!(out, "|-------|-------|-------------|").unwrap();
-    writeln!(
+    );
+    cy!(out);
+    cy!(out, "### Legend (ADR-024)");
+    cy!(out);
+    cy!(out, "| Color | Trait | Description |");
+    cy!(out, "|-------|-------|-------------|");
+    cy!(
         out,
         "| \u{1F535} Blue | Defined | Nodes that don't change between locales |"
-    )
-    .unwrap();
-    writeln!(
+    );
+    cy!(
         out,
         "| \u{1F7E2} Green | Authored | Nodes with locale-specific content |"
-    )
-    .unwrap();
-    writeln!(
+    );
+    cy!(
         out,
         "| \u{1F7E3} Purple | Imported | Cultural/linguistic knowledge per locale |"
-    )
-    .unwrap();
-    writeln!(out, "| \u{1F31F} Gold | Generated | LLM-generated output |").unwrap();
-    writeln!(
+    );
+    cy!(out, "| \u{1F31F} Gold | Generated | LLM-generated output |");
+    cy!(
         out,
         "| \u{26AA} Gray | Retrieved | Computed/retrieved data |"
-    )
-    .unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "### Realms").unwrap();
-    writeln!(out).unwrap();
-    writeln!(
+    );
+    cy!(out);
+    cy!(out, "### Realms");
+    cy!(out);
+    cy!(
         out,
         "- **\u{1F30D} SHARED** — Locale configuration and knowledge (shared across all projects)"
-    )
-    .unwrap();
-    writeln!(
+    );
+    cy!(
         out,
         "- **\u{1F4E6} ORG** — Organization-specific content structure and generation"
-    )
-    .unwrap();
+    );
     // Architecture is 2 realms (shared + org), 10 layers
-    writeln!(out).unwrap();
-    writeln!(out, "## Graph Diagram").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "```mermaid").unwrap();
-    write!(out, "{mermaid_code}").unwrap();
-    writeln!(out, "```").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "## Arc Families").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "| Arrow | Family | Description |").unwrap();
-    writeln!(out, "|-------|--------|-------------|").unwrap();
-    writeln!(
+    cy!(out);
+    cy!(out, "## Graph Diagram");
+    cy!(out);
+    cy!(out, "```mermaid");
+    cyw!(out, "{mermaid_code}");
+    cy!(out, "```");
+    cy!(out);
+    cy!(out, "## Arc Families");
+    cy!(out);
+    cy!(out, "| Arrow | Family | Description |");
+    cy!(out, "|-------|--------|-------------|");
+    cy!(
         out,
         "| `-->` | Ownership | Parent-child structural relationships |"
-    )
-    .unwrap();
-    writeln!(
+    );
+    cy!(
         out,
         "| `.->` | Localization | Locale-specific content links |"
-    )
-    .unwrap();
-    writeln!(
+    );
+    cy!(
         out,
         "| `.->` | Semantic | Meaning and concept connections |"
-    )
-    .unwrap();
-    writeln!(out, "| `==>` | Generation | LLM generation flow |").unwrap();
-    writeln!(out, "| `--o` | Mining | SEO keyword mining |").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "---").unwrap();
-    writeln!(out).unwrap();
-    writeln!(out, "*Generated by novanet MermaidGenerator*").unwrap();
+    );
+    cy!(out, "| `==>` | Generation | LLM generation flow |");
+    cy!(out, "| `--o` | Mining | SEO keyword mining |");
+    cy!(out);
+    cy!(out, "---");
+    cy!(out);
+    cy!(out, "*Generated by novanet MermaidGenerator*");
 
     out
 }
