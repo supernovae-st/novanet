@@ -9,7 +9,7 @@ pub mod state;
 
 pub use config::Config;
 pub use handler::NovaNetHandler;
-pub use state::{ServerStats, State};
+pub use state::{StatsSnapshot, State};
 
 use crate::error::Result;
 use rmcp::ServiceExt;

@@ -1,26 +1,30 @@
 //! Tests for server state module
 //!
-//! Tests ServerStats, State accessors, and concurrent access patterns.
+//! Tests StatsSnapshot, State accessors, and concurrent access patterns.
 
 #![allow(unexpected_cfgs)]
 
-use novanet_mcp::server::ServerStats;
+use novanet_mcp::server::StatsSnapshot;
 
 // =============================================================================
-// ServerStats Tests
+// StatsSnapshot Tests
 // =============================================================================
 
 #[test]
-fn test_server_stats_default() {
-    let stats = ServerStats::default();
-    assert_eq!(stats.queries_executed, 0);
-    assert_eq!(stats.cache_hits, 0);
-    assert_eq!(stats.cache_misses, 0);
+fn test_stats_snapshot_debug() {
+    let stats = StatsSnapshot {
+        queries_executed: 0,
+        cache_hits: 0,
+        cache_misses: 0,
+    };
+    let debug = format!("{:?}", stats);
+    assert!(debug.contains("StatsSnapshot"));
+    assert!(debug.contains("queries_executed"));
 }
 
 #[test]
-fn test_server_stats_clone() {
-    let stats = ServerStats {
+fn test_stats_snapshot_clone() {
+    let stats = StatsSnapshot {
         queries_executed: 42,
         cache_hits: 10,
         cache_misses: 5,
@@ -30,14 +34,6 @@ fn test_server_stats_clone() {
     assert_eq!(cloned.queries_executed, 42);
     assert_eq!(cloned.cache_hits, 10);
     assert_eq!(cloned.cache_misses, 5);
-}
-
-#[test]
-fn test_server_stats_debug() {
-    let stats = ServerStats::default();
-    let debug = format!("{:?}", stats);
-    assert!(debug.contains("ServerStats"));
-    assert!(debug.contains("queries_executed"));
 }
 
 // =============================================================================
@@ -154,17 +150,13 @@ mod state_integration {
 // =============================================================================
 
 #[test]
-fn test_stats_can_be_created_and_modified() {
+fn test_stats_snapshot_fields_accessible() {
     // Verify the struct fields are accessible
-    let mut stats = ServerStats {
-        queries_executed: 0,
-        cache_hits: 0,
-        cache_misses: 0,
+    let stats = StatsSnapshot {
+        queries_executed: 100,
+        cache_hits: 50,
+        cache_misses: 25,
     };
-
-    stats.queries_executed = 100;
-    stats.cache_hits = 50;
-    stats.cache_misses = 25;
 
     assert_eq!(stats.queries_executed, 100);
     assert_eq!(stats.cache_hits, 50);
@@ -173,7 +165,7 @@ fn test_stats_can_be_created_and_modified() {
 
 #[test]
 fn test_stats_ratio_calculation() {
-    let stats = ServerStats {
+    let stats = StatsSnapshot {
         queries_executed: 100,
         cache_hits: 75,
         cache_misses: 25,
@@ -185,7 +177,7 @@ fn test_stats_ratio_calculation() {
 
 #[test]
 fn test_stats_with_zero_cache_operations() {
-    let stats = ServerStats {
+    let stats = StatsSnapshot {
         queries_executed: 10,
         cache_hits: 0,
         cache_misses: 0,

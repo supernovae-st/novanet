@@ -1,6 +1,6 @@
 //! Server state
 //!
-//! Shared application state using parking_lot for faster locking.
+//! Shared application state with lock-free atomic counters for stats.
 //!
 //! ## Cache Warming
 //!
@@ -23,8 +23,8 @@ use crate::neo4j::{CircuitBreaker, Neo4jPool};
 use crate::schema_cache::SchemaCache;
 use crate::server::Config;
 use crate::tokens::TokenCounter;
-use parking_lot::RwLock;
 use std::sync::Arc;
+use std::sync::atomic::{AtomicU64, Ordering};
 use tracing::{info, warn};
 
 /// Shared application state
@@ -43,13 +43,21 @@ struct StateInner {
     pub circuit_breaker: CircuitBreaker,
     /// Spreading activation config (Phase 2.2)
     pub spreading_config: SpreadingConfig,
-    /// Server statistics
-    pub stats: RwLock<ServerStats>,
+    /// Server statistics (lock-free atomic counters)
+    pub stats: ServerStats,
 }
 
-/// Server statistics
-#[derive(Debug, Default, Clone)]
+/// Server statistics (lock-free atomic counters)
+#[derive(Debug, Default)]
 pub struct ServerStats {
+    pub queries_executed: AtomicU64,
+    pub cache_hits: AtomicU64,
+    pub cache_misses: AtomicU64,
+}
+
+/// Snapshot of server statistics at a point in time
+#[derive(Debug, Clone)]
+pub struct StatsSnapshot {
     pub queries_executed: u64,
     pub cache_hits: u64,
     pub cache_misses: u64,
@@ -97,7 +105,7 @@ impl State {
                 schema_cache,
                 circuit_breaker,
                 spreading_config,
-                stats: RwLock::new(ServerStats::default()),
+                stats: ServerStats::default(),
             }),
         })
     }
@@ -173,22 +181,26 @@ impl State {
 
     /// Increment query count
     pub fn record_query(&self) {
-        self.inner.stats.write().queries_executed += 1;
+        self.inner.stats.queries_executed.fetch_add(1, Ordering::Relaxed);
     }
 
     /// Record cache hit
     pub fn record_cache_hit(&self) {
-        self.inner.stats.write().cache_hits += 1;
+        self.inner.stats.cache_hits.fetch_add(1, Ordering::Relaxed);
     }
 
     /// Record cache miss
     pub fn record_cache_miss(&self) {
-        self.inner.stats.write().cache_misses += 1;
+        self.inner.stats.cache_misses.fetch_add(1, Ordering::Relaxed);
     }
 
-    /// Get current statistics
-    pub fn stats(&self) -> ServerStats {
-        self.inner.stats.read().clone()
+    /// Get current statistics snapshot
+    pub fn stats(&self) -> StatsSnapshot {
+        StatsSnapshot {
+            queries_executed: self.inner.stats.queries_executed.load(Ordering::Relaxed),
+            cache_hits: self.inner.stats.cache_hits.load(Ordering::Relaxed),
+            cache_misses: self.inner.stats.cache_misses.load(Ordering::Relaxed),
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
