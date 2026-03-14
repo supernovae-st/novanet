@@ -17,7 +17,6 @@ use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, Vali
 // =============================================================================
 
 /// Navigation mode — Graph + Flow since v0.20.0.
-/// Nexus and Views modes removed in Phase 1 cleanup.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     /// Graph mode: Unified tree view (Realm > Layer > Class hierarchy with instances)

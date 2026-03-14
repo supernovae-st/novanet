@@ -1919,6 +1919,10 @@ impl App {
     /// Get breadcrumb path for the current selection.
     /// Returns a string like "Org > Foundation > Entity (12)"
     pub fn current_breadcrumb(&self) -> String {
+        if self.mode == NavMode::Flow {
+            return format!("Flow > {}", self.flow.tab.label());
+        }
+
         use super::data::TreeItem;
         match self.current_item() {
             Some(TreeItem::ClassesSection) => "Node Classes".to_string(),

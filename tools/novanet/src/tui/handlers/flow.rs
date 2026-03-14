@@ -84,22 +84,13 @@ pub fn handle_flow_key(app: &mut App, key: KeyEvent) -> KeyResult {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::tui::app::state::FlowTab;
-    use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
-
-    fn key(code: KeyCode) -> KeyEvent {
-        KeyEvent::new(code, KeyModifiers::NONE)
-    }
-
     #[test]
     fn test_tab_switches_flow_tab() {
-        // This test needs a mock App -- placeholder for now
-        // Will be implemented when App::test_default() is available
+        // Placeholder: needs mock App (App::test_default())
     }
 
     #[test]
     fn test_scroll_keys() {
-        // Placeholder -- verify j/k/h/l change scroll positions
+        // Placeholder: verify j/k/h/l change scroll positions
     }
 }

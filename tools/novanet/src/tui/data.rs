@@ -274,15 +274,6 @@ pub struct GraphStats {
 }
 
 // ============================================================================
-// (Nexus Architecture Diagrams + ADR Browser removed in Phase 1 cleanup)
-// ============================================================================
-
-// (get_architecture_diagram and get_all_adrs removed - were Nexus-only)
-// Placeholder to mark removal location. Functions removed:
-// - get_architecture_diagram(class_name) -> Option<ArchitectureDiagram>
-// - get_all_adrs() -> Vec<AdrEntry>
-
-// ============================================================================
 // Entity Category Hierarchy (Data mode)
 // ============================================================================
 
