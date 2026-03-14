@@ -72,7 +72,7 @@ pub async fn execute(state: &State, params: QueryParams) -> Result<QueryResult> 
     // Execute query
     let rows = state
         .pool()
-        .execute_query(&cypher, params.params.clone())
+        .execute_query(&cypher, params.params)
         .await?;
     state.record_query();
 
