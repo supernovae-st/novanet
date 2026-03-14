@@ -2,7 +2,6 @@
 //!
 //! Creates, edits, and deletes data nodes in Neo4j. Node creation validates
 //! the Class against the schema-graph and auto-wires the `OF_CLASS` relationship.
-//! (v0.12.0 ADR-023: Kind→Class, OF_KIND→OF_CLASS)
 
 use crate::db::Db;
 use tracing::{info, warn};
@@ -55,7 +54,7 @@ fn build_set_fragment(props: &serde_json::Value, prefix: &str) -> (String, Vec<(
 pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> crate::Result<()> {
     validate_label(kind)?;
 
-    // Validate Class exists in schema-graph (v0.12.0 ADR-023)
+    // Validate Class exists in schema-graph
     let kind_rows = db
         .execute_with_params(
             "MATCH (c:Class {label: $kind}) RETURN c.label AS label",

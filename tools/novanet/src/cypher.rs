@@ -136,7 +136,7 @@ fn build_facet_where(filter: &FacetFilter) -> (String, Vec<(String, ParamValue)>
 
 /// Build a faceted Cypher query from a `FacetFilter`.
 ///
-/// Strategy (v0.12.0 ADR-023):
+/// Strategy (ADR-023):
 /// 1. MATCH Class nodes satisfying all active facets (AND across axes, OR within axis)
 /// 2. Collect resolved Class labels
 /// 3. MATCH data nodes linked to those Classes via OF_CLASS

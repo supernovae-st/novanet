@@ -61,7 +61,7 @@ fn cardinality_key(c: Cardinality) -> &'static str {
 
 /// Build a JSON-like property info object for detailed arc property documentation.
 /// Format: {name: "rank", type: "string", required: true, enum: ["primary", "secondary", "tertiary"]}
-/// Required properties are listed first (ADR-030 alignment).
+/// Required properties are listed first (ADR-030).
 fn build_property_info_json(defs: &[ArcPropertyDef]) -> String {
     // Sort: required first, then by name
     let mut sorted: Vec<&ArcPropertyDef> = defs.iter().collect();
@@ -270,7 +270,7 @@ fn generate_arc_schema(
         // Get ADR references for this arc
         let adr_refs = get_adr_references(rel);
 
-        // Build detailed property info if available (v0.13.1: ADR-030)
+        // Build detailed property info if available (ADR-030)
         let prop_info: Option<String> = rel
             .property_defs
             .as_ref()
@@ -304,8 +304,8 @@ fn generate_arc_schema(
             props = cypher_list_owned(&props)
         )
         .unwrap();
-        // v0.13.1: Add detailed property info (ADR-030)
-        // v0.16: Escape single quotes for Cypher (' → \')
+        // Add detailed property info (ADR-030)
+        // Escape single quotes for Cypher (' → \')
         if let Some(ref info) = prop_info {
             let escaped = info.replace('\'', "\\'");
             writeln!(out, "  {var}.arc_property_info = '{escaped}',").unwrap();
@@ -319,7 +319,7 @@ fn generate_arc_schema(
         } else {
             writeln!(out, "  {var}.temperature_threshold = null,").unwrap();
         }
-        // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+        // (ADR-037): node_class discriminator (lowercase = SCHEMA node)
         writeln!(out, "  {var}.node_class = 'arc_class',").unwrap();
         // v0.17.3 (ADR-036): Add provenance tracking
         writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
@@ -346,8 +346,8 @@ fn generate_arc_schema(
             props = cypher_list_owned(&props)
         )
         .unwrap();
-        // v0.13.1: Add detailed property info (ADR-030)
-        // v0.16: Escape single quotes for Cypher (' → \')
+        // Add detailed property info (ADR-030)
+        // Escape single quotes for Cypher (' → \')
         if let Some(ref info) = prop_info {
             let escaped = info.replace('\'', "\\'");
             writeln!(out, "  {var}.arc_property_info = '{escaped}',").unwrap();
@@ -361,7 +361,7 @@ fn generate_arc_schema(
         } else {
             writeln!(out, "  {var}.temperature_threshold = null,").unwrap();
         }
-        // v0.19.0 (ADR-037): Always set node_class on match too
+        // (ADR-037): Always set node_class on match too
         writeln!(out, "  {var}.node_class = 'arc_class',").unwrap();
         writeln!(out, "  {var}.updated_at = datetime();").unwrap();
         writeln!(out).unwrap();
@@ -580,10 +580,10 @@ mod tests {
 
         let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
 
-        // Header (v11.8: ArcClass terminology)
+        // Header (ArcClass terminology)
         assert!(cypher.contains("2 ArcClass nodes"));
 
-        // ArcClass MERGE statements (only forward, not inverse) - v11.8: :Schema:ArcClass
+        // ArcClass MERGE statements (only forward, not inverse) - :Schema:ArcClass
         let ac_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
@@ -596,7 +596,7 @@ mod tests {
             "inverse should not create ArcClass"
         );
 
-        // Properties (v11.8: ac_ prefix)
+        // Properties (ac_ prefix)
         assert!(cypher.contains("ac_HAS_PAGE.cardinality = 'one_to_many'"));
         assert!(cypher.contains("ac_HAS_PAGE.display_name = 'Has Page'"));
         assert!(cypher.contains("ac_HAS_PAGE.cypher_pattern = '(Project)-[:HAS_PAGE]->(Page)'"));
@@ -612,7 +612,7 @@ mod tests {
         // temperature_threshold always null
         assert!(cypher.contains("ac_HAS_PAGE.temperature_threshold = null"));
 
-        // HAS_ARC_CLASS relationships (v11.8: renamed from HAS_ARC_KIND)
+        // HAS_ARC_CLASS relationships (renamed from HAS_ARC_KIND)
         let has_ac = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
@@ -626,21 +626,21 @@ mod tests {
             .count();
         assert_eq!(in_family, 2);
 
-        // FROM_CLASS relationships (v11.8: renamed from FROM_KIND)
+        // FROM_CLASS relationships (renamed from FROM_KIND)
         let from_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:FROM_CLASS]"))
             .count();
         assert_eq!(from_class, 2);
 
-        // TO_CLASS relationships (v11.8: renamed from TO_KIND)
+        // TO_CLASS relationships (renamed from TO_KIND)
         let to_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:TO_CLASS]"))
             .count();
         assert_eq!(to_class, 2);
 
-        // Spot check FROM_CLASS wiring (v11.8: :ArcClass, :Class)
+        // Spot check FROM_CLASS wiring (:ArcClass, :Class)
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Project'})"));
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_BLOCK'}), (c:Class {label: 'Page'})"));
 
@@ -648,7 +648,7 @@ mod tests {
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Page'})"));
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_BLOCK'}), (c:Class {label: 'Block'})"));
 
-        // Timestamps + provenance (v0.17.3 ADR-036)
+        // Timestamps + provenance (ADR-036)
         assert!(cypher.contains("created_by = 'seed:schema'"));
         assert!(cypher.contains("created_at = datetime()"));
         assert!(cypher.contains("updated_at = datetime()"));
@@ -670,14 +670,14 @@ mod tests {
 
         let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
 
-        // 2 FROM_CLASS (Page, Block) — v11.8: renamed from FROM_CLASS
+        // 2 FROM_CLASS (Page, Block) — renamed from FROM_CLASS
         let from_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:FROM_CLASS]"))
             .count();
         assert_eq!(from_class, 2, "should have 2 FROM_CLASS for multi-source");
 
-        // 2 TO_CLASS (PageNative, BlockNative) — v11.8: renamed from TO_CLASS
+        // 2 TO_CLASS (PageNative, BlockNative) — renamed from TO_CLASS
         let to_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:TO_CLASS]"))
@@ -726,11 +726,11 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v0.13 ADR-029: 169 ArcClass nodes (merged HAS_CONTENT/HAS_GENERATED → HAS_NATIVE)
+        // ADR-029: 169 ArcClass nodes (merged HAS_CONTENT/HAS_GENERATED → HAS_NATIVE)
         // Brand Architecture: +HAS_BRAND, HAS_DESIGN, HAS_PRINCIPLES, HAS_PROMPT_STYLE, FOR_MARKET, INSPIRED_BY_REGION
         // ADR-028: +REFERENCES, +MENTIONS, +REFERENCED_BY
-        // v0.19.0: REPRESENTS/REPRESENTED_BY deprecated → use ABOUT/ABOUT_OF (ADR-046)
-        // v0.16: HAS_KEYWORD removed — use TARGETS on EntityNative instead
+        // REPRESENTS/REPRESENTED_BY deprecated → use ABOUT/ABOUT_OF (ADR-046)
+        // HAS_KEYWORD removed — use TARGETS on EntityNative instead
         // ADR-028 inverses: +BRAND_OF, +DESIGN_OF, +PRINCIPLES_OF, +PROMPT_STYLE_OF
         // ADR-026 geographic inverses (11): CLASSIFIES, POPULATION_OF, PRIMARY_FOR, HAS_LOCALE,
         //   HAS_LOCALE_VARIANT, SPOKEN_BY, HAS_BRANCH, HAS_SUBCLUSTER, HAS_REGION, HAS_SUBREGION, HAS_SUBREALM
@@ -743,7 +743,7 @@ mod tests {
             .count();
         assert_eq!(
             ac_merges, 159,
-            "expected 159 ArcClass MERGE statements (v0.20.0: 159 arc YAML files)"
+            "expected 159 ArcClass MERGE statements (159 arc YAML files)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -753,7 +753,7 @@ mod tests {
             .count();
         assert_eq!(
             has_ac, 159,
-            "expected 159 HAS_ARC_CLASS relationships (v0.20.0: 159 files)"
+            "expected 159 HAS_ARC_CLASS relationships (159 files)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -763,7 +763,7 @@ mod tests {
             .count();
         assert_eq!(
             in_family, 159,
-            "expected 159 IN_FAMILY relationships (v0.20.0: 159 files)"
+            "expected 159 IN_FAMILY relationships (159 files)"
         );
 
         // Family distribution (non-inverse counts)
@@ -784,10 +784,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.17.3: Total arcs = 142
+        // Total arcs = 142
         // ownership=78 (incl schema family for meta-arcs)
         // localization=20
-        // semantic=21 (v0.17.3: +HAS_FEATURE, +FEATURE_OF)
+        // semantic=21 (+HAS_FEATURE, +FEATURE_OF)
         // generation=12 (PRODUCED, PRODUCED_BY, minus merged arcs)
         // mining=6 (SEO/GEO mining arcs)
         // Note: schema family (OF_CLASS, FROM_CLASS, TO_CLASS) also counted in ownership
@@ -797,18 +797,18 @@ mod tests {
             "family counts should sum to at least 125: o={ownership} l={localization} s={semantic} g={generation} m={mining} total={total}"
         );
 
-        // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
+        // Spot checks — specific ArcClass nodes (renamed from ArcClass)
         assert!(cypher.contains("ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'}"));
         assert!(cypher.contains("ac_HAS_BLOCK:Schema:ArcClass {key: 'HAS_BLOCK'}"));
         assert!(cypher.contains("ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'}"));
 
-        // Spot check — inverse_name populated (v11.8: ac_ prefix)
+        // Spot check — inverse_name populated (ac_ prefix)
         assert!(
             cypher.contains("ac_HAS_BLOCK.inverse_name = 'BLOCK_OF'"),
             "HAS_BLOCK should have inverse_name BLOCK_OF"
         );
 
-        // Spot check — FROM_CLASS/TO_CLASS for HAS_PAGE (v11.8: renamed from FROM_CLASS/TO_CLASS)
+        // Spot check — FROM_CLASS/TO_CLASS for HAS_PAGE (renamed from FROM_CLASS/TO_CLASS)
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Project'})"));
 
         // All cardinality values are valid
@@ -824,7 +824,7 @@ mod tests {
             }
         }
 
-        // v0.20.0: Header reflects count (159 total ArcClass nodes from 159 files)
+        // Header reflects count (159 total ArcClass nodes from 159 files)
         assert!(cypher.contains("159 ArcClass nodes"));
     }
 

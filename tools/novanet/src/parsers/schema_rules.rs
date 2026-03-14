@@ -1,11 +1,11 @@
-//! Schema validation rules for v0.19.0 standardization.
+//! Schema validation rules for property standardization.
 //!
 //! Validates:
 //! - Standard properties presence (8 REQUIRED: key, display_name, node_class, content, triggers, provenance, created_at, updated_at)
 //! - Composite key denormalization (entity_key, page_key, block_key, locale_key)
 //! - Property ordering (key → *_key → display_name → node_class → content → ... → created_at → updated_at)
 //! - ADR-030/032 compliance: slug derivation, TARGETS arc properties
-//! - v0.19.0: content REPLACES description, provenance REPLACES created_by + created_by_file
+//! - content REPLACES description, provenance REPLACES created_by + created_by_file
 //!
 //! # Usage
 //!
@@ -103,10 +103,10 @@ const ORG_LAYERS: &[&str] = &[
     "output",
 ];
 
-/// Expected order for standard properties (v0.19.0: 8 REQUIRED properties).
+/// Expected order for standard properties (8 REQUIRED properties).
 /// Properties present in the node must appear in this order (others can be interspersed).
 ///
-/// v0.19.0 changes:
+/// Changes:
 /// - `content` REPLACES `description`
 /// - `provenance` REPLACES `created_by` + `created_by_file`
 /// - `node_class` added for explicit class reference
@@ -151,7 +151,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
     }
 
     // Rule 2: Composite key nodes must have denormalized properties
-    // v0.19.0: Check BOTH standard_properties AND properties (denorm keys moved to properties)
+    // Check BOTH standard_properties AND properties (denorm keys moved to properties)
     for (composite_node, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
         if node.def.name == *composite_node {
             for prop in *required_props {
@@ -566,7 +566,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
-    // ADR-030/032 Compliance Rules (v0.13.1)
+    // ADR-030/032 Compliance Rules
     // ─────────────────────────────────────────────────────────────────────────────
 
     // Rule 15: SEOKeyword must have slug_form in properties (ADR-032)
@@ -612,7 +612,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
         }
     }
 
-    // Rule 16: BlockNative must have payload in properties (v0.19.0: renamed from content to avoid collision with standard_properties.content)
+    // Rule 16: BlockNative must have payload in properties
     if node.def.name == "BlockNative" {
         let has_payload = node
             .def
@@ -625,7 +625,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                 node_name: node.def.name.clone(),
                 severity: IssueSeverity::Error,
                 rule: "PAYLOAD_REQUIRED",
-                message: "BlockNative.properties must declare 'payload' (v0.19.0: JSON matching BlockType.structure)"
+                message: "BlockNative.properties must declare 'payload' (JSON matching BlockType.structure)"
                     .into(),
             });
         } else if let Some(props) = &node.def.properties {
@@ -864,7 +864,7 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
                 arc_name: arc.name.clone(),
                 severity: IssueSeverity::Error,
                 rule: "ARC_SOURCE_TARGET",
-                message: "DERIVED_SLUG_FROM source must be BlockNative (ADR-030 v0.13.1)".into(),
+                message: "DERIVED_SLUG_FROM source must be BlockNative (ADR-030)".into(),
                 fix_suggestion: Some("Change source: BlockNative".into()),
             });
         }
@@ -874,7 +874,7 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
                 arc_name: arc.name.clone(),
                 severity: IssueSeverity::Error,
                 rule: "ARC_SOURCE_TARGET",
-                message: "DERIVED_SLUG_FROM target must be EntityNative (ADR-030 v0.13.1)".into(),
+                message: "DERIVED_SLUG_FROM target must be EntityNative (ADR-030)".into(),
                 fix_suggestion: Some("Change target: EntityNative".into()),
             });
         }
@@ -1143,7 +1143,7 @@ mod tests {
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
 
-        // v0.19.0: Denormalized keys can be in EITHER standard_properties OR properties
+        // Denormalized keys can be in EITHER standard_properties OR properties
         for (node_name, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
             let node = nodes.iter().find(|n| n.def.name == *node_name);
             assert!(node.is_some(), "Node {} not found", node_name);
@@ -1508,7 +1508,7 @@ mod tests {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // v0.13.1: YAML/Cypher Alignment Tests (ADR-030, ADR-032)
+    // YAML/Cypher Alignment Tests (ADR-030, ADR-032)
     // ─────────────────────────────────────────────────────────────────────────
 
     #[test]
@@ -1532,7 +1532,7 @@ mod tests {
             .as_ref()
             .expect("SEOKeyword must have properties");
 
-        // v0.13.1 ADR-032: slug_form for URL derivation
+        // ADR-032: slug_form for URL derivation
         assert!(
             props.contains_key("slug_form"),
             "SEOKeyword.properties must contain 'slug_form' (ADR-032: URL-safe slug form)"
@@ -1543,7 +1543,7 @@ mod tests {
             "slug_form must be type string"
         );
 
-        // v0.13.1: source_date for data freshness tracking
+        // source_date for data freshness tracking
         assert!(
             props.contains_key("source_date"),
             "SEOKeyword.properties must contain 'source_date' (Ahrefs/Semrush fetch date)"
@@ -1570,7 +1570,7 @@ mod tests {
             .find(|n| n.def.name == "SEOKeyword")
             .expect("SEOKeyword node must exist");
 
-        // v0.19.0: locale_key can be in EITHER standard_properties OR properties
+        // locale_key can be in EITHER standard_properties OR properties
         let locale_key = seokeyword
             .def
             .standard_properties
@@ -1622,7 +1622,7 @@ mod tests {
             .as_ref()
             .expect("BlockNative must have properties");
 
-        // v0.19.0: payload as JSON blob for BlockType schema (renamed from content to avoid collision with standard_properties.content)
+        // payload as JSON blob for BlockType schema
         assert!(
             props.contains_key("payload"),
             "BlockNative.properties must contain 'payload' (JSON matching BlockType.structure)"
@@ -1630,7 +1630,7 @@ mod tests {
         let payload = &props["payload"];
         assert_eq!(payload.prop_type, "json", "payload must be type json");
 
-        // v0.13.1: block_type denormalized for fast filtering
+        // block_type denormalized for fast filtering
         assert!(
             props.contains_key("block_type"),
             "BlockNative.properties must contain 'block_type' (reference to BlockType.key)"
@@ -1666,7 +1666,7 @@ mod tests {
             .as_ref()
             .expect("BlockNative must have properties");
 
-        // v0.13.1: generated_at for LLM generation timestamp
+        // generated_at for LLM generation timestamp
         assert!(
             props.contains_key("generated_at"),
             "BlockNative.properties must contain 'generated_at' (LLM generation timestamp)"

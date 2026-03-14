@@ -1,6 +1,6 @@
 //! Blueprint views — different perspectives on the schema-graph.
 //!
-//! v11.7: 7 implemented views:
+//! 7 implemented views:
 //! - `default` — Rich overview (shown when no --view specified)
 //! - `tree` — Hierarchical Realm > Layer > Kind
 //! - `flow` — 6 data flow diagrams

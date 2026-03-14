@@ -229,7 +229,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
                 Span::styled("Quit", STYLE_DIM),
             ]),
             Line::from(""),
-            // v0.12.0 ADR-024: Updated trait names (was "Trait Filter (Meta mode)")
+            // ADR-024: Updated trait names
             Line::from(vec![Span::styled(
                 "  Trait Filter (Schema view)",
                 STYLE_HIGHLIGHT,
@@ -259,7 +259,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
                 Span::styled("Clear filter (show all)", STYLE_DIM),
             ]),
             Line::from(""),
-            // v11.6.1: Tree icons legend
+            // Tree icons legend
             Line::from(vec![Span::styled("  Tree Icons", STYLE_HIGHLIGHT)]),
             Line::from(vec![
                 Span::styled("    ▦◇       ", STYLE_PRIMARY),
@@ -361,7 +361,7 @@ pub fn render_legend(f: &mut Frame, app: &App) {
         "  Traits (border style)",
         STYLE_HIGHLIGHT,
     )]));
-    // v0.12.0 ADR-024: Updated trait names (Data Origin semantics)
+    // ADR-024: Updated trait names (Data Origin semantics)
     lines.push(Line::from(vec![
         Span::styled("    ─── ", STYLE_PRIMARY),
         Span::styled("defined (solid)", STYLE_DIM),
@@ -767,7 +767,7 @@ mod tests {
 
     #[test]
     fn test_legend_trait_styles_count() {
-        // v11.8: ADR-024 Data Origin semantics (5 traits)
+        // ADR-024 Data Origin semantics (5 traits)
         let expected_traits = [
             "defined",  // was: invariant
             "authored", // was: localized

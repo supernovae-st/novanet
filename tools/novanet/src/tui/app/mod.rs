@@ -40,8 +40,6 @@ use ratatui::text::Span;
 // =============================================================================
 
 /// Main app state.
-/// v0.14.0: Refactored with sub-structs for better organization.
-/// v0.17.3: State types extracted to state.rs
 /// 55 fields → 30 direct + 25 in sub-structs.
 pub struct App {
     // ==========================================================================
@@ -95,7 +93,7 @@ pub struct App {
     pub status_message: Option<(String, std::time::Instant)>,
     /// Pending refresh request.
     pub pending_refresh: bool,
-    // v0.16.3: Separate scroll states for Props and Arcs panels
+    // Separate scroll states for Props and Arcs panels
     /// Properties panel scroll position.
     pub props_scroll: usize,
     /// Properties panel total line count.
@@ -184,7 +182,7 @@ impl App {
             // UI state
             status_message: None,
             pending_refresh: false,
-            // v0.16.3: Separate scroll for Props and Arcs panels
+            // Separate scroll for Props and Arcs panels
             props_scroll: 0,
             props_line_count: 0,
             arcs_scroll: 0,
@@ -220,11 +218,10 @@ impl App {
         app
     }
 
-    // v0.13.1: yaml_active_section() removed (collapse/peek eliminated)
 
     /// Map selected_box to the appropriate Focus panel.
-    /// v0.16.3: Updated for 4-panel layout (Tree/Yaml/Props/Arcs).
-    /// v0.18.3: DEPRECATED - use Focus directly instead of InfoBox.
+    /// Updated for 4-panel layout (Tree/Yaml/Props/Arcs).
+    /// DEPRECATED - use Focus directly instead of InfoBox.
     #[deprecated(since = "0.18.3", note = "Use Focus enum directly")]
     #[allow(deprecated)]
     pub fn focus_for_selected_box(&self) -> Focus {
@@ -246,7 +243,7 @@ impl App {
         self.yaml.scroll = 0;
         self.props_scroll = 0;
         self.arcs_scroll = 0;
-        // v0.16.3: Reset property focus when changing tree items
+        // Reset property focus when changing tree items
         self.focused_property_idx = 0;
         self.expanded_property = false;
 
@@ -302,7 +299,7 @@ impl App {
                 self.load_yaml_cached(&path);
             },
             TreeItemData::Section => {
-                // v0.12.5: Show _index.yaml (complete schema overview) instead of taxonomy.yaml
+                // Show _index.yaml (complete schema overview) instead of taxonomy.yaml
                 self.load_yaml_cached("packages/core/models/_index.yaml");
             },
             TreeItemData::Instance {
@@ -503,7 +500,6 @@ impl App {
     /// Load YAML content with caching (avoids re-reading files on every navigation).
     fn load_yaml_cached(&mut self, relative_path: &str) {
         self.yaml.path = relative_path.to_string();
-        // v0.13.1: yaml_peek reset removed (collapse/peek eliminated)
 
         // Check cache first
         if let Some(cached) = self.yaml_cache.get(relative_path) {
@@ -1025,7 +1021,7 @@ impl App {
                 true
             },
 
-            // Panel navigation: Tab cycles through 5 panels (v0.18.3)
+            // Panel navigation: Tab cycles through 5 panels
             // Tree [1] → Identity [2] → Content [3] → Props [4] → Arcs [5]
             KeyCode::Tab => {
                 self.focus = self.focus.next();
@@ -1038,13 +1034,13 @@ impl App {
                 true
             },
             KeyCode::Left => {
-                // Left arrow: spatial navigation left (v0.18.3)
+                // Left arrow: spatial navigation left
                 self.focus = self.focus.left();
                 self.set_status(self.focus.name());
                 true
             },
             KeyCode::Right => {
-                // Right arrow: spatial navigation right (v0.18.3)
+                // Right arrow: spatial navigation right
                 self.focus = self.focus.right();
                 self.set_status(self.focus.name());
                 true
@@ -1062,7 +1058,7 @@ impl App {
                         self.toggle_tree_item();
                     },
                     Focus::Identity => {
-                        // v0.18.3: Identity panel - no action on Enter yet
+                        // Identity panel - no action on Enter yet
                         // Future: could toggle between expanded/collapsed view
                     },
                     Focus::Content => {
@@ -1093,7 +1089,7 @@ impl App {
                 true
             },
 
-            // h/l: Panel navigation OR tree toggle (v0.18.3)
+            // h/l: Panel navigation OR tree toggle
             // When in Tree: toggle collapse/expand (existing behavior)
             // When in other panels: linear panel navigation (h=prev, l=next)
             KeyCode::Char('h') => {
@@ -1157,7 +1153,7 @@ impl App {
                         self.tree.collapse_subtree(&key);
                     }
                 } else if self.focus == Focus::Props && self.selected_box == InfoBox::Properties {
-                    // v0.13.1: Feature 3 - copy focused property value
+                    // Copy focused property value
                     self.copy_focused_property();
                 }
                 true
@@ -1601,7 +1597,7 @@ impl App {
     // =========================================================================
 
     /// Check if currently in Graph mode (unified tree that shows instances).
-    /// v11.7: Renamed from is_graph_mode() for clarity — Graph mode IS the unified view.
+    /// Renamed from is_graph_mode() for clarity — Graph mode IS the unified view.
     pub fn is_graph_mode(&self) -> bool {
         self.mode == NavMode::Graph
     }
@@ -1819,7 +1815,7 @@ impl App {
     }
 
     /// Copy focused property value to clipboard (c key in Properties box).
-    /// v0.13.1: Feature 3 - single property copy.
+    /// Single property copy.
     pub fn copy_focused_property(&mut self) {
         use super::clipboard::{copy_to_clipboard, get_focused_property};
         if let Some((key, value)) = get_focused_property(self) {
@@ -1848,7 +1844,7 @@ impl App {
     // =========================================================================
 
     /// Check if in filtered Graph mode (drilling into a specific Class).
-    /// v11.7: Renamed from is_filtered_graph_mode() for consistency.
+    /// Renamed from is_filtered_graph_mode() for consistency.
     pub fn is_filtered_graph_mode(&self) -> bool {
         self.is_graph_mode() && self.data_filter_class.is_some()
     }

@@ -87,7 +87,7 @@ pub struct ArcFamilyDef {
     #[serde(default)]
     pub key_arcs: Vec<String>,
 
-    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    /// Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
 }

@@ -39,7 +39,7 @@ impl BlueprintData {
     pub fn from_yaml(root: &Path) -> crate::Result<Self> {
         let node_classes = crate::parsers::yaml_node::load_all_nodes(root)?;
         let arcs_doc = crate::parsers::arcs::load_arc_classes_from_files(root)?;
-        // v0.12.5: Load from individual YAML files
+        // Load from individual YAML files
         let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
 
         Ok(Self {
@@ -59,7 +59,7 @@ impl BlueprintData {
 
     /// Query Neo4j for schema node counts.
     ///
-    /// Uses correct labels and property names (ADR-023 v0.12.0):
+    /// Uses correct labels and property names (ADR-023):
     /// - `:Schema:Class` nodes have `label` property (e.g., "Page", "Entity")
     /// - `:Schema:ArcClass` nodes have `key` property (e.g., "HAS_PAGE", "USES_ENTITY")
     async fn query_neo4j_counts(db: &Db) -> crate::Result<Neo4jCounts> {

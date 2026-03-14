@@ -32,7 +32,7 @@ use super::{
 };
 
 // =============================================================================
-// v0.13.1 YAML-STYLE COLORS FOR PROPERTIES
+// YAML-STYLE COLORS FOR PROPERTIES
 // =============================================================================
 
 /// YAML key style (cyan) - matches SOURCE panel styling.
@@ -50,7 +50,7 @@ const COLOR_VALUE_ARRAY: Color = Color::Rgb(137, 180, 250); // Blue
 const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
 
 // =============================================================================
-// v0.13.1 SECTION HEADER COLORS
+// SECTION HEADER COLORS
 // =============================================================================
 
 /// STANDARD section header - teal (same as shared realm color #2aa198).
@@ -70,7 +70,7 @@ const COLOR_HEADER_PROVENANCE: Color = Color::Rgb(139, 92, 246); // Violet-500
 const COLOR_PROPERTY_FOCUSED_BG: Color = Color::Rgb(30, 50, 80);
 
 // =============================================================================
-// v0.17: PROPERTY INDICATOR COLORS (Solarized palette)
+// PROPERTY INDICATOR COLORS (Solarized palette)
 // =============================================================================
 
 /// Green checkmark (✓) for properties that have values - Solarized Green #859900
@@ -83,11 +83,11 @@ const COLOR_REQUIRED_MARKER: Color = Color::Rgb(220, 50, 47);
 const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 
 // =============================================================================
-// v0.19.0 STANDARD PROPERTIES (ADR-044)
+// STANDARD PROPERTIES (ADR-044)
 // =============================================================================
 
 /// Standard properties that ALL nodes have (DATA and SCHEMA).
-/// v0.19.0: ALL nodes have THE SAME 8 standard properties.
+/// ALL nodes have THE SAME 8 standard properties.
 ///
 /// Order: key -> display_name -> node_class -> content -> triggers -> provenance -> created_at -> updated_at
 ///
@@ -105,26 +105,26 @@ const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
 const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "key",
     "display_name",
-    "node_class", // v0.19.0: PascalCase = DATA node, lowercase = SCHEMA node
-    "content",    // v0.19.0: replaces "description" for Data nodes
+    "node_class", // PascalCase = DATA node, lowercase = SCHEMA node
+    "content",    // Unified name for all nodes
     "triggers",
-    "provenance", // v0.19.0: replaces created_by + created_by_meta
+    "provenance", // {source, version} object
     "created_at",
     "updated_at",
 ];
 
 /// Check if a property name is a standard property.
-/// v0.19.0: Only the 8 ADR-044 properties are standard. Composite keys are SPECIFIC.
+/// Only the 8 ADR-044 properties are standard. Composite keys are SPECIFIC.
 fn is_standard_property(name: &str) -> bool {
     STANDARD_PROPERTY_NAMES.contains(&name)
 }
 
 // =============================================================================
-// v0.19.0: PROVENANCE HELPERS (ADR-035)
+// PROVENANCE HELPERS (ADR-035)
 // =============================================================================
 
 /// Data category derived from provenance.source field.
-/// v0.19.0: 6 sources mapped to 6 categories with distinct lifecycle properties.
+/// 6 sources mapped to 6 categories with distinct lifecycle properties.
 ///
 ///   Source           │ Reseed │ Backup │ Editable │ Color (TUI)
 ///   ─────────────────┼────────┼────────┼──────────┼────────────
@@ -146,7 +146,7 @@ pub(crate) enum DataCategory {
 
 impl DataCategory {
     /// Parse category from provenance source value.
-    /// v0.19.0: 6 sources with distinct lifecycle properties.
+    /// 6 sources with distinct lifecycle properties.
     pub(crate) fn from_source(source: &str) -> Self {
         match source {
             "seed:schema" => DataCategory::Schema,
@@ -246,7 +246,7 @@ impl DataCategory {
 }
 
 /// Parse provenance JSON for display in the TUI info panel.
-/// v0.19.0: Unified provenance object with tagged union on `source`.
+/// Unified provenance object with tagged union on `source`.
 ///
 /// Structure depends on source:
 ///   seed:*       → { source, version, file? }
@@ -303,7 +303,7 @@ impl ProvenanceMeta {
 }
 
 /// Build provenance section content from unified provenance property.
-/// v0.19.0: Consolidated from `created_by` + `created_by_meta` into single `provenance` JSON object.
+/// Consolidated from `created_by` + `created_by_meta` into single `provenance` JSON object.
 ///
 /// Display layout:
 /// ```text
@@ -522,7 +522,7 @@ fn build_provenance_section(provenance: Option<&JsonValue>) -> SectionContent<'s
 }
 
 // =============================================================================
-// v0.17: PROPERTY RENDERING HELPERS
+// PROPERTY RENDERING HELPERS
 // =============================================================================
 
 /// Property type for type badge rendering.
@@ -592,7 +592,7 @@ const BOX_BORDER_SELECTED: Color = Color::Cyan;
 /// Content for a single info section.
 /// Each section has a title and content lines.
 /// Empty sections display "—" as content.
-/// v0.16.4: Made public for render optimization
+/// Made public for render optimization.
 #[derive(Default)]
 pub struct SectionContent<'a> {
     pub lines: Vec<Line<'a>>,
@@ -632,8 +632,8 @@ impl<'a> SectionContent<'a> {
 
 /// Unified info content with 7 fixed sections.
 /// All sections are always present; empty sections show "—".
-/// v0.16.4: Made public for render optimization
-/// v0.18.0: Added PROVENANCE section (ADR-042)
+/// Made public for render optimization.
+/// Added PROVENANCE section (ADR-042).
 #[derive(Default)]
 pub struct UnifiedContent<'a> {
     /// IDENTITY: type, category, key, class
@@ -658,7 +658,7 @@ pub struct UnifiedContent<'a> {
 
 /// Build unified content for the current tree item.
 /// Returns all 6 sections populated with appropriate content.
-/// v0.16.4: Made public for single-build optimization in mod.rs
+/// Made public for single-build optimization in mod.rs.
 pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
     match app.current_item() {
         Some(TreeItem::ClassesSection) => build_classes_section_content(app),
@@ -673,7 +673,7 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
         },
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
-        // v0.17.3: EntityGroup shows parent Entity as INSTANCE panel
+        // EntityGroup shows parent Entity as INSTANCE panel
         // Look up Entity instance and class to render with full INSTANCE layout
         Some(TreeItem::EntityGroup(_, _, _, group)) => {
             if let Some((entity_realm, entity_layer, entity_class)) = app.tree.find_class("Entity")
@@ -695,7 +695,7 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
             // Fallback to custom content if lookup fails
             build_entity_group_content(app, group)
         },
-        // v0.17.3: EntityNativeItem shows as INSTANCE panel with full layout
+        // EntityNativeItem shows as INSTANCE panel with full layout
         // Create InstanceInfo from EntityNativeInfo for consistent rendering
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
             // Compute property stats for consistent INSTANCE panel display
@@ -939,7 +939,7 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         .properties
         .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // v0.19.0: Realm has NO specific properties per ADR-044
+    // Realm has NO specific properties per ADR-044
     // Only the 8 standard properties exist on Realm nodes
 
     // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
@@ -1071,7 +1071,7 @@ fn build_layer_content(
         .properties
         .add_line(render_property_line("updated_at", true, PropType::DateTime));
 
-    // v0.19.0: Layer has NO specific properties per ADR-044
+    // Layer has NO specific properties per ADR-044
     // Only the 8 standard properties exist on Layer nodes
 
     // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
@@ -1148,9 +1148,9 @@ fn build_class_content(
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
     let theme = &app.theme;
-    let mode = ColorMode::TrueColor; // v0.13: Use TrueColor for semantic colors
+    let mode = ColorMode::TrueColor; // TrueColor for semantic colors
 
-    // v0.13: Get semantic colors from colors.generated.rs
+    // Get semantic colors from colors.generated.rs
     // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
@@ -1424,7 +1424,7 @@ fn build_class_content(
 
     // RELATIONSHIPS - v0.13: with arc family colors from Neo4j data
     if let Some(arcs_data) = &app.details.class_arcs {
-        // v0.13: Use Neo4j arc data with family-based colors
+        // Use Neo4j arc data with family-based colors
         let outgoing_count = arcs_data.outgoing.len();
         let incoming_count = arcs_data.incoming.len();
 
@@ -1445,7 +1445,7 @@ fn build_class_content(
             Span::styled(format!("{} in", incoming_count), STYLE_MUTED),
         ]));
 
-        // v0.13: Show outgoing arcs with family colors
+        // Show outgoing arcs with family colors
         for arc in arcs_data.outgoing.iter().take(4) {
             let family_color = colors::arc_family::color(&arc.family, mode);
             content.relationships.add_line(Line::from(vec![
@@ -1473,7 +1473,7 @@ fn build_class_content(
             )]));
         }
 
-        // v0.13: Show incoming arcs with family colors
+        // Show incoming arcs with family colors
         for arc in arcs_data.incoming.iter().take(3) {
             let family_color = colors::arc_family::color(&arc.family, mode);
             content.relationships.add_line(Line::from(vec![
@@ -1549,9 +1549,9 @@ fn build_class_content(
 /// Build content for ArcFamily.
 fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
-    let mode = ColorMode::TrueColor; // v0.13: semantic colors
+    let mode = ColorMode::TrueColor; // Semantic colors
 
-    // v0.13: Get family-specific color
+    // Get family-specific color
     let family_color = colors::arc_family::color(&family.key, mode);
 
     // IDENTITY - explicit key:value format
@@ -1636,9 +1636,9 @@ fn build_arc_class_content(
     arc_class: &crate::tui::data::ArcClassInfo,
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
-    let mode = ColorMode::TrueColor; // v0.13: semantic colors
+    let mode = ColorMode::TrueColor; // Semantic colors
 
-    // v0.13: Get family-specific color
+    // Get family-specific color
     let family_color = colors::arc_family::color(&family.key, mode);
 
     // IDENTITY - explicit key:value format
@@ -1776,9 +1776,9 @@ fn build_instance_content(
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
     let theme = &app.theme;
-    let mode = ColorMode::TrueColor; // v0.13: semantic colors
+    let mode = ColorMode::TrueColor; // Semantic colors
 
-    // v0.13: Get semantic colors from colors.generated.rs
+    // Get semantic colors from colors.generated.rs
     // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
@@ -2006,7 +2006,7 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.16.4: Wrap long values when expanded
+                // Wrap long values when expanded
                 if is_focused && app.expanded_property && value_str.len() > 24 {
                     // Wrap value across multiple lines
                     let prefix_len = 2 + max_key_len + 8;
@@ -2118,7 +2118,7 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.16.4: Wrap long values when expanded
+                // Wrap long values when expanded
                 if is_focused && app.expanded_property && value_str.len() > 24 {
                     let prefix_len = 2 + max_key_len + 8;
                     let wrap_width = 50;
@@ -2192,7 +2192,7 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.16.4: Wrap long values when expanded
+                // Wrap long values when expanded
                 if is_focused && app.expanded_property && value_str.len() > 24 {
                     let prefix_len = 2 + max_key_len + 2;
                     let wrap_width = 50;
@@ -2371,7 +2371,7 @@ fn build_locale_group_content(group: &crate::tui::data::LocaleGroup) -> UnifiedC
 }
 
 /// Build content for EntityGroup (EntityNatives grouped by parent Entity).
-/// v0.17.3: New grouping system - groups natives by entity instead of locale.
+/// Groups natives by entity instead of locale.
 /// Shows the parent Entity's properties and relationships.
 fn build_entity_group_content(
     app: &crate::tui::app::App,
@@ -2475,12 +2475,6 @@ fn build_empty_content() -> UnifiedContent<'static> {
 }
 
 // =============================================================================
-// CONSTANTS
-// =============================================================================
-
-// v0.13: STYLE_ARC_FAMILY removed - now using colors::arc_family::color() from colors.generated.rs
-
-// =============================================================================
 // HELPER FUNCTIONS (local to this module)
 // =============================================================================
 
@@ -2503,7 +2497,7 @@ fn type_badge(prop_type: &str) -> &'static str {
     }
 }
 
-/// v0.13: Return semantic color for property type.
+/// Return semantic color for property type.
 fn type_color(prop_type: &str) -> Color {
     match prop_type.to_lowercase().as_str() {
         "string" => Color::Rgb(42, 161, 152),   // cyan/teal - text
@@ -2553,7 +2547,7 @@ fn format_json_value(value: &JsonValue) -> String {
 }
 
 /// Wrap a JSON value string across multiple lines.
-/// v0.16.4: For expanded property display.
+/// For expanded property display.
 /// Returns lines with configurable indent for continuation.
 fn wrap_json_value(s: &str, max_width: usize, indent: usize) -> Vec<String> {
     // Early return for empty or short strings (use char count, not byte count)
@@ -2625,7 +2619,7 @@ fn json_value_to_display(value: &JsonValue) -> String {
 }
 
 /// Get color for JSON value type.
-/// v0.13.1: Matches yaml_panel.rs json_value_color() for consistency.
+/// Matches yaml_panel.rs json_value_color() for consistency.
 fn json_value_color(value: &JsonValue) -> Color {
     match value {
         JsonValue::Null => COLOR_VALUE_NULL,
@@ -2743,7 +2737,7 @@ fn render_scrollable_section_box(
 }
 
 /// Compute visual state for a box in the Detail panel.
-/// v0.18.3: Simplified to use only panel_focused (Focus enum is source of truth).
+/// Simplified to use only panel_focused (Focus enum is source of truth).
 /// Old selected_box parameter is deprecated and ignored.
 fn detail_box_state(
     panel_focused: bool,
@@ -2761,10 +2755,10 @@ fn detail_box_state(
 // build_location_badges, build_metric_cards, render_header_box, render_unified_info_panel
 // ~550 lines removed — replaced by render_identity_panel in v0.18.3 4-panel refactor.
 /// Render the properties panel [3] in the right column.
-/// v0.16.3: New function for the separated Properties panel.
-/// v0.16.4: Accepts pre-built content to avoid double-building.
+/// Render the separated Properties panel.
+/// Accepts pre-built content to avoid double-building.
 pub fn render_props_panel(f: &mut Frame, area: Rect, app: &mut App, content: &UnifiedContent) {
-    // v0.16.3: Props panel focused when Focus::Props
+    // Props panel focused when Focus::Props
     let panel_focused = app.focus == Focus::Props;
     let selected_box = app.selected_box;
 

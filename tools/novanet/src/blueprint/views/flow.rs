@@ -35,7 +35,6 @@ fn render_header() -> String {
 }
 
 fn render_ownership_flow() -> String {
-    // v0.13: ADR-029 *Native pattern - unified HAS_NATIVE arc
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  1. OWNERSHIP FLOW — Who owns what (org hierarchy)                           │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
@@ -109,7 +108,6 @@ fn render_knowledge_flow() -> String {
 }
 
 fn render_generation_flow() -> String {
-    // v0.13: ADR-029 *Native pattern - unified naming
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  4. GENERATION FLOW — LLM pipeline from content to output (ADR-029)          │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
@@ -138,7 +136,6 @@ fn render_generation_flow() -> String {
 }
 
 fn render_seo_flow() -> String {
-    // v11.3: SEO and GEO are now separate layers in org realm
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  5. SEO + GEO FLOW — Keywords and AI search optimization                     │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
@@ -152,7 +149,7 @@ fn render_seo_flow() -> String {
      │      │                                                                       │\n\
      │      └──[TARGETS_LOCALE]──► Locale                                           │\n\
      │                                                                              │\n\
-     │  💡 SEO is org-specific (v11.3). Keywords for qrcode-ai.com,                 │\n\
+     │  💡 SEO is org-specific. Keywords for qrcode-ai.com,                         │\n\
      │     not universal knowledge. GEO is AI search optimization.                  │\n\
      │                                                                              │\n\
      └──────────────────────────────────────────────────────────────────────────────┘"
@@ -160,7 +157,6 @@ fn render_seo_flow() -> String {
 }
 
 fn render_cross_realm_flow() -> String {
-    // v11.2: global → shared, tenant → org
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  6. CROSS-REALM FLOW — Shared knowledge used by org content                  │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\

@@ -93,7 +93,7 @@ pub fn cypher_list_owned(items: &[String]) -> String {
 /// Write a MERGE statement for a `:Schema:<Label>` node with ON CREATE/ON MATCH SET.
 ///
 /// Properties are formatted as `{var}.{name} = '{value}'`.
-/// v0.19.0 (ADR-037): Adds `node_class` (lowercase of label) for SCHEMA nodes.
+/// Adds `node_class` (lowercase of label) for SCHEMA nodes.
 /// Automatically adds `created_by` (provenance), `created_at` on CREATE and `updated_at` on MATCH.
 pub fn write_merge_meta(
     out: &mut String,
@@ -102,7 +102,7 @@ pub fn write_merge_meta(
     key: &str,
     props: &[(&str, &str)],
 ) {
-    // v0.19.0 (ADR-037): node_class is lowercase for SCHEMA nodes
+    // node_class is lowercase for SCHEMA nodes
     // Convert PascalCase/CamelCase to snake_case for node_class
     let node_class = to_snake_case(label);
 
@@ -112,9 +112,9 @@ pub fn write_merge_meta(
     for (name, value) in props {
         writeln!(out, "  {var}.{name} = '{value}',").unwrap();
     }
-    // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+    // node_class discriminator (lowercase = SCHEMA node)
     writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
-    // v0.19.0 (ADR-044): provenance as JSON object
+    // Provenance as JSON object
     writeln!(out, "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}}',").unwrap();
     writeln!(out, "  {var}.created_at = datetime()").unwrap();
 
@@ -122,7 +122,7 @@ pub fn write_merge_meta(
     for (name, value) in props {
         writeln!(out, "  {var}.{name} = '{value}',").unwrap();
     }
-    // v0.19.0 (ADR-037): Always set node_class on match too
+    // Always set node_class on match too
     writeln!(out, "  {var}.node_class = '{node_class}',").unwrap();
     writeln!(out, "  {var}.updated_at = datetime()").unwrap();
 }
@@ -305,9 +305,9 @@ mod tests {
         assert!(out.contains("MERGE (r:Schema:Realm {key: 'shared'})"));
         assert!(out.contains("r.display_name = 'Shared'"));
         assert!(out.contains("r.emoji = 'globe'"));
-        // v0.19.0 (ADR-037): node_class discriminator
+        // node_class discriminator
         assert!(out.contains("r.node_class = 'realm'"));
-        // v0.19.0 (ADR-044): Provenance tracking
+        // Provenance tracking
         assert!(out.contains("r.provenance = '{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}'"));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));

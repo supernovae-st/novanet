@@ -59,7 +59,6 @@ pub const FAMILY_COLORS: &[(&str, &str)] = &[
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Returns emoji for node_trait trait (O(1) match instead of O(n) search).
-/// v0.12.0: ADR-024 Data Origin rename.
 pub fn trait_emoji(behavior: &str) -> &'static str {
     match behavior {
         "defined" => "\u{1F535}",   // 🔵
@@ -151,7 +150,7 @@ pub struct ExpandedArc {
 pub fn expand_arcs(relations: &[ArcDef]) -> Vec<ExpandedArc> {
     let mut arcs = Vec::new();
     for rel in relations {
-        // v0.19.0: Skip deprecated arcs (e.g., REPRESENTS, REPRESENTED_BY)
+        // Skip deprecated arcs (e.g., REPRESENTS, REPRESENTED_BY)
         if rel.deprecated {
             continue;
         }
@@ -421,7 +420,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
         "- **\u{1F4E6} ORG** — Organization-specific content structure and generation"
     )
     .unwrap();
-    // v11.5: Architecture is 2 realms (shared + org), 10 layers
+    // Architecture is 2 realms (shared + org), 10 layers
     writeln!(out).unwrap();
     writeln!(out, "## Graph Diagram").unwrap();
     writeln!(out).unwrap();
@@ -556,7 +555,6 @@ mod tests {
 
     #[test]
     fn render_small_mermaid() {
-        // v0.13.0 ADR-029: ProjectContent → ProjectNative, HAS_CONTENT → HAS_NATIVE
         // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
         let nodes = vec![
             make_node("Locale", "shared", "config"),
@@ -695,17 +693,16 @@ mod tests {
         assert!(output.contains("ORG_REALM"));
 
         // Sample layer subgraphs (v11.4: 4 shared + 6 org)
-        assert!(output.contains("SHARED_config")); // v11.4: shared/config for classifications
+        assert!(output.contains("SHARED_config"));
         assert!(output.contains("SHARED_locale"));
         assert!(output.contains("SHARED_geography"));
-        assert!(output.contains("SHARED_knowledge")); // v11.4: SEO/GEO nodes now here
+        assert!(output.contains("SHARED_knowledge"));
         assert!(output.contains("ORG_config"));
         assert!(output.contains("ORG_foundation"));
         assert!(output.contains("ORG_structure"));
         assert!(output.contains("ORG_semantic"));
         assert!(output.contains("ORG_instruction"));
         assert!(output.contains("ORG_output"));
-        // v11.4: seo/geo layers removed from org (nodes moved to shared/knowledge)
 
         // All 9 classDef layer styles (v0.17.3 ADR-036: layer-based styling)
         assert!(output.contains("classDef config"));
@@ -724,9 +721,9 @@ mod tests {
         assert!(output.contains("Page["));
         assert!(output.contains("Block["));
         assert!(output.contains("Entity["));
-        assert!(output.contains("EntityNative[")); // v0.13.0 ADR-029: renamed from EntityContent
-        assert!(output.contains("PageNative[")); // v0.13.0 ADR-029: renamed from PageGenerated
-        assert!(output.contains("BlockNative[")); // v0.13.0 ADR-029: renamed from BlockGenerated
+        assert!(output.contains("EntityNative["));
+        assert!(output.contains("PageNative["));
+        assert!(output.contains("BlockNative["));
 
         // Edges exist (at least some)
         assert!(output.contains("|HAS_PAGE|"));
@@ -739,7 +736,7 @@ mod tests {
         // Class assignments (v0.17.3 ADR-036: by layer instead of trait)
         assert!(output.contains("class Locale config"));
         assert!(output.contains("class Project foundation"));
-        assert!(output.contains("class PageNative output")); // v0.13.0 ADR-029: renamed to PageNative
+        assert!(output.contains("class PageNative output"));
 
         // No v8 terms
         assert!(!output.contains("SCOPE_HIERARCHY"));

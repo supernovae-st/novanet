@@ -136,7 +136,7 @@ const POWER_BARS: [&str; 11] = [
 
 /// Render power bar with color based on percentage.
 /// Returns (&'static bar_string, color) where bar looks like: ▰▰▰▰▰▰▰▰▱▱
-/// v0.17.3: Zero-allocation using lookup table instead of format!
+/// Zero-allocation using lookup table instead of format!
 #[inline]
 fn render_power_bar(power: u8) -> (&'static str, Color) {
     let filled = (power as usize * POWER_BAR_WIDTH / 100).min(POWER_BAR_WIDTH);
@@ -213,9 +213,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 k.display_name.clone()
             };
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: class_label,
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
         },
         Some(TreeItem::EntityCategory(r, l, k, cat)) => {
@@ -230,9 +230,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: k.display_name.clone(),
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
             path.push(BreadcrumbLevel {
                 icon: "◫",
@@ -252,9 +252,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: k.display_name.clone(),
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
             path.push(BreadcrumbLevel {
                 icon: "🌐",
@@ -265,7 +265,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::Cyan,
             });
         },
-        // v0.17.3: EntityGroup breadcrumb (entity-grouped EntityNatives)
+        // EntityGroup breadcrumb (entity-grouped EntityNatives)
         Some(TreeItem::EntityGroup(r, l, k, group)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -278,9 +278,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: k.display_name.clone(),
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
             path.push(BreadcrumbLevel {
                 icon: "◈",
@@ -300,9 +300,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: k.display_name.clone(),
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
             path.push(BreadcrumbLevel {
                 icon: "►",
@@ -365,9 +365,9 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
             path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key), // v0.17.3: use layer icon (trait removed)
+                icon: layer_badge_icon(&l.key), // Use layer icon
                 label: k.display_name.clone(),
-                color: hex_to_color(&l.color), // v0.17.3: use layer color (trait removed)
+                color: hex_to_color(&l.color), // Use layer color
             });
             path.push(BreadcrumbLevel {
                 icon: "◆",
@@ -547,7 +547,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     if total_classes == 0 {
         // Render empty tree panel with border
-        // v11.6: Show mode in empty state too
+        // Show mode in empty state too
         let empty_title = if app.is_graph_mode() {
             " ● Data "
         } else {
@@ -692,7 +692,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
             let realm_color = hex_to_color(&realm.color);
 
-            // v11.6.1: Custom Realm line with counts and right-aligned badge
+            // Custom Realm line with counts and right-aligned badge
             // Format: [cursor][prefix][chevron] [icon] [name]  [▦layers ◇classes]  │ [badge] │R│
             let is_cursor = idx == app.tree_cursor;
             let cursor_char = if is_cursor { ">" } else { " " };
@@ -716,7 +716,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             };
             let stats_str = format!("▦{} ◇{}{}", layers_count, classes_count, health_str);
 
-            // v0.13.1: No right badge for Realm (bar starts at Layer level)
+            // No right badge for Realm (bar starts at Layer level)
             // Calculate padding for alignment (using display_width for Unicode support)
             let tree_width = area.width.saturating_sub(5) as usize;
             let left_width = display_width(&left_content);
@@ -794,11 +794,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     // Show expand icon only if layer has content
                     let layer_icon = expand_icon(layer_collapsed);
 
-                    // v0.16.4: All layers visible (no dimming for empty layers)
+                    // All layers visible (no dimming for empty layers)
                     let layer_color = hex_to_color(&layer.color);
                     let text_color = layer_color;
 
-                    // v11.6.1: Custom Layer line with counts and right-aligned badge
+                    // Custom Layer line with counts and right-aligned badge
                     // Format: [cursor][prefix][chevron] [icon] [name]  [◇classes]  │ [badge] │L│
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
@@ -824,7 +824,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     };
                     let stats_str = format!("◇{}{}", classes_in_layer, health_str);
 
-                    // v0.13.1: Simple color bar (layer color) - starts at Layer level
+                    // Simple color bar (layer color) - starts at Layer level
                     // Calculate padding for alignment
                     let tree_width = area.width.saturating_sub(5) as usize;
                     let left_width = display_width(&left_content);
@@ -877,7 +877,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             " ".repeat(padding_after_stats + 1),
                             base_style,
                         ));
-                        // v0.13.1: Simple color bar (layer color)
+                        // Simple color bar (layer color)
                         spans.push(Span::styled("│", base_style.fg(layer_color)));
 
                         all_lines.push(Line::from(spans));
@@ -912,7 +912,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let class_icon = if is_data_mode && class_info.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
-                                // v0.17.3: Use helpers for Entity/EntityNative dual storage
+                                // Use helpers for Entity/EntityNative dual storage
                                 let instances_loaded = if class_info.key == "Entity" {
                                     app.tree.has_entity_instances()
                                 } else if class_info.key == "EntityNative" {
@@ -930,19 +930,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 " "
                             };
 
-                            // v10.1: Show instance count (always in Data mode)
-                            // v10.6: Add trait icon prefix
-                            // v11.3: Colored trait icons (from visual-encoding.yaml + traits/*.yaml)
-                            // v11.5: Enhanced display with all useful metrics
-                            // v0.16.3: Populated icon (● vs ○) for visual clarity
                             // Format: Name (instances) →out←in req/tot
                             let class_is_empty = class_info.instance_count == 0;
                             let instance_count = class_info.instance_count;
 
-                            // v0.16.3: Use populated icon (● filled = has data, ○ empty = no data)
+                            // Use populated icon (● filled = has data, ○ empty = no data)
                             let populated_icon = if class_is_empty { "○" } else { "●" };
 
-                            // v0.17.3: Simplified format - just Name (count) - removed arc/prop noise
+                            // Simplified format - just Name (count)
                             let (display_text, class_text_color, count_str, count_color) =
                                 if is_data_mode {
                                     // Data mode: Name (count)
@@ -990,7 +985,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 branch(class_is_last)
                             );
                             // Highlight Class if it has expanded instances (active focus)
-                            // v0.17.3: Use helpers for Entity/EntityNative dual storage
+                            // Use helpers for Entity/EntityNative dual storage
                             let has_loaded_instances = if class_info.key == "Entity" {
                                 app.tree.has_entity_instances()
                             } else if class_info.key == "EntityNative" {
@@ -1008,7 +1003,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 None
                             };
 
-                            // v0.16.4: New Class line format
+                            // Class line format
                             // Format: [cursor] [prefix] [icon] [●/○] [count] [name] [arcs] [props] │
                             let is_cursor = idx == app.tree_cursor;
                             let cursor_char = if is_cursor { ">" } else { " " };
@@ -1024,7 +1019,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 display_text
                             );
 
-                            // v0.13.1: Simple color bar only (no repeated text badges)
+                            // Simple color bar only (no repeated text badges)
                             // Just a colored │ at the right edge, matching layer color
 
                             // Calculate padding for right-alignment
@@ -1054,7 +1049,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     Style::default()
                                 };
 
-                                // v0.16.4: New format: ● 200 Name (no trait abbrev)
+                                // Format: ● 200 Name
                                 let icon_color = if class_is_empty {
                                     Color::Rgb(100, 100, 110) // Dim gray
                                 } else {
@@ -1068,12 +1063,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         format!("{} ", class_icon),
                                         base_style.fg(class_text_color),
                                     ),
-                                    // v0.16.4: populated icon (● vs ○)
+                                    // Populated icon (● vs ○)
                                     Span::styled(
                                         format!("{} ", populated_icon),
                                         base_style.fg(icon_color),
                                     ),
-                                    // v0.16.4: count with color coding
+                                    // Count with color coding
                                     Span::styled(
                                         format!("{} ", count_str),
                                         base_style.fg(count_color),
@@ -1088,7 +1083,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     class_bg,
                                 ));
 
-                                // v0.13.1: Simple color bar (layer color) - no text badges
+                                // Simple color bar (layer color)
                                 spans.push(Span::styled(" ".repeat(padding_width), base_style));
                                 spans.push(Span::styled("│", base_style.fg(layer_color)));
 
@@ -1098,9 +1093,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !class_collapsed {
-                                // v0.17.3: Entity shows flat alphabetical list (no category grouping)
+                                // Entity shows flat alphabetical list (no category grouping)
                                 if class_info.key == "Entity" {
-                                    // v0.17.3: Entity shows simple flat list (same format as regular instances)
+                                    // Entity shows simple flat list (same format as regular instances)
                                     // EntityNatives are shown under the EntityNative class instead
                                     let all_entities: Vec<_> =
                                         app.tree.entity_instances_flat().collect();
@@ -1164,7 +1159,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     && !app.tree.entity_native_groups.is_empty()
                                 {
                                     // EntityNative class: group by parent Entity
-                                    // v0.17.3: Show entity groups with power bar and expandable natives
+                                    // Show entity groups with power bar and expandable natives
                                     use unicode_width::UnicodeWidthStr;
 
                                     let group_count = app.tree.entity_native_groups.len();
@@ -1261,7 +1256,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                 .entity_native_by_entity
                                                 .get(&entity_group.entity_key)
                                             {
-                                                // v0.17.3: Format with locale flags: "🇫🇷 fr-FR - Display Name    /slug"
+                                                // Format with locale flags: "🇫🇷 fr-FR - Display Name    /slug"
                                                 // Pre-compute left parts and find max width for slug alignment
                                                 let native_parts: Vec<_> = natives
                                                     .iter()
@@ -1405,7 +1400,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             0
                                         };
 
-                                        // v0.13.1: Unified instance color (yellow)
+                                        // Unified instance color (yellow)
                                         let icon = if is_primary { "●" } else { "○" };
                                         let base_color = COLOR_INSTANCE;
 
@@ -1503,7 +1498,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let family_collapsed = app.tree.is_collapsed(&family_key);
             let family_icon = expand_icon(family_collapsed);
 
-            // v0.13.1: Simplified ArcFamily line - no right badge (like Realm)
+            // Simplified ArcFamily line - no right badge (like Realm)
             // Format: [cursor][prefix][chevron] [icon] [name]  [◇arcs]
             let is_cursor = idx == app.tree_cursor;
             let cursor_char = if is_cursor { ">" } else { " " };
@@ -1547,7 +1542,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     COLOR_ARC_FAMILY,
                     None,
                 ));
-                // v0.13.1: stats only, no right badge
+                // Stats only, no right badge
                 spans.push(Span::styled(" ", base_style));
                 spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
 
@@ -1560,7 +1555,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 for (ai, arc_class) in family.arc_classes.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
 
-                    // v0.13.1: Simplified ArcClass line with color bar
+                    // Simplified ArcClass line with color bar
                     // Format: [cursor][prefix] [name]  [From→To]  [card] │
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
@@ -1583,7 +1578,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let left_width = display_width(&left_content);
                     let flow_width = display_width(&flow_str);
                     let card_width = display_width(card_str);
-                    let right_side = "│"; // v0.13.1: Simple color bar
+                    let right_side = "│"; // Simple color bar
                     let right_width = 1;
 
                     let total_content = left_width + flow_width + card_width + right_width + 3;
@@ -1615,7 +1610,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         spans.push(Span::styled(flow_str, base_style.fg(COLOR_MUTED_TEXT)));
                         spans.push(Span::styled(" ", base_style));
                         spans.push(Span::styled(card_str, base_style.fg(Color::Cyan)));
-                        // v0.13.1: Simple color bar (arc family color)
+                        // Simple color bar (arc family color)
                         spans.push(Span::styled(" ".repeat(padding), base_style));
                         spans.push(Span::styled("│", base_style.fg(COLOR_ARC_FAMILY)));
 
@@ -1642,7 +1637,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     };
 
     // Show hierarchical position in title: R:1/2 L:2/4 K:3/7 I:42/300
-    // v11.6: Show mode with icon + hierarchy position
+    // Show mode with icon + hierarchy position
     let total = app.current_item_count(); // Used for scrollbar
     let mode_prefix = if app.is_graph_mode() {
         "● Data" // Filled circle = instances/data
@@ -1671,14 +1666,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let inner_area = block.inner(area);
     f.render_widget(block, area);
 
-    // v11.6: Reserve space for mini-map (2 chars + 1 separator) and add left padding
+    // Reserve space for mini-map (2 chars + 1 separator) and add left padding
     let minimap_width: u16 = 3;
     let content_x = inner_area.x + TREE_PADDING_LEFT;
     let content_width = inner_area
         .width
         .saturating_sub(minimap_width + TREE_PADDING_LEFT + SCROLLBAR_WIDTH);
 
-    // v11.6: Render sticky breadcrumb at top of content area (with padding)
+    // Render sticky breadcrumb at top of content area (with padding)
     let breadcrumb_area = Rect::new(content_x, inner_area.y, content_width, inner_area.height);
     let breadcrumb_height = render_breadcrumb(f, breadcrumb_area, app);
 
@@ -1710,7 +1705,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let paragraph = Paragraph::new(lines);
     f.render_widget(paragraph, tree_area);
 
-    // v11.6: Render mini-map on right side (positioned from right edge)
+    // Render mini-map on right side (positioned from right edge)
     let sep_x = inner_area.x + inner_area.width - minimap_width;
     let minimap_area = Rect::new(
         sep_x + 1, // After separator
@@ -1861,7 +1856,7 @@ fn render_filtered_instances(
                 0
             };
 
-            // v0.13.1: Unified instance color (yellow)
+            // Unified instance color (yellow)
             // Primary locales: filled circle ●, secondary: empty circle ○
             let icon = if is_primary { "●" } else { "○" };
             let base_color = COLOR_INSTANCE;

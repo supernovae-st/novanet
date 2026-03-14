@@ -81,7 +81,7 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "packages/core/src/graph/visual-encoding.ts",
             post_process: None,
         },
-        // ViewsGenerator removed in v0.12.5 — views.yaml is now loaded dynamically
+        // ViewsGenerator removed — views.yaml is now loaded dynamically
         // by ViewLoader.ts (Studio) and nexus/views.rs (TUI)
         GeneratorEntry {
             generator: Box::new(TuiIconsGenerator),
@@ -184,7 +184,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     let node_names: std::collections::HashSet<String> =
         nodes.iter().map(|n| n.def.name.clone()).collect();
 
-    // 2. Parse arc definitions (v10.7+: from arc-classes/ directory)
+    // 2. Parse arc definitions (from arc-classes/ directory)
     let rels_doc = crate::parsers::arcs::load_arc_classes_from_files(root)?;
 
     // 3. Parse organizing principles
@@ -259,7 +259,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
         }
     }
 
-    // 7. Validate schema standardization rules (v0.13.1)
+    // 7. Validate schema standardization rules
     let schema_issues = crate::parsers::schema_rules::validate_all_nodes(&nodes);
     for issue in schema_issues {
         let severity = match issue.severity {
@@ -682,7 +682,7 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 12 generators should succeed (views removed in v0.12.5)
+        // All 12 generators should succeed (views removed)
         assert_eq!(results.len(), 12, "expected 12 generator results");
 
         // Verify generator names and order
@@ -795,7 +795,7 @@ mod tests {
 
         // Create a test node with issues (wrong property order, missing timestamps)
         let mut standard_properties = IndexMap::new();
-        // WRONG ORDER: content before key (v0.19.0: content replaces description)
+        // WRONG ORDER: content before key (content replaces description)
         standard_properties.insert(
             "content".to_string(),
             PropertyDef {

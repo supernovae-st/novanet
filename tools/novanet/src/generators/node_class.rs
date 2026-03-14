@@ -77,15 +77,13 @@ fn context_budget(node: &ParsedNode) -> &'static str {
 /// - `fragment`: Building blocks, not publishable alone (foundation, structure)
 /// - `publishable`: Can be published to end users (semantic, output)
 ///
-/// v11.2: Added as derived property, not classification axis.
+/// Added as derived property, not classification axis.
 fn derive_visibility(realm: &str, layer: &str, class_name: &str) -> &'static str {
     // Class-name overrides (priority 1)
     match class_name {
         // Page/Block types and templates are fragments
-        // v0.12.5: PageStructure deleted (ADR-028)
         "Page" | "Block" | "BlockType" => return "fragment",
         // Generated and content nodes are publishable
-        // v0.13.0 ADR-029: PageGenerated→PageNative, BlockGenerated→BlockNative, EntityContent→EntityNative
         "PageNative" | "BlockNative" => return "publishable",
         "Entity" | "EntityNative" => return "publishable",
         // SEO/GEO data is publishable (v11.4: GEOMetrics removed)
@@ -294,12 +292,12 @@ fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
         writeln!(out, "  {var}.context_budget = '{budget}',").unwrap();
         writeln!(out, "  {var}.visibility = '{visibility}',").unwrap();
-        // v10: knowledge_tier for knowledge layer nodes only
+        // knowledge_tier for knowledge layer nodes only
         if let Some(tier) = &node.def.knowledge_tier {
             writeln!(out, "  {var}.knowledge_tier = '{tier}',").unwrap();
         }
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
-        // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+        // node_class discriminator (lowercase = SCHEMA node)
         writeln!(out, "  {var}.node_class = 'class',").unwrap();
         // v0.17.3 (ADR-036): Add provenance tracking
         writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
@@ -327,12 +325,12 @@ fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
         writeln!(out, "  {var}.context_budget = '{budget}',").unwrap();
         writeln!(out, "  {var}.visibility = '{visibility}',").unwrap();
-        // v10: knowledge_tier for knowledge layer nodes only
+        // knowledge_tier for knowledge layer nodes only
         if let Some(tier) = &node.def.knowledge_tier {
             writeln!(out, "  {var}.knowledge_tier = '{tier}',").unwrap();
         }
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
-        // v0.19.0 (ADR-037): Always set node_class on match too
+        // Always set node_class on match too
         writeln!(out, "  {var}.node_class = 'class',").unwrap();
         writeln!(out, "  {var}.updated_at = datetime();").unwrap();
         writeln!(out).unwrap();
@@ -540,7 +538,6 @@ mod tests {
 
     #[test]
     fn to_kebab_case_native() {
-        // v0.13.0 ADR-029: *Content/*Generated → *Native
         assert_eq!(to_kebab_case("EntityNative"), "entity-native");
         assert_eq!(to_kebab_case("PageNative"), "page-native");
         assert_eq!(to_kebab_case("BlockNative"), "block-native");
@@ -632,7 +629,7 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.20.0: 59 nodes (36 shared + 23 org)
+        // 59 nodes (36 shared + 23 org)
         let class_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
@@ -704,10 +701,9 @@ mod tests {
             }
         }
 
-        // v0.20.0: Header mentions 59 Class nodes
+        // Header mentions 59 Class nodes
         assert!(cypher.contains("59 Class nodes"));
 
-        // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(
             !cypher.contains(".knowledge_tier"),
             "No nodes should have knowledge_tier (removed in v10.1)"
@@ -748,7 +744,6 @@ mod tests {
         // Kind-name overrides take precedence
         assert_eq!(derive_visibility("org", "structure", "Page"), "fragment");
         assert_eq!(derive_visibility("org", "structure", "Block"), "fragment");
-        // v0.13.0 ADR-029: PageGenerated→PageNative, BlockGenerated→BlockNative
         assert_eq!(
             derive_visibility("org", "output", "PageNative"),
             "publishable"
@@ -761,12 +756,11 @@ mod tests {
             derive_visibility("org", "semantic", "Entity"),
             "publishable"
         );
-        // v0.13.0 ADR-029: EntityContent→EntityNative
         assert_eq!(
             derive_visibility("org", "semantic", "EntityNative"),
             "publishable"
         );
-        // v11.4: SEO/GEO nodes in shared/knowledge but still publishable (kind-name override)
+        // SEO/GEO nodes in shared/knowledge but still publishable (kind-name override)
         assert_eq!(
             derive_visibility("shared", "knowledge", "SEOKeyword"),
             "publishable"
@@ -780,7 +774,7 @@ mod tests {
     #[test]
     fn visibility_layer_rules() {
         // Shared realm → internal (regardless of layer)
-        // v11.4: 4 shared layers (config, locale, geography, knowledge)
+        // 4 shared layers (config, locale, geography, knowledge)
         assert_eq!(derive_visibility("shared", "locale", "Locale"), "internal");
         assert_eq!(derive_visibility("shared", "knowledge", "Term"), "internal");
         assert_eq!(
@@ -808,7 +802,6 @@ mod tests {
 
         // Org internal layers
         assert_eq!(derive_visibility("org", "config", "Org"), "internal");
-        // v0.12.5: PageInstruction deleted, use BlockInstruction
         assert_eq!(
             derive_visibility("org", "instruction", "BlockInstruction"),
             "internal"

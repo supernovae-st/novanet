@@ -5,7 +5,7 @@
 //! 2. Set all required properties from YAML
 //! 3. Use consistent property types
 //!
-//! v0.13.1 — ADR-003 (YAML-First Architecture) coherence validation.
+//! ADR-003 (YAML-First Architecture) coherence validation.
 
 use crate::parsers::yaml_node::{ParsedNode, PropertyDef};
 use indexmap::IndexMap;

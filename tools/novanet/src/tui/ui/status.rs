@@ -50,7 +50,7 @@ pub enum CollapseState {
 ///
 /// Returns a string with the most relevant keyboard hints for the current context.
 /// Format: arrows for nav, Enter for action (silent alternatives: hjkl, Space)
-/// v0.17.3: Added collapse_state for dynamic expand/collapse hints.
+/// Added collapse_state for dynamic expand/collapse hints.
 pub(crate) fn get_contextual_shortcuts(
     mode: NavMode,
     focus: Focus,
@@ -69,7 +69,7 @@ pub(crate) fn get_contextual_shortcuts(
             if is_instance {
                 "↑/↓:nav y:copy Esc:back".to_string()
             } else {
-                // v0.17.3: Show expand/collapse based on state (classes, layers, realms)
+                // Show expand/collapse based on state (classes, layers, realms)
                 match collapse_state {
                     CollapseState::Collapsed => "↑/↓:nav →:expand y:copy".to_string(),
                     CollapseState::Expanded => "↑/↓:nav ←:collapse y:copy".to_string(),
@@ -77,7 +77,7 @@ pub(crate) fn get_contextual_shortcuts(
                 }
             }
         },
-        Focus::Identity => "Tab:panel y:copy".to_string(), // v0.18.3
+        Focus::Identity => "Tab:panel y:copy".to_string(), // Identity panel
         Focus::Content | Focus::Props => "↑/↓:scroll Enter:page y:copy".to_string(),
         Focus::Arcs => "↑/↓:scroll Tab:panel".to_string(),
     }
@@ -232,7 +232,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let current_item = app.current_item();
     let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
 
-    // v0.17.3: Determine collapse state for contextual hints
+    // Determine collapse state for contextual hints
     let collapse_state = if is_instance {
         CollapseState::NotCollapsible
     } else {
@@ -285,7 +285,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    // v0.18.3: Add focus indicator for debugging panel navigation
+    // Add focus indicator for debugging panel navigation
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
     spans.push(Span::styled(
         format!("[{}]", app.focus.name()),
@@ -357,12 +357,12 @@ mod tests {
 
     // =========================================================================
     // get_contextual_shortcuts tests
-    // v0.17.3: Added collapse_state parameter tests
+    // collapse_state parameter tests
     // =========================================================================
 
     #[test]
     fn test_shortcuts_graph_mode_tree_focus_on_class_collapsed() {
-        // v0.17.3: Show "expand" when collapsed
+        // Show "expand" when collapsed
         let result =
             get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Collapsed);
         assert!(result.contains("↑/↓:nav"));
@@ -372,7 +372,7 @@ mod tests {
 
     #[test]
     fn test_shortcuts_graph_mode_tree_focus_on_class_expanded() {
-        // v0.17.3: Show "collapse" when expanded
+        // Show "collapse" when expanded
         let result =
             get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Expanded);
         assert!(result.contains("↑/↓:nav"));
@@ -567,7 +567,7 @@ mod tests {
 
     #[test]
     fn test_focus_next() {
-        // v0.18.3: 5-panel cycle: Tree → Identity → Content → Props → Arcs → Tree
+        // 5-panel cycle: Tree → Identity → Content → Props → Arcs → Tree
         assert_eq!(Focus::Tree.next(), Focus::Identity);
         assert_eq!(Focus::Identity.next(), Focus::Content);
         assert_eq!(Focus::Content.next(), Focus::Props);
@@ -577,7 +577,7 @@ mod tests {
 
     #[test]
     fn test_focus_prev() {
-        // v0.18.3: 5-panel cycle reverse
+        // 5-panel cycle reverse
         assert_eq!(Focus::Tree.prev(), Focus::Arcs);
         assert_eq!(Focus::Arcs.prev(), Focus::Props);
         assert_eq!(Focus::Props.prev(), Focus::Content);
@@ -592,7 +592,7 @@ mod tests {
     #[test]
     fn test_shortcuts_all_focus_panels_for_graph() {
         // Ensure all focus panels produce valid shortcuts for Graph mode
-        // v0.18.3: 5 panels including Identity
+        // 5 panels including Identity
         for focus in [
             Focus::Tree,
             Focus::Identity,

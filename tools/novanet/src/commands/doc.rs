@@ -1,6 +1,6 @@
 //! `novanet doc generate` and `novanet doc list` commands.
 //!
-//! v0.12.5: The old ViewDef-based generation was removed.
+//! The old ViewDef-based generation was removed.
 //! - doc list: Now uses views.yaml (simplified format)
 //! - doc generate: Deprecated (the old views/ directory was removed)
 
@@ -22,7 +22,7 @@ pub struct DocGenerateResult {
 
 /// Generate Mermaid documentation for views.
 ///
-/// **DEPRECATED in v0.12.5**: The old views/ directory was removed.
+/// **DEPRECATED**: The old views/ directory was removed.
 /// The new views.yaml uses Cypher queries instead of include rules,
 /// so the Mermaid diagram generation is no longer supported.
 ///
@@ -53,7 +53,7 @@ pub struct DocListEntry {
 
 /// List available views from views.yaml.
 ///
-/// v0.12.5: Now uses the simplified views.yaml format.
+/// Now uses the simplified views.yaml format.
 pub fn doc_list(root: &Path) -> crate::Result<Vec<DocListEntry>> {
     let views_file = crate::parsers::views::load_simple_views(root)?;
     let entries = views_file
@@ -104,7 +104,7 @@ mod tests {
 
         let entries = doc_list(&root).expect("should list views");
 
-        // v0.13.1: 13 views in views.yaml (added denomination-forms-context, ADR-033)
+        // 13 views in views.yaml (added denomination-forms-context, ADR-033)
         assert_eq!(
             entries.len(),
             13,

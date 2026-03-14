@@ -30,7 +30,6 @@ impl super::Generator for OrganizingGenerator {
     }
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
-        // v0.12.5: Load from individual YAML files instead of taxonomy.yaml
         let doc = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
         generate_cypher(&doc)
     }
@@ -144,14 +143,14 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         // Start MERGE
         writeln!(out, "MERGE ({var}:Schema:ArcFamily {{key: '{}'}})", af.key).unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
-        // v0.19.0 (ADR-037): node_class discriminator (lowercase = SCHEMA node)
+        // node_class discriminator (lowercase = SCHEMA node)
         writeln!(out, "  {var}.node_class = 'arc_family',").unwrap();
-        // v0.19.0 (ADR-044): provenance as JSON object
+        // Provenance as JSON object
         writeln!(out, "  {var}.provenance = '{{\"source\": \"seed:schema\", \"version\": \"v0.19.0\"}}',").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
-        // v0.19.0 (ADR-037): Always set node_class on match too
+        // Always set node_class on match too
         writeln!(out, "  {var}.node_class = 'arc_family',").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
         writeln!(out, "SET").unwrap();
@@ -402,10 +401,10 @@ mod tests {
                 .count()
         };
 
-        assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v11.4: shared + org
-        assert_eq!(count_merges("Layer"), 10, "expected 10 Layer nodes"); // v11.4: 4 shared + 6 org
+        assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes");
+        assert_eq!(count_merges("Layer"), 10, "expected 10 Layer nodes");
         // v0.17.3 (ADR-036): Trait nodes removed from schema, provenance is per-instance
-        assert_eq!(count_merges("ArcFamily"), 6, "expected 6 ArcFamily nodes"); // v0.13.1: added schema family
+        assert_eq!(count_merges("ArcFamily"), 6, "expected 6 ArcFamily nodes");
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
         assert_eq!(
             count_merges("ArcCardinality"),
@@ -418,18 +417,17 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("[:HAS_LAYER]"))
             .count();
-        assert_eq!(has_layer_count, 10, "expected 10 HAS_LAYER relationships"); // v11.4: 4 shared + 6 org
+        assert_eq!(has_layer_count, 10, "expected 10 HAS_LAYER relationships");
 
         // Spot checks — specific nodes exist (v11.4: 2 realms, 10 layers)
         assert!(cypher.contains("r_shared:Schema:Realm {key: 'shared'}"));
-        assert!(cypher.contains("r_org:Schema:Realm {key: 'org'}")); // v11.2: org realm
-        assert!(cypher.contains("l_config:Schema:Layer {key: 'config'}")); // v11.4: shared.config
-        assert!(cypher.contains("l_locale:Schema:Layer {key: 'locale'}")); // v11.3: shared.locale
-        assert!(cypher.contains("l_geography:Schema:Layer {key: 'geography'}")); // v11.3: shared.geography
-        assert!(cypher.contains("l_knowledge:Schema:Layer {key: 'knowledge'}")); // v11.3: shared.knowledge
+        assert!(cypher.contains("r_org:Schema:Realm {key: 'org'}"));
+        assert!(cypher.contains("l_config:Schema:Layer {key: 'config'}"));
+        assert!(cypher.contains("l_locale:Schema:Layer {key: 'locale'}"));
+        assert!(cypher.contains("l_geography:Schema:Layer {key: 'geography'}"));
+        assert!(cypher.contains("l_knowledge:Schema:Layer {key: 'knowledge'}"));
         assert!(cypher.contains("l_foundation:Schema:Layer {key: 'foundation'}"));
-        assert!(cypher.contains("l_semantic:Schema:Layer {key: 'semantic'}")); // v10.6: tenant.semantic
-        // v11.4: seo/geo layers removed (nodes moved to shared/knowledge)
+        assert!(cypher.contains("l_semantic:Schema:Layer {key: 'semantic'}"));
         // v0.17.3 (ADR-036): Trait assertions removed, provenance is per-instance
         assert!(cypher.contains("af_semantic:Schema:ArcFamily {key: 'semantic'}"));
         assert!(cypher.contains("af_mining:Schema:ArcFamily {key: 'mining'}"));
@@ -459,7 +457,6 @@ mod tests {
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'knowledge'})"));
         assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})"));
         assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'output'})"));
-        // v11.4: seo/geo removed from org
     }
 
     /// Snapshot test for a minimal taxonomy document.

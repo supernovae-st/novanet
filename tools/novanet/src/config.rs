@@ -68,19 +68,19 @@ pub fn arc_classes_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-classes")
 }
 
-/// Directory containing realm YAML files (v0.12.5)
+/// Directory containing realm YAML files
 #[must_use]
 pub fn realms_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/realms")
 }
 
-/// Directory containing layer YAML files (v0.12.5)
+/// Directory containing layer YAML files
 #[must_use]
 pub fn layers_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/layers")
 }
 
-/// Directory containing arc-family YAML files (v0.12.5)
+/// Directory containing arc-family YAML files
 #[must_use]
 pub fn arc_families_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-families")
@@ -95,10 +95,6 @@ pub fn seed_dir(root: &Path) -> PathBuf {
 pub fn core_src_dir(root: &Path) -> PathBuf {
     root.join("packages/core/src")
 }
-
-// NOTE: views_dir was removed in v0.12.5.
-// The old views/ directory was replaced by a single views.yaml file.
-// Use models_dir(root).join("views.yaml") for the new views file.
 
 #[must_use]
 pub fn docs_dir(root: &Path) -> PathBuf {
@@ -182,8 +178,6 @@ mod tests {
             PathBuf::from("/fake/root/packages/core/src")
         );
     }
-
-    // NOTE: views_dir test removed in v0.12.5 (views/ replaced by views.yaml)
 
     #[test]
     fn docs_dir_joins_correctly() {

@@ -280,7 +280,7 @@ mod tests {
 
         let stats = compute_node_stats(&root).expect("should compute node stats");
 
-        // v0.20.0: 59 node classes (36 shared + 23 org)
+        // 59 node classes (36 shared + 23 org)
         assert!(
             stats.total >= 59,
             "expected at least 59 node classes, got {}",
@@ -332,7 +332,7 @@ mod tests {
 
         let stats = compute_arc_stats(&root).expect("should compute arc stats");
 
-        // v0.20.0: 159 arc classes (157 active + 2 deprecated)
+        // 159 arc classes (157 active + 2 deprecated)
         assert!(
             stats.total >= 157,
             "expected at least 157 arc classes, got {}",
@@ -414,12 +414,12 @@ mod tests {
 
     fn sample_stats() -> SchemaStats {
         let mut by_realm = HashMap::new();
-        by_realm.insert("shared".to_string(), 39); // v0.17: -Market
+        by_realm.insert("shared".to_string(), 39); // -Market
         by_realm.insert("org".to_string(), 19);
 
         let mut by_layer = HashMap::new();
         by_layer.insert("config".to_string(), 4);
-        by_layer.insert("locale".to_string(), 5); // v0.17: -Market
+        by_layer.insert("locale".to_string(), 5); // -Market
         by_layer.insert("knowledge".to_string(), 24);
         by_layer.insert("foundation".to_string(), 6);
 
@@ -439,13 +439,13 @@ mod tests {
 
         SchemaStats {
             nodes: NodeStats {
-                total: 58, // v0.17: removed Market
+                total: 58, // removed Market
                 by_realm,
                 by_layer,
                 // v0.17.3 (ADR-036): by_trait removed
             },
             arcs: Some(ArcStats {
-                total: 175, // v0.17: removed Market arcs
+                total: 175, // removed Market arcs
                 by_family,
                 by_scope,
             }),

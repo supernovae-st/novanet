@@ -402,7 +402,7 @@ pub fn horizontal_rule(width: usize) -> String {
     chars::HORIZONTAL.to_string().repeat(width)
 }
 
-/// Trait symbols for display (v11.8: ADR-024 Data Origin renames).
+/// Trait symbols for display (ADR-024 Data Origin).
 pub fn trait_symbol(trait_key: &str) -> &'static str {
     match trait_key {
         "defined" => "■",

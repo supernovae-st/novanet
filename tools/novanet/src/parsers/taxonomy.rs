@@ -119,9 +119,9 @@ pub struct LayerRetrievalDefaults {
 pub struct NodeRealmDef {
     pub key: String,
     pub display_name: String,
-    /// v0.19.0 (ADR-044): What this realm IS (1-3 sentences).
+    /// What this realm IS (ADR-044) (1-3 sentences).
     pub content: String,
-    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    /// Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
     /// Dual format icon { web, terminal }. For TUI display only, not in seeds.
@@ -175,10 +175,10 @@ pub struct ArcFamilyDef {
     #[serde(default)]
     pub stroke_width: Option<u8>,
     pub arrow_style: String,
-    /// v9.9: Default traversal behavior (eager/lazy/skip).
+    /// Default traversal behavior (eager/lazy/skip).
     #[serde(default)]
     pub default_traversal: Option<String>,
-    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    /// Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
 }
@@ -419,7 +419,7 @@ mod tests {
 
     #[test]
     fn parse_taxonomy_yaml() {
-        // v0.19.0: content field required per ADR-044
+        // Content field required per ADR-044
         let yaml = r##"
 version: "0.19.0"
 node_realms:
@@ -481,7 +481,7 @@ terminal:
 
     #[test]
     fn parse_minimal_taxonomy() {
-        // v0.19.0: content field required per ADR-044
+        // Content field required per ADR-044
         let yaml = r##"
 version: "0.19.0"
 node_realms:
@@ -519,7 +519,7 @@ arc_families:
 
     #[test]
     fn to_organizing_doc_conversion() {
-        // v0.19.0: content field required per ADR-044
+        // Content field required per ADR-044
         let yaml = r##"
 version: "0.19.0"
 node_realms:
@@ -577,7 +577,7 @@ arc_families:
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 10); // v11.4: 4 shared + 6 org layers
+        assert_eq!(total_layers, 10); // 4 shared + 6 org layers
 
         // Check terminal palette (uses semantic keys like global, tenant, etc.)
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
@@ -591,7 +591,7 @@ arc_families:
             assert!(!defaults.is_empty());
         }
 
-        // v9.9: Check default_traversal on arc families
+        // Check default_traversal on arc families
         let ownership = doc
             .arc_families
             .iter()
@@ -608,7 +608,7 @@ arc_families:
 
     #[test]
     fn parse_layer_retrieval_defaults() {
-        // v0.19.0: content field required per ADR-044
+        // Content field required per ADR-044
         let yaml = r##"
 version: "0.19.0"
 node_realms:

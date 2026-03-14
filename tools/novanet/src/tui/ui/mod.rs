@@ -204,7 +204,7 @@ pub(super) fn scroll_indicator(
 
 /// Get icon for realm badge (from visual-encoding.yaml via icons.rs).
 /// Named `_badge` to avoid collision with expand_icon variables in tree.rs
-/// v11.7: Uses icons.rs as source of truth (fixes swapped icons bug)
+/// Uses icons.rs as source of truth.
 pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
     match realm_key {
         "shared" => icons::REALMS_SHARED.terminal,
@@ -214,16 +214,16 @@ pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
 }
 
 /// Get icon for layer badge (from visual-encoding.yaml via icons.rs).
-/// v11.5: All icons are single-width Unicode symbols (no emojis)
-/// v11.7: Uses icons.rs as source of truth
+/// All icons are single-width Unicode symbols (no emojis).
+/// Uses icons.rs as source of truth.
 pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
     match layer_key {
-        // v11.5: 4 shared layers
+        // 4 shared layers
         "config" => icons::LAYERS_CONFIG.terminal,
         "locale" => icons::LAYERS_LOCALE.terminal,
         "geography" => icons::LAYERS_GEOGRAPHY.terminal,
         "knowledge" => icons::LAYERS_KNOWLEDGE.terminal,
-        // v11.5: 6 org layers
+        // 6 org layers
         "foundation" => icons::LAYERS_FOUNDATION.terminal,
         "structure" => icons::LAYERS_STRUCTURE.terminal,
         "semantic" => icons::LAYERS_SEMANTIC.terminal,
@@ -233,10 +233,10 @@ pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
     }
 }
 
-// v11.6.1: Arc Family helpers for tree visual enrichment
+// Arc Family helpers for tree visual enrichment
 
 /// Get icon for arc family badge (from visual-encoding.yaml via icons.rs).
-/// v11.7: Uses icons.rs as source of truth
+/// Uses icons.rs as source of truth.
 pub(super) fn arc_family_badge_icon(family_key: &str) -> &'static str {
     match family_key {
         "ownership" => icons::ARC_FAMILIES_OWNERSHIP.terminal,
@@ -468,7 +468,7 @@ fn spinner(tick: u16) -> &'static str {
 
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
-    // v0.17.3: Clear panel rects at render start to avoid stale hit-testing
+    // Clear panel rects at render start to avoid stale hit-testing
     app.panel_rects.clear();
 
     let chunks = Layout::default()
@@ -588,9 +588,9 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
 }
 
 /// Wide layout: Tree [1] | Center (Identity+DataViewer [2]) | Right (Props+Stats [3] + Arcs [4]).
-/// v0.18.3: Refactored for new 4-panel layout with clear separation.
+/// Refactored for new 4-panel layout with clear separation.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
-    // v0.16.4: Build unified content ONCE
+    // Build unified content ONCE
     let content = build_unified_content(app);
 
     // 3-column horizontal layout: Tree | Center | Right
@@ -630,7 +630,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     render_props_panel(f, right_chunks[0], app, &content); // Props+Stats [3]
     render_graph_panel(f, right_chunks[1], app); // Arcs [4]
 
-    // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
+    // Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
     app.panel_rects.identity = Some(center_chunks[0]);
     app.panel_rects.content = Some(center_chunks[1]);
@@ -639,9 +639,9 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
 }
 
 /// Narrow layout: Tree [1] | Stacked (Identity, DataViewer [2], Props+Stats [3], Arcs [4]).
-/// v0.18.3: Updated for 4-panel layout on smaller screens.
+/// Updated for 4-panel layout on smaller screens.
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
-    // v0.16.4: Build unified content ONCE
+    // Build unified content ONCE
     let content = build_unified_content(app);
 
     let h_chunks = Layout::default()
@@ -670,7 +670,7 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     render_props_panel(f, v_chunks[2], app, &content); // Props+Stats [3]
     render_graph_panel(f, v_chunks[3], app); // Arcs [4]
 
-    // v0.18.3: Capture panel rects for mouse hit-testing (5 panels)
+    // Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
     app.panel_rects.identity = Some(v_chunks[0]);
     app.panel_rects.content = Some(v_chunks[1]);
@@ -747,7 +747,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 Some(crate::tui::data::TreeItem::LocaleGroup(_, _, _, group)) => {
                     ("🌐", format!("{} {}", group.flag, group.locale_name))
                 },
-                // v0.17.3: EntityGroup history item
+                // EntityGroup history item
                 Some(crate::tui::data::TreeItem::EntityGroup(_, _, _, group)) => {
                     ("◈", group.entity_display_name.clone())
                 },

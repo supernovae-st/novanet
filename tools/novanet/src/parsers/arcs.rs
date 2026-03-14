@@ -489,7 +489,7 @@ impl ArcClassDef {
             inverse_of: None,
             // Store the inverse name for display in the generator
             inverse_name: self.inverse.clone(),
-            // v0.19.0: Deprecated arcs filtered from generated artifacts
+            // Deprecated arcs filtered from generated artifacts
             deprecated: self.deprecated,
         }
     }
@@ -798,7 +798,7 @@ arcs:
 
         let doc = load_arc_classes_from_files(root).expect("should load arc-classes from files");
 
-        // v11.0: Total arc count from individual arc-class files
+        // Total arc count from individual arc-class files
         // Should have a reasonable number of arcs (more than legacy relations.yaml)
         assert!(
             doc.arcs.len() > 50,
@@ -909,7 +909,7 @@ arc:
         );
         assert_eq!(temps.get("SEMANTIC_LINK"), Some(&0.3_f32));
 
-        // v0.17.1: USES_ENTITY was archived, test with BELONGS_TO which has threshold
+        // USES_ENTITY was archived, test with BELONGS_TO which has threshold
         assert!(
             temps.contains_key("BELONGS_TO"),
             "BELONGS_TO should have threshold"
@@ -1291,7 +1291,7 @@ arc:
 
         let doc = load_arc_classes_from_files(&root).expect("should load all arc classes");
 
-        // v0.17.1: Should have TARGETS_KEYWORD and DERIVED_SLUG_FROM
+        // Should have TARGETS_KEYWORD and DERIVED_SLUG_FROM
         let targets = doc.arcs.iter().find(|a| a.arc_type == "TARGETS_KEYWORD");
         assert!(targets.is_some(), "TARGETS_KEYWORD arc must exist");
         let targets = targets.unwrap();

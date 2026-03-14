@@ -5,7 +5,7 @@
 //! - YAML ↔ Neo4j ↔ Cypher coherence validation
 //! - 7 specialized views for different needs
 //!
-//! # Views (v11.7)
+//! # Views
 //!
 //! - `tree` — Hierarchy Realm > Layer > Kind
 //! - `flow` — 6 data flow diagrams

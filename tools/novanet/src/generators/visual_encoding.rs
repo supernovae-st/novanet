@@ -84,7 +84,7 @@ struct TemplateCardinalityArrow {
 /// Class icon for template (v11.8: renamed from Kind).
 #[derive(Debug, Serialize)]
 struct TemplateClassIcon {
-    /// v11.8: field name preserved as "kind" for backward compatibility in template
+    /// Field name preserved as "kind" for backward compatibility in template
     kind: String,
     icon: String,
 }
@@ -816,7 +816,7 @@ mod tests {
         assert!(output.contains("'shared': { web: 'globe', terminal: '◉'"));
         assert!(output.contains("'org': { web: 'building-2', terminal: '◎'"));
         assert!(output.contains("'defined': { web: 'lock', terminal: '■'"));
-        assert!(output.contains("'authored': { web: 'pen', terminal: '□'")); // v0.12.0: pen icon
+        assert!(output.contains("'authored': { web: 'pen', terminal: '□'"));
         assert!(output.contains("'expanded': { web: 'chevron-down', terminal: '▼'"));
         assert!(output.contains("'collapsed': { web: 'chevron-right', terminal: '▶'"));
 

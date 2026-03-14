@@ -95,7 +95,7 @@ pub struct LayerDef {
     /// Human-readable name.
     pub display_name: String,
 
-    /// v0.19.0: What this layer IS (1-3 sentences).
+    /// What this layer IS (1-3 sentences).
     /// Renamed from `description` to `content` per ADR-044.
     pub content: String,
 
@@ -118,7 +118,7 @@ pub struct LayerDef {
     #[serde(default)]
     pub class_count: u32,
 
-    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    /// Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
 }

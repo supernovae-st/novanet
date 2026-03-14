@@ -84,12 +84,12 @@ fn render_with_scroll(f: &mut Frame, area: Rect, lines: Vec<Line>, scroll_offset
 /// Shows real arc data from Neo4j when a Class is selected,
 /// instance arcs in Data mode, or contextual messages for other selections.
 ///
-/// v0.16.3: Arcs panel [4] using Focus::Arcs for panel selection.
+/// Arcs panel [4] using Focus::Arcs for panel selection.
 pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
     use super::super::app::Focus;
     let theme = &app.theme; // Use cached theme from App
 
-    // v0.16.3: Use Focus instead of selected_box for panel focus
+    // Use Focus instead of selected_box for panel focus
     let selected = app.focus == Focus::Arcs;
     let border_color = if selected {
         BOX_BORDER_SELECTED
@@ -161,7 +161,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         spans
     };
 
-    // v0.17.3: Add scroll indicator using cached line count from previous frame
+    // Add scroll indicator using cached line count from previous frame
     let visible_height = area.height.saturating_sub(2) as usize; // -2 for borders
     let scroll_hint = scroll_indicator(app.arcs_scroll, app.arcs_line_count, visible_height);
 
@@ -275,7 +275,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             )));
         }
 
-        // v0.16.4: Render with scroll support
+        // Render with scroll support
         app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
@@ -387,7 +387,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             )));
         }
 
-        // v0.16.4: Render with scroll support
+        // Render with scroll support
         app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
@@ -528,7 +528,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             }
         }
 
-        // v0.16.4: Render with scroll support
+        // Render with scroll support
         app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
@@ -564,10 +564,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // v0.13: Group arcs by direction with classification badges
+        // Group arcs by direction with classification badges
         render_arcs_by_direction(&mut lines, arcs, app, theme, &dim);
 
-        // v0.16.4: Render with scroll support
+        // Render with scroll support
         app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
@@ -727,7 +727,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
     f.render_widget(paragraph, inner);
 }
 
-/// v0.13: Render arcs grouped by direction (OUTGOING, INCOMING) with classification badges.
+/// Render arcs grouped by direction (OUTGOING, INCOMING) with classification badges.
 /// Format: → ARC_NAME → [realm/layer] trait_icon TargetClass [fam]
 fn render_arcs_by_direction(
     lines: &mut Vec<Line>,
@@ -1176,7 +1176,7 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
-        // v0.13: header + separator + 2 arcs + empty = 5 lines
+        // Header + separator + 2 arcs + empty = 5 lines
         assert!(lines.len() >= 4, "should have header + separator + arcs");
 
         let all_content: String = lines
@@ -1622,7 +1622,7 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
-        // v0.13: OUTGOING header + separator + 5 arcs + empty line = 8 lines
+        // OUTGOING header + separator + 5 arcs + empty line = 8 lines
         assert_eq!(
             lines.len(),
             8,

@@ -33,7 +33,7 @@ const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
-// v0.19.0 STANDARD PROPERTIES (ADR-044)
+// STANDARD PROPERTIES (ADR-044)
 // =============================================================================
 //
 // ALL nodes (DATA and SCHEMA) have THE SAME 8 standard properties:
@@ -59,10 +59,10 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 const STANDARD_PROPERTIES: &[&str] = &[
     "key",
     "display_name",
-    "node_class", // v0.19.0: PascalCase = DATA, lowercase = SCHEMA
-    "content",    // v0.19.0: unified name for all nodes
+    "node_class", // PascalCase = DATA, lowercase = SCHEMA
+    "content",    // Unified name for all nodes
     "triggers",
-    "provenance", // v0.19.0: {source, version} object
+    "provenance", // {source, version} object
     "created_at",
     "updated_at",
 ];
@@ -143,7 +143,7 @@ fn format_timestamp(timestamp: i64) -> String {
 }
 
 // =============================================================================
-// v0.17.3 INSTANCE PANEL COLORS (rich YAML-style)
+// INSTANCE PANEL COLORS (rich YAML-style)
 // =============================================================================
 
 /// YAML key color (cyan)
@@ -158,7 +158,7 @@ const COLOR_YAML_BOOL: Color = Color::Rgb(198, 120, 221); // #C678DD Violet
 const COLOR_SECTION_HEADER: Color = Color::Rgb(92, 99, 112); // #5C6370 Muted
 
 // =============================================================================
-// v0.13 SEMANTIC COLORS
+// SEMANTIC COLORS
 // =============================================================================
 
 /// Realm colors
@@ -207,20 +207,20 @@ const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
 // =============================================================================
 
 /// Render the Content panel [2] (SOURCE box only).
-/// v0.17.3: Renamed from render_yaml_panel to reflect context-aware content.
+/// Renamed from render_yaml_panel to reflect context-aware content.
 ///
 /// Visual states:
 /// - Selected (cyan): This panel is focused (Focus::Content)
 /// - Unfocused (dim): This panel is NOT focused
 pub fn render_content_panel(f: &mut Frame, area: Rect, app: &App) {
-    // v0.17.3: Use Focus::Content for panel focus
+    // Use Focus::Content for panel focus
     use crate::tui::app::Focus;
     let source_selected = app.focus == Focus::Content;
     render_source_box(f, area, app, source_selected);
 }
 
 /// Render the SOURCE box with context-aware content.
-/// v0.17.3: Phase 3 - uses ContentPanelMode to determine what to show.
+/// Uses ContentPanelMode to determine what to show.
 fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
     // Determine border color: selected = cyan, otherwise = dim
     let border_color = if selected {
@@ -283,7 +283,7 @@ fn abbreviate_yaml_path(path: &str) -> String {
 // =============================================================================
 
 /// Render SCHEMA content - shows YAML with syntax highlighting.
-/// v0.17.3: Used when a Class or ArcClass is selected in the tree.
+/// Used when a Class or ArcClass is selected in the tree.
 fn render_schema_content(
     f: &mut Frame,
     area: Rect,
@@ -303,7 +303,7 @@ fn render_schema_content(
 }
 
 /// Build the SCHEMA panel title with YAML badge.
-/// v0.17.3: Added 📄 YAML badge for symmetry with 🔷 NEO4J badge on instances.
+/// Added 📄 YAML badge for symmetry with 🔷 NEO4J badge on instances.
 /// Format: ` 📄 SCHEMA ⊞N │ path/file.yaml ` (when selected)
 fn build_schema_title(
     selected: bool,
@@ -313,7 +313,7 @@ fn build_schema_title(
 ) -> Line<'static> {
     let mut spans = Vec::new();
 
-    // v0.17.3: Add 📄 YAML badge for data source indicator
+    // Add 📄 YAML badge for data source indicator
     spans.push(Span::styled(" ", Style::default()));
     spans.push(Span::styled("📄", Style::default())); // YAML badge
     spans.push(Span::styled(" ", Style::default()));
@@ -361,9 +361,9 @@ fn build_schema_title(
 }
 
 /// Render content for instances - shows properties in YAML-like format.
-/// v0.17.3: Unified panel - symmetric with Schema (shows Neo4j data instead of YAML file).
-/// v0.17.3: Enhanced display with STANDARD/SPECIFIC grouping, word-wrap, multi-line YAML.
-/// v0.17.3: Added collapse/expand support for sections (Enter to toggle).
+/// Unified panel - symmetric with Schema (shows Neo4j data instead of YAML file).
+/// Enhanced display with STANDARD/SPECIFIC grouping, word-wrap, multi-line YAML.
+/// Added collapse/expand support for sections (Enter to toggle).
 #[allow(clippy::too_many_arguments)]
 fn render_instance_info(
     f: &mut Frame,
@@ -551,7 +551,7 @@ fn render_property_lines(
             ]));
         },
         JsonValue::String(s) => {
-            // v0.17.3: Check if string contains embedded JSON (common for denomination_forms etc.)
+            // Check if string contains embedded JSON (common for denomination_forms etc.)
             let trimmed = s.trim();
             if (trimmed.starts_with('[') && trimmed.ends_with(']'))
                 || (trimmed.starts_with('{') && trimmed.ends_with('}'))
@@ -639,7 +639,7 @@ fn render_property_lines(
 }
 
 /// Render a property with special handling for timestamps.
-/// v0.17.3: Timestamps (created_at, updated_at) are formatted as human-readable dates.
+/// Timestamps (created_at, updated_at) are formatted as human-readable dates.
 fn render_property_lines_with_timestamp(
     lines: &mut Vec<Line<'static>>,
     key: &str,
@@ -885,7 +885,7 @@ fn build_neo4j_title(selected: bool, instance_key: &str) -> Line<'static> {
 }
 
 /// Render INFO content for sections (Realm, Layer, ArcFamily).
-/// v0.17.3: Used when a navigation section is selected.
+/// Used when a navigation section is selected.
 fn render_section_info(
     f: &mut Frame,
     area: Rect,
@@ -932,7 +932,7 @@ fn render_section_info(
 }
 
 /// Render empty content state.
-/// v0.17.3: Used when nothing is selected.
+/// Used when nothing is selected.
 fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color: Color) {
     let lines: Vec<Line> = vec![
         Line::from(""),
@@ -964,7 +964,7 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
 fn build_info_title(selected: bool, name: &str) -> Line<'static> {
     let mut spans = Vec::new();
 
-    // v0.17.3: Replace generic "INFO" with "INSTANCE" for clarity
+    // Replace generic "INFO" with "INSTANCE" for clarity
     if selected {
         spans.push(Span::styled(
             " ◇ ",
@@ -1002,7 +1002,6 @@ fn build_info_title(selected: bool, name: &str) -> Line<'static> {
     Line::from(spans)
 }
 
-// v0.13.1: render_diagram_box, get_diagram_type, generate_diagram_content removed (panel simplification)
 
 /// Get realm color from key.
 fn realm_color(key: &str) -> Color {
@@ -1082,7 +1081,7 @@ fn semantic_value_color(key: &str, value: &str) -> Option<Color> {
 // =============================================================================
 
 /// Generate arc badge lines for ArcClass items.
-/// v0.13 Option C: Shows source→target relationship with colored badges.
+/// Shows source→target relationship with colored badges.
 /// Format: ┌ [Source] ──[:ARC_NAME]──► [Target] ┐
 fn generate_arc_badge(app: &App) -> Vec<Line<'static>> {
     use crate::tui::data::TreeItem;
@@ -1144,7 +1143,7 @@ fn generate_arc_badge(app: &App) -> Vec<Line<'static>> {
 }
 
 /// Render YAML content in a box with given border color and title.
-/// v0.13.1: Simplified - shows full YAML with scroll, no collapse/peek.
+/// Shows full YAML with scroll, no collapse/peek.
 /// PROPERTIES panel already shows instance properties, so no need for contextual sections.
 fn render_yaml_content_in_box(
     f: &mut Frame,
@@ -1157,7 +1156,7 @@ fn render_yaml_content_in_box(
     // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
-    // v0.13 Option C: Add arc badge for ArcClass items
+    // Add arc badge for ArcClass items
     let arc_badge = generate_arc_badge(app);
     let badge_height = arc_badge.len();
     lines.extend(arc_badge);
@@ -1165,7 +1164,7 @@ fn render_yaml_content_in_box(
     // Adjust visible height for badge
     let content_visible_height = visible_height.saturating_sub(badge_height);
 
-    // v0.17.3: Always show YAML content (Instance tab removed, data is in PROPERTIES panel)
+    // Always show YAML content (Instance tab removed, data is in PROPERTIES panel)
     if !app.yaml.content.is_empty() {
         for yaml_line in app
             .yaml
@@ -1196,7 +1195,7 @@ fn render_yaml_content_in_box(
     f.render_widget(paragraph, area);
 
     // Add scrollbar if content exceeds visible area
-    // v0.16.4: Use Unicode symbols for visual consistency with other panels
+    // Use Unicode symbols for visual consistency with other panels
     if total_lines > visible_height {
         let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
             .begin_symbol(Some("▲"))
@@ -1219,7 +1218,7 @@ fn render_yaml_content_in_box(
 }
 
 /// Highlight a YAML line with syntax coloring.
-/// v0.13: Enhanced with semantic coloring for realm, layer, trait, family, scope, cardinality.
+/// Enhanced with semantic coloring for realm, layer, family, scope, cardinality.
 fn highlight_yaml_line(line: &str) -> Line<'static> {
     // Comment line
     if line.trim_start().starts_with('#') {
@@ -1251,7 +1250,7 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
             let key = &after_dash[..colon_pos + 1];
             let value = &after_dash[colon_pos + 1..];
             spans.push(Span::styled(key.to_string(), STYLE_YAML_KEY));
-            // v0.13: Semantic coloring for values
+            // Semantic coloring for values
             spans.push(highlight_yaml_value_semantic(key, value));
         } else {
             spans.push(highlight_yaml_value(after_dash));
@@ -1266,7 +1265,7 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
         if colon_and_rest.len() > 1 {
             spans.push(Span::styled(":", STYLE_YAML_TEXT));
             let value = &colon_and_rest[1..];
-            // v0.13: Semantic coloring for values
+            // Semantic coloring for values
             spans.push(highlight_yaml_value_semantic(key, value));
         } else {
             spans.push(Span::styled(":", STYLE_YAML_TEXT));
@@ -1280,7 +1279,7 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
 }
 
 /// Highlight a YAML value with semantic coloring if applicable.
-/// v0.13: Checks if the key is a semantic key (realm, layer, trait, family, scope, cardinality)
+/// Checks if the key is a semantic key (realm, layer, trait, family, scope, cardinality)
 /// and applies the appropriate color from the taxonomy.
 fn highlight_yaml_value_semantic(key: &str, value: &str) -> Span<'static> {
     // Check for semantic coloring first
@@ -1612,7 +1611,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.13 semantic_value_color tests (Option B)
+    // semantic_value_color tests
     // =========================================================================
 
     #[test]
@@ -1683,7 +1682,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.13 highlight_yaml_value_semantic tests
+    // highlight_yaml_value_semantic tests
     // =========================================================================
 
     #[test]
@@ -1704,7 +1703,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.13 layer_color tests
+    // layer_color tests
     // =========================================================================
 
     #[test]
@@ -1728,7 +1727,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.13 cardinality_color tests
+    // cardinality_color tests
     // =========================================================================
 
     #[test]
@@ -1750,7 +1749,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.17.3 word_wrap tests
+    // word_wrap tests
     // =========================================================================
 
     #[test]
@@ -1803,7 +1802,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.17.3 STANDARD_PROPERTIES tests
+    // STANDARD_PROPERTIES tests
     // =========================================================================
 
     #[test]
@@ -1824,13 +1823,13 @@ mod tests {
 
     #[test]
     fn test_standard_properties_count() {
-        // v0.19.0: 8 standard properties for DATA nodes (ADR-035)
+        // 8 standard properties for DATA nodes (ADR-035)
         // key, display_name, content, triggers, node_class, provenance, created_at, updated_at
         assert_eq!(STANDARD_PROPERTIES.len(), 8);
     }
 
     // =========================================================================
-    // v0.17.3 format_timestamp tests
+    // format_timestamp tests
     // =========================================================================
 
     #[test]
@@ -1870,7 +1869,7 @@ mod tests {
 
     #[test]
     fn test_standard_properties_order() {
-        // v0.17.3: key and display_name should be first, timestamps last
+        // Key and display_name should be first, timestamps last
         let key_pos = STANDARD_PROPERTIES
             .iter()
             .position(|p| *p == "key")
@@ -1897,7 +1896,7 @@ mod tests {
     }
 
     // =========================================================================
-    // v0.17.3 embedded JSON parsing tests
+    // embedded JSON parsing tests
     // =========================================================================
 
     #[test]

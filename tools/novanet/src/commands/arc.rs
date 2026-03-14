@@ -1,7 +1,7 @@
 //! Arc CRUD commands: `novanet arc create/delete`.
 //!
 //! Creates and deletes arcs (relationships) between nodes in Neo4j. Validates
-//! arc type against ArcClass schema nodes (v0.12.0: ArcKind→ArcClass, Meta→Schema).
+//! arc type against ArcClass schema nodes.
 
 use crate::db::Db;
 use tracing::{info, warn};
@@ -35,7 +35,7 @@ pub async fn run_create(
 ) -> crate::Result<()> {
     validate_rel_type(rel_type)?;
 
-    // Validate ArcClass exists in schema graph (v0.12.0: ArcKind→ArcClass)
+    // Validate ArcClass exists in schema graph
     let ak_rows = db
         .execute_with_params(
             "MATCH (ak:ArcClass {key: $rel_type}) RETURN ak.key AS key",

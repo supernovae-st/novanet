@@ -189,7 +189,7 @@ fn check_models_directory(root: &Path) -> HealthCheck {
 }
 
 fn check_yaml_validity(root: &Path, verbose: bool) -> HealthCheck {
-    // v0.12.5: Load from individual YAML files
+    // Load from individual YAML files
     match crate::parsers::taxonomy::load_taxonomy_from_files(root) {
         Ok(taxonomy) => {
             let total_layers: usize = taxonomy.node_realms.iter().map(|r| r.layers.len()).sum();

@@ -106,7 +106,7 @@ pub struct NodeDef {
     pub layer: String,
 
     // Note: `trait` was removed in v0.17.3 (ADR-036). Provenance is tracked per-instance.
-    /// v10 knowledge tier — optional, only for knowledge layer nodes.
+    /// Knowledge tier — optional, only for knowledge layer nodes.
     /// Groups locale knowledge: technical, style, semantic.
     #[serde(default)]
     pub knowledge_tier: Option<KnowledgeTier>,
@@ -443,7 +443,7 @@ node:
             return;
         }
 
-        // v0.20.0: 59 nodes (36 shared + 23 org)
+        // 59 nodes (36 shared + 23 org)
         let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
         assert_eq!(
             nodes.len(),
