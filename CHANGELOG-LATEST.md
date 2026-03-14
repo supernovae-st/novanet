@@ -4,6 +4,62 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-03-14
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.20.0 — THE GREAT CLEANUP                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  14→8 MCP Tools  │  Dead Code Removed  │  ADRs Updated  │  DX Refreshed    ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **MCP Tool Consolidation Docs** | ✅ Complete | 14→8 tools documented across all files |
+| **Dead Code Removal** | ✅ Complete | Removed unused `rlm/` module |
+| **ADR Deprecation Notes** | ✅ Complete | 8 ADRs updated with v0.20.0 tool names |
+| **CLAUDE.md Rewrites** | ✅ Complete | novanet-mcp and novanet CLAUDE.md refreshed |
+| **DX Skills/Rules** | ✅ Complete | 4 skills/rules updated for new tool names |
+
+### Changed
+
+- **MCP Tool Consolidation (docs)** — Updated all documentation for 14→8 tool plan
+  - `novanet_traverse` → `novanet_search` (graph walk mode)
+  - `novanet_generate` + `novanet_assemble` + `novanet_atoms` → `novanet_context`
+  - `novanet_check` → `novanet_write(dry_run=true)`
+  - `novanet_cache_stats` / `novanet_cache_invalidate` → removed (internal only)
+
+- **CLAUDE.md** — Complete rewrite of module architecture section
+  - `novanet-mcp/CLAUDE.md`: Updated module map, tool list, architecture docs
+  - `novanet/CLAUDE.md`: Updated MCP server tool count and descriptions
+
+- **DX Skills** — Updated for v0.20.0 tool names
+  - `dx/.claude/skills/shared/novanet-mcp.md`: Full rewrite with 8 tools
+  - `dx/.claude/skills/shared/novanet-mcp-verify.md`: Updated verification checklist
+  - `dx/.claude/rules/mcp-tool-selection.md`: Updated decision tree
+  - `dx/.claude/rules/novanet.md`: Updated MCP server section
+
+- **ADR Deprecation Notes** — 8 ADR files updated with v0.20.0 annotations
+  - ADR-003 (Nika MCP-Only): Rewrote tool table from 14→8 tools
+  - ADR-035 (Context Build Log): Updated all `novanet_generate` → `novanet_context`
+  - ADR-039 (Knowledge Atom Provenance): Updated tool references
+  - ADR-041 (Structured Arc Constraints): Updated `novanet_check`/`novanet_generate`
+  - ADR-043 (Key Naming Conventions): Updated `novanet_check`
+  - ADR-044 (Eight Standard Properties): Updated `novanet_generate`
+  - ADR-046 (ABOUT Arc): Updated `novanet_check`
+  - `_index.yaml`: Updated ADR-035 summary and triggers
+
+### Removed
+
+- **Dead Code** — Removed unused `src/rlm/` module from novanet-mcp
+  - `src/rlm/mod.rs` deleted
+  - `pub mod rlm;` removed from `src/lib.rs`
+
+---
+
 ## [0.19.0] - 2026-03-11
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗

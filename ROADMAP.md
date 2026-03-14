@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.19.0** | Last release: v0.19.0 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.20.0** | Last release: v0.20.0 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -75,9 +75,12 @@ v0.17.1 Key Normalization              █████████████�
 v0.17.2 Schema Cleanup Complete        ████████████████████  100%  RELEASED
       YAGNI: Deleted orphaned Term/TermSet nodes and arcs
       57 nodes (36 shared + 21 org), 140 arcs, 6 families
-v0.19.0 Traits Deprecated              ████████████████████  100%  <- CURRENT
+v0.19.0 Traits Deprecated              ████████████████████  100%  RELEASED
       ADR-024 deprecated, traits removed from schema
       59 nodes (36 shared + 23 org), 159 arcs, 6 families
+v0.20.0 The Great Cleanup               ████████████████████  100%  <- CURRENT
+      MCP tool consolidation docs (14→8 tools), dead code removal
+      ADR deprecation notes, CLAUDE.md rewrites, skill/rule updates
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -312,3 +315,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v0.17.1 | 2026-03-06 | Key normalization — ADR-036 @ pattern, migrations 048-050, CSR 100% |
 | v0.17.2 | 2026-03-07 | Schema cleanup complete — YAGNI Term/TermSet deletion, 57 nodes (36+21), 140 arcs |
 | v0.19.0 | 2026-03-11 | Traits deprecated — ADR-024 simplified, 59 nodes (36+23), 159 arcs |
+| v0.20.0 | 2026-03-14 | The Great Cleanup — MCP tool consolidation docs (14→8), dead code removal, ADR deprecation notes |
