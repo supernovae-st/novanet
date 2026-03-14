@@ -52,11 +52,16 @@ pub enum CollapseState {
 /// Format: arrows for nav, Enter for action (silent alternatives: hjkl, Space)
 /// v0.17.3: Added collapse_state for dynamic expand/collapse hints.
 pub(crate) fn get_contextual_shortcuts(
-    _mode: NavMode,
+    mode: NavMode,
     focus: Focus,
     is_instance: bool,
     collapse_state: CollapseState,
 ) -> String {
+    // Flow mode has its own shortcuts
+    if mode == NavMode::Flow {
+        return "Tab:switch j/k:scroll n/p:select h/l:pan d/u:page".to_string();
+    }
+
     // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
     // Silent alternatives: hjkl, Space (handled in key processing)
     match focus {
