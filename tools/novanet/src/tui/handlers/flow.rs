@@ -82,15 +82,3 @@ pub fn handle_flow_key(app: &mut App, key: KeyEvent) -> KeyResult {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_tab_switches_flow_tab() {
-        // Placeholder: needs mock App (App::test_default())
-    }
-
-    #[test]
-    fn test_scroll_keys() {
-        // Placeholder: verify j/k/h/l change scroll positions
-    }
-}

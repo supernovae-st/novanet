@@ -39,8 +39,6 @@ chrono = "0.4"                # Timestamp for generated file headers
 # Output
 tabled = "0.17"
 colored = "2"                 # Terminal colorization for backup CLI
-indicatif = "0.17"            # Progress bars for long operations (export, snapshot)
-similar = "2"                 # Text diff algorithm for data promote/diff
 
 # Compression/Archives
 flate2 = "1"                  # gzip compression for backup archives

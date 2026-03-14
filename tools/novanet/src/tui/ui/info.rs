@@ -2637,49 +2637,6 @@ fn json_value_color(value: &JsonValue) -> Color {
     }
 }
 
-/// Get detail panel title for current item.
-/// v0.13: Not currently used (outer panel removed), kept for future use.
-#[allow(dead_code)]
-fn get_detail_title(app: &App) -> String {
-    match app.current_item() {
-        Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
-        Some(TreeItem::ArcsSection) => "Arcs".to_string(),
-        Some(TreeItem::Realm(r)) => format!("{} {}", r.icon, r.display_name),
-        Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
-        Some(TreeItem::Class(_, _, k)) => {
-            // [C] badge for Class - instant recognition
-            if k.icon.is_empty() {
-                format!("[C] {}", k.display_name)
-            } else {
-                format!("[C] {} {}", k.icon, k.display_name)
-            }
-        },
-        Some(TreeItem::ArcFamily(f)) => f.display_name.clone(),
-        Some(TreeItem::ArcClass(_, ek)) => ek.display_name.clone(),
-        Some(TreeItem::Instance(_, _, _, inst)) => {
-            // [I] badge for Instance - instant recognition
-            format!("[I] {} ({})", inst.key, inst.class_key)
-        },
-        Some(TreeItem::EntityCategory(_, _, _, cat)) => {
-            // [C] badge for Category
-            format!("[C] {}", cat.display_name)
-        },
-        Some(TreeItem::LocaleGroup(_, _, _, group)) => {
-            // [L] badge for LocaleGroup
-            format!("[L] {} {}", group.flag, group.locale_name)
-        },
-        // v0.17.3: EntityGroup badge
-        Some(TreeItem::EntityGroup(_, _, _, group)) => {
-            // [E] badge for EntityGroup
-            format!("[E] {}", group.entity_display_name)
-        },
-        Some(TreeItem::EntityNativeItem(_, _, _, native)) => {
-            // [N] badge for Native - locale-specific content
-            format!("[N] {}", native.display_name)
-        },
-        None => "Detail".to_string(),
-    }
-}
 
 // =============================================================================
 // UNIFIED INFO PANEL RENDERING
