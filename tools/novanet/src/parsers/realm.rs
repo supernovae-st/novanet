@@ -1,7 +1,6 @@
 //! Parse realm YAML definitions from `packages/core/models/realms/`.
 //!
 //! Each realm defines a scope (shared vs org) with associated layers.
-//! v0.12.5: Individual realm files replace taxonomy.yaml node_realms section.
 
 use serde::{Deserialize, Serialize};
 use std::path::Path;

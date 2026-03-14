@@ -1,7 +1,6 @@
 //! Parse arc family YAML definitions from `packages/core/models/arc-families/`.
 //!
 //! Each arc family defines a functional group of arcs (ownership, localization, semantic, etc.).
-//! v0.12.5: Individual arc family files replace taxonomy.yaml arc_families section.
 
 use serde::{Deserialize, Serialize};
 use std::path::Path;

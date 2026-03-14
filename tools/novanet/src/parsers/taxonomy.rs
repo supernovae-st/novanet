@@ -1,20 +1,15 @@
-//! Parse taxonomy.yaml (v0.17.3 - traits removed).
+//! Parse taxonomy from individual YAML files and taxonomy.yaml.
 //!
 //! Handles:
-//! - `node_realms` with nested layers
+//! - `node_realms` with nested layers (from individual YAML files)
 //! - `arc_families` with stroke styles, arrow styles, and default_traversal
 //! - `arc_scopes` and `arc_cardinalities` for arc classification
 //! - `terminal` palette for TUI graceful degradation
-//! - `layer_retrieval_defaults` per-layer context assembly settings (v0.17.3, was class_retrieval_defaults)
+//! - `layer_retrieval_defaults` per-layer context assembly settings
 //!
-//! Note: `node_traits` was removed in v0.17.3 (ADR-036). Provenance is now tracked
-//! per-instance via the `provenance` property, not per-class via the `trait` field.
-//!
-//! ## Migration to Individual Files (v0.12.5)
-//!
-//! Use `load_taxonomy_from_files()` to load taxonomy data from individual YAML files:
+//! Uses `load_taxonomy_from_files()` to load from individual YAML files:
 //! - `realms/*.yaml` → Realm definitions
-//! - `layers/*.yaml` → Layer definitions (with `realms` field)
+//! - `layers/*.yaml` → Layer definitions
 //! - `arc-families/*.yaml` → Arc family definitions
 //!
 //! The function constructs a `TaxonomyDoc` compatible with existing generators.
@@ -24,11 +19,10 @@ use std::collections::HashMap;
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Dual-format Icon (v0.12.5)
+// Dual-format Icon
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dual-format icon for taxonomy definitions.
-/// v0.12.5: Legacy emoji format removed. All icons use { web, terminal } format.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct TaxonomyIcon {
     /// Web icon (Lucide name): "diamond"
@@ -130,7 +124,7 @@ pub struct NodeRealmDef {
     /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
-    /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
+    /// Dual format icon { web, terminal }. For TUI display only, not in seeds.
     pub icon: TaxonomyIcon,
     /// Hex color for TUI display only, not in seeds.
     pub color: String,
@@ -149,12 +143,12 @@ impl NodeRealmDef {
 pub struct NodeLayerDef {
     pub key: String,
     pub display_name: String,
-    /// v0.19.0 (ADR-044): What this layer IS (1-3 sentences).
+    /// What this layer IS (1-3 sentences).
     pub content: String,
-    /// v0.20.0: Machine-readable routing keywords (max 10, lowercase, English).
+    /// Machine-readable routing keywords (max 10, lowercase, English).
     #[serde(default)]
     pub triggers: Vec<String>,
-    /// v0.12.5: Dual format icon { web, terminal }. For TUI display only, not in seeds.
+    /// Dual format icon { web, terminal }. For TUI display only, not in seeds.
     pub icon: TaxonomyIcon,
     /// Hex color for TUI display only, not in seeds.
     pub color: String,
@@ -218,25 +212,20 @@ pub struct TerminalPalette {
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and validate taxonomy (backwards-compatible wrapper).
-///
-/// **v0.12.5**: This function now delegates to `load_taxonomy_from_files()`.
-/// The legacy `taxonomy.yaml` format (with node_realms, node_traits, arc_families)
-/// is no longer supported. Use `load_taxonomy_from_files()` directly for clarity.
+/// Load and validate taxonomy. Delegates to `load_taxonomy_from_files()`.
 pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
     load_taxonomy_from_files(root)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Individual File Loader (v0.12.5)
+// Individual File Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load taxonomy from individual YAML files (v0.12.5 migration).
+/// Load taxonomy from individual YAML files.
 ///
 /// Reads from:
 /// - `realms/*.yaml` → Realm definitions
 /// - `layers/*.yaml` → Layer definitions
-/// - `traits/*.yaml` → Trait definitions
 /// - `arc-families/*.yaml` → Arc family definitions
 /// - `taxonomy.yaml` → arc_scopes, arc_cardinalities, terminal (still centralized)
 ///
@@ -580,13 +569,10 @@ arc_families:
             return;
         }
 
-        // v0.12.5: load_taxonomy() now delegates to load_taxonomy_from_files()
         let doc = load_taxonomy(root).expect("should load taxonomy from individual files");
 
-        // v0.17.3: Version comes from minimal taxonomy.yaml (traits removed)
-        assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
-        // Note: node_traits removed in v0.17.3 (ADR-036)
-        assert_eq!(doc.arc_families.len(), 6); // v0.13.1: added schema family
+        assert_eq!(doc.node_realms.len(), 2); // 2 realms (shared, org)
+        assert_eq!(doc.arc_families.len(), 6); // 6 families including schema
         assert_eq!(doc.arc_scopes.len(), 2);
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
@@ -600,9 +586,6 @@ arc_families:
         assert!(terminal.palette_16.contains_key("shared"));
         assert!(terminal.palette_16.contains_key("org"));
 
-        // v0.17.3: layer_retrieval_defaults (was class_retrieval_defaults)
-        // Note: The taxonomy.yaml still uses class_retrieval_defaults keyed by trait
-        // This will be updated in a later migration to layer_retrieval_defaults
         if let Some(defaults) = doc.layer_retrieval_defaults.as_ref() {
             // If we have defaults, check they parse correctly
             assert!(!defaults.is_empty());
@@ -712,12 +695,11 @@ arc_families:
 
         let doc = load_taxonomy_from_files(root).expect("should load from individual files");
 
-        // v0.17.3: traits removed (ADR-036)
         assert_eq!(doc.node_realms.len(), 2, "expected 2 realms (shared, org)");
         assert_eq!(
             doc.arc_families.len(),
             6,
-            "expected 6 arc families (v0.13.1: added schema)"
+            "expected 6 arc families (including schema)"
         );
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
@@ -748,6 +730,4 @@ arc_families:
         assert_eq!(doc.arc_cardinalities.len(), 5);
     }
 
-    // v0.12.5: load_taxonomy_from_files_matches_load_taxonomy test REMOVED
-    // since load_taxonomy() now delegates to load_taxonomy_from_files()
 }

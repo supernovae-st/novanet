@@ -25,11 +25,10 @@
 //! - `utils`: Shared YAML loading utilities
 //! - `markdown_utils`: Shared markdown parsing utilities (frontmatter, sections)
 
-// v0.12.5: Individual taxonomy file parsers
+// Individual taxonomy file parsers
 pub mod arc_family;
 pub mod layer;
 pub mod realm;
-// v0.19.0: trait_def removed (traits deprecated per ADR-024)
 
 // Core schema parsers
 pub mod arcs;

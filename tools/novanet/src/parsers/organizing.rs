@@ -1,8 +1,7 @@
 //! Organizing principles types (realms, layers, arc families).
 //!
-//! v0.12.5: Data now comes from individual YAML files (realms/, layers/, arc-families/)
+//! Data comes from individual YAML files (realms/, layers/, arc-families/)
 //! via `load_taxonomy_from_files()`. Legacy `taxonomy.yaml` is still used for arc_scopes and terminal config.
-//! v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 //!
 //! Used by:
 //! - `generators/organizing.rs` → Cypher seed
@@ -64,14 +63,11 @@ pub struct ArcFamilyDef {
 // Loader (via individual YAML files conversion)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load organizing principles from individual YAML files (with backwards-compatible format).
+/// Load organizing principles from individual YAML files.
 ///
-/// v0.12.5: This function now loads from individual YAML files (realms/, layers/, arc-families/)
+/// Loads from individual YAML files (realms/, layers/, arc-families/)
 /// via `load_taxonomy_from_files()` and converts to `OrganizingDoc` format.
-/// The return type remains `OrganizingDoc` for backwards compatibility with existing generators.
-/// v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
-    // v0.12.5: Load from individual YAML files and convert to OrganizingDoc format
     let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
     let doc = taxonomy.to_organizing_doc();
 
@@ -157,11 +153,9 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // v0.13.0: Version from minimal taxonomy.yaml
         assert_eq!(doc.version, "0.13.0");
-        assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
-        // v0.17.3 (ADR-036): traits assertion removed, provenance is per-instance
-        assert_eq!(doc.arc_families.len(), 6); // v0.13.1: added schema family
+        assert_eq!(doc.realms.len(), 2); // 2 realms (shared, org)
+        assert_eq!(doc.arc_families.len(), 6); // 6 families including schema
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 10); // v11.4: 4 shared + 6 org layers

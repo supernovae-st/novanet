@@ -1,12 +1,11 @@
-//! Visual encoding parser — reads visual-encoding.yaml (v0.12.0).
+//! Visual encoding parser — reads visual-encoding.yaml.
 //!
 //! Parses the visual presentation rules for NovaNet graph elements:
 //! - Channel mapping (which visual property encodes which facet)
 //! - Node/arc states (opacity, scale, shadow, etc.)
-//! - Trait border styles (solid, dashed, dotted, double)
 //! - Scope stroke styles (intra/cross realm)
 //! - Cardinality arrow heads
-//! - Class icons (Lucide icon mapping) — v0.12.0: kind → class
+//! - Class icons (Lucide icon mapping)
 //! - Icon system (web + terminal icons for all categories)
 //! - Animation presets
 //! - Accessibility settings

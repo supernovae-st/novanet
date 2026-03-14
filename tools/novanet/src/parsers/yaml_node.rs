@@ -54,7 +54,6 @@ impl std::fmt::Display for KnowledgeTier {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dual-format icon (web + terminal) for node definitions.
-/// v0.12.5: All icons use { web, terminal } format.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct NodeIcon {
     /// Web icon (Lucide name): "diamond"

@@ -1,7 +1,6 @@
 //! Parse layer YAML definitions from `packages/core/models/layers/`.
 //!
 //! Each layer defines a functional category within a realm.
-//! v0.12.5: Individual layer files replace taxonomy.yaml node_layers section.
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

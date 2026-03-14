@@ -171,7 +171,7 @@ pub struct ViewRegistry {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Simplified views.yaml (v0.12.5 - Single Source of Truth)
+// Simplified views.yaml (Single Source of Truth)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Category definition in views.yaml.
@@ -207,7 +207,7 @@ pub struct SimpleViewEntry {
     pub cypher: Option<String>,
 }
 
-/// The simplified `views.yaml` document (v0.12.5).
+/// The simplified `views.yaml` document.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SimpleViewsFile {
     pub version: String,
@@ -222,13 +222,9 @@ pub struct SimpleViewsFile {
 // Loaders
 // ─────────────────────────────────────────────────────────────────────────────
 
-// NOTE: The old view loader functions (load_all_views, load_view, load_registry)
-// were removed in v0.12.5. The views/ directory was replaced by a single views.yaml file.
-// Use load_simple_views() to load the new unified views format.
-
 /// Load the simplified views file (`views.yaml`).
 ///
-/// This is the single source of truth for TUI and Studio (v0.12.5).
+/// This is the single source of truth for TUI and Studio.
 pub fn load_simple_views(root: &Path) -> crate::Result<SimpleViewsFile> {
     let path = crate::config::models_dir(root).join("views.yaml");
     if !path.exists() {
@@ -392,10 +388,6 @@ include:
         }
         Some(root.to_path_buf())
     }
-
-    // NOTE: Old integration tests for load_all_views, load_view, load_registry
-    // were removed in v0.12.5. The views/ directory was replaced by views.yaml.
-    // See load_simple_views_integration for the new unified views format test.
 
     #[test]
     fn parse_view_icon_object_format() {
