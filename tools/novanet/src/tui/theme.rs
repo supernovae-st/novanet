@@ -6,7 +6,6 @@
 //! v0.12.5: Source of truth (individual files):
 //! - Realm colors: packages/core/models/realms/*.yaml
 //! - Layer colors: packages/core/models/layers/*.yaml
-//! - Trait colors: packages/core/models/traits/*.yaml
 //! - Arc family colors: packages/core/models/arc-families/*.yaml
 //! - Icons: packages/core/models/visual-encoding.yaml (icons section)
 
@@ -79,13 +78,11 @@ static HEX_COLOR_CACHE: LazyLock<FxHashMap<&'static str, Color>> = LazyLock::new
     map.insert("#10b981", Color::Rgb(16, 185, 129)); // GEOGRAPHY
     map.insert("#8b5cf6", Color::Rgb(139, 92, 246)); // KNOWLEDGE, GENERATION
     // Layer colors (org)
-    map.insert("#3b82f6", Color::Rgb(59, 130, 246)); // FOUNDATION, OWNERSHIP, DEFINED
+    map.insert("#3b82f6", Color::Rgb(59, 130, 246)); // FOUNDATION, OWNERSHIP
     map.insert("#06b6d4", Color::Rgb(6, 182, 212)); // STRUCTURE
     map.insert("#f97316", Color::Rgb(249, 115, 22)); // SEMANTIC
     map.insert("#eab308", Color::Rgb(234, 179, 8)); // INSTRUCTION
-    map.insert("#22c55e", Color::Rgb(34, 197, 94)); // OUTPUT, LOCALIZATION, AUTHORED
-    // Trait colors
-    map.insert("#b58900", Color::Rgb(181, 137, 0)); // GENERATED
+    map.insert("#22c55e", Color::Rgb(34, 197, 94)); // OUTPUT, LOCALIZATION
     // Arc family colors
     map.insert("#ec4899", Color::Rgb(236, 72, 153)); // MINING
     map.insert("#6366f1", Color::Rgb(99, 102, 241)); // SCHEMA (v0.13.1)
@@ -307,7 +304,6 @@ pub mod arc_family {
 pub struct Icons {
     pub realms: FxHashMap<String, String>,
     pub layers: FxHashMap<String, String>,
-    pub traits: FxHashMap<String, String>,
     pub arc_families: FxHashMap<String, String>,
     pub states: FxHashMap<String, String>,
     pub navigation: FxHashMap<String, String>,
@@ -338,7 +334,6 @@ impl Icons {
             // Parse each category
             Self::parse_category(icons_section, "realms", &mut icons.realms);
             Self::parse_category(icons_section, "layers", &mut icons.layers);
-            Self::parse_category(icons_section, "traits", &mut icons.traits);
             Self::parse_category(icons_section, "arc_families", &mut icons.arc_families);
             Self::parse_category(icons_section, "states", &mut icons.states);
             Self::parse_category(icons_section, "navigation", &mut icons.navigation);
@@ -390,14 +385,6 @@ impl Icons {
         icons.layers.insert("instruction".into(), "▧".into());
         icons.layers.insert("output".into(), "●".into());
 
-        // Traits (v0.12.0: renamed per ADR-024 Data Origin)
-        // Icons from visual-encoding.yaml (source of truth)
-        icons.traits.insert("defined".into(), "■".into()); // was: invariant
-        icons.traits.insert("authored".into(), "□".into()); // was: localized
-        icons.traits.insert("imported".into(), "◊".into()); // was: knowledge
-        icons.traits.insert("generated".into(), "★".into()); // star for LLM-generated
-        icons.traits.insert("retrieved".into(), "▪".into()); // was: aggregated
-
         // Arc families (v0.13.1: 6 families including schema)
         icons.arc_families.insert("ownership".into(), "→".into());
         icons.arc_families.insert("localization".into(), "⇢".into());
@@ -446,10 +433,6 @@ impl Icons {
 
     pub fn layer(&self, key: &str) -> &str {
         self.layers.get(key).map(|s| s.as_str()).unwrap_or("·")
-    }
-
-    pub fn trait_icon(&self, key: &str) -> &str {
-        self.traits.get(key).map(|s| s.as_str()).unwrap_or("·")
     }
 
     pub fn arc_family(&self, key: &str) -> &str {
@@ -894,10 +877,6 @@ mod tests {
         assert_eq!(icons.layer("config"), "⚙");
         assert_eq!(icons.layer("semantic"), "◆");
         assert_eq!(icons.layer("unknown"), "·"); // Fallback
-
-        // Traits (v0.12.0: renamed per ADR-024)
-        assert_eq!(icons.trait_icon("defined"), "■");
-        assert_eq!(icons.trait_icon("authored"), "□");
 
         // States
         assert_eq!(icons.state("loading"), "◐");

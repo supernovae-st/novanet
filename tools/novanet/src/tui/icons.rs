@@ -40,16 +40,6 @@ pub const LAYERS_SEMANTIC: IconDef = IconDef::new("lightbulb", "◆", "Entities 
 pub const LAYERS_STRUCTURE: IconDef = IconDef::new("layout", "▤", "Information architecture");
 
 // =============================================================================
-// TRAITS ICONS (5)
-// =============================================================================
-
-pub const TRAITS_AUTHORED: IconDef = IconDef::new("pen", "□", "Human-written PER locale");
-pub const TRAITS_DEFINED: IconDef = IconDef::new("lock", "■", "Human-created ONCE");
-pub const TRAITS_GENERATED: IconDef = IconDef::new("sparkles", "★", "OUR LLM produces this output");
-pub const TRAITS_IMPORTED: IconDef = IconDef::new("download", "◊", "External data brought in");
-pub const TRAITS_RETRIEVED: IconDef = IconDef::new("cloud-download", "▪", "Fetched from EXTERNAL APIs");
-
-// =============================================================================
 // ARC_FAMILIES ICONS (6)
 // =============================================================================
 
@@ -143,17 +133,6 @@ pub fn layer_icons() -> HashMap<&'static str, IconDef> {
     }
 }
 
-/// Get all trait icons.
-pub fn trait_icons() -> HashMap<&'static str, IconDef> {
-    icon_map! {
-        "authored" => TRAITS_AUTHORED,
-        "defined" => TRAITS_DEFINED,
-        "generated" => TRAITS_GENERATED,
-        "imported" => TRAITS_IMPORTED,
-        "retrieved" => TRAITS_RETRIEVED,
-    }
-}
-
 /// Get all arc family icons.
 pub fn arc_family_icons() -> HashMap<&'static str, IconDef> {
     icon_map! {
@@ -242,18 +221,6 @@ pub fn layer_terminal_icon(key: &str) -> &'static str {
         "output" => "●",
         "semantic" => "◆",
         "structure" => "▤",
-        _ => "·",
-    }
-}
-
-/// Get terminal icon for a trait.
-pub fn trait_terminal_icon(key: &str) -> &'static str {
-    match key {
-        "authored" => "□",
-        "defined" => "■",
-        "generated" => "★",
-        "imported" => "◊",
-        "retrieved" => "▪",
         _ => "·",
     }
 }
