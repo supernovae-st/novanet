@@ -540,19 +540,24 @@ src/
 ├── tokens/
 │   ├── mod.rs
 │   └── counter.rs       # Token counting (tiktoken-rs)
-├── context/
-│   ├── mod.rs           # Context assembly engine
-│   └── spreading.rs     # Spreading activation for relevance
-├── rlm/
-│   └── mod.rs           # RLM-on-KG structures
+├── activation/
+│   ├── mod.rs           # Spreading activation config + re-exports
+│   └── spreading.rs     # Spreading activation algorithms for relevance
 ├── tools/
 │   ├── mod.rs           # Tool re-exports
 │   ├── query.rs         # novanet_query
 │   ├── describe.rs      # novanet_describe
 │   ├── search.rs        # novanet_search (5 modes incl. walk)
 │   ├── introspect.rs    # novanet_introspect
-│   ├── context.rs       # novanet_context (4 modes: page/block/knowledge/assemble)
-│   ├── write.rs         # novanet_write (with dry_run)
+│   ├── context/         # novanet_context (4 modes: page/block/knowledge/assemble)
+│   │   ├── mod.rs       # Dispatcher + tests
+│   │   ├── types.rs     # EvidencePacket, TraversalResult, context types
+│   │   └── helpers.rs   # Mode executors (page, block, knowledge, assemble)
+│   ├── write/           # novanet_write (with dry_run validation)
+│   │   ├── mod.rs       # Dispatcher + tests
+│   │   ├── types.rs     # WriteParams, WriteResult, ExecutedResult
+│   │   ├── validation.rs # Pre-write validation + dry-run logic
+│   │   └── operations.rs # upsert_node, create_arc, update_props executors
 │   ├── auditor/         # novanet_audit
 │   │   ├── mod.rs       # Audit execution
 │   │   ├── queries.rs   # Audit Cypher queries

@@ -350,82 +350,56 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  MCP TOOLS (14 tools)                                                       │
+│  MCP TOOLS (8 tools — v0.20.0)                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  novanet_query       Execute read-only Cypher against Neo4j                 │
-│                      params: cypher, params, limit, timeout_ms              │
-│                      returns: rows, row_count, token_estimate, cached       │
 │                                                                             │
 │  novanet_describe    Bootstrap agent understanding of the knowledge graph   │
 │                      params: describe (schema|entity|category|relations|    │
 │                              locales|stats), entity_key, category_key       │
-│                      returns: target, data, token_estimate                  │
 │                                                                             │
-│  novanet_search      Fulltext + property search with hybrid mode            │
-│                      params: query, mode (fulltext|property|hybrid),        │
-│                              kinds, realm, limit                            │
-│                      returns: hits, total_hits, mode, token_estimate        │
-│                                                                             │
-│  novanet_traverse    Graph traversal with configurable depth and filters    │
-│                      params: start_key, max_depth, direction (outgoing|     │
-│                              incoming|both), arc_families, target_kinds     │
-│                      returns: start, nodes, arcs, max_depth_reached         │
-│                                                                             │
-│  novanet_assemble    Assemble context for LLM generation (token-aware)      │
-│                      params: focus_key, locale, token_budget, strategy      │
-│                              (breadth|depth|relevance|custom)               │
-│                      returns: focus, evidence[], locale_context, truncated  │
-│                                                                             │
-│  novanet_atoms       Retrieve knowledge atoms for a specific locale         │
-│                      params: locale, atom_type (term|expression|pattern|    │
-│                              cultureref|taboo|audiencetrait|all), domain    │
-│                      returns: locale, atoms[], containers[], total_count    │
-│                                                                             │
-│  novanet_generate    Full RLM-on-KG context assembly for generation         │
-│                      params: focus_key, locale, mode (block|page),          │
-│                              token_budget, spreading_depth                  │
-│                      returns: prompt, evidence_summary, locale_context,     │
-│                               context_anchors, denomination_forms (ADR-033),│
-│                               context_build_log (DX-11)                     │
+│  novanet_search      Find nodes + graph walk (fulltext/property/hybrid/walk)│
+│                      params: query, mode, kinds, realm, limit,              │
+│                              start_key, max_depth, direction, arc_families  │
+│                      v0.20.0: absorbs novanet_traverse (mode="walk")        │
 │                                                                             │
 │  novanet_introspect  Schema introspection for agents to query metadata      │
 │                      params: target (classes|class|arcs|arc), name,         │
 │                              realm, layer, family, include_arcs             │
-│                      returns: target, data, token_estimate                  │
 │                                                                             │
-│  novanet_batch       Bulk operations with parallel execution                │
-│                      params: operations[], parallel, stop_on_error          │
-│                      returns: results[], total_execution_time_ms            │
+│  novanet_context     Unified context assembly (page/block/knowledge/assemble│
+│                      params: focus_key, locale, mode, token_budget,         │
+│                              spreading_depth, atom_type, strategy           │
+│                      v0.20.0: absorbs generate + assemble + atoms           │
 │                                                                             │
-│  novanet_cache_stats Get cache statistics (entries, hit rate, memory)       │
-│                      params: (none)                                         │
-│                      returns: entries, hit_rate, hits, misses, ttl_secs     │
-│                                                                             │
-│  novanet_cache_invalidate  Invalidate cache by pattern or clear all         │
-│                      params: pattern, clear_all                             │
-│                      returns: invalidated_count, pattern_used               │
-│                                                                             │
-│  novanet_write       Write data to Neo4j with schema validation             │
+│  novanet_write       Write data with dry_run validation                     │
 │                      params: operation, class/arc_class, key/from_key/to_key│
-│                              properties, locale                             │
-│                      operations: upsert_node, create_arc, update_props      │
-│                      returns: success, created, updated_properties,         │
-│                               auto_arcs_created, cache_invalidated          │
-│                                                                             │
-│  novanet_check       Pre-write validation with intelligent feedback         │
-│                      params: operation, class, key, properties, locale      │
-│                      returns: valid, errors[], warnings[], suggestions[]    │
-│                      (v0.17.0: neuro-symbolic validation with llm_context)  │
+│                              properties, locale, dry_run                    │
+│                      v0.20.0: absorbs novanet_check (dry_run=true)          │
 │                                                                             │
 │  novanet_audit       Post-write quality audit with CSR metrics              │
 │                      params: target (coverage|orphans|integrity|freshness|  │
 │                              all), scope, limit                             │
-│                      returns: issues[], summary, csr, recommendations[]     │
-│                      (v0.17.0: MMKG-RDS research-based quality scoring)     │
+│                                                                             │
+│  novanet_batch       Bulk operations with parallel execution                │
+│                      params: operations[], parallel, fail_fast              │
+│                                                                             │
+│  novanet_query       Raw Cypher (LAST RESORT — use specialized tools first) │
+│                      params: cypher, params, limit, timeout_ms              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+**v0.20.0 Tool Consolidation (14 → 8):**
+
+| Removed Tool | Replacement |
+|-------------|-------------|
+| `novanet_traverse` | `novanet_search(mode="walk")` |
+| `novanet_generate` | `novanet_context(mode="page"/"block")` |
+| `novanet_assemble` | `novanet_context(mode="assemble")` |
+| `novanet_atoms` | `novanet_context(mode="knowledge")` |
+| `novanet_check` | `novanet_write(dry_run=true)` |
+| `novanet_cache_stats` | Removed (internal only) |
+| `novanet_cache_invalidate` | Removed (auto-invalidation on writes) |
 
 **Integration with Nika:**
 
@@ -439,11 +413,11 @@ mcp:
 
 tasks:
   - id: load_context
-    invoke: novanet_generate
+    invoke: novanet_context
     params:
-      entity: "qr-code"
+      focus_key: "qr-code"
       locale: "fr-FR"
-      forms: ["text", "title", "abbrev"]
+      mode: "page"
     use.ctx: entity_context
 
   - id: generate_page
@@ -451,25 +425,16 @@ tasks:
     context: $entity_context
 ```
 
-**v0.17.0 MCP Server:**
-
-| Feature | Description | Reference |
-|---------|-------------|-----------|
-| `novanet_check` | Pre-write validation with llm_context suggestions | v0.17.0 |
-| `novanet_audit` | Post-write quality audit with CSR metrics | v0.17.0 |
-| `denomination_forms` | Prescriptive canonical forms for LLM entity references | ADR-033 |
-| `context_build_log` | Step-by-step context assembly debugging | DX-11 |
-
 **ADR-033 Denomination Forms:**
 
-The `novanet_generate` tool returns `denomination_forms` — prescriptive canonical forms for LLM entity references:
+The `novanet_context` tool returns `denomination_forms` — prescriptive canonical forms for LLM entity references:
 
 | Form | Usage | Example (es-MX) |
 |------|-------|-----------------|
-| `text` | Prose, body content | "código qr" |
-| `title` | H1, H2, meta_title | "Código QR" |
+| `text` | Prose, body content | "codigo qr" |
+| `title` | H1, H2, meta_title | "Codigo QR" |
 | `abbrev` | After first mention | "qr" |
-| `url` | URL-safe slug | "crear-código-qr" |
+| `url` | URL-safe slug | "crear-codigo-qr" |
 
 **Running the MCP Server:**
 
