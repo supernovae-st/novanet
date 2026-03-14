@@ -2095,7 +2095,6 @@ ORDER BY entity_key
     /// Set instances for a Class (used in Data mode).
     /// Also stores the total count for "X of Y" display.
     /// Calculates missing_required_count for each instance based on Class schema.
-    #[allow(dead_code)]
     pub fn set_instances(
         &mut self,
         class_key: &str,
@@ -3293,7 +3292,6 @@ fn to_kebab_case(s: &str) -> String {
 // ============================================================================
 
 /// An instance of a Class in the data graph.
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct InstanceInfo {
     pub key: String,
@@ -3321,7 +3319,6 @@ pub struct InstanceInfo {
 }
 
 /// An actual arc connection from/to an instance.
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct InstanceArc {
     pub arc_type: String,
@@ -3333,44 +3330,6 @@ pub struct InstanceArc {
     pub target_display_name: Option<String>,
     /// URL slug from denomination_forms (for EntityNative nodes).
     pub target_slug: Option<String>,
-}
-
-/// Comparison of schema arcs vs actual arcs for an instance.
-#[allow(dead_code)]
-#[derive(Debug, Clone)]
-pub struct ArcComparison {
-    pub arc_type: String,
-    pub target_class: String,
-    pub exists: bool,
-    pub target_key: Option<String>, // Only if exists
-}
-
-#[allow(dead_code)]
-impl InstanceInfo {
-    /// Compare schema arcs with actual arcs.
-    /// Returns list of arcs showing which exist and which are missing.
-    pub fn compare_arcs(&self, schema_arcs: &[ArcInfo]) -> Vec<ArcComparison> {
-        let mut comparisons = Vec::with_capacity(schema_arcs.len());
-
-        for schema_arc in schema_arcs {
-            if schema_arc.direction == ArcDirection::Outgoing {
-                // Check if this arc type exists in outgoing_arcs
-                let actual = self
-                    .outgoing_arcs
-                    .iter()
-                    .find(|a| a.arc_type == schema_arc.arc_type);
-
-                comparisons.push(ArcComparison {
-                    arc_type: schema_arc.arc_type.clone(),
-                    target_class: schema_arc.target_class.clone(),
-                    exists: actual.is_some(),
-                    target_key: actual.map(|a| a.target_key.clone()),
-                });
-            }
-        }
-
-        comparisons
-    }
 }
 
 // =============================================================================
@@ -3664,64 +3623,6 @@ mod tests {
             instance.properties.get("language"),
             Some(&JsonValue::String("fr".to_string()))
         );
-    }
-
-    #[test]
-    fn test_instance_arc_comparison_exists() {
-        let instance = InstanceInfo {
-            key: "fr-FR".to_string(),
-            display_name: "Français".to_string(),
-            class_key: "Locale".to_string(),
-            properties: BTreeMap::new(),
-            outgoing_arcs: vec![InstanceArc {
-                arc_type: "HAS_TERMS".to_string(),
-                target_key: "fr-FR-terms".to_string(),
-                target_class: "TermSet".to_string(),
-                exists: true,
-                target_display_name: None,
-                target_slug: None,
-            }],
-            incoming_arcs: vec![],
-            arcs_loading: false,
-            missing_required_count: 0,
-            filled_properties: 0,
-            total_properties: 0,
-            entity_slug: None,
-            relationship_power: 0,
-        };
-
-        let schema_arcs = vec![
-            ArcInfo {
-                arc_type: "HAS_TERMS".to_string(),
-                direction: ArcDirection::Outgoing,
-                target_class: "TermSet".to_string(),
-            },
-            ArcInfo {
-                arc_type: "HAS_CULTURE".to_string(),
-                direction: ArcDirection::Outgoing,
-                target_class: "CultureSet".to_string(),
-            },
-        ];
-
-        let comparison = instance.compare_arcs(&schema_arcs);
-
-        assert_eq!(comparison.len(), 2);
-
-        // HAS_TERMS should exist
-        let has_terms = comparison
-            .iter()
-            .find(|c| c.arc_type == "HAS_TERMS")
-            .unwrap();
-        assert!(has_terms.exists);
-        assert_eq!(has_terms.target_key, Some("fr-FR-terms".to_string()));
-
-        // HAS_CULTURE should be missing
-        let has_culture = comparison
-            .iter()
-            .find(|c| c.arc_type == "HAS_CULTURE")
-            .unwrap();
-        assert!(!has_culture.exists);
-        assert_eq!(has_culture.target_key, None);
     }
 
     // ========================================================================

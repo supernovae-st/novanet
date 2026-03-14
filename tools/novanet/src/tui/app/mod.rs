@@ -1896,25 +1896,6 @@ impl App {
         }
     }
 
-    /// Enter filtered Data mode for a specific Class.
-    /// Saves cursor position and resets to 0.
-    /// Also resets all scroll states to avoid stale positions.
-    #[allow(dead_code)]
-    pub fn enter_filtered_data_mode(&mut self, class_key: String) {
-        self.data_cursor_before_filter = self.tree_cursor;
-        self.data_filter_class = Some(class_key.clone());
-        self.tree_cursor = 0;
-        self.tree_scroll = 0;
-        // Reset other scroll states to avoid stale positions
-        self.props_scroll = 0;
-        self.arcs_scroll = 0;
-        self.yaml.scroll = 0;
-        // Request instance load if not already loaded
-        if self.tree.get_instances(&class_key).is_none() {
-            self.pending.instance = Some(class_key);
-        }
-    }
-
     /// Get breadcrumb path for the current selection.
     /// Returns a string like "Org > Foundation > Entity (12)"
     pub fn current_breadcrumb(&self) -> String {

@@ -53,9 +53,6 @@ pub(super) const COLOR_MUTED_TEXT: Color = Color::Rgb(100, 100, 120);
 /// Highlighted row background.
 const COLOR_HIGHLIGHT_BG: Color = Color::Rgb(30, 40, 50);
 
-/// Connected/active status indicator.
-const COLOR_CONNECTED: Color = Color::Rgb(100, 180, 100);
-
 /// Instance color (v0.13.1: unified yellow for all instances).
 pub(super) const COLOR_INSTANCE: Color = Color::Yellow;
 
@@ -140,10 +137,6 @@ const STYLE_SUCCESS: Style = Style::new().fg(Color::Green);
 
 /// Accent color (e.g., special values).
 pub(super) const STYLE_ACCENT: Style = Style::new().fg(Color::Magenta);
-
-/// Warning indicators (v0.13: kept for future use).
-#[allow(dead_code)]
-const STYLE_WARNING: Style = Style::new().fg(Color::Yellow);
 
 /// Muted/secondary text (custom RGB).
 const STYLE_MUTED: Style = Style::new().fg(COLOR_MUTED_TEXT);
@@ -237,21 +230,6 @@ pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
         "instruction" => icons::LAYERS_INSTRUCTION.terminal,
         "output" => icons::LAYERS_OUTPUT.terminal,
         _ => "○",
-    }
-}
-
-/// Get short abbreviation for trait display in tree badges.
-/// v11.8: Renamed per ADR-024 Data Origin semantics
-/// v0.16.4: Kept for breadcrumb use (removed from tree)
-#[allow(dead_code)]
-pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
-    match trait_name {
-        "defined" => "def",  // was: invariant
-        "authored" => "aut", // was: localized
-        "imported" => "imp", // was: knowledge
-        "generated" => "gen",
-        "retrieved" => "ret", // was: aggregated
-        _ => "???",
     }
 }
 
@@ -700,35 +678,6 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     app.panel_rects.arcs = Some(v_chunks[3]);
 }
 
-/// Colorize path inline for title.
-#[allow(dead_code)] // Used in tests
-pub(super) fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
-    let parts: Vec<&str> = path.split('/').collect();
-    let mut spans: Vec<Span<'static>> = Vec::new();
-
-    for (i, part) in parts.iter().enumerate() {
-        let color = match i {
-            0..=2 => Color::Rgb(80, 80, 90), // packages/core/models
-            3 => Color::Magenta,             // nodes
-            4 => match *part {
-                // realm (v11.4: 2 realms - shared + org)
-                "shared" => Color::Green,
-                "org" => Color::Yellow,
-                _ => Color::White,
-            },
-            5 => COLOR_CONNECTED, // layer
-            _ => Color::White,    // filename
-        };
-        spans.push(Span::styled(part.to_string(), Style::default().fg(color)));
-        if i < parts.len() - 1 {
-            spans.push(Span::styled(
-                "/",
-                Style::default().fg(Color::Rgb(50, 50, 60)),
-            ));
-        }
-    }
-    spans
-}
 /// Render the recent items popup overlay.
 fn render_recent_items_overlay(f: &mut Frame, app: &App) {
     use ratatui::widgets::Clear;

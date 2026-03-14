@@ -1969,27 +1969,6 @@ pub(super) fn expand_icon(is_collapsed: bool) -> &'static str {
     if is_collapsed { "▶" } else { "▼" }
 }
 
-/// Build a tree prefix string for a given depth and position.
-///
-/// # Arguments
-/// * `parent_is_last` - Slice of booleans indicating whether each ancestor was the last child
-/// * `is_last` - Whether this node is the last child at its level
-///
-/// # Returns
-/// A string like "│ │ └─" for drawing tree structure
-///
-/// NOTE: Currently used only in tests to verify tree prefix logic.
-/// Future refactoring could use this in render_tree to replace inline format!() calls.
-#[allow(dead_code)]
-pub(super) fn build_tree_prefix(parent_is_last: &[bool], is_last: bool) -> String {
-    let mut prefix = String::with_capacity(parent_is_last.len() * 3 + 3);
-    for &was_last in parent_is_last {
-        prefix.push_str(cont_char(was_last));
-    }
-    prefix.push_str(branch_char(is_last));
-    prefix
-}
-
 /// Format a health badge for a Class node.
 /// Returns empty string if no health data, or a bar like " ━━━░░░░░░░50%"
 pub(super) fn format_health_badge(
@@ -2098,47 +2077,6 @@ mod tests {
         // Just language code, no country - uses the language as country
         // "fr" → treats as country code → "FR" → 🇫🇷
         assert_eq!(locale_to_flag("FR"), "🇫🇷");
-    }
-
-    // =============================================================================
-    // Tree prefix building tests
-    // =============================================================================
-
-    #[test]
-    fn test_build_tree_prefix_root_level() {
-        // First level item (no parents), last child
-        assert_eq!(build_tree_prefix(&[], true), "└─");
-        // First level item, not last
-        assert_eq!(build_tree_prefix(&[], false), "├─");
-    }
-
-    #[test]
-    fn test_build_tree_prefix_second_level() {
-        // Second level, parent was not last, this is last
-        assert_eq!(build_tree_prefix(&[false], true), "│ └─");
-        // Second level, parent was not last, this is not last
-        assert_eq!(build_tree_prefix(&[false], false), "│ ├─");
-        // Second level, parent was last, this is last
-        assert_eq!(build_tree_prefix(&[true], true), "  └─");
-        // Second level, parent was last, this is not last
-        assert_eq!(build_tree_prefix(&[true], false), "  ├─");
-    }
-
-    #[test]
-    fn test_build_tree_prefix_third_level() {
-        // Third level: grandparent not last, parent not last, this is last
-        assert_eq!(build_tree_prefix(&[false, false], true), "│ │ └─");
-        // Third level: grandparent last, parent not last, this is not last
-        assert_eq!(build_tree_prefix(&[true, false], false), "  │ ├─");
-        // Third level: all were last
-        assert_eq!(build_tree_prefix(&[true, true], true), "    └─");
-    }
-
-    #[test]
-    fn test_build_tree_prefix_deep_nesting() {
-        // Deep nesting with mixed last states
-        let prefix = build_tree_prefix(&[false, true, false, true], false);
-        assert_eq!(prefix, "│   │   ├─");
     }
 
     // =============================================================================

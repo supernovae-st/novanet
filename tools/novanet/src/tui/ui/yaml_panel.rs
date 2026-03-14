@@ -489,26 +489,6 @@ fn render_instance_info(
     f.render_widget(paragraph, area);
 }
 
-/// Render a section separator line: ─────── LABEL (N) ───────
-/// Note: Used by tests; production code uses render_section_separator_with_toggle.
-#[allow(dead_code)]
-fn render_section_separator(label: &str, count: usize, width: usize) -> Line<'static> {
-    let label_text = format!(" {} ({}) ", label, count);
-    let label_len = label_text.chars().count();
-    let remaining = width.saturating_sub(label_len);
-    let left_dashes = remaining / 2;
-    let right_dashes = remaining - left_dashes;
-
-    let left = "─".repeat(left_dashes);
-    let right = "─".repeat(right_dashes);
-
-    Line::from(vec![
-        Span::styled(left, Style::default().fg(COLOR_SECTION_HEADER)),
-        Span::styled(label_text, Style::default().fg(COLOR_SECTION_HEADER)),
-        Span::styled(right, Style::default().fg(COLOR_SECTION_HEADER)),
-    ])
-}
-
 /// Render a section separator line with collapse/expand toggle indicator.
 /// Shows ▶ when collapsed, ▼ when expanded.
 /// Format: ─────── ▼ LABEL (N) ───────
@@ -1820,27 +1800,6 @@ mod tests {
         assert!(!result.is_empty());
         // Chars count, not bytes
         assert!(result.iter().all(|line| line.chars().count() <= 12)); // Allow slight overrun for single word
-    }
-
-    // =========================================================================
-    // v0.17.3 render_section_separator tests
-    // =========================================================================
-
-    #[test]
-    fn test_render_section_separator_format() {
-        let line = render_section_separator("STANDARD", 5, 40);
-        // Should have 3 spans: left dashes, label, right dashes
-        assert_eq!(line.spans.len(), 3);
-        // Middle span should contain the label and count
-        assert!(line.spans[1].content.contains("STANDARD"));
-        assert!(line.spans[1].content.contains("5"));
-    }
-
-    #[test]
-    fn test_render_section_separator_narrow_width() {
-        let line = render_section_separator("TEST", 10, 15);
-        // Should still produce valid output
-        assert_eq!(line.spans.len(), 3);
     }
 
     // =========================================================================
