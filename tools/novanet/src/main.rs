@@ -501,9 +501,10 @@ async fn main() -> color_eyre::Result<()> {
             }
             #[cfg(not(feature = "tui"))]
             {
-                eprintln!("error: No command provided. Use --help for available commands.");
-                eprintln!("       TUI is not available (compile with --features tui).");
-                std::process::exit(1);
+                color_eyre::eyre::bail!(
+                    "No command provided. Use --help for available commands.\n\
+                     TUI is not available (compile with --features tui)."
+                );
             }
         }
     };
@@ -643,7 +644,7 @@ async fn main() -> color_eyre::Result<()> {
                 eprintln!("\n{} error(s), {} warning(s)", errors.len(), warnings.len());
 
                 if !errors.is_empty() || (strict && !warnings.is_empty()) {
-                    std::process::exit(1);
+                    color_eyre::eyre::bail!("schema validation failed");
                 }
             }
             SchemaAction::Stats { format } => {
@@ -689,7 +690,7 @@ async fn main() -> color_eyre::Result<()> {
                 eprintln!("{}", novanet::validation::format_summary(&issues));
 
                 if !errors.is_empty() || (strict && !warnings.is_empty()) {
-                    std::process::exit(1);
+                    color_eyre::eyre::bail!("cypher validation failed");
                 }
             }
         },
@@ -858,7 +859,7 @@ async fn main() -> color_eyre::Result<()> {
                     let result = novanet::commands::db::run_verify(&db, &root).await?;
                     result.print_report();
                     if !result.is_synced() {
-                        std::process::exit(1);
+                        color_eyre::eyre::bail!("database not synced with schema");
                     }
                 }
             }
@@ -1032,7 +1033,7 @@ async fn main() -> color_eyre::Result<()> {
                     eprintln!("\n  {}/{} phase(s) valid", valid_count, results.len());
 
                     if has_errors {
-                        std::process::exit(1);
+                        color_eyre::eyre::bail!("entity validation failed");
                     }
                 }
             }
@@ -1044,8 +1045,7 @@ async fn main() -> color_eyre::Result<()> {
             match action {
                 ViewsAction::Export { format } => {
                     if format != "json" {
-                        eprintln!("Only JSON format supported");
-                        std::process::exit(1);
+                        color_eyre::eyre::bail!("only JSON format is supported for views export");
                     }
                     let json = novanet::commands::views::views_export(&root)?;
                     println!("{}", json);
@@ -1055,13 +1055,7 @@ async fn main() -> color_eyre::Result<()> {
                         "novanet views validate{}",
                         if *verbose { " --verbose" } else { "" }
                     );
-                    match novanet::commands::views::views_validate(&root, *verbose) {
-                        Ok(()) => {}
-                        Err(e) => {
-                            eprintln!("✗ {}", e);
-                            std::process::exit(1);
-                        }
-                    }
+                    novanet::commands::views::views_validate(&root, *verbose)?;
                 }
             }
         }
@@ -1206,7 +1200,7 @@ async fn main() -> color_eyre::Result<()> {
             );
             let has_differences = novanet::commands::diff::run_diff(&db, &root, args).await?;
             if args.exit_code && has_differences {
-                std::process::exit(1);
+                color_eyre::eyre::bail!("differences detected between YAML and Neo4j");
             }
         }
 
