@@ -696,8 +696,8 @@ async fn main() -> color_eyre::Result<()> {
         },
         Commands::Doc { action } => match action {
             DocAction::Generate {
-                view,
-                dry_run,
+                view: _,
+                dry_run: _,
                 list,
             } => {
                 let root = root?;
@@ -712,33 +712,9 @@ async fn main() -> color_eyre::Result<()> {
                     }
                     eprintln!("\n  {} view(s) available", entries.len());
                 } else {
-                    eprintln!(
-                        "novanet doc generate{}{} (root: {})",
-                        view.as_ref()
-                            .map(|v| format!(" --view={v}"))
-                            .unwrap_or_default(),
-                        if dry_run { " --dry-run" } else { "" },
-                        root.display()
-                    );
-                    let results =
-                        novanet::commands::doc::doc_generate(&root, view.as_deref(), dry_run)?;
-                    for r in &results {
-                        eprintln!(
-                            "  {} {} ({} bytes, {}ms)",
-                            if dry_run { "would write" } else { "wrote" },
-                            r.output_path,
-                            r.bytes,
-                            r.duration_ms,
-                        );
-                    }
-                    eprintln!(
-                        "\n{} {} view doc(s)",
-                        if dry_run {
-                            "Would generate"
-                        } else {
-                            "Generated"
-                        },
-                        results.len()
+                    color_eyre::eyre::bail!(
+                        "doc generate was removed in v0.20.0 (deprecated since v0.12.5). \
+                         Use 'novanet schema generate' for the complete-graph.md diagram."
                     );
                 }
             }
