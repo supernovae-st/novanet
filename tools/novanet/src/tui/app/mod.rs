@@ -43,7 +43,6 @@ use ratatui::text::Span;
 /// v0.14.0: Refactored with sub-structs for better organization.
 /// v0.17.3: State types extracted to state.rs
 /// 55 fields → 30 direct + 25 in sub-structs.
-#[allow(dead_code)]
 pub struct App {
     // ==========================================================================
     // Core State
