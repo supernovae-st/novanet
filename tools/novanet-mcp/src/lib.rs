@@ -24,19 +24,22 @@
 //! }
 //! ```
 
+// Public modules (re-exported or used by integration tests):
 pub mod cache;
-pub mod activation;
 pub mod error;
-pub mod hints;
-pub mod metrics;
 pub mod neo4j;
 pub mod prompts;
 pub mod resources;
-pub mod schema_cache;
 pub mod server;
 pub mod tokens;
 pub mod tools;
-pub mod validation;
+
+// Internal modules — pub(crate) only:
+pub(crate) mod activation;
+pub(crate) mod hints;
+pub(crate) mod metrics;
+pub(crate) mod schema_cache;
+pub(crate) mod validation;
 
 // Re-export main types
 pub use error::{Error, Result};
