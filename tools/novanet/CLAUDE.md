@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.20.0 | **Tests**: 1034 passing | **Clippy**: zero warnings
+**Version**: v0.20.0 | **Tests**: 1039 | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -185,10 +185,9 @@ novanet arc delete --from=page1 --to=entity1 --class=USES_ENTITY
 ### Documentation (No Neo4j Required)
 
 ```bash
-novanet doc generate                 # Generate all Mermaid diagrams
-novanet doc generate --list          # List available views
-novanet doc generate --view=X        # Generate specific view
-novanet doc generate --dry-run       # Preview without writing
+novanet doc list                     # List available views
+# Note: doc generate was removed in v0.20.0 (deprecated since v0.12.5)
+# Use 'novanet schema generate' for diagram generation
 ```
 
 ### Locale Operations
@@ -304,7 +303,7 @@ src/
     data_status.rs     data status (backup vs Neo4j comparison)
     db.rs              db seed/migrate/reset
     diff.rs            YAML vs Neo4j comparison
-    doc.rs             doc generate (YAML views → Mermaid)
+    doc.rs             doc list (YAML views listing)
     doctor.rs          system health check + auto-fix
     entity.rs          entity list/validate/seed
     export.rs          graph export (Cypher/JSON/GraphML/CSV)
