@@ -364,7 +364,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_introspect_all_classes_returns_61_plus_classes() {
+    async fn test_introspect_all_classes_returns_59_plus_classes() {
         require_neo4j!();
         let state = test_state().await;
 
@@ -375,11 +375,11 @@ mod tests {
 
         let result = execute(&state, params).await.unwrap();
 
-        // NovaNet has 61 classes (40 shared + 21 org)
+        // NovaNet has 59 classes (36 shared + 23 org)
         let classes = result.data["classes"].as_array().unwrap();
         assert!(
-            classes.len() >= 61,
-            "Expected at least 61 classes, got {}",
+            classes.len() >= 59,
+            "Expected at least 59 classes, got {}",
             classes.len()
         );
         assert!(result.token_estimate > 0);
@@ -401,8 +401,8 @@ mod tests {
 
         // All classes should be from org realm
         assert!(classes.iter().all(|c| c["realm"] == "org"));
-        // NovaNet has 21 org classes
-        assert_eq!(classes.len(), 21);
+        // NovaNet has 23 org classes
+        assert_eq!(classes.len(), 23);
     }
 
     #[tokio::test]

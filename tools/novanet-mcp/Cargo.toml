@@ -98,10 +98,8 @@ ahash = "0.8"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Validation
-# once_cell 1.19: Lazy static initialization for compiled regex
 # regex 1.10: Input validation to prevent Cypher injection
 # ═══════════════════════════════════════════════════════════════════════════════
-once_cell = "1.19"
 regex = "1.10"
 
 [dev-dependencies]

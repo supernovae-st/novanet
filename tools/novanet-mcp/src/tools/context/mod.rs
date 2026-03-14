@@ -51,7 +51,6 @@ async fn execute_page(state: &State, params: ContextParams) -> Result<ContextRes
     let start = std::time::Instant::now();
     let focus_key = params.focus_key.as_deref().unwrap_or("unknown");
     let token_budget = params.token_budget.unwrap_or(state.config().default_token_budget);
-    let spreading_depth = params.spreading_depth.unwrap_or(2);
 
     let mut build_log = ContextBuildLog {
         structure_phase: String::new(),
@@ -62,7 +61,7 @@ async fn execute_page(state: &State, params: ContextParams) -> Result<ContextRes
     };
 
     // Phase 1: Discover page structure via walk
-    let structure = get_structure(state, focus_key, spreading_depth).await?;
+    let structure = get_structure(state, focus_key).await?;
     let _ = write!(
         build_log.structure_phase,
         "Discovered {} blocks for page '{}'",
@@ -72,8 +71,8 @@ async fn execute_page(state: &State, params: ContextParams) -> Result<ContextRes
 
     // Phases 2-4 in parallel: assemble entities, get atoms, get anchors
     let (entities, atoms_evidence, anchors) = tokio::join!(
-        assemble_entities_internal(state, focus_key, &params.locale, &params.block_type),
-        assemble_knowledge_internal(state, &params.locale, &params.block_type),
+        assemble_entities_internal(state, focus_key, &params.locale),
+        assemble_knowledge_internal(state, &params.locale),
         get_context_anchors(state, focus_key, &params.locale),
     );
 
@@ -219,8 +218,8 @@ async fn execute_block(state: &State, params: ContextParams) -> Result<ContextRe
 
     // Parallel: entities + atoms + locale context
     let (entities, atoms_evidence, locale_context) = tokio::join!(
-        assemble_entities_internal(state, focus_key, &params.locale, &params.block_type),
-        assemble_knowledge_internal(state, &params.locale, &params.block_type),
+        assemble_entities_internal(state, focus_key, &params.locale),
+        assemble_knowledge_internal(state, &params.locale),
         get_locale_context(state, &params.locale),
     );
 
@@ -423,7 +422,6 @@ async fn execute_assemble(state: &State, params: ContextParams) -> Result<Contex
     let start = std::time::Instant::now();
     let focus_key = params.focus_key.as_deref().unwrap_or("unknown");
     let token_budget = params.token_budget.unwrap_or(state.config().default_token_budget);
-    let max_depth = params.max_depth.unwrap_or(3).min(5);
 
     let include_entities = params.include_entities.unwrap_or(true);
     let include_knowledge = params.include_knowledge.unwrap_or(true);
@@ -437,7 +435,7 @@ async fn execute_assemble(state: &State, params: ContextParams) -> Result<Contex
         get_locale_context(state, &params.locale),
         async {
             if include_entities || has_arc_filter {
-                assemble_entities_for_focus(state, focus_key, &params.locale, max_depth).await
+                assemble_entities_for_focus(state, focus_key, &params.locale).await
             } else {
                 Ok(Vec::new())
             }
@@ -451,7 +449,7 @@ async fn execute_assemble(state: &State, params: ContextParams) -> Result<Contex
         },
         async {
             if include_structure || has_arc_filter {
-                assemble_structure_for_focus(state, focus_key, max_depth).await
+                assemble_structure_for_focus(state, focus_key).await
             } else {
                 Ok(Vec::new())
             }

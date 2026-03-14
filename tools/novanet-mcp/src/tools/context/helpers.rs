@@ -17,7 +17,6 @@ use super::types::*;
 pub(super) async fn get_structure(
     state: &State,
     focus_key: &str,
-    _depth: usize,
 ) -> Result<Vec<EvidencePacket>> {
     let cypher = r#"
         MATCH (p {key: $key})-[:HAS_BLOCK]->(b)
@@ -61,7 +60,6 @@ pub(super) async fn assemble_entities_internal(
     state: &State,
     focus_key: &str,
     locale: &str,
-    _block_type: &Option<String>,
 ) -> Result<Vec<EvidencePacket>> {
     let cypher = r#"
         MATCH (n {key: $key})-[:USES_ENTITY|HAS_ENTITY*1..2]->(e:Entity)
@@ -105,7 +103,6 @@ pub(super) async fn assemble_entities_internal(
 pub(super) async fn assemble_knowledge_internal(
     state: &State,
     locale: &str,
-    _block_type: &Option<String>,
 ) -> Result<Vec<EvidencePacket>> {
     let cypher = r#"
         MATCH (l:Locale {key: $locale})-[:HAS_EXPRESSIONS]->(es:ExpressionSet)-[:CONTAINS_EXPRESSION]->(e:Expression)
@@ -266,7 +263,6 @@ pub(super) async fn assemble_entities_for_focus(
     state: &State,
     focus_key: &str,
     locale: &str,
-    _max_depth: usize,
 ) -> Result<Vec<EvidencePacket>> {
     let cypher = r#"
         MATCH (n {key: $key})-[:USES_ENTITY|HAS_ENTITY|HAS_BLOCK*1..3]->(e:Entity)
@@ -349,7 +345,6 @@ pub(super) async fn assemble_knowledge_for_focus(
 pub(super) async fn assemble_structure_for_focus(
     state: &State,
     focus_key: &str,
-    _max_depth: usize,
 ) -> Result<Vec<EvidencePacket>> {
     let cypher = r#"
         MATCH (n {key: $key})-[:HAS_BLOCK|HAS_PAGE*1..2]->(child)

@@ -3,19 +3,19 @@
 //! Validates class names, arc names, and other inputs to prevent
 //! Cypher injection attacks.
 
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 /// Regex for valid Neo4j node class/label names: PascalCase, alphanumeric only
 /// Must start with uppercase letter, followed by letters or digits
-static CLASS_NAME_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^[A-Z][A-Za-z0-9]*$").expect("Invalid regex"));
+static CLASS_NAME_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[A-Z][A-Za-z0-9]*$").expect("Invalid regex"));
 
 /// Regex for valid Neo4j relationship/arc class names: SCREAMING_SNAKE_CASE
 /// Must start with uppercase letter, can contain uppercase letters, digits, and underscores
 /// Examples: HAS_NATIVE, BELONGS_TO, TARGETS, HAS_CONTENT_1
-static ARC_CLASS_NAME_REGEX: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9_]*$").expect("Invalid regex"));
+static ARC_CLASS_NAME_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[A-Z][A-Z0-9_]*$").expect("Invalid regex"));
 
 /// Validate a node class name for safe use in Cypher queries
 ///

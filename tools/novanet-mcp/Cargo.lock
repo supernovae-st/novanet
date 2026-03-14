@@ -1057,7 +1057,6 @@ dependencies = [
  "insta",
  "moka",
  "neo4rs",
- "once_cell",
  "parking_lot",
  "pretty_assertions",
  "regex",

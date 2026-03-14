@@ -648,8 +648,8 @@ cargo test --test e2e_agent_scenarios
 
 This MCP server reads from the same Neo4j instance as NovaNet Studio:
 
-- **60 NodeClasses** across 2 realms (shared: 36, org: 24)
-- **151 ArcClasses** in 6 families (ownership, localization, semantic, generation, mining, schema)
+- **59 NodeClasses** across 2 realms (shared: 36, org: 23)
+- **159 ArcClasses** in 6 families (ownership, localization, semantic, generation, mining, schema)
 - **200+ Locales** for multi-locale content generation
 
 ---
