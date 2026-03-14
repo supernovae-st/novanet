@@ -605,7 +605,7 @@ arc_families:
         // This will be updated in a later migration to layer_retrieval_defaults
         if let Some(defaults) = doc.layer_retrieval_defaults.as_ref() {
             // If we have defaults, check they parse correctly
-            assert!(defaults.len() > 0);
+            assert!(!defaults.is_empty());
         }
 
         // v9.9: Check default_traversal on arc families
