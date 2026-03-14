@@ -302,6 +302,32 @@ impl Neo4jPool {
     }
 }
 
+/// Dangerous APOC procedures blocked in both read and write contexts.
+/// SECURITY: This is the single source of truth — update here only.
+const DANGEROUS_APOC: &[&str] = &[
+    // Dynamic Cypher execution
+    "APOC.CYPHER.RUN",
+    "APOC.CYPHER.DOIT",
+    "APOC.CYPHER.RUNMANY",
+    "APOC.CYPHER.PARALLEL",
+    // Periodic/scheduled execution
+    "APOC.PERIODIC.COMMIT",
+    "APOC.PERIODIC.ITERATE",
+    "APOC.PERIODIC.SUBMIT",
+    "APOC.PERIODIC.REPEAT",
+    // File system access
+    "APOC.EXPORT",
+    "APOC.IMPORT",
+    "APOC.LOAD.CSV",
+    "APOC.LOAD.JSON",
+    "APOC.LOAD.XML",
+    // Schema modifications
+    "APOC.SCHEMA.ASSERT",
+    "APOC.TRIGGER",
+    // Database operations
+    "APOC.SYSTEMDB",
+];
+
 /// Check if keyword appears with valid boundaries (no allocations)
 /// Checks for keyword preceded/followed by: space, newline, tab, parenthesis, brace, pipe
 #[inline]
@@ -422,31 +448,7 @@ fn validate_read_only(cypher: &str) -> Result<()> {
     }
 
     // Step 3: Block dangerous APOC procedures
-    let dangerous_apoc = [
-        // Dynamic Cypher execution
-        "APOC.CYPHER.RUN",
-        "APOC.CYPHER.DOIT",
-        "APOC.CYPHER.RUNMANY",
-        "APOC.CYPHER.PARALLEL",
-        // Periodic/scheduled execution
-        "APOC.PERIODIC.COMMIT",
-        "APOC.PERIODIC.ITERATE",
-        "APOC.PERIODIC.SUBMIT",
-        "APOC.PERIODIC.REPEAT",
-        // File system access
-        "APOC.EXPORT",
-        "APOC.IMPORT",
-        "APOC.LOAD.CSV",
-        "APOC.LOAD.JSON",
-        "APOC.LOAD.XML",
-        // Schema modifications
-        "APOC.SCHEMA.ASSERT",
-        "APOC.TRIGGER",
-        // Database operations
-        "APOC.SYSTEMDB",
-    ];
-
-    for proc in dangerous_apoc {
+    for proc in DANGEROUS_APOC {
         if upper.contains(proc) {
             return Err(Error::invalid_cypher(format!(
                 "Dangerous APOC procedure not allowed: {}",
@@ -497,31 +499,7 @@ fn validate_write_safe(cypher: &str) -> Result<()> {
     }
 
     // Step 3: Block dangerous APOC procedures
-    let dangerous_apoc = [
-        // Dynamic Cypher execution
-        "APOC.CYPHER.RUN",
-        "APOC.CYPHER.DOIT",
-        "APOC.CYPHER.RUNMANY",
-        "APOC.CYPHER.PARALLEL",
-        // Periodic/scheduled execution
-        "APOC.PERIODIC.COMMIT",
-        "APOC.PERIODIC.ITERATE",
-        "APOC.PERIODIC.SUBMIT",
-        "APOC.PERIODIC.REPEAT",
-        // File system access
-        "APOC.EXPORT",
-        "APOC.IMPORT",
-        "APOC.LOAD.CSV",
-        "APOC.LOAD.JSON",
-        "APOC.LOAD.XML",
-        // Schema modifications
-        "APOC.SCHEMA.ASSERT",
-        "APOC.TRIGGER",
-        // Database operations
-        "APOC.SYSTEMDB",
-    ];
-
-    for proc in dangerous_apoc {
+    for proc in DANGEROUS_APOC {
         if upper.contains(proc) {
             return Err(Error::invalid_cypher(format!(
                 "Dangerous APOC procedure not allowed: {}",
