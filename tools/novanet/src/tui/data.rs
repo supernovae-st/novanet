@@ -3268,7 +3268,7 @@ fn realm_icon(key: &str) -> &'static str {
     }
 }
 
-/// Convert PascalCase to kebab-case (e.g., "BlockGenerated" -> "block-generated").
+/// Convert PascalCase to kebab-case (e.g., "BlockNative" -> "block-native").
 /// Pre-allocates capacity to avoid reallocations.
 fn to_kebab_case(s: &str) -> String {
     let mut result = String::with_capacity(s.len() + 4); // +4 for potential dashes
@@ -3800,7 +3800,7 @@ mod tests {
         // Valid labels: alphanumeric, underscore, dash
         assert!(super::validate_cypher_label("Entity").is_ok());
         assert!(super::validate_cypher_label("knowledge").is_ok());
-        assert!(super::validate_cypher_label("PageGenerated").is_ok());
+        assert!(super::validate_cypher_label("PageNative").is_ok());
     }
 
     #[test]

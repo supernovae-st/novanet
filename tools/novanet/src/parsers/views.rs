@@ -55,7 +55,7 @@ pub struct RootDef {
 /// A single include rule (recursive: can contain nested rules).
 #[derive(Debug, Clone, Deserialize)]
 pub struct IncludeRule {
-    /// Relation type to follow (e.g., "HAS_PAGE", "HAS_CONTENT").
+    /// Relation type to follow (e.g., "HAS_PAGE", "HAS_NATIVE").
     pub relation: String,
 
     /// Traversal direction from current frontier.

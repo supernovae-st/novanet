@@ -97,7 +97,7 @@ pub struct NodeDocument {
 /// Core node definition from YAML.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NodeDef {
-    /// Neo4j label (PascalCase), e.g. "Project", "PageGenerated".
+    /// Neo4j label (PascalCase), e.g. "Project", "PageNative".
     pub name: String,
 
     /// Realm classification (shared, org) — explicit in YAML.
