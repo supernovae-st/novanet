@@ -10,7 +10,6 @@
 //! use crate::db::RowExt;
 //! let key = row.str("key");        // String, defaults to ""
 //! let count = row.int("count");    // i64, defaults to 0
-//! let active = row.bool("active"); // bool, defaults to false
 //! let tags = row.vec_str("tags");  // Vec<String>, defaults to []
 //! ```
 
@@ -32,17 +31,11 @@ pub trait RowExt {
     /// Extract an i64 field, defaulting to 0.
     fn int(&self, key: &str) -> i64;
 
-    /// Extract a bool field, defaulting to false.
-    fn bool(&self, key: &str) -> bool;
-
     /// Extract a Vec<String> field, defaulting to empty vec.
     fn vec_str(&self, key: &str) -> Vec<String>;
 
     /// Extract an Option<String> field (None if missing or empty).
     fn opt_str(&self, key: &str) -> Option<String>;
-
-    /// Extract an Option<i64> field (None if missing).
-    fn opt_int(&self, key: &str) -> Option<i64>;
 }
 
 impl RowExt for Row {
@@ -54,20 +47,12 @@ impl RowExt for Row {
         self.get::<i64>(key).unwrap_or(0)
     }
 
-    fn bool(&self, key: &str) -> bool {
-        self.get::<bool>(key).unwrap_or(false)
-    }
-
     fn vec_str(&self, key: &str) -> Vec<String> {
         self.get::<Vec<String>>(key).unwrap_or_default()
     }
 
     fn opt_str(&self, key: &str) -> Option<String> {
         self.get::<String>(key).ok().filter(|s| !s.is_empty())
-    }
-
-    fn opt_int(&self, key: &str) -> Option<i64> {
-        self.get::<i64>(key).ok()
     }
 }
 
@@ -141,19 +126,23 @@ impl Db {
         q: neo4rs::Query,
         cypher_for_error: String,
     ) -> crate::Result<Vec<neo4rs::Row>> {
-        let mut result =
-            self.graph
-                .execute(q)
-                .await
-                .map_err(|e| crate::NovaNetError::Query {
-                    query: cypher_for_error.clone(),
-                    source: e,
-                })?;
+        let mut result = self
+            .graph
+            .execute(q)
+            .await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: cypher_for_error.clone(),
+                source: e,
+            })?;
         let mut rows = Vec::new();
-        while let Some(row) = result.next().await.map_err(|e| crate::NovaNetError::Query {
-            query: cypher_for_error.clone(),
-            source: e,
-        })? {
+        while let Some(row) = result
+            .next()
+            .await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: cypher_for_error.clone(),
+                source: e,
+            })?
+        {
             rows.push(row);
         }
         Ok(rows)

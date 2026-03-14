@@ -12,9 +12,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
-use super::markdown_utils::{
-    RE_SECTION, clean_value, normalize_section_name, parse_frontmatter_metadata,
-};
+use super::markdown_utils::{clean_value, parse_frontmatter_metadata, split_sections};
 use crate::{NovaNetError, Result};
 
 // ============================================================================
@@ -587,43 +585,7 @@ fn parse_data_sources(content: &str) -> Vec<String> {
         .unwrap_or_default()
 }
 
-/// Split content into sections by ## headers.
-fn split_sections(content: &str) -> HashMap<String, String> {
-    let mut sections = HashMap::new();
-
-    let mut current_section: Option<String> = None;
-    let mut current_content = String::new();
-
-    for line in content.lines() {
-        if let Some(caps) = RE_SECTION.captures(line) {
-            // Save previous section
-            if let Some(ref name) = current_section {
-                sections.insert(name.clone(), current_content.clone());
-            }
-
-            // Start new section
-            let section_name = caps
-                .get(1)
-                .map(|m: regex::Match| m.as_str().to_lowercase())
-                .unwrap_or_default();
-
-            current_section = Some(normalize_section_name(&section_name));
-            current_content = String::new();
-        } else if current_section.is_some() {
-            current_content.push_str(line);
-            current_content.push('\n');
-        }
-    }
-
-    // Save last section
-    if let Some(name) = current_section {
-        sections.insert(name, current_content);
-    }
-
-    sections
-}
-
-// Note: normalize_section_name moved to markdown_utils
+// Note: split_sections and normalize_section_name live in markdown_utils
 
 /// Parse number formatting section.
 fn parse_number_section(content: &str) -> NumberFormatting {
@@ -1264,6 +1226,7 @@ fn parse_landline_prefixes(content: &str) -> Vec<LandlinePrefix> {
 
 #[cfg(test)]
 mod tests {
+    use super::super::markdown_utils::normalize_section_name;
     use super::*;
 
     #[test]
