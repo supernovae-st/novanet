@@ -3,7 +3,6 @@
 //! Compares schema YAML definitions with Neo4j database state to detect drift.
 //! Identifies differences in node classes, arc classes, and their properties.
 //!
-//! v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance.
 
 use clap::{Parser, ValueEnum};
 use serde::{Deserialize, Serialize};
@@ -102,7 +101,6 @@ pub struct DiffSummary {
 
 /// Node class info from Neo4j.
 ///
-/// v0.17.3 (ADR-036): node_trait field removed, provenance is per-instance.
 #[derive(Debug, Clone)]
 pub struct Neo4jNodeClass {
     pub name: String,
@@ -127,7 +125,6 @@ pub struct Neo4jArcClass {
 
 /// YAML node class tuple: (name, realm, layer, properties)
 ///
-/// v0.17.3 (ADR-036): trait removed, provenance is per-instance.
 pub type YamlNodeClass = (String, String, String, Vec<String>);
 
 /// YAML arc class tuple: (name, family, source, target, properties)
@@ -139,7 +136,6 @@ pub type YamlArcClass = (String, String, Vec<String>, Vec<String>, Vec<String>);
 
 /// Compare YAML node classes with Neo4j Schema:Class nodes.
 ///
-/// v0.17.3 (ADR-036): trait comparison removed, provenance is per-instance.
 pub fn diff_node_classes(
     yaml_nodes: &[YamlNodeClass],
     neo4j_nodes: &[Neo4jNodeClass],
@@ -201,7 +197,6 @@ pub fn diff_node_classes(
             ));
         }
 
-        // v0.17.3 (ADR-036): trait comparison removed, provenance is per-instance
 
         // Check properties (simplified - just check if sets differ)
         let yaml_props: BTreeSet<&str> = yaml_node.3.iter().map(|s| s.as_str()).collect();
@@ -466,7 +461,6 @@ pub fn format_json(result: &DiffResult) -> String {
 /// Query Cypher for Schema:Class nodes.
 /// Note: Class nodes store their name in the `label` property, not `name`.
 ///
-/// v0.17.3 (ADR-036): trait field removed from query, provenance is per-instance.
 const QUERY_NODE_CLASSES: &str = r#"
 MATCH (c:Schema:Class)
 RETURN c.label AS name,
@@ -490,7 +484,6 @@ ORDER BY a.key
 
 /// Fetch node classes from Neo4j.
 ///
-/// v0.17.3 (ADR-036): node_trait field removed, provenance is per-instance.
 pub async fn fetch_neo4j_node_classes(db: &Db) -> crate::Result<Vec<Neo4jNodeClass>> {
     let rows = db.execute(QUERY_NODE_CLASSES).await?;
     let mut classes = Vec::new();
@@ -531,7 +524,6 @@ pub async fn fetch_neo4j_arc_classes(db: &Db) -> crate::Result<Vec<Neo4jArcClass
 
 /// Run the diff command.
 ///
-/// v0.17.3 (ADR-036): trait comparison removed, provenance is per-instance.
 pub async fn run_diff(db: &Db, root: &Path, args: &DiffArgs) -> crate::Result<bool> {
     // Load YAML definitions
     let yaml_nodes = if !args.arcs_only {
@@ -672,7 +664,6 @@ mod tests {
 
     #[test]
     fn test_diff_node_classes_no_differences() {
-        // v0.17.3 (ADR-036): trait removed, 4-tuple (name, realm, layer, properties)
         let yaml_nodes = vec![
             (
                 "Page".to_string(),

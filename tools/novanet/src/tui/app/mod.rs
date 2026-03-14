@@ -122,7 +122,6 @@ pub struct App {
     pub data_cursor_before_filter: usize,
     /// Hide empty: when true, hide classes/layers with 0 instances in Data mode.
     pub hide_empty: bool,
-    // v0.17.3 (ADR-036): trait_filter and filter_pending removed - traits no longer in schema
 
     // ==========================================================================
     // Property Focus State (Feature 3)
@@ -197,7 +196,6 @@ impl App {
             data_filter_class: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
-            // v0.17.3 (ADR-036): trait_filter/filter_pending removed
 
             // Property focus state
             focused_property_idx: 0,
@@ -936,7 +934,6 @@ impl App {
             return self.handle_recent_items_key(key);
         }
 
-        // v0.17.3 (ADR-036): filter_pending/trait_filter removed - traits no longer in schema
 
         // Search mode captures all input
         if self.search.active {
@@ -991,7 +988,6 @@ impl App {
                 true
             },
 
-            // v0.17.3 (ADR-036): 'f' trait filter keybinding removed
 
             // Open color legend (F1 = accessible, out of flow)
             KeyCode::F(1) => {
@@ -1869,7 +1865,6 @@ impl App {
             self.tree
                 .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         } else {
-            // v0.17.3 (ADR-036): Meta mode - trait filtering removed
             self.tree.item_at(self.tree_cursor)
         }
     }
@@ -1887,7 +1882,6 @@ impl App {
         if self.is_graph_mode() {
             self.tree.item_count_for_mode(true, self.hide_empty)
         } else {
-            // v0.17.3 (ADR-036): Meta mode - trait filtering removed
             self.tree.item_count()
         }
     }
@@ -1908,7 +1902,6 @@ impl App {
                 format!("{} → {}", r.display_name, l.display_name)
             },
             Some(TreeItem::Class(r, l, k)) => {
-                // v0.17.3 (ADR-036): trait removed from breadcrumb display
                 if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
                         "{} → {} → {} ({})",

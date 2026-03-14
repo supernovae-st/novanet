@@ -178,7 +178,6 @@ impl CompositeKeyFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::{IssueSeverity, SchemaIssue};
-    // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
     use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
@@ -202,7 +201,6 @@ mod tests {
                 name: "EntityNative".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),
@@ -248,7 +246,6 @@ mod tests {
                 name: "EntityNative".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),
@@ -444,7 +441,6 @@ mod tests {
                 name: node_name.clone(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: format!("{} node", node_name),
@@ -559,7 +555,6 @@ mod tests {
         }
 
         /// Property: Fix preserves node identity (name, realm, layer)
-        /// v0.17.3 (ADR-036): trait removed, provenance is per-instance
         #[test]
         fn prop_preserves_node_identity(node_name in prop_node_name()) {
             let mut node = create_node_without_pattern(node_name.clone());

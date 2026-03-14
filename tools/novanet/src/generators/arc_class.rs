@@ -321,7 +321,6 @@ fn generate_arc_schema(
         }
         // (ADR-037): node_class discriminator (lowercase = SCHEMA node)
         writeln!(out, "  {var}.node_class = 'arc_class',").unwrap();
-        // v0.17.3 (ADR-036): Add provenance tracking
         writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
@@ -648,7 +647,6 @@ mod tests {
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Page'})"));
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_BLOCK'}), (c:Class {label: 'Block'})"));
 
-        // Timestamps + provenance (ADR-036)
         assert!(cypher.contains("created_by = 'seed:schema'"));
         assert!(cypher.contains("created_at = datetime()"));
         assert!(cypher.contains("updated_at = datetime()"));

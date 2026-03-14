@@ -189,7 +189,6 @@ fn write_custom_layers(out: &mut String, nodes: &[&ParsedNode], layers: &[ViewLa
 
         for node_name in &layer.nodes {
             if let Some(node) = node_map.get(node_name.as_str()) {
-                // v0.17.3 (ADR-036): traits removed, using layer emoji instead
                 let emoji = mermaid::layer_emoji(&node.def.layer);
                 writeln!(out, "    {node_name}[\"{emoji} {node_name}\"]").unwrap();
                 assigned.insert(node_name.as_str());
@@ -210,7 +209,6 @@ fn write_custom_layers(out: &mut String, nodes: &[&ParsedNode], layers: &[ViewLa
     if !unassigned.is_empty() {
         writeln!(out, "  %% Additional reachable nodes").unwrap();
         for node in unassigned {
-            // v0.17.3 (ADR-036): traits removed, using layer emoji instead
             let emoji = mermaid::layer_emoji(&node.def.layer);
             writeln!(out, "  {}[\"{} {}\"]", node.def.name, emoji, node.def.name).unwrap();
         }
@@ -261,7 +259,6 @@ fn write_realm_layers(out: &mut String, nodes: &[&ParsedNode], org_doc: &Organiz
             let layer_id = format!("{}_{}", realm_def.key.to_uppercase(), layer_def.key);
             writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
             for node in node_list {
-                // v0.17.3 (ADR-036): traits removed, using layer emoji instead
                 let emoji = mermaid::layer_emoji(&node.def.layer);
                 writeln!(
                     out,

@@ -1,6 +1,5 @@
 //! Glossary view — concept definitions.
 //!
-//! v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance.
 
 use crate::blueprint::ascii::{pad_right, truncate};
 use crate::blueprint::sources::BlueprintData;
@@ -93,7 +92,6 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance
 
     // Arc Families
     out.push_str(
@@ -131,7 +129,6 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // v0.17.3 (ADR-036): KEY PATTERNS section removed (was trait-based)
 
     // Core Principle
     out.push_str(
@@ -185,7 +182,6 @@ mod tests {
         assert!(output.contains("NOVANET GLOSSARY"), "Should have header");
         assert!(output.contains("REALM"), "Should have realm section");
         assert!(output.contains("LAYER"), "Should have layer section");
-        // v0.17.3 (ADR-036): TRAIT section removed, provenance is per-instance
         assert!(
             output.contains("ARC FAMILY"),
             "Should have arc family section"

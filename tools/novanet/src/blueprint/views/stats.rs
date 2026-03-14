@@ -1,6 +1,5 @@
 //! Stats view — raw numbers for CI/scripts.
 //!
-//! v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance.
 
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
@@ -14,7 +13,6 @@ pub struct BlueprintStats {
     pub arc_classes: usize,
     pub realms: usize,
     pub layers: usize,
-    // v0.17.3 (ADR-036): traits removed, provenance is per-instance
     pub arc_families: ArcFamilyStats,
     pub validation: ValidationStats,
 }
@@ -48,7 +46,6 @@ pub fn render(data: &BlueprintData, format: OutputFormat) -> String {
 fn collect_stats(data: &BlueprintData) -> BlueprintStats {
     use crate::parsers::arcs::ArcFamily;
 
-    // v0.17.3 (ADR-036): traits removed, provenance is per-instance
     let by_family = data.arcs_by_family();
     let validation = ValidationResult::validate(data);
 
@@ -88,7 +85,6 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
 }
 
 fn render_table(stats: &BlueprintStats) -> String {
-    // v0.17.3 (ADR-036): traits section removed, provenance is per-instance
     format!(
         "BLUEPRINT STATS\n\
          ───────────────────────────────────────\n\

@@ -1030,7 +1030,6 @@ fn build_layer_content(
         Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
     );
 
-    // COVERAGE - v0.17.3 (ADR-036): trait breakdown removed, showing class count only
     if !layer.classes.is_empty() {
         content.coverage.add_line(Line::from(vec![
             Span::styled("◆ ", STYLE_PRIMARY),
@@ -1111,7 +1110,6 @@ fn build_layer_content(
     ]));
 
     // Outgoing: HAS_CLASS to each class
-    // v0.17.3 (ADR-036): using layer color instead of trait color
     for class_info in layer.classes.iter().take(4) {
         content.relationships.add_line(Line::from(vec![
             Span::styled(
@@ -1151,7 +1149,6 @@ fn build_class_content(
     let mode = ColorMode::TrueColor; // TrueColor for semantic colors
 
     // Get semantic colors from colors.generated.rs
-    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
 
@@ -1173,7 +1170,6 @@ fn build_class_content(
     );
 
     // LOCATION (Classification) - realm and layer only
-    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);
@@ -1779,7 +1775,6 @@ fn build_instance_content(
     let mode = ColorMode::TrueColor; // Semantic colors
 
     // Get semantic colors from colors.generated.rs
-    // v0.17.3 (ADR-036): trait_color removed - traits no longer in schema
     let realm_color = colors::realm::color(&realm.key, mode);
     let layer_color = colors::layer::color(&layer.key, mode);
 
@@ -1802,7 +1797,6 @@ fn build_instance_content(
     );
 
     // LOCATION (Classification) - realm and layer only
-    // v0.17.3 (ADR-036): trait classification removed
     content
         .location
         .add_classification("realm", realm.icon, &realm.key, realm_color);

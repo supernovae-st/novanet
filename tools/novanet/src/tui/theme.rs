@@ -853,7 +853,6 @@ mod tests {
         assert_eq!(layer::color("semantic", mode), Color::Rgb(249, 115, 22));
     }
 
-    // v0.17.3 (ADR-036): test_trait_borders and test_trait_modifiers removed
     // Traits no longer part of schema - provenance is per-instance at runtime
 
     #[test]
@@ -861,7 +860,6 @@ mod tests {
         let theme = Theme::with_mode(ColorMode::TrueColor);
         assert_eq!(theme.realm_color("shared"), Color::Rgb(42, 161, 152));
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
-        // v0.17.3 (ADR-036): trait_border assertions removed - provenance is per-instance
     }
 
     #[test]
@@ -1026,7 +1024,6 @@ mod tests {
 
     /// Test trait border styles for all 5 traits (ADR-005, updated ADR-024).
     /// Maps CSS border styles to Unicode box-drawing characters:
-    // v0.17.3 (ADR-036): trait border tests removed - traits no longer in schema
     // test_trait_border_all_traits, test_trait_border_fallback, test_trait_border_via_theme removed
     // Provenance will be per-instance at runtime (seed/nika/mcp)
 

@@ -240,7 +240,6 @@ mod tests {
 
     #[test]
     fn faceted_query_multiple_facets() {
-        // v0.17.3 (ADR-036): trait_filters removed
         let filter = FacetFilter {
             realms: vec!["shared".to_string()],
             layers: vec!["knowledge".to_string()],

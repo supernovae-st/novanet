@@ -1,6 +1,5 @@
 //! Tree view — hierarchical Realm > Layer > Kind.
 //!
-//! v0.17.3 (ADR-036): Trait symbols removed, provenance is per-instance.
 
 use crate::blueprint::ascii::{realm_icon, truncate};
 use crate::blueprint::sources::BlueprintData;
@@ -86,7 +85,6 @@ pub fn render(data: &BlueprintData) -> String {
                 } else {
                     "├── "
                 };
-                // v0.17.3 (ADR-036): traits removed, provenance is per-instance
                 let description = truncate(&node.def.description, 40);
 
                 out.push_str(&format!(
@@ -98,7 +96,6 @@ pub fn render(data: &BlueprintData) -> String {
         out.push('\n');
     }
 
-    // v0.17.3 (ADR-036): Legend removed, provenance is per-instance not per-class
 
     out
 }
@@ -117,6 +114,5 @@ mod tests {
         assert!(output.contains("NOVANET TREE"), "Should have header");
         assert!(output.contains("SHARED"), "Should have shared realm");
         assert!(output.contains("ORG"), "Should have org realm");
-        // v0.17.3 (ADR-036): Legend removed, provenance is per-instance
     }
 }

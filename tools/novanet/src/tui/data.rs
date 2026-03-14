@@ -172,7 +172,6 @@ pub struct ClassInfo {
     pub display_name: String,
     pub description: String,
     pub icon: String,
-    // v0.17.3 (ADR-036): trait_name removed, use layer for visual encoding
     pub instance_count: i64,
     pub arcs: Vec<ArcInfo>,
     pub yaml_path: String,
@@ -437,7 +436,6 @@ pub struct RealmDetails {
     pub total_instances: usize,
 }
 
-// v0.17.3 (ADR-036): TraitClassGroup removed - traits no longer part of schema
 
 /// Complete details for a Layer, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
@@ -446,7 +444,7 @@ pub struct LayerDetails {
     pub display_name: String,
     pub description: String,
     pub realm: String,
-    /// v0.17.3 (ADR-036): Flat list of class names (was classes_by_trait)
+    /// Flat list of class names
     pub class_names: Vec<String>,
     pub total_classes: usize,
     pub total_instances: usize,
@@ -517,7 +515,6 @@ RETURN
     coalesce(k.display_name, k.label) AS class_display,
     coalesce(k.content, '') AS class_desc,
     coalesce(k.icon, '') AS class_icon,
-    // v0.17.3 (ADR-036): trait removed from schema
     coalesce(r.key, 'unknown') AS realm_key,
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
     coalesce(r.color, '#ffffff') AS realm_color,
@@ -553,7 +550,6 @@ ORDER BY realm_key, layer_key, class_key
             let class_display = row.str("class_display");
             let class_desc = row.str("class_desc");
             let class_icon = row.str("class_icon");
-            // v0.17.3 (ADR-036): trait_key removed
             let realm_key = row.str("realm_key");
             let realm_display = row.str("realm_display");
             let realm_color = row.str("realm_color");
@@ -595,7 +591,6 @@ ORDER BY realm_key, layer_key, class_key
                 display_name: class_display,
                 description: class_desc,
                 icon: class_icon,
-                // v0.17.3 (ADR-036): trait_name removed
                 instance_count: instances,
                 arcs: Vec::new(), // Loaded separately
                 yaml_path,
@@ -1472,7 +1467,7 @@ RETURN l.key as layer_key,
     }
 
     /// Load Layer details from Neo4j (classes, stats).
-    /// v0.17.3 (ADR-036): Simplified - no longer groups by trait.
+    /// Simplified - no longer groups by trait.
     pub async fn load_layer_details(db: &Db, layer_key: &str) -> crate::Result<LayerDetails> {
         let cypher = r#"
 MATCH (l:Layer {key: $layerKey})
@@ -1503,7 +1498,6 @@ RETURN l.key as layer_key,
             let total_classes: i64 = row.get("total_classes").unwrap_or(0);
             let total_instances: i64 = row.get("total_instances").unwrap_or(0);
 
-            // v0.17.3 (ADR-036): Simple flat list of class names
             let class_names: Vec<String> = row.get("class_names").unwrap_or_default();
 
             Ok(LayerDetails {
@@ -2534,7 +2528,6 @@ ORDER BY entity_key
     }
 
     // =========================================================================
-    // v0.17.3 (ADR-036): Trait filter methods removed - traits no longer in schema
     // Quick Filter keybindings (fi/fl/fk/fg/fa) removed in tree.rs
     // =========================================================================
 
@@ -3354,7 +3347,6 @@ impl TaxonomyTree {
             display_name: "App Config".to_string(),
             description: "Application configuration".to_string(),
             icon: String::new(),
-            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -3372,7 +3364,6 @@ impl TaxonomyTree {
             display_name: "Entity".to_string(),
             description: "Foundation entity".to_string(),
             icon: String::new(),
-            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -3515,7 +3506,6 @@ mod tests {
             display_name: display_name.to_string(),
             description: String::new(),
             icon: String::new(),
-            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),

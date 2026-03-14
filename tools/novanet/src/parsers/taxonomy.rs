@@ -56,13 +56,12 @@ impl Default for TaxonomyIcon {
 // YAML Structs (taxonomy.yaml)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Top-level document for taxonomy.yaml (v0.17.3 - traits removed).
+/// Top-level document for taxonomy.yaml.
 #[derive(Debug, Deserialize)]
 pub struct TaxonomyDoc {
     pub version: String,
     pub node_realms: Vec<NodeRealmDef>,
-    // Note: node_traits was removed in v0.17.3 (ADR-036)
-    /// v0.17.3: Per-layer retrieval defaults for context assembly (was class_retrieval_defaults).
+    /// Per-layer retrieval defaults for context assembly.
     #[serde(default, alias = "class_retrieval_defaults")]
     pub layer_retrieval_defaults: Option<HashMap<String, LayerRetrievalDefaults>>,
     pub arc_families: Vec<ArcFamilyDef>,
@@ -74,7 +73,7 @@ pub struct TaxonomyDoc {
     pub terminal: Option<TerminalPalette>,
 }
 
-/// Minimal taxonomy.yaml format (v0.17.3 - traits removed).
+/// Minimal taxonomy.yaml format.
 ///
 /// Contains only centralized config that isn't per-item:
 /// - arc_scopes, arc_cardinalities (small enums)
@@ -100,7 +99,7 @@ fn default_version() -> String {
     "0.13.0".to_string()
 }
 
-/// Per-layer retrieval settings for context assembly (v0.17.3: was ClassRetrievalDefaults).
+/// Per-layer retrieval settings for context assembly.
 #[derive(Debug, Clone, Deserialize)]
 pub struct LayerRetrievalDefaults {
     /// Maximum hops for structural traversal.
@@ -161,8 +160,6 @@ impl NodeLayerDef {
     }
 }
 
-// Note: NodeTraitDef was removed in v0.17.3 (ADR-036)
-// Provenance is now tracked per-instance, not per-class.
 
 /// Arc family definition with visual encoding.
 #[derive(Debug, Clone, Deserialize)]
@@ -233,14 +230,13 @@ pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
 pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
     use super::{arc_family, layer, realm};
 
-    // Load individual files (v0.17.3: traits removed)
+    // Load individual files
     let realms = realm::load_all_realms(root)?;
     let layers = layer::load_all_layers(root)?;
     let arc_families = arc_family::load_all_arc_families(root)?;
 
     // Load arc_scopes, arc_cardinalities, terminal from taxonomy.yaml
     // (these are small and rarely change, kept centralized for now)
-    // v0.17.3: layer_retrieval_defaults replaces class_retrieval_defaults
     let taxonomy_path = crate::config::taxonomy_path(root);
     let (arc_scopes, arc_cardinalities, terminal, layer_retrieval_defaults, version) =
         if taxonomy_path.exists() {
@@ -302,7 +298,6 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
         })
         .collect();
 
-    // Note: trait conversion removed in v0.17.3 (ADR-036)
 
     // Convert arc families to ArcFamilyDef
     let arc_families: Vec<ArcFamilyDef> = arc_families
@@ -341,7 +336,6 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
             )));
         }
     }
-    // Note: trait validation removed in v0.17.3 (ADR-036)
     if arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
             "no arc families found in arc-families/".to_string(),
@@ -351,7 +345,6 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
     Ok(TaxonomyDoc {
         version,
         node_realms,
-        // Note: node_traits removed in v0.17.3 (ADR-036)
         layer_retrieval_defaults,
         arc_families,
         arc_scopes,
@@ -393,7 +386,6 @@ impl TaxonomyDoc {
                         .collect(),
                 })
                 .collect(),
-            // Note: traits removed in v0.17.3 (ADR-036)
             arc_families: self
                 .arc_families
                 .iter()
@@ -468,7 +460,6 @@ terminal:
         assert_eq!(doc.node_realms[0].key, "shared");
         assert_eq!(doc.node_realms[0].layers.len(), 1);
         assert_eq!(doc.node_realms[0].layers[0].key, "config");
-        // Note: node_traits removed in v0.17.3 (ADR-036)
         assert_eq!(doc.arc_families.len(), 1);
         assert_eq!(doc.arc_families[0].arrow_style, "-->");
         assert_eq!(doc.arc_families[0].stroke_style, Some("solid".to_string()));
@@ -514,7 +505,6 @@ arc_families:
         assert!(doc.arc_scopes.is_empty());
         assert!(doc.arc_cardinalities.is_empty());
         assert!(doc.terminal.is_none());
-        // Note: node_traits removed in v0.17.3 (ADR-036)
     }
 
     #[test]
@@ -553,7 +543,6 @@ arc_families:
         assert_eq!(organizing.version, "0.19.0");
         assert_eq!(organizing.realms.len(), 1);
         assert_eq!(organizing.realms[0].key, "shared");
-        // Note: traits removed in v0.17.3 (ADR-036)
         assert_eq!(organizing.arc_families.len(), 1);
         assert_eq!(organizing.arc_families[0].key, "ownership");
     }
@@ -663,7 +652,7 @@ arc_families:
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "0.19.0");
 
-        // Check layer_retrieval_defaults (v0.17.3: keyed by layer, not trait)
+        // Check layer_retrieval_defaults (keyed by layer)
         let defaults = doc.layer_retrieval_defaults.unwrap();
         assert_eq!(defaults.len(), 2);
         let def = defaults.get("semantic").unwrap();

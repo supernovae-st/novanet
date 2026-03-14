@@ -268,7 +268,6 @@ pub fn load_visual_encoding(root: &Path) -> crate::Result<VisualEncodingDoc> {
             "visual-encoding.yaml has no node_states".to_string(),
         ));
     }
-    // v0.17.3 (ADR-036): trait_borders validation removed - traits no longer in schema
     // The YAML still has trait_borders for Studio visual consistency
     if doc.class_icons.is_empty() {
         return Err(crate::NovaNetError::Validation(
@@ -315,7 +314,6 @@ mod tests {
         assert!(doc.node_states.contains_key("selected"));
         assert!(doc.node_states.contains_key("filtered"));
 
-        // v0.17.3 (ADR-036): trait_borders assertions removed - traits no longer in schema
         // YAML still has trait_borders for Studio visual consistency
 
         // Kind icons (44+)

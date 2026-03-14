@@ -699,7 +699,6 @@ mod tests {
     // ═══════════════════════════════════════════════════════════════════════════
     // These tests validate ADR-023 (Class/Instance), ADR-025 (Instruction Layer)
     // terminology is consistent across YAML.
-    // v0.17.3 (ADR-036): Schema-level trait tests removed, provenance is per-instance
 
     /// ADR-028: Must have exactly 59 node classes (36 shared + 23 org)
     /// v0.20.0: 59 nodes (36 shared + 23 org) — BlockRules removed from instruction layer
@@ -852,7 +851,6 @@ mod tests {
         );
     }
 
-    // v0.17.3 (ADR-036): test_naming_convention_native_suffix removed
     // Trait validation no longer relevant - provenance is per-instance, not per-class
 
     /// Layer distribution validation (v0.12.5)

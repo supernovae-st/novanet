@@ -352,7 +352,6 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         lines.push(Line::from(Span::raw("")));
 
         // === OUTGOING ARCS (Classes in this layer) ===
-        // v0.17.3 (ADR-036): Simplified - no longer shows trait grouping
         let total_classes = details.class_names.len();
 
         if total_classes > 0 {
@@ -841,7 +840,6 @@ fn layer_short(layer: &str) -> &'static str {
 }
 
 /// Get layer icon (Unicode symbol).
-/// v0.17.3 (ADR-036): Replaced trait_icon with layer_icon
 fn layer_icon(layer_key: &str) -> &'static str {
     match layer_key {
         "config" => "⚙",
@@ -859,7 +857,6 @@ fn layer_icon(layer_key: &str) -> &'static str {
 
 /// Build classification badge Span: [realm/layer] layer_icon
 /// Example: [org/fnd] ■
-/// v0.17.3 (ADR-036): trait_icon removed, using layer icon instead
 fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> Span<'static> {
     if let Some((realm, layer, _class_info)) = app.tree.find_class(class_key) {
         let realm_short = if realm.key == "shared" { "shd" } else { "org" };
@@ -1032,7 +1029,6 @@ mod tests {
             display_name: key.to_string(),
             description: String::new(),
             icon: String::new(),
-            // v0.17.3 (ADR-036): trait_name removed
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -1272,7 +1268,6 @@ mod tests {
             all_content.contains("[org/str]"),
             "should contain realm/layer badge"
         );
-        // v0.17.3 (ADR-036): trait icon assertion removed - traits no longer in schema
         // Both direction indicators
         assert!(
             all_content.contains("←"),

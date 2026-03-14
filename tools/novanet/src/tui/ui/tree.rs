@@ -34,7 +34,6 @@ use super::{
     realm_badge_icon,
     render_empty_state,
     spinner,
-    // v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::locale_to_flag;
@@ -766,7 +765,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 let is_data_mode = app.is_graph_mode();
                 let hide_empty = app.hide_empty && is_data_mode;
 
-                // v0.17.3 (ADR-036): trait filter removed
                 // Filter visible layers (hide empty if hide_empty)
                 let visible_layers: Vec<_> = realm
                     .layers
@@ -885,7 +883,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
-                        // v0.17.3 (ADR-036): trait filter removed
                         // Filter visible classes (hide empty if hide_empty is true)
                         let visible_classes: Vec<_> = layer
                             .classes
@@ -1645,7 +1642,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "◆ Schema" // Diamond = structure/schema
     };
 
-    // v0.17.3 (ADR-036): trait filter indicator removed
 
     let hierarchy =
         app.tree

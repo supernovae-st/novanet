@@ -74,7 +74,6 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
     let item = app.current_item()?;
     let json = match item {
         TreeItem::Class(realm, layer, class) => {
-            // v0.17.3 (ADR-036): trait removed from clipboard output
             serde_json::json!({
                 "type": "Class",
                 "key": class.key,

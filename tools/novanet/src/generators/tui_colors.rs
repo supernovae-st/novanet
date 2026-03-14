@@ -1,12 +1,11 @@
 //! Generate TUI color constants from YAML sources.
 //!
-//! v0.17.3 (ADR-036): Generates `tui/colors.generated.rs` from:
+//! Generates `tui/colors.generated.rs` from:
 //! - `realms/*.yaml` → Realm colors
 //! - `layers/*.yaml` → Layer colors
 //! - `arc-families/*.yaml` → Arc family colors
 //! - `taxonomy.yaml` → Terminal palette (256/16 color fallbacks)
 //!
-//! NOTE: Traits removed in v0.17.3 (ADR-036). Provenance is now per-instance.
 //!
 //! This generator ensures TUI colors are synchronized with the YAML source of truth,
 //! eliminating hardcoded color values in `theme.rs`.
@@ -34,7 +33,6 @@ struct ColorEntry {
     color_16: String,
 }
 
-// v0.17.3 (ADR-036): TraitEntry removed, provenance is per-instance
 
 /// All color data for the template.
 #[derive(Debug, Serialize)]
@@ -42,7 +40,6 @@ struct TemplateData {
     version: String,
     realms: Vec<ColorEntry>,
     layers: Vec<ColorEntry>,
-    // v0.17.3 (ADR-036): traits field removed
     arc_families: Vec<ColorEntry>,
 }
 
@@ -56,8 +53,6 @@ const TUI_COLORS_TEMPLATE: &str = r##"//! TUI color constants generated from YAM
 //! Source: realms/*.yaml, layers/*.yaml, arc-families/*.yaml
 //! Run: cargo run -- schema generate
 //!
-//! v0.17.3 (ADR-036): Colors synchronized with YAML source of truth.
-//! NOTE: Traits removed in v0.17.3 — provenance is now per-instance.
 
 use ratatui::style::Color;
 
@@ -156,10 +151,6 @@ pub mod layer {
         }
     }
 }
-
-// =============================================================================
-// v0.17.3 (ADR-036): TRAIT COLORS section removed — provenance is per-instance
-// =============================================================================
 
 // =============================================================================
 // ARC FAMILY COLORS ({{ arc_families | length }})
@@ -282,7 +273,6 @@ fn default_terminal_palette() -> TerminalPalette {
         palette_16.insert(key.to_string(), idx_16);
     }
 
-    // v0.17.3 (ADR-036): Traits removed, provenance is per-instance
 
     // Arc families
     for (key, idx_256, idx_16) in [
@@ -325,7 +315,6 @@ fn color_16_name(idx: u8) -> &'static str {
     }
 }
 
-// v0.17.3 (ADR-036): trait_border_char() removed, provenance is per-instance
 
 /// Build template data from organizing doc and terminal palette.
 fn render_tui_colors(doc: &OrganizingDoc, terminal: &TerminalPalette) -> crate::Result<String> {
@@ -366,7 +355,6 @@ fn render_tui_colors(doc: &OrganizingDoc, terminal: &TerminalPalette) -> crate::
         })
         .collect();
 
-    // v0.17.3 (ADR-036): traits completely removed, provenance is per-instance
 
     // Extract arc families
     let arc_families: Vec<ColorEntry> = doc
@@ -401,7 +389,6 @@ fn render_tui_colors(doc: &OrganizingDoc, terminal: &TerminalPalette) -> crate::
         version: doc.version.clone(),
         realms,
         layers,
-        // v0.17.3 (ADR-036): traits removed
         arc_families,
     };
 
@@ -425,7 +412,6 @@ fn render_tui_colors(doc: &OrganizingDoc, terminal: &TerminalPalette) -> crate::
             version => data.version,
             realms => data.realms,
             layers => data.layers,
-            // v0.17.3 (ADR-036): traits removed
             arc_families => data.arc_families,
         })
         .map_err(|e| crate::NovaNetError::Generator {
@@ -444,7 +430,6 @@ fn render_tui_colors(doc: &OrganizingDoc, terminal: &TerminalPalette) -> crate::
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    // v0.17.3 (ADR-036): TraitDef removed, traits hardcoded in render function
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef};
     use serial_test::serial;
 
@@ -485,7 +470,6 @@ mod tests {
                     }],
                 },
             ],
-            // v0.17.3 (ADR-036): traits field removed, hardcoded in render function
             arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
@@ -525,7 +509,6 @@ mod tests {
         assert!(output.contains("pub const SEMANTIC_HEX: &str = \"#f97316\""));
     }
 
-    // v0.17.3 (ADR-036): render_tui_colors_traits test removed, provenance is per-instance
 
     #[test]
     fn render_tui_colors_arc_families() {
@@ -542,7 +525,6 @@ mod tests {
 
         assert!(output.contains("pub fn color(realm: &str, mode: ColorMode) -> Color"));
         assert!(output.contains("pub fn color(layer_key: &str, mode: ColorMode) -> Color"));
-        // v0.17.3 (ADR-036): trait functions removed
         assert!(output.contains("pub fn color(family: &str, mode: ColorMode) -> Color"));
     }
 
@@ -556,7 +538,6 @@ mod tests {
         assert_eq!(color_16_name(255), "White"); // Fallback
     }
 
-    // v0.17.3 (ADR-036): trait_border_char_mapping test removed
 
     #[test]
     #[serial]
@@ -597,7 +578,6 @@ mod tests {
             );
         }
 
-        // v0.17.3 (ADR-036): Traits removed, provenance is per-instance
 
         // Should have all 5 arc families
         for af in [

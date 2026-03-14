@@ -15,12 +15,10 @@ use std::path::Path;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Top-level document (converted from TaxonomyDoc).
-/// v0.17.3 (ADR-036): traits removed, provenance is per-instance.
 #[derive(Debug, Deserialize)]
 pub struct OrganizingDoc {
     pub version: String,
     pub realms: Vec<RealmDef>,
-    // v0.17.3 (ADR-036): traits field removed, provenance is per-instance
     pub arc_families: Vec<ArcFamilyDef>,
 }
 
@@ -47,7 +45,6 @@ pub struct LayerDef {
     pub triggers: Vec<String>,
 }
 
-// v0.17.3 (ADR-036): TraitDef removed, provenance is per-instance
 
 /// Arc family definition.
 #[derive(Debug, Deserialize)]
@@ -85,7 +82,6 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
             )));
         }
     }
-    // v0.17.3 (ADR-036): traits validation removed, provenance is per-instance
     if doc.arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
             "No arc_families defined in taxonomy".to_string(),
@@ -105,7 +101,6 @@ mod tests {
 
     #[test]
     fn parse_organizing_yaml() {
-        // v0.17.3 (ADR-036): traits section removed from YAML parsing
         let yaml = r##"
 version: "9.0.0"
 realms:
@@ -135,7 +130,6 @@ arc_families:
         assert_eq!(doc.realms[0].key, "shared");
         assert_eq!(doc.realms[0].layers.len(), 1);
         assert_eq!(doc.realms[0].layers[0].key, "config");
-        // v0.17.3 (ADR-036): traits assertions removed
         assert_eq!(doc.arc_families.len(), 1);
         assert_eq!(doc.arc_families[0].arrow_style, "-->");
     }

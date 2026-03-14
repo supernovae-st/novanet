@@ -195,7 +195,6 @@ pub(super) fn scroll_indicator(
 // HELPER FUNCTIONS (shared across UI modules)
 // =============================================================================
 
-// v0.17.3 (ADR-036): trait_icon removed - traits no longer in schema
 // Provenance will be tracked per-instance at runtime (seed/nika/mcp)
 
 // =============================================================================

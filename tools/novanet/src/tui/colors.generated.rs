@@ -4,7 +4,6 @@
 //! Source: realms/*.yaml, layers/*.yaml, arc-families/*.yaml
 //! Run: cargo run -- schema generate
 //!
-//! v0.17.3 (ADR-036): Colors synchronized with YAML source of truth.
 //! NOTE: Traits removed in v0.17.3 — provenance is now per-instance.
 
 use ratatui::style::Color;
@@ -136,7 +135,6 @@ pub mod layer {
 }
 
 // =============================================================================
-// v0.17.3 (ADR-036): TRAIT COLORS section removed — provenance is per-instance
 // =============================================================================
 
 // =============================================================================

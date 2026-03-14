@@ -94,7 +94,6 @@ impl AutoFix for TimestampFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    // v0.17.3 (ADR-036): NodeTrait removed, provenance is per-instance
     use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
@@ -129,7 +128,6 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node without timestamps".to_string(),
@@ -214,7 +212,6 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test".to_string(),
@@ -274,7 +271,6 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test".to_string(),
@@ -354,7 +350,6 @@ mod tests {
                 name: "TestNode".to_string(),
                 realm: "org".to_string(),
                 layer: "semantic".to_string(),
-                // v0.17.3 (ADR-036): node_trait removed
                 knowledge_tier: None,
                 icon: None,
                 description: "Test node".to_string(),
@@ -433,7 +428,6 @@ mod tests {
         }
 
         /// Property: Fix preserves node identity (name, realm, layer)
-        /// v0.17.3 (ADR-036): trait removed, provenance is per-instance
         #[test]
         fn prop_preserves_node_identity(prop_names in prop_property_names()) {
             let mut node = create_node_with_properties(prop_names);

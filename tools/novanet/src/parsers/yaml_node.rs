@@ -5,8 +5,6 @@
 //! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
 //! Validation ensures the file path matches the YAML-declared realm/layer.
 //!
-//! Note: `trait` was removed in v0.17.3 (ADR-036). Provenance is now tracked per-instance
-//! via the `provenance` property, not per-class via the `trait` field.
 
 use indexmap::IndexMap;
 use rayon::prelude::*;
@@ -16,10 +14,6 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Note: NodeTrait was removed in v0.17.3 (ADR-036)
-// Provenance is now tracked per-instance, not per-class.
-// ─────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
 // KnowledgeTier (v10 — locale knowledge classification)
@@ -105,7 +99,6 @@ pub struct NodeDef {
     /// Layer classification (config, knowledge, foundation, etc.) — explicit in YAML.
     pub layer: String,
 
-    // Note: `trait` was removed in v0.17.3 (ADR-036). Provenance is tracked per-instance.
     /// Knowledge tier — optional, only for knowledge layer nodes.
     /// Groups locale knowledge: technical, style, semantic.
     #[serde(default)]
@@ -320,7 +313,6 @@ mod tests {
 
     #[test]
     fn node_basic_deserialize() {
-        // v0.17.3: trait removed (ADR-036)
         let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.name, "Test");
@@ -354,7 +346,6 @@ mod tests {
 
     #[test]
     fn optional_fields_default_to_none() {
-        // v0.17.3: trait removed
         let yaml = "node:\n  name: Minimal\n  realm: org\n  layer: output\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
@@ -470,7 +461,6 @@ node:
             );
         }
 
-        // v0.17.3: Verify realm distribution (trait removed, no trait checks)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
@@ -483,7 +473,6 @@ node:
             "org realm count (v0.20.0: 23 org nodes)"
         );
 
-        // Spot-check known nodes (v0.17.3: trait checks removed)
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
         assert_eq!(project.realm, "org");
         assert_eq!(project.layer, "foundation");

@@ -6,7 +6,6 @@
 //! - `make_rel` — Create an `ArcDef` with string source/target
 //! - `make_rel_full` — Create an `ArcDef` with NodeRef and cardinality
 //!
-//! Note: NodeTrait removed in v0.17.3 (ADR-036). Provenance is now per-instance.
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -22,7 +21,6 @@ use crate::parsers::yaml_node::{NodeDef, ParsedNode, PropertyDef};
 
 /// Create a `ParsedNode` for testing.
 ///
-/// v0.17.3: NodeTrait removed (ADR-036). Provenance is now per-instance.
 ///
 /// # Example
 /// ```ignore
@@ -54,7 +52,6 @@ pub fn make_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
 
 /// Create a `ParsedNode` for testing with explicit properties.
 ///
-/// v0.17.3: NodeTrait removed (ADR-036). Provenance is now per-instance.
 ///
 /// # Arguments
 /// * `props` — Vec of (name, type, required) tuples
@@ -166,7 +163,6 @@ mod tests {
 
     #[test]
     fn test_make_node_basic() {
-        // v0.17.3: NodeTrait removed (ADR-036)
         let node = make_node("Page", "org", "structure");
         assert_eq!(node.def.name, "Page");
         assert_eq!(node.realm, "org");
@@ -175,7 +171,6 @@ mod tests {
 
     #[test]
     fn test_make_node_with_props() {
-        // v0.17.3: NodeTrait removed (ADR-036)
         let node = make_node_with_props(
             "Entity",
             "org",
