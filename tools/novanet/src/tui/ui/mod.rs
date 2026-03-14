@@ -3,6 +3,7 @@
 //! v0.20.0: Single mode (Graph). Renders tree, info, yaml, graph panels.
 //! v0.13.1: Architecture panel removed (panel simplification).
 
+mod flow;
 mod graph;
 mod identity_panel;
 mod info;
@@ -594,6 +595,11 @@ impl LayoutMode {
 
 /// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
+    if app.mode == NavMode::Flow {
+        flow::render_flow(f, app, area);
+        return;
+    }
+
     // Graph mode: standard panel layout (unified tree)
     let layout_mode = LayoutMode::detect(area.width);
 
