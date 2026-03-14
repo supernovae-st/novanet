@@ -806,96 +806,36 @@ impl App {
         match event.kind {
             MouseEventKind::ScrollUp => {
                 if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
-                    match panel {
-                        Panel::Tree => {
-                            // Scroll up in tree (move cursor up)
-                            if self.tree_cursor > 0 {
-                                self.tree_cursor -= 1;
-                                self.ensure_cursor_visible();
-                                self.load_yaml_for_current();
-                                return true;
-                            }
-                        },
-                        Panel::Identity => {
-                            if self.identity_scroll > 0 {
-                                self.identity_scroll =
-                                    self.identity_scroll.saturating_sub(MOUSE_SCROLL_LINES);
-                                return true;
-                            }
-                        },
-                        Panel::Content => {
-                            if self.yaml.scroll > 0 {
-                                self.yaml.scroll =
-                                    self.yaml.scroll.saturating_sub(MOUSE_SCROLL_LINES);
-                                return true;
-                            }
-                        },
-                        Panel::Props => {
-                            if self.props_scroll > 0 {
-                                self.props_scroll =
-                                    self.props_scroll.saturating_sub(MOUSE_SCROLL_LINES);
-                                return true;
-                            }
-                        },
-                        Panel::Arcs => {
-                            if self.arcs_scroll > 0 {
-                                self.arcs_scroll =
-                                    self.arcs_scroll.saturating_sub(MOUSE_SCROLL_LINES);
-                                return true;
-                            }
-                        },
+                    if panel == Panel::Tree {
+                        if self.tree_cursor > 0 {
+                            self.tree_cursor -= 1;
+                            self.ensure_cursor_visible();
+                            self.load_yaml_for_current();
+                            return true;
+                        }
+                    } else if let Some((scroll, _)) = self.panel_scroll_mut(panel.to_focus()) {
+                        if *scroll > 0 {
+                            *scroll = scroll.saturating_sub(MOUSE_SCROLL_LINES);
+                            return true;
+                        }
                     }
                 }
             },
             MouseEventKind::ScrollDown => {
                 if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
-                    match panel {
-                        Panel::Tree => {
-                            // Scroll down in tree (move cursor down)
-                            let max = self.current_item_count().saturating_sub(1);
-                            if self.tree_cursor < max {
-                                self.tree_cursor += 1;
-                                self.ensure_cursor_visible();
-                                self.load_yaml_for_current();
-                                return true;
-                            }
-                        },
-                        Panel::Identity => {
-                            let max_scroll =
-                                self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                            if self.identity_scroll < max_scroll {
-                                self.identity_scroll =
-                                    (self.identity_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
-                                return true;
-                            }
-                        },
-                        Panel::Content => {
-                            let max_scroll =
-                                self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                            if self.yaml.scroll < max_scroll {
-                                self.yaml.scroll =
-                                    (self.yaml.scroll + MOUSE_SCROLL_LINES).min(max_scroll);
-                                return true;
-                            }
-                        },
-                        Panel::Props => {
-                            let max_scroll =
-                                self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                            if self.props_scroll < max_scroll {
-                                self.props_scroll =
-                                    (self.props_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
-                                return true;
-                            }
-                        },
-                        Panel::Arcs => {
-                            let max_scroll =
-                                self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                            if self.arcs_scroll < max_scroll {
-                                self.arcs_scroll =
-                                    (self.arcs_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
-                                return true;
-                            }
-                        },
+                    if panel == Panel::Tree {
+                        let max = self.current_item_count().saturating_sub(1);
+                        if self.tree_cursor < max {
+                            self.tree_cursor += 1;
+                            self.ensure_cursor_visible();
+                            self.load_yaml_for_current();
+                            return true;
+                        }
+                    } else if let Some((scroll, max)) = self.panel_scroll_mut(panel.to_focus()) {
+                        if *scroll < max {
+                            *scroll = (*scroll + MOUSE_SCROLL_LINES).min(max);
+                            return true;
+                        }
                     }
                 }
             },
@@ -913,6 +853,32 @@ impl App {
             _ => {},
         }
         false
+    }
+
+    /// Get mutable scroll position and max scroll value for a scrollable panel.
+    ///
+    /// Returns `None` for Tree (cursor-based navigation).
+    /// Used by keyboard and mouse scroll handlers to avoid repetitive match arms.
+    fn panel_scroll_mut(&mut self, focus: Focus) -> Option<(&mut usize, usize)> {
+        match focus {
+            Focus::Identity => {
+                let max = self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                Some((&mut self.identity_scroll, max))
+            },
+            Focus::Content => {
+                let max = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                Some((&mut self.yaml.scroll, max))
+            },
+            Focus::Props => {
+                let max = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                Some((&mut self.props_scroll, max))
+            },
+            Focus::Arcs => {
+                let max = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                Some((&mut self.arcs_scroll, max))
+            },
+            Focus::Tree => None,
+        }
     }
 
     /// Handle key input. Returns true if state changed (needs re-render).
@@ -1173,195 +1139,102 @@ impl App {
 
             // Jump to first/last (vim-style: g/G)
             KeyCode::Char('g') => {
-                match self.focus {
-                    Focus::Tree => {
-                        self.tree_cursor = 0;
-                        self.tree_scroll = 0;
-                        self.load_yaml_for_current();
-                        // Note: Instance loading removed - use Space/Enter to expand
-                    },
-                    Focus::Identity => {
-                        self.identity_scroll = 0;
-                    },
-                    Focus::Content => {
-                        self.yaml.scroll = 0;
-                    },
-                    Focus::Props => {
-                        self.props_scroll = 0;
-                    },
-                    Focus::Arcs => {
-                        self.arcs_scroll = 0;
-                    },
+                if self.focus == Focus::Tree {
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.load_yaml_for_current();
+                } else if let Some((scroll, _)) = self.panel_scroll_mut(self.focus) {
+                    *scroll = 0;
                 }
                 true
             },
             KeyCode::Char('G') => {
-                match self.focus {
-                    Focus::Tree => {
-                        let max = self.current_item_count().saturating_sub(1);
-                        self.tree_cursor = max;
-                        self.ensure_cursor_visible();
-                        self.load_yaml_for_current();
-                        // Note: Instance loading removed - use Space/Enter to expand
-                    },
-                    Focus::Identity => {
-                        let max_scroll = self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.identity_scroll = max_scroll;
-                    },
-                    Focus::Content => {
-                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        self.yaml.scroll = max_scroll;
-                    },
-                    Focus::Props => {
-                        let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.props_scroll = max_scroll;
-                    },
-                    Focus::Arcs => {
-                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.arcs_scroll = max_scroll;
-                    },
+                if self.focus == Focus::Tree {
+                    let max = self.current_item_count().saturating_sub(1);
+                    self.tree_cursor = max;
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                } else if let Some((scroll, max)) = self.panel_scroll_mut(self.focus) {
+                    *scroll = max;
                 }
                 true
             },
 
             // Navigation: ↑/k scroll up, ↓/j scroll down (in focused panel)
             KeyCode::Up | KeyCode::Char('k') => {
-                match self.focus {
-                    Focus::Tree => {
-                        if self.tree_cursor > 0 {
-                            self.tree_cursor -= 1;
-                            self.ensure_cursor_visible();
-                            self.load_yaml_for_current();
-                        }
-                    },
-                    Focus::Identity => {
-                        if self.identity_scroll > 0 {
-                            self.identity_scroll -= 1;
-                        }
-                    },
-                    Focus::Content => {
-                        if self.yaml.scroll > 0 {
-                            self.yaml.scroll -= 1;
-                        }
-                    },
-                    Focus::Props => {
-                        // Navigate properties with j/k
-                        if self.schema_overlay.matched_properties.is_some()
-                            && self.focused_property_idx > 0
-                        {
-                            self.focused_property_idx -= 1;
-                            self.expanded_property = false;
-                        } else if self.props_scroll > 0 {
-                            self.props_scroll -= 1;
-                        }
-                    },
-                    Focus::Arcs => {
-                        if self.arcs_scroll > 0 {
-                            self.arcs_scroll -= 1;
-                        }
-                    },
+                if self.focus == Focus::Tree {
+                    if self.tree_cursor > 0 {
+                        self.tree_cursor -= 1;
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                    }
+                } else if self.focus == Focus::Props {
+                    // Navigate properties with j/k (dual-mode)
+                    if self.schema_overlay.matched_properties.is_some()
+                        && self.focused_property_idx > 0
+                    {
+                        self.focused_property_idx -= 1;
+                        self.expanded_property = false;
+                    } else if self.props_scroll > 0 {
+                        self.props_scroll -= 1;
+                    }
+                } else if let Some((scroll, _)) = self.panel_scroll_mut(self.focus) {
+                    if *scroll > 0 {
+                        *scroll -= 1;
+                    }
                 }
                 true
             },
             KeyCode::Down | KeyCode::Char('j') => {
-                match self.focus {
-                    Focus::Tree => {
-                        let max = self.current_item_count().saturating_sub(1);
-                        if self.tree_cursor < max {
-                            self.tree_cursor += 1;
-                            self.ensure_cursor_visible();
-                            self.load_yaml_for_current();
+                if self.focus == Focus::Tree {
+                    let max = self.current_item_count().saturating_sub(1);
+                    if self.tree_cursor < max {
+                        self.tree_cursor += 1;
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                    }
+                } else if self.focus == Focus::Props {
+                    // Navigate properties with j/k (dual-mode)
+                    if let Some(matched) = &self.schema_overlay.matched_properties {
+                        let max_idx = matched.len().saturating_sub(1);
+                        if self.focused_property_idx < max_idx {
+                            self.focused_property_idx += 1;
+                            self.expanded_property = false;
                         }
-                    },
-                    Focus::Identity => {
+                    } else {
                         let max_scroll =
-                            self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        if self.identity_scroll < max_scroll {
-                            self.identity_scroll += 1;
+                            self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        if self.props_scroll < max_scroll {
+                            self.props_scroll += 1;
                         }
-                    },
-                    Focus::Content => {
-                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        if self.yaml.scroll < max_scroll {
-                            self.yaml.scroll += 1;
-                        }
-                    },
-                    Focus::Props => {
-                        // Navigate properties with j/k
-                        if let Some(matched) = &self.schema_overlay.matched_properties {
-                            let max_idx = matched.len().saturating_sub(1);
-                            if self.focused_property_idx < max_idx {
-                                self.focused_property_idx += 1;
-                                self.expanded_property = false;
-                            }
-                        } else {
-                            let max_scroll =
-                                self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                            if self.props_scroll < max_scroll {
-                                self.props_scroll += 1;
-                            }
-                        }
-                    },
-                    Focus::Arcs => {
-                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        if self.arcs_scroll < max_scroll {
-                            self.arcs_scroll += 1;
-                        }
-                    },
+                    }
+                } else if let Some((scroll, max)) = self.panel_scroll_mut(self.focus) {
+                    if *scroll < max {
+                        *scroll += 1;
+                    }
                 }
                 true
             },
 
             // Page scroll: d/u vim-style
             KeyCode::Char('d') => {
-                match self.focus {
-                    Focus::Tree => {
-                        let max = self.current_item_count().saturating_sub(1);
-                        self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
-                        self.ensure_cursor_visible();
-                        self.load_yaml_for_current();
-                    },
-                    Focus::Identity => {
-                        let max_scroll = self.identity_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.identity_scroll =
-                            (self.identity_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    },
-                    Focus::Content => {
-                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    },
-                    Focus::Props => {
-                        let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.props_scroll =
-                            (self.props_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    },
-                    Focus::Arcs => {
-                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.arcs_scroll = (self.arcs_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    },
+                if self.focus == Focus::Tree {
+                    let max = self.current_item_count().saturating_sub(1);
+                    self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                } else if let Some((scroll, max)) = self.panel_scroll_mut(self.focus) {
+                    *scroll = (*scroll + PAGE_SCROLL_AMOUNT).min(max);
                 }
                 true
             },
             KeyCode::Char('u') => {
-                match self.focus {
-                    Focus::Tree => {
-                        self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
-                        self.ensure_cursor_visible();
-                        self.load_yaml_for_current();
-                    },
-                    Focus::Identity => {
-                        self.identity_scroll =
-                            self.identity_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    },
-                    Focus::Content => {
-                        self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    },
-                    Focus::Props => {
-                        self.props_scroll = self.props_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    },
-                    Focus::Arcs => {
-                        self.arcs_scroll = self.arcs_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    },
+                if self.focus == Focus::Tree {
+                    self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                } else if let Some((scroll, _)) = self.panel_scroll_mut(self.focus) {
+                    *scroll = scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                 }
                 true
             },
