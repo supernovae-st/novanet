@@ -15,6 +15,15 @@ use crate::error::{Error, Result};
 use std::path::PathBuf;
 use std::time::Duration;
 
+/// Parse an environment variable with a default value.
+/// Pattern: read env var -> parse to T -> fallback to default.
+fn env_or<T: std::str::FromStr>(var: &str, default: T) -> T {
+    std::env::var(var)
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(default)
+}
+
 /// Server configuration
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -62,66 +71,33 @@ impl Config {
                 .unwrap_or_else(|_| "neo4j".to_string()),
             neo4j_password: std::env::var("NOVANET_MCP_NEO4J_PASSWORD")
                 .map_err(|_| Error::Config("NOVANET_MCP_NEO4J_PASSWORD not set".to_string()))?,
-            pool_size: std::env::var("NOVANET_MCP_NEO4J_POOL_SIZE")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(16),
+            pool_size: env_or("NOVANET_MCP_NEO4J_POOL_SIZE", 16),
 
             // Connection pool tuning (Phase 3)
-            fetch_size: std::env::var("NOVANET_MCP_FETCH_SIZE")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(500),
+            fetch_size: env_or("NOVANET_MCP_FETCH_SIZE", 500),
 
             // Retry settings
-            max_retries: std::env::var("NOVANET_MCP_MAX_RETRIES")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(3),
+            max_retries: env_or("NOVANET_MCP_MAX_RETRIES", 3),
             retry_base_delay: Duration::from_millis(
-                std::env::var("NOVANET_MCP_RETRY_BASE_DELAY_MS")
-                    .ok()
-                    .and_then(|s| s.parse().ok())
-                    .unwrap_or(100),
+                env_or("NOVANET_MCP_RETRY_BASE_DELAY_MS", 100),
             ),
 
             // Circuit breaker settings (Phase 3)
-            circuit_breaker_threshold: std::env::var("NOVANET_MCP_CIRCUIT_BREAKER_THRESHOLD")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(5),
+            circuit_breaker_threshold: env_or("NOVANET_MCP_CIRCUIT_BREAKER_THRESHOLD", 5),
             circuit_breaker_reset_timeout: Duration::from_secs(
-                std::env::var("NOVANET_MCP_CIRCUIT_BREAKER_RESET_SECS")
-                    .ok()
-                    .and_then(|s| s.parse().ok())
-                    .unwrap_or(30),
+                env_or("NOVANET_MCP_CIRCUIT_BREAKER_RESET_SECS", 30),
             ),
 
             // Cache
-            cache_max_entries: std::env::var("NOVANET_MCP_CACHE_MAX_ENTRIES")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(10000),
+            cache_max_entries: env_or("NOVANET_MCP_CACHE_MAX_ENTRIES", 10000),
             cache_ttl: Duration::from_secs(
-                std::env::var("NOVANET_MCP_CACHE_TTL_SECS")
-                    .ok()
-                    .and_then(|s| s.parse().ok())
-                    .unwrap_or(300),
+                env_or("NOVANET_MCP_CACHE_TTL_SECS", 300),
             ),
 
             // Token settings
-            default_token_budget: std::env::var("NOVANET_MCP_DEFAULT_TOKEN_BUDGET")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(100_000),
-            max_hops: std::env::var("NOVANET_MCP_MAX_HOPS")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(5),
-            evidence_packet_size: std::env::var("NOVANET_MCP_EVIDENCE_PACKET_SIZE")
-                .ok()
-                .and_then(|s| s.parse().ok())
-                .unwrap_or(200),
+            default_token_budget: env_or("NOVANET_MCP_DEFAULT_TOKEN_BUDGET", 100_000),
+            max_hops: env_or("NOVANET_MCP_MAX_HOPS", 5),
+            evidence_packet_size: env_or("NOVANET_MCP_EVIDENCE_PACKET_SIZE", 200),
 
             // Spreading activation config (Phase 2.2)
             spreading_config_path: std::env::var("NOVANET_MCP_SPREADING_CONFIG_PATH")
