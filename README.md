@@ -7,7 +7,7 @@
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet/actions)
-[![Tests](https://img.shields.io/badge/tests-1258_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Tests](https://img.shields.io/badge/tests-1034_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -129,7 +129,7 @@ novanet/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (16 commands, 8 generators)
-│       └── Cargo.toml         # 1258 tests, zero clippy warnings
+│       └── Cargo.toml         # 1034 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -144,10 +144,10 @@ novanet/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.19.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.19.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.19.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.19.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/core** | `0.20.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.20.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.20.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.20.0` | Rust CLI + TUI for schema generation, validation, queries |
 | **tools/novanet-mcp** | `0.20.0` | MCP Server for AI agent integration (8 tools) |
 
 ---

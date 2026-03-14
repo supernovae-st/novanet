@@ -1,4 +1,4 @@
-# NovaNet Studio (v0.19.0)
+# NovaNet Studio (v0.20.0)
 
 @.claude/rules/novanet-terminology.md
 @.claude/rules/novanet-decisions.md
@@ -15,7 +15,7 @@ Knowledge graph visualization for the NovaNet native content generation engine.
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
 **AI:** Claude API for natural language → Cypher
-**Version:** v0.19.0 (all packages aligned)
+**Version:** v0.20.0 (all packages aligned)
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "@novanet/db",
-  "version": "0.17.2",
+  "version": "0.20.0",
   "private": true,
   "description": "NovaNet database infrastructure - Neo4j seeds, migrations, and Docker",
   "scripts": {
