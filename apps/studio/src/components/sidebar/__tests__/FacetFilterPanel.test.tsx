@@ -1,7 +1,7 @@
 /**
  * FacetFilterPanel Tests
  *
- * Tests rendering of 4 facet sections (Realms, Layers, Traits, Arc Families),
+ * Tests rendering of 3 facet sections (Realms, Layers, Arc Families),
  * tri-state checkboxes, and toggle behavior via filterStore.
  */
 
@@ -16,28 +16,23 @@ jest.mock('@/stores/filterStore', () => ({
 }));
 
 const mockToggleRealm = jest.fn();
-const mockToggleTrait = jest.fn();
 const mockToggleLayer = jest.fn();
 const mockToggleArcFamily = jest.fn();
 const mockSetRealmFilter = jest.fn();
 const mockSetLayerFilter = jest.fn();
-const mockSetTraitFilter = jest.fn();
 const mockSetArcFamilyFilter = jest.fn();
 const mockUseFilterStore = useFilterStore as jest.MockedFunction<typeof useFilterStore>;
 
 function setupStore(overrides: Record<string, unknown> = {}) {
   const defaultState = {
     realmFilter: [] as string[],
-    traitFilter: [] as string[],
     layerFilter: [] as string[],
     arcFamilyFilter: [] as string[],
     toggleRealm: mockToggleRealm,
-    toggleTrait: mockToggleTrait,
     toggleLayer: mockToggleLayer,
     toggleArcFamily: mockToggleArcFamily,
     setRealmFilter: mockSetRealmFilter,
     setLayerFilter: mockSetLayerFilter,
-    setTraitFilter: mockSetTraitFilter,
     setArcFamilyFilter: mockSetArcFamilyFilter,
     ...overrides,
   };
@@ -63,12 +58,11 @@ describe('FacetFilterPanel', () => {
   // ==========================================================================
 
   describe('rendering', () => {
-    it('renders all 4 facet sections', () => {
+    it('renders all 3 facet sections', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Realms')).toBeInTheDocument();
       expect(screen.getByText('Layers')).toBeInTheDocument();
-      expect(screen.getByText('Traits')).toBeInTheDocument();
       expect(screen.getByText('Arc Families')).toBeInTheDocument();
     });
 
@@ -86,9 +80,7 @@ describe('FacetFilterPanel', () => {
       // Shared realm (4 layers: config, locale, geography, knowledge)
       expect(screen.getByText('Locale')).toBeInTheDocument();
       expect(screen.getByText('Geography')).toBeInTheDocument();
-      // v11.8: "Knowledge" is layer only, trait renamed to "Imported" per ADR-024
       expect(screen.getByText('Knowledge')).toBeInTheDocument();
-      expect(screen.getByText('Imported')).toBeInTheDocument();
       expect(screen.getByText('Configuration')).toBeInTheDocument();  // v11.5: shared config layer visible
       // Org realm (6 layers: config, foundation, structure, semantic, instruction, output)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
@@ -98,17 +90,6 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Instructions')).toBeInTheDocument();
       // v11.5: SEO/GEO layers removed - nodes in shared/knowledge now
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
-    });
-
-    // v11.8: Renamed per ADR-024 Data Origin semantics
-    it('renders 5 trait items (v11.8: defined/authored/imported/generated/retrieved)', () => {
-      render(<FacetFilterPanel />);
-
-      expect(screen.getByText('Defined')).toBeInTheDocument();    // was: Invariant
-      expect(screen.getByText('Authored')).toBeInTheDocument();   // was: Localized
-      expect(screen.getByText('Imported')).toBeInTheDocument();   // was: Knowledge trait
-      expect(screen.getByText('Generated')).toBeInTheDocument();
-      expect(screen.getByText('Retrieved')).toBeInTheDocument();  // was: Aggregated
     });
 
     it('renders 5 arc family items', () => {
@@ -142,13 +123,12 @@ describe('FacetFilterPanel', () => {
     it('shows active count when facets are selected', () => {
       setupStore({
         realmFilter: ['shared'],
-        traitFilter: ['authored'], // v11.8: was 'localized'
         layerFilter: [],
       });
 
       render(<FacetFilterPanel />);
 
-      expect(screen.getByText('2 active')).toBeInTheDocument();
+      expect(screen.getByText('1 active')).toBeInTheDocument();
     });
 
     it('hides active count when no facets selected', () => {
@@ -160,7 +140,6 @@ describe('FacetFilterPanel', () => {
     it('hides help text when facets are active', () => {
       setupStore({
         realmFilter: ['shared'],
-        traitFilter: [],
         layerFilter: [],
       });
 

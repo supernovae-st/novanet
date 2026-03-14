@@ -67,8 +67,6 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp | string; category: RelationCat
 
   // GEO
   { pattern: /GEO/, category: 'geo' },
-  { pattern: 'HAS_CITATION', category: 'geo' },
-  { pattern: 'HAS_REFORMULATION', category: 'geo' },
 
   // Reference (fallback)
   { pattern: 'USES', category: 'reference' },

@@ -111,11 +111,9 @@ export default function HomePage() {
     useShallow((state) => ({
       applyViewPresetByShortcut: state.applyViewPresetByShortcut,
       toCypher: state.toCypher,
-      setTraitFilter: state.setTraitFilter,
       setArcFamilyFilter: state.setArcFamilyFilter,
     }))
   );
-  const traitFilter = useFilterStore((s) => s.traitFilter);
   const arcFamilyFilter = useFilterStore((s) => s.arcFamilyFilter);
 
   // Graph Store - state + selectors
@@ -428,24 +426,6 @@ export default function HomePage() {
         return;
       }
 
-      // Cycle trait filter (T) - none → defined → authored → imported → generated → retrieved → none
-      // v11.8: Renamed per ADR-024 Data Origin semantics
-      if (e.key === 't' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
-        e.preventDefault();
-        const traits = ['defined', 'authored', 'imported', 'generated', 'retrieved'] as const;
-        if (traitFilter.length === 0) {
-          filterActions.setTraitFilter([traits[0]]);
-        } else {
-          const idx = traits.indexOf(traitFilter[0] as typeof traits[number]);
-          if (idx >= 0 && idx < traits.length - 1) {
-            filterActions.setTraitFilter([traits[idx + 1]]);
-          } else {
-            filterActions.setTraitFilter([]);
-          }
-        }
-        return;
-      }
-
       // Cycle edge family filter (E) - none → ownership → localization → semantic → generation → mining → none
       if (e.key === 'e' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
@@ -520,7 +500,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, openMacropad, traitFilter, arcFamilyFilter]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, openMacropad, arcFamilyFilter]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS

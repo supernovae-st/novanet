@@ -234,10 +234,6 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
     speed: 'fast',
     // effects removed: now uses arcFamily 'mining' → 'radarSweep'
   },
-  HAS_CITATION: {
-    lineStyle: 'solid',
-    particlePreset: 'spark',
-  },
 
   // ─── Reference Overrides ───
   USES: {

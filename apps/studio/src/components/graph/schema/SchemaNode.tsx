@@ -3,19 +3,20 @@
 /**
  * SchemaNode - Premium card for schema visualization
  *
- * v11.5 Design:
- * - Wider card (240px), taller
+ * v0.19.0 Design:
+ * - Wider card (280px), taller
  * - Large icon top-left with glow
- * - 3 stacked badges: Realm, Layer, Trait (with design system colors)
- * - Glow pulsé + gradient badges
+ * - 2 stacked badges: Realm, Layer (with design system colors)
+ * - Glow pulse + gradient badges
  * - Node color = Layer color
+ * - Traits removed (ADR-024 deprecated in v0.19.0)
  */
 
 import { memo, useMemo } from 'react';
 import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { LayerIcon, RealmIcon, TraitIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon, RealmIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
@@ -25,24 +26,11 @@ import type { Realm, Layer } from '@novanet/core/types';
 import {
   REALM_COLORS,
   LAYER_COLORS,
-  TRAIT_COLORS,
 } from '@/design/colors';
 
 // =============================================================================
 // Types
 // =============================================================================
-
-// v0.12.0: renamed per ADR-024 Data Origin
-export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
-
-// v0.12.0: 5 traits renamed per ADR-024 Data Origin
-const TRAIT_BORDER_STYLES: Record<string, { style: string; width: number; className?: string }> = {
-  defined: { style: 'solid', width: 2 },     // was: invariant
-  authored: { style: 'dashed', width: 2 },   // was: localized
-  imported: { style: 'dotted', width: 2 },   // was: knowledge
-  generated: { style: 'double', width: 2 },
-  retrieved: { style: 'dotted', width: 3 },  // was: aggregated
-};
 
 export interface SchemaNodeData extends Record<string, unknown> {
   nodeType: string;
@@ -50,7 +38,6 @@ export interface SchemaNodeData extends Record<string, unknown> {
   description: string;
   realm: Realm;
   layer: string;
-  trait?: Trait;
 }
 
 export type SchemaNodeType = Node<SchemaNodeData, 'schemaNode'>;
@@ -94,15 +81,13 @@ export const SchemaNode = memo(function SchemaNode({
 }: NodeProps<SchemaNodeType>) {
   const config = NODE_TYPE_CONFIG[data.nodeType as keyof typeof NODE_TYPE_CONFIG];
 
-  // Get classification values
+  // Get classification values (v0.19.0: traits removed, 2 axes only)
   const realm = (data.realm || 'shared') as Realm;
   const layer = (config?.layer || data.layer || 'foundation') as Layer;
-  const trait = (data.trait || 'defined') as Trait;
 
   // Use LAYER color as the primary node color (from generated taxonomy)
   const layerColor = LAYER_COLORS[layer]?.color || '#64748b';
   const realmColor = REALM_COLORS[realm]?.color || '#2aa198';
-  const traitColor = TRAIT_COLORS[trait]?.color || '#3b82f6';
 
   const {
     isHovered,
@@ -126,13 +111,6 @@ export const SchemaNode = memo(function SchemaNode({
         ? NODE_DESIGN.shadows.glowHover(layerColor)
         : NODE_DESIGN.shadows.glow(layerColor),
   }), [layerColor, selected, isHovered]);
-
-  const traitBorder = TRAIT_BORDER_STYLES[trait] || TRAIT_BORDER_STYLES.defined; // v11.8: ADR-024
-  const traitBorderStyle = useMemo(() => ({
-    borderStyle: traitBorder.style,
-    borderWidth: `${traitBorder.width}px`,
-    borderColor: `${layerColor}60`,
-  }), [traitBorder.style, traitBorder.width, layerColor]);
 
   return (
     <div
@@ -167,17 +145,15 @@ export const SchemaNode = memo(function SchemaNode({
             selected && glassClasses.medium,
             selected && 'animate-float',
             isHovered && !selected && 'animate-shimmer-sweep',
-            traitBorder.className
           )}
           style={{
             width: 280,
             minHeight: 160,
             borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${layerColor}` : undefined,
-            borderStyle: selected ? undefined : (traitBorderStyle.borderStyle as React.CSSProperties['borderStyle']),
-            borderWidth: selected ? undefined : traitBorderStyle.borderWidth,
-            borderColor: selected ? undefined : traitBorderStyle.borderColor,
+            border: selected
+              ? `${NODE_DESIGN.border.innerSelected}px solid ${layerColor}`
+              : `2px solid ${layerColor}60`,
             boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(layerColor) : undefined,
             // CSS variable for animation color
             '--pulse-color': `${layerColor}60`,
@@ -227,7 +203,7 @@ export const SchemaNode = memo(function SchemaNode({
                 />
               </div>
 
-              {/* 3 Stacked badges with design system colors */}
+              {/* 2 Stacked badges: Realm + Layer (v0.19.0: traits removed) */}
               <div className="flex flex-col gap-2 items-end">
                 <GlowBadge
                   label={realm.toUpperCase()}
@@ -238,11 +214,6 @@ export const SchemaNode = memo(function SchemaNode({
                   label={layer.toUpperCase().replace(/-/g, ' ')}
                   icon={<LayerIcon layer={layer} size={12} strokeWidth={2} style={{ color: layerColor }} />}
                   color={layerColor}
-                />
-                <GlowBadge
-                  label={trait.toUpperCase()}
-                  icon={<TraitIcon trait={trait} size={12} strokeWidth={2} style={{ color: traitColor }} />}
-                  color={traitColor}
                 />
               </div>
             </div>

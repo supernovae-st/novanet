@@ -3,11 +3,12 @@
 /**
  * FacetFilterPanel - Faceted filter panel for Query mode
  *
- * Four facet sections:
+ * Three facet sections:
  * - Realms (2): shared, org
  * - Layers (9): config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
- * - Traits (5): defined, authored, imported, generated, retrieved (v0.12.0: ADR-024)
  * - Arc Families (5): ownership, localization, semantic, generation, mining
+ *
+ * Note: Traits (ADR-024) were deprecated in v0.19.0. Classification is now Realm + Layer only.
  *
  * Reads/writes filterStore facet state.
  * Uses Sidebar compound component for consistent styling.
@@ -24,11 +25,6 @@ import {
   FileOutput,
   Settings,
   Brain,
-  Lock,
-  Languages,
-  BookOpen,
-  Sparkles,
-  Cpu,
   Link,
   ArrowRightLeft,
   Waypoints,
@@ -37,13 +33,12 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
-import type { Realm, Layer, Trait } from '@novanet/core/types';
+import type { Realm, Layer } from '@novanet/core/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { iconSizes } from '@/design/tokens';
 import {
   REALM_COLORS,
   LAYER_COLORS,
-  TRAIT_COLORS,
   ARC_FAMILY_COLORS,
 } from '@/design/colors';
 import { Sidebar } from './SidebarContent';
@@ -71,15 +66,6 @@ const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
   { key: 'output', label: 'Generated Output', icon: FileOutput },
 ];
 
-// v0.12.0: renamed per ADR-024 Data Origin
-const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [
-  { key: 'defined', label: 'Defined', icon: Lock },
-  { key: 'authored', label: 'Authored', icon: Languages },
-  { key: 'imported', label: 'Imported', icon: BookOpen },
-  { key: 'generated', label: 'Generated', icon: Sparkles },
-  { key: 'retrieved', label: 'Retrieved', icon: Cpu },
-];
-
 const ARC_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
   { key: 'ownership', label: 'Ownership', icon: Link },
   { key: 'localization', label: 'Localization', icon: ArrowRightLeft },
@@ -101,21 +87,17 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
 }: FacetFilterPanelProps) {
   const {
     realmFilter,
-    traitFilter,
     layerFilter,
     arcFamilyFilter,
     toggleRealm,
-    toggleTrait,
     toggleLayer,
     toggleArcFamily,
   } = useFilterStore(
     useShallow((s) => ({
       realmFilter: s.realmFilter,
-      traitFilter: s.traitFilter,
       layerFilter: s.layerFilter,
       arcFamilyFilter: s.arcFamilyFilter,
       toggleRealm: s.toggleRealm,
-      toggleTrait: s.toggleTrait,
       toggleLayer: s.toggleLayer,
       toggleArcFamily: s.toggleArcFamily,
     }))
@@ -123,7 +105,6 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
 
   const realmSet = useMemo(() => new Set(realmFilter), [realmFilter]);
   const layerSet = useMemo(() => new Set(layerFilter), [layerFilter]);
-  const traitSet = useMemo(() => new Set(traitFilter), [traitFilter]);
   const arcFamilySet = useMemo(() => new Set(arcFamilyFilter), [arcFamilyFilter]);
 
   // Section-level tri-state: all checked, some, none
@@ -138,12 +119,6 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     if (layerSet.size === LAYERS.length) return 'all' as const;
     return 'partial' as const;
   }, [layerSet]);
-
-  const traitCheckboxState = useMemo(() => {
-    if (traitSet.size === 0) return 'none' as const;
-    if (traitSet.size === TRAITS.length) return 'all' as const;
-    return 'partial' as const;
-  }, [traitSet]);
 
   const arcFamilyCheckboxState = useMemo(() => {
     if (arcFamilySet.size === 0) return 'none' as const;
@@ -173,17 +148,6 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     }
   }, [layerCheckboxState]);
 
-  // Toggle all traits
-  const handleTraitSectionClick = useCallback(() => {
-    const allKeys = TRAITS.map((t) => t.key);
-    const store = useFilterStore.getState();
-    if (traitCheckboxState !== 'none') {
-      store.setTraitFilter([]);
-    } else {
-      store.setTraitFilter(allKeys);
-    }
-  }, [traitCheckboxState]);
-
   // Toggle all arc families
   const handleArcFamilySectionClick = useCallback(() => {
     const allKeys = ARC_FAMILIES.map((f) => f.key);
@@ -196,7 +160,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
   }, [arcFamilyCheckboxState]);
 
   // Active facet count
-  const activeFacetCount = realmSet.size + layerSet.size + traitSet.size + arcFamilySet.size;
+  const activeFacetCount = realmSet.size + layerSet.size + arcFamilySet.size;
 
   return (
     <Sidebar.Content
@@ -267,30 +231,6 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
               color={LAYER_COLORS[key].color}
               isSelected={layerSet.has(key)}
               onToggle={() => toggleLayer(key)}
-            />
-          ))}
-        </Sidebar.Section>
-
-        {/* Traits Section */}
-        <Sidebar.Section
-          id="facet-traits"
-          label="Traits"
-          icon={<Sparkles className={iconSizes.sm} />}
-          color={TRAIT_COLORS.defined.color}
-          checkboxState={traitCheckboxState}
-          onCheckboxClick={handleTraitSectionClick}
-          count={TRAITS.length}
-          defaultExpanded
-        >
-          {TRAITS.map(({ key, label, icon: Icon }) => (
-            <Sidebar.Row
-              key={key}
-              id={`facet-trait-${key}`}
-              label={label}
-              icon={<Icon className={iconSizes.sm} />}
-              color={TRAIT_COLORS[key].color}
-              isSelected={traitSet.has(key)}
-              onToggle={() => toggleTrait(key)}
             />
           ))}
         </Sidebar.Section>

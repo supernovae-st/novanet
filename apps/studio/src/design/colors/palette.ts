@@ -182,7 +182,6 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   HAS_IDENTITY: 'ownership',
   HAS_VOICE: 'ownership',
   HAS_CULTURE: 'ownership',
-  HAS_MARKET: 'ownership',
   HAS_LEXICON: 'ownership',
   OF_TYPE: 'ownership',
   OF_CLASS: 'ownership', // v0.12.0 ADR-023: was OF_KIND
@@ -231,8 +230,6 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   TARGETS: 'mining',
   HAS_VARIATION: 'mining',
   HAS_SNAPSHOT: 'mining',
-  HAS_CITATION: 'mining',
-  HAS_REFORMULATION: 'mining',
 };
 
 /**

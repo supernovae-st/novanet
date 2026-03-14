@@ -6,16 +6,16 @@
  * Features:
  * - Side-by-side layout: info left, 3D preview right
  * - Type badge with layer icon
- * - Classification grid (realm, layer, trait)
+ * - Classification grid (realm, layer)
  * - Content, triggers, and provenance (v0.20.0)
  * - Copy key functionality
  */
 
 import { memo } from 'react';
 import dynamic from 'next/dynamic';
-import { Hash, MapPin, Layers, Sparkles, Tag, Database } from 'lucide-react';
+import { Hash, MapPin, Layers, Tag, Database } from 'lucide-react';
 import { CLASS_TAXONOMY } from '@novanet/core/types';
-import type { Layer, Realm, Trait } from '@novanet/core/types';
+import type { Layer, Realm } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
@@ -23,13 +23,10 @@ import {
   gapTokens,
   REALM_DISPLAY_NAMES,
   LAYER_DISPLAY_NAMES,
-  TRAIT_DISPLAY_NAMES,
   getRealmColor,
   getLayerColor,
-  getTraitColor,
   type RealmKey,
   type LayerKey,
-  type TraitKey,
 } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 import type { NodeTypeConfig } from '@/config/nodeTypes';
@@ -54,7 +51,7 @@ interface OverviewTabProps {
 }
 
 /**
- * Classification chip - shows realm, layer, or trait
+ * Classification chip - shows realm or layer
  */
 function ClassificationChip({
   icon: Icon,
@@ -145,8 +142,6 @@ export const OverviewTab = memo(function OverviewTab({
   const classification = CLASS_TAXONOMY[node.type];
   const realm = (classification?.realm ?? 'org') as RealmKey;
   const layer = (config?.layer ?? 'foundation') as LayerKey;
-  const trait = (classification?.trait ?? 'defined') as TraitKey; // v11.8: ADR-024
-
   return (
     <div className="p-4 space-y-6">
       {/* Header card with side-by-side layout: Info left, 3D right */}
@@ -200,7 +195,6 @@ export const OverviewTab = memo(function OverviewTab({
             <NodePreview3DSimple
               layer={layer as Layer}
               realm={realm as Realm}
-              trait={trait as Trait}
               size={100}
             />
           </div>
@@ -210,7 +204,7 @@ export const OverviewTab = memo(function OverviewTab({
       {/* Classification grid */}
       <div>
         <h4 className="text-xs font-medium text-white/40 mb-3">Classification</h4>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <ClassificationChip
             icon={MapPin}
             label="Realm"
@@ -222,12 +216,6 @@ export const OverviewTab = memo(function OverviewTab({
             label="Layer"
             value={LAYER_DISPLAY_NAMES[layer] || layer}
             color={getLayerColor(layer).color}
-          />
-          <ClassificationChip
-            icon={Sparkles}
-            label="Trait"
-            value={TRAIT_DISPLAY_NAMES[trait] || trait}
-            color={getTraitColor(trait).color}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Realm, Layer, Trait, NodeType } from '@novanet/core/types';
+import type { Realm, Layer, NodeType } from '@novanet/core/types';
 import type { FilterPreset } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES, NODE_LAYERS } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
@@ -29,7 +29,6 @@ interface ExtendedFilterState {
 
   // Navigation query facets (v9 Phase 6)
   realmFilter: Realm[];
-  traitFilter: Trait[];
   arcFamilyFilter: string[];
 
   // Schema mode collapsed groups (Task 3.1)
@@ -58,8 +57,6 @@ interface FilterStoreState extends ExtendedFilterState {
   // Navigation query facet actions (v9 Phase 6)
   setRealmFilter: (realms: Realm[]) => void;
   toggleRealm: (realm: Realm) => void;
-  setTraitFilter: (traits: Trait[]) => void;
-  toggleTrait: (trait: Trait) => void;
   setArcFamilyFilter: (families: string[]) => void;
   toggleArcFamily: (family: string) => void;
 
@@ -110,7 +107,6 @@ export const useFilterStore = create<FilterStoreState>()(
 
       // Navigation query facets (v9 Phase 6)
       realmFilter: [],
-      traitFilter: [],
       arcFamilyFilter: [],
 
       // Schema mode collapsed groups initial state (Task 3.1)
@@ -239,25 +235,6 @@ export const useFilterStore = create<FilterStoreState>()(
         });
       },
 
-      setTraitFilter: (traits) => {
-        set((state) => {
-          state.traitFilter = traits;
-          state.activePresetId = null;
-        });
-      },
-
-      toggleTrait: (trait) => {
-        set((state) => {
-          const idx = state.traitFilter.indexOf(trait);
-          if (idx >= 0) {
-            state.traitFilter.splice(idx, 1);
-          } else {
-            state.traitFilter.push(trait);
-          }
-          state.activePresetId = null;
-        });
-      },
-
       setArcFamilyFilter: (families) => {
         set((state) => {
           state.arcFamilyFilter = families;
@@ -319,7 +296,6 @@ export const useFilterStore = create<FilterStoreState>()(
           state.localeFamily = null;
           // Reset navigation query facets (v9 Phase 6)
           state.realmFilter = [];
-          state.traitFilter = [];
           state.arcFamilyFilter = [];
         });
       },
@@ -500,7 +476,6 @@ export const useFilterStore = create<FilterStoreState>()(
         localeFamily: state.localeFamily,
         // Navigation query facets (v9 Phase 6)
         realmFilter: state.realmFilter,
-        traitFilter: state.traitFilter,
         arcFamilyFilter: state.arcFamilyFilter,
         // Schema mode collapsed groups (Task 3.1)
         collapsedRealms: state.collapsedRealms,
@@ -523,7 +498,6 @@ export const useFilterStore = create<FilterStoreState>()(
             activeOnly: false,
             localeFamily: null,
             realmFilter: [],
-            traitFilter: [],
             arcFamilyFilter: [],
             collapsedRealms: [],
             collapsedLayers: [],

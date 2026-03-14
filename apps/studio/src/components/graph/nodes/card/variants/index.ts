@@ -5,12 +5,12 @@
  * Based on taxonomy visual encoding (ADR-005).
  *
  * Two variant systems:
- * 1. Layer Variants - Visual encoding based on Realm/Layer/Trait
+ * 1. Layer Variants - Visual encoding based on Realm/Layer
  * 2. Level Variants - Visual encoding based on abstraction level (Taxonomy/Schema/Data)
  */
 
 // =============================================================================
-// Layer Variants (ADR-005: Realm/Layer/Trait encoding)
+// Layer Variants (ADR-005: Realm/Layer encoding)
 // =============================================================================
 
 export {
@@ -22,19 +22,14 @@ export {
   // Border color variants
   REALM_BORDERS,
   getRealmBorderClass,
-  // Border style variants
-  TRAIT_BORDER_CLASSES,
-  getTraitBorderClass,
   // Combined card function
   getLayerCardClasses,
   type LayerCardVariantProps,
   // Badge variants
   LAYER_BADGE_CLASSES,
   REALM_BADGE_CLASSES,
-  TRAIT_BADGE_CLASSES,
   getLayerBadgeClass,
   getRealmBadgeClass,
-  getTraitBadgeClass,
   // Taxonomy badge
   getTaxonomyBadgeClasses,
   type TaxonomyBadgeVariants,

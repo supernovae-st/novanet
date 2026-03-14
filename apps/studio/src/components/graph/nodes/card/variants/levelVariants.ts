@@ -8,7 +8,7 @@
  * - NovaNet-specific requirements (ADR-005)
  *
  * 3 Levels:
- * - TAXONOMY (21 nodes): Realm, Layer, Trait, ArcFamily — the classification system
+ * - TAXONOMY (17 nodes): Realm, Layer, ArcFamily — the classification system
  * - SCHEMA (218 nodes): 59 NodeClass + 159 ArcClass — definitions (v0.18.0)
  * - DATA (∞ instances): Runtime data instances — actual content
  *
@@ -371,7 +371,7 @@ export function getLevelStyles(level: NodeLevel, glowColor?: string): LevelStyle
 // Utility: Determine Level from Node Data
 // =============================================================================
 
-/** Taxonomy node types (21) */
+/** Taxonomy node types (17) — v0.19.0: Traits removed (ADR-024 deprecated) */
 export const TAXONOMY_TYPES = new Set([
   // Realms (2)
   'Realm', 'NodeRealm',
@@ -379,8 +379,6 @@ export const TAXONOMY_TYPES = new Set([
   'Layer', 'NodeLayer',
   'ConfigLayer', 'LocaleLayer', 'GeographyLayer', 'KnowledgeLayer',
   'FoundationLayer', 'StructureLayer', 'SemanticLayer', 'InstructionLayer', 'OutputLayer',
-  // Traits (5)
-  'Trait', 'NodeTrait',
   // Arc Families (5)
   'ArcFamily',
 ]);
@@ -396,7 +394,7 @@ export const SCHEMA_TYPES = new Set([
  * Determine the abstraction level of a node
  *
  * Uses type name to classify:
- * - Taxonomy: Realm, Layer, Trait, ArcFamily
+ * - Taxonomy: Realm, Layer, ArcFamily
  * - Schema: NodeClass, ArcClass (or any type ending in "Class")
  * - Data: Everything else (actual instances)
  */

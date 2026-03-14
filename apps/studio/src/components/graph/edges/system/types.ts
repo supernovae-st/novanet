@@ -18,7 +18,7 @@ export type RelationCategory =
   | 'generation'    // HAS_NATIVE, HAS_INSTRUCTION
   | 'semantic'      // USES_ENTITY, SEMANTIC
   | 'seo'           // TARGETS_SEO, HAS_VARIATION
-  | 'geo'           // TARGETS_GEO, HAS_CITATION
+  | 'geo'           // TARGETS_GEO
   | 'reference';    // USES, MODEL, PROVIDER, FALLBACK
 
 /**
@@ -48,8 +48,6 @@ export type RelationType =
   | 'HAS_SNAPSHOT'
   // GEO
   | 'TARGETS_GEO'
-  | 'HAS_CITATION'
-  | 'HAS_REFORMULATION'
   // Reference
   | 'USES'
   | 'FALLBACK_TO'

@@ -12,14 +12,12 @@ import type { Layer, Realm } from '@novanet/core/types';
 import {
   LAYER_HEX,
   REALM_HEX,
-  TRAIT_HEX,
   ARC_FAMILY_HEX,
 } from '@/design/colors/palette';
 
 // Re-export unified colors for 3D rendering
 export const LAYER_COLORS: Record<Layer, string> = LAYER_HEX;
 export const REALM_COLORS: Record<Realm, string> = REALM_HEX;
-export const TRAIT_COLORS = TRAIT_HEX;
 export const ARC_FAMILY_COLORS = ARC_FAMILY_HEX;
 
 // Helper to convert hex to THREE.js color number
