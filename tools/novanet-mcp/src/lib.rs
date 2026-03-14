@@ -32,7 +32,6 @@ pub mod metrics;
 pub mod neo4j;
 pub mod prompts;
 pub mod resources;
-pub mod rlm;
 pub mod schema_cache;
 pub mod server;
 pub mod tokens;
