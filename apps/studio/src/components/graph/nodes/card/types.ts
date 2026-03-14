@@ -2,14 +2,13 @@
  * Card Type System - 3-Level Architecture
  *
  * Unified type definitions for the NovaNet card system:
- * - Level 1: Taxonomy (21 nodes) - Realm, Layer, Trait, ArcFamily
+ * - Level 1: Taxonomy - Realm, Layer, ArcFamily
  * - Level 2: Schema (218 nodes) - 59 NodeClass + 159 ArcClass (v0.18.0)
  * - Level 3: Data (∞ instances) - Runtime instances per layer
  *
  * Visual Encoding (ADR-005):
  * - Fill color → Layer
  * - Border color → Realm
- * - Border style → Trait
  * - Arc stroke → ArcFamily
  */
 
@@ -17,30 +16,12 @@ import type { PerformanceTier, PerformanceConfig } from '@/contexts/PerformanceC
 import type {
   RealmKey,
   LayerKey,
-  TraitKey,
   ArcFamilyKey,
 } from '@/design/colors';
 
 // Re-export for convenience
-export type { RealmKey, LayerKey, TraitKey, ArcFamilyKey };
+export type { RealmKey, LayerKey, ArcFamilyKey };
 export type { PerformanceTier, PerformanceConfig };
-
-// =============================================================================
-// Visual Encoding - Trait Border Styles (ADR-005)
-// =============================================================================
-
-export interface TraitBorderStyle {
-  style: 'solid' | 'dashed' | 'double' | 'dotted';
-  width: number;
-}
-
-export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
-  defined: { style: 'solid', width: 2 },
-  authored: { style: 'dashed', width: 2 },
-  imported: { style: 'double', width: 3 },
-  generated: { style: 'dotted', width: 2 },
-  retrieved: { style: 'dotted', width: 1 },
-};
 
 // =============================================================================
 // Base Node Data
@@ -86,7 +67,7 @@ export type NodeLevel = 'taxonomy' | 'schema' | 'data';
 // Level 1: Taxonomy (21 nodes)
 // -----------------------------------------------------------------------------
 
-export type TaxonomyVariant = 'realm' | 'layer' | 'trait' | 'arcFamily';
+export type TaxonomyVariant = 'realm' | 'layer' | 'arcFamily';
 
 export interface TaxonomyNodeData extends BaseNodeData {
   level: 'taxonomy';
@@ -114,13 +95,6 @@ export interface LayerTaxonomyData extends TaxonomyNodeData {
   nodeClassCount: number;
 }
 
-export interface TraitTaxonomyData extends TaxonomyNodeData {
-  variant: 'trait';
-  traitKey: TraitKey;
-  borderStyle: TraitBorderStyle;
-  nodeClassCount: number;
-}
-
 export interface ArcFamilyTaxonomyData extends TaxonomyNodeData {
   variant: 'arcFamily';
   familyKey: ArcFamilyKey;
@@ -138,7 +112,6 @@ export interface SchemaNodeData extends BaseNodeData {
   variant: SchemaVariant;
   realm: RealmKey;
   layer: LayerKey;
-  trait: TraitKey;
   propCount?: number;
   description?: string;
 }
@@ -167,7 +140,6 @@ export interface DataNodeData extends BaseNodeData {
   level: 'data';
   realm: RealmKey;
   layer: LayerKey;
-  trait: TraitKey;
   /** Class name (e.g., 'Page', 'Entity', 'Block') */
   className: string;
   /** Layer-specific data passed via layerData */
@@ -216,7 +188,6 @@ export interface OutputInstanceData extends DataNodeData {
 export type TaxonomyNodeDataUnion =
   | RealmTaxonomyData
   | LayerTaxonomyData
-  | TraitTaxonomyData
   | ArcFamilyTaxonomyData;
 
 export type SchemaNodeDataUnion = NodeClassData | ArcClassData;

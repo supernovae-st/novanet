@@ -40,7 +40,6 @@ import {
   type PerformanceConfig,
   TIER_CONFIGS,
 } from '@/contexts/PerformanceContext';
-import { type NodeTrait, TRAIT_BORDERS } from './taxonomyColors';
 
 // =============================================================================
 // Types
@@ -80,10 +79,6 @@ export interface CardShellProps {
   width?: number;
   /** Minimum card height in pixels (default: auto) */
   minHeight?: number;
-
-  // Taxonomy visual encoding (ADR-005)
-  /** Node trait for border style (solid/dashed/dotted/double) */
-  trait?: NodeTrait;
 
   // Feature toggles (all default to true)
   /** Show selection pulse ring effect (default: true) */
@@ -140,9 +135,6 @@ export const CardShell = memo(function CardShell({
   // Sizing
   width = 200,
   minHeight,
-
-  // Taxonomy (ADR-005)
-  trait,
 
   // Features (defaults = true)
   showPulseRing = true,
@@ -201,19 +193,6 @@ export const CardShell = memo(function CardShell({
   const innerRadius = borderRadius - 4;
   const innerSelectedRadius = borderRadius - 6;
 
-  // Trait border style (ADR-005: border style encodes data origin)
-  const traitBorderStyle = useMemo(() => {
-    if (!trait) return {};
-    const traitInfo = TRAIT_BORDERS[trait];
-    return {
-      borderStyle: traitInfo.style,
-      borderWidth: traitInfo.width,
-      borderColor: selected
-        ? colors.primary
-        : `${colors.primary}80`, // 50% opacity when not selected
-    };
-  }, [trait, colors.primary, selected]);
-
   // Context for render props (now includes performance info)
   const context: CardContext = useMemo(() => ({
     colors,
@@ -267,15 +246,12 @@ export const CardShell = memo(function CardShell({
             minHeight,
             borderRadius: selected ? innerSelectedRadius : innerRadius,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            // Apply trait border when not selected, primary border when selected
             ...(selected
               ? {
                   border: `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}`,
                   boxShadow: NODE_DESIGN.shadows.skeuomorphic(colors.primary),
                 }
-              : trait
-                ? traitBorderStyle
-                : {}),
+              : {}),
           }}
         >
           {/* Glassmorphism effects (performance-aware) */}

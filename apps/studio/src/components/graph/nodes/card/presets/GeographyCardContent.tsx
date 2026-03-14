@@ -7,7 +7,6 @@
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = geography) → emerald #10b981
- * - Border style → solid (defined trait)
  * - Shows hierarchy context (continent > region > country)
  *
  * Layout:
@@ -28,7 +27,7 @@ import { cn } from '@/lib/utils';
 import { Globe, Flag, MapPin, Map, Landmark, Banknote, Building2, type LucideIcon } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../CardShell';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 import { TaxonomyBadge } from '../TaxonomyBadge';
 
 // =============================================================================
@@ -73,7 +72,6 @@ export interface GeographyNodeData {
 export interface GeographyTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface GeographyCardContentProps extends CardContext {
@@ -194,14 +192,12 @@ export const GeographyCardContent = memo(function GeographyCardContent({
           <TaxonomyBadge
             layer={taxonomy.layer}
             realm={taxonomy.realm}
-            trait={taxonomy.trait}
             className={data.type}
             selected={selected}
             isHovered={isHovered}
             performanceConfig={performanceConfig}
             size="sm"
             showLayerLabel={true}
-            showTraitIndicator={true}
           />
         </div>
       ) : (

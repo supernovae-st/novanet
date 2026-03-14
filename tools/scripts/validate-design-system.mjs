@@ -224,43 +224,6 @@ function loadRealms(taxonomy) {
   return realms;
 }
 
-/**
- * Load node traits from individual YAML files (v0.12.5+)
- * Falls back to taxonomy.node_traits if individual files don't exist
- */
-function loadTraits(taxonomy) {
-  // First, check if node_traits exists in taxonomy (legacy format)
-  if (taxonomy?.node_traits?.length > 0) {
-    return taxonomy.node_traits;
-  }
-
-  // v0.12.5+: Load from individual files
-  const traitsDir = join(ROOT, 'packages/core/models/traits');
-  if (!existsSync(traitsDir)) {
-    logWarn('traits directory not found');
-    return [];
-  }
-
-  const traits = [];
-  const files = readdirSync(traitsDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
-
-  for (const file of files) {
-    const content = loadYaml(`packages/core/models/traits/${file}`);
-    if (content?.trait) {
-      traits.push({
-        key: content.trait.key,
-        border_style: content.trait.border_style,
-        color: content.trait.color,
-      });
-    }
-  }
-
-  if (traits.length > 0) {
-    logInfo(`Loaded ${traits.length} traits from individual YAML files`);
-  }
-
-  return traits;
-}
 
 // =============================================================================
 // Validators
@@ -601,18 +564,6 @@ function validateLayers(realms, hierarchyTS, layersTS) {
   }
 }
 
-function validateTraits(traits, typesTS) {
-  logSection('Node Traits (v0.19.0: DEPRECATED)');
-
-  // v0.19.0: Traits removed from schema (ADR-024 deprecated)
-  // Provenance is now tracked per-instance on nodes that need it
-  if (traits.length === 0) {
-    logOk('Traits correctly removed from schema (v0.19.0 ADR-024 deprecated)');
-    return;
-  }
-
-  logWarn(`${traits.length} traits still found — expected 0 after v0.19.0 deprecation`);
-}
 
 function validateNodeCounts(layersTS) {
   logSection('Node Counts (layers.ts consistency)');
@@ -703,15 +654,6 @@ function validateNodeCounts(layersTS) {
   }
 }
 
-function validateVisualEncodingTraits(visualEncoding, traits) {
-  logSection('Visual Encoding Trait Icons (v0.19.0: DEPRECATED)');
-
-  // v0.19.0: Traits deprecated — icons may still exist for backward compat
-  if (traits.length === 0) {
-    logOk('Traits deprecated — skipping visual encoding trait validation');
-    return;
-  }
-}
 
 function validateVisualEncodingLayers(visualEncoding) {
   logSection('Visual Encoding Layer Icons');
@@ -764,7 +706,6 @@ async function main() {
   }
 
   const realms = loadRealms(taxonomy);
-  const traits = loadTraits(taxonomy);
 
   // Run validations - Arc System (v0.12.0)
   validateArcFamilies(arcFamilies, arcFamilyPalettesTS, generatedTS);
@@ -781,9 +722,7 @@ async function main() {
   if (hierarchyTS && layersTS) {
     validateRealms(realms, hierarchyTS);
     validateLayers(realms, hierarchyTS, layersTS);
-    validateTraits(traits, typesTS);
     validateNodeCounts(layersTS);
-    validateVisualEncodingTraits(visualEncoding, traits);
     validateVisualEncodingLayers(visualEncoding);
   } else {
     logWarn('Skipping taxonomy structure validation (missing hierarchy.ts or layers.ts)');

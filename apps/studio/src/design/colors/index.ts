@@ -26,10 +26,3 @@ export {
   getFacetHex,
 } from './generated';
 
-// v0.17.3 (ADR-036): Trait colors defined locally in palette.ts, not auto-generated
-export {
-  type TraitKey,
-  TRAIT_COLORS,
-  TRAIT_DISPLAY_NAMES,
-  getTraitColor,
-} from './palette';

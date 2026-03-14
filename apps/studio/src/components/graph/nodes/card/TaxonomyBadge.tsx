@@ -3,11 +3,10 @@
 /**
  * TaxonomyBadge - Visual encoding component for taxonomy classification
  *
- * Displays Layer, Realm, Trait, and Class visual encoding prominently.
+ * Displays Layer, Realm, and Class visual encoding prominently.
  * Follows ADR-005 Visual Encoding:
  * - Layer → Fill color (primary identification)
  * - Realm → Border color badge
- * - Trait → Border style indicator
  * - Class → Icon with glow
  *
  * Usage:
@@ -15,7 +14,6 @@
  * <TaxonomyBadge
  *   layer="knowledge"
  *   realm="shared"
- *   trait="imported"
  *   className="Term"
  * />
  * ```
@@ -27,17 +25,14 @@ import { cn } from '@/lib/utils';
 import {
   type NodeLayer,
   type NodeRealm,
-  type NodeTrait,
   LAYER_COLORS,
   LAYER_DISPLAY_NAMES,
   REALM_COLORS,
-  TRAIT_BORDERS,
   getClassIcon,
   hexToRgba,
 } from './taxonomyColors';
 import { DURATIONS } from './animationPresets';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { TraitIndicatorAnimated } from './effects/TraitGlow';
 
 // =============================================================================
 // Types
@@ -48,8 +43,6 @@ export interface TaxonomyBadgeProps {
   layer: NodeLayer;
   /** Node realm (determines border color) */
   realm: NodeRealm;
-  /** Node trait / Data Origin (determines border style) */
-  trait: NodeTrait;
   /** Node class name (determines icon) */
   className: string;
   /** Whether the node is selected */
@@ -62,8 +55,6 @@ export interface TaxonomyBadgeProps {
   size?: 'sm' | 'md' | 'lg';
   /** Show layer name label */
   showLayerLabel?: boolean;
-  /** Show trait indicator line */
-  showTraitIndicator?: boolean;
 }
 
 // =============================================================================
@@ -154,103 +145,18 @@ function IconSVG({
 }
 
 // =============================================================================
-// Trait Indicator Component (Enhanced with animations per ADR-024)
-// =============================================================================
-
-function TraitIndicator({
-  trait,
-  color,
-  animated,
-  selected = false,
-  isHovered = false,
-  performanceConfig,
-}: {
-  trait: NodeTrait;
-  color: string;
-  animated: boolean;
-  selected?: boolean;
-  isHovered?: boolean;
-  performanceConfig?: PerformanceConfig;
-}) {
-  const traitInfo = TRAIT_BORDERS[trait];
-  const width = 40;
-
-  // Generate border pattern based on trait
-  const getBorderPattern = () => {
-    switch (traitInfo.style) {
-      case 'solid':
-        return `M0,1 L${width},1`;
-      case 'dashed':
-        return `M0,1 L8,1 M12,1 L20,1 M24,1 L32,1 M36,1 L${width},1`;
-      case 'dotted':
-        return `M2,1 L3,1 M7,1 L8,1 M12,1 L13,1 M17,1 L18,1 M22,1 L23,1 M27,1 L28,1 M32,1 L33,1 M37,1 L38,1`;
-      case 'double':
-        return `M0,0 L${width},0 M0,2 L${width},2`;
-      default:
-        return `M0,1 L${width},1`;
-    }
-  };
-
-  const Wrapper = animated ? motion.div : 'div';
-
-  return (
-    <Wrapper
-      className="flex items-center gap-1.5"
-      {...(animated && {
-        initial: { opacity: 0.7 },
-        animate: { opacity: 1 },
-        transition: { duration: DURATIONS.fast },
-      })}
-    >
-      {/* Animated trait dot indicator */}
-      <TraitIndicatorAnimated
-        trait={trait}
-        color={color}
-        selected={selected}
-        isHovered={isHovered}
-        performanceConfig={performanceConfig}
-        size="sm"
-      />
-
-      {/* Border pattern line */}
-      <svg
-        width={width}
-        height="3"
-        viewBox={`0 0 ${width} 3`}
-        className="flex-shrink-0"
-      >
-        <path
-          d={getBorderPattern()}
-          stroke={color}
-          strokeWidth={traitInfo.width}
-          fill="none"
-          strokeLinecap="round"
-        />
-      </svg>
-
-      {/* Trait label */}
-      <span className="text-[8px] text-white/50 uppercase tracking-wider">
-        {trait}
-      </span>
-    </Wrapper>
-  );
-}
-
-// =============================================================================
 // Component
 // =============================================================================
 
 export const TaxonomyBadge = memo(function TaxonomyBadge({
   layer,
   realm,
-  trait,
   className: nodeClassName,
   selected = false,
   isHovered = false,
   performanceConfig,
   size = 'md',
   showLayerLabel = true,
-  showTraitIndicator = true,
 }: TaxonomyBadgeProps) {
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
   const animationState = selected ? 'selected' : isHovered ? 'hover' : 'idle';
@@ -346,17 +252,6 @@ export const TaxonomyBadge = memo(function TaxonomyBadge({
         </div>
       </div>
 
-      {/* Trait indicator line with animated dot */}
-      {showTraitIndicator && (
-        <TraitIndicator
-          trait={trait}
-          color={layerColor}
-          animated={animationsEnabled}
-          selected={selected}
-          isHovered={isHovered}
-          performanceConfig={performanceConfig}
-        />
-      )}
     </div>
   );
 });
@@ -367,20 +262,17 @@ export const TaxonomyBadge = memo(function TaxonomyBadge({
 
 export interface TaxonomyBadgeCompactProps {
   layer: NodeLayer;
-  trait: NodeTrait;
   className: string;
   color?: string;
 }
 
 export const TaxonomyBadgeCompact = memo(function TaxonomyBadgeCompact({
   layer,
-  trait,
   className: nodeClassName,
   color,
 }: TaxonomyBadgeCompactProps) {
   const layerColor = color || LAYER_COLORS[layer];
   const iconName = getClassIcon(nodeClassName);
-  const traitInfo = TRAIT_BORDERS[trait];
 
   return (
     <div className="flex items-center gap-1.5">
@@ -390,16 +282,6 @@ export const TaxonomyBadgeCompact = memo(function TaxonomyBadgeCompact({
         style={{ color: layerColor }}
       >
         {nodeClassName}
-      </span>
-      <span
-        className="text-[8px] px-1 py-0.5 rounded"
-        style={{
-          backgroundColor: hexToRgba(layerColor, 0.15),
-          color: hexToRgba(layerColor, 0.7),
-          borderLeft: `2px ${traitInfo.style} ${layerColor}`,
-        }}
-      >
-        {trait}
       </span>
     </div>
   );

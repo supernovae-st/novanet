@@ -931,7 +931,6 @@ export {
   type ColorTokens,
   type RealmKey,
   type LayerKey,
-  type TraitKey,
   type ArcFamilyKey,
   // Realm colors (replaces realmAccents)
   REALM_COLORS,
@@ -941,10 +940,6 @@ export {
   LAYER_COLORS,
   LAYER_DISPLAY_NAMES,
   getLayerColor,
-  // Trait colors (v0.17.3 ADR-036: defined locally in palette.ts)
-  TRAIT_COLORS,
-  TRAIT_DISPLAY_NAMES,
-  getTraitColor,
   // Arc family colors
   ARC_FAMILY_COLORS,
   ARC_FAMILY_DISPLAY_NAMES,
@@ -952,7 +947,6 @@ export {
   // Utility
   getFacetHex,
 } from './colors';
-export { TRAIT_STYLES, getTraitStyle, getTraitBorderCSS } from './traitStyles';
 
 // ============================================================================
 // EXPORT ALL

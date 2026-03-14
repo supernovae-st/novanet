@@ -14,14 +14,3 @@ export {
   getAllLayers,
   getLayersByRealm,
 } from './layerTokens';
-
-export {
-  TRAIT_TOKENS,
-  type TraitToken,
-  getTraitAnimation,
-  getTraitBorderClass,
-  getTraitCreator,
-  getAllTraits,
-  getTraitBorderStyle,
-  TRAIT_ANIMATION_TIMING,
-} from './traitTokens';

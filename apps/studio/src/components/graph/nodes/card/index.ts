@@ -4,14 +4,13 @@
  * Unified card wrapper and content components for graph nodes.
  *
  * 3-Level Architecture:
- * - Level 1: Taxonomy (21 nodes) - Realm, Layer, Trait, ArcFamily
+ * - Level 1: Taxonomy - Realm, Layer, ArcFamily
  * - Level 2: Schema (218 nodes) - 59 NodeClass + 159 ArcClass (v0.18.0)
  * - Level 3: Data (∞ instances) - Runtime instances per layer
  *
  * Visual Encoding (ADR-005):
  * - Fill color → Layer
  * - Border color → Realm
- * - Border style → Trait
  *
  * Usage:
  * ```tsx
@@ -27,12 +26,11 @@
  * ```
  */
 
-// Types (3-level architecture) - excluding TRAIT_BORDERS/TraitBorderStyle (defined in taxonomyColors)
+// Types (3-level architecture)
 export {
   // Re-exported types
   type RealmKey,
   type LayerKey,
-  type TraitKey,
   type ArcFamilyKey,
   type PerformanceTier,
   type PerformanceConfig,
@@ -46,7 +44,6 @@ export {
   type TaxonomyNodeData,
   type RealmTaxonomyData,
   type LayerTaxonomyData,
-  type TraitTaxonomyData,
   type ArcFamilyTaxonomyData,
   // Schema types
   type SchemaVariant,
@@ -82,7 +79,7 @@ export * from './animationPresets';
 // Premium effects (MagicUI inspired)
 export * from './effects';
 
-// Taxonomy visual encoding (ADR-005) - includes TRAIT_BORDERS and TraitBorderStyle
+// Taxonomy visual encoding (ADR-005)
 export * from './taxonomyColors';
 export {
   TaxonomyBadge,
@@ -174,8 +171,6 @@ export {
   type ColorSwatchProps,
   TypographyPreview,
   type TypographyPreviewProps,
-  TraitBadge,
-  type TraitBadgeProps,
   SectionLabel,
   type SectionLabelProps,
   PlatformBadge,

@@ -1,13 +1,12 @@
 /**
  * Taxonomy Visual Encoding Utilities
  *
- * Maps Layer, Realm, and Trait to their visual properties.
- * Source of truth: taxonomy.yaml, visual-encoding.yaml, layer/*.yaml, trait/*.yaml
+ * Maps Layer and Realm to their visual properties.
+ * Source of truth: taxonomy.yaml, visual-encoding.yaml, layer/*.yaml
  *
  * Visual Channels (ADR-005):
  * - Fill color → Layer
  * - Border color → Realm (at 60% opacity)
- * - Border style → Trait (Data Origin)
  * - Icon → Class
  */
 
@@ -66,66 +65,6 @@ export const REALM_COLORS: Record<NodeRealm, string> = {
 export const REALM_DISPLAY_NAMES: Record<NodeRealm, string> = {
   shared: 'Shared',
   org: 'Org',
-};
-
-// =============================================================================
-// Trait Border Styles (5 traits - Data Origin per ADR-024)
-// =============================================================================
-
-export type NodeTrait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
-
-export interface TraitBorderStyle {
-  style: 'solid' | 'dashed' | 'dotted' | 'double';
-  width: number;
-  color: string;
-  /** CSS border property shorthand */
-  css: string;
-  /** Unicode character for terminal */
-  unicode: string;
-  description: string;
-}
-
-export const TRAIT_BORDERS: Record<NodeTrait, TraitBorderStyle> = {
-  defined: {
-    style: 'solid',
-    width: 2,
-    color: '#3b82f6', // blue-500
-    css: '2px solid',
-    unicode: '─',
-    description: 'Human-created ONCE',
-  },
-  authored: {
-    style: 'dashed',
-    width: 2,
-    color: '#22c55e', // green-500
-    css: '2px dashed',
-    unicode: '┄',
-    description: 'Human-written PER locale',
-  },
-  imported: {
-    style: 'dotted',
-    width: 2,
-    color: '#8b5cf6', // violet-500
-    css: '2px dotted',
-    unicode: '┈',
-    description: 'External data brought in',
-  },
-  generated: {
-    style: 'double',
-    width: 3,
-    color: '#eab308', // yellow-500
-    css: '3px double',
-    unicode: '═',
-    description: 'OUR LLM produces this',
-  },
-  retrieved: {
-    style: 'dotted',
-    width: 3,
-    color: '#6c71c4', // solarized violet
-    css: '3px dotted',
-    unicode: '┅',
-    description: 'Fetched from EXTERNAL APIs',
-  },
 };
 
 // =============================================================================
@@ -190,15 +129,6 @@ export const CLASS_ICONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Get CSS border style for a trait
- */
-export function getTraitBorderCSS(trait: NodeTrait, opacity = 1): string {
-  const border = TRAIT_BORDERS[trait];
-  const color = hexToRgba(border.color, opacity);
-  return `${border.width}px ${border.style} ${color}`;
-}
-
-/**
  * Get layer color with optional opacity
  */
 export function getLayerColor(layer: NodeLayer, opacity = 1): string {
@@ -236,7 +166,6 @@ export function getClassIcon(className: string): string {
 export interface TaxonomyContext {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
   className: string;
 }
 
@@ -251,9 +180,6 @@ export function getTaxonomyColors(ctx: TaxonomyContext) {
     // Realm = border color (60% opacity)
     realmColor: getRealmColor(ctx.realm),
     realmName: REALM_DISPLAY_NAMES[ctx.realm],
-    // Trait = border style
-    traitBorder: TRAIT_BORDERS[ctx.trait],
-    traitCSS: getTraitBorderCSS(ctx.trait),
     // Class = icon
     classIcon: getClassIcon(ctx.className),
   };

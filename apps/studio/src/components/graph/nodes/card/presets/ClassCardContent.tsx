@@ -11,7 +11,6 @@
  * Visual Encoding (ADR-005):
  * - Fill gradient → Layer (semantic=blue, foundation=purple, etc.) - 40-50% opacity
  * - Border color → Realm (shared=cyan, org=sky)
- * - Border style → Trait (solid=defined, dashed=authored, dotted=imported/generated)
  *
  * Layout (Passport Élégant):
  * ┌────────────────────────────────────────────────┐
@@ -19,7 +18,7 @@
  * │  🏛️   │                                        │
  * │ radial│       SEMANTIC                         │  ← Layer as HERO (big text)
  * │  glow │                                        │
- * │       │  ◉ defined  ⊞ 4 props                  │  ← Trait chip + Property count
+ * │       │  ⊞ 4 props                               │  ← Property count
  * │       │  ──────────────────────────────────    │
  * │       │  Entity                                │  ← Class name (key, monospace)
  * └───────┴────────────────────────────────────────┘
@@ -50,14 +49,12 @@ import { SPRING_CONFIGS } from '../animationPresets';
 import {
   REALM_COLORS,
   LAYER_COLORS,
-  TRAIT_COLORS,
   ARC_FAMILY_COLORS,
   type RealmKey,
   type LayerKey,
-  type TraitKey,
   type ArcFamilyKey,
 } from '@/design/colors';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 // TaxonomyBadge reserved for future use
 // import { TaxonomyBadge } from '../TaxonomyBadge';
 import { LEVEL_VISUALS } from '../variants/levelVariants';
@@ -77,8 +74,6 @@ export interface ClassNodeData {
   realm?: string;
   /** Layer: config, locale, semantic, etc. */
   layer?: string;
-  /** Trait: defined, authored, imported, generated, retrieved */
-  trait?: string;
   /** Property count */
   propCount?: number;
   /** For ArcClass: source node type */
@@ -97,7 +92,6 @@ export interface ClassNodeData {
 export interface ClassTaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface ClassCardContentProps extends CardContext {
@@ -130,18 +124,6 @@ const cardVariants: Variants = {
     y: -3,
     transition: SPRING_CONFIGS.smooth,
   },
-};
-
-// =============================================================================
-// Helper: Trait to border style (ADR-005)
-// =============================================================================
-
-const TRAIT_BORDER_STYLES: Record<string, string> = {
-  defined: 'solid',
-  authored: 'dashed',
-  imported: 'double',
-  generated: 'dotted',
-  retrieved: 'dotted',
 };
 
 // =============================================================================
@@ -208,12 +190,9 @@ export const ClassCardContent = memo(function ClassCardContent({
   // Get colors for each taxonomy axis
   const realmColor = REALM_COLORS[data.realm as RealmKey]?.color ?? colors.secondary;
   const layerColor = LAYER_COLORS[data.layer as LayerKey]?.color ?? colors.primary;
-  const traitColor = TRAIT_COLORS[data.trait as TraitKey]?.color ?? '#94a3b8';
   const familyColor = isArcClass && data.family
     ? ARC_FAMILY_COLORS[data.family as ArcFamilyKey]?.color ?? '#94a3b8'
     : layerColor;
-  const borderStyle = TRAIT_BORDER_STYLES[data.trait ?? 'defined'] ?? 'solid';
-
   // Primary color for effects (layer for NodeClass, family for ArcClass)
   const primaryColor = isArcClass ? familyColor : layerColor;
 
@@ -288,9 +267,6 @@ export const ClassCardContent = memo(function ClassCardContent({
     [primaryColor, selected]
   );
 
-  // Border width based on trait style
-  const borderWidth = borderStyle === 'double' ? 3 : levelVisuals.borderWidth;
-
   // Wrapper
   const CardWrapper = animationsEnabled ? motion.div : 'div';
 
@@ -300,9 +276,9 @@ export const ClassCardContent = memo(function ClassCardContent({
       style={{
         ...backgroundStyle,
         ...cardShadowStyle,
-        borderWidth,
-        borderStyle,
-        borderColor: selected ? realmColor : `${realmColor}${selected ? '80' : '50'}`,
+        borderWidth: levelVisuals.borderWidth,
+        borderStyle: 'solid',
+        borderColor: selected ? realmColor : `${realmColor}50`,
         minHeight: 110,
       }}
       {...(animationsEnabled && {
@@ -427,7 +403,7 @@ export const ClassCardContent = memo(function ClassCardContent({
           {heroText}
         </h3>
 
-        {/* CHIPS ROW: Trait chip + Property count (NodeClass) OR Source→Target (ArcClass) */}
+        {/* CHIPS ROW: Property count (NodeClass) OR Source→Target (ArcClass) */}
         <div className={cn('flex flex-wrap items-center mt-1.5', gapTokens.compact)}>
           {isArcClass ? (
             // ArcClass: Source → Target
@@ -445,22 +421,8 @@ export const ClassCardContent = memo(function ClassCardContent({
               )}
             </>
           ) : (
-            // NodeClass: Trait chip + Property count chip
+            // NodeClass: Property count chip
             <>
-              {data.trait && (
-                <Chip
-                  color={traitColor}
-                  variant="accent"
-                  icon={
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ background: traitColor, boxShadow: `0 0 4px ${traitColor}` }}
-                    />
-                  }
-                >
-                  {data.trait}
-                </Chip>
-              )}
               {data.propCount !== undefined && (
                 <Chip color={primaryColor}>
                   {data.propCount} props

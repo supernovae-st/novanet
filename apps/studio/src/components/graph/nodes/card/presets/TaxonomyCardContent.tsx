@@ -3,10 +3,9 @@
 /**
  * TaxonomyCardContent - Premium design for TAXONOMY level nodes (v0.13.1)
  *
- * Handles 4 taxonomy variants:
+ * Handles 3 taxonomy variants:
  * - Realm: shared, org (2)
  * - Layer: 10 layers across 2 realms
- * - Trait: defined, authored, imported, generated, retrieved (5)
  * - ArcFamily: ownership, localization, semantic, generation, mining (5)
  *
  * Visual Encoding (3-Level Architecture):
@@ -45,7 +44,6 @@ import { gapTokens } from '@/design/tokens';
 import {
   Globe,
   Layers,
-  Tag,
   GitBranch,
   type LucideIcon,
 } from 'lucide-react';
@@ -55,11 +53,9 @@ import { SPRING_CONFIGS } from '../animationPresets';
 import {
   REALM_COLORS,
   LAYER_COLORS,
-  TRAIT_COLORS,
   ARC_FAMILY_COLORS,
   type RealmKey,
   type LayerKey,
-  type TraitKey,
   type ArcFamilyKey,
 } from '@/design/colors';
 import { MotionTechCorners } from '../../effects';
@@ -73,7 +69,7 @@ import {
 // Types
 // =============================================================================
 
-export type TaxonomyVariant = 'realm' | 'layer' | 'trait' | 'arcFamily';
+export type TaxonomyVariant = 'realm' | 'layer' | 'arcFamily';
 
 export interface TaxonomyNodeData {
   id: string;
@@ -112,14 +108,12 @@ export interface TaxonomyCardContentProps extends CardContext {
 const VARIANT_ICONS: Record<TaxonomyVariant, LucideIcon> = {
   realm: Globe,
   layer: Layers,
-  trait: Tag,
   arcFamily: GitBranch,
 };
 
 const VARIANT_LABELS: Record<TaxonomyVariant, string> = {
   realm: 'REALM',
   layer: 'LAYER',
-  trait: 'TRAIT',
   arcFamily: 'ARC FAMILY',
 };
 
@@ -172,8 +166,6 @@ function getVariantColor(data: TaxonomyNodeData): string {
       return REALM_COLORS[data.key as RealmKey]?.color ?? '#8b5cf6';
     case 'layer':
       return LAYER_COLORS[data.key as LayerKey]?.color ?? '#6366f1';
-    case 'trait':
-      return TRAIT_COLORS[data.key as TraitKey]?.color ?? '#10b981';
     case 'arcFamily':
       return ARC_FAMILY_COLORS[data.key as ArcFamilyKey]?.color ?? '#f59e0b';
     default:
@@ -219,10 +211,6 @@ export const TaxonomyCardContent = memo(function TaxonomyCardContent({
         return [
           { label: 'NodeClasses', value: data.nodeClassCount ?? 0 },
           { label: 'Realm', value: data.realmKey ?? '—' },
-        ];
-      case 'trait':
-        return [
-          { label: 'NodeClasses', value: data.nodeClassCount ?? 0 },
         ];
       case 'arcFamily':
         return [

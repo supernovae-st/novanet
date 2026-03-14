@@ -13,7 +13,6 @@
  * Enhanced with optional TaxonomyBadge support for full visual encoding (ADR-005):
  * - Layer → Fill color
  * - Realm → Border color
- * - Trait → Border style + animation
  *
  * Layout:
  * ┌─────────────────────────────────────────┐
@@ -36,7 +35,7 @@ import { gapTokens } from '@/design/tokens';
 import { localeToFlag } from '@/lib/localeUtils';
 import type { CardContext } from '../CardShell';
 import type { Layer } from '@novanet/core/types';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 import { TaxonomyBadge } from '../TaxonomyBadge';
 import { BorderBeam, GlowEffect } from '../effects';
 import { SPRING_CONFIGS } from '../animationPresets';
@@ -60,7 +59,6 @@ export interface StructuralNodeData {
 export interface TaxonomyProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
 }
 
 export interface StructuralCardContentProps extends CardContext {
@@ -264,14 +262,12 @@ export const StructuralCardContent = memo(function StructuralCardContent({
             <TaxonomyBadge
               layer={taxonomy.layer}
               realm={taxonomy.realm}
-              trait={taxonomy.trait}
               className={data.type}
               selected={selected}
               isHovered={isHovered}
               performanceConfig={performanceConfig}
               size="sm"
               showLayerLabel={true}
-              showTraitIndicator={true}
             />
           </div>
         ) : (

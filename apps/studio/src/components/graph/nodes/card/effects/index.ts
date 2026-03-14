@@ -33,14 +33,6 @@
 export { GlowEffect, type GlowEffectProps, type GlowIntensity } from './GlowEffect';
 export { ElectricBorder, type ElectricBorderProps, type ElectricStyle } from './ElectricBorder';
 export { Perspective3D, type Perspective3DProps } from './Perspective3D';
-export {
-  TraitGlow,
-  TraitIndicatorAnimated,
-  getGlowMode,
-  type TraitGlowProps,
-  type TraitIndicatorAnimatedProps,
-  type GlowMode,
-} from './TraitGlow';
 
 // Premium effects (v0.13.1 - wow factor)
 export { AuroraBackground, type AuroraBackgroundProps } from './AuroraBackground';
@@ -48,17 +40,6 @@ export { BorderBeam, type BorderBeamProps } from './BorderBeam';
 export { HolographicOverlay, type HolographicOverlayProps } from './HolographicOverlay';
 export { LiquidGlass, type LiquidGlassProps } from './LiquidGlass';
 export { MouseSpotlight, type MouseSpotlightProps } from './MouseSpotlight';
-
-// Trait-specific animations (v0.13.1 - ADR-024)
-export {
-  TraitAnimation,
-  TraitStatusDot,
-  TraitBadgeAnimated,
-  type TraitAnimationProps,
-  type TraitStatusDotProps,
-  type TraitBadgeAnimatedProps,
-  type AnimatableTrait,
-} from './TraitAnimation';
 
 // Pattern backgrounds (Magic UI inspired)
 export { GridPattern, DotPattern, type GridPatternProps, type DotPatternProps } from './GridPattern';

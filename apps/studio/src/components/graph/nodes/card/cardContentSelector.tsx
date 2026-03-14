@@ -8,7 +8,6 @@
  * Visual Encoding (ADR-005):
  * - Fill gradient → Layer
  * - Border color → Realm
- * - Border style → Trait
  * - Icon → Class
  *
  * Coverage: 60 node types across 10 layers (SHARED + ORG realms)
@@ -26,7 +25,7 @@ import type { CardContext } from './types';
 import { StructuralCardContent, type StructuralNodeData } from './presets/StructuralCardContent';
 
 // =============================================================================
-// TAXONOMY LEVEL (Meta-meta: Realm, Layer, Trait, ArcFamily)
+// TAXONOMY LEVEL (Meta-meta: Realm, Layer, ArcFamily)
 // =============================================================================
 import { TaxonomyCardContent, type TaxonomyNodeData } from './presets/TaxonomyCardContent';
 
@@ -194,7 +193,7 @@ export type CardContentComponent = ComponentType<CardContentProps>;
  */
 const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   // =========================================================================
-  // TAXONOMY LEVEL (M2) - Classification system (21 types: Realm, Layer, Trait, ArcFamily)
+  // TAXONOMY LEVEL (M2) - Classification system (Realm, Layer, ArcFamily)
   // Premium visual treatment: 4px border, triple glow, always-animated
   // =========================================================================
   // Realms (2)
@@ -212,9 +211,6 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   SemanticLayer: TaxonomyCardContent as CardContentComponent,
   InstructionLayer: TaxonomyCardContent as CardContentComponent,
   OutputLayer: TaxonomyCardContent as CardContentComponent,
-  // Traits (5)
-  Trait: TaxonomyCardContent as CardContentComponent,
-  NodeTrait: TaxonomyCardContent as CardContentComponent,
   // ArcFamilies (5)
   ArcFamily: TaxonomyCardContent as CardContentComponent,
 

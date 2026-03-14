@@ -7,12 +7,11 @@
  * Visual Encoding (ADR-005):
  * - Layer = fill gradient (background)
  * - Realm = border color
- * - Trait = border style + animation
  */
 
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
+import type { NodeLayer, NodeRealm } from '../taxonomyColors';
 
 // =============================================================================
 // Utility Functions
@@ -51,25 +50,12 @@ export const REALM_BORDERS: Record<NodeRealm, string> = {
 };
 
 // =============================================================================
-// Trait Border Style Variants (Tailwind classes)
-// =============================================================================
-
-export const TRAIT_BORDER_CLASSES: Record<NodeTrait, string> = {
-  defined: 'border-2 border-solid',
-  authored: 'border-2 border-dashed',
-  imported: 'border-2 border-dotted',
-  generated: 'border-[3px] [border-style:double]',
-  retrieved: 'border-[3px] border-dotted',
-};
-
-// =============================================================================
 // Combined Card Variant Function
 // =============================================================================
 
 export interface LayerCardVariantProps {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
   selected?: boolean;
   hovered?: boolean;
   className?: string;
@@ -83,7 +69,6 @@ export interface LayerCardVariantProps {
  * <div className={getLayerCardClasses({
  *   layer: 'semantic',
  *   realm: 'org',
- *   trait: 'defined',
  *   selected: isSelected
  * })}>
  *   <CardContent />
@@ -93,20 +78,17 @@ export interface LayerCardVariantProps {
 export function getLayerCardClasses({
   layer,
   realm,
-  trait,
   selected = false,
   hovered = false,
   className,
 }: LayerCardVariantProps): string {
   return cn(
     // Base styles
-    'relative overflow-hidden rounded-xl transition-all duration-200',
+    'relative overflow-hidden rounded-xl transition-all duration-200 border-2 border-solid',
     // Layer gradient
     LAYER_GRADIENTS[layer],
     // Realm border color
     REALM_BORDERS[realm],
-    // Trait border style
-    TRAIT_BORDER_CLASSES[trait],
     // Interactive states
     selected && 'ring-2 ring-white/30 ring-offset-2 ring-offset-transparent',
     hovered && 'shadow-lg shadow-white/5',
@@ -127,11 +109,6 @@ export function getLayerGradientClass(layer: NodeLayer): string {
 /** Get border color class for a realm */
 export function getRealmBorderClass(realm: NodeRealm): string {
   return REALM_BORDERS[realm];
-}
-
-/** Get border style class for a trait */
-export function getTraitBorderClass(trait: NodeTrait): string {
-  return TRAIT_BORDER_CLASSES[trait];
 }
 
 // =============================================================================
@@ -155,14 +132,6 @@ export const REALM_BADGE_CLASSES: Record<NodeRealm, string> = {
   org: 'bg-sky-500/20 text-sky-300',
 };
 
-export const TRAIT_BADGE_CLASSES: Record<NodeTrait, string> = {
-  defined: 'bg-blue-500/20 text-blue-300',
-  authored: 'bg-green-500/20 text-green-300',
-  imported: 'bg-violet-500/20 text-violet-300',
-  generated: 'bg-yellow-500/20 text-yellow-300',
-  retrieved: 'bg-purple-500/20 text-purple-300',
-};
-
 /** Get badge class for a layer */
 export function getLayerBadgeClass(layer: NodeLayer): string {
   return LAYER_BADGE_CLASSES[layer];
@@ -173,11 +142,6 @@ export function getRealmBadgeClass(realm: NodeRealm): string {
   return REALM_BADGE_CLASSES[realm];
 }
 
-/** Get badge class for a trait */
-export function getTraitBadgeClass(trait: NodeTrait): string {
-  return TRAIT_BADGE_CLASSES[trait];
-}
-
 // =============================================================================
 // Compound Badge Component Classes
 // =============================================================================
@@ -185,7 +149,6 @@ export function getTraitBadgeClass(trait: NodeTrait): string {
 export interface TaxonomyBadgeVariants {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -201,7 +164,6 @@ const BADGE_SIZES = {
 export function getTaxonomyBadgeClasses({
   layer,
   realm: _realm,
-  trait: _trait,
   size = 'md',
 }: TaxonomyBadgeVariants): string {
   return cn(

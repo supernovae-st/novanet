@@ -6,7 +6,6 @@
  * Wraps CardShell with layer-specific visual encoding (ADR-005):
  * - Layer = fill gradient (background)
  * - Realm = border color
- * - Trait = border style + animation
  *
  * This component provides the visual "skin" based on node taxonomy,
  * while CardShell handles interactions and effects.
@@ -16,7 +15,6 @@
  * <LayerCardWrapper
  *   layer="semantic"
  *   realm="org"
- *   trait="defined"
  *   selected={selected}
  *   renderContent={({ taxonomy }) => (
  *     <TaxonomyBadge {...taxonomy} />
@@ -28,10 +26,8 @@
 
 import { memo, useMemo, type ReactNode } from 'react';
 import { CardShell, type CardContext } from './CardShell';
-import { TraitGlow } from './effects/TraitGlow';
 import { LAYER_TOKENS } from '@/design/tokens/layerTokens';
-import { TRAIT_TOKENS } from '@/design/tokens/traitTokens';
-import type { NodeLayer, NodeRealm, NodeTrait } from './taxonomyColors';
+import type { NodeLayer, NodeRealm } from './taxonomyColors';
 import {
   getLayerCardClasses,
   getLayerIconGlowClass,
@@ -44,7 +40,6 @@ import {
 export interface TaxonomyInfo {
   layer: NodeLayer;
   realm: NodeRealm;
-  trait: NodeTrait;
   className?: string;
 }
 
@@ -63,8 +58,6 @@ export interface LayerCardWrapperProps {
   layer: NodeLayer;
   /** Node realm (determines border color) */
   realm: NodeRealm;
-  /** Node trait (determines border style + animation) */
-  trait: NodeTrait;
   /** Node class name for icons and badges */
   className?: string;
 
@@ -81,8 +74,6 @@ export interface LayerCardWrapperProps {
   width?: number;
   /** Minimum height in pixels */
   minHeight?: number;
-  /** Enable trait-based glow animation (default: true) */
-  enableTraitGlow?: boolean;
   /** Additional CSS classes */
   wrapperClassName?: string;
   /** Schema mode styling */
@@ -99,7 +90,6 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
   // Taxonomy
   layer,
   realm,
-  trait,
   className: nodeClassName,
 
   // State
@@ -111,14 +101,12 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
   // Options
   width = 240,
   minHeight,
-  enableTraitGlow = true,
   wrapperClassName,
   isSchemaMode = false,
   isDimmed = false,
 }: LayerCardWrapperProps) {
   // Get layer token for colors
   const layerToken = LAYER_TOKENS[layer];
-  const _traitToken = TRAIT_TOKENS[trait];
 
   // Derive colors from layer token
   const colors = useMemo(
@@ -138,11 +126,10 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
       getLayerCardClasses({
         layer,
         realm,
-        trait,
         selected,
         className: wrapperClassName,
       }),
-    [layer, realm, trait, selected, wrapperClassName]
+    [layer, realm, selected, wrapperClassName]
   );
 
   // Taxonomy context for child components
@@ -150,10 +137,9 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
     () => ({
       layer,
       realm,
-      trait,
       className: nodeClassName,
     }),
-    [layer, realm, trait, nodeClassName]
+    [layer, realm, nodeClassName]
   );
 
   return (
@@ -162,7 +148,6 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
       selected={selected}
       width={width}
       minHeight={minHeight}
-      trait={trait}
       isDimmed={isDimmed}
       isSchemaMode={isSchemaMode}
       className={wrapperClassName}
@@ -175,24 +160,7 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
           gradientClass: layerToken.gradient,
         };
 
-        // Wrap in TraitGlow if enabled
-        const content = renderContent(extendedContext);
-
-        if (enableTraitGlow) {
-          return (
-            <TraitGlow
-              trait={trait}
-              color={colors.primary}
-              selected={selected}
-              isHovered={cardContext.isHovered}
-              performanceConfig={cardContext.performanceConfig}
-            >
-              {content}
-            </TraitGlow>
-          );
-        }
-
-        return content;
+        return renderContent(extendedContext);
       }}
     />
   );
