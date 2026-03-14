@@ -38,7 +38,7 @@ chrono = "0.4"                # Timestamp for generated file headers
 
 # Output
 tabled = "0.17"
-colored = "2"                 # Terminal colorization for backup CLI
+colored = "3"                 # Terminal colorization for backup CLI
 
 # Compression/Archives
 flate2 = "1"                  # gzip compression for backup archives
