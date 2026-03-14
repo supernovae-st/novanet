@@ -37,10 +37,6 @@ use crate::error::NovaNetError;
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-/// Data directory relative to monorepo root (used in error messages).
-#[allow(dead_code)]
-const DATA_DIR: &str = "private-data/data";
-
 /// Output directory for generated Cypher files.
 const OUTPUT_DIR: &str = "packages/db/seed/generated";
 
