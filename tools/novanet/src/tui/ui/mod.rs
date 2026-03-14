@@ -804,6 +804,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
 
             let mode_badge = match mode {
                 crate::tui::app::NavMode::Graph => "[G]",
+                crate::tui::app::NavMode::Flow => "[F]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };

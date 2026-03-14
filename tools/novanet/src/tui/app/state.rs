@@ -16,19 +16,22 @@ use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, Vali
 // NAVIGATION ENUMS
 // =============================================================================
 
-/// Navigation mode — Graph-only since v0.20.0.
+/// Navigation mode — Graph + Flow since v0.20.0.
 /// Nexus and Views modes removed in Phase 1 cleanup.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     /// Graph mode: Unified tree view (Realm > Layer > Class hierarchy with instances)
     #[default]
     Graph,
+    /// Flow mode: Navigable ASCII architecture diagrams
+    Flow,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
             NavMode::Graph => "Graph",
+            NavMode::Flow => "Flow",
         }
     }
 
@@ -36,12 +39,13 @@ impl NavMode {
     pub fn index(&self) -> usize {
         match self {
             NavMode::Graph => 0,
+            NavMode::Flow => 1,
         }
     }
 
     /// Get all modes in order.
     pub fn all() -> &'static [NavMode] {
-        &[NavMode::Graph]
+        &[NavMode::Graph, NavMode::Flow]
     }
 }
 
@@ -446,6 +450,47 @@ impl SchemaOverlayState {
     }
 }
 
+/// Flow view tabs — two navigable ASCII diagrams.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum FlowTab {
+    /// Schema Architecture: Realm > Layer > Class hierarchy with arcs
+    #[default]
+    Schema,
+    /// Data Pipeline: Entity → EntityNative → Page → Block → BlockNative flow
+    Pipeline,
+}
+
+impl FlowTab {
+    pub fn label(&self) -> &'static str {
+        match self {
+            FlowTab::Schema => "Schema Architecture",
+            FlowTab::Pipeline => "Data Pipeline",
+        }
+    }
+
+    pub fn toggle(&self) -> Self {
+        match self {
+            FlowTab::Schema => FlowTab::Pipeline,
+            FlowTab::Pipeline => FlowTab::Schema,
+        }
+    }
+}
+
+/// State for the Flow view (navigable ASCII diagrams).
+#[derive(Debug, Clone, Default)]
+pub struct FlowState {
+    /// Current tab (Schema or Pipeline)
+    pub tab: FlowTab,
+    /// Vertical scroll position
+    pub scroll_y: usize,
+    /// Horizontal scroll position (diagrams can be wide)
+    pub scroll_x: usize,
+    /// Selected node index in the current diagram (for highlighting)
+    pub selected: usize,
+    /// Total number of selectable nodes in current diagram
+    pub total_nodes: usize,
+}
+
 /// YAML panel state (extracted sub-state).
 /// Displays Class YAML or Instance data in the right panel.
 #[derive(Debug, Default)]
@@ -607,18 +652,21 @@ mod tests {
     #[test]
     fn test_navmode_labels() {
         assert_eq!(NavMode::Graph.label(), "Graph");
+        assert_eq!(NavMode::Flow.label(), "Flow");
     }
 
     #[test]
     fn test_navmode_indices() {
         assert_eq!(NavMode::Graph.index(), 0);
+        assert_eq!(NavMode::Flow.index(), 1);
     }
 
     #[test]
     fn test_navmode_all() {
         let all = NavMode::all();
-        assert_eq!(all.len(), 1);
+        assert_eq!(all.len(), 2);
         assert_eq!(all[0], NavMode::Graph);
+        assert_eq!(all[1], NavMode::Flow);
     }
 
     // -------------------------------------------------------------------------

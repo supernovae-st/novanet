@@ -12,8 +12,9 @@ pub use constants::*;
 
 // Re-export state types
 pub use state::{
-    ContentPanelMode, Focus, InfoBox, LoadedDetails, NavMode, OverlayState, Panel, PanelRects,
-    PendingLoads, SchemaOverlayState, SearchState, TreeItemData, YamlPreviewState,
+    ContentPanelMode, FlowState, FlowTab, Focus, InfoBox, LoadedDetails, NavMode, OverlayState,
+    Panel, PanelRects, PendingLoads, SchemaOverlayState, SearchState, TreeItemData,
+    YamlPreviewState,
 };
 
 use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
@@ -55,7 +56,7 @@ pub struct App {
     pub selected_box: InfoBox,
     pub tree_cursor: usize,
     /// Remember cursor position per mode.
-    pub mode_cursors: [usize; 1],
+    pub mode_cursors: [usize; 2],
     pub tree_scroll: usize,
     pub tree_height: usize,
     pub tree: TaxonomyTree,
@@ -159,7 +160,7 @@ impl App {
             focus: Focus::Tree,
             selected_box: InfoBox::default(),
             tree_cursor: 0,
-            mode_cursors: [0; 1],
+            mode_cursors: [0; 2],
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
