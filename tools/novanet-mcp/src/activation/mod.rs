@@ -9,4 +9,4 @@
 
 pub mod spreading;
 
-pub use spreading::{ConfigError, SpreadingConfig, SpreadingDefaults, TaskModifier};
+pub use spreading::{SpreadingConfig, TaskModifier};
