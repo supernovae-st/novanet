@@ -17,6 +17,7 @@ name = "novanet-mcp"
 version = "0.20.0"
 edition = "2024"
 license = "LicenseRef-Proprietary"
+publish = false
 rust-version = "1.86"
 description = "NovaNet MCP Server - Knowledge Graph for AI Agents"
 authors = ["SuperNovae Studio"]

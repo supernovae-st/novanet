@@ -4,6 +4,7 @@ version = "0.20.0"
 edition = "2024"
 rust-version = "1.86"  # Minimum supported (ratatui 0.30 requires 1.86+)
 license = "LicenseRef-Proprietary"
+publish = false
 description = "NovaNet context graph CLI + TUI"
 
 [dependencies]
