@@ -24,7 +24,6 @@ ignore = [
     "RUSTSEC-2024-0384",  # instant (neo4rs → backoff → instant) - unmaintained
     "RUSTSEC-2024-0436",  # paste (neo4rs → paste) - unmaintained
     "RUSTSEC-2025-0134",  # rustls-pemfile (neo4rs → rustls-pemfile) - old API
-    "RUSTSEC-2025-0119",  # number_prefix (indicatif → number_prefix) - unmaintained
 ]
 
 # =============================================================================
