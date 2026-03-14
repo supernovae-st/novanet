@@ -280,55 +280,134 @@ cargo deny check                     # Security/license audit
 
 ## Architecture
 
-Module structure:
+Module structure (~150 files):
 
 ```
 src/
-  main.rs         Thin entry point (clap parse + dispatch)
-  lib.rs          Public API (re-exports all modules)
-  config.rs       Root discovery (resolve_root) + path helpers
-  db.rs           Neo4j connection pool (neo4rs::Graph + Arc)
-  error.rs        NovaNetError enum (thiserror) + Result type alias
-  cypher.rs       CypherStatement builder (data/meta/overlay/query/search)
-  facets.rs       FacetFilter (Realm/Layer/ArcFamily/Class) + JSON serde
-  output.rs       OutputFormat (Table/Json/Cypher) + rendering helpers
-  commands/
-    mod.rs        Module registry
-    read.rs       data/meta/overlay/query (CypherStatement → Neo4j → format)
-    node.rs       node create/edit/delete (label validation + Cypher)
-    arc.rs        arc create/delete (ArcClass validation + Cypher)
-    search.rs     search --query (fulltext + property match)
-    locale.rs     locale list/import
-    db.rs         db seed/migrate/reset (Cypher file execution)
-    schema.rs     schema generate/validate (YAML → artifacts)
-    doc.rs        doc generate/list (YAML views → Mermaid)
-    filter.rs     filter build (JSON stdin → Cypher stdout)
-    data_backup.rs  data backup (Neo4j → private-data/data/ YAML export)
-    data_status.rs  data status (backup vs Neo4j comparison with colored diffs)
-    data_common.rs  shared constants, types, and query logic for data commands
-    export.rs     export (Cypher/JSON/GraphML/CSV graph export)
-    stats.rs      stats (YAML schema statistics)
-    diff.rs       diff (YAML vs Neo4j comparison)
-  core/
-    backup.rs     brain directory backup/restore operations
-    ux.rs         CLI UX helpers (colored summaries, ASCII schemas, fmt_count)
-  parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
-  generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
-  validation/     Schema validation + auto-fix system
-    mod.rs        ValidationEngine + rule registry
-    autofix/      AutoFix trait + 6 fixers (FixEngine registry)
-      composite_key.rs      Adds pattern to composite key fields
-      denormalized_key.rs   Adds denormalized keys for composite nodes
-      description.rs        Generates default descriptions
-      example_data.rs       Generates type-aware example data
-      property_order.rs     Reorders properties to canonical order
-      timestamps.rs         Adds created_at/updated_at properties
-  tui/            Terminal UI v3 — Unified Tree Architecture (feature-gated)
-    mod.rs        Entry point (terminal setup + event loop)
-    app.rs        State machine (NavMode: Graph/Nexus, async channels for lazy loading)
-    data.rs       UnifiedTree (Realm > Layer > Class > Instance, ArcFamily > ArcClass)
-    theme.rs      Visual encoding + Icons (colors from taxonomy.yaml, icons from visual-encoding.yaml)
-    ui.rs         3-panel layout (Tree | Info | YAML) + search/help overlays
+  main.rs              Thin entry point (clap parse + dispatch)
+  lib.rs               Public API (re-exports all modules)
+  config.rs            Root discovery (resolve_root) + path helpers
+  db.rs                Neo4j connection pool (neo4rs::Graph + Arc)
+  error.rs             NovaNetError enum (thiserror) + Result type alias
+  cypher.rs            CypherStatement builder (data/meta/overlay/query/search)
+  facets.rs            FacetFilter (Realm/Layer/ArcFamily/Class) + JSON serde
+  output.rs            OutputFormat (Table/Json/Cypher) + rendering helpers
+  user_config.rs       User configuration (~/.novanet/config.toml)
+  commands/            CLI command implementations (24 files)
+    mod.rs             Module registry + dispatch
+    arc.rs             arc create/delete (ArcClass validation)
+    backup.rs          backup operations
+    blueprint.rs       blueprint command dispatch
+    completions.rs     shell completions (bash/zsh/fish/powershell)
+    data_backup.rs     data backup (Neo4j → YAML export)
+    data_common.rs     shared types for data commands
+    data_status.rs     data status (backup vs Neo4j comparison)
+    db.rs              db seed/migrate/reset
+    diff.rs            YAML vs Neo4j comparison
+    doc.rs             doc generate (YAML views → Mermaid)
+    doctor.rs          system health check + auto-fix
+    entity.rs          entity list/validate/seed
+    export.rs          graph export (Cypher/JSON/GraphML/CSV)
+    filter.rs          filter build (JSON stdin → Cypher stdout)
+    init.rs            interactive setup wizard
+    knowledge.rs       knowledge tier generation
+    locale.rs          locale list/import/generate
+    node.rs            node create/edit/delete
+    read.rs            data/meta/overlay/query commands
+    schema.rs          schema generate/validate
+    search.rs          fulltext + property search
+    seed.rs            database seeding
+    stats.rs           YAML schema statistics
+    views.rs           views export/validate
+  blueprint/           Schema visualization (11 files)
+    mod.rs             Blueprint engine
+    ascii.rs           ASCII rendering
+    sources.rs         Data source loading
+    validation.rs      Blueprint validation
+    views/             View renderers (7 files)
+      mod.rs, arcs.rs, cardinality.rs, default.rs, flow.rs, glossary.rs, stats.rs, tree.rs
+  core/                Shared utilities (5 files)
+    mod.rs             Module root
+    ux.rs              CLI UX helpers (colored summaries, ASCII schemas)
+    backup/            Brain directory backup (archive.rs, service.rs, types.rs)
+  parsers/             YAML parsers (20 files)
+    mod.rs             Parser registry
+    arc_family.rs      ArcFamily definitions
+    arcs.rs            ArcClass parsing
+    culture.rs         CultureRef parsing
+    expression.rs      Expression parsing
+    formatting.rs      Format helpers
+    layer.rs           Layer definitions
+    markdown_utils.rs  Markdown processing
+    market.rs          Market/locale parsing
+    organizing.rs      Organizing rules
+    realm.rs           Realm definitions
+    schema_rules.rs    Schema validation rules
+    slugification.rs   URL slug generation
+    taxonomy.rs        Taxonomy YAML parser
+    utils.rs           Parser utilities
+    views.rs           View YAML parser
+    visual_encoding.rs Visual encoding YAML parser
+    yaml_node.rs       NodeClass YAML parser
+  generators/          Code generators (20 files)
+    mod.rs             Generator registry
+    arc_class.rs       ArcClass Cypher generation
+    autowire.rs        Auto-wiring rules
+    colors.rs          Color Cypher generation
+    culture.rs         Culture seed generation
+    cypher_utils.rs    Shared Cypher utilities
+    expression.rs      Expression seed generation
+    formatting.rs      Format generation
+    hierarchy.rs       Hierarchy Cypher generation
+    icons.rs           Icon Cypher generation
+    layer.rs           Layer Cypher generation
+    market.rs          Market seed generation
+    mermaid.rs         Mermaid diagram generation
+    node_class.rs      NodeClass Cypher generation
+    organizing.rs      Organizing Cypher generation
+    slugification.rs   Slug Cypher generation
+    test_utils.rs      Test helpers
+    tui_colors.rs      TUI color constants generation
+    tui_icons.rs       TUI icon constants generation
+    view_mermaid.rs    View Mermaid generation
+    visual_encoding.rs Visual encoding generation
+  validation/          Schema validation + auto-fix (8 files)
+    mod.rs             ValidationEngine + rule registry
+    cypher_validator.rs  Cypher file validation
+    autofix/           AutoFix trait + 6 fixers
+      mod.rs, composite_key.rs, denormalized_key.rs, description.rs,
+      example_data.rs, property_order.rs, timestamps.rs
+  tui/                 Terminal UI — Unified Tree Architecture (29 files, feature-gated)
+    mod.rs             Entry point (terminal setup + event loop)
+    app/               State machine (3 files)
+      mod.rs           NavMode: Graph/Nexus, async channels
+      constants.rs     TUI constants
+      state.rs         State types
+    data.rs            UnifiedTree (Realm > Layer > Class > Instance)
+    theme.rs           Visual encoding + Icons
+    schema.rs          Schema loading
+    cache.rs           Query result caching
+    clipboard.rs       Clipboard integration
+    flow.rs            Flow state management
+    icons.rs           Icon definitions
+    colors.generated.rs  Generated color constants
+    unicode.rs         Unicode helpers
+    unified_types.rs   Shared TUI types (TreeLine, Badge, NodeStats)
+    testing.rs         TUI test utilities
+    handlers/          Event handlers (2 files)
+      mod.rs, flow.rs
+    ui/                UI rendering (8 files)
+      mod.rs           3-panel layout + search/help overlays
+      tree.rs          Tree panel rendering
+      info.rs          Info panel rendering
+      yaml_panel.rs    YAML panel rendering
+      graph.rs         Graph visualization
+      flow.rs          Flow rendering
+      identity_panel.rs  Identity panel
+      overlays.rs      Modal overlays
+      status.rs        Status bar
+    widgets/           Reusable widgets (3 files)
+      mod.rs, panel.rs, scrollable.rs
 ```
 
 ## Key Patterns
