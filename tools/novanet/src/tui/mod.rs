@@ -18,6 +18,7 @@ pub mod clipboard;
 #[path = "colors.generated.rs"]
 pub mod colors;
 mod data;
+pub mod flow;
 mod handlers;
 pub mod icons;
 mod schema;
