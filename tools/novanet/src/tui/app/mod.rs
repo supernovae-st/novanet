@@ -77,6 +77,8 @@ pub struct App {
     pub details: LoadedDetails,
     /// Schema overlay state for Data mode.
     pub schema_overlay: SchemaOverlayState,
+    /// Flow mode state (navigable architecture diagrams).
+    pub flow: FlowState,
 
     // ==========================================================================
     // Navigation & History
@@ -173,6 +175,7 @@ impl App {
             pending: PendingLoads::default(),
             details: LoadedDetails::default(),
             schema_overlay: SchemaOverlayState::default(),
+            flow: FlowState::default(),
 
             // Navigation & history
             nav_history: Vec::with_capacity(100),
@@ -1010,9 +1013,16 @@ impl App {
                 true
             },
 
-            // Mode switching: only Graph mode available
+            // Mode switching: Graph [1] + Flow [2]
             KeyCode::Char('1') => {
-                // Already in Graph mode (only mode available)
+                self.mode_cursors[self.mode.index()] = self.tree_cursor;
+                self.mode = NavMode::Graph;
+                self.tree_cursor = self.mode_cursors[0];
+                true
+            },
+            KeyCode::Char('2') => {
+                self.mode_cursors[self.mode.index()] = self.tree_cursor;
+                self.mode = NavMode::Flow;
                 true
             },
 
