@@ -4,11 +4,29 @@
 //! Supports filtering by labels, relationship types, and custom queries.
 
 use clap::{Parser, ValueEnum};
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
 use crate::db::Db;
 use crate::output::OutputFormat;
+
+/// Regex for valid Neo4j label/relationship type names (prevents Cypher injection).
+static RE_VALID_LABEL: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[A-Za-z_][A-Za-z0-9_]*$").unwrap());
+
+/// Validate that all label/relationship names are safe for Cypher interpolation.
+fn validate_identifiers(names: &[String]) -> crate::Result<()> {
+    for name in names {
+        if !RE_VALID_LABEL.is_match(name) {
+            return Err(crate::NovaNetError::Validation(format!(
+                "invalid label/type name '{name}': must match [A-Za-z_][A-Za-z0-9_]*"
+            )));
+        }
+    }
+    Ok(())
+}
 
 // =============================================================================
 // TYPES
@@ -91,33 +109,31 @@ pub struct RelData {
 // =============================================================================
 
 /// Build Cypher query based on export arguments.
-pub fn build_export_query(args: &ExportArgs) -> String {
+pub fn build_export_query(args: &ExportArgs) -> crate::Result<String> {
     // If a custom query is provided, use it directly
     if let Some(ref query) = args.query {
-        return query.clone();
+        return Ok(query.clone());
+    }
+
+    // Validate labels before interpolation (prevent Cypher injection)
+    if let Some(ref labels) = args.labels {
+        validate_identifiers(labels)?;
     }
 
     let mut query = String::with_capacity(256);
 
-    // Build label filter
-    let label_filter = args
-        .labels
-        .as_ref()
-        .map(|labels| labels.join("|"))
-        .unwrap_or_default();
-
     // Match nodes with optional label filter
-    if label_filter.is_empty() {
-        query.push_str("MATCH (n)\nWHERE NOT n:Schema\n");
-    } else {
+    if let Some(ref labels) = args.labels {
         query.push_str("MATCH (n)\nWHERE NOT n:Schema AND (");
-        for (i, label) in args.labels.as_ref().unwrap().iter().enumerate() {
+        for (i, label) in labels.iter().enumerate() {
             if i > 0 {
                 query.push_str(" OR ");
             }
-            query.push_str(&format!("n:{}", label));
+            query.push_str(&format!("n:{label}"));
         }
         query.push_str(")\n");
+    } else {
+        query.push_str("MATCH (n)\nWHERE NOT n:Schema\n");
     }
 
     // Add RETURN clause with limit
@@ -128,26 +144,27 @@ pub fn build_export_query(args: &ExportArgs) -> String {
         args.limit
     ));
 
-    query
+    Ok(query)
 }
 
 /// Build Cypher query for relationships based on export arguments.
-pub fn build_relationships_query(args: &ExportArgs) -> Option<String> {
+pub fn build_relationships_query(args: &ExportArgs) -> crate::Result<Option<String>> {
     // Only build relationships query if relationships filter is specified or we want all
     if args.query.is_some() {
-        return None; // Custom query handles everything
+        return Ok(None); // Custom query handles everything
+    }
+
+    // Validate identifiers before interpolation (prevent Cypher injection)
+    if let Some(ref labels) = args.labels {
+        validate_identifiers(labels)?;
+    }
+    if let Some(ref rels) = args.relationships {
+        validate_identifiers(rels)?;
     }
 
     let mut query = String::with_capacity(256);
 
-    // Build label filter for nodes
-    let label_filter = args
-        .labels
-        .as_ref()
-        .map(|labels| labels.join("|"))
-        .unwrap_or_default();
-
-    // Build relationship type filter
+    let has_labels = args.labels.is_some();
     let rel_filter = args
         .relationships
         .as_ref()
@@ -155,21 +172,22 @@ pub fn build_relationships_query(args: &ExportArgs) -> Option<String> {
         .unwrap_or_default();
 
     // Match relationships
-    if label_filter.is_empty() && rel_filter.is_empty() {
+    if !has_labels && rel_filter.is_empty() {
         query.push_str("MATCH (a)-[r]->(b)\nWHERE NOT a:Schema AND NOT b:Schema\n");
-    } else if !label_filter.is_empty() && rel_filter.is_empty() {
+    } else if has_labels && rel_filter.is_empty() {
         query.push_str("MATCH (a)-[r]->(b)\nWHERE NOT a:Schema AND NOT b:Schema AND (");
-        for (i, label) in args.labels.as_ref().unwrap().iter().enumerate() {
-            if i > 0 {
-                query.push_str(" OR ");
+        if let Some(ref labels) = args.labels {
+            for (i, label) in labels.iter().enumerate() {
+                if i > 0 {
+                    query.push_str(" OR ");
+                }
+                query.push_str(&format!("a:{label} OR b:{label}"));
             }
-            query.push_str(&format!("a:{} OR b:{}", label, label));
         }
         query.push_str(")\n");
     } else if !rel_filter.is_empty() {
         query.push_str(&format!(
-            "MATCH (a)-[r:{}]->(b)\nWHERE NOT a:Schema AND NOT b:Schema\n",
-            rel_filter
+            "MATCH (a)-[r:{rel_filter}]->(b)\nWHERE NOT a:Schema AND NOT b:Schema\n",
         ));
     }
 
@@ -180,7 +198,7 @@ pub fn build_relationships_query(args: &ExportArgs) -> Option<String> {
         args.limit
     ));
 
-    Some(query)
+    Ok(Some(query))
 }
 
 // =============================================================================
@@ -307,7 +325,7 @@ pub async fn run_export(db: &Db, args: ExportArgs, _format: OutputFormat) -> cra
     use crate::db::RowExt;
 
     // Build and execute node query
-    let node_query = build_export_query(&args);
+    let node_query = build_export_query(&args)?;
     eprintln!("Fetching nodes...");
 
     let node_rows = db.execute(&node_query).await?;
@@ -330,7 +348,7 @@ pub async fn run_export(db: &Db, args: ExportArgs, _format: OutputFormat) -> cra
 
     // Build and execute relationships query
     let mut relationships: Vec<RelData> = Vec::new();
-    if let Some(rel_query) = build_relationships_query(&args) {
+    if let Some(rel_query) = build_relationships_query(&args)? {
         eprintln!("Fetching relationships...");
         let rel_rows = db.execute(&rel_query).await?;
 
@@ -479,7 +497,7 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        let query = build_export_query(&args);
+        let query = build_export_query(&args).unwrap();
         assert!(query.contains("MATCH (n)"));
         assert!(query.contains("WHERE NOT n:Schema"));
         assert!(query.contains("LIMIT 100"));
@@ -496,7 +514,7 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        let query = build_export_query(&args);
+        let query = build_export_query(&args).unwrap();
         assert!(query.contains("Entity"));
         assert!(query.contains("LIMIT 100"));
     }
@@ -512,7 +530,7 @@ mod tests {
             include_schema: false,
             limit: 50,
         };
-        let query = build_export_query(&args);
+        let query = build_export_query(&args).unwrap();
         assert!(query.contains("n:Entity"));
         assert!(query.contains("n:Page"));
         assert!(query.contains(" OR "));
@@ -530,8 +548,22 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        let query = build_export_query(&args);
+        let query = build_export_query(&args).unwrap();
         assert_eq!(query, "MATCH (n:Custom) RETURN n");
+    }
+
+    #[test]
+    fn test_build_export_query_rejects_injection() {
+        let args = ExportArgs {
+            format: ExportFormat::Cypher,
+            output: None,
+            labels: Some(vec!["Entity] RETURN n //".to_string()]),
+            relationships: None,
+            query: None,
+            include_schema: false,
+            limit: 100,
+        };
+        assert!(build_export_query(&args).is_err());
     }
 
     #[test]
@@ -545,7 +577,7 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        let query = build_relationships_query(&args).unwrap();
+        let query = build_relationships_query(&args).unwrap().unwrap();
         assert!(query.contains("MATCH (a)-[r]->(b)"));
         assert!(query.contains("WHERE NOT a:Schema AND NOT b:Schema"));
         assert!(query.contains("LIMIT 100"));
@@ -562,7 +594,7 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        let query = build_relationships_query(&args).unwrap();
+        let query = build_relationships_query(&args).unwrap().unwrap();
         assert!(query.contains("HAS_NATIVE|FOR_LOCALE"));
     }
 
@@ -577,7 +609,21 @@ mod tests {
             include_schema: false,
             limit: 100,
         };
-        assert!(build_relationships_query(&args).is_none());
+        assert!(build_relationships_query(&args).unwrap().is_none());
+    }
+
+    #[test]
+    fn test_build_relationships_query_rejects_injection() {
+        let args = ExportArgs {
+            format: ExportFormat::Cypher,
+            output: None,
+            labels: None,
+            relationships: Some(vec!["HAS_NATIVE}]->(b) DELETE b //".to_string()]),
+            query: None,
+            include_schema: false,
+            limit: 100,
+        };
+        assert!(build_relationships_query(&args).is_err());
     }
 
     #[test]
