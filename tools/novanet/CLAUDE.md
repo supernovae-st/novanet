@@ -376,14 +376,32 @@ src/
     autofix/           AutoFix trait + 6 fixers
       mod.rs, composite_key.rs, denormalized_key.rs, description.rs,
       example_data.rs, property_order.rs, timestamps.rs
-  tui/                 Terminal UI — Unified Tree Architecture (29 files, feature-gated)
+  tui/                 Terminal UI — Unified Tree Architecture (73 files, feature-gated)
     mod.rs             Entry point (terminal setup + event loop)
-    app/               State machine (3 files)
+    app/               State machine (5 files)
       mod.rs           NavMode: Graph/Nexus, async channels
       constants.rs     TUI constants
+      content.rs       Content loading
+      input.rs         Key event handling
+      search.rs        Search state
       state.rs         State types
-    data.rs            UnifiedTree (Realm > Layer > Class > Instance)
+    data/              Data loading + tree state (12 files)
+      mod.rs           Module root + re-exports
+      types.rs         Struct/enum definitions (ClassInfo, TreeItem, etc.)
+      conversion.rs    Bolt-to-JSON conversion, label validation
+      queries.rs       Main load() + taxonomy tree assembly
+      queries_details.rs   Schema detail queries
+      queries_instances.rs Generic instance loading
+      queries_entities.rs  Entity category hierarchy
+      tree_state.rs    Collapse/expand state management
+      cursor_finders.rs  Cursor position finders (realm/layer/class/family)
+      navigation.rs    Item counting, parent finding, hierarchy position
+      entity_helpers.rs  Entity dual-storage helpers
+      hierarchy.rs     Hierarchy utilities
     theme.rs           Visual encoding + Icons
+    palette.rs         Centralized color palette (Solarized + Tailwind)
+    hex_colors.rs      Hex-to-Color conversion
+    color_mode.rs      Terminal color mode detection
     schema.rs          Schema loading
     cache.rs           Query result caching
     clipboard.rs       Clipboard integration
@@ -395,18 +413,35 @@ src/
     testing.rs         TUI test utilities
     handlers/          Event handlers (2 files)
       mod.rs, flow.rs
-    ui/                UI rendering (8 files)
+    ui/                UI rendering (34 files)
       mod.rs           3-panel layout + search/help overlays
-      tree.rs          Tree panel rendering
-      info.rs          Info panel rendering
-      yaml_panel.rs    YAML panel rendering
-      graph.rs         Graph visualization
+      badges.rs        Badge rendering helpers
+      text_utils.rs    Text truncation/wrapping utilities
+      tree/            Tree panel (7 files)
+        mod.rs, nodes.rs, arcs_section.rs, breadcrumb.rs,
+        filtered.rs, helpers.rs, highlight.rs, minimap.rs
+      info/            Info panel (9 files)
+        mod.rs         Types, constants, render functions
+        builders.rs    Routing dispatcher for tree item → builder
+        build_schema.rs  ClassesSection, ArcsSection, Realm, Layer
+        build_class.rs   Class (NodeClass) content builder
+        build_arcs.rs    ArcFamily, ArcClass content builders
+        build_instance.rs  Instance content builder
+        build_groups.rs    EntityCategory, EntityGroup, empty state
+        build_provenance.rs  Provenance section (ADR-035/042)
+        json_formatting.rs   JSON value formatting + colors
+        property_styling.rs  Property type badges, render helpers
+      yaml_panel/      YAML panel (5 files)
+        mod.rs, colors.rs, properties.rs, syntax.rs, utils.rs
+      graph/           Graph visualization (4 files)
+        mod.rs, helpers.rs, stats.rs, views.rs
+      identity_panel/  Identity panel (4 files)
+        mod.rs, data.rs, helpers.rs, schema.rs
       flow.rs          Flow rendering
-      identity_panel.rs  Identity panel
       overlays.rs      Modal overlays
       status.rs        Status bar
-    widgets/           Reusable widgets (3 files)
-      mod.rs, panel.rs, scrollable.rs
+    widgets/           Reusable widgets (5 files)
+      mod.rs, badge.rs, panel.rs, progress_bar.rs, scrollable.rs
 ```
 
 ## Key Patterns
