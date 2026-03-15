@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.20.0 | **Tests**: 1039 | **Clippy**: zero warnings
+**Version**: v0.20.0 | **Tests**: 1068 (977 unit + 71 integration + 20 ignored) | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -376,7 +376,7 @@ src/
     autofix/           AutoFix trait + 6 fixers
       mod.rs, composite_key.rs, denormalized_key.rs, description.rs,
       example_data.rs, property_order.rs, timestamps.rs
-  tui/                 Terminal UI — Unified Tree Architecture (73 files, feature-gated)
+  tui/                 Terminal UI — Unified Tree Architecture (76 files, feature-gated)
     mod.rs             Entry point (terminal setup + event loop)
     app/               State machine (5 files)
       mod.rs           NavMode: Graph/Nexus, async channels
@@ -395,9 +395,9 @@ src/
       queries_entities.rs  Entity category hierarchy
       tree_state.rs    Collapse/expand state management
       cursor_finders.rs  Cursor position finders (realm/layer/class/family)
-      navigation.rs    Item counting, parent finding, hierarchy position
       entity_helpers.rs  Entity dual-storage helpers
-      hierarchy.rs     Hierarchy utilities
+      hierarchy.rs     Hierarchy position calculation (R:realm L:layer C:class I:instance)
+      navigation.rs    Item counting, cursor lookup, parent finding
     theme.rs           Visual encoding + Icons
     palette.rs         Centralized color palette (Solarized + Tailwind)
     hex_colors.rs      Hex-to-Color conversion
@@ -417,10 +417,10 @@ src/
       mod.rs           3-panel layout + search/help overlays
       badges.rs        Badge rendering helpers
       text_utils.rs    Text truncation/wrapping utilities
-      tree/            Tree panel (7 files)
+      tree/            Tree panel (8 files)
         mod.rs, nodes.rs, arcs_section.rs, breadcrumb.rs,
         filtered.rs, helpers.rs, highlight.rs, minimap.rs
-      info/            Info panel (9 files)
+      info/            Info panel (10 files)
         mod.rs         Types, constants, render functions
         builders.rs    Routing dispatcher for tree item → builder
         build_schema.rs  ClassesSection, ArcsSection, Realm, Layer
@@ -563,8 +563,6 @@ Scroll:      ENC1 (tree)    ENC2 (yaml)
 Overlays:    / (help)       f (search)
 Exit:        q or Esc
 ```
-
-> **Hook**: `.claude/hooks/keybindings-reminder.sh` triggers when `tui/*.rs` is edited.
 
 ## Dependencies on Monorepo
 
