@@ -9,6 +9,7 @@ use ratatui::text::{Line, Span};
 use crate::tui::app::{App, Focus};
 use crate::tui::colors;
 use crate::tui::palette;
+use crate::tui::widgets::Badge;
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::ValidationStatus;
 use crate::tui::theme::{ColorMode, hex_to_color};
@@ -665,10 +666,7 @@ fn build_class_content(
                         STYLE_PROP_KEY,
                     ),
                     Span::styled(": ", STYLE_PROP_COLON),
-                    Span::styled(
-                        format!("[{}]", badge.trim()),
-                        Style::default().fg(badge_color),
-                    ),
+                    Badge::new(badge.trim()).style(Style::default().fg(badge_color)).to_span(),
                 ]));
             }
         }
@@ -703,10 +701,7 @@ fn build_class_content(
                         STYLE_PROP_KEY,
                     ),
                     Span::styled(": ", STYLE_PROP_COLON),
-                    Span::styled(
-                        format!("[{}]", badge.trim()),
-                        Style::default().fg(badge_color),
-                    ),
+                    Badge::new(badge.trim()).style(Style::default().fg(badge_color)).to_span(),
                 ]));
             }
         }
@@ -1397,10 +1392,7 @@ fn build_instance_content(
                             STYLE_PROP_KEY.patch(bg_style),
                         ),
                         Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                        Span::styled(
-                            format!("[{}] ", badge.trim()),
-                            Style::default().fg(badge_color).patch(bg_style),
-                        ),
+                        Badge::new(badge.trim()).style(Style::default().fg(badge_color).patch(bg_style)).spaced().to_span(),
                         Span::styled(
                             wrapped.first().cloned().unwrap_or_default(),
                             Style::default().fg(value_color).patch(bg_style),
@@ -1428,10 +1420,7 @@ fn build_instance_content(
                             STYLE_PROP_KEY.patch(bg_style),
                         ),
                         Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                        Span::styled(
-                            format!("[{}] ", badge.trim()),
-                            Style::default().fg(badge_color).patch(bg_style),
-                        ),
+                        Badge::new(badge.trim()).style(Style::default().fg(badge_color).patch(bg_style)).spaced().to_span(),
                         Span::styled(
                             display_value,
                             Style::default().fg(value_color).patch(bg_style),
@@ -1507,10 +1496,7 @@ fn build_instance_content(
                             STYLE_PROP_KEY.patch(bg_style),
                         ),
                         Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                        Span::styled(
-                            format!("[{}] ", badge.trim()),
-                            Style::default().fg(badge_color).patch(bg_style),
-                        ),
+                        Badge::new(badge.trim()).style(Style::default().fg(badge_color).patch(bg_style)).spaced().to_span(),
                         Span::styled(
                             wrapped.first().cloned().unwrap_or_default(),
                             Style::default().fg(value_color).patch(bg_style),
@@ -1536,10 +1522,7 @@ fn build_instance_content(
                             STYLE_PROP_KEY.patch(bg_style),
                         ),
                         Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                        Span::styled(
-                            format!("[{}] ", badge.trim()),
-                            Style::default().fg(badge_color).patch(bg_style),
-                        ),
+                        Badge::new(badge.trim()).style(Style::default().fg(badge_color).patch(bg_style)).spaced().to_span(),
                         Span::styled(
                             display_value,
                             Style::default().fg(value_color).patch(bg_style),
