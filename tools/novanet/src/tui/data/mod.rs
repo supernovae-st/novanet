@@ -27,10 +27,6 @@ pub use types::*;
 // Re-export public utilities
 pub use conversion::locale_to_flag;
 
-// Make crate-internal utilities accessible via `use super::*` in tests
-#[allow(unused_imports)]
-pub(crate) use conversion::{bolt_to_json, realm_icon, to_kebab_case, validate_cypher_label};
-
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
 
@@ -275,6 +271,7 @@ impl TaxonomyTree {
 
 #[cfg(test)]
 mod tests {
+    use super::conversion::{to_kebab_case, validate_cypher_label};
     use super::*;
     use crate::tui::testing::{create_test_class, create_test_layer, create_test_realm};
     use std::collections::BTreeMap;
