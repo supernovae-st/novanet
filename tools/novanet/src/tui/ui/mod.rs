@@ -1,7 +1,6 @@
 //! UI rendering for TUI v2.
 //!
-//! v0.20.0: Single mode (Graph). Renders tree, info, yaml, graph panels.
-//! v0.13.1: Architecture panel removed (panel simplification).
+//! Two modes (Graph + Flow). Renders tree, identity, content, props, arcs panels.
 
 mod flow;
 mod graph;
@@ -99,9 +98,6 @@ const LAYOUT_DATA_VIEWER_PCT: u16 = 65;
 /// Right column split: Properties+Stats (top) | Arcs (bottom)
 const LAYOUT_PROPS_STATS_PCT: u16 = 50;
 const LAYOUT_ARCS_PCT: u16 = 50;
-
-// NOTE: Legacy LAYOUT_HEADER_PCT, LAYOUT_YAML_PCT, LAYOUT_PROPS_PCT removed in v0.18.3
-// They were replaced by LAYOUT_IDENTITY_PCT, LAYOUT_DATA_VIEWER_PCT, LAYOUT_PROPS_STATS_PCT
 
 /// Narrow layout: Tree panel percentage (compact sidebar).
 const LAYOUT_NARROW_TREE_PCT: u16 = 35;

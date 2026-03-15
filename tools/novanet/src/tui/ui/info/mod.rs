@@ -920,9 +920,6 @@ fn detail_box_state(panel_focused: bool) -> BoxVisualState {
     }
 }
 
-// Dead galaxy theme block deleted (v0 cleanup): build_bottom_row, build_content_row,
-// build_location_badges, build_metric_cards, render_header_box, render_unified_info_panel
-// ~550 lines removed — replaced by render_identity_panel in v0.18.3 4-panel refactor.
 /// Render the properties panel [3] in the right column.
 /// Render the separated Properties panel.
 /// Accepts pre-built content to avoid double-building.

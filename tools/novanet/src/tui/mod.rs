@@ -1,7 +1,8 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
-//! Single navigation mode:
+//! Two navigation modes:
 //! - Graph: Unified tree view (Realm > Layer > Class)
+//! - Flow: Architecture diagrams (Schema + Pipeline)
 //!
 //! ## Crash Recovery
 //!

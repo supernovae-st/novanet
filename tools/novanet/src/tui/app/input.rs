@@ -224,9 +224,6 @@ impl App {
             // NOTE: Up/Down arrows handled below for in-panel navigation (cursor/scroll)
             // Left/Right = panel switching, Up/Down/j/k = in-panel (vim/lazygit pattern)
 
-            // 't' keybinding removed (SourceTab toggle removed)
-            // Content panel now shows context-aware content based on tree selection
-
             // Enter: toggle collapse/expand (Tree), toggle sections (Content), or expand property (Info)
             KeyCode::Enter => {
                 match self.focus {
@@ -466,7 +463,7 @@ impl App {
                 true
             },
 
-            // Yank JSON properties (Y) - legacy, kept for compatibility
+            // Yank JSON properties (Y)
             KeyCode::Char('Y') => {
                 self.yank_current_json();
                 true
