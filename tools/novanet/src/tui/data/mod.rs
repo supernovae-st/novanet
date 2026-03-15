@@ -3,7 +3,10 @@
 //! Split into submodules:
 //! - `types`: All struct/enum definitions (ArcInfo, ClassInfo, TreeItem, etc.)
 //! - `conversion`: Bolt-to-JSON conversion, label validation, formatting helpers
-//! - `queries`: All async Neo4j query methods (impl TaxonomyTree)
+//! - `queries`: Main load() entry point + taxonomy tree assembly helpers
+//! - `queries_details`: Schema detail queries (stats, class arcs, arc/realm/layer details)
+//! - `queries_instances`: Generic instance loading (full, fast, background arcs)
+//! - `queries_entities`: Entity category hierarchy (categories, by-category, natives)
 //! - `tree_state`: Collapse/expand state management
 //! - `navigation`: Item counting, cursor lookup, parent finding, hierarchy position
 //! - `entity_helpers`: Centralized Entity dual-storage helpers
@@ -12,6 +15,9 @@ mod conversion;
 mod entity_helpers;
 mod navigation;
 mod queries;
+mod queries_details;
+mod queries_entities;
+mod queries_instances;
 mod tree_state;
 mod types;
 
