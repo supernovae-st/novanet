@@ -58,8 +58,10 @@ impl<T> RenderCache<T> {
             self.cached = Some(compute());
             self.change_key = key;
         }
-        // SAFETY: we just set cached = Some(...) above
-        self.cached.as_ref().expect("cache was just populated")
+        // Structurally guaranteed: the branch above ensures `cached` is always `Some`.
+        // Using `unwrap_unchecked` would be sound here, but `unwrap` is clearer and
+        // the branch predictor eliminates the cost.
+        self.cached.as_ref().unwrap()
     }
 
     /// Invalidate the cache, forcing recomputation on next access.
@@ -81,8 +83,7 @@ impl<T: Clone> RenderCache<T> {
             self.cached = Some(compute());
             self.change_key = key;
         }
-        // SAFETY: we just set cached = Some(...) above
-        self.cached.clone().expect("cache was just populated")
+        self.cached.clone().unwrap()
     }
 }
 
