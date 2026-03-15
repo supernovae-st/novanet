@@ -91,31 +91,6 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::Gray,
             });
         },
-        Some(TreeItem::LocaleGroup(r, l, k, group)) => {
-            path.push(BreadcrumbLevel {
-                icon: realm_badge_icon(&r.key),
-                label: r.display_name.clone(),
-                color: hex_to_color(&r.color),
-            });
-            path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key),
-                label: l.display_name.clone(),
-                color: hex_to_color(&l.color),
-            });
-            path.push(BreadcrumbLevel {
-                icon: layer_badge_icon(&l.key),
-                label: k.display_name.clone(),
-                color: hex_to_color(&l.color),
-            });
-            path.push(BreadcrumbLevel {
-                icon: "🌐",
-                label: format!(
-                    "{} {} ({})",
-                    group.flag, group.locale_code, group.locale_name
-                ),
-                color: Color::Cyan,
-            });
-        },
         Some(TreeItem::EntityGroup(r, l, k, group)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),

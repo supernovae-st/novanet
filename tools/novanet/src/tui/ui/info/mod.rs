@@ -7,7 +7,7 @@
 //! - `build_class.rs`: Class (NodeClass) content builder
 //! - `build_arcs.rs`: ArcFamily, ArcClass content builders
 //! - `build_instance.rs`: Instance content builder
-//! - `build_groups.rs`: EntityCategory, LocaleGroup, EntityGroup, empty state
+//! - `build_groups.rs`: EntityCategory, EntityGroup, empty state
 
 mod builders;
 mod build_arcs;

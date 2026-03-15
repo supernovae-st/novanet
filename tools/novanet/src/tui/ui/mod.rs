@@ -725,10 +725,6 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
                     ("◫", cat.display_name.clone())
                 },
-                Some(crate::tui::data::TreeItem::LocaleGroup(_, _, _, group)) => {
-                    ("🌐", format!("{} {}", group.flag, group.locale_name))
-                },
-                // EntityGroup history item
                 Some(crate::tui::data::TreeItem::EntityGroup(_, _, _, group)) => {
                     ("◈", group.entity_display_name.clone())
                 },

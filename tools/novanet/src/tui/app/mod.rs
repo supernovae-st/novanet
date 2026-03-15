@@ -374,12 +374,8 @@ impl App {
                 }
             },
             // EntityCategory is a grouper (THING, ACTION, etc.) - show as Section
-            // v0.17.3: Categories don't have YAML schema, they are navigational groupers
             Some(TreeItem::EntityCategory(_, _, _, _)) => TreeItemData::Section,
-            // LocaleGroup is a grouper (locale code) - show as Section
-            // Note: Legacy, kept for backwards compatibility
-            Some(TreeItem::LocaleGroup(_, _, _, _)) => TreeItemData::Section,
-            // v0.17.3: EntityGroup shows parent Entity as INSTANCE panel
+            // EntityGroup shows parent Entity as INSTANCE panel
             // Look up the Entity instance by key to show its properties
             Some(TreeItem::EntityGroup(_, _, _, group)) => {
                 // Find Entity class info
@@ -1116,13 +1112,6 @@ impl App {
                     r.display_name, l.display_name, k.display_name, cat.display_name
                 )
             },
-            Some(TreeItem::LocaleGroup(r, l, k, group)) => {
-                format!(
-                    "{} → {} → {} → {} {}",
-                    r.display_name, l.display_name, k.display_name, group.flag, group.locale_name
-                )
-            },
-            // v0.17.3: EntityGroup breadcrumb shows entity name
             Some(TreeItem::EntityGroup(r, l, k, group)) => {
                 format!(
                     "{} → {} → {} → {}",
@@ -1248,12 +1237,6 @@ impl App {
                 } else {
                     self.tree.toggle(&key);
                 }
-            }
-            // Handle LocaleGroup toggle (EntityNative locale groups)
-            else if key.starts_with("locale:") {
-                // LocaleGroup items are already loaded when EntityNative class was expanded
-                // Just toggle expand/collapse
-                self.tree.toggle(&key);
             }
             // Other items (Realm, Layer, ArcFamily, etc.): normal toggle
             else {

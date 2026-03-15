@@ -283,7 +283,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
     }
 
     // =========================================================================
-    // DATA NODES — Instance, EntityNative, EntityCategory, LocaleGroup, EntityGroup
+    // DATA NODES — Instance, EntityNative, EntityCategory, EntityGroup
     // =========================================================================
     Some(TreeItem::Instance(realm, layer, class_info, instance)) => {
       let provenance = instance.properties.get("provenance");
@@ -415,34 +415,6 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         "Entity category grouping. Instances inside share the same semantic domain.",
       );
       (lines, "Data Management".into(), Some(palette::BLUE_500))
-    }
-
-    Some(TreeItem::LocaleGroup(realm, layer, class_info, group)) => {
-      let mut lines = Vec::new();
-      push_breadcrumb_class(
-        &mut lines,
-        &realm.display_name,
-        &realm.color,
-        &layer.display_name,
-        &layer.color,
-        &class_info.display_name,
-      );
-      push_empty(&mut lines);
-      lines.push(Line::from(vec![
-        Span::styled("  Locale   ", Style::default().fg(COLOR_DIM)),
-        Span::styled(
-          format!("{} {}", group.flag, group.locale_name),
-          Style::default()
-            .fg(Color::Magenta)
-            .add_modifier(Modifier::BOLD),
-        ),
-      ]));
-      push_empty(&mut lines);
-      push_explanation(
-        &mut lines,
-        "Locale group — native content for this language/region.",
-      );
-      (lines, "Data Management".into(), Some(palette::CYAN_500))
     }
 
     Some(TreeItem::EntityGroup(realm, layer, class_info, group)) => {

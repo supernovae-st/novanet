@@ -70,7 +70,6 @@ pub fn build_minimap_info(app: &App, visible_height: usize) -> MiniMapInfo {
         Some(crate::tui::data::TreeItem::Layer(r, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Class(r, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::EntityCategory(r, _, _, _)) => hex_to_color(&r.color),
-        Some(crate::tui::data::TreeItem::LocaleGroup(r, _, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Instance(r, _, _, _)) => hex_to_color(&r.color),
         _ => Color::Cyan,
     };

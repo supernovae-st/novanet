@@ -172,24 +172,6 @@ pub struct EntityCategory {
     pub instance_count: i64,
 }
 
-// ============================================================================
-// EntityNative Locale Grouping (Data mode)
-// ============================================================================
-
-/// LocaleGroup for grouping EntityNative instances by locale.
-/// Used in Data mode to show EntityNative instances organized by locale.
-#[derive(Debug, Clone)]
-pub struct LocaleGroup {
-    /// Locale code (e.g., "fr-FR")
-    pub locale_code: String,
-    /// Locale display name (e.g., "Français (France)")
-    pub locale_name: String,
-    /// Flag emoji (e.g., "🇫🇷")
-    pub flag: String,
-    /// Number of EntityNative instances for this locale
-    pub instance_count: i64,
-}
-
 /// EntityNative info with parent Entity reference.
 /// Used for displaying natives grouped by locale with defined parent name.
 #[derive(Debug, Clone)]
@@ -325,9 +307,6 @@ pub enum TreeItem<'a> {
         &'a ClassInfo,
         &'a EntityCategory,
     ),
-    // Data view: Locale groups (between Class and instances for EntityNative only)
-    // Note: Legacy, kept for backwards compatibility but not used in v0.17.3+
-    LocaleGroup(&'a RealmInfo, &'a LayerInfo, &'a ClassInfo, &'a LocaleGroup),
     // Data view: Entity groups (between Class and instances for EntityNative only)
     // v0.17.3: Groups EntityNatives by parent Entity
     EntityGroup(

@@ -5,7 +5,7 @@
 //! - `build_class`: Class (NodeClass)
 //! - `build_arcs`: ArcFamily, ArcClass
 //! - `build_instance`: Instance
-//! - `build_groups`: EntityCategory, LocaleGroup, EntityGroup, empty state
+//! - `build_groups`: EntityCategory, EntityGroup, empty state
 
 use crate::tui::app::App;
 use crate::tui::data::{InstanceInfo, TreeItem};
@@ -20,7 +20,6 @@ use super::build_arcs::{build_arc_class_content, build_arc_family_content};
 use super::build_class::build_class_content;
 use super::build_groups::{
     build_category_content, build_empty_content, build_entity_group_content,
-    build_locale_group_content,
 };
 use super::build_instance::build_instance_content;
 
@@ -43,7 +42,6 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
             build_instance_content(app, realm, layer, class, instance)
         },
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
-        Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
         // EntityGroup shows parent Entity as INSTANCE panel
         Some(TreeItem::EntityGroup(_, _, _, group)) => {
             if let Some((entity_realm, entity_layer, entity_class)) =

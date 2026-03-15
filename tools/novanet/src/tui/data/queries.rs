@@ -213,8 +213,6 @@ ORDER BY realm_key, layer_key, class_key
             class_index,
             entity_categories: Vec::new(), // Loaded on-demand via load_entity_categories
             entity_category_instances: FxHashMap::default(), // Loaded on-demand when category expanded
-            locale_groups: Vec::new(), // Loaded on-demand via load_entity_natives_by_locale
-            entity_native_by_locale: FxHashMap::default(), // Loaded on-demand when locale expanded
             entity_native_groups: Vec::new(), // Loaded on-demand via load_entity_natives_by_entity
             entity_native_by_entity: FxHashMap::default(), // Loaded on-demand when entity group expanded
         })
@@ -1222,84 +1220,6 @@ RETURN total,
         }
 
         Ok((instances, total_count))
-    }
-
-    /// Load all EntityNative instances grouped by locale.
-    /// Returns locale groups sorted by locale code, with natives sorted A-Z by entity_display_name.
-    pub async fn load_entity_natives_by_locale(
-        db: &Db,
-    ) -> crate::Result<(Vec<LocaleGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
-        // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
-        let cypher = r#"
-MATCH (en:EntityNative)
-OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
-OPTIONAL MATCH (e:Entity)-[:HAS_NATIVE]->(en)
-WITH coalesce(l.key, 'unknown') AS locale_code,
-     coalesce(l.display_name, l.key, 'Unknown Locale') AS locale_name,
-     en, e
-ORDER BY coalesce(e.display_name, e.key, en.key)
-WITH locale_code, locale_name,
-     collect({
-         key: en.key,
-         display_name: coalesce(en.display_name, en.key),
-         entity_key: coalesce(e.key, ''),
-         entity_display_name: coalesce(e.display_name, e.key, ''),
-         slug: CASE
-           WHEN en.denomination_forms IS NOT NULL
-           THEN [form IN apoc.convert.fromJsonList(en.denomination_forms) WHERE form.type = 'url' | form.value][0]
-           ELSE null
-         END
-     }) AS natives
-RETURN locale_code, locale_name, natives, size(natives) AS count
-ORDER BY locale_code
-"#;
-
-        let rows = db.execute(cypher).await?;
-        let mut locale_groups = Vec::with_capacity(rows.len());
-        let mut natives_by_locale: FxHashMap<String, Vec<EntityNativeInfo>> = FxHashMap::default();
-
-        for row in rows {
-            let locale_code: String = row.get("locale_code").unwrap_or_default();
-            let locale_name: String = row.get("locale_name").unwrap_or_default();
-            let count: i64 = row.get("count").unwrap_or(0);
-
-            // Convert locale code to flag emoji
-            let flag = locale_to_flag(&locale_code);
-
-            locale_groups.push(LocaleGroup {
-                locale_code: locale_code.clone(),
-                locale_name,
-                flag,
-                instance_count: count,
-            });
-
-            // Parse natives
-            // Note: This legacy function doesn't load full properties (use load_entity_natives_by_entity)
-            let natives: Vec<EntityNativeInfo> = row
-                .get::<Vec<neo4rs::BoltMap>>("natives")
-                .unwrap_or_default()
-                .into_iter()
-                .map(|m| {
-                    let slug: Option<String> = m.get("slug").ok();
-                    // Power based on completeness: 100 if has slug, 50 otherwise
-                    let relationship_power = if slug.is_some() { 100 } else { 50 };
-                    EntityNativeInfo {
-                        key: m.get("key").unwrap_or_default(),
-                        display_name: m.get("display_name").unwrap_or_default(),
-                        entity_key: m.get("entity_key").unwrap_or_default(),
-                        entity_display_name: m.get("entity_display_name").unwrap_or_default(),
-                        locale_code: locale_code.clone(),
-                        slug,
-                        relationship_power,
-                        properties: BTreeMap::new(), // Legacy: no full properties in this query
-                    }
-                })
-                .collect();
-
-            natives_by_locale.insert(locale_code.clone(), natives);
-        }
-
-        Ok((locale_groups, natives_by_locale))
     }
 
     /// Load EntityNatives grouped by parent Entity.

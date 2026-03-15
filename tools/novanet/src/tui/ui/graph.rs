@@ -1072,8 +1072,6 @@ mod tests {
             class_index: FxHashMap::default(),
             entity_categories: Vec::new(),
             entity_category_instances: Default::default(),
-            locale_groups: Vec::new(),
-            entity_native_by_locale: Default::default(),
             entity_native_groups: Vec::new(),
             entity_native_by_entity: Default::default(),
         }
@@ -1100,8 +1098,6 @@ mod tests {
             class_index,
             entity_categories: Vec::new(),
             entity_category_instances: Default::default(),
-            locale_groups: Vec::new(),
-            entity_native_by_locale: Default::default(),
             entity_native_groups: Vec::new(),
             entity_native_by_entity: Default::default(),
         }

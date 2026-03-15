@@ -49,12 +49,6 @@ pub struct TaxonomyTree {
     /// Loaded on-demand when Entity categories are expanded.
     /// Uses FxHashMap for ~30% faster lookups (no ordering needed).
     pub entity_category_instances: FxHashMap<String, Vec<InstanceInfo>>,
-    /// Locale groups for EntityNative display (sorted by locale code).
-    /// Loaded on-demand when viewing EntityNative class.
-    pub locale_groups: Vec<LocaleGroup>,
-    /// EntityNative instances grouped by locale (key = locale code like "fr-FR").
-    /// Loaded on-demand when locale groups are expanded.
-    pub entity_native_by_locale: FxHashMap<String, Vec<EntityNativeInfo>>,
     /// EntityNative groups by parent Entity (sorted by entity key).
     /// Loaded on-demand when viewing EntityNative class.
     pub entity_native_groups: Vec<EntityNativeGroup>,
@@ -754,12 +748,7 @@ impl TaxonomyTree {
             Some(TreeItem::Class(_, _, k)) => Some(format!("class:{}", k.key)),
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
-            // LocaleGroup can be collapsed to hide its EntityNativeItems
-            // Note: Legacy, kept for backwards compatibility
-            Some(TreeItem::LocaleGroup(_, _, _, group)) => {
-                Some(format!("locale:{}", group.locale_code))
-            },
-            // v0.17.3: EntityGroup can be collapsed to hide its EntityNativeItems
+            // EntityGroup can be collapsed to hide its EntityNativeItems
             Some(TreeItem::EntityGroup(_, _, _, group)) => {
                 Some(format!("entity_group:{}", group.entity_key))
             },
@@ -812,12 +801,7 @@ impl TaxonomyTree {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             },
 
-            // LocaleGroup's parent is its Class (EntityNative)
-            // Note: Legacy, kept for backwards compatibility
-            Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
-                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
-            },
-            // v0.17.3: EntityGroup's parent is its Class (EntityNative)
+            // EntityGroup's parent is its Class (EntityNative)
             Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             },
@@ -1276,33 +1260,7 @@ impl TaxonomyTree {
                     ..Default::default()
                 }
             },
-            Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
-                let realm_idx = self
-                    .realms
-                    .iter()
-                    .position(|r| r.key == realm.key)
-                    .map(|i| i + 1)
-                    .unwrap_or(1);
-                let layer_idx = realm
-                    .layers
-                    .iter()
-                    .position(|l| l.key == layer.key)
-                    .map(|i| i + 1)
-                    .unwrap_or(1);
-                let class_idx = layer
-                    .classes
-                    .iter()
-                    .position(|k| k.key == class_info.key)
-                    .map(|i| i + 1)
-                    .unwrap_or(1);
-                HierarchyPosition {
-                    realm: Some((realm_idx, total_realms)),
-                    layer: Some((layer_idx, realm.layers.len())),
-                    class: Some((class_idx, layer.classes.len())),
-                    ..Default::default()
-                }
-            },
-            // v0.17.3: EntityGroup hierarchy position (same as LocaleGroup)
+            // EntityGroup hierarchy position
             Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
@@ -1478,8 +1436,6 @@ impl TaxonomyTree {
             class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
-            locale_groups: Vec::new(),
-            entity_native_by_locale: FxHashMap::default(),
             entity_native_groups: Vec::new(),
             entity_native_by_entity: FxHashMap::default(),
         }
@@ -1622,8 +1578,6 @@ mod tests {
             class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
-            locale_groups: Vec::new(),
-            entity_native_by_locale: FxHashMap::default(),
             entity_native_groups: Vec::new(),
             entity_native_by_entity: FxHashMap::default(),
         }

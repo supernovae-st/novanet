@@ -1,4 +1,4 @@
-//! Group content builders: EntityCategory, LocaleGroup, EntityGroup, empty state.
+//! Group content builders: EntityCategory, EntityGroup, empty state.
 
 use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
@@ -55,49 +55,6 @@ pub(super) fn build_category_content(
                 .add_line(Line::from(Span::styled(format!("  {}", line), STYLE_DIM)));
         }
     }
-
-    // RELATIONSHIPS - not applicable
-    content.relationships.add_empty();
-
-    content
-}
-
-/// Build content for LocaleGroup (EntityNative grouping by locale).
-pub(super) fn build_locale_group_content(
-    group: &crate::tui::data::LocaleGroup,
-) -> UnifiedContent<'static> {
-    let mut content = UnifiedContent::default();
-
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("LocaleGroup", STYLE_ACCENT));
-    content.identity.add_kv(
-        "locale",
-        Span::styled(
-            format!("{} {}", group.flag, group.locale_code),
-            Style::default().fg(Color::Cyan),
-        ),
-    );
-    content.identity.add_kv(
-        "name",
-        Span::styled(group.locale_name.clone(), STYLE_PRIMARY),
-    );
-
-    // LOCATION - not applicable
-    content.location.add_empty();
-
-    // METRICS
-    content.metrics.add_kv(
-        "natives",
-        Span::styled(group.instance_count.to_string(), STYLE_PRIMARY),
-    );
-
-    // COVERAGE - not applicable
-    content.coverage.add_empty();
-
-    // PROPERTIES - not applicable
-    content.properties.add_empty();
 
     // RELATIONSHIPS - not applicable
     content.relationships.add_empty();

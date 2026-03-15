@@ -48,13 +48,6 @@ fn get_tree_content(app: &App) -> Option<(String, &'static str)> {
         TreeItem::EntityCategory(realm, layer, class, cat) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, cat.key)
         },
-        TreeItem::LocaleGroup(realm, layer, class, group) => {
-            format!(
-                "{}/{}/{}/{}",
-                realm.key, layer.key, class.key, group.locale_code
-            )
-        },
-        // v0.17.3: EntityGroup path
         TreeItem::EntityGroup(realm, layer, class, group) => {
             format!(
                 "{}/{}/{}/{}",
