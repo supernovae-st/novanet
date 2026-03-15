@@ -87,17 +87,6 @@ pub const QUALITY_PARTIAL: IconDef = IconDef::new("circle-dot", "◐", "Some fie
 pub const QUALITY_REQUIRED: IconDef = IconDef::new("asterisk", "*", "Required field marker");
 
 // =============================================================================
-// MODES ICONS (6)
-// =============================================================================
-
-pub const MODES_DATA: IconDef = IconDef::new("table", "D", "Data instances view");
-pub const MODES_GRAPH: IconDef = IconDef::new("git-branch", "G", "Unified tree view (Realm > Layer > Class)");
-pub const MODES_META: IconDef = IconDef::new("database", "M", "Meta-graph view");
-pub const MODES_NEXUS: IconDef = IconDef::new("compass", "N", "Hub for Quiz, Stats, Help");
-pub const MODES_OVERLAY: IconDef = IconDef::new("layers", "O", "Combined meta+data");
-pub const MODES_QUERY: IconDef = IconDef::new("filter", "Q", "Faceted query");
-
-// =============================================================================
 // LOOKUP FUNCTIONS
 // =============================================================================
 
@@ -184,18 +173,6 @@ pub fn quality_icons() -> HashMap<&'static str, IconDef> {
     }
 }
 
-/// Get all mode icons.
-pub fn mode_icons() -> HashMap<&'static str, IconDef> {
-    icon_map! {
-        "data" => MODES_DATA,
-        "graph" => MODES_GRAPH,
-        "meta" => MODES_META,
-        "nexus" => MODES_NEXUS,
-        "overlay" => MODES_OVERLAY,
-        "query" => MODES_QUERY,
-    }
-}
-
 // =============================================================================
 // CONVENIENCE FUNCTIONS
 // =============================================================================
@@ -254,15 +231,3 @@ pub fn state_terminal_icon(key: &str) -> &'static str {
     }
 }
 
-/// Get terminal icon for a mode.
-pub fn mode_terminal_icon(key: &str) -> &'static str {
-    match key {
-        "data" => "D",
-        "graph" => "G",
-        "meta" => "M",
-        "nexus" => "N",
-        "overlay" => "O",
-        "query" => "Q",
-        _ => "·",
-    }
-}
