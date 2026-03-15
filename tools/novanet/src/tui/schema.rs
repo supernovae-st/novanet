@@ -28,11 +28,9 @@ pub struct SchemaProperty {
     pub is_standard: bool,
     /// Example value from schema (for display when empty)
     pub example: Option<String>,
-    /// Property description (parsed for future tooltip/detail view)
-    #[allow(dead_code)]
+    /// Property description from YAML schema
     pub description: Option<String>,
-    /// Enum values if prop_type is "enum" (parsed for future dropdown/validation)
-    #[allow(dead_code)]
+    /// Enum values if prop_type is "enum"
     pub enum_values: Option<Vec<String>>,
 }
 
@@ -65,11 +63,9 @@ pub struct CoverageStats {
     pub total: usize,
     /// Properties with values
     pub filled: usize,
-    /// Required properties missing (used in tests)
-    #[allow(dead_code)]
+    /// Required properties missing values
     pub missing_required: usize,
-    /// Coverage percentage (0-100) — calculated for future progress bar display
-    #[allow(dead_code)]
+    /// Coverage percentage (0-100)
     pub percent: u8,
 }
 
