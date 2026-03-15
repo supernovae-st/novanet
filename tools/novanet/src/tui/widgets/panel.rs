@@ -3,6 +3,8 @@
 use ratatui::style::{Color, Style};
 use ratatui::widgets::{Block, BorderType, Borders};
 
+use crate::tui::palette;
+
 /// A panel with automatic focus styling.
 pub struct FocusablePanel<'a> {
     title: &'a str,
@@ -17,7 +19,7 @@ impl<'a> FocusablePanel<'a> {
             title,
             focused: false,
             focused_color: Color::Cyan,
-            unfocused_color: Color::Rgb(60, 60, 70),
+            unfocused_color: palette::BORDER_UNFOCUSED,
         }
     }
 

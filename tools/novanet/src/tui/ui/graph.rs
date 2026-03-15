@@ -15,6 +15,7 @@ use ratatui::widgets::{
 use super::super::app::App;
 use super::super::data::TreeItem;
 use super::super::theme;
+use crate::tui::palette;
 use super::{
     STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED,
     STYLE_PRIMARY, STYLE_SUCCESS, scroll_indicator, spinner, wrap_text,
@@ -25,10 +26,10 @@ use super::{
 // =============================================================================
 
 /// Unfocused: Nord Polar Night (dim) - box is NOT selected
-const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
 
 /// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
-const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
+const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
 
 // =============================================================================
 // ARC DISPLAY CONSTANTS
@@ -176,7 +177,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
     f.render_widget(block, area);
 
     let mut lines: Vec<Line> = Vec::new();
-    let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+    let dim = Style::default().fg(palette::DIM);
     let bright_dim = STYLE_BRIGHT_DIM;
 
     // === LOADING INDICATOR (specific message based on what's loading) ===
@@ -220,7 +221,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         if !details.description.is_empty() {
             lines.push(Line::from(Span::styled(
                 format!("  {}", details.description),
-                Style::default().fg(Color::Rgb(180, 180, 180)),
+                Style::default().fg(palette::COUNT_TEXT),
             )));
             lines.push(Line::from(Span::raw("")));
         }
@@ -304,7 +305,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         if !details.description.is_empty() {
             lines.push(Line::from(Span::styled(
                 format!("  {}", details.description),
-                Style::default().fg(Color::Rgb(180, 180, 180)),
+                Style::default().fg(palette::COUNT_TEXT),
             )));
             lines.push(Line::from(Span::raw("")));
         }
@@ -875,7 +876,7 @@ fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> Span<'static
 /// Build realm/layer distribution stats for the graph panel fallback view.
 fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     let theme = &app.theme;
-    let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+    let dim = Style::default().fg(palette::DIM);
     let mut lines: Vec<Line<'static>> = Vec::with_capacity(20);
 
     // Calculate total classes

@@ -37,6 +37,7 @@ use super::{
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::locale_to_flag;
+use crate::tui::palette;
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::display_width;
 
@@ -112,10 +113,10 @@ const SCROLLBAR_WIDTH: u16 = 1;
 /// Power bar width (10 filled/empty characters)
 const POWER_BAR_WIDTH: usize = 10;
 
-/// Power bar color thresholds (Tailwind colors)
-const COLOR_POWER_HIGH: Color = Color::Rgb(34, 197, 94); // green-500 (≥80%)
-const COLOR_POWER_MED: Color = Color::Rgb(249, 115, 22); // orange-500 (50-79%)
-const COLOR_POWER_LOW: Color = Color::Rgb(239, 68, 68); // red-500 (<50%)
+/// Power bar color thresholds (Tailwind colors via palette)
+const COLOR_POWER_HIGH: Color = palette::GREEN_500; // green-500 (≥80%)
+const COLOR_POWER_MED: Color = palette::ORANGE_500; // orange-500 (50-79%)
+const COLOR_POWER_LOW: Color = palette::RED_500; // red-500 (<50%)
 
 /// Pre-computed power bar strings (v0.17.3: zero-allocation optimization)
 /// Index 0 = 0% filled, Index 10 = 100% filled
@@ -155,7 +156,7 @@ fn render_power_bar(power: u8) -> (&'static str, Color) {
 const COLOR_ENTITY_TEXT: Color = Color::White;
 
 /// Entity slug color (slate-400, same as EntityNative slug)
-const COLOR_ENTITY_SLUG: Color = Color::Rgb(148, 163, 184);
+const COLOR_ENTITY_SLUG: Color = palette::ENTITY_SLUG;
 
 // =============================================================================
 // BREADCRUMB RENDERING (v11.6)
@@ -392,9 +393,9 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
         // Empty breadcrumb: show subtle placeholder
         let line = Line::from(Span::styled(
             " ◇ Select an item",
-            Style::default().fg(Color::Rgb(80, 80, 100)),
+            Style::default().fg(palette::HINT_TEXT),
         ));
-        let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(25, 25, 35)));
+        let paragraph = Paragraph::new(line).style(Style::default().bg(palette::BG_EMPTY));
         f.render_widget(paragraph, breadcrumb_area);
         return 1;
     }
@@ -408,7 +409,7 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
             // Arrow separator with subtle color
             spans.push(Span::styled(
                 " → ",
-                Style::default().fg(Color::Rgb(100, 100, 120)),
+                Style::default().fg(palette::MUTED),
             ));
         }
         // Icon
@@ -428,7 +429,7 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
     }
 
     let line = Line::from(spans);
-    let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(25, 25, 35)));
+    let paragraph = Paragraph::new(line).style(Style::default().bg(palette::BG_EMPTY));
     f.render_widget(paragraph, breadcrumb_area);
 
     1 // Always 1 line
@@ -485,7 +486,7 @@ fn render_minimap(f: &mut Frame, area: Rect, info: &MiniMapInfo) {
             ("░░", COLOR_MUTED_TEXT)
         } else {
             // Outside viewport: medium shade
-            ("▒▒", Color::Rgb(40, 40, 50))
+            ("▒▒", palette::EMPTY_SLOT)
         };
 
         lines.push(Line::from(Span::styled(symbol, Style::default().fg(color))));
@@ -949,7 +950,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                                     // Dim text for empty classes, white for populated
                                     let text_color = if class_is_empty {
-                                        Color::Rgb(140, 140, 150)
+                                        palette::BRIGHT_DIM
                                     } else {
                                         Color::White
                                     };
@@ -962,7 +963,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     } else if instance_count > 0 {
                                         Color::Green
                                     } else {
-                                        Color::Rgb(100, 100, 110)
+                                        palette::DIM_110
                                     };
 
                                     (text, text_color, cnt_str, cnt_color)
@@ -1049,7 +1050,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                                 // Format: ● 200 Name
                                 let icon_color = if class_is_empty {
-                                    Color::Rgb(100, 100, 110) // Dim gray
+                                    palette::DIM_110 // Dim gray
                                 } else {
                                     Color::Green
                                 };
@@ -1720,7 +1721,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         for _ in 0..inner_area.height {
             sep_lines.push(Line::from(Span::styled(
                 "│",
-                Style::default().fg(Color::Rgb(50, 50, 60)),
+                Style::default().fg(palette::EMPTY_SLOT),
             )));
         }
         let sep_paragraph = Paragraph::new(sep_lines);

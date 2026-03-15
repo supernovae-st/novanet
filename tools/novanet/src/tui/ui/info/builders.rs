@@ -8,6 +8,7 @@ use ratatui::text::{Line, Span};
 
 use crate::tui::app::{App, Focus};
 use crate::tui::colors;
+use crate::tui::palette;
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::ValidationStatus;
 use crate::tui::theme::{ColorMode, hex_to_color};
@@ -643,9 +644,9 @@ fn build_class_content(
 
             for prop in &standard_props {
                 let (status_icon, status_style) = match prop.status {
-                    ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+                    ValidationStatus::Sync => ("✓", Style::default().fg(palette::SOLARIZED_GREEN)),
                     ValidationStatus::Missing => {
-                        ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                        ("⚠", Style::default().fg(palette::SOLARIZED_ORANGE))
                     },
                     ValidationStatus::Extra => ("?", STYLE_DIM),
                 };
@@ -657,7 +658,7 @@ fn build_class_content(
                     Span::styled(status_icon, status_style),
                     Span::styled(
                         required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                        Style::default().fg(palette::SOLARIZED_RED),
                     ),
                     Span::styled(
                         format!("{:width$}", prop.name, width = max_name_len),
@@ -681,9 +682,9 @@ fn build_class_content(
 
             for prop in &specific_props {
                 let (status_icon, status_style) = match prop.status {
-                    ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+                    ValidationStatus::Sync => ("✓", Style::default().fg(palette::SOLARIZED_GREEN)),
                     ValidationStatus::Missing => {
-                        ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                        ("⚠", Style::default().fg(palette::SOLARIZED_ORANGE))
                     },
                     ValidationStatus::Extra => ("?", STYLE_DIM),
                 };
@@ -695,7 +696,7 @@ fn build_class_content(
                     Span::styled(status_icon, status_style),
                     Span::styled(
                         required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                        Style::default().fg(palette::SOLARIZED_RED),
                     ),
                     Span::styled(
                         format!("{:width$}", prop.name, width = max_name_len),
@@ -743,7 +744,7 @@ fn build_class_content(
 
                 content.properties.add_line(Line::from(vec![
                     Span::styled("  ", STYLE_DIM),
-                    Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
+                    Span::styled(marker, Style::default().fg(palette::SOLARIZED_RED)),
                     Span::styled(
                         format!("{:width$}", prop, width = max_name_len),
                         STYLE_PROP_KEY,
@@ -752,7 +753,7 @@ fn build_class_content(
                     Span::styled(
                         if is_required { "[req]" } else { "[opt]" },
                         if is_required {
-                            Style::default().fg(Color::Rgb(181, 137, 0))
+                            Style::default().fg(palette::SOLARIZED_GOLD)
                         } else {
                             STYLE_DIM
                         },
@@ -774,7 +775,7 @@ fn build_class_content(
 
                 content.properties.add_line(Line::from(vec![
                     Span::styled("  ", STYLE_DIM),
-                    Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
+                    Span::styled(marker, Style::default().fg(palette::SOLARIZED_RED)),
                     Span::styled(
                         format!("{:width$}", prop, width = max_name_len),
                         STYLE_PROP_KEY,
@@ -783,7 +784,7 @@ fn build_class_content(
                     Span::styled(
                         if is_required { "[req]" } else { "[opt]" },
                         if is_required {
-                            Style::default().fg(Color::Rgb(181, 137, 0))
+                            Style::default().fg(palette::SOLARIZED_GOLD)
                         } else {
                             STYLE_DIM
                         },
@@ -1343,9 +1344,9 @@ fn build_instance_content(
                     .unwrap_or(false);
 
                 let (status_icon, status_style) = if has_value {
-                    ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                    ("✓", Style::default().fg(palette::SOLARIZED_GREEN))
                 } else if is_required {
-                    ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                    ("⚠", Style::default().fg(palette::SOLARIZED_ORANGE))
                 } else {
                     (" ", STYLE_DIM)
                 };
@@ -1389,7 +1390,7 @@ fn build_instance_content(
                         Span::styled(status_icon, status_style.patch(bg_style)),
                         Span::styled(
                             required_marker,
-                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                            Style::default().fg(palette::SOLARIZED_RED).patch(bg_style),
                         ),
                         Span::styled(
                             format!("{:width$}", key, width = max_key_len),
@@ -1420,7 +1421,7 @@ fn build_instance_content(
                         Span::styled(status_icon, status_style.patch(bg_style)),
                         Span::styled(
                             required_marker,
-                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                            Style::default().fg(palette::SOLARIZED_RED).patch(bg_style),
                         ),
                         Span::styled(
                             format!("{:width$}", key, width = max_key_len),
@@ -1456,9 +1457,9 @@ fn build_instance_content(
                     .unwrap_or(false);
 
                 let (status_icon, status_style) = if has_value {
-                    ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                    ("✓", Style::default().fg(palette::SOLARIZED_GREEN))
                 } else if is_required {
-                    ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                    ("⚠", Style::default().fg(palette::SOLARIZED_ORANGE))
                 } else {
                     (" ", STYLE_DIM)
                 };
@@ -1499,7 +1500,7 @@ fn build_instance_content(
                         Span::styled(status_icon, status_style.patch(bg_style)),
                         Span::styled(
                             required_marker,
-                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                            Style::default().fg(palette::SOLARIZED_RED).patch(bg_style),
                         ),
                         Span::styled(
                             format!("{:width$}", key, width = max_key_len),
@@ -1528,7 +1529,7 @@ fn build_instance_content(
                         Span::styled(status_icon, status_style.patch(bg_style)),
                         Span::styled(
                             required_marker,
-                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                            Style::default().fg(palette::SOLARIZED_RED).patch(bg_style),
                         ),
                         Span::styled(
                             format!("{:width$}", key, width = max_key_len),

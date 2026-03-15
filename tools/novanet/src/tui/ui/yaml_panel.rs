@@ -21,16 +21,17 @@ use serde_json::Value as JsonValue;
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
 use crate::tui::app::{App, ContentPanelMode};
+use crate::tui::palette;
 
 // =============================================================================
 // BOX VISUAL STATES v0.13 (enhanced palette)
 // =============================================================================
 
 /// Unfocused: Nord Polar Night (dim) - box is NOT selected
-const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
 
 /// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
-const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
+const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
 
 // =============================================================================
 // STANDARD PROPERTIES (ADR-044)
@@ -147,35 +148,35 @@ fn format_timestamp(timestamp: i64) -> String {
 // =============================================================================
 
 /// YAML key color (cyan)
-const COLOR_YAML_KEY: Color = Color::Rgb(86, 182, 194); // #56B6C2 Cyan
+const COLOR_YAML_KEY: Color = palette::YAML_KEY;
 /// YAML string color (yellow/gold)
-const COLOR_YAML_STRING: Color = Color::Rgb(229, 192, 123); // #E5C07B Yellow
+const COLOR_YAML_STRING: Color = palette::YAML_STRING;
 /// YAML number color (orange)
-const COLOR_YAML_NUMBER: Color = Color::Rgb(209, 154, 102); // #D19A66 Orange
+const COLOR_YAML_NUMBER: Color = palette::YAML_NUMBER;
 /// YAML boolean/null color (violet)
-const COLOR_YAML_BOOL: Color = Color::Rgb(198, 120, 221); // #C678DD Violet
+const COLOR_YAML_BOOL: Color = palette::YAML_BOOL;
 /// Section header color (muted)
-const COLOR_SECTION_HEADER: Color = Color::Rgb(92, 99, 112); // #5C6370 Muted
+const COLOR_SECTION_HEADER: Color = palette::YAML_SECTION_HEADER;
 
 // =============================================================================
 // SEMANTIC COLORS
 // =============================================================================
 
 /// Realm colors
-const COLOR_REALM_SHARED: Color = Color::Rgb(42, 161, 152); // #2AA198 Solarized Cyan
-const COLOR_REALM_ORG: Color = Color::Rgb(108, 113, 196); // #6C71C4 Solarized Violet
+const COLOR_REALM_SHARED: Color = palette::REALM_SHARED;
+const COLOR_REALM_ORG: Color = palette::REALM_ORG;
 
 /// Layer colors (subset)
-const COLOR_LAYER_SEMANTIC: Color = Color::Rgb(249, 115, 22); // #F97316 Orange
-const COLOR_LAYER_OUTPUT: Color = Color::Rgb(34, 197, 94); // #22C55E Green
-const COLOR_LAYER_KNOWLEDGE: Color = Color::Rgb(139, 92, 246); // #8B5CF6 Violet
+const COLOR_LAYER_SEMANTIC: Color = palette::LAYER_SEMANTIC;
+const COLOR_LAYER_OUTPUT: Color = palette::LAYER_OUTPUT;
+const COLOR_LAYER_KNOWLEDGE: Color = palette::LAYER_KNOWLEDGE;
 
 /// Arc family colors
-const COLOR_FAMILY_OWNERSHIP: Color = Color::Rgb(59, 130, 246); // Blue
-const COLOR_FAMILY_SEMANTIC: Color = Color::Rgb(249, 115, 22); // Orange
-const COLOR_FAMILY_GENERATION: Color = Color::Rgb(181, 137, 0); // Gold
-const COLOR_FAMILY_LOCALIZATION: Color = Color::Rgb(34, 197, 94); // Green
-const COLOR_FAMILY_MINING: Color = Color::Rgb(139, 92, 246); // Violet
+const COLOR_FAMILY_OWNERSHIP: Color = palette::FAMILY_OWNERSHIP;
+const COLOR_FAMILY_SEMANTIC: Color = palette::FAMILY_SEMANTIC;
+const COLOR_FAMILY_GENERATION: Color = palette::FAMILY_GENERATION;
+const COLOR_FAMILY_LOCALIZATION: Color = palette::FAMILY_LOCALIZATION;
+const COLOR_FAMILY_MINING: Color = palette::FAMILY_MINING;
 
 // =============================================================================
 // YAML SYNTAX HIGHLIGHTING STYLES
@@ -334,7 +335,7 @@ fn build_schema_title(
 
     // Line count badge
     let badge_style = if selected {
-        Style::default().fg(Color::Rgb(136, 192, 208)) // Nord Frost
+        Style::default().fg(palette::NORD_FROST)
     } else {
         Style::default().fg(Color::DarkGray)
     };
@@ -344,13 +345,13 @@ fn build_schema_title(
     if !yaml_path.is_empty() {
         let short_path = abbreviate_yaml_path(yaml_path);
         let path_style = if selected {
-            Style::default().fg(Color::Rgb(100, 120, 140))
+            Style::default().fg(palette::SLATE_500)
         } else {
-            Style::default().fg(Color::Rgb(70, 70, 70))
+            Style::default().fg(palette::SEPARATOR)
         };
         spans.push(Span::styled(
             " │ ",
-            Style::default().fg(Color::Rgb(60, 60, 60)),
+            Style::default().fg(palette::BORDER_UNFOCUSED),
         ));
         spans.push(Span::styled(short_path, path_style));
     }
@@ -383,17 +384,17 @@ fn render_instance_info(
 
     // YAML-like header with class info
     lines.push(Line::from(vec![
-        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))),
+        Span::styled("# ", Style::default().fg(palette::SOLARIZED_VIOLET)),
         Span::styled(
             format!("{} instance", class_name),
-            Style::default().fg(Color::Rgb(108, 113, 196)),
+            Style::default().fg(palette::SOLARIZED_VIOLET),
         ),
     ]));
     lines.push(Line::from(vec![
-        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))),
+        Span::styled("# ", Style::default().fg(palette::SOLARIZED_VIOLET)),
         Span::styled(
             format!("realm: {} | layer: {}", realm, layer),
-            Style::default().fg(Color::Rgb(108, 113, 196)),
+            Style::default().fg(palette::SOLARIZED_VIOLET),
         ),
     ]));
     lines.push(Line::from(""));
@@ -473,7 +474,7 @@ fn render_instance_info(
         lines.push(Line::from(""));
         lines.push(Line::from(Span::styled(
             "# No properties loaded",
-            Style::default().fg(Color::Rgb(108, 113, 196)),
+            Style::default().fg(palette::SOLARIZED_VIOLET),
         )));
     }
 
@@ -600,7 +601,7 @@ fn render_property_lines(
                     Span::styled(indent_str, Style::default()),
                     Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
                     Span::styled(": ", Style::default().fg(Color::White)),
-                    Span::styled("[]", Style::default().fg(Color::Rgb(97, 175, 239))),
+                    Span::styled("[]", Style::default().fg(palette::YAML_BRACKET)),
                 ]));
             } else {
                 // Array header
@@ -621,7 +622,7 @@ fn render_property_lines(
                     Span::styled(indent_str, Style::default()),
                     Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
                     Span::styled(": ", Style::default().fg(Color::White)),
-                    Span::styled("{}", Style::default().fg(Color::Rgb(97, 175, 239))),
+                    Span::styled("{}", Style::default().fg(palette::YAML_BRACKET)),
                 ]));
             } else {
                 // Object header
@@ -658,7 +659,7 @@ fn render_property_lines_with_timestamp(
                     Span::styled(indent_str, Style::default()),
                     Span::styled(key.to_string(), Style::default().fg(COLOR_YAML_KEY)),
                     Span::styled(": ", Style::default().fg(Color::White)),
-                    Span::styled(formatted, Style::default().fg(Color::Rgb(136, 192, 208))), // Nord Frost for timestamps
+                    Span::styled(formatted, Style::default().fg(palette::NORD_FROST)),
                 ]));
                 return;
             }
@@ -740,7 +741,7 @@ fn render_array_item_lines(
                 lines.push(Line::from(vec![
                     Span::styled(indent_str, Style::default()),
                     Span::styled("- ", Style::default().fg(Color::White)),
-                    Span::styled("{}", Style::default().fg(Color::Rgb(97, 175, 239))),
+                    Span::styled("{}", Style::default().fg(palette::YAML_BRACKET)),
                 ]));
             } else {
                 // Object in array - first key on same line as dash
@@ -880,7 +881,7 @@ fn build_neo4j_title(selected: bool, instance_key: &str) -> Line<'static> {
                 .add_modifier(Modifier::BOLD),
         ),
         Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
-        Span::styled(display_key, Style::default().fg(Color::Rgb(136, 192, 208))),
+        Span::styled(display_key, Style::default().fg(palette::NORD_FROST)),
         Span::styled(" ", Style::default()),
     ])
 }
@@ -903,7 +904,7 @@ fn render_section_info(
         Span::styled(
             name.to_string(),
             Style::default()
-                .fg(Color::Rgb(136, 192, 208)) // Nord Frost
+                .fg(palette::NORD_FROST)
                 .add_modifier(Modifier::BOLD),
         ),
     ]));
@@ -917,7 +918,7 @@ fn render_section_info(
     lines.push(Line::from(""));
     lines.push(Line::from(Span::styled(
         "   Select a Class to view its YAML schema.",
-        Style::default().fg(Color::Rgb(100, 100, 100)),
+        Style::default().fg(palette::DIM),
     )));
 
     // Build title
@@ -945,7 +946,7 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
         Line::from(""),
         Line::from(Span::styled(
             "   Navigate to a node to view its content.",
-            Style::default().fg(Color::Rgb(100, 100, 100)),
+            Style::default().fg(palette::DIM),
         )),
     ];
 
@@ -990,14 +991,14 @@ fn build_info_title(selected: bool, name: &str) -> Line<'static> {
 
     // Name badge
     let name_style = if selected {
-        Style::default().fg(Color::Rgb(136, 192, 208)) // Nord Frost
+        Style::default().fg(palette::NORD_FROST)
     } else {
         Style::default().fg(Color::DarkGray)
     };
 
     spans.push(Span::styled(
         "│ ",
-        Style::default().fg(Color::Rgb(60, 60, 60)),
+        Style::default().fg(palette::BORDER_UNFOCUSED),
     ));
     spans.push(Span::styled(name.to_string(), name_style));
     spans.push(Span::styled(" ", Style::default()));
@@ -1030,14 +1031,14 @@ fn arc_family_color(family: &str) -> Color {
 /// Get layer color from key.
 fn layer_color(layer: &str) -> Color {
     match layer {
-        "config" => Color::Rgb(59, 130, 246),   // Blue
-        "locale" => Color::Rgb(236, 72, 153),   // Pink
-        "geography" => Color::Rgb(34, 197, 94), // Green
+        "config" => palette::LAYER_CONFIG,
+        "locale" => palette::LAYER_LOCALE,
+        "geography" => palette::LAYER_GEOGRAPHY,
         "knowledge" => COLOR_LAYER_KNOWLEDGE,
-        "foundation" => Color::Rgb(168, 85, 247), // Purple
-        "structure" => Color::Rgb(59, 130, 246),  // Blue
+        "foundation" => palette::LAYER_FOUNDATION,
+        "structure" => palette::LAYER_STRUCTURE,
         "semantic" => COLOR_LAYER_SEMANTIC,
-        "instruction" => Color::Rgb(181, 137, 0), // Gold
+        "instruction" => palette::LAYER_INSTRUCTION,
         "output" => COLOR_LAYER_OUTPUT,
         _ => Color::White,
     }
@@ -1046,8 +1047,8 @@ fn layer_color(layer: &str) -> Color {
 /// Get arc scope color.
 fn scope_color(scope: &str) -> Color {
     match scope {
-        "intra_realm" => Color::Rgb(42, 161, 152), // Cyan
-        "cross_realm" => Color::Rgb(249, 115, 22), // Orange
+        "intra_realm" => palette::SOLARIZED_CYAN,
+        "cross_realm" => palette::ORANGE_500,
         _ => Color::White,
     }
 }
@@ -1055,10 +1056,10 @@ fn scope_color(scope: &str) -> Color {
 /// Get cardinality color.
 fn cardinality_color(cardinality: &str) -> Color {
     match cardinality {
-        "one_to_one" | "1:1" => Color::Rgb(34, 197, 94), // Green
-        "one_to_many" | "1:N" => Color::Rgb(59, 130, 246), // Blue
-        "many_to_one" | "N:1" => Color::Rgb(168, 85, 247), // Purple
-        "many_to_many" | "N:M" => Color::Rgb(249, 115, 22), // Orange
+        "one_to_one" | "1:1" => palette::GREEN_500,
+        "one_to_many" | "1:N" => palette::BLUE_500,
+        "many_to_one" | "N:1" => palette::PURPLE_500,
+        "many_to_many" | "N:M" => palette::ORANGE_500,
         _ => Color::White,
     }
 }
@@ -1095,8 +1096,8 @@ fn generate_arc_badge(app: &App) -> Vec<Line<'static>> {
         let fc = arc_family_color(&family.key);
 
         // Get source/target class colors (use layer colors if we can resolve them)
-        let source_color = Color::Rgb(136, 192, 208); // Nord Frost (default)
-        let target_color = Color::Rgb(163, 190, 140); // Nord Aurora Green (default)
+        let source_color = palette::NORD_FROST;
+        let target_color = palette::NORD_AURORA_GREEN;
 
         // Line 1: Source ──[:ARC]──► Target
         badge_lines.push(Line::from(vec![

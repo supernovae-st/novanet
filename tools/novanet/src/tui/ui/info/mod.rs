@@ -17,6 +17,7 @@ use ratatui::widgets::{
 };
 
 use crate::tui::app::{App, Focus};
+use crate::tui::palette;
 use crate::tui::unicode::truncate_to_width;
 
 use serde_json::Value as JsonValue;
@@ -28,18 +29,18 @@ use super::{STYLE_DIM, STYLE_MUTED};
 // =============================================================================
 
 /// YAML key style (cyan) - matches SOURCE panel styling.
-pub(super) const STYLE_PROP_KEY: Style = Style::new().fg(Color::Rgb(139, 233, 253)); // Cyan
+pub(super) const STYLE_PROP_KEY: Style = Style::new().fg(palette::PROP_KEY);
 
 /// YAML colon style.
 pub(super) const STYLE_PROP_COLON: Style = Style::new().fg(Color::Cyan);
 
 /// JSON value colors - match yaml_panel.rs json_value_color().
 pub(super) const COLOR_VALUE_NULL: Color = Color::DarkGray;
-const COLOR_VALUE_BOOL: Color = Color::Rgb(189, 147, 249); // Purple
-const COLOR_VALUE_NUMBER: Color = Color::Rgb(249, 226, 175); // Yellow
-const COLOR_VALUE_STRING: Color = Color::Rgb(166, 227, 161); // Green
-const COLOR_VALUE_ARRAY: Color = Color::Rgb(137, 180, 250); // Blue
-const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
+const COLOR_VALUE_BOOL: Color = palette::VALUE_BOOL;
+const COLOR_VALUE_NUMBER: Color = palette::VALUE_NUMBER;
+const COLOR_VALUE_STRING: Color = palette::VALUE_STRING;
+const COLOR_VALUE_ARRAY: Color = palette::VALUE_ARRAY;
+const COLOR_VALUE_OBJECT: Color = palette::VALUE_OBJECT;
 
 // =============================================================================
 // SECTION HEADER COLORS
@@ -47,32 +48,32 @@ const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
 
 /// STANDARD section header - teal (same as shared realm color #2aa198).
 /// Standard properties are common/boring - stable teal conveys "foundational".
-pub(super) const COLOR_HEADER_STANDARD: Color = Color::Rgb(42, 161, 152);
+pub(super) const COLOR_HEADER_STANDARD: Color = palette::SOLARIZED_CYAN;
 
 /// SPECIFIC section header - orange (same as semantic layer color #f97316).
 /// Specific properties are unique/interesting - vibrant orange conveys "differentiation".
-pub(super) const COLOR_HEADER_SPECIFIC: Color = Color::Rgb(249, 115, 22);
+pub(super) const COLOR_HEADER_SPECIFIC: Color = palette::ORANGE_500;
 
 /// PROVENANCE section header - violet (ADR-042 provenance tracking).
 /// Provenance shows data origin and lifecycle - violet conveys "authority/trust".
-pub(super) const COLOR_HEADER_PROVENANCE: Color = Color::Rgb(139, 92, 246); // Violet-500
+pub(super) const COLOR_HEADER_PROVENANCE: Color = palette::VIOLET_500;
 
 /// Focused property background - subtle highlight for j/k navigation.
 /// Dark blue background that works well with all text colors.
-pub(super) const COLOR_PROPERTY_FOCUSED_BG: Color = Color::Rgb(30, 50, 80);
+pub(super) const COLOR_PROPERTY_FOCUSED_BG: Color = palette::BG_PROPERTY_FOCUSED;
 
 // =============================================================================
 // PROPERTY INDICATOR COLORS (Solarized palette)
 // =============================================================================
 
 /// Green checkmark (✓) for properties that have values - Solarized Green #859900
-pub(super) const COLOR_STATUS_OK: Color = Color::Rgb(133, 153, 0);
+pub(super) const COLOR_STATUS_OK: Color = palette::SOLARIZED_GREEN;
 
 /// Red asterisk (*) for required properties - Solarized Red #dc322f
-pub(super) const COLOR_REQUIRED_MARKER: Color = Color::Rgb(220, 50, 47);
+pub(super) const COLOR_REQUIRED_MARKER: Color = palette::SOLARIZED_RED;
 
 /// Blue type badge [str] - Solarized Blue #268bd2
-pub(super) const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
+pub(super) const COLOR_TYPE_STRING: Color = palette::SOLARIZED_BLUE;
 
 // =============================================================================
 // STANDARD PROPERTIES (ADR-044)
@@ -200,12 +201,12 @@ impl DataCategory {
     /// Color for the category badge.
     pub(crate) fn color(&self) -> Color {
         match self {
-            DataCategory::Schema => Color::Rgb(100, 116, 139),  // Slate-500
-            DataCategory::Immutable => Color::Rgb(34, 197, 94), // Green-500
-            DataCategory::Locale => Color::Rgb(6, 182, 212),    // Cyan-500
-            DataCategory::Content => Color::Rgb(59, 130, 246),  // Blue-500
-            DataCategory::Nika => Color::Rgb(249, 115, 22),     // Orange-500
-            DataCategory::Mcp => Color::Rgb(168, 85, 247),      // Purple-500
+            DataCategory::Schema => palette::SLATE_500,
+            DataCategory::Immutable => palette::GREEN_500,
+            DataCategory::Locale => palette::CYAN_500,
+            DataCategory::Content => palette::BLUE_500,
+            DataCategory::Nika => palette::ORANGE_500,
+            DataCategory::Mcp => palette::PURPLE_500,
         }
     }
 
@@ -339,7 +340,7 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
                     Span::styled("  Source       ", STYLE_DIM),
                     Span::styled(
                         "⚠ missing",
-                        Style::default().fg(Color::Rgb(234, 179, 8)), // Yellow-500
+                        Style::default().fg(palette::YELLOW_500),
                     ),
                 ]));
                 return section;
@@ -350,7 +351,7 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
                 Span::styled("  Source       ", STYLE_DIM),
                 Span::styled(
                     "⚠ missing",
-                    Style::default().fg(Color::Rgb(234, 179, 8)), // Yellow-500
+                    Style::default().fg(palette::YELLOW_500),
                 ),
             ]));
             return section;
@@ -365,7 +366,7 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
                 Span::styled("  Source       ", STYLE_DIM),
                 Span::styled(
                     "⚠ missing source",
-                    Style::default().fg(Color::Rgb(234, 179, 8)), // Yellow-500
+                    Style::default().fg(palette::YELLOW_500),
                 ),
             ]));
             return section;
@@ -409,19 +410,19 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
 
     // Lifecycle badges line
     let reseed_badge = if category.reseed_safe() {
-        Span::styled("✓Reseed", Style::default().fg(Color::Rgb(34, 197, 94))) // Green
+        Span::styled("✓Reseed", Style::default().fg(palette::GREEN_500))
     } else {
-        Span::styled("⚠Reseed", Style::default().fg(Color::Rgb(239, 68, 68))) // Red
+        Span::styled("⚠Reseed", Style::default().fg(palette::RED_500))
     };
 
     let backup_badge = if category.needs_backup() {
-        Span::styled("●Backup", Style::default().fg(Color::Rgb(249, 115, 22))) // Orange
+        Span::styled("●Backup", Style::default().fg(palette::ORANGE_500))
     } else {
         Span::styled("○Backup", Style::default().fg(Color::DarkGray))
     };
 
     let edit_badge = if category.is_editable() {
-        Span::styled("✎Edit", Style::default().fg(Color::Rgb(59, 130, 246))) // Blue
+        Span::styled("✎Edit", Style::default().fg(palette::BLUE_500))
     } else {
         Span::styled("🔒Edit", Style::default().fg(Color::DarkGray))
     };
@@ -569,10 +570,10 @@ pub(super) fn render_property_line(name: &str, is_required: bool, prop_type: Pro
 // =============================================================================
 
 /// Border color for unfocused boxes (dim gray - panel not active)
-const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
 
 /// Border color for focused but not selected boxes (light gray - panel active, other box selected)
-const BOX_BORDER_FOCUSED: Color = Color::Rgb(76, 86, 106); // #4C566A
+const BOX_BORDER_FOCUSED: Color = palette::NORD_BORDER_FOCUSED;
 
 /// Border color for selected box (cyan bright - active box for copy/scroll)
 const BOX_BORDER_SELECTED: Color = Color::Cyan;
@@ -670,18 +671,18 @@ pub(super) fn type_badge(prop_type: &str) -> &'static str {
 /// Return semantic color for property type.
 pub(super) fn type_color(prop_type: &str) -> Color {
     match prop_type.to_lowercase().as_str() {
-        "string" => Color::Rgb(42, 161, 152),   // cyan/teal - text
-        "json" => Color::Rgb(108, 113, 196),    // violet - complex
-        "enum" => Color::Rgb(181, 137, 0),      // yellow - constrained
-        "datetime" => Color::Rgb(211, 54, 130), // magenta - temporal
-        "int" | "integer" => Color::Rgb(38, 139, 210), // blue - numeric
-        "float" | "number" => Color::Rgb(38, 139, 210), // blue - numeric
-        "bool" | "boolean" => Color::Rgb(133, 153, 0), // green - binary
-        "array" | "list" => Color::Rgb(203, 75, 22), // orange - collection
-        "object" | "map" => Color::Rgb(220, 50, 47), // red - complex
-        "url" | "uri" => Color::Rgb(42, 161, 152), // cyan - reference
-        "?" => Color::DarkGray,                 // unknown
-        _ => Color::Gray,                       // fallback
+        "string" => palette::SOLARIZED_CYAN,      // cyan/teal - text
+        "json" => palette::SOLARIZED_VIOLET,       // violet - complex
+        "enum" => palette::SOLARIZED_GOLD,         // yellow - constrained
+        "datetime" => palette::SOLARIZED_MAGENTA,  // magenta - temporal
+        "int" | "integer" => palette::SOLARIZED_BLUE, // blue - numeric
+        "float" | "number" => palette::SOLARIZED_BLUE, // blue - numeric
+        "bool" | "boolean" => palette::SOLARIZED_GREEN, // green - binary
+        "array" | "list" => palette::SOLARIZED_ORANGE,  // orange - collection
+        "object" | "map" => palette::SOLARIZED_RED,     // red - complex
+        "url" | "uri" => palette::SOLARIZED_CYAN,  // cyan - reference
+        "?" => Color::DarkGray,                    // unknown
+        _ => Color::Gray,                          // fallback
     }
 }
 

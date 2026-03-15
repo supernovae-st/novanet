@@ -21,6 +21,7 @@ mod data;
 pub mod flow;
 mod handlers;
 pub mod icons;
+pub mod palette;
 mod schema;
 pub mod theme;
 mod ui;

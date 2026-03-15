@@ -27,6 +27,7 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 
 use super::app::{App, NavMode};
 use super::icons;
+use super::palette;
 use super::theme::{self, hex_to_color};
 use super::unicode::{truncate_start_to_width, truncate_to_width};
 
@@ -41,41 +42,41 @@ const WIDE_LAYOUT_MIN_WIDTH: u16 = 160;
 const SPINNER_SPEED_DIVISOR: usize = 2;
 
 // -----------------------------------------------------------------------------
-// Color palette constants (avoid repeated Color::Rgb constructions)
+// Color palette constants (re-exported from palette.rs)
 // -----------------------------------------------------------------------------
 
 /// Unfocused panel border color.
-pub(super) const COLOR_UNFOCUSED_BORDER: Color = Color::Rgb(60, 60, 70);
+pub(super) const COLOR_UNFOCUSED_BORDER: Color = palette::BORDER_UNFOCUSED;
 
 /// Muted text for secondary information.
-pub(super) const COLOR_MUTED_TEXT: Color = Color::Rgb(100, 100, 120);
+pub(super) const COLOR_MUTED_TEXT: Color = palette::MUTED;
 
 /// Highlighted row background.
-const COLOR_HIGHLIGHT_BG: Color = Color::Rgb(30, 40, 50);
+const COLOR_HIGHLIGHT_BG: Color = palette::BG_HIGHLIGHT;
 
 /// Instance color (v0.13.1: unified yellow for all instances).
 pub(super) const COLOR_INSTANCE: Color = Color::Yellow;
 
 /// Arc family label color.
-const COLOR_ARC_FAMILY: Color = Color::Rgb(180, 140, 80);
+const COLOR_ARC_FAMILY: Color = palette::FAMILY_LABEL;
 
 /// Description/secondary text.
-const COLOR_DESC_TEXT: Color = Color::Rgb(150, 150, 150);
+const COLOR_DESC_TEXT: Color = palette::DESC_TEXT;
 
 /// Separator dots between stats.
-pub(super) const COLOR_SEPARATOR: Color = Color::Rgb(70, 70, 80);
+pub(super) const COLOR_SEPARATOR: Color = palette::SEPARATOR;
 
 /// Hint text (dimmed).
-pub(super) const COLOR_HINT_TEXT: Color = Color::Rgb(80, 80, 100);
+pub(super) const COLOR_HINT_TEXT: Color = palette::HINT_TEXT;
 
 /// Overlay/popup background.
-pub(super) const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
+pub(super) const COLOR_OVERLAY_BG: Color = palette::BG_OVERLAY;
 
 /// Brighter dim text.
-const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
+const COLOR_BRIGHT_DIM: Color = palette::BRIGHT_DIM;
 
 /// Active Class background (subtle highlight for Class with expanded instances).
-const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
+const COLOR_ACTIVE_CLASS_BG: Color = palette::BG_ACTIVE;
 
 // -----------------------------------------------------------------------------
 // Layout constants (percentages and sizes)

@@ -9,6 +9,7 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 use super::super::app::App;
 use super::super::data::TreeItem;
 use super::hex_to_color;
+use crate::tui::palette;
 
 // Re-use shared styles and constants from parent module
 use super::{
@@ -84,14 +85,14 @@ pub fn render_search(f: &mut Frame, app: &App) {
         let type_label = get_type_label(item.as_ref());
 
         let style = if is_selected {
-            Style::default().bg(Color::Rgb(30, 50, 70)).fg(Color::White)
+            Style::default().bg(palette::BG_SEARCH).fg(Color::White)
         } else {
             STYLE_DESC
         };
 
         let type_style = if is_selected {
             Style::default()
-                .bg(Color::Rgb(30, 50, 70))
+                .bg(palette::BG_SEARCH)
                 .fg(Color::DarkGray)
         } else {
             STYLE_DIM

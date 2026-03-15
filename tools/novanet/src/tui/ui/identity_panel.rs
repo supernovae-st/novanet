@@ -22,35 +22,23 @@ use serde_json::Value as JsonValue;
 
 use crate::tui::app::{App, Focus};
 use crate::tui::data::TreeItem;
+use crate::tui::palette;
 use crate::tui::theme;
 
 use super::info::{DataCategory, ProvenanceMeta};
 use super::COLOR_SEPARATOR;
 
 // =============================================================================
-// COLORS
+// COLORS — sourced from crate::tui::palette
 // =============================================================================
 
-/// Dim label color for field names.
-const COLOR_DIM: Color = Color::Rgb(100, 100, 110);
-
-/// Muted text color for secondary info.
-const COLOR_MUTED: Color = Color::Rgb(130, 130, 140);
-
-/// Schema structure title/border color (Slate-500).
-const COLOR_SCHEMA_STRUCTURE: Color = Color::Rgb(100, 116, 139);
-
-/// Flow arrow color.
-const COLOR_FLOW: Color = Color::Rgb(80, 80, 100);
-
-/// Seed file color.
-const COLOR_FILE: Color = Color::Rgb(180, 180, 200);
-
-/// Command color (actionable).
-const COLOR_CMD: Color = Color::Rgb(139, 233, 253); // Cyan
-
-/// Gauge filled color.
-const COLOR_GAUGE_FILLED: Color = Color::Rgb(34, 197, 94); // Green-500
+const COLOR_DIM: Color = palette::DIM_110;
+const COLOR_MUTED: Color = palette::MUTED_130;
+const COLOR_SCHEMA_STRUCTURE: Color = palette::SLATE_500;
+const COLOR_FLOW: Color = palette::HINT_TEXT;
+const COLOR_FILE: Color = palette::FILE_TEXT;
+const COLOR_CMD: Color = palette::PROP_KEY;
+const COLOR_GAUGE_FILLED: Color = palette::GREEN_500;
 
 // =============================================================================
 // RENDERING
@@ -77,7 +65,7 @@ pub fn render_identity_panel(f: &mut Frame, area: Rect, app: &mut App) {
   let focus_border = if is_focused {
     theme::ui::ACCENT
   } else {
-    border_color.unwrap_or(Color::Rgb(60, 60, 70))
+    border_color.unwrap_or(palette::BORDER_UNFOCUSED)
   };
 
   let mut block = Block::default()
@@ -430,7 +418,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         &mut lines,
         "Entity category grouping. Instances inside share the same semantic domain.",
       );
-      (lines, "Data Management".into(), Some(Color::Rgb(59, 130, 246)))
+      (lines, "Data Management".into(), Some(palette::BLUE_500))
     }
 
     Some(TreeItem::LocaleGroup(realm, layer, class_info, group)) => {
@@ -458,7 +446,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         &mut lines,
         "Locale group — native content for this language/region.",
       );
-      (lines, "Data Management".into(), Some(Color::Rgb(6, 182, 212)))
+      (lines, "Data Management".into(), Some(palette::CYAN_500))
     }
 
     Some(TreeItem::EntityGroup(realm, layer, class_info, group)) => {
@@ -486,7 +474,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         &mut lines,
         "Entity group — all locale variants for this entity.",
       );
-      (lines, "Data Management".into(), Some(Color::Rgb(34, 197, 94)))
+      (lines, "Data Management".into(), Some(palette::GREEN_500))
     }
 
     // =========================================================================
@@ -662,7 +650,7 @@ fn push_category_badge(lines: &mut Vec<Line<'static>>, category: &DataCategory) 
 fn push_pipeline_schema(lines: &mut Vec<Line<'static>>, yaml_source: &str, cypher_file: &str) {
   lines.push(Line::from(vec![
     Span::styled("  ", Style::default()),
-    Span::styled("YAML", Style::default().fg(Color::Rgb(249, 226, 175))), // Yellow
+    Span::styled("YAML", Style::default().fg(palette::VALUE_NUMBER)),
     Span::styled("  ", Style::default().fg(COLOR_FILE)),
     Span::styled(yaml_source.to_string(), Style::default().fg(COLOR_FILE)),
   ]));
@@ -675,7 +663,7 @@ fn push_pipeline_schema(lines: &mut Vec<Line<'static>>, yaml_source: &str, cyphe
   ]));
   lines.push(Line::from(vec![
     Span::styled("  ", Style::default()),
-    Span::styled("Cypher", Style::default().fg(Color::Rgb(137, 180, 250))), // Blue
+    Span::styled("Cypher", Style::default().fg(palette::VALUE_ARRAY)),
     Span::styled("  ", Style::default().fg(COLOR_FILE)),
     Span::styled(cypher_file.to_string(), Style::default().fg(COLOR_FILE)),
   ]));
@@ -691,9 +679,9 @@ fn push_pipeline_schema(lines: &mut Vec<Line<'static>>, yaml_source: &str, cyphe
     Span::styled(
       "Neo4j",
       Style::default()
-        .fg(Color::Rgb(34, 197, 94))
+        .fg(palette::GREEN_500)
         .add_modifier(Modifier::BOLD),
-    ), // Green
+    ),
     Span::styled("  ", Style::default()),
     Span::styled("bolt://localhost:7687", Style::default().fg(COLOR_MUTED)),
   ]));
@@ -714,7 +702,7 @@ fn push_pipeline_data(
         .unwrap_or("seed/*.cypher");
       lines.push(Line::from(vec![
         Span::styled("  Origin   ", Style::default().fg(COLOR_DIM)),
-        Span::styled("Seed  ", Style::default().fg(Color::Rgb(249, 226, 175))),
+        Span::styled("Seed  ", Style::default().fg(palette::VALUE_NUMBER)),
         Span::styled(file_name.to_string(), Style::default().fg(COLOR_FILE)),
       ]));
       // Show backup path for content
@@ -734,7 +722,7 @@ fn push_pipeline_data(
         Span::styled("  Origin   ", Style::default().fg(COLOR_DIM)),
         Span::styled(
           "Nika  ",
-          Style::default().fg(Color::Rgb(249, 115, 22)), // Orange
+          Style::default().fg(palette::ORANGE_500),
         ),
         Span::styled(wf.to_string(), Style::default().fg(COLOR_FILE)),
       ]));
@@ -752,7 +740,7 @@ fn push_pipeline_data(
         Span::styled("  Origin   ", Style::default().fg(COLOR_DIM)),
         Span::styled(
           "MCP   ",
-          Style::default().fg(Color::Rgb(168, 85, 247)), // Purple
+          Style::default().fg(palette::PURPLE_500),
         ),
         Span::styled(tool.to_string(), Style::default().fg(COLOR_FILE)),
       ]));
@@ -772,19 +760,19 @@ fn push_lifecycle(lines: &mut Vec<Line<'static>>, category: &DataCategory) {
   let reseed = if category.reseed_safe() {
     Span::styled(
       "✓ Reseed-safe",
-      Style::default().fg(Color::Rgb(34, 197, 94)), // Green
+      Style::default().fg(palette::GREEN_500),
     )
   } else {
     Span::styled(
       "⚠ Reseed-LOST",
-      Style::default().fg(Color::Rgb(239, 68, 68)), // Red
+      Style::default().fg(palette::RED_500),
     )
   };
 
   let backup = if category.needs_backup() {
     Span::styled(
       "● Backup",
-      Style::default().fg(Color::Rgb(249, 115, 22)), // Orange
+      Style::default().fg(palette::ORANGE_500),
     )
   } else {
     Span::styled("○ No backup", Style::default().fg(COLOR_DIM))
@@ -793,7 +781,7 @@ fn push_lifecycle(lines: &mut Vec<Line<'static>>, category: &DataCategory) {
   let edit = if category.is_editable() {
     Span::styled(
       "✎ Editable",
-      Style::default().fg(Color::Rgb(59, 130, 246)), // Blue
+      Style::default().fg(palette::BLUE_500),
     )
   } else {
     Span::styled("⊘ Read-only", Style::default().fg(COLOR_DIM))
@@ -828,9 +816,9 @@ fn push_completeness(lines: &mut Vec<Line<'static>>, filled: usize, total: usize
   let gauge_color = if pct >= 80 {
     COLOR_GAUGE_FILLED
   } else if pct >= 50 {
-    Color::Rgb(249, 226, 175) // Yellow
+    palette::VALUE_NUMBER
   } else {
-    Color::Rgb(239, 68, 68) // Red
+    palette::RED_500
   };
 
   lines.push(Line::from(vec![
@@ -851,7 +839,7 @@ fn push_runtime_details(lines: &mut Vec<Line<'static>>, meta: &ProvenanceMeta) {
     lines.push(Line::from(Span::styled(
       "  ─── Generation ───",
       Style::default()
-        .fg(Color::Rgb(139, 92, 246))
+        .fg(palette::VIOLET_500)
         .add_modifier(Modifier::DIM),
     )));
     if let Some(ref wf) = meta.workflow_id {
@@ -883,7 +871,7 @@ fn push_runtime_details(lines: &mut Vec<Line<'static>>, meta: &ProvenanceMeta) {
     lines.push(Line::from(Span::styled(
       "  ─── MCP Mutation ───",
       Style::default()
-        .fg(Color::Rgb(139, 92, 246))
+        .fg(palette::VIOLET_500)
         .add_modifier(Modifier::DIM),
     )));
     if let Some(ref tool) = meta.tool {

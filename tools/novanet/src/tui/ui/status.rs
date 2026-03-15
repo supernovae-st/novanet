@@ -11,6 +11,7 @@ use ratatui::widgets::Paragraph;
 
 use super::{STYLE_DIM, STYLE_HINT, STYLE_MUTED, STYLE_SEPARATOR};
 use crate::tui::app::{App, Focus, NavMode};
+use crate::tui::palette;
 use crate::tui::cache::combine_hashes;
 use crate::tui::data::TreeItem;
 use crate::tui::theme::hex_to_color;
@@ -341,7 +342,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     spans.push(Span::raw(" "));
 
     let status = Line::from(spans);
-    let paragraph = Paragraph::new(status).style(Style::default().bg(Color::Rgb(15, 15, 20)));
+    let paragraph = Paragraph::new(status).style(Style::default().bg(palette::BG_DARK));
 
     f.render_widget(paragraph, area);
 }
