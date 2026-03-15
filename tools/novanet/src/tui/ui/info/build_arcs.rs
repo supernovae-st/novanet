@@ -4,7 +4,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 
 use crate::tui::colors;
-use crate::tui::theme::ColorMode;
+use crate::tui::color_mode::ColorMode;
 
 use super::{
     COLOR_HEADER_STANDARD, COLOR_HEADER_SPECIFIC,

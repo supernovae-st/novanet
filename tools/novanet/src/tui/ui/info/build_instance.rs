@@ -8,7 +8,7 @@ use crate::tui::colors;
 use crate::tui::palette;
 use crate::tui::widgets::{Badge, ProgressBar};
 use crate::tui::data::InstanceInfo;
-use crate::tui::theme::ColorMode;
+use crate::tui::color_mode::ColorMode;
 
 use super::{
     STYLE_PROP_KEY, STYLE_PROP_COLON,
