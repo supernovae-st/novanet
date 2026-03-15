@@ -16,6 +16,12 @@ set -euo pipefail
 export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 
+# Java encoding for cypher-shell (JVM client inside Docker)
+# Without this, cypher-shell corrupts non-ASCII characters (mojibake)
+# NEO4J_server_jvm_additional in docker-compose only affects the server JVM,
+# not the cypher-shell client JVM which reads/writes Cypher files.
+JAVA_ENCODING="-Dfile.encoding=UTF-8 -Dstdin.encoding=UTF-8 -Dstdout.encoding=UTF-8"
+
 # SECURITY: Use environment variables with defaults for dev only
 NEO4J_USER="${NEO4J_USER:-neo4j}"
 NEO4J_PASSWORD="${NEO4J_PASSWORD:-novanetpassword}"
@@ -117,7 +123,7 @@ echo ""
 echo -e "${YELLOW}[3/5] Attente que Neo4j soit prêt...${NC}"
 MAX_ATTEMPTS=30
 ATTEMPT=0
-while ! docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
+while ! docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
     ATTEMPT=$((ATTEMPT + 1))
     if [ $ATTEMPT -ge $MAX_ATTEMPTS ]; then
         echo -e "${RED}✗ Neo4j n'est pas prêt après ${MAX_ATTEMPTS} tentatives${NC}"
@@ -138,16 +144,16 @@ for file in "$SEED_DIR"/*.cypher; do
     filename=$(basename "$file")
     echo -e "  ${YELLOW}→ $filename${NC}"
 
-    # Use --file option to read file inside container (preserves UTF-8 encoding)
+    # Use --file option to read file inside container
     # Files are mounted at /import/seed/ via docker-compose.yml
-    # LANG/LC_ALL required for proper diacritics handling (ó, é, ñ, etc.)
-    if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename" > /dev/null 2>&1; then
+    # JAVA_TOOL_OPTIONS required: cypher-shell JVM defaults corrupt non-ASCII without it
+    if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename" > /dev/null 2>&1; then
         echo -e "    ${GREEN}✓ OK${NC}"
     else
         echo -e "    ${RED}✗ Erreur${NC}"
         echo ""
         echo "Détails de l'erreur:"
-        docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename"
+        docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename"
         exit 1
     fi
 done
@@ -174,13 +180,13 @@ elif [ -d "$CONTENT_DIR" ]; then
             echo -e "  ${YELLOW}→ content/$filename${NC}"
 
             # Files are mounted at /import/seed/content/ via docker-compose.yml
-            if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename" > /dev/null 2>&1; then
+            if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename" > /dev/null 2>&1; then
                 echo -e "    ${GREEN}✓ OK${NC}"
             else
                 echo -e "    ${RED}✗ Erreur${NC}"
                 echo ""
                 echo "Détails de l'erreur:"
-                docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename"
+                docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/content/$filename"
                 exit 1
             fi
         done
@@ -205,5 +211,5 @@ echo ""
 
 # Stats rapides
 echo -e "${YELLOW}Stats:${NC}"
-docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" \
+docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 -e JAVA_TOOL_OPTIONS="${JAVA_ENCODING}" "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" \
     "MATCH (n) RETURN labels(n)[0] AS label, count(*) AS count ORDER BY count DESC" 2>/dev/null | tail -n +2
