@@ -60,7 +60,9 @@ pub(super) fn render_realm_details(
     app: &mut App,
 ) {
     let theme = &app.theme;
-    let details = app.details.realm.as_ref().unwrap();
+    let Some(details) = app.details.realm.as_ref() else {
+        return;
+    };
     let dim = Style::default().fg(palette::DIM);
     let mut lines: Vec<Line> = Vec::new();
 
@@ -146,7 +148,9 @@ pub(super) fn render_layer_details(
     app: &mut App,
 ) {
     let theme = &app.theme;
-    let details = app.details.layer.as_ref().unwrap();
+    let Some(details) = app.details.layer.as_ref() else {
+        return;
+    };
     let dim = Style::default().fg(palette::DIM);
     let bright_dim = STYLE_BRIGHT_DIM;
     let mut lines: Vec<Line> = Vec::new();
@@ -416,7 +420,9 @@ pub(super) fn render_class_arcs(
     app: &mut App,
 ) {
     let theme = &app.theme;
-    let arcs = app.details.class_arcs.as_ref().unwrap();
+    let Some(arcs) = app.details.class_arcs.as_ref() else {
+        return;
+    };
     let dim = Style::default().fg(palette::DIM);
     let bright_dim = STYLE_BRIGHT_DIM;
     let mut lines: Vec<Line> = Vec::new();
@@ -463,7 +469,9 @@ pub(super) fn render_arc_class_details(
     app: &mut App,
 ) {
     let theme = &app.theme;
-    let details = app.details.arc_class.as_ref().unwrap();
+    let Some(details) = app.details.arc_class.as_ref() else {
+        return;
+    };
     let dim = Style::default().fg(palette::DIM);
     let mut lines: Vec<Line> = Vec::new();
 
