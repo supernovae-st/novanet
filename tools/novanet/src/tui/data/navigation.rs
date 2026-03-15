@@ -592,7 +592,7 @@ impl TaxonomyTree {
     }
 
     /// Find cursor position of the first instance for a Class.
-    /// Used when switching to Instance tab.
+    /// Used when expanding a Class node to select its first instance.
     ///
     /// Requires the class to be expanded (not collapsed).
     /// Returns cursor position right after the class node (where first instance would be).

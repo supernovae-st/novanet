@@ -65,7 +65,7 @@ pub(super) fn render_yaml_content_in_box(
     // Adjust visible height for badge
     let content_visible_height = visible_height.saturating_sub(badge_height);
 
-    // Always show YAML content (Instance tab removed, data is in PROPERTIES panel)
+    // Always show YAML content (instance data rendered in PROPERTIES panel)
     if !app.yaml.content.is_empty() {
         for yaml_line in app
             .yaml

@@ -1,7 +1,7 @@
 //! Centralized Entity helpers for dual storage pattern.
 //!
 //! Entity instances can be in `entity_category_instances` (by category) OR
-//! in the regular `instances` map (fallback/legacy). These helpers abstract
+//! in the regular `instances` map (fallback). These helpers abstract
 //! this complexity to reduce code duplication across the codebase.
 
 use super::types::InstanceInfo;

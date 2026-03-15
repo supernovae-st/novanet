@@ -688,8 +688,6 @@ mod tests {
         assert!(expected_section.contains("Layer"));
     }
 
-    // Trait tests removed: ADR-024 deprecated traits in v0.19.0
-
     // =========================================================================
     // Help content structure tests
     // =========================================================================
