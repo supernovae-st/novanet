@@ -24,6 +24,7 @@ use crate::tui::app::{App, Focus};
 use crate::tui::data::TreeItem;
 use crate::tui::palette;
 use crate::tui::theme;
+use crate::tui::widgets::ProgressBar;
 
 use super::info::{DataCategory, ProvenanceMeta};
 use super::COLOR_SEPARATOR;
@@ -803,15 +804,6 @@ fn push_completeness(lines: &mut Vec<Line<'static>>, filled: usize, total: usize
     return;
   }
   let pct = (filled as f64 / total as f64 * 100.0) as usize;
-  let gauge_width = 10;
-  let filled_bars = (filled * gauge_width) / total.max(1);
-  let empty_bars = gauge_width - filled_bars;
-
-  let gauge_str = format!(
-    "{}{}",
-    "▰".repeat(filled_bars),
-    "▱".repeat(empty_bars),
-  );
 
   let gauge_color = if pct >= 80 {
     COLOR_GAUGE_FILLED
@@ -821,9 +813,16 @@ fn push_completeness(lines: &mut Vec<Line<'static>>, filled: usize, total: usize
     palette::RED_500
   };
 
+  let (bar, empty) = ProgressBar::new(filled, total, 10)
+    .chars('▰', '▱')
+    .filled_style(Style::default().fg(gauge_color))
+    .empty_style(Style::default().fg(gauge_color))
+    .to_spans();
+
   lines.push(Line::from(vec![
     Span::styled("  Props    ", Style::default().fg(COLOR_DIM)),
-    Span::styled(gauge_str, Style::default().fg(gauge_color)),
+    bar,
+    empty,
     Span::styled(
       format!(" {}/{} ({}%)", filled, total, pct),
       Style::default().fg(COLOR_MUTED),

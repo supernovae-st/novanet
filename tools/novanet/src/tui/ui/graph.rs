@@ -16,6 +16,7 @@ use super::super::app::App;
 use super::super::data::TreeItem;
 use super::super::theme;
 use crate::tui::palette;
+use crate::tui::widgets::ProgressBar;
 use super::{
     STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED,
     STYLE_PRIMARY, STYLE_SUCCESS, scroll_indicator, spinner, wrap_text,
@@ -910,21 +911,23 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     for realm in &app.tree.realms {
         let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
         let percent = (realm_classes as f64 / total_classes as f64 * 100.0).round() as u8;
-        let bar_width = (realm_classes * bar_max_width) / total_classes.max(1);
-        let bar = "\u{2588}".repeat(bar_width.max(1));
-        let empty = "\u{2591}".repeat(bar_max_width.saturating_sub(bar_width));
+        let realm_color = theme.realm_color(&realm.key);
+        let (bar, empty) = ProgressBar::new(realm_classes, total_classes, bar_max_width)
+            .filled_style(Style::default().fg(realm_color))
+            .empty_style(STYLE_DIM)
+            .to_spans();
 
         lines.push(Line::from(vec![
             Span::styled("    ", dim),
             Span::styled(
                 format!("{:8}", realm.display_name),
                 Style::default()
-                    .fg(theme.realm_color(&realm.key))
+                    .fg(realm_color)
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(" ", dim),
-            Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
-            Span::styled(empty, STYLE_DIM),
+            bar,
+            empty,
             Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
             Span::styled(format!("  {} Classes", realm_classes), STYLE_DIM),
         ]));

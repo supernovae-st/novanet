@@ -9,7 +9,7 @@ use ratatui::text::{Line, Span};
 use crate::tui::app::{App, Focus};
 use crate::tui::colors;
 use crate::tui::palette;
-use crate::tui::widgets::Badge;
+use crate::tui::widgets::{Badge, ProgressBar};
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::ValidationStatus;
 use crate::tui::theme::{ColorMode, hex_to_color};
@@ -141,21 +141,22 @@ fn build_classes_section_content(app: &App) -> UnifiedContent<'static> {
 
     // COVERAGE - realm distribution
     if class_count > 0 {
-        let bar_width = 16usize;
         for realm in &app.tree.realms {
             let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
             let percent = (realm_classes as f64 / class_count as f64 * 100.0).round() as u8;
-            let filled = (realm_classes * bar_width) / class_count.max(1);
-            let bar = "█".repeat(filled.max(1));
-            let empty = "░".repeat(bar_width.saturating_sub(filled));
+            let realm_color = app.theme.realm_color(&realm.key);
+            let (bar, empty) = ProgressBar::new(realm_classes, class_count, 16)
+                .filled_style(Style::default().fg(realm_color))
+                .empty_style(STYLE_DIM)
+                .to_spans();
 
             content.coverage.add_line(Line::from(vec![
                 Span::styled(
                     format!("{:8} ", realm.display_name),
-                    Style::default().fg(app.theme.realm_color(&realm.key)),
+                    Style::default().fg(realm_color),
                 ),
-                Span::styled(bar, Style::default().fg(app.theme.realm_color(&realm.key))),
-                Span::styled(empty, STYLE_DIM),
+                bar,
+                empty,
                 Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
             ]));
         }
@@ -261,25 +262,25 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
 
     // COVERAGE - layer breakdown
     if class_count > 0 {
-        let bar_width = 12usize;
         for layer in &realm.layers {
             let count = layer.classes.len();
             if count == 0 {
                 continue;
             }
             let percent = (count as f64 / class_count as f64 * 100.0).round() as u8;
-            let filled = (count * bar_width) / class_count.max(1);
-            let bar = "█".repeat(filled.max(1));
-            let empty = "░".repeat(bar_width.saturating_sub(filled));
             let layer_color = theme.layer_color(&layer.key);
+            let (bar, empty) = ProgressBar::new(count, class_count, 12)
+                .filled_style(Style::default().fg(layer_color))
+                .empty_style(STYLE_DIM)
+                .to_spans();
 
             content.coverage.add_line(Line::from(vec![
                 Span::styled(
                     format!("{:12} ", layer.display_name),
                     Style::default().fg(layer_color),
                 ),
-                Span::styled(bar, Style::default().fg(layer_color)),
-                Span::styled(empty, STYLE_DIM),
+                bar,
+                empty,
                 Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
             ]));
         }
@@ -581,33 +582,34 @@ fn build_class_content(
     let optional_props = total_props.saturating_sub(required_props);
 
     if total_props > 0 {
-        let bar_width = 12usize;
         // Required bar
         let req_percent = (required_props as f64 / total_props as f64 * 100.0).round() as u8;
-        let req_filled = (required_props * bar_width) / total_props.max(1);
-        let req_bar = "█".repeat(req_filled.max(if required_props > 0 { 1 } else { 0 }));
-        let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
+        let (req_bar, req_empty) = ProgressBar::new(required_props, total_props, 12)
+            .filled_style(Style::default().fg(Color::Yellow))
+            .empty_style(STYLE_DIM)
+            .to_spans();
 
         content.coverage.add_line(Line::from(vec![
             Span::styled("* ", Style::default().fg(Color::Red)),
             Span::styled("required   ", Style::default().fg(Color::Yellow)),
-            Span::styled(req_bar, Style::default().fg(Color::Yellow)),
-            Span::styled(req_empty, STYLE_DIM),
+            req_bar,
+            req_empty,
             Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
             Span::styled(format!("  {}", required_props), STYLE_DIM),
         ]));
 
         // Optional bar
         let opt_percent = (optional_props as f64 / total_props as f64 * 100.0).round() as u8;
-        let opt_filled = (optional_props * bar_width) / total_props.max(1);
-        let opt_bar = "█".repeat(opt_filled.max(if optional_props > 0 { 1 } else { 0 }));
-        let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
+        let (opt_bar, opt_empty) = ProgressBar::new(optional_props, total_props, 12)
+            .filled_style(Style::default().fg(Color::White))
+            .empty_style(STYLE_DIM)
+            .to_spans();
 
         content.coverage.add_line(Line::from(vec![
             Span::styled("  ", STYLE_DIM),
             Span::styled("optional   ", Style::default().fg(Color::White)),
-            Span::styled(opt_bar, Style::default().fg(Color::White)),
-            Span::styled(opt_empty, STYLE_DIM),
+            opt_bar,
+            opt_empty,
             Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
             Span::styled(format!("  {}", optional_props), STYLE_DIM),
         ]));
@@ -1221,27 +1223,22 @@ fn build_instance_content(
         .count();
 
     if total_props > 0 {
-        let bar_width = 12usize;
-
         // Required bar - shows filled/total required
         let req_percent = if required_props > 0 {
             (filled_required as f64 / required_props as f64 * 100.0).round() as u8
         } else {
             0
         };
-        let req_filled = if required_props > 0 {
-            (filled_required * bar_width) / required_props.max(1)
-        } else {
-            0
-        };
-        let req_bar = "█".repeat(req_filled.max(if filled_required > 0 { 1 } else { 0 }));
-        let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
+        let (req_bar, req_empty) = ProgressBar::new(filled_required, required_props, 12)
+            .filled_style(Style::default().fg(Color::Yellow))
+            .empty_style(STYLE_DIM)
+            .to_spans();
 
         content.coverage.add_line(Line::from(vec![
             Span::styled("* ", Style::default().fg(Color::Red)),
             Span::styled("required   ", Style::default().fg(Color::Yellow)),
-            Span::styled(req_bar, Style::default().fg(Color::Yellow)),
-            Span::styled(req_empty, STYLE_DIM),
+            req_bar,
+            req_empty,
             Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
             Span::styled(
                 format!("  {}/{}", filled_required, required_props),
@@ -1255,19 +1252,16 @@ fn build_instance_content(
         } else {
             0
         };
-        let opt_filled = if optional_props > 0 {
-            (filled_optional * bar_width) / optional_props.max(1)
-        } else {
-            0
-        };
-        let opt_bar = "█".repeat(opt_filled.max(if filled_optional > 0 { 1 } else { 0 }));
-        let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
+        let (opt_bar, opt_empty) = ProgressBar::new(filled_optional, optional_props, 12)
+            .filled_style(Style::default().fg(Color::White))
+            .empty_style(STYLE_DIM)
+            .to_spans();
 
         content.coverage.add_line(Line::from(vec![
             Span::styled("  ", STYLE_DIM),
             Span::styled("optional   ", Style::default().fg(Color::White)),
-            Span::styled(opt_bar, Style::default().fg(Color::White)),
-            Span::styled(opt_empty, STYLE_DIM),
+            opt_bar,
+            opt_empty,
             Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
             Span::styled(
                 format!("  {}/{}", filled_optional, optional_props),
