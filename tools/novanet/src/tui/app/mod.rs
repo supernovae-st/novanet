@@ -2,10 +2,15 @@
 //!
 //! Refactored into submodules:
 //! - `constants`: Scroll amounts, margins, UI defaults
+//! - `content`: YAML loading, content panel mode, tree item data extraction
+//! - `input`: Key/mouse event handlers
+//! - `search`: Nucleo fuzzy search logic
 //! - `state`: Navigation enums and state structs
 
 mod constants;
+mod content;
 mod input;
+mod search;
 mod state;
 
 // Re-export constants
@@ -14,14 +19,11 @@ pub use constants::*;
 // Re-export state types
 pub use state::{
     ContentPanelMode, FlowState, FlowTab, Focus, LoadedDetails, NavMode, OverlayState, PanelRects,
-    PendingLoads, SchemaOverlayState, SearchState, TreeItemData, YamlPreviewState,
+    PendingLoads, SchemaOverlayState, SearchState, YamlPreviewState,
 };
 
-use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
-use nucleo_matcher::{Config, Matcher, Utf32Str};
 use rustc_hash::FxHashMap;
 use std::cell::RefCell;
-use std::fs;
 use std::path::Path;
 
 use super::cache::RenderCache;
@@ -210,291 +212,6 @@ impl App {
         app
     }
 
-
-    /// Load YAML content for the current cursor position.
-    /// Uses mode-aware item lookup to handle filtered Data mode correctly.
-    pub fn load_yaml_for_current(&mut self) {
-        // Increment generation to invalidate any in-flight async loads
-        self.navigation_generation = self.navigation_generation.wrapping_add(1);
-
-        // Reset scroll positions when changing items
-        self.yaml.scroll = 0;
-        self.props_scroll = 0;
-        self.arcs_scroll = 0;
-        // Reset property focus when changing tree items
-        self.focused_property_idx = 0;
-        self.expanded_property = false;
-
-        // Clear Neo4j data AND pending loads when moving away
-        // (prevents race condition where pending load completes after navigation)
-        self.details.class_arcs = None;
-        self.details.arc_class = None;
-        self.details.realm = None;
-        self.details.layer = None;
-        self.pending.arcs = None;
-        self.pending.arc_class = None;
-        self.pending.realm = None;
-        self.pending.layer = None;
-        self.pending.instance = None;
-
-        // Clear Class validation state (only populated for Class items)
-        self.schema_overlay.validated_class_properties = None;
-        self.schema_overlay.validation_stats = None;
-
-        // Get current item using mode-aware method (handles filtered Data mode)
-        // This is the same logic as current_item() but we extract data to avoid borrow issues
-        let current = self.get_current_tree_item_data();
-
-        // Content panel mode is determined by tree selection (no toggle)
-        // Handle based on item type
-        match current {
-            TreeItemData::Class {
-                yaml_path,
-                key,
-                properties,
-            } => {
-                self.load_yaml_cached(&yaml_path);
-                self.pending.arcs = Some(key);
-                // Load Class validation (Neo4j vs YAML)
-                self.load_validated_class_properties(&properties);
-            },
-            TreeItemData::ArcClass { yaml_path, key } => {
-                self.load_yaml_cached(&yaml_path);
-                self.pending.arc_class = Some(key);
-            },
-            TreeItemData::Realm { key } => {
-                let path = format!("packages/core/models/realms/{}.yaml", key);
-                self.load_yaml_cached(&path);
-                self.pending.realm = Some(key);
-            },
-            TreeItemData::Layer { key } => {
-                let path = format!("packages/core/models/layers/{}.yaml", key);
-                self.load_yaml_cached(&path);
-                self.pending.layer = Some(key);
-            },
-            TreeItemData::ArcFamily { key } => {
-                let path = format!("packages/core/models/arc-families/{}.yaml", key);
-                self.load_yaml_cached(&path);
-            },
-            TreeItemData::Section => {
-                // Show _index.yaml (complete schema overview) instead of taxonomy.yaml
-                self.load_yaml_cached("packages/core/models/_index.yaml");
-            },
-            TreeItemData::Instance {
-                class_yaml_path,
-                class_properties,
-                ..
-            } => {
-                // Load the Class's YAML to show Instance schema (standard_properties)
-                if !class_yaml_path.is_empty() {
-                    self.load_yaml_cached(&class_yaml_path);
-                    // Load validated properties with types (same as Class view)
-                    self.load_validated_class_properties(&class_properties);
-                } else {
-                    self.yaml.path.clear();
-                    self.yaml.content.clear();
-                    self.yaml.line_count = 0;
-                }
-            },
-            TreeItemData::None => {
-                self.yaml.path.clear();
-                self.yaml.content.clear();
-                self.yaml.line_count = 0;
-            },
-        }
-    }
-
-    /// Extract current tree item data using mode-aware lookup.
-    /// Handles filtered Data mode correctly (same logic as current_item()).
-    fn get_current_tree_item_data(&self) -> TreeItemData {
-        // In filtered Data mode, always return Instance (that's all we show)
-        if self.is_graph_mode() && self.data_filter_class.is_some() {
-            if let Some(class_key) = &self.data_filter_class {
-                if let Some(TreeItem::Instance(realm, layer, class_info, instance)) =
-                    self.tree.filtered_item_at(self.tree_cursor, class_key)
-                {
-                    return TreeItemData::Instance {
-                        instance_key: instance.key.clone(),
-                        class_name: class_info.key.clone(),
-                        realm: realm.key.clone(),
-                        layer: layer.key.clone(),
-                        class_yaml_path: class_info.yaml_path.clone(),
-                        class_properties: class_info.properties.clone(),
-                        properties: instance.properties.clone(),
-                    };
-                }
-            }
-            return TreeItemData::None;
-        }
-
-        // Use mode-aware item lookup
-        // Pass hide_empty to match render_tree filtering
-        let item = if self.is_graph_mode() {
-            self.tree
-                .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
-        } else {
-            self.tree.item_at(self.tree_cursor)
-        };
-
-        match item {
-            Some(TreeItem::Class(_, _, class_info)) => TreeItemData::Class {
-                yaml_path: class_info.yaml_path.clone(),
-                key: class_info.key.clone(),
-                properties: class_info.properties.clone(),
-            },
-            Some(TreeItem::ArcClass(family, arc)) => {
-                let arc_file = arc.key.to_lowercase().replace('_', "-");
-                TreeItemData::ArcClass {
-                    yaml_path: format!(
-                        "packages/core/models/arc-classes/{}/{}.yaml",
-                        family.key, arc_file
-                    ),
-                    key: arc.key.clone(),
-                }
-            },
-            Some(TreeItem::Realm(realm)) => TreeItemData::Realm {
-                key: realm.key.clone(),
-            },
-            Some(TreeItem::Layer(_, layer)) => TreeItemData::Layer {
-                key: layer.key.clone(),
-            },
-            Some(TreeItem::ArcFamily(family)) => TreeItemData::ArcFamily {
-                key: family.key.clone(),
-            },
-            Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
-            Some(TreeItem::Instance(realm, layer, class_info, instance)) => {
-                TreeItemData::Instance {
-                    instance_key: instance.key.clone(),
-                    class_name: class_info.key.clone(),
-                    realm: realm.key.clone(),
-                    layer: layer.key.clone(),
-                    class_yaml_path: class_info.yaml_path.clone(),
-                    class_properties: class_info.properties.clone(),
-                    properties: instance.properties.clone(),
-                }
-            },
-            // EntityCategory is a grouper (THING, ACTION, etc.) - show as Section
-            Some(TreeItem::EntityCategory(_, _, _, _)) => TreeItemData::Section,
-            // EntityGroup shows parent Entity as INSTANCE panel
-            // Look up the Entity instance by key to show its properties
-            Some(TreeItem::EntityGroup(_, _, _, group)) => {
-                // Find Entity class info
-                if let Some((entity_realm, entity_layer, entity_class_info)) =
-                    self.tree.find_class("Entity")
-                {
-                    // Look up the Entity instance with matching key
-                    if let Some(instances) = self.tree.instances.get("Entity") {
-                        if let Some(entity_instance) =
-                            instances.iter().find(|i| i.key == group.entity_key)
-                        {
-                            return TreeItemData::Instance {
-                                instance_key: entity_instance.key.clone(),
-                                class_name: entity_class_info.key.clone(),
-                                realm: entity_realm.key.clone(),
-                                layer: entity_layer.key.clone(),
-                                class_yaml_path: entity_class_info.yaml_path.clone(),
-                                class_properties: entity_class_info.properties.clone(),
-                                properties: entity_instance.properties.clone(),
-                            };
-                        }
-                    }
-                }
-                // Fallback: show helpful message if Entity lookup fails
-                TreeItemData::None
-            },
-            // EntityNativeItem shows as Instance (same data structure)
-            // Now includes full properties for INSTANCE panel display
-            Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
-                TreeItemData::Instance {
-                    instance_key: native.key.clone(),
-                    class_name: class_info.key.clone(),
-                    realm: realm.key.clone(),
-                    layer: layer.key.clone(),
-                    class_yaml_path: class_info.yaml_path.clone(),
-                    class_properties: class_info.properties.clone(),
-                    properties: native.properties.clone(),
-                }
-            },
-            None => TreeItemData::None,
-        }
-    }
-
-    /// Determine the content panel mode based on current tree selection.
-    ///
-    /// Returns a `ContentPanelMode` indicating what the center panel should show:
-    /// - `Schema`: YAML definition for Class/ArcClass nodes
-    /// - `InstanceInfo`: Info message pointing to PROPERTIES for instances
-    /// - `SectionInfo`: Section overview for Section headers
-    /// - `Empty`: No content available
-    pub fn content_panel_mode(&self) -> ContentPanelMode {
-        match self.get_current_tree_item_data() {
-            TreeItemData::Class { yaml_path, key, .. } => ContentPanelMode::Schema {
-                path: yaml_path,
-                name: key,
-            },
-            TreeItemData::ArcClass { yaml_path, key } => ContentPanelMode::Schema {
-                path: yaml_path,
-                name: key,
-            },
-            TreeItemData::Instance {
-                instance_key,
-                class_name,
-                realm,
-                layer,
-                properties,
-                ..
-            } => ContentPanelMode::InstanceInfo {
-                instance_key,
-                class_name,
-                realm,
-                layer,
-                properties,
-            },
-            TreeItemData::Realm { key } => ContentPanelMode::Schema {
-                path: format!("packages/core/models/realms/{}.yaml", key),
-                name: format!("Realm: {}", key),
-            },
-            TreeItemData::Layer { key } => ContentPanelMode::Schema {
-                path: format!("packages/core/models/layers/{}.yaml", key),
-                name: format!("Layer: {}", key),
-            },
-            TreeItemData::ArcFamily { key } => ContentPanelMode::Schema {
-                path: format!("packages/core/models/arc-families/{}.yaml", key),
-                name: format!("Arc Family: {}", key),
-            },
-            TreeItemData::Section => ContentPanelMode::SectionInfo {
-                name: "Section".to_string(),
-                description: "Navigate to view node or arc classes.".to_string(),
-            },
-            TreeItemData::None => ContentPanelMode::Empty,
-        }
-    }
-
-    /// Load YAML content with caching (avoids re-reading files on every navigation).
-    fn load_yaml_cached(&mut self, relative_path: &str) {
-        self.yaml.path = relative_path.to_string();
-
-        // Check cache first
-        if let Some(cached) = self.yaml_cache.get(relative_path) {
-            self.yaml.content = cached.clone();
-            self.yaml.line_count = self.yaml.content.lines().count();
-            return;
-        }
-
-        // Load from disk
-        let full_path = Path::new(&self.root_path).join(relative_path);
-        let content = fs::read_to_string(&full_path)
-            .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-
-        // Update cache
-        self.yaml_cache
-            .insert(relative_path.to_string(), content.clone());
-
-        // Update display
-        self.yaml.content = content;
-        self.yaml.line_count = self.yaml.content.lines().count();
-    }
-
     /// Ensure cursor is visible by adjusting scroll.
     pub fn ensure_cursor_visible(&mut self) {
         // Debug assertion to catch cursor bounds bugs during development
@@ -599,178 +316,6 @@ impl App {
         false
     }
 
-    // =========================================================================
-    // Search Methods
-    // =========================================================================
-
-    /// Update search results based on current query using nucleo fuzzy matching.
-    /// Results are sorted by match score (best matches first).
-    pub fn update_search(&mut self) {
-        self.search.results.clear();
-        self.search.scores.clear();
-        self.search.matches.clear();
-
-        if self.search.query.is_empty() {
-            return;
-        }
-
-        // Setup nucleo matcher with smart case matching
-        let mut matcher = Matcher::new(Config::DEFAULT);
-        let pattern = Atom::new(
-            &self.search.query,
-            CaseMatching::Smart, // Case-insensitive unless query has uppercase
-            Normalization::Smart,
-            AtomKind::Fuzzy, // Fuzzy matching (not exact)
-            false,           // No append
-        );
-
-        // Collect all (idx, score, match_positions) tuples
-        let mut matches: Vec<(usize, u16, Vec<u32>)> = Vec::new();
-        let mut idx = 0;
-
-        // Helper to check fuzzy match and collect positions
-        let fuzzy_match =
-            |text: &str, matcher: &mut Matcher, pattern: &Atom| -> Option<(u16, Vec<u32>)> {
-                let mut buf = Vec::new();
-                let haystack = Utf32Str::new(text, &mut buf);
-                let mut indices = Vec::new();
-                pattern
-                    .indices(haystack, matcher, &mut indices)
-                    .map(|score| (score, indices))
-            };
-
-        // Classes section header
-        if let Some((score, indices)) = fuzzy_match("Node Classes", &mut matcher, &pattern) {
-            matches.push((idx, score, indices));
-        }
-        idx += 1;
-
-        if !self.tree.is_collapsed("classes") {
-            for realm in &self.tree.realms {
-                // Check display_name and key, take best match
-                let match_display = fuzzy_match(&realm.display_name, &mut matcher, &pattern);
-                let match_key = fuzzy_match(&realm.key, &mut matcher, &pattern);
-                if let Some((score, indices)) = match_display.or(match_key) {
-                    matches.push((idx, score, indices));
-                }
-                idx += 1;
-
-                if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
-                    for layer in &realm.layers {
-                        let match_display =
-                            fuzzy_match(&layer.display_name, &mut matcher, &pattern);
-                        let match_key = fuzzy_match(&layer.key, &mut matcher, &pattern);
-                        if let Some((score, indices)) = match_display.or(match_key) {
-                            matches.push((idx, score, indices));
-                        }
-                        idx += 1;
-
-                        if !self
-                            .tree
-                            .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
-                        {
-                            for class_info in &layer.classes {
-                                let match_display =
-                                    fuzzy_match(&class_info.display_name, &mut matcher, &pattern);
-                                let match_key =
-                                    fuzzy_match(&class_info.key, &mut matcher, &pattern);
-                                if let Some((score, indices)) = match_display.or(match_key) {
-                                    matches.push((idx, score, indices));
-                                }
-                                idx += 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Arcs section header
-        if let Some((score, indices)) = fuzzy_match("Arcs", &mut matcher, &pattern) {
-            matches.push((idx, score, indices));
-        }
-        idx += 1;
-
-        if !self.tree.is_collapsed("arcs") {
-            for family in &self.tree.arc_families {
-                let match_display = fuzzy_match(&family.display_name, &mut matcher, &pattern);
-                let match_key = fuzzy_match(&family.key, &mut matcher, &pattern);
-                if let Some((score, indices)) = match_display.or(match_key) {
-                    matches.push((idx, score, indices));
-                }
-                idx += 1;
-
-                if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_class in &family.arc_classes {
-                        let match_display =
-                            fuzzy_match(&arc_class.display_name, &mut matcher, &pattern);
-                        let match_key = fuzzy_match(&arc_class.key, &mut matcher, &pattern);
-                        if let Some((score, indices)) = match_display.or(match_key) {
-                            matches.push((idx, score, indices));
-                        }
-                        idx += 1;
-                    }
-                }
-            }
-        }
-
-        // Sort by score (descending - best matches first)
-        matches.sort_by(|a, b| b.1.cmp(&a.1));
-
-        // Extract into separate vectors
-        for (idx, score, indices) in matches {
-            self.search.results.push(idx);
-            self.search.scores.push(score);
-            self.search.matches.insert(idx, indices);
-        }
-
-        // Reset cursor if out of bounds
-        if self.search.cursor >= self.search.results.len() {
-            self.search.cursor = 0;
-        }
-    }
-
-    /// Select current search result and close search.
-    pub fn select_search_result(&mut self) {
-        if let Some(&idx) = self.search.results.get(self.search.cursor) {
-            self.tree_cursor = idx;
-            self.ensure_cursor_visible();
-        }
-        self.close_search();
-    }
-
-    /// Close search overlay.
-    pub fn close_search(&mut self) {
-        self.search.clear();
-    }
-
-    /// Navigate to next search result (n key).
-    pub fn next_search_result(&mut self) {
-        if self.search.results.is_empty() {
-            return;
-        }
-        let max = self.search.results.len().saturating_sub(1);
-        self.search.cursor = (self.search.cursor + 1).min(max);
-        if let Some(&target_idx) = self.search.results.get(self.search.cursor) {
-            self.tree_cursor = target_idx;
-            self.ensure_cursor_visible();
-            self.load_yaml_for_current();
-        }
-    }
-
-    /// Navigate to previous search result (N key).
-    pub fn prev_search_result(&mut self) {
-        if self.search.results.is_empty() {
-            return;
-        }
-        self.search.cursor = self.search.cursor.saturating_sub(1);
-        if let Some(&target_idx) = self.search.results.get(self.search.cursor) {
-            self.tree_cursor = target_idx;
-            self.ensure_cursor_visible();
-            self.load_yaml_for_current();
-        }
-    }
-
     // Event Handlers: see input.rs (handle_key, handle_mouse, handle_search_key, etc.)
 
     // =========================================================================
@@ -788,14 +333,12 @@ impl App {
         self.mode_cursors[self.mode.index()] = self.tree_cursor;
     }
 
-    // restore_mode_cursor removed — single mode (Graph only)
-
     /// Set a temporary status message (auto-clears after ~3 seconds).
     pub fn set_status(&mut self, msg: &str) {
         self.status_message = Some((msg.to_string(), std::time::Instant::now()));
     }
 
-    /// Set an error status message with ⚠ prefix (auto-clears after ~3 seconds).
+    /// Set an error status message with prefix (auto-clears after ~3 seconds).
     /// Used when async data loading fails to inform the user.
     pub fn set_status_error(&mut self, msg: &str) {
         self.status_message = Some((format!("⚠ {}", msg), std::time::Instant::now()));
@@ -925,7 +468,6 @@ impl App {
 
     /// Yank (copy) the current item's key to clipboard.
     pub fn yank_current_key(&mut self) {
-        use super::data::TreeItem;
         let key = match self.current_item() {
             Some(TreeItem::Realm(r)) => Some(r.key.clone()),
             Some(TreeItem::Layer(_, l)) => Some(l.key.clone()),
@@ -944,7 +486,6 @@ impl App {
 
     /// Yank (copy) the current item's properties as JSON.
     pub fn yank_current_json(&mut self) {
-        use super::data::TreeItem;
         let json = match self.current_item() {
             Some(TreeItem::Instance(_, _, _, inst)) => {
                 // Serialize instance properties to JSON
@@ -1025,7 +566,6 @@ impl App {
     // =========================================================================
 
     /// Check if in filtered Graph mode (drilling into a specific Class).
-    /// Renamed from is_filtered_graph_mode() for consistency.
     pub fn is_filtered_graph_mode(&self) -> bool {
         self.is_graph_mode() && self.data_filter_class.is_some()
     }
@@ -1037,7 +577,7 @@ impl App {
 
     /// Get item at cursor position for the current mode.
     /// Uses mode-aware method that shows instances in Data mode.
-    pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
+    pub fn current_item(&self) -> Option<TreeItem<'_>> {
         // Filtered Data mode: show only instances of the filtered Class
         if let Some(class_key) = &self.data_filter_class {
             if self.is_graph_mode() {
@@ -1072,13 +612,12 @@ impl App {
     }
 
     /// Get breadcrumb path for the current selection.
-    /// Returns a string like "Org > Foundation > Entity (12)"
+    /// Returns a string like "Org → Foundation → Entity (12)"
     pub fn current_breadcrumb(&self) -> String {
         if self.mode == NavMode::Flow {
-            return format!("Flow > {}", self.flow.tab.label());
+            return format!("Flow → {}", self.flow.tab.label());
         }
 
-        use super::data::TreeItem;
         match self.current_item() {
             Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
             Some(TreeItem::ArcsSection) => "Arcs".to_string(),
@@ -1152,7 +691,7 @@ impl App {
         }
 
         // Check if current item is a Class
-        if let Some(super::data::TreeItem::Class(_, _, class_info)) =
+        if let Some(TreeItem::Class(_, _, class_info)) =
             self.tree.item_at(self.tree_cursor)
         {
             // Only request if not already loaded
@@ -1168,7 +707,7 @@ impl App {
     /// Toggle collapse/expand of the current tree item.
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
-    fn toggle_tree_item(&mut self) {
+    pub(crate) fn toggle_tree_item(&mut self) {
         let data_mode = self.is_graph_mode();
 
         if let Some(key) = self
@@ -1261,7 +800,7 @@ impl App {
         // Check if current item is an Instance
         // Pass hide_empty to match render_tree filtering
         // Clone properties to avoid borrow conflict
-        let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) = self
+        let props = if let Some(TreeItem::Instance(_, _, _, instance)) = self
             .tree
             .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         {
@@ -1380,86 +919,5 @@ impl App {
     pub fn spinner_frame(&self) -> char {
         const BRAILLE: &[char] = &['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
         BRAILLE[(self.tick / 2) as usize % BRAILLE.len()]
-    }
-
-    // =========================================================================
-    // Schema Overlay Methods (Feature 1)
-    // =========================================================================
-
-    /// Load matched properties for the current instance (schema + values).
-    /// Called after loading instance data to prepare schema overlay.
-    pub fn load_matched_properties(
-        &mut self,
-        instance_props: &std::collections::BTreeMap<String, serde_json::Value>,
-    ) {
-        use super::schema::{CoverageStats, load_schema_properties, match_properties};
-
-        // Only in Data mode with schema overlay enabled
-        if !self.is_graph_mode() || !self.schema_overlay.enabled {
-            self.schema_overlay.matched_properties = None;
-            self.schema_overlay.coverage_stats = None;
-            return;
-        }
-
-        // Need the Class's YAML path to load schema
-        if self.yaml.path.is_empty() {
-            self.schema_overlay.matched_properties = None;
-            self.schema_overlay.coverage_stats = None;
-            return;
-        }
-
-        // Load schema from YAML
-        let schema = load_schema_properties(&self.root_path, &self.yaml.path);
-        if schema.is_empty() {
-            self.schema_overlay.matched_properties = None;
-            self.schema_overlay.coverage_stats = None;
-            return;
-        }
-
-        // Match properties
-        let matched = match_properties(&schema, instance_props);
-        let stats = CoverageStats::from_matched(&matched);
-
-        self.schema_overlay.matched_properties = Some(matched);
-        self.schema_overlay.coverage_stats = Some(stats);
-    }
-
-    // ==========================================================================
-    // Class Validation (Neo4j ↔ YAML)
-    // ==========================================================================
-
-    /// Load validated properties for the current Class (compares Neo4j vs YAML).
-    /// Called when selecting a Class in Meta mode to show validation status.
-    /// Uses cached YAML content to avoid redundant file I/O.
-    pub fn load_validated_class_properties(&mut self, class_properties: &[String]) {
-        use super::schema::{ValidationStats, parse_schema_properties, validate_class_properties};
-
-        // Need the Class's YAML path to load schema
-        if self.yaml.path.is_empty() {
-            return; // State already cleared in load_yaml_for_current()
-        }
-
-        // Use cached YAML content (already loaded by load_yaml_cached)
-        let yaml_content = match self.yaml_cache.get(&self.yaml.path) {
-            Some(content) => content,
-            None => {
-                tracing::warn!(path = %self.yaml.path, "YAML not in cache for Class validation");
-                return;
-            },
-        };
-
-        // Parse schema from cached YAML content
-        let schema = parse_schema_properties(yaml_content);
-        if schema.is_empty() {
-            tracing::debug!(path = %self.yaml.path, "No schema properties found in YAML");
-            return;
-        }
-
-        // Validate: compare YAML schema against Neo4j properties
-        let validated = validate_class_properties(&schema, class_properties);
-        let stats = ValidationStats::from_validated(&validated);
-
-        self.schema_overlay.validated_class_properties = Some(validated);
-        self.schema_overlay.validation_stats = Some(stats);
     }
 }
