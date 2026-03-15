@@ -25,6 +25,7 @@ use crate::tui::data::TreeItem;
 use crate::tui::theme;
 
 use super::info::{DataCategory, ProvenanceMeta};
+use super::COLOR_SEPARATOR;
 
 // =============================================================================
 // COLORS
@@ -36,8 +37,8 @@ const COLOR_DIM: Color = Color::Rgb(100, 100, 110);
 /// Muted text color for secondary info.
 const COLOR_MUTED: Color = Color::Rgb(130, 130, 140);
 
-/// Breadcrumb separator color.
-const COLOR_SEPARATOR: Color = Color::Rgb(70, 70, 80);
+/// Schema structure title/border color (Slate-500).
+const COLOR_SCHEMA_STRUCTURE: Color = Color::Rgb(100, 116, 139);
 
 /// Flow arrow color.
 const COLOR_FLOW: Color = Color::Rgb(80, 80, 100);
@@ -147,7 +148,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
           "Organization-specific data. Editable per project."
         },
       );
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::Layer(realm, layer)) => {
@@ -169,7 +170,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
       if !layer.content.is_empty() {
         push_explanation(&mut lines, &layer.content);
       }
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::Class(realm, layer, class_info)) => {
@@ -217,7 +218,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         &mut lines,
         "Defines the structure (properties, arcs) for all instances of this type.",
       );
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::ArcFamily(family)) => {
@@ -238,7 +239,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
         &mut lines,
         "Groups related arc types that share the same purpose (ownership, localization, etc.)",
       );
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::ArcClass(family, arc_class)) => {
@@ -268,7 +269,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
       ]));
       push_empty(&mut lines);
       push_pipeline_schema(&mut lines, "<arc>.yaml", "02-arc-classes.cypher");
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::ClassesSection) => {
@@ -281,7 +282,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
       );
       push_empty(&mut lines);
       push_pipeline_schema(&mut lines, "models/node-classes/", "01-classes.cypher");
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     Some(TreeItem::ArcsSection) => {
@@ -294,7 +295,7 @@ fn build_panel_content(app: &App) -> (Vec<Line<'static>>, String, Option<Color>)
       );
       push_empty(&mut lines);
       push_pipeline_schema(&mut lines, "models/arc-classes/", "02-arc-classes.cypher");
-      (lines, "Schema Structure".into(), Some(Color::Rgb(100, 116, 139)))
+      (lines, "Schema Structure".into(), Some(COLOR_SCHEMA_STRUCTURE))
     }
 
     // =========================================================================
@@ -572,7 +573,7 @@ fn push_schema_banner(lines: &mut Vec<Line<'static>>, node_type: &str) {
   lines.push(Line::from(Span::styled(
     label,
     Style::default()
-      .fg(Color::Rgb(100, 116, 139)) // Slate-500
+      .fg(COLOR_SCHEMA_STRUCTURE) // Slate-500
       .add_modifier(Modifier::BOLD),
   )));
 }

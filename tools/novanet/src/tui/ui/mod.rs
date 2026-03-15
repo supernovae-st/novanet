@@ -63,7 +63,7 @@ const COLOR_ARC_FAMILY: Color = Color::Rgb(180, 140, 80);
 const COLOR_DESC_TEXT: Color = Color::Rgb(150, 150, 150);
 
 /// Separator dots between stats.
-const COLOR_SEPARATOR: Color = Color::Rgb(70, 70, 80);
+pub(super) const COLOR_SEPARATOR: Color = Color::Rgb(70, 70, 80);
 
 /// Hint text (dimmed).
 pub(super) const COLOR_HINT_TEXT: Color = Color::Rgb(80, 80, 100);
