@@ -28,7 +28,7 @@ use std::path::Path;
 
 use super::cache::RenderCache;
 use super::data::{
-    ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
+    ArcClassDetails, ClassArcsData, CollapseKey, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
 use super::theme::Theme;
 
@@ -274,10 +274,12 @@ impl App {
         };
 
         // Expand the path: classes header, realm, layer
-        self.tree.expand("classes");
-        self.tree.expand(&format!("realm:{}", realm_key));
-        self.tree
-            .expand(&format!("layer:{}:{}", realm_key, layer_key));
+        self.tree.expand(&CollapseKey::Classes);
+        self.tree.expand(&CollapseKey::Realm(realm_key.clone()));
+        self.tree.expand(&CollapseKey::Layer {
+            realm: realm_key.clone(),
+            layer: layer_key.clone(),
+        });
 
         // Calculate the index (same logic as update_search)
         let mut idx = 0;
@@ -289,14 +291,17 @@ impl App {
             // Realm
             idx += 1;
 
-            if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
+            if !self.tree.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                 for layer in &realm.layers {
                     // Layer
                     idx += 1;
 
                     if !self
                         .tree
-                        .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
+                        .is_collapsed(&CollapseKey::Layer {
+                            realm: realm.key.clone(),
+                            layer: layer.key.clone(),
+                        })
                     {
                         for class in &layer.classes {
                             if class.key == class_key {
@@ -708,77 +713,75 @@ impl App {
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
     pub(crate) fn toggle_tree_item(&mut self) {
+        use crate::tui::data::CollapseKey;
+
         let data_mode = self.is_graph_mode();
 
         if let Some(key) = self
             .tree
             .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
         {
-            // Handle Class toggle in Data mode
-            if let Some(class_key) = key.strip_prefix("class:") {
-                if data_mode {
-                    // Use helpers for Entity/EntityNative dual storage pattern
-                    let instances_loaded = if class_key == "Entity" {
-                        self.tree.has_entity_instances()
-                    } else if class_key == "EntityNative" {
-                        !self.tree.entity_native_groups.is_empty()
-                    } else {
-                        self.tree.get_instances(class_key).is_some()
-                    };
-
-                    if !instances_loaded {
-                        // First click on unloaded Class: load instances AND ensure expanded
-                        // Entity uses flat instances (same as regular classes)
-                        if class_key == "Entity" {
-                            // Load flat Entity instances
-                            self.pending.instance = Some("Entity".to_string());
+            match &key {
+                // Handle Class toggle in Data mode
+                CollapseKey::Class(class_key) => {
+                    if data_mode {
+                        // Use helpers for Entity/EntityNative dual storage pattern
+                        let instances_loaded = if class_key == "Entity" {
+                            self.tree.has_entity_instances()
                         } else if class_key == "EntityNative" {
-                            if self.tree.entity_native_groups.is_empty() {
-                                self.pending.entity_natives = true;
-                            }
-                            // EntityNative uses entity-grouped display, not flat instances
+                            !self.tree.entity_native_groups.is_empty()
                         } else {
-                            // Regular classes: use flat instance loading
-                            self.pending.instance = Some(class_key.to_string());
-                        }
-                        // Ensure state is "expanded" so instances show when loaded
-                        if self.tree.is_collapsed(&key) {
-                            self.tree.toggle(&key);
-                        }
-                    } else {
-                        // Instances loaded: normal toggle
-                        self.tree.toggle(&key);
-                    }
-                } else {
-                    // Meta mode: normal toggle (Classes don't expand in schema)
-                    self.tree.toggle(&key);
-                }
-            }
-            // Handle EntityCategory toggle
-            else if let Some(category_key) = key.strip_prefix("category:") {
-                if data_mode {
-                    let instances_loaded = self
-                        .tree
-                        .entity_category_instances
-                        .contains_key(category_key);
+                            self.tree.get_instances(class_key).is_some()
+                        };
 
-                    if !instances_loaded {
-                        // First click: load category instances AND ensure expanded
-                        self.pending.category_instances = Some(category_key.to_string());
-                        if self.tree.is_collapsed(&key) {
+                        if !instances_loaded {
+                            // First click on unloaded Class: load instances AND ensure expanded
+                            if class_key == "Entity" {
+                                self.pending.instance = Some("Entity".to_string());
+                            } else if class_key == "EntityNative" {
+                                if self.tree.entity_native_groups.is_empty() {
+                                    self.pending.entity_natives = true;
+                                }
+                            } else {
+                                self.pending.instance = Some(class_key.clone());
+                            }
+                            // Ensure state is "expanded" so instances show when loaded
+                            if self.tree.is_collapsed(&key) {
+                                self.tree.toggle(&key);
+                            }
+                        } else {
+                            // Instances loaded: normal toggle
                             self.tree.toggle(&key);
                         }
                     } else {
-                        // Instances loaded: normal toggle
+                        // Meta mode: normal toggle (Classes don't expand in schema)
                         self.tree.toggle(&key);
                     }
-                } else {
+                }
+                // Handle EntityCategory toggle
+                CollapseKey::Category(category_key) => {
+                    if data_mode {
+                        let instances_loaded = self
+                            .tree
+                            .entity_category_instances
+                            .contains_key(category_key.as_str());
+
+                        if !instances_loaded {
+                            self.pending.category_instances = Some(category_key.clone());
+                            if self.tree.is_collapsed(&key) {
+                                self.tree.toggle(&key);
+                            }
+                        } else {
+                            self.tree.toggle(&key);
+                        }
+                    } else {
+                        self.tree.toggle(&key);
+                    }
+                }
+                // Other items (Realm, Layer, ArcFamily, EntityGroup, etc.): normal toggle
+                _ => {
                     self.tree.toggle(&key);
                 }
-            }
-            // Other items (Realm, Layer, ArcFamily, etc.): normal toggle
-            else {
-                self.tree.toggle(&key);
             }
         }
     }

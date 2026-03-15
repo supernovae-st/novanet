@@ -21,10 +21,10 @@ impl TaxonomyTree {
 
         // Classes section
         count += 1; // "Classes" header
-        if !self.is_collapsed("classes") {
+        if !self.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.realms {
                 count += 1; // realm header
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     // Filter layers like render_tree does
                     let visible_layers: Vec<_> = realm
                         .layers
@@ -40,7 +40,7 @@ impl TaxonomyTree {
 
                     for layer in visible_layers {
                         count += 1; // layer header
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                             // Filter classes like render_tree does
                             let visible_classes: Vec<_> = layer
                                 .classes
@@ -59,7 +59,7 @@ impl TaxonomyTree {
 
                                 // In Data mode, add instances if not collapsed
                                 if data_mode
-                                    && !self.is_collapsed(&format!("class:{}", class_info.key))
+                                    && !self.is_collapsed(&CollapseKey::Class(class_info.key.clone()))
                                 {
                                     // Entity shows flat alphabetical list (no categories)
                                     if class_info.key == "Entity" {
@@ -71,10 +71,7 @@ impl TaxonomyTree {
                                         for group in &self.entity_native_groups {
                                             count += 1; // EntityGroup node
                                             // If entity group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!(
-                                                "entity_group:{}",
-                                                group.entity_key
-                                            )) {
+                                            if !self.is_collapsed(&CollapseKey::EntityGroup(group.entity_key.clone())) {
                                                 if let Some(natives) = self
                                                     .entity_native_by_entity
                                                     .get(&group.entity_key)
@@ -100,10 +97,10 @@ impl TaxonomyTree {
 
         // Arcs section
         count += 1; // "Arcs" header
-        if !self.is_collapsed("arcs") {
+        if !self.is_collapsed(&CollapseKey::Arcs) {
             for family in &self.arc_families {
                 count += 1; // family header
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                if !self.is_collapsed(&CollapseKey::Family(family.key.clone())) {
                     count += family.arc_classes.len();
                 }
             }
@@ -129,14 +126,14 @@ impl TaxonomyTree {
         }
         idx += 1;
 
-        if !self.is_collapsed("classes") {
+        if !self.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.realms {
                 if idx == cursor {
                     return Some(TreeItem::Realm(realm));
                 }
                 idx += 1;
 
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     // Filter layers like render_tree does
                     let visible_layers: Vec<_> = realm
                         .layers
@@ -156,7 +153,7 @@ impl TaxonomyTree {
                         }
                         idx += 1;
 
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                             // Filter classes like render_tree does
                             let visible_classes: Vec<_> = layer
                                 .classes
@@ -178,7 +175,7 @@ impl TaxonomyTree {
 
                                 // In Data mode, check for instances
                                 if data_mode
-                                    && !self.is_collapsed(&format!("class:{}", class_info.key))
+                                    && !self.is_collapsed(&CollapseKey::Class(class_info.key.clone()))
                                 {
                                     // Entity shows simple flat list (matches tree.rs rendering)
                                     // No categories, no expand - just instances
@@ -201,10 +198,7 @@ impl TaxonomyTree {
                                             }
                                             idx += 1;
                                             // If entity group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!(
-                                                "entity_group:{}",
-                                                group.entity_key
-                                            )) {
+                                            if !self.is_collapsed(&CollapseKey::EntityGroup(group.entity_key.clone())) {
                                                 if let Some(natives) = self
                                                     .entity_native_by_entity
                                                     .get(&group.entity_key)
@@ -251,14 +245,14 @@ impl TaxonomyTree {
         }
         idx += 1;
 
-        if !self.is_collapsed("arcs") {
+        if !self.is_collapsed(&CollapseKey::Arcs) {
             for family in &self.arc_families {
                 if idx == cursor {
                     return Some(TreeItem::ArcFamily(family));
                 }
                 idx += 1;
 
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                if !self.is_collapsed(&CollapseKey::Family(family.key.clone())) {
                     for arc_class in &family.arc_classes {
                         if idx == cursor {
                             return Some(TreeItem::ArcClass(family, arc_class));
@@ -278,13 +272,13 @@ impl TaxonomyTree {
 
         // Classes section
         count += 1; // "Classes" header
-        if !self.is_collapsed("classes") {
+        if !self.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.realms {
                 count += 1; // realm header
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     for layer in &realm.layers {
                         count += 1; // layer header
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                             count += layer.classes.len();
                         }
                     }
@@ -294,10 +288,10 @@ impl TaxonomyTree {
 
         // Arcs section
         count += 1; // "Arcs" header
-        if !self.is_collapsed("arcs") {
+        if !self.is_collapsed(&CollapseKey::Arcs) {
             for family in &self.arc_families {
                 count += 1; // family header
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                if !self.is_collapsed(&CollapseKey::Family(family.key.clone())) {
                     count += family.arc_classes.len();
                 }
             }
@@ -316,21 +310,21 @@ impl TaxonomyTree {
         }
         idx += 1;
 
-        if !self.is_collapsed("classes") {
+        if !self.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.realms {
                 if idx == cursor {
                     return Some(TreeItem::Realm(realm));
                 }
                 idx += 1;
 
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     for layer in &realm.layers {
                         if idx == cursor {
                             return Some(TreeItem::Layer(realm, layer));
                         }
                         idx += 1;
 
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                             for class_info in &layer.classes {
                                 if idx == cursor {
                                     return Some(TreeItem::Class(realm, layer, class_info));
@@ -349,14 +343,14 @@ impl TaxonomyTree {
         }
         idx += 1;
 
-        if !self.is_collapsed("arcs") {
+        if !self.is_collapsed(&CollapseKey::Arcs) {
             for family in &self.arc_families {
                 if idx == cursor {
                     return Some(TreeItem::ArcFamily(family));
                 }
                 idx += 1;
 
-                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                if !self.is_collapsed(&CollapseKey::Family(family.key.clone())) {
                     for arc_class in &family.arc_classes {
                         if idx == cursor {
                             return Some(TreeItem::ArcClass(family, arc_class));
@@ -381,29 +375,29 @@ impl TaxonomyTree {
         cursor: usize,
         data_mode: bool,
         hide_empty: bool,
-    ) -> Option<String> {
+    ) -> Option<CollapseKey> {
         let item = if data_mode {
             self.item_at_for_mode(cursor, true, hide_empty)
         } else {
             self.item_at(cursor)
         };
         match item {
-            Some(TreeItem::ClassesSection) => Some("classes".to_string()),
-            Some(TreeItem::ArcsSection) => Some("arcs".to_string()),
-            Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
-            Some(TreeItem::Layer(r, l)) => Some(format!("layer:{}:{}", r.key, l.key)),
-            Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
+            Some(TreeItem::ClassesSection) => Some(CollapseKey::Classes),
+            Some(TreeItem::ArcsSection) => Some(CollapseKey::Arcs),
+            Some(TreeItem::Realm(r)) => Some(CollapseKey::Realm(r.key.clone())),
+            Some(TreeItem::Layer(r, l)) => Some(CollapseKey::Layer { realm: r.key.clone(), layer: l.key.clone() }),
+            Some(TreeItem::ArcFamily(f)) => Some(CollapseKey::Family(f.key.clone())),
             // In Data mode, Class can be collapsed to hide instances
-            Some(TreeItem::Class(_, _, k)) => Some(format!("class:{}", k.key)),
+            Some(TreeItem::Class(_, _, k)) => Some(CollapseKey::Class(k.key.clone())),
             // EntityCategory can be collapsed to hide its instances
-            Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
+            Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(CollapseKey::Category(cat.key.clone())),
             // EntityGroup can be collapsed to hide its EntityNativeItems
             Some(TreeItem::EntityGroup(_, _, _, group)) => {
-                Some(format!("entity_group:{}", group.entity_key))
+                Some(CollapseKey::EntityGroup(group.entity_key.clone()))
             },
             // Entity instances can be collapsed to hide EntityNatives
-            Some(TreeItem::Instance(_, _, class_info, instance)) if class_info.key == "Entity" => {
-                Some(format!("entity:{}", instance.key))
+            Some(TreeItem::Instance(_, _, class_info, _instance)) if class_info.key == "Entity" => {
+                None // Entity instances don't have a collapse variant
             },
             // Other leaf nodes can't be collapsed
             Some(TreeItem::ArcClass(_, _))
@@ -475,7 +469,7 @@ impl TaxonomyTree {
 
     /// Find cursor position of a Realm (does not modify collapse state).
     fn find_realm_cursor(&self, realm_key: &str) -> Option<usize> {
-        if self.is_collapsed("classes") {
+        if self.is_collapsed(&CollapseKey::Classes) {
             return None; // Realm not visible
         }
         let mut idx = 1; // Skip ClassesSection
@@ -484,10 +478,10 @@ impl TaxonomyTree {
                 return Some(idx);
             }
             idx += 1;
-            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+            if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                 for layer in &realm.layers {
                     idx += 1;
-                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                    if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                         idx += layer.classes.len();
                     }
                 }
@@ -498,14 +492,14 @@ impl TaxonomyTree {
 
     /// Find cursor position of a Layer (does not modify collapse state).
     fn find_layer_cursor(&self, realm_key: &str, layer_key: &str) -> Option<usize> {
-        if self.is_collapsed("classes") {
+        if self.is_collapsed(&CollapseKey::Classes) {
             return None;
         }
         let mut idx = 1; // Skip ClassesSection
         for realm in &self.realms {
             idx += 1; // Realm
             if realm.key == realm_key {
-                if self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     return None; // Layer not visible
                 }
                 for layer in &realm.layers {
@@ -513,16 +507,16 @@ impl TaxonomyTree {
                         return Some(idx);
                     }
                     idx += 1;
-                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                    if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                         idx += layer.classes.len();
                     }
                 }
                 return None;
             }
-            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+            if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                 for layer in &realm.layers {
                     idx += 1;
-                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                    if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                         idx += layer.classes.len();
                     }
                 }
@@ -539,16 +533,16 @@ impl TaxonomyTree {
         class_key: &str,
         data_mode: bool,
     ) -> Option<usize> {
-        if self.is_collapsed("classes") {
+        if self.is_collapsed(&CollapseKey::Classes) {
             return None;
         }
         let mut idx = 1; // Skip ClassesSection
         for realm in &self.realms {
             idx += 1; // Realm
-            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+            if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                 for layer in &realm.layers {
                     idx += 1; // Layer
-                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                    if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                         for class_info in &layer.classes {
                             if realm.key == realm_key
                                 && layer.key == layer_key
@@ -558,7 +552,7 @@ impl TaxonomyTree {
                             }
                             idx += 1;
                             // In data mode, count instances
-                            if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key))
+                            if data_mode && !self.is_collapsed(&CollapseKey::Class(class_info.key.clone()))
                             {
                                 // Entity uses flat instances (matches tree.rs rendering)
                                 if class_info.key == "Entity" {
@@ -567,10 +561,7 @@ impl TaxonomyTree {
                                     // EntityNative: count groups + expanded natives
                                     for group in &self.entity_native_groups {
                                         idx += 1; // The group itself
-                                        if !self.is_collapsed(&format!(
-                                            "entity_group:{}",
-                                            group.entity_key
-                                        )) {
+                                        if !self.is_collapsed(&CollapseKey::EntityGroup(group.entity_key.clone())) {
                                             if let Some(natives) =
                                                 self.entity_native_by_entity.get(&group.entity_key)
                                             {
@@ -617,7 +608,7 @@ impl TaxonomyTree {
         }
 
         // Class must be expanded for instances to be visible
-        if self.is_collapsed(&format!("class:{}", class_key)) {
+        if self.is_collapsed(&CollapseKey::Class(class_key.to_string())) {
             return None;
         }
 
@@ -630,13 +621,13 @@ impl TaxonomyTree {
     /// Find cursor position of ArcsSection.
     fn find_arcs_section_cursor(&self) -> Option<usize> {
         let mut idx = 1; // Skip ClassesSection
-        if !self.is_collapsed("classes") {
+        if !self.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.realms {
                 idx += 1;
-                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self.is_collapsed(&CollapseKey::Realm(realm.key.clone())) {
                     for layer in &realm.layers {
                         idx += 1;
-                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self.is_collapsed(&CollapseKey::Layer { realm: realm.key.clone(), layer: layer.key.clone() }) {
                             idx += layer.classes.len();
                         }
                     }
@@ -649,7 +640,7 @@ impl TaxonomyTree {
     /// Find cursor position of an ArcFamily.
     fn find_family_cursor(&self, family_key: &str) -> Option<usize> {
         let arcs_idx = self.find_arcs_section_cursor()?;
-        if self.is_collapsed("arcs") {
+        if self.is_collapsed(&CollapseKey::Arcs) {
             return None;
         }
         let mut idx = arcs_idx + 1;
@@ -658,7 +649,7 @@ impl TaxonomyTree {
                 return Some(idx);
             }
             idx += 1;
-            if !self.is_collapsed(&format!("family:{}", family.key)) {
+            if !self.is_collapsed(&CollapseKey::Family(family.key.clone())) {
                 idx += family.arc_classes.len();
             }
         }

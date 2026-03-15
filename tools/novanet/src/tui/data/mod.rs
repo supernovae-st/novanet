@@ -36,9 +36,9 @@ pub struct TaxonomyTree {
     pub realms: Vec<RealmInfo>,
     pub arc_families: Vec<ArcFamilyInfo>,
     pub stats: GraphStats,
-    /// Collapsed state: stores keys of collapsed nodes (e.g., "classes", "arcs", "realm:shared", "layer:structure")
-    /// Uses FxHashSet for ~30% faster lookups on string keys.
-    pub collapsed: FxHashSet<String>,
+    /// Collapsed state: stores which tree nodes are collapsed.
+    /// Uses FxHashSet for ~30% faster lookups.
+    pub collapsed: FxHashSet<CollapseKey>,
     /// Instances loaded for Data view, keyed by Class key.
     /// Only populated when in Data mode and a Class is selected.
     /// Uses FxHashMap for ~30% faster lookups (no ordering needed).
@@ -275,6 +275,7 @@ mod tests {
     use super::*;
     use crate::tui::testing::{create_test_class, create_test_layer, create_test_realm};
     use std::collections::BTreeMap;
+    use types::CollapseKey;
 
     // ========================================================================
     // TaxonomyTree::mock_for_testing() tests
@@ -439,14 +440,14 @@ mod tests {
         assert_eq!(collapsed_count, 2); // Just Classes + Arcs headers
 
         // Expand Classes section
-        tree.toggle("classes");
+        tree.toggle(&CollapseKey::Classes);
 
         // Now we see: Classes + shared + org + Arcs = 4
         // (realms are still collapsed, so we don't see layers/classes)
         assert_eq!(tree.item_count(), 4);
 
         // Expand shared realm
-        tree.toggle("realm:shared");
+        tree.toggle(&CollapseKey::Realm("shared".to_string()));
 
         // Now we see: Classes + shared + locale + org + Arcs = 5
         // Note: collapse_all() also collapsed the layer, so we don't see Locale yet
@@ -462,7 +463,7 @@ mod tests {
         assert_eq!(initial_count, 10);
 
         // Toggle shared realm to collapse it
-        tree.toggle("realm:shared");
+        tree.toggle(&CollapseKey::Realm("shared".to_string()));
 
         // Now: Classes + shared (collapsed) + org + structure + Page + semantic + Entity + Arcs
         // = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = 8
@@ -470,7 +471,7 @@ mod tests {
         assert_eq!(after_collapse, 8);
 
         // Toggle again to expand
-        tree.toggle("realm:shared");
+        tree.toggle(&CollapseKey::Realm("shared".to_string()));
 
         // Should return to original count
         assert_eq!(tree.item_count(), initial_count);
@@ -708,7 +709,7 @@ mod tests {
         );
 
         // Explicitly collapse the class (default is expanded)
-        tree.collapse_subtree("class:AppConfig");
+        tree.collapse_subtree(&CollapseKey::Class("AppConfig".to_string()));
 
         // Class is collapsed, so should return None
         let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
@@ -738,10 +739,13 @@ mod tests {
         );
 
         // Expand necessary nodes
-        tree.expand("classes");
-        tree.expand("realm:shared");
-        tree.expand("layer:shared:config");
-        tree.expand("class:AppConfig");
+        tree.expand(&CollapseKey::Classes);
+        tree.expand(&CollapseKey::Realm("shared".to_string()));
+        tree.expand(&CollapseKey::Layer {
+            realm: "shared".to_string(),
+            layer: "config".to_string(),
+        });
+        tree.expand(&CollapseKey::Class("AppConfig".to_string()));
 
         // Now should find the first instance
         let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
@@ -760,10 +764,13 @@ mod tests {
     fn test_find_first_instance_cursor_no_instances() {
         let mut tree = TaxonomyTree::mock_for_testing();
 
-        tree.expand("classes");
-        tree.expand("realm:shared");
-        tree.expand("layer:shared:config");
-        tree.expand("class:AppConfig");
+        tree.expand(&CollapseKey::Classes);
+        tree.expand(&CollapseKey::Realm("shared".to_string()));
+        tree.expand(&CollapseKey::Layer {
+            realm: "shared".to_string(),
+            layer: "config".to_string(),
+        });
+        tree.expand(&CollapseKey::Class("AppConfig".to_string()));
 
         let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
         assert!(

@@ -51,7 +51,7 @@ use std::path::Path;
 
 use crate::db::Db;
 use app::App;
-use data::TaxonomyTree;
+use data::{CollapseKey, TaxonomyTree};
 
 /// Event polling timeout in milliseconds.
 /// Short timeout enables smooth animation (spinners) during async loading.
@@ -334,7 +334,7 @@ async fn run_app(
                                 for group in &groups {
                                     app.tree
                                         .collapsed
-                                        .insert(format!("entity_group:{}", group.entity_key));
+                                        .insert(CollapseKey::EntityGroup(group.entity_key.clone()));
                                 }
                                 app.tree.entity_native_groups = groups;
                                 app.tree.entity_native_by_entity = natives;

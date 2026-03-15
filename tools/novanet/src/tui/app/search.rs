@@ -7,6 +7,7 @@ use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
 use nucleo_matcher::{Config, Matcher, Utf32Str};
 
 use super::App;
+use crate::tui::data::CollapseKey;
 
 impl App {
     /// Update search results based on current query using nucleo fuzzy matching.
@@ -51,7 +52,7 @@ impl App {
         }
         idx += 1;
 
-        if !self.tree.is_collapsed("classes") {
+        if !self.tree.is_collapsed(&CollapseKey::Classes) {
             for realm in &self.tree.realms {
                 // Check display_name and key, take best match
                 let match_display = fuzzy_match(&realm.display_name, &mut matcher, &pattern);
@@ -61,7 +62,10 @@ impl App {
                 }
                 idx += 1;
 
-                if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
+                if !self
+                    .tree
+                    .is_collapsed(&CollapseKey::Realm(realm.key.clone()))
+                {
                     for layer in &realm.layers {
                         let match_display =
                             fuzzy_match(&layer.display_name, &mut matcher, &pattern);
@@ -71,10 +75,10 @@ impl App {
                         }
                         idx += 1;
 
-                        if !self
-                            .tree
-                            .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
-                        {
+                        if !self.tree.is_collapsed(&CollapseKey::Layer {
+                            realm: realm.key.clone(),
+                            layer: layer.key.clone(),
+                        }) {
                             for class_info in &layer.classes {
                                 let match_display =
                                     fuzzy_match(&class_info.display_name, &mut matcher, &pattern);
@@ -97,7 +101,7 @@ impl App {
         }
         idx += 1;
 
-        if !self.tree.is_collapsed("arcs") {
+        if !self.tree.is_collapsed(&CollapseKey::Arcs) {
             for family in &self.tree.arc_families {
                 let match_display = fuzzy_match(&family.display_name, &mut matcher, &pattern);
                 let match_key = fuzzy_match(&family.key, &mut matcher, &pattern);
@@ -106,7 +110,10 @@ impl App {
                 }
                 idx += 1;
 
-                if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
+                if !self
+                    .tree
+                    .is_collapsed(&CollapseKey::Family(family.key.clone()))
+                {
                     for arc_class in &family.arc_classes {
                         let match_display =
                             fuzzy_match(&arc_class.display_name, &mut matcher, &pattern);

@@ -4,6 +4,50 @@
 
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
+use std::fmt;
+
+// ============================================================================
+// Collapse Key (type-safe tree state)
+// ============================================================================
+
+/// Type-safe key for tracking collapsed/expanded state of tree nodes.
+///
+/// Replaces stringly-typed keys like `"realm:shared"`, `"layer:org:structure"`, etc.
+/// with an enum that the compiler can check exhaustively.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum CollapseKey {
+    /// The "Node Classes" section header.
+    Classes,
+    /// The "Arcs" section header.
+    Arcs,
+    /// A realm node (e.g., "shared", "org").
+    Realm(String),
+    /// A layer node within a realm.
+    Layer { realm: String, layer: String },
+    /// An arc family node (e.g., "ownership", "semantic").
+    Family(String),
+    /// A class node (e.g., "Entity", "Page").
+    Class(String),
+    /// An entity category node (e.g., "THING", "ACTION").
+    Category(String),
+    /// An entity-native group node (keyed by parent entity key, e.g., "qr-code").
+    EntityGroup(String),
+}
+
+impl fmt::Display for CollapseKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            CollapseKey::Classes => write!(f, "classes"),
+            CollapseKey::Arcs => write!(f, "arcs"),
+            CollapseKey::Realm(key) => write!(f, "realm:{key}"),
+            CollapseKey::Layer { realm, layer } => write!(f, "layer:{realm}:{layer}"),
+            CollapseKey::Family(key) => write!(f, "family:{key}"),
+            CollapseKey::Class(key) => write!(f, "class:{key}"),
+            CollapseKey::Category(key) => write!(f, "category:{key}"),
+            CollapseKey::EntityGroup(key) => write!(f, "entity_group:{key}"),
+        }
+    }
+}
 
 // ============================================================================
 // Schema Tree Types

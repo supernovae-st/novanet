@@ -11,6 +11,7 @@ use super::super::{
     COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_MUTED_TEXT, cardinality_abbrev,
 };
 use crate::tui::app::App;
+use crate::tui::data::CollapseKey;
 use crate::tui::unicode::display_width;
 
 /// Build all tree lines for the "Arcs" section.
@@ -27,7 +28,7 @@ pub(super) fn build_arc_lines<'a>(
     let cont = cont_char;
 
     // === ARCS HEADER ===
-    let arcs_collapsed = app.tree.is_collapsed("arcs");
+    let arcs_collapsed = app.tree.is_collapsed(&CollapseKey::Arcs);
     let arcs_icon = expand_icon(arcs_collapsed);
     let arcs_count: usize = app
         .tree
@@ -57,8 +58,8 @@ pub(super) fn build_arc_lines<'a>(
     let family_count = app.tree.arc_families.len();
     for (fi, family) in app.tree.arc_families.iter().enumerate() {
         let family_is_last = fi == family_count - 1;
-        let family_key = format!("family:{}", family.key);
-        let family_collapsed = app.tree.is_collapsed(&family_key);
+        let family_collapse_key = CollapseKey::Family(family.key.clone());
+        let family_collapsed = app.tree.is_collapsed(&family_collapse_key);
         let family_icon = expand_icon(family_collapsed);
 
         let is_cursor = *idx == app.tree_cursor;

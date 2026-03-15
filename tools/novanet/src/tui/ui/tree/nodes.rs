@@ -12,7 +12,7 @@ use super::super::{
     COLOR_ACTIVE_CLASS_BG, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE, COLOR_MUTED_TEXT,
 };
 use crate::tui::app::App;
-use crate::tui::data::locale_to_flag;
+use crate::tui::data::{locale_to_flag, CollapseKey};
 use crate::tui::palette;
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::display_width;
@@ -31,7 +31,7 @@ pub(super) fn build_node_class_lines<'a>(
     let cont = cont_char;
 
     // === KINDS HEADER ===
-    let classes_collapsed = app.tree.is_collapsed("classes");
+    let classes_collapsed = app.tree.is_collapsed(&CollapseKey::Classes);
     let classes_icon = expand_icon(classes_collapsed);
     let classes_count: usize = app
         .tree
@@ -66,8 +66,8 @@ pub(super) fn build_node_class_lines<'a>(
 
     for (ri, realm) in visible_realms.iter().enumerate() {
         let realm_is_last = ri == realm_count - 1 && !has_arcs;
-        let realm_key = format!("realm:{}", realm.key);
-        let realm_collapsed = app.tree.is_collapsed(&realm_key);
+        let realm_collapse_key = CollapseKey::Realm(realm.key.clone());
+        let realm_collapsed = app.tree.is_collapsed(&realm_collapse_key);
         let realm_icon = expand_icon(realm_collapsed);
 
         let realm_color = hex_to_color(&realm.color);
@@ -156,8 +156,11 @@ pub(super) fn build_node_class_lines<'a>(
 
         for (li, layer) in visible_layers.iter().enumerate() {
             let layer_is_last = li == layer_count - 1;
-            let layer_key = format!("layer:{}:{}", realm.key, layer.key);
-            let layer_collapsed = app.tree.is_collapsed(&layer_key);
+            let layer_collapse_key = CollapseKey::Layer {
+                realm: realm.key.clone(),
+                layer: layer.key.clone(),
+            };
+            let layer_collapsed = app.tree.is_collapsed(&layer_collapse_key);
 
             let layer_instance_count: i64 =
                 layer.classes.iter().map(|k| k.instance_count).sum();
@@ -263,8 +266,8 @@ pub(super) fn build_node_class_lines<'a>(
 
             for (ki, class_info) in visible_classes.iter().enumerate() {
                 let class_is_last = ki == class_count - 1;
-                let class_key_str = format!("class:{}", class_info.key);
-                let class_collapsed = app.tree.is_collapsed(&class_key_str);
+                let class_collapse_key = CollapseKey::Class(class_info.key.clone());
+                let class_collapsed = app.tree.is_collapsed(&class_collapse_key);
 
                 let class_icon = if is_data_mode && class_info.instance_count > 0 {
                     let instances_loaded = if class_info.key == "Entity" {
@@ -620,8 +623,8 @@ fn build_entity_native_lines<'a>(
         let group_is_last = gi == group_count - 1;
         let is_cursor = *idx == app.tree_cursor;
 
-        let group_key = format!("entity_group:{}", entity_group.entity_key);
-        let is_collapsed = app.tree.is_collapsed(&group_key);
+        let group_collapse_key = CollapseKey::EntityGroup(entity_group.entity_key.clone());
+        let is_collapsed = app.tree.is_collapsed(&group_collapse_key);
         let expand_icon = if is_collapsed { "▶" } else { "▼" };
 
         let style = if is_cursor && focused {
