@@ -3,12 +3,15 @@
 //! This module contains all enums and state structs used by the App.
 //! Extracted from app.rs for better organization.
 
+use std::cell::RefCell;
 use std::collections::BTreeMap;
 
 use ratatui::layout::Rect;
+use ratatui::text::Line;
 use rustc_hash::FxHashMap;
 use serde_json::Value as JsonValue;
 
+use crate::tui::cache::RenderCache;
 use crate::tui::data::{ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails};
 use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 
@@ -430,6 +433,11 @@ pub struct YamlPreviewState {
     pub scroll: usize,
     /// Cached line count (avoids per-scroll recomputation).
     pub line_count: usize,
+    /// Cached syntax-highlighted lines for the visible window.
+    /// Key: hash(content.len(), scroll, visible_height).
+    /// Eliminates ~330 allocations/frame when YAML is static.
+    /// Uses RefCell for interior mutability (render functions take &App).
+    pub highlight_cache: RefCell<RenderCache<Vec<Line<'static>>>>,
 }
 
 impl YamlPreviewState {
@@ -439,6 +447,7 @@ impl YamlPreviewState {
         self.path.clear();
         self.scroll = 0;
         self.line_count = 0;
+        self.highlight_cache.borrow_mut().invalidate();
     }
 }
 

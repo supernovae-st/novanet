@@ -11,6 +11,7 @@ use ratatui::widgets::{Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarStat
 
 use super::colors::{arc_family_color, cardinality_color, semantic_value_color};
 use crate::tui::app::App;
+use crate::tui::cache::combine_hashes;
 use crate::tui::palette;
 use crate::tui::ui::{STYLE_DIM, scroll_indicator};
 use crate::tui::widgets::bordered_block;
@@ -67,15 +68,29 @@ pub(super) fn render_yaml_content_in_box(
 
     // Always show YAML content (instance data rendered in PROPERTIES panel)
     if !app.yaml.content.is_empty() {
-        for yaml_line in app
+        // Cache highlighted lines keyed on (content length, scroll, visible height).
+        // Eliminates ~330 String allocations/frame when YAML is static.
+        let cache_key = combine_hashes(&[
+            app.yaml.content.len() as u64,
+            app.yaml.scroll as u64,
+            content_visible_height as u64,
+        ]);
+
+        let highlighted = app
             .yaml
-            .content
-            .lines()
-            .skip(app.yaml.scroll)
-            .take(content_visible_height)
-        {
-            lines.push(highlight_yaml_line(yaml_line));
-        }
+            .highlight_cache
+            .borrow_mut()
+            .get_clone_or_compute(cache_key, || {
+                app.yaml
+                    .content
+                    .lines()
+                    .skip(app.yaml.scroll)
+                    .take(content_visible_height)
+                    .map(highlight_yaml_line)
+                    .collect()
+            });
+
+        lines.extend(highlighted);
     } else {
         lines.push(Line::from(Span::styled("No YAML file", STYLE_DIM)));
     }
