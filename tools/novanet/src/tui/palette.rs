@@ -5,13 +5,6 @@
 
 use ratatui::style::Color;
 
-// ── Semantic Status ──────────────────────────────────────────────
-
-pub const SUCCESS: Color = Color::Rgb(34, 197, 94); // green-500
-pub const WARNING: Color = Color::Rgb(249, 115, 22); // orange-500
-pub const ERROR: Color = Color::Rgb(239, 68, 68); // red-500
-pub const INFO: Color = Color::Rgb(59, 130, 246); // blue-500
-
 // ── Solarized Base ───────────────────────────────────────────────
 
 pub const SOLARIZED_CYAN: Color = Color::Rgb(42, 161, 152);
@@ -39,7 +32,6 @@ pub const VIOLET_500: Color = Color::Rgb(139, 92, 246);
 pub const RED_500: Color = Color::Rgb(239, 68, 68);
 pub const YELLOW_500: Color = Color::Rgb(234, 179, 8);
 pub const CYAN_500: Color = Color::Rgb(6, 182, 212);
-pub const PINK_500: Color = Color::Rgb(236, 72, 153);
 pub const PURPLE_500: Color = Color::Rgb(168, 85, 247);
 pub const SLATE_500: Color = Color::Rgb(100, 116, 139);
 
@@ -51,7 +43,6 @@ pub const BG_EMPTY: Color = Color::Rgb(25, 25, 35);
 pub const BG_ACTIVE: Color = Color::Rgb(25, 35, 45);
 pub const BG_HIGHLIGHT: Color = Color::Rgb(30, 40, 50);
 pub const BG_SEARCH: Color = Color::Rgb(30, 50, 70);
-pub const BG_SELECTED: Color = Color::Rgb(30, 35, 50);
 pub const BG_PROPERTY_FOCUSED: Color = Color::Rgb(30, 50, 80);
 pub const BORDER_UNFOCUSED: Color = Color::Rgb(60, 60, 70);
 pub const SEPARATOR: Color = Color::Rgb(70, 70, 80);
@@ -73,7 +64,7 @@ pub const REALM_ORG: Color = SOLARIZED_VIOLET;
 // ── Layer colors ─────────────────────────────────────────────────
 
 pub const LAYER_CONFIG: Color = BLUE_500;
-pub const LAYER_LOCALE: Color = PINK_500;
+pub const LAYER_LOCALE: Color = Color::Rgb(236, 72, 153); // pink-500
 pub const LAYER_GEOGRAPHY: Color = GREEN_500;
 pub const LAYER_KNOWLEDGE: Color = VIOLET_500;
 pub const LAYER_FOUNDATION: Color = PURPLE_500;
@@ -97,7 +88,6 @@ pub const YAML_KEY: Color = Color::Rgb(86, 182, 194);
 pub const YAML_STRING: Color = Color::Rgb(229, 192, 123);
 pub const YAML_NUMBER: Color = Color::Rgb(209, 154, 102);
 pub const YAML_BOOL: Color = Color::Rgb(198, 120, 221);
-pub const YAML_COMMENT: Color = SOLARIZED_VIOLET;
 pub const YAML_BRACKET: Color = Color::Rgb(97, 175, 239);
 pub const YAML_SECTION_HEADER: Color = Color::Rgb(92, 99, 112);
 
@@ -113,5 +103,4 @@ pub const VALUE_OBJECT: Color = Color::Rgb(245, 194, 231);
 
 pub const PROP_KEY: Color = Color::Rgb(139, 233, 253);
 pub const ENTITY_SLUG: Color = Color::Rgb(148, 163, 184);
-pub const STATUS_BAR_BG: Color = BG_DARK;
 pub const EMPTY_SLOT: Color = Color::Rgb(40, 40, 50);
