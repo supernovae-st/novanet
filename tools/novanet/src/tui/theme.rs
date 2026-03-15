@@ -241,7 +241,7 @@ pub mod arc_family {
     pub const SEMANTIC_HEX: &str = "#f97316";
     pub const GENERATION_HEX: &str = "#8b5cf6";
     pub const MINING_HEX: &str = "#ec4899";
-    pub const SCHEMA_HEX: &str = "#6366f1"; // v0.13.1: indigo for meta-schema
+    pub const SCHEMA_HEX: &str = "#6366f1"; // indigo for meta-schema
 
     // 256-color palette
     pub const OWNERSHIP_256: u8 = 33;
@@ -249,7 +249,7 @@ pub mod arc_family {
     pub const SEMANTIC_256: u8 = 208;
     pub const GENERATION_256: u8 = 141;
     pub const MINING_256: u8 = 205;
-    pub const SCHEMA_256: u8 = 99; // v0.13.1: indigo
+    pub const SCHEMA_256: u8 = 99; // indigo
 
     // 16-color palette
     pub const OWNERSHIP_16: Color = Color::Blue;
@@ -257,7 +257,7 @@ pub mod arc_family {
     pub const SEMANTIC_16: Color = Color::Yellow;
     pub const GENERATION_16: Color = Color::Magenta;
     pub const MINING_16: Color = Color::LightMagenta;
-    pub const SCHEMA_16: Color = Color::Blue; // v0.13.1: blue fallback
+    pub const SCHEMA_16: Color = Color::Blue; // blue fallback
 
     /// Get arc family color for a given color mode.
     pub fn color(family: &str, mode: ColorMode) -> Color {
@@ -568,7 +568,7 @@ pub mod nav_mode {
     pub const GRAPH_16: Color = Color::Cyan;
 
     /// Get nav mode color for a given color mode.
-    /// v0.20.0: Graph only
+    /// Graph only.
     pub fn color(nav_mode: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match nav_mode {
@@ -587,7 +587,7 @@ pub mod nav_mode {
     }
 
     /// Get icon for nav mode.
-    /// v0.20.0: Graph only
+    /// Graph only.
     pub fn icon(nav_mode: &str) -> &'static str {
         match nav_mode {
             "graph" | "Graph" => "◈",

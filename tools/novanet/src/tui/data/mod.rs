@@ -953,7 +953,7 @@ impl TaxonomyTree {
         layer_key: &str,
         class_key: &str,
     ) -> Option<usize> {
-        // v0.16.5: Check if instances exist - use Entity helper for dual storage
+        // Check if instances exist - use Entity helper for dual storage
         let has_instances = if class_key == "Entity" {
             self.has_entity_instances()
         } else {
@@ -1062,7 +1062,7 @@ impl TaxonomyTree {
 
     /// Get item count when filtered to a specific Class (Data mode drill-down).
     /// Returns only instances of that Class.
-    /// v0.16.5: Entity uses helper for dual storage (entity_category_instances OR instances)
+    /// Entity uses helper for dual storage (entity_category_instances OR instances).
     pub fn filtered_item_count(&self, class_key: &str) -> usize {
         if class_key == "Entity" {
             self.entity_instance_count()
@@ -1073,7 +1073,7 @@ impl TaxonomyTree {
 
     /// Get item at cursor when filtered to a specific Class.
     /// Returns Instance items only.
-    /// v0.16.5: Entity uses helper for dual storage (entity_category_instances OR instances)
+    /// Entity uses helper for dual storage (entity_category_instances OR instances).
     pub fn filtered_item_at<'a>(&'a self, cursor: usize, class_key: &str) -> Option<TreeItem<'a>> {
         // Find the Class info for context
         let class_tuple = self.find_class(class_key)?;

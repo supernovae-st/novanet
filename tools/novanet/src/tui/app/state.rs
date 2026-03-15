@@ -49,7 +49,7 @@ impl NavMode {
 }
 
 /// Which panel is currently focused for keyboard input.
-/// v0.18.3: Extended to 5 panels for new layout.
+/// Extended to 5 panels for new layout.
 ///
 /// Layout:
 /// ```text
@@ -275,7 +275,7 @@ impl SearchState {
 }
 
 /// All pending async load requests (extracted sub-state).
-/// v0.14.0: Extracted from App struct for clarity.
+/// Extracted from App struct for clarity.
 #[derive(Debug, Default)]
 pub struct PendingLoads {
     /// Pending instance load request (Class label to load).
@@ -476,11 +476,11 @@ impl OverlayState {
 
 /// Panel identifiers for mouse hit-testing.
 /// Renamed Yaml → Content to reflect context-aware content.
-/// v0.18.3: Added Identity panel for new 5-panel layout.
+/// Added Identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Panel {
     Tree,
-    Identity, // v0.18.3: Center top - identity & provenance
+    Identity, // Center top - identity & provenance
     Content,  // was Yaml
     Props,
     Arcs,
@@ -502,11 +502,11 @@ impl Panel {
 /// Stores panel rectangles for mouse hit-testing.
 /// Updated during each render pass with the actual panel areas.
 /// Renamed yaml → content to reflect context-aware content.
-/// v0.18.3: Added identity panel for new 5-panel layout.
+/// Added identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Default)]
 pub struct PanelRects {
     pub tree: Option<Rect>,
-    pub identity: Option<Rect>, // v0.18.3: Center top
+    pub identity: Option<Rect>, // Center top
     pub content: Option<Rect>,  // was yaml
     pub props: Option<Rect>,
     pub arcs: Option<Rect>,
@@ -602,7 +602,7 @@ mod tests {
 
     #[test]
     fn test_focus_cycle_next() {
-        // v0.18.3: Tree → Identity → Content → Props → Arcs → Tree
+        // Tree → Identity → Content → Props → Arcs → Tree
         let focus = Focus::Tree;
         assert_eq!(focus.next(), Focus::Identity);
         assert_eq!(focus.next().next(), Focus::Content);
@@ -613,7 +613,7 @@ mod tests {
 
     #[test]
     fn test_focus_cycle_prev() {
-        // v0.18.3: Tree ← Identity ← Content ← Props ← Arcs ← Tree
+        // Tree ← Identity ← Content ← Props ← Arcs ← Tree
         let focus = Focus::Tree;
         assert_eq!(focus.prev(), Focus::Arcs);
         assert_eq!(focus.prev().prev(), Focus::Props);
@@ -624,7 +624,7 @@ mod tests {
 
     #[test]
     fn test_focus_numbers() {
-        // v0.18.3: 5 panels [1-5]
+        // 5 panels [1-5]
         insta::assert_snapshot!(format!(
             "Tree: [{}]\nIdentity: [{}]\nContent: [{}]\nProps: [{}]\nArcs: [{}]",
             Focus::Tree.number(),
@@ -779,7 +779,7 @@ mod tests {
 
     #[test]
     fn test_panel_rects_hit_test() {
-        // v0.18.3: 5-panel layout with identity
+        // 5-panel layout with identity
         let rects = PanelRects {
             tree: Some(Rect::new(0, 0, 30, 20)),
             identity: Some(Rect::new(30, 0, 40, 10)), // Center top
@@ -809,7 +809,7 @@ mod tests {
 
     #[test]
     fn test_panel_to_focus() {
-        // v0.18.3: 5 panels map to 5 Focus variants
+        // 5 panels map to 5 Focus variants
         assert_eq!(Panel::Tree.to_focus(), Focus::Tree);
         assert_eq!(Panel::Identity.to_focus(), Focus::Identity);
         assert_eq!(Panel::Content.to_focus(), Focus::Content);

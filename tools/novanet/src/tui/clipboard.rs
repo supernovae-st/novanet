@@ -188,8 +188,6 @@ fn get_source_content(app: &App) -> Option<(String, &'static str)> {
     }
 }
 
-// v0.13.1: get_diagram_content and get_architecture_content removed (panel simplification)
-
 /// Standard + composite key properties for clipboard ordering.
 /// Superset of STANDARD_PROPERTY_NAMES in ui/info.rs (the 8 ADR-044 core properties)
 /// plus composite key fields and provenance metadata.
