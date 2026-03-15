@@ -14,7 +14,7 @@ use crate::tui::app::{App, Focus, NavMode};
 use crate::tui::palette;
 use crate::tui::cache::combine_hashes;
 use crate::tui::data::TreeItem;
-use crate::tui::theme::hex_to_color;
+use crate::tui::hex_colors::hex_to_color;
 use crate::tui::unicode::truncate_start_to_width;
 
 // =============================================================================

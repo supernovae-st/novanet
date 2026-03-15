@@ -8,7 +8,7 @@ use ratatui::widgets::{Clear, Paragraph};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
-use super::hex_to_color;
+use crate::tui::hex_colors::hex_to_color;
 use crate::tui::palette;
 use crate::tui::widgets::bordered_block;
 

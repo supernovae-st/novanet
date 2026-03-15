@@ -10,7 +10,7 @@ use ratatui::widgets::Paragraph;
 
 use crate::tui::app::App;
 use crate::tui::palette;
-use crate::tui::theme::hex_to_color;
+use crate::tui::hex_colors::hex_to_color;
 use crate::tui::ui::COLOR_MUTED_TEXT;
 
 /// Information needed to render the mini-map.

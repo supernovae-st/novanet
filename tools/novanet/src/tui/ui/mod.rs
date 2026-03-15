@@ -1,13 +1,19 @@
 //! UI rendering for TUI v2.
 //!
 //! Two modes (Graph + Flow). Renders tree, identity, content, props, arcs panels.
+//!
+//! Sub-modules:
+//! - `badges.rs`: Icon and badge classification helpers (realm, layer, arc family, cardinality)
+//! - `text_utils.rs`: Text wrapping, truncation, spinner animation
 
+mod badges;
 mod flow;
 mod graph;
 mod identity_panel;
 mod info;
 mod overlays;
 mod status;
+mod text_utils;
 mod tree;
 mod yaml_panel;
 
@@ -18,6 +24,13 @@ pub use status::render_status;
 pub use tree::render_tree;
 pub use yaml_panel::render_content_panel;
 
+// Re-export extracted modules for backward compatibility.
+// Submodules import badge/text functions via `super::` or `super::super::`.
+pub(super) use badges::{
+    arc_family_badge_icon, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
+};
+pub(super) use text_utils::{spinner, truncate_str, wrap_text};
+
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
@@ -25,12 +38,8 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Clear, Paragraph};
 
 use super::app::{App, NavMode};
-use super::icons;
 use super::palette;
-use super::theme::{self, hex_to_color};
-use super::unicode::truncate_to_width;
-#[cfg(test)]
-use super::unicode::truncate_start_to_width;
+use super::theme;
 use super::widgets::bordered_block;
 
 // =============================================================================
@@ -39,9 +48,6 @@ use super::widgets::bordered_block;
 
 /// Minimum terminal width for wide (3-column) layout.
 const WIDE_LAYOUT_MIN_WIDTH: u16 = 160;
-
-/// Spinner animation speed divisor (higher = slower animation).
-const SPINNER_SPEED_DIVISOR: usize = 2;
 
 // -----------------------------------------------------------------------------
 // Color palette constants (re-exported from palette.rs)
@@ -92,10 +98,6 @@ pub(super) const BOX_BORDER_FOCUSED: Color = palette::NORD_BORDER_FOCUSED;
 
 /// Selected box border: Solarized Cyan (bright) - active box for copy/scroll.
 pub(super) const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
-
-// -----------------------------------------------------------------------------
-// Layout constants (percentages and sizes)
-// -----------------------------------------------------------------------------
 
 // =============================================================================
 // LAYOUT CONSTANTS (v0.18.3: New 4-panel layout)
@@ -173,12 +175,6 @@ pub(super) const STYLE_PALETTE_DIM: Style = Style::new().fg(palette::DIM);
 // =============================================================================
 
 /// Build a scroll indicator with directional arrows.
-///
-/// Returns:
-/// - `""` if content fits in visible area (no scrolling needed)
-/// - `" ↓ [1/N] "` if at top (can scroll down)
-/// - `" ↑ [N/N] "` if at bottom (can scroll up)
-/// - `" ↕ [M/N] "` if in middle (can scroll both ways)
 pub(super) fn scroll_indicator(
     scroll_pos: usize,
     total_lines: usize,
@@ -190,104 +186,10 @@ pub(super) fn scroll_indicator(
 }
 
 // =============================================================================
-// HELPER FUNCTIONS (shared across UI modules)
-// =============================================================================
-
-// Provenance will be tracked per-instance at runtime (seed/nika/mcp)
-
-// =============================================================================
-// CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)
-// =============================================================================
-
-/// Get icon for realm badge (from visual-encoding.yaml via icons.rs).
-/// Named `_badge` to avoid collision with expand_icon variables in tree.rs
-/// Uses icons.rs as source of truth.
-pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
-    match realm_key {
-        "shared" => icons::REALMS_SHARED.terminal,
-        "org" => icons::REALMS_ORG.terminal,
-        _ => "○",
-    }
-}
-
-/// Get icon for layer badge (from visual-encoding.yaml via icons.rs).
-/// All icons are single-width Unicode symbols (no emojis).
-/// Uses icons.rs as source of truth.
-pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
-    match layer_key {
-        // 4 shared layers
-        "config" => icons::LAYERS_CONFIG.terminal,
-        "locale" => icons::LAYERS_LOCALE.terminal,
-        "geography" => icons::LAYERS_GEOGRAPHY.terminal,
-        "knowledge" => icons::LAYERS_KNOWLEDGE.terminal,
-        // 6 org layers
-        "foundation" => icons::LAYERS_FOUNDATION.terminal,
-        "structure" => icons::LAYERS_STRUCTURE.terminal,
-        "semantic" => icons::LAYERS_SEMANTIC.terminal,
-        "instruction" => icons::LAYERS_INSTRUCTION.terminal,
-        "output" => icons::LAYERS_OUTPUT.terminal,
-        _ => "○",
-    }
-}
-
-// Arc Family helpers for tree visual enrichment
-
-/// Get icon for arc family badge (from visual-encoding.yaml via icons.rs).
-/// Uses icons.rs as source of truth.
-pub(super) fn arc_family_badge_icon(family_key: &str) -> &'static str {
-    match family_key {
-        "ownership" => icons::ARC_FAMILIES_OWNERSHIP.terminal,
-        "localization" => icons::ARC_FAMILIES_LOCALIZATION.terminal,
-        "semantic" => icons::ARC_FAMILIES_SEMANTIC.terminal,
-        "generation" => icons::ARC_FAMILIES_GENERATION.terminal,
-        "mining" => icons::ARC_FAMILIES_MINING.terminal,
-        _ => "?",
-    }
-}
-
-/// Get short abbreviation for cardinality display.
-pub(super) fn cardinality_abbrev(cardinality: &str) -> &'static str {
-    match cardinality {
-        "zero_to_one" => "0:1",
-        "one_to_one" => "1:1",
-        "one_to_many" => "1:N",
-        "many_to_one" => "N:1",
-        "many_to_many" => "N:M",
-        _ => "?:?",
-    }
-}
-
-/// Wrap text to lines of max `width` characters, returning owned Strings.
-/// Uses char indices instead of collecting to Vec<char> for efficiency.
-pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
-    let mut result = Vec::new();
-    let mut chars = text.char_indices().peekable();
-    while chars.peek().is_some() {
-        let start = chars.peek().map(|(i, _)| *i).unwrap_or(0);
-        let mut end = start;
-        let mut count = 0;
-        while let Some((idx, c)) = chars.peek() {
-            if count >= width {
-                break;
-            }
-            end = *idx + c.len_utf8();
-            count += 1;
-            chars.next();
-        }
-        if start < end {
-            result.push(text[start..end].to_string());
-        }
-    }
-    result
-}
-
-// =============================================================================
 // EMPTY STATE RENDERING
 // =============================================================================
 
 /// Types of empty states that can be displayed.
-/// All variants are exercised in tests; only `NoClasses` is constructed in
-/// production so far — others will be wired as error/loading paths mature.
 #[derive(Debug, Clone, Copy)]
 #[allow(dead_code)]
 pub enum EmptyStateClass {
@@ -304,51 +206,48 @@ pub enum EmptyStateClass {
 }
 
 impl EmptyStateClass {
-    /// Get the icon for this empty state.
     fn icon(&self) -> &'static str {
         match self {
-            EmptyStateClass::NoConnection => "⚠",
-            EmptyStateClass::NoClasses => "∅",
-            EmptyStateClass::NoResults => "◌",
-            EmptyStateClass::NoInstances => "□",
-            EmptyStateClass::Loading => "◐",
+            EmptyStateClass::NoConnection => "\u{26a0}",
+            EmptyStateClass::NoClasses => "\u{2205}",
+            EmptyStateClass::NoResults => "\u{25cc}",
+            EmptyStateClass::NoInstances => "\u{25a1}",
+            EmptyStateClass::Loading => "\u{25d0}",
         }
     }
 
-    /// Get the title for this empty state.
     fn title(&self) -> &'static str {
         match self {
             EmptyStateClass::NoConnection => "Neo4j Not Connected",
             EmptyStateClass::NoClasses => "No Node Classes Found",
             EmptyStateClass::NoResults => "No Results",
             EmptyStateClass::NoInstances => "No Instances",
-            EmptyStateClass::Loading => "Loading…",
+            EmptyStateClass::Loading => "Loading\u{2026}",
         }
     }
 
-    /// Get the description lines for this empty state (zero allocation).
     fn description(&self) -> &'static [&'static str] {
         match self {
             EmptyStateClass::NoConnection => &[
                 "Unable to connect to Neo4j",
                 "",
                 "Try:",
-                "  • pnpm infra:up",
-                "  • Check NEO4J_URI environment variable",
+                "  \u{2022} pnpm infra:up",
+                "  \u{2022} Check NEO4J_URI environment variable",
             ],
             EmptyStateClass::NoClasses => &[
                 "The taxonomy tree is empty.",
                 "",
                 "Run:",
-                "  • cargo run -- schema generate",
-                "  • cargo run -- db seed",
+                "  \u{2022} cargo run -- schema generate",
+                "  \u{2022} cargo run -- db seed",
             ],
             EmptyStateClass::NoResults => &[
                 "No nodes match your current filter.",
                 "",
                 "Try:",
-                "  • Remove filters with 'c'",
-                "  • Switch modes with 1-4",
+                "  \u{2022} Remove filters with 'c'",
+                "  \u{2022} Switch modes with 1-4",
             ],
             EmptyStateClass::NoInstances => &[
                 "This Class has no data instances yet.",
@@ -356,11 +255,10 @@ impl EmptyStateClass {
                 "Create one with:",
                 "  cargo run -- node create --class=<Class>",
             ],
-            EmptyStateClass::Loading => &["Fetching data from Neo4j…"],
+            EmptyStateClass::Loading => &["Fetching data from Neo4j\u{2026}"],
         }
     }
 
-    /// Get the hint text for this empty state.
     fn hint(&self) -> &'static str {
         match self {
             EmptyStateClass::NoConnection => "Press 'r' to retry",
@@ -374,12 +272,10 @@ impl EmptyStateClass {
 
 /// Render an empty state message in a centered box.
 fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, tick: u16) {
-    // Calculate centered box dimensions
     let box_width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
     let box_height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(2));
 
     if box_width < POPUP_BOX_MIN_WIDTH || box_height < POPUP_BOX_MIN_HEIGHT {
-        // Area too small for empty state
         return;
     }
 
@@ -387,17 +283,14 @@ fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, t
     let y = (area.height.saturating_sub(box_height)) / 2 + area.y;
     let box_area = Rect::new(x, y, box_width, box_height);
 
-    // Build content lines
     let mut lines: Vec<Line> = Vec::new();
 
-    // Title with icon
     let title_icon = empty_state.icon();
     let title_text = empty_state.title();
 
-    // Loading spinner animation
+    // Loading spinner animation (uses spinner() from text_utils)
     let display_icon = if matches!(empty_state, EmptyStateClass::Loading) {
-        const BRAILLE: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
-        BRAILLE[(tick / SPINNER_SPEED_DIVISOR as u16) as usize % BRAILLE.len()]
+        spinner(tick)
     } else {
         title_icon
     };
@@ -414,7 +307,6 @@ fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, t
 
     lines.push(Line::from(""));
 
-    // Description lines
     for desc_line in empty_state.description() {
         lines.push(Line::from(Span::styled(
             format!("  {}", desc_line),
@@ -422,57 +314,31 @@ fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, t
         )));
     }
 
-    // Hint (if any)
     let hint = empty_state.hint();
     if !hint.is_empty() {
         lines.push(Line::from(""));
         lines.push(Line::from(Span::styled(format!("  {}", hint), STYLE_INFO)));
     }
 
-    // Render block with border
     let block = bordered_block("", COLOR_UNFOCUSED_BORDER)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
 
-    // Clear background and render
     f.render_widget(Clear, box_area);
     f.render_widget(paragraph, box_area);
 }
 
-/// Safely truncate a UTF-8 string to N terminal columns (not chars).
-/// Appends "…" if truncated. Handles CJK, emoji, and combining characters.
-fn truncate_str(s: &str, max_width: usize) -> String {
-    truncate_to_width(s, max_width)
-}
-
-/// Safely truncate a UTF-8 string from the START, keeping last N columns.
-/// Prepends "…" if truncated. Used for breadcrumbs where the end is most relevant.
-#[cfg(test)]
-fn truncate_start(s: &str, max_width: usize) -> String {
-    truncate_start_to_width(s, max_width)
-}
-
-/// Animated spinner for loading states.
-/// Cycles through braille patterns for smooth animation.
-const SPINNER_FRAMES: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
-
-/// Get the current spinner frame based on tick counter.
-fn spinner(tick: u16) -> &'static str {
-    SPINNER_FRAMES[(tick as usize / SPINNER_SPEED_DIVISOR) % SPINNER_FRAMES.len()]
-}
-
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
-    // Clear panel rects at render start to avoid stale hit-testing
     app.panel_rects.clear();
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(1), // Header
-            Constraint::Min(0),    // Main content
-            Constraint::Length(1), // Unified status bar (hints + stats)
+            Constraint::Length(1),
+            Constraint::Min(0),
+            Constraint::Length(1),
         ])
         .split(f.area());
 
@@ -480,7 +346,6 @@ pub fn render(f: &mut Frame, app: &mut App) {
     render_main(f, chunks[1], app);
     render_status(f, chunks[2], app);
 
-    // Overlays on top (order matters: last = topmost)
     if app.search.active {
         overlays::render_search(f, app);
     }
@@ -495,8 +360,6 @@ pub fn render(f: &mut Frame, app: &mut App) {
     }
 }
 
-/// Header: Logo + Mode tabs.
-/// Shows: [1]Graph
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = NavMode::all()
         .iter()
@@ -523,19 +386,16 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     ];
     header.extend(tabs);
 
-    // Show hide_empty indicator when active in Instances view
     if app.hide_empty && app.is_graph_mode() {
         header.push(Span::styled(
-            " [∅ hidden]",
+            " [\u{2205} hidden]",
             Style::default().fg(Color::Yellow),
         ));
     }
 
-    // Minimal right side: just ?:help and q:quit (shortcuts in footer/action bar)
     let right_side = vec![Span::styled("  ?:help  q:quit", theme::ui::muted_style())];
 
     let mut full_header: Vec<Span<'static>> = header;
-    // Calculate padding to right-align
     let header_len: usize = full_header.iter().map(|s| s.content.len()).sum();
     let right_len: usize = right_side.iter().map(|s| s.content.len()).sum();
     let padding = area
@@ -550,11 +410,10 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, area);
 }
 
-/// Layout mode based on terminal width.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum LayoutMode {
-    Wide,   // 3 columns: Tree | Info | YAML
-    Narrow, // 2 columns: Tree | (Info / YAML stacked)
+    Wide,
+    Narrow,
 }
 
 impl LayoutMode {
@@ -567,14 +426,12 @@ impl LayoutMode {
     }
 }
 
-/// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     if app.mode == NavMode::Flow {
         flow::render_flow(f, app, area);
         return;
     }
 
-    // Graph mode: standard panel layout (unified tree)
     let layout_mode = LayoutMode::detect(area.width);
 
     match layout_mode {
@@ -583,13 +440,9 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree [1] | Center (Identity+DataViewer [2]) | Right (Props+Stats [3] + Arcs [4]).
-/// Refactored for new 4-panel layout with clear separation.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
-    // Build unified content ONCE
     let content = build_unified_content(app);
 
-    // 3-column horizontal layout: Tree | Center | Right
     let h_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
@@ -599,10 +452,8 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(area);
 
-    // LEFT: Tree [1]
     render_tree(f, h_chunks[0], app);
 
-    // CENTER: Identity+Provenance (top) + Data Viewer (bottom)
     let center_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
@@ -611,10 +462,9 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(h_chunks[1]);
 
-    render_identity_panel(f, center_chunks[0], app); // Identity+Provenance
-    render_content_panel(f, center_chunks[1], app); // Data Viewer [2]
+    render_identity_panel(f, center_chunks[0], app);
+    render_content_panel(f, center_chunks[1], app);
 
-    // RIGHT: Props+Stats (top) + Arcs (bottom)
     let right_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
@@ -623,10 +473,9 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(h_chunks[2]);
 
-    render_props_panel(f, right_chunks[0], app, &content); // Props+Stats [3]
-    render_graph_panel(f, right_chunks[1], app); // Arcs [4]
+    render_props_panel(f, right_chunks[0], app, &content);
+    render_graph_panel(f, right_chunks[1], app);
 
-    // Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
     app.panel_rects.identity = Some(center_chunks[0]);
     app.panel_rects.content = Some(center_chunks[1]);
@@ -634,10 +483,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     app.panel_rects.arcs = Some(right_chunks[1]);
 }
 
-/// Narrow layout: Tree [1] | Stacked (Identity, DataViewer [2], Props+Stats [3], Arcs [4]).
-/// Updated for 4-panel layout on smaller screens.
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
-    // Build unified content ONCE
     let content = build_unified_content(app);
 
     let h_chunks = Layout::default()
@@ -650,23 +496,21 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
 
     render_tree(f, h_chunks[0], app);
 
-    // Stack Identity, DataViewer, Props+Stats, Arcs vertically
     let v_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(15), // Identity+Provenance
-            Constraint::Percentage(30), // Data Viewer [2]
-            Constraint::Percentage(30), // Props+Stats [3]
-            Constraint::Percentage(25), // Arcs [4]
+            Constraint::Percentage(15),
+            Constraint::Percentage(30),
+            Constraint::Percentage(30),
+            Constraint::Percentage(25),
         ])
         .split(h_chunks[1]);
 
-    render_identity_panel(f, v_chunks[0], app); // Identity
-    render_content_panel(f, v_chunks[1], app); // Data Viewer [2]
-    render_props_panel(f, v_chunks[2], app, &content); // Props+Stats [3]
-    render_graph_panel(f, v_chunks[3], app); // Arcs [4]
+    render_identity_panel(f, v_chunks[0], app);
+    render_content_panel(f, v_chunks[1], app);
+    render_props_panel(f, v_chunks[2], app, &content);
+    render_graph_panel(f, v_chunks[3], app);
 
-    // Capture panel rects for mouse hit-testing (5 panels)
     app.panel_rects.tree = Some(h_chunks[0]);
     app.panel_rects.identity = Some(v_chunks[0]);
     app.panel_rects.content = Some(v_chunks[1]);
@@ -674,37 +518,30 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     app.panel_rects.arcs = Some(v_chunks[3]);
 }
 
-/// Render the recent items popup overlay.
 fn render_recent_items_overlay(f: &mut Frame, app: &App) {
     use ratatui::widgets::Clear;
 
-    // Center the popup
     let area = f.area();
     let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
-    let height = 14.min(area.height.saturating_sub(4)); // Taller for list items
+    let height = 14.min(area.height.saturating_sub(4));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 3;
 
     let popup_area = Rect::new(x, y, width, height);
 
-    // Clear the area behind the overlay
     f.render_widget(Clear, popup_area);
 
-    // Build content
     let mut lines: Vec<Line> = Vec::new();
 
-    // Title
     lines.push(Line::from(vec![
         Span::styled(" Recent Items ", STYLE_INFO),
         Span::styled("(j/k Enter Esc)", STYLE_DIM),
     ]));
     lines.push(Line::from(""));
 
-    // Show history items (newest first, limit to 10)
     let max_items = 10.min(app.nav_history.len());
     let visible_height = height.saturating_sub(4) as usize;
 
-    // Calculate scroll window
     let start =
         if max_items <= visible_height || app.overlays.recent_items_cursor < visible_height / 2 {
             0
@@ -717,34 +554,32 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
         };
 
     for display_idx in start..start + visible_height.min(max_items - start) {
-        // History is oldest→newest, we show newest first
         let history_idx = app.nav_history.len().saturating_sub(1 + display_idx);
         let is_selected = display_idx == app.overlays.recent_items_cursor;
 
         if let Some(&(mode, cursor)) = app.nav_history.get(history_idx) {
-            // Get item name at that cursor position
             let item = app.tree.item_at(cursor);
             let (icon, name) = match item {
                 Some(crate::tui::data::TreeItem::ClassesSection) => {
-                    ("≡", "Node Classes".to_string())
+                    ("\u{2261}", "Node Classes".to_string())
                 },
-                Some(crate::tui::data::TreeItem::ArcsSection) => ("⇄", "Arcs".to_string()),
+                Some(crate::tui::data::TreeItem::ArcsSection) => ("\u{21c4}", "Arcs".to_string()),
                 Some(crate::tui::data::TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
-                Some(crate::tui::data::TreeItem::Layer(_, l)) => ("▸", l.display_name.clone()),
-                Some(crate::tui::data::TreeItem::Class(_, _, k)) => ("◆", k.display_name.clone()),
+                Some(crate::tui::data::TreeItem::Layer(_, l)) => ("\u{25b8}", l.display_name.clone()),
+                Some(crate::tui::data::TreeItem::Class(_, _, k)) => ("\u{25c6}", k.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Instance(_, _, _, i)) => {
-                    ("•", i.display_name.clone())
+                    ("\u{2022}", i.display_name.clone())
                 },
-                Some(crate::tui::data::TreeItem::ArcFamily(f)) => ("↔", f.display_name.clone()),
-                Some(crate::tui::data::TreeItem::ArcClass(_, ak)) => ("→", ak.display_name.clone()),
+                Some(crate::tui::data::TreeItem::ArcFamily(af)) => ("\u{2194}", af.display_name.clone()),
+                Some(crate::tui::data::TreeItem::ArcClass(_, ak)) => ("\u{2192}", ak.display_name.clone()),
                 Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
-                    ("◫", cat.display_name.clone())
+                    ("\u{25eb}", cat.display_name.clone())
                 },
                 Some(crate::tui::data::TreeItem::EntityGroup(_, _, _, group)) => {
-                    ("◈", group.entity_display_name.clone())
+                    ("\u{25c8}", group.entity_display_name.clone())
                 },
                 Some(crate::tui::data::TreeItem::EntityNativeItem(_, _, _, native)) => {
-                    ("◆", native.display_name.clone())
+                    ("\u{25c6}", native.display_name.clone())
                 },
                 None => ("?", format!("(cursor {})", cursor)),
             };
@@ -754,7 +589,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 crate::tui::app::NavMode::Flow => "[F]",
             };
 
-            let prefix = if is_selected { "› " } else { "  " };
+            let prefix = if is_selected { "\u{203a} " } else { "  " };
             let style = if is_selected {
                 Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
             } else {
@@ -772,7 +607,6 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
         }
     }
 
-    // Footer hint
     if max_items == 0 {
         lines.push(Line::from(Span::styled(
             "  No history yet. Navigate around!",
@@ -793,138 +627,28 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_truncate_str_ascii_under_limit() {
-        assert_eq!(truncate_str("hello", 10), "hello");
-    }
-
-    #[test]
-    fn test_truncate_str_ascii_at_limit() {
-        assert_eq!(truncate_str("hello", 5), "hello");
-    }
-
-    #[test]
-    fn test_truncate_str_ascii_over_limit() {
-        // Width-based: "hell" (4 cols) + "…" (1 col) = 5 cols
-        assert_eq!(truncate_str("hello world", 5), "hell…");
-    }
-
-    #[test]
-    fn test_truncate_str_utf8_bengali() {
-        // Bengali: "বাংলা (বাংলাদেশ)" - this caused the original panic
-        let bengali = "বাংলা (বাংলাদেশ)";
-        // Should not panic even when truncating in the middle of multi-byte chars
-        let result = truncate_str(bengali, 5);
-        // Width-based truncation with "…" suffix
-        assert!(result.ends_with('…'));
-    }
-
-    #[test]
-    fn test_truncate_str_utf8_emoji() {
-        let emoji = "Hello 👋🏻 World 🌍";
-        let result = truncate_str(emoji, 8);
-        // Width-based truncation uses "…" (single char ellipsis)
-        assert!(result.ends_with('…'));
-    }
-
-    #[test]
-    fn test_truncate_str_chinese() {
-        // Chinese chars are 2 columns each: 你(2) + …(1) = 3 cols fits in 4
-        // But 你(2) + 好(2) = 4, which equals max, so we can fit "你好" if exact
-        // Actually: max_width=4, 你好 = 4 cols, fits exactly without truncation
-        // Let's use max_width=3: 你(2) + …(1) = 3 cols
-        let chinese = "你好世界这是中文测试";
-        let result = truncate_str(chinese, 3);
-        assert_eq!(result, "你…"); // 你(2) + …(1) = 3 cols
-    }
-
-    #[test]
-    fn test_truncate_str_empty() {
-        assert_eq!(truncate_str("", 10), "");
-    }
-
-    // =============================================================================
-    // truncate_start tests (UTF-8 safe start truncation for breadcrumbs)
-    // =============================================================================
-
-    #[test]
-    fn test_truncate_start_under_limit() {
-        assert_eq!(truncate_start("hello", 10), "hello");
-    }
-
-    #[test]
-    fn test_truncate_start_at_limit() {
-        assert_eq!(truncate_start("hello", 5), "hello");
-    }
-
-    #[test]
-    fn test_truncate_start_over_limit() {
-        // Width-based: "…" (1 col) + "orld" (4 cols) = 5 cols
-        assert_eq!(truncate_start("hello world", 5), "…orld");
-    }
-
-    #[test]
-    fn test_truncate_start_utf8_arrows() {
-        // This is the actual bug case: "Shared → Org" with → being 3 bytes
-        let s = "Shared → Org Configuration → Slugification";
-        let result = truncate_start(s, 20);
-        // Should keep last 20 chars without panicking
-        assert!(result.starts_with('…'));
-        assert!(result.chars().count() <= 21); // 20 + ellipsis
-    }
-
-    #[test]
-    fn test_truncate_start_utf8_emoji() {
-        // "🎉 Hello 🎉 World" - emojis are 4 bytes each
-        let s = "🎉 Hello 🎉 World";
-        let result = truncate_start(s, 8);
-        assert!(result.starts_with('…'));
-        // Should not panic on multi-byte boundaries
-    }
-
-    #[test]
-    fn test_truncate_start_empty() {
-        assert_eq!(truncate_start("", 10), "");
-    }
-
-    // =============================================================================
-    // Spinner tests
-    // =============================================================================
-
-    #[test]
-    fn test_spinner_cycles_through_frames() {
-        // Spinner should return different chars for different ticks
-        let frames: Vec<&str> = (0..20).map(spinner).collect();
-        // Check that we get braille characters
-        assert!(frames.iter().all(|f| f.chars().all(|c| !c.is_ascii())));
-    }
-
-    // =============================================================================
-    // EmptyStateClass tests (Phase 6.2 TDD)
-    // =============================================================================
-
-    #[test]
     fn test_empty_state_class_icon_no_connection() {
-        assert_eq!(EmptyStateClass::NoConnection.icon(), "⚠");
+        assert_eq!(EmptyStateClass::NoConnection.icon(), "\u{26a0}");
     }
 
     #[test]
     fn test_empty_state_class_icon_no_classes() {
-        assert_eq!(EmptyStateClass::NoClasses.icon(), "∅");
+        assert_eq!(EmptyStateClass::NoClasses.icon(), "\u{2205}");
     }
 
     #[test]
     fn test_empty_state_class_icon_no_results() {
-        assert_eq!(EmptyStateClass::NoResults.icon(), "◌");
+        assert_eq!(EmptyStateClass::NoResults.icon(), "\u{25cc}");
     }
 
     #[test]
     fn test_empty_state_class_icon_no_instances() {
-        assert_eq!(EmptyStateClass::NoInstances.icon(), "□");
+        assert_eq!(EmptyStateClass::NoInstances.icon(), "\u{25a1}");
     }
 
     #[test]
     fn test_empty_state_class_icon_loading() {
-        assert_eq!(EmptyStateClass::Loading.icon(), "◐");
+        assert_eq!(EmptyStateClass::Loading.icon(), "\u{25d0}");
     }
 
     #[test]
@@ -949,120 +673,85 @@ mod tests {
 
     #[test]
     fn test_empty_state_class_title_loading() {
-        assert_eq!(EmptyStateClass::Loading.title(), "Loading…");
+        assert_eq!(EmptyStateClass::Loading.title(), "Loading\u{2026}");
     }
 
     #[test]
     fn test_empty_state_class_description_no_connection() {
         let desc = EmptyStateClass::NoConnection.description();
         assert!(!desc.is_empty(), "description should not be empty");
-        assert!(
-            desc.iter().any(|s| s.contains("Neo4j")),
-            "should mention Neo4j"
-        );
-        assert!(
-            desc.iter().any(|s| s.contains("infra:up")),
-            "should suggest pnpm infra:up"
-        );
+        assert!(desc.iter().any(|s| s.contains("Neo4j")));
+        assert!(desc.iter().any(|s| s.contains("infra:up")));
     }
 
     #[test]
     fn test_empty_state_class_description_no_classes() {
         let desc = EmptyStateClass::NoClasses.description();
         assert!(!desc.is_empty());
-        assert!(
-            desc.iter().any(|s| s.contains("schema generate")),
-            "should suggest schema generate"
-        );
-        assert!(
-            desc.iter().any(|s| s.contains("db seed")),
-            "should suggest db seed"
-        );
+        assert!(desc.iter().any(|s| s.contains("schema generate")));
+        assert!(desc.iter().any(|s| s.contains("db seed")));
     }
 
     #[test]
     fn test_empty_state_class_description_no_results() {
         let desc = EmptyStateClass::NoResults.description();
         assert!(!desc.is_empty());
-        assert!(
-            desc.iter().any(|s| s.contains("filter")),
-            "should mention filters"
-        );
+        assert!(desc.iter().any(|s| s.contains("filter")));
     }
 
     #[test]
     fn test_empty_state_class_description_no_instances() {
         let desc = EmptyStateClass::NoInstances.description();
         assert!(!desc.is_empty());
-        assert!(
-            desc.iter().any(|s| s.contains("node create")),
-            "should suggest node create command"
-        );
+        assert!(desc.iter().any(|s| s.contains("node create")));
     }
 
     #[test]
     fn test_empty_state_class_description_loading() {
         let desc = EmptyStateClass::Loading.description();
         assert!(!desc.is_empty());
-        assert!(
-            desc.iter().any(|s| s.contains("Neo4j")),
-            "should mention Neo4j"
-        );
+        assert!(desc.iter().any(|s| s.contains("Neo4j")));
     }
 
     #[test]
     fn test_empty_state_class_hint_no_connection() {
-        let hint = EmptyStateClass::NoConnection.hint();
-        assert!(hint.contains("r"), "hint should suggest retry with 'r'");
+        assert!(EmptyStateClass::NoConnection.hint().contains("r"));
     }
 
     #[test]
     fn test_empty_state_class_hint_no_classes() {
-        let hint = EmptyStateClass::NoClasses.hint();
-        assert!(hint.contains("q"), "hint should suggest quit with 'q'");
+        assert!(EmptyStateClass::NoClasses.hint().contains("q"));
     }
 
     #[test]
     fn test_empty_state_class_hint_no_results() {
-        let hint = EmptyStateClass::NoResults.hint();
-        assert!(
-            hint.contains("c"),
-            "hint should suggest clearing filters with 'c'"
-        );
+        assert!(EmptyStateClass::NoResults.hint().contains("c"));
     }
 
     #[test]
     fn test_empty_state_class_hint_no_instances() {
-        let hint = EmptyStateClass::NoInstances.hint();
-        assert!(hint.contains("Esc"), "hint should suggest go back");
+        assert!(EmptyStateClass::NoInstances.hint().contains("Esc"));
     }
 
     #[test]
     fn test_empty_state_class_hint_loading() {
-        // Loading has no hint - it's a transient state
         let hint = EmptyStateClass::Loading.hint();
-        // Just verify it doesn't panic and returns something
         assert!(hint.is_empty() || !hint.is_empty());
     }
 
     #[test]
     fn test_empty_state_class_is_copy() {
-        // Verify EmptyStateClass is Copy (can be assigned without move)
         let empty_state = EmptyStateClass::NoConnection;
-        let empty_state2 = empty_state; // Copy
-        let _empty_state3 = empty_state; // Still valid - proves Copy
+        let empty_state2 = empty_state;
+        let _empty_state3 = empty_state;
         assert_eq!(empty_state2.title(), "Neo4j Not Connected");
     }
 
     #[test]
     fn test_empty_state_class_debug_impl() {
-        // Verify Debug is implemented
         let empty_state = EmptyStateClass::Loading;
         let debug_str = format!("{:?}", empty_state);
-        assert!(
-            debug_str.contains("Loading"),
-            "Debug should contain variant name"
-        );
+        assert!(debug_str.contains("Loading"));
     }
 
     #[test]
@@ -1075,11 +764,7 @@ mod tests {
             EmptyStateClass::Loading,
         ];
         for empty_state in variants {
-            assert!(
-                !empty_state.icon().is_empty(),
-                "{:?} icon should not be empty",
-                empty_state
-            );
+            assert!(!empty_state.icon().is_empty(), "{:?} icon should not be empty", empty_state);
         }
     }
 
@@ -1093,11 +778,7 @@ mod tests {
             EmptyStateClass::Loading,
         ];
         for empty_state in variants {
-            assert!(
-                !empty_state.title().is_empty(),
-                "{:?} title should not be empty",
-                empty_state
-            );
+            assert!(!empty_state.title().is_empty(), "{:?} title should not be empty", empty_state);
         }
     }
 }

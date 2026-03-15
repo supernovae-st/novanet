@@ -14,7 +14,7 @@ use super::super::{
 use crate::tui::app::App;
 use crate::tui::data::{locale_to_flag, CollapseKey};
 use crate::tui::palette;
-use crate::tui::theme::hex_to_color;
+use crate::tui::hex_colors::hex_to_color;
 use crate::tui::unicode::display_width;
 
 /// Build all tree lines for the "Node Classes" section.

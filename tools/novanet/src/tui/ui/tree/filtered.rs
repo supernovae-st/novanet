@@ -9,7 +9,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph};
 
 use crate::tui::app::App;
-use crate::tui::theme::hex_to_color;
+use crate::tui::hex_colors::hex_to_color;
 use crate::tui::ui::{
     COLOR_HIGHLIGHT_BG, COLOR_INSTANCE, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_PRIMARY,
     STYLE_UNFOCUSED, spinner,
