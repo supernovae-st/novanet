@@ -108,78 +108,11 @@ RETURN total,
         for row in rows {
             let key: String = row.get("key").unwrap_or_default();
             let display_name: String = row.get("display_name").unwrap_or_default();
-
-            // Parse properties as BTreeMap with proper JSON values
-            let props: BTreeMap<String, JsonValue> = row
-                .get::<neo4rs::BoltMap>("props")
-                .map(|m| {
-                    m.value
-                        .iter()
-                        .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
-                        .collect()
-                })
-                .unwrap_or_default();
-
-            // Parse outgoing arcs
-            let outgoing_arcs: Vec<InstanceArc> = row
-                .get::<Vec<neo4rs::BoltMap>>("outgoing")
-                .unwrap_or_default()
-                .into_iter()
-                .filter_map(|m| {
-                    let arc_type = m.get::<String>("arc_type").ok()?;
-                    if arc_type.is_empty() {
-                        return None;
-                    }
-                    Some(InstanceArc {
-                        arc_type,
-                        target_key: m.get("target_key").unwrap_or_default(),
-                        target_class: m.get("target_class").unwrap_or_default(),
-                        exists: true,
-                        target_display_name: m.get("target_display_name").ok(),
-                        target_slug: m.get("target_slug").ok(),
-                    })
-                })
-                .collect();
-
-            // Parse incoming arcs
-            let incoming_arcs: Vec<InstanceArc> = row
-                .get::<Vec<neo4rs::BoltMap>>("incoming")
-                .unwrap_or_default()
-                .into_iter()
-                .filter_map(|m| {
-                    let arc_type = m.get::<String>("arc_type").ok()?;
-                    if arc_type.is_empty() {
-                        return None;
-                    }
-                    Some(InstanceArc {
-                        arc_type,
-                        target_key: m.get("source_key").unwrap_or_default(),
-                        target_class: m.get("source_class").unwrap_or_default(),
-                        exists: true,
-                        target_display_name: m.get("source_display_name").ok(),
-                        target_slug: m.get("source_slug").ok(),
-                    })
-                })
-                .collect();
-
-            // Calculate relationship_power from HAS_NATIVE arc count
-            let native_count = outgoing_arcs
-                .iter()
-                .filter(|a| a.arc_type == "HAS_NATIVE")
-                .count();
-            let max_natives = 10; // Expected max locales
-            let relationship_power = ((native_count * 100) / max_natives).min(100) as u8;
-
-            // Extract entity_slug from denomination_forms
-            let entity_slug = props
-                .get("denomination_forms")
-                .and_then(|df| df.as_array())
-                .and_then(|arr| {
-                    arr.iter()
-                        .find(|form| form.get("type").and_then(|t| t.as_str()) == Some("url"))
-                        .and_then(|form| form.get("value").and_then(|v| v.as_str()))
-                        .map(|s| s.to_string())
-                });
+            let props = parse_bolt_props(&row);
+            let outgoing_arcs = parse_outgoing_arcs(&row);
+            let incoming_arcs = parse_incoming_arcs(&row);
+            let relationship_power = relationship_power_from_arcs(&outgoing_arcs);
+            let entity_slug = extract_entity_slug(&props);
 
             instances.push(InstanceInfo {
                 key,

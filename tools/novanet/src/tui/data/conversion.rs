@@ -1,8 +1,12 @@
 //! Conversion utilities for TUI data.
 //!
-//! Bolt-to-JSON conversion, label validation, and formatting helpers.
+//! Bolt-to-JSON conversion, label validation, formatting helpers,
+//! and shared parsing helpers for Neo4j query results.
 
 use serde_json::Value as JsonValue;
+use std::collections::BTreeMap;
+
+use super::types::InstanceArc;
 
 /// Maximum number of instances to load per Class.
 /// Reduced from 500 to 300 for better performance with large datasets.
@@ -179,4 +183,97 @@ pub(crate) fn to_kebab_case(s: &str) -> String {
         }
     }
     result
+}
+
+// =============================================================================
+// Shared Neo4j row parsing helpers (used by queries_instances + queries_entities)
+// =============================================================================
+
+/// Parse outgoing arcs from a Cypher row's "outgoing" column.
+///
+/// Expects a `Vec<BoltMap>` with keys: arc_type, target_key, target_class,
+/// target_display_name, target_slug. Filters out entries with empty arc_type.
+pub(crate) fn parse_outgoing_arcs(row: &neo4rs::Row) -> Vec<InstanceArc> {
+    row.get::<Vec<neo4rs::BoltMap>>("outgoing")
+        .unwrap_or_default()
+        .into_iter()
+        .filter_map(|m| {
+            let arc_type = m.get::<String>("arc_type").ok()?;
+            if arc_type.is_empty() {
+                return None;
+            }
+            Some(InstanceArc {
+                arc_type,
+                target_key: m.get("target_key").unwrap_or_default(),
+                target_class: m.get("target_class").unwrap_or_default(),
+                exists: true,
+                target_display_name: m.get("target_display_name").ok(),
+                target_slug: m.get("target_slug").ok(),
+            })
+        })
+        .collect()
+}
+
+/// Parse incoming arcs from a Cypher row's "incoming" column.
+///
+/// Expects a `Vec<BoltMap>` with keys: arc_type, source_key, source_class,
+/// source_display_name, source_slug. Filters out entries with empty arc_type.
+pub(crate) fn parse_incoming_arcs(row: &neo4rs::Row) -> Vec<InstanceArc> {
+    row.get::<Vec<neo4rs::BoltMap>>("incoming")
+        .unwrap_or_default()
+        .into_iter()
+        .filter_map(|m| {
+            let arc_type = m.get::<String>("arc_type").ok()?;
+            if arc_type.is_empty() {
+                return None;
+            }
+            Some(InstanceArc {
+                arc_type,
+                target_key: m.get("source_key").unwrap_or_default(),
+                target_class: m.get("source_class").unwrap_or_default(),
+                exists: true,
+                target_display_name: m.get("source_display_name").ok(),
+                target_slug: m.get("source_slug").ok(),
+            })
+        })
+        .collect()
+}
+
+/// Parse a BoltMap "props" column into a BTreeMap of JSON values.
+pub(crate) fn parse_bolt_props(row: &neo4rs::Row) -> BTreeMap<String, JsonValue> {
+    row.get::<neo4rs::BoltMap>("props")
+        .map(|m| {
+            m.value
+                .iter()
+                .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// Extract entity slug from denomination_forms property (ADR-033).
+///
+/// Looks for the form with `type: "url"` and returns its value.
+pub(crate) fn extract_entity_slug(props: &BTreeMap<String, JsonValue>) -> Option<String> {
+    props
+        .get("denomination_forms")
+        .and_then(|df| df.as_array())
+        .and_then(|arr| {
+            arr.iter()
+                .find(|form| form.get("type").and_then(|t| t.as_str()) == Some("url"))
+                .and_then(|form| form.get("value").and_then(|v| v.as_str()))
+                .map(|s| s.to_string())
+        })
+}
+
+/// Calculate relationship_power from HAS_NATIVE arc count.
+///
+/// Returns 0-100 based on ratio of HAS_NATIVE arcs to expected max (10 locales).
+pub(crate) fn relationship_power_from_arcs(outgoing_arcs: &[InstanceArc]) -> u8 {
+    let native_count = outgoing_arcs
+        .iter()
+        .filter(|a| a.arc_type == "HAS_NATIVE")
+        .count();
+    let max_natives = 10; // Expected max locales
+    ((native_count * 100) / max_natives).min(100) as u8
 }
