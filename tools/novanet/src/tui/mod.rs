@@ -286,7 +286,7 @@ async fn run_app(
                         match TaxonomyTree::load_entity_categories(db).await {
                             Ok(categories) if app.navigation_generation == nav_gen => {
                                 if categories.is_empty() {
-                                    // v0.17.3: No EntityCategory nodes in DB, fall back to flat Entity instances
+                                    // No EntityCategory nodes in DB, fall back to flat Entity instances
                                     app.pending.instance = Some("Entity".to_string());
                                 } else {
                                     // Auto-trigger loading of first category's instances
@@ -325,11 +325,11 @@ async fn run_app(
                     }
 
                     // EntityNative entity groups loading (triggered when EntityNative Class expanded)
-                    // v0.17.3: Group by parent Entity instead of locale
+                    // Group by parent Entity instead of locale
                     if app.take_pending_entity_natives_load() {
                         match TaxonomyTree::load_entity_natives_by_entity(db).await {
                             Ok((groups, natives)) if app.navigation_generation == nav_gen => {
-                                // v0.17.3: Default all entity groups to collapsed
+                                // Default all entity groups to collapsed
                                 for group in &groups {
                                     app.tree
                                         .collapsed

@@ -17,7 +17,7 @@ use super::TaxonomyTree;
 impl TaxonomyTree {
     /// Load taxonomy tree from Neo4j, enriched with content from individual YAML files.
     pub async fn load(db: &Db, root: &Path) -> crate::Result<Self> {
-        // v0.12.5: Load from individual YAML files for content enrichment
+        // Load from individual YAML files for content enrichment
         let taxonomy = load_taxonomy_from_files(root).ok();
 
         // Build lookup maps for realm/layer content
@@ -26,7 +26,7 @@ impl TaxonomyTree {
 
         // Query all Classes with their realm, layer, and instance count
         // Note: Class uses 'label' property as identifier, not 'key'
-        // v0.16.4: Count by label match instead of OF_CLASS (which only exists for Locale)
+        // Count by label match instead of OF_CLASS (which only exists for Locale)
         let cypher = r#"
 MATCH (k:Class:Schema)
 OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)
@@ -106,7 +106,7 @@ ORDER BY realm_key, layer_key, class_key
             let required_properties = row.vec_str("required_properties");
             let schema_hint = row.str("schema_hint");
             let context_budget = row.str("context_budget");
-            // v10: knowledge_tier (optional, only for knowledge-layer nodes)
+            // knowledge_tier (optional, only for knowledge-layer nodes)
             let knowledge_tier = row.opt_str("knowledge_tier");
 
             let class_info = ClassInfo {
@@ -1081,7 +1081,7 @@ ORDER BY c.sort_order, c.key
         db: &Db,
         category_key: &str,
     ) -> crate::Result<(Vec<InstanceInfo>, i64)> {
-        // v0.17.3: Use OPTIONAL MATCH to handle categories with 0 entities
+        // Use OPTIONAL MATCH to handle categories with 0 entities
         // Query returns empty result set if category has no entities (handled in Rust)
         let cypher = r#"
 MATCH (c:EntityCategory {key: $category})
@@ -1232,8 +1232,8 @@ RETURN total,
         FxHashMap<String, Vec<EntityNativeInfo>>,
     )> {
         // Query EntityNatives grouped by parent Entity
-        // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
-        // v0.17.3: Also load all properties for INSTANCE panel display
+        // Use APOC to parse denomination_forms JSON string at query time
+        // Also load all properties for INSTANCE panel display
         let cypher = r#"
 MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)
 OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
@@ -1276,7 +1276,7 @@ ORDER BY entity_key
             });
 
             // Parse natives with slug from denomination_forms and full properties
-            // v0.17.3: Include all properties for INSTANCE panel display
+            // Include all properties for INSTANCE panel display
             let natives: Vec<EntityNativeInfo> = row
                 .get::<Vec<neo4rs::BoltMap>>("natives")
                 .unwrap_or_default()

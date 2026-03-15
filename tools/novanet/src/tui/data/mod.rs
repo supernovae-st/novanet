@@ -93,7 +93,7 @@ impl TaxonomyTree {
     }
 
     /// Initialize with smart default collapsed state for good UX.
-    /// v0.17.3: Start with a clean, navigable tree:
+    /// Start with a clean, navigable tree:
     /// - Classes section: open (shows realms)
     /// - Arcs section: collapsed
     /// - Realms: open (shows layers)
@@ -365,8 +365,8 @@ impl TaxonomyTree {
 
     /// Total number of visible items for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
-    /// v0.16.4: Entity instances are flat (no category rows) with category suffix in display.
-    /// v0.17.3: Added hide_empty parameter to match render_tree and item_at_for_mode filtering.
+    /// Entity instances are flat (no category rows) with category suffix in display.
+    /// Added hide_empty parameter to match render_tree and item_at_for_mode filtering.
     pub fn item_count_for_mode(&self, data_mode: bool, hide_empty: bool) -> usize {
         let mut count = 0;
 
@@ -376,7 +376,7 @@ impl TaxonomyTree {
             for realm in &self.realms {
                 count += 1; // realm header
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    // v0.17.3: Filter layers like render_tree does
+                    // Filter layers like render_tree does
                     let visible_layers: Vec<_> = realm
                         .layers
                         .iter()
@@ -392,7 +392,7 @@ impl TaxonomyTree {
                     for layer in visible_layers {
                         count += 1; // layer header
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            // v0.17.3: Filter classes like render_tree does
+                            // Filter classes like render_tree does
                             let visible_classes: Vec<_> = layer
                                 .classes
                                 .iter()
@@ -412,13 +412,13 @@ impl TaxonomyTree {
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Entity shows flat alphabetical list (no categories)
+                                    // Entity shows flat alphabetical list (no categories)
                                     if class_info.key == "Entity" {
-                                        // v0.17.3: DISABLED EntityCategory grouping
+                                        // DISABLED EntityCategory grouping
                                         // Always use flat instance count
                                         count += self.entity_instance_count();
                                     } else if class_info.key == "EntityNative" {
-                                        // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
+                                        // EntityNative shows EntityGroup nodes (grouped by parent Entity)
                                         for group in &self.entity_native_groups {
                                             count += 1; // EntityGroup node
                                             // If entity group is expanded, add its EntityNativeItems
@@ -465,7 +465,7 @@ impl TaxonomyTree {
 
     /// Get item at cursor position for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
-    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    /// Added hide_empty parameter to match render_tree filtering.
     pub fn item_at_for_mode(
         &self,
         cursor: usize,
@@ -488,7 +488,7 @@ impl TaxonomyTree {
                 idx += 1;
 
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    // v0.17.3: Filter layers like render_tree does
+                    // Filter layers like render_tree does
                     let visible_layers: Vec<_> = realm
                         .layers
                         .iter()
@@ -508,7 +508,7 @@ impl TaxonomyTree {
                         idx += 1;
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            // v0.17.3: Filter classes like render_tree does
+                            // Filter classes like render_tree does
                             let visible_classes: Vec<_> = layer
                                 .classes
                                 .iter()
@@ -531,7 +531,7 @@ impl TaxonomyTree {
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Entity shows simple flat list (matches tree.rs rendering)
+                                    // Entity shows simple flat list (matches tree.rs rendering)
                                     // No categories, no expand - just instances
                                     if class_info.key == "Entity" {
                                         for instance in self.entity_instances_flat() {
@@ -543,7 +543,7 @@ impl TaxonomyTree {
                                             idx += 1;
                                         }
                                     } else if class_info.key == "EntityNative" {
-                                        // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
+                                        // EntityNative shows EntityGroup nodes (grouped by parent Entity)
                                         for group in &self.entity_native_groups {
                                             if idx == cursor {
                                                 return Some(TreeItem::EntityGroup(
@@ -726,7 +726,7 @@ impl TaxonomyTree {
     // =========================================================================
 
     /// Get the collapse key for an item at cursor position.
-    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    /// Added hide_empty parameter to match render_tree filtering.
     pub fn collapse_key_at(
         &self,
         cursor: usize,
@@ -768,7 +768,7 @@ impl TaxonomyTree {
     /// Returns None if at root or no parent exists.
     /// Hierarchy: Instance -> Class -> Layer -> Realm -> ClassesSection
     ///            ArcClass -> ArcFamily -> ArcsSection
-    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    /// Added hide_empty parameter to match render_tree filtering.
     pub fn find_parent_cursor(
         &self,
         cursor: usize,
@@ -807,7 +807,6 @@ impl TaxonomyTree {
             },
 
             // Instance's parent is its Class
-            // v0.16.4: Entity instances now go directly to Entity class (no categories)
             Some(TreeItem::Instance(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             },
@@ -912,7 +911,7 @@ impl TaxonomyTree {
                             // In data mode, count instances
                             if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key))
                             {
-                                // v0.17.3: Entity uses flat instances (matches tree.rs rendering)
+                                // Entity uses flat instances (matches tree.rs rendering)
                                 if class_info.key == "Entity" {
                                     idx += self.entity_instances_flat().count();
                                 } else if class_info.key == "EntityNative" {
@@ -1032,10 +1031,10 @@ impl TaxonomyTree {
     }
 
     /// Check if Entity class has any displayable content.
-    /// v0.17.3: Returns true when categories exist (they're displayable as EntityCategory nodes).
+    /// Returns true when instances exist (displayable as Instance nodes).
     /// Used for quick "has content" checks to decide if toggle should load or expand.
     pub fn has_entity_instances(&self) -> bool {
-        // v0.17.3: Entity uses flat instances (same as regular classes)
+        // Entity uses flat instances (same as regular classes)
         self.instances
             .get("Entity")
             .map(|v| !v.is_empty())
@@ -1043,13 +1042,13 @@ impl TaxonomyTree {
     }
 
     /// Count all Entity instances.
-    /// v0.17.3: Entity uses flat instances (same as regular classes)
+    /// Entity uses flat instances (same as regular classes)
     pub fn entity_instance_count(&self) -> usize {
         self.instances.get("Entity").map(|v| v.len()).unwrap_or(0)
     }
 
     /// Get a flat iterator over all Entity instances.
-    /// v0.17.3: Entity uses flat instances (same as regular classes)
+    /// Entity uses flat instances (same as regular classes)
     pub fn entity_instances_flat(&self) -> impl Iterator<Item = &InstanceInfo> {
         self.instances
             .get("Entity")
@@ -1080,7 +1079,7 @@ impl TaxonomyTree {
         let class_tuple = self.find_class(class_key)?;
 
         if class_key == "Entity" {
-            // v0.17.3: Use flat instance access via nth()
+            // Use flat instance access via nth()
             if let Some(instance) = self.entity_instances_flat().nth(cursor) {
                 return Some(TreeItem::Instance(
                     class_tuple.0,
@@ -1210,7 +1209,6 @@ impl TaxonomyTree {
                     .map(|i| i + 1)
                     .unwrap_or(1);
                 // Calculate instance position within Class
-                // v0.16.5: Entity uses helper for dual storage
                 let loaded_count = if class_info.key == "Entity"
                     && self.has_entity_category_instances()
                     && !self.entity_categories.is_empty()
@@ -1310,7 +1308,7 @@ impl TaxonomyTree {
                     .position(|k| k.key == class_info.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                // v0.17.3: Calculate EntityNative instance count across all entity groups
+                // Calculate EntityNative instance count across all entity groups
                 let loaded_count: usize = self
                     .entity_native_groups
                     .iter()

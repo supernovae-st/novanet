@@ -1,6 +1,6 @@
 //! App state for TUI v2.
 //!
-//! v0.17.3: Refactored into submodules:
+//! Refactored into submodules:
 //! - `constants`: Scroll amounts, margins, UI defaults
 //! - `state`: Navigation enums and state structs
 
@@ -55,7 +55,7 @@ pub struct App {
     pub root_path: String,
 
     // ==========================================================================
-    // Extracted Sub-States (v0.14.0)
+    // Extracted Sub-States
     // ==========================================================================
     /// Search state (extracted sub-state).
     pub search: SearchState,
@@ -129,7 +129,7 @@ pub struct App {
     pub json_pretty: bool,
 
     // ==========================================================================
-    // Instance Panel State (v0.17.3)
+    // Instance Panel State
     // ==========================================================================
     /// Whether STANDARD section is collapsed in instance panel (default: false = expanded).
     pub instance_standard_collapsed: bool,
@@ -158,7 +158,7 @@ impl App {
             tree,
             root_path,
 
-            // Extracted sub-states (v0.14.0)
+            // Extracted sub-states
             search: SearchState::default(),
             overlays: OverlayState::default(),
             yaml: YamlPreviewState::default(),
@@ -196,14 +196,14 @@ impl App {
             expanded_property: false,
             json_pretty: false,
 
-            // Instance panel state (v0.17.3)
+            // Instance panel state
             instance_standard_collapsed: false, // Expanded by default
             instance_specific_collapsed: false, // Expanded by default
 
             // Render caches
             mini_bar_cache: RefCell::new(RenderCache::new()),
         };
-        // v0.17.3: Initialize with smart collapsed defaults for better UX
+        // Initialize with smart collapsed defaults for better UX
         // (Classes section open with realms visible, but layers/classes collapsed)
         app.tree.init_default_collapsed();
         app.load_yaml_for_current();
@@ -245,7 +245,7 @@ impl App {
         // This is the same logic as current_item() but we extract data to avoid borrow issues
         let current = self.get_current_tree_item_data();
 
-        // v0.17.3: Content panel mode is determined by tree selection (no toggle)
+        // Content panel mode is determined by tree selection (no toggle)
         // Handle based on item type
         match current {
             TreeItemData::Class {
@@ -328,7 +328,7 @@ impl App {
         }
 
         // Use mode-aware item lookup
-        // v0.17.3: Pass hide_empty to match render_tree filtering
+        // Pass hide_empty to match render_tree filtering
         let item = if self.is_graph_mode() {
             self.tree
                 .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
@@ -403,7 +403,7 @@ impl App {
                 TreeItemData::None
             },
             // EntityNativeItem shows as Instance (same data structure)
-            // v0.17.3: Now includes full properties for INSTANCE panel display
+            // Now includes full properties for INSTANCE panel display
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
                 TreeItemData::Instance {
                     instance_key: native.key.clone(),
@@ -420,7 +420,6 @@ impl App {
     }
 
     /// Determine the content panel mode based on current tree selection.
-    /// v0.17.3: Phase 3 of source-panel-redesign.md
     ///
     /// Returns a `ContentPanelMode` indicating what the center panel should show:
     /// - `Schema`: YAML definition for Class/ArcClass nodes
@@ -498,7 +497,7 @@ impl App {
 
     /// Ensure cursor is visible by adjusting scroll.
     pub fn ensure_cursor_visible(&mut self) {
-        // v0.17.3: Debug assertion to catch cursor bounds bugs during development
+        // Debug assertion to catch cursor bounds bugs during development
         #[cfg(debug_assertions)]
         {
             let max = self.current_item_count();
@@ -812,7 +811,7 @@ impl App {
     }
 
     /// Open the current YAML file in external editor.
-    /// v0.17.3: Uses $EDITOR environment variable, falls back to 'code' then 'vim'.
+    /// Uses $EDITOR environment variable, falls back to 'code' then 'vim'.
     /// Returns true if editor was launched, false if no YAML file is available.
     pub fn open_yaml_in_editor(&mut self) -> bool {
         if self.yaml.path.is_empty() {
@@ -1046,7 +1045,7 @@ impl App {
             }
         }
         // Normal mode
-        // v0.17.3: Pass hide_empty to match render_tree filtering
+        // Pass hide_empty to match render_tree filtering
         if self.is_graph_mode() {
             self.tree
                 .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
@@ -1056,7 +1055,7 @@ impl App {
     }
 
     /// Get total item count for the current mode.
-    /// v0.17.3: Pass hide_empty to match render_tree and item_at_for_mode filtering.
+    /// Pass hide_empty to match render_tree and item_at_for_mode filtering.
     pub fn current_item_count(&self) -> usize {
         // Filtered Data mode: count only instances of the filtered Class
         if let Some(class_key) = &self.data_filter_class {
@@ -1179,7 +1178,7 @@ impl App {
             // Handle Class toggle in Data mode
             if let Some(class_key) = key.strip_prefix("class:") {
                 if data_mode {
-                    // v0.17.3: Use helpers for Entity/EntityNative dual storage pattern
+                    // Use helpers for Entity/EntityNative dual storage pattern
                     let instances_loaded = if class_key == "Entity" {
                         self.tree.has_entity_instances()
                     } else if class_key == "EntityNative" {
@@ -1190,7 +1189,7 @@ impl App {
 
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
-                        // v0.17.3: Entity uses flat instances (same as regular classes)
+                        // Entity uses flat instances (same as regular classes)
                         if class_key == "Entity" {
                             // Load flat Entity instances
                             self.pending.instance = Some("Entity".to_string());
@@ -1260,7 +1259,7 @@ impl App {
         }
 
         // Check if current item is an Instance
-        // v0.17.3: Pass hide_empty to match render_tree filtering
+        // Pass hide_empty to match render_tree filtering
         // Clone properties to avoid borrow conflict
         let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) = self
             .tree

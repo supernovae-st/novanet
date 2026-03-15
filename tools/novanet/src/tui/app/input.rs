@@ -224,7 +224,7 @@ impl App {
             // NOTE: Up/Down arrows handled below for in-panel navigation (cursor/scroll)
             // Left/Right = panel switching, Up/Down/j/k = in-panel (vim/lazygit pattern)
 
-            // v0.17.3: 't' keybinding removed (SourceTab toggle removed)
+            // 't' keybinding removed (SourceTab toggle removed)
             // Content panel now shows context-aware content based on tree selection
 
             // Enter: toggle collapse/expand (Tree), toggle sections (Content), or expand property (Info)
@@ -238,7 +238,7 @@ impl App {
                         // Future: could toggle between expanded/collapsed view
                     },
                     Focus::Content => {
-                        // v0.17.3: Toggle instance panel sections collapse/expand
+                        // Toggle instance panel sections collapse/expand
                         // Cycles: all expanded → STANDARD collapsed → both collapsed → all expanded
                         if !self.instance_standard_collapsed && !self.instance_specific_collapsed {
                             // Both expanded → collapse STANDARD

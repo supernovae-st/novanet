@@ -56,7 +56,7 @@ const COLOR_POWER_HIGH: Color = palette::GREEN_500;
 const COLOR_POWER_MED: Color = palette::ORANGE_500;
 const COLOR_POWER_LOW: Color = palette::RED_500;
 
-/// Pre-computed power bar strings (v0.17.3: zero-allocation optimization)
+/// Pre-computed power bar strings (zero-allocation optimization)
 /// Index 0 = 0% filled, Index 10 = 100% filled
 const POWER_BARS: [&str; 11] = [
     "▱▱▱▱▱▱▱▱▱▱", // 0/10

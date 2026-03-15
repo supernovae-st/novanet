@@ -191,7 +191,6 @@ pub struct EntityNativeInfo {
     /// Relationship power (0-100) based on completeness
     pub relationship_power: u8,
     /// All properties from Neo4j for display in INSTANCE panel.
-    /// v0.17.3: Added to show full instance details like Entity instances.
     pub properties: BTreeMap<String, JsonValue>,
 }
 
@@ -308,7 +307,6 @@ pub enum TreeItem<'a> {
         &'a EntityCategory,
     ),
     // Data view: Entity groups (between Class and instances for EntityNative only)
-    // v0.17.3: Groups EntityNatives by parent Entity
     EntityGroup(
         &'a RealmInfo,
         &'a LayerInfo,
@@ -322,7 +320,7 @@ pub enum TreeItem<'a> {
         &'a ClassInfo,
         &'a InstanceInfo,
     ),
-    /// Data view: EntityNative items (locale-grouped, v0.17.3)
+    /// Data view: EntityNative items (grouped by parent Entity)
     EntityNativeItem(
         &'a RealmInfo,
         &'a LayerInfo,

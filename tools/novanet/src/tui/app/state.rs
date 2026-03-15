@@ -159,7 +159,7 @@ impl Focus {
 // =============================================================================
 
 /// Content panel mode - determines what the center panel shows.
-/// v0.17.3: Replaces SourceTab - no toggle, context-aware content.
+/// Replaces SourceTab - no toggle, context-aware content.
 ///
 /// Computed on-demand via `App::content_panel_mode()` - not stored in App.
 /// This avoids lifetime complexity while still providing context-aware rendering.
@@ -173,7 +173,7 @@ pub enum ContentPanelMode {
         name: String,
     },
     /// Show instance data from Neo4j (symmetric with Schema for YAML).
-    /// v0.17.3: Now shows actual properties instead of redirect message.
+    /// Shows actual properties from Neo4j.
     InstanceInfo {
         /// Instance key (e.g., "barcode@en-US").
         instance_key: String,
@@ -221,7 +221,7 @@ pub enum TreeItemData {
     },
     Section,
     /// Instance with full metadata for content panel and YAML loading.
-    /// v0.17.3: Extended with instance_key, class_name, realm, layer, properties for ContentPanelMode.
+    /// Includes instance_key, class_name, realm, layer, properties for ContentPanelMode.
     Instance {
         /// Instance key (e.g., "barcode@en-US")
         instance_key: String,
@@ -471,11 +471,11 @@ impl OverlayState {
 }
 
 // =============================================================================
-// PANEL RECTS (Mouse Scroll Support v0.17.3)
+// PANEL RECTS (Mouse Scroll Support)
 // =============================================================================
 
 /// Panel identifiers for mouse hit-testing.
-/// v0.17.3: Renamed Yaml → Content to reflect context-aware content.
+/// Renamed Yaml → Content to reflect context-aware content.
 /// v0.18.3: Added Identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Panel {
@@ -501,7 +501,7 @@ impl Panel {
 
 /// Stores panel rectangles for mouse hit-testing.
 /// Updated during each render pass with the actual panel areas.
-/// v0.17.3: Renamed yaml → content to reflect context-aware content.
+/// Renamed yaml → content to reflect context-aware content.
 /// v0.18.3: Added identity panel for new 5-panel layout.
 #[derive(Debug, Clone, Default)]
 pub struct PanelRects {
