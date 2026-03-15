@@ -2,6 +2,18 @@
 
 use ratatui::text::Line;
 
+/// Clamp a scroll offset so it never exceeds `total_lines - visible_height`.
+///
+/// `visible_height` is typically `area.height.saturating_sub(2) as usize`
+/// (area minus top/bottom borders).
+#[inline]
+pub fn clamp_scroll(scroll: &mut usize, total_lines: usize, visible_height: usize) {
+    let max = total_lines.saturating_sub(visible_height);
+    if *scroll > max {
+        *scroll = max;
+    }
+}
+
 /// Manages scroll state for content that may exceed visible area.
 #[derive(Debug, Default, Clone)]
 pub struct ScrollState {
@@ -146,5 +158,26 @@ mod tests {
         assert_eq!(state.offset, 0);
         assert_eq!(state.total_lines, 0);
         assert_eq!(state.visible_height, 0);
+    }
+
+    #[test]
+    fn test_clamp_scroll_within_bounds() {
+        let mut scroll = 3;
+        clamp_scroll(&mut scroll, 20, 10);
+        assert_eq!(scroll, 3);
+    }
+
+    #[test]
+    fn test_clamp_scroll_exceeds_max() {
+        let mut scroll = 15;
+        clamp_scroll(&mut scroll, 20, 10);
+        assert_eq!(scroll, 10);
+    }
+
+    #[test]
+    fn test_clamp_scroll_content_smaller_than_viewport() {
+        let mut scroll = 5;
+        clamp_scroll(&mut scroll, 5, 10);
+        assert_eq!(scroll, 0);
     }
 }

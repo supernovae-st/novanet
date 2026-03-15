@@ -13,4 +13,4 @@ mod scrollable;
 pub use badge::Badge;
 pub use panel::{bordered_block, FocusablePanel};
 pub use progress_bar::ProgressBar;
-pub use scrollable::ScrollState;
+pub use scrollable::{ScrollState, clamp_scroll};

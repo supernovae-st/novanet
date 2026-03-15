@@ -24,7 +24,7 @@ use crate::tui::app::{App, Focus};
 use crate::tui::data::TreeItem;
 use crate::tui::palette;
 use crate::tui::theme;
-use crate::tui::widgets::bordered_block;
+use crate::tui::widgets::{bordered_block, clamp_scroll};
 
 // DataCategory and ProvenanceMeta re-exported for submodules via super::super::info
 
@@ -57,9 +57,7 @@ pub fn render_identity_panel(f: &mut Frame, area: Rect, app: &mut App) {
 
   // Clamp scroll position
   let visible_height = area.height.saturating_sub(2) as usize; // minus borders
-  if app.identity_scroll > total_lines.saturating_sub(visible_height) {
-    app.identity_scroll = total_lines.saturating_sub(visible_height);
-  }
+  clamp_scroll(&mut app.identity_scroll, total_lines, visible_height);
 
   // Build block with rounded borders and dynamic title
   let focus_border = if is_focused {
