@@ -16,11 +16,13 @@
 mod app;
 pub mod cache;
 pub mod clipboard;
+pub mod color_mode;
 #[path = "colors.generated.rs"]
 pub mod colors;
 mod data;
 pub mod flow;
 mod handlers;
+pub mod hex_colors;
 pub mod icons;
 pub mod palette;
 mod schema;

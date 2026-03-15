@@ -56,7 +56,7 @@ const TUI_COLORS_TEMPLATE: &str = r##"//! TUI color constants generated from YAM
 
 use ratatui::style::Color;
 
-use super::theme::ColorMode;
+use super::color_mode::ColorMode;
 
 // =============================================================================
 // REALM COLORS ({{ realms | length }})

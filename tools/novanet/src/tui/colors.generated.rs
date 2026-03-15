@@ -6,7 +6,7 @@
 
 use ratatui::style::Color;
 
-use super::theme::ColorMode;
+use super::color_mode::ColorMode;
 
 // =============================================================================
 // REALM COLORS (2)
