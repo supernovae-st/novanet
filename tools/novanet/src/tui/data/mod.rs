@@ -8,10 +8,12 @@
 //! - `queries_instances`: Generic instance loading (full, fast, background arcs)
 //! - `queries_entities`: Entity category hierarchy (categories, by-category, natives)
 //! - `tree_state`: Collapse/expand state management
+//! - `cursor_finders`: Cursor position finders (realm, layer, class, family)
 //! - `navigation`: Item counting, cursor lookup, parent finding, hierarchy position
 //! - `entity_helpers`: Centralized Entity dual-storage helpers
 
 mod conversion;
+mod cursor_finders;
 mod entity_helpers;
 mod navigation;
 mod queries;
