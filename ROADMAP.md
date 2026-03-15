@@ -136,24 +136,7 @@ Complete TUI rebuild focusing on stability and simplicity.
 
 **Stats:** -7,600 lines deleted, +1,200 lines added. 179 tests pass.
 
-## v9.5.0 — Advanced TUI (Galaxy Theme)
-
-**STATUS: DEFERRED** — Galaxy features removed during v9.1 stability rebuild.
-Will be reimplemented on stable v2 foundation when prioritized.
-
-| Task | Description | Status |
-|------|-------------|--------|
-| 7.8d | Search + detail pane | DEFERRED |
-| 7.8e | CRUD dialogs | DEFERRED |
-| 7.8f | Galaxy visual theme | DEFERRED |
-| 7.8g | Dashboard mode | DEFERRED |
-| 7.8h | Animations (boot, matrix rain) | DEFERRED |
-| 7.8i | ASCII logo + branding | DEFERRED |
-| 7.8j | Onboarding flow | DEFERRED |
-| 7.8k | Command palette + UX | DEFERRED |
-| 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
-
-## v0.12.0 — SemVer Transition ← CURRENT
+## v0.12.0 — SemVer Transition
 
 Adopted proper semantic versioning. v0.x.y indicates pre-production status.
 
@@ -162,28 +145,6 @@ Adopted proper semantic versioning. v0.x.y indicates pre-production status.
 | **SemVer adoption** | 0.x.y versioning indicates pre-1.0 status |
 | **ADR-024 traits** | defined/authored/imported/generated/retrieved |
 | **Unified packages** | All packages now at 0.12.0 |
-
----
-
-## v11.8.0 — Class Act (Legacy)
-
-Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
-
-| Old Trait | New Trait | Description |
-|-----------|-----------|-------------|
-| `invariant` | `defined` | Structurally fixed, version-controlled definitions |
-| `localized` | `authored` | Human-authored locale-specific content |
-| `knowledge` | `imported` | External data imported from authoritative sources |
-| `generated` | `generated` | LLM-generated output (unchanged) |
-| `aggregated` | `retrieved` | Computed/aggregated from external APIs |
-
-**Files updated:**
-- 60+ YAML node definitions (realm: shared/org)
-- Rust TUI (traits.rs, theme.rs)
-- TypeScript Studio (15+ components, design system, tests)
-- ADR-024 added to novanet-decisions.md
-
-**Schema counts:** 61 NodeClasses, 182 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org), 6 ArcFamilies
 
 ---
 
@@ -237,7 +198,7 @@ Future ideas without timeline. Detailed specs in `docs/plans/future/`.
 | **Dynamic Retrieval** | Context Assembly Engine that reads meta-graph to assemble token-aware context windows autonomously |
 | **Autonomous Learning** | Feedback loops where quality scores improve meta-graph weights over time |
 | **Content Pipeline** | Full CLI-driven generation: `novanet generate --project=qrcode-ai --locale=fr-FR` |
-| **GEO Intelligence** | Geographic localization layer: Thing (invariant), ThingL10n, GEOSeed, GEOSeedMetrics, GEOMiningRun. Deferred from v10.1 — add when needed for location-based content. |
+| **GEO Intelligence** | Geographic localization layer: GEOSeed, GEOSeedMetrics, GEOMiningRun. Deferred from v10.1 — add when needed for location-based content. |
 
 ## Versioning Strategy
 
