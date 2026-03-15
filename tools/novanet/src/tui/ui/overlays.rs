@@ -16,12 +16,18 @@ use super::{
     STYLE_HIGHLIGHT, STYLE_INFO, STYLE_PRIMARY,
 };
 
+/// Maximum number of search results visible in the overlay.
+const SEARCH_MAX_VISIBLE: usize = 8;
+
+/// Margin subtracted from terminal area for popup positioning.
+const POPUP_MARGIN: u16 = 4;
+
 /// Search overlay: fuzzy search with results list.
 pub fn render_search(f: &mut Frame, app: &App) {
     // Center the search box
     let area = f.area();
-    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
-    let height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(4));
+    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(POPUP_MARGIN));
+    let height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(POPUP_MARGIN));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 3; // Slightly above center
 
@@ -57,19 +63,18 @@ pub fn render_search(f: &mut Frame, app: &App) {
     lines.push(Line::from(""));
 
     // Results list with scroll window around cursor
-    let max_visible = 8;
     let total_results = app.search.results.len();
 
     // Calculate scroll window to keep cursor visible
-    let start = if total_results <= max_visible || app.search.cursor < max_visible / 2 {
+    let start = if total_results <= SEARCH_MAX_VISIBLE || app.search.cursor < SEARCH_MAX_VISIBLE / 2 {
         0
-    } else if app.search.cursor > total_results - max_visible / 2 {
-        total_results.saturating_sub(max_visible)
+    } else if app.search.cursor > total_results - SEARCH_MAX_VISIBLE / 2 {
+        total_results.saturating_sub(SEARCH_MAX_VISIBLE)
     } else {
-        app.search.cursor.saturating_sub(max_visible / 2)
+        app.search.cursor.saturating_sub(SEARCH_MAX_VISIBLE / 2)
     };
 
-    let visible_results = app.search.results.iter().skip(start).take(max_visible);
+    let visible_results = app.search.results.iter().skip(start).take(SEARCH_MAX_VISIBLE);
     for (i, &idx) in visible_results.enumerate() {
         let actual_idx = start + i;
         let is_selected = actual_idx == app.search.cursor;
@@ -111,7 +116,7 @@ pub fn render_search(f: &mut Frame, app: &App) {
 /// Help overlay: keyboard shortcuts.
 pub fn render_help(f: &mut Frame, _app: &App) {
     let area = f.area();
-    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
+    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(POPUP_MARGIN));
 
     let lines: Vec<Line> = {
         // Graph mode help
@@ -286,7 +291,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
         ]
     };
 
-    let height = (lines.len() as u16 + 2).min(area.height.saturating_sub(4));
+    let height = (lines.len() as u16 + 2).min(area.height.saturating_sub(POPUP_MARGIN));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
@@ -308,8 +313,8 @@ pub fn render_help(f: &mut Frame, _app: &App) {
 /// Color legend overlay: shows Realm, Layer, and Trait color meanings.
 pub fn render_legend(f: &mut Frame, app: &App) {
     let area = f.area();
-    let width = 45.min(area.width.saturating_sub(4));
-    let height = 24.min(area.height.saturating_sub(4));
+    let width = 45.min(area.width.saturating_sub(POPUP_MARGIN));
+    let height = 24.min(area.height.saturating_sub(POPUP_MARGIN));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
