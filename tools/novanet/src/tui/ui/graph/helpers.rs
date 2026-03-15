@@ -161,9 +161,9 @@ pub(crate) fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> S
 
 #[cfg(test)]
 mod tests {
+    use super::super::super::STYLE_PALETTE_DIM;
     use super::*;
     use crate::tui::data::{ClassArcsData, ClassInfo, Neo4jArc, TaxonomyTree};
-    use crate::tui::palette;
     use crate::tui::testing::{
         create_test_class, create_test_layer, create_test_realm, create_test_theme,
         create_tree_with_realms,
@@ -213,7 +213,7 @@ mod tests {
         let tree = create_tree_for_arcs(&["Page"]);
         let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
         let arcs = create_class_arcs_data("Page", Vec::new(), Vec::new());
 
         let mut lines: Vec<Line> = Vec::new();
@@ -234,7 +234,7 @@ mod tests {
         let tree = create_tree_for_arcs(&["Entity", "Block"]);
         let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
 
         let outgoing = vec![
             create_neo4j_arc("USES_ENTITY", "Entity", "semantic"),
@@ -277,7 +277,7 @@ mod tests {
         let tree = create_tree_for_arcs(&["Project", "Entity"]);
         let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
 
         let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
         let outgoing = vec![create_neo4j_arc("USES_ENTITY", "Entity", "semantic")];
@@ -315,7 +315,7 @@ mod tests {
         let tree = create_tree_for_arcs(&["Entity", "Page", "Block"]);
         let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
 
         let incoming = vec![
             create_neo4j_arc("USED_BY_PAGE", "Page", "semantic"),
@@ -352,7 +352,7 @@ mod tests {
         let tree = create_tree_for_arcs(&["Project", "Page"]);
         let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
 
         let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
         let outgoing = vec![create_neo4j_arc("HAS_PAGE", "Page", "ownership")];
@@ -380,7 +380,7 @@ mod tests {
     #[test]
     fn test_render_arcs_by_direction_all_five_families() {
         let theme = create_test_theme();
-        let dim = Style::default().fg(palette::DIM);
+        let dim = STYLE_PALETTE_DIM;
 
         let classes = vec![
             create_test_class("Project"),

@@ -6,14 +6,13 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 
 use super::super::super::app::App;
-use super::super::{STYLE_DIM, STYLE_MUTED};
-use crate::tui::palette;
+use super::super::{STYLE_DIM, STYLE_MUTED, STYLE_PALETTE_DIM};
 use crate::tui::widgets::ProgressBar;
 
 /// Build realm/layer distribution stats for the graph panel fallback view.
 pub(crate) fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     let theme = &app.theme;
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let mut lines: Vec<Line<'static>> = Vec::with_capacity(20);
 
     // Calculate total classes

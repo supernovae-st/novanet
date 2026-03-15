@@ -12,8 +12,8 @@ use ratatui::widgets::Paragraph;
 use super::super::super::app::App;
 use super::super::super::data::TreeItem;
 use super::super::{
-    STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_PRIMARY,
-    STYLE_SUCCESS, spinner, wrap_text,
+    STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_PALETTE_DIM,
+    STYLE_PRIMARY, STYLE_SUCCESS, spinner, wrap_text,
 };
 use super::helpers::render_arcs_by_direction;
 use super::render_with_scroll;
@@ -63,7 +63,7 @@ pub(super) fn render_realm_details(
     let Some(details) = app.details.realm.as_ref() else {
         return;
     };
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let mut lines: Vec<Line> = Vec::new();
 
     lines.push(Line::from(vec![
@@ -151,7 +151,7 @@ pub(super) fn render_layer_details(
     let Some(details) = app.details.layer.as_ref() else {
         return;
     };
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let bright_dim = STYLE_BRIGHT_DIM;
     let mut lines: Vec<Line> = Vec::new();
 
@@ -268,7 +268,7 @@ pub(super) fn render_instance_arcs(
     app: &mut App,
 ) {
     let theme = &app.theme;
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let bright_dim = STYLE_BRIGHT_DIM;
     let mut lines: Vec<Line> = Vec::new();
 
@@ -423,7 +423,7 @@ pub(super) fn render_class_arcs(
     let Some(arcs) = app.details.class_arcs.as_ref() else {
         return;
     };
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let bright_dim = STYLE_BRIGHT_DIM;
     let mut lines: Vec<Line> = Vec::new();
 
@@ -472,7 +472,7 @@ pub(super) fn render_arc_class_details(
     let Some(details) = app.details.arc_class.as_ref() else {
         return;
     };
-    let dim = Style::default().fg(palette::DIM);
+    let dim = STYLE_PALETTE_DIM;
     let mut lines: Vec<Line> = Vec::new();
 
     let family_color = theme.arc_family_color(&details.family);
