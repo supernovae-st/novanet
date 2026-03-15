@@ -173,23 +173,9 @@ pub(super) fn scroll_indicator(
     total_lines: usize,
     visible_height: usize,
 ) -> String {
-    if total_lines <= visible_height {
-        return String::new();
-    }
-
-    let max_scroll = total_lines.saturating_sub(visible_height);
-    let current_page = scroll_pos + 1;
-    let total_pages = max_scroll + 1;
-
-    let arrow = if scroll_pos == 0 {
-        "↓" // at top, can scroll down
-    } else if scroll_pos >= max_scroll {
-        "↑" // at bottom, can scroll up
-    } else {
-        "↕" // in middle, can scroll both
-    };
-
-    format!(" {} [{}/{}] ", arrow, current_page, total_pages)
+    let mut state = super::widgets::ScrollState::new(total_lines, visible_height);
+    state.offset = scroll_pos;
+    state.indicator()
 }
 
 // =============================================================================
