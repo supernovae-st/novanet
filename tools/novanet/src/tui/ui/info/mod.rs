@@ -2,9 +2,19 @@
 //!
 //! v0.20.0: Split into submodules:
 //! - `mod.rs`: Types, constants, helpers, render functions
-//! - `builders.rs`: Content builders for each tree item type (~1800 lines)
+//! - `builders.rs`: Routing dispatcher for tree item → builder
+//! - `build_schema.rs`: ClassesSection, ArcsSection, Realm, Layer
+//! - `build_class.rs`: Class (NodeClass) content builder
+//! - `build_arcs.rs`: ArcFamily, ArcClass content builders
+//! - `build_instance.rs`: Instance content builder
+//! - `build_groups.rs`: EntityCategory, LocaleGroup, EntityGroup, empty state
 
 mod builders;
+mod build_arcs;
+mod build_class;
+mod build_groups;
+mod build_instance;
+mod build_schema;
 
 pub use builders::build_unified_content;
 
