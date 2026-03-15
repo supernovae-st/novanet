@@ -1,7 +1,7 @@
 //! Reusable panel widgets with focus state management.
 
 use ratatui::style::{Color, Style};
-use ratatui::widgets::{Block, Borders};
+use ratatui::widgets::{Block, BorderType, Borders};
 
 /// A panel with automatic focus styling.
 pub struct FocusablePanel<'a> {
@@ -47,6 +47,7 @@ impl<'a> FocusablePanel<'a> {
         Block::default()
             .title(self.title)
             .borders(Borders::ALL)
+            .border_type(BorderType::Rounded)
             .border_style(Style::default().fg(border_color))
     }
 }

@@ -9,7 +9,7 @@ use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
-    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+    Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
 
 use super::super::app::App;
@@ -169,6 +169,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         .title(Line::from(title_spans))
         .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color));
 
     let inner = block.inner(area);

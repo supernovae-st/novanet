@@ -15,7 +15,7 @@ use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
-    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+    Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
 use serde_json::Value as JsonValue;
 
@@ -483,6 +483,7 @@ fn render_instance_info(
     let block = Block::default()
         .title(title)
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -925,6 +926,7 @@ fn render_section_info(
     let block = Block::default()
         .title(title)
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -953,6 +955,7 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
     let block = Block::default()
         .title(title)
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -1189,6 +1192,7 @@ fn render_yaml_content_in_box(
         .title(title)
         .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color));
 
     let paragraph = Paragraph::new(lines).block(block);

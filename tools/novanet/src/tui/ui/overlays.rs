@@ -4,7 +4,7 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Clear, Paragraph};
+use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
@@ -106,6 +106,7 @@ pub fn render_search(f: &mut Frame, app: &App) {
     let block = Block::default()
         .title(Span::styled(" Search ", STYLE_INFO))
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(STYLE_INFO)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
@@ -303,6 +304,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
     let block = Block::default()
         .title(Span::styled(title, STYLE_ACCENT))
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(STYLE_ACCENT)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
@@ -397,6 +399,7 @@ pub fn render_legend(f: &mut Frame, app: &App) {
     let block = Block::default()
         .title(Span::styled(" Legend ", STYLE_ACCENT))
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .border_style(STYLE_ACCENT)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 

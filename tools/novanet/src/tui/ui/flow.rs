@@ -4,7 +4,7 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Paragraph, Tabs};
+use ratatui::widgets::{Block, BorderType, Borders, Paragraph, Tabs};
 
 use crate::tui::app::{App, FlowTab};
 use crate::tui::flow::{FlowDiagram, data_pipeline, schema_architecture};
@@ -52,6 +52,7 @@ fn render_tabs(f: &mut Frame, app: &App, area: Rect) {
         .block(
             Block::default()
                 .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
                 .title(" Flow ── [Tab] switch  [j/k] scroll  [n/p] select "),
         )
         .select(match app.flow.tab {
@@ -89,6 +90,7 @@ fn render_diagram(f: &mut Frame, app: &App, diagram: &FlowDiagram, area: Rect) {
 
     let block = Block::default()
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .title(format!(" {} ", diagram.title));
 
     let paragraph = Paragraph::new(styled_lines).block(block);
@@ -176,6 +178,7 @@ fn render_node_info(f: &mut Frame, app: &App, diagram: &FlowDiagram, area: Rect)
 
     let block = Block::default()
         .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .title(" Node Info ");
 
     let paragraph = Paragraph::new(text).block(block);
