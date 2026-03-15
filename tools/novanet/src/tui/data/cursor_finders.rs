@@ -146,7 +146,8 @@ impl TaxonomyTree {
     ///
     /// Requires the class to be expanded (not collapsed).
     /// Returns cursor position right after the class node (where first instance would be).
-    pub fn find_first_instance_cursor(
+    #[cfg(test)]
+    pub(super) fn find_first_instance_cursor(
         &self,
         realm_key: &str,
         layer_key: &str,
