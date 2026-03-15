@@ -255,6 +255,7 @@ impl DataCategory {
 ///   seed:*       → { source, version, file? }
 ///   runtime:nika → { source, version, workflow_id?, task_id?, provider?, model?, generated_at? }
 ///   runtime:mcp  → { source, version, tool?, user? }
+#[derive(Default)]
 pub(crate) struct ProvenanceMeta {
     pub(crate) source: Option<String>,
     pub(crate) version: Option<String>,
@@ -332,15 +333,7 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
                     // Plain string, not JSON — treat as raw source
                     ProvenanceMeta {
                         source: Some(s.clone()),
-                        version: None,
-                        file: None,
-                        workflow_id: None,
-                        task_id: None,
-                        provider: None,
-                        model: None,
-                        generated_at: None,
-                        tool: None,
-                        user: None,
+                        ..Default::default()
                     }
                 }
             }

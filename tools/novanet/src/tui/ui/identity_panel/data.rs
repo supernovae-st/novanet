@@ -242,33 +242,14 @@ pub(super) fn parse_provenance(
           cat,
           ProvenanceMeta {
             source: Some(s.clone()),
-            version: None,
-            file: None,
-            workflow_id: None,
-            task_id: None,
-            provider: None,
-            model: None,
-            generated_at: None,
-            tool: None,
-            user: None,
+            ..Default::default()
           },
         )
       }
     }
     _ => (
       DataCategory::Mcp,
-      ProvenanceMeta {
-        source: None,
-        version: None,
-        file: None,
-        workflow_id: None,
-        task_id: None,
-        provider: None,
-        model: None,
-        generated_at: None,
-        tool: None,
-        user: None,
-      },
+      ProvenanceMeta::default(),
     ),
   }
 }
