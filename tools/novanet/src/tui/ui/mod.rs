@@ -115,10 +115,6 @@ const POPUP_BOX_MIN_WIDTH: u16 = 20;
 const POPUP_BOX_MIN_HEIGHT: u16 = 6;
 
 // -----------------------------------------------------------------------------
-// Trait icons for visual node classification
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
 // General UI styles (most frequently used, avoid Style::default() overhead)
 // -----------------------------------------------------------------------------
 
@@ -1048,7 +1044,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_class_debug_trait() {
+    fn test_empty_state_class_debug_impl() {
         // Verify Debug is implemented
         let empty_state = EmptyStateClass::Loading;
         let debug_str = format!("{:?}", empty_state);

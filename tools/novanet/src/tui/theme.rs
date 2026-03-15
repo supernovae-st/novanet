@@ -853,8 +853,6 @@ mod tests {
         assert_eq!(layer::color("semantic", mode), Color::Rgb(249, 115, 22));
     }
 
-    // Traits no longer part of schema - provenance is per-instance at runtime
-
     #[test]
     fn test_theme_instance() {
         let theme = Theme::with_mode(ColorMode::TrueColor);
@@ -1019,16 +1017,7 @@ mod tests {
     }
 
     // =========================================================================
-    // Task 2.3: Trait border style tests (ADR-005)
-    // =========================================================================
-
-    /// Test trait border styles for all 5 traits (ADR-005, updated ADR-024).
-    /// Maps CSS border styles to Unicode box-drawing characters:
-    // test_trait_border_all_traits, test_trait_border_fallback, test_trait_border_via_theme removed
-    // Provenance will be per-instance at runtime (seed/nika/mcp)
-
-    // =========================================================================
-    // Task 2.4: Arc family color resolution tests
+    // Arc family color resolution tests
     // =========================================================================
 
     #[test]

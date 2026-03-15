@@ -724,7 +724,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
 }
 
 /// Render arcs grouped by direction (OUTGOING, INCOMING) with classification badges.
-/// Format: → ARC_NAME → [realm/layer] trait_icon TargetClass [fam]
+/// Format: → ARC_NAME → [realm/layer] TargetClass [fam]
 fn render_arcs_by_direction(
     lines: &mut Vec<Line>,
     arcs: &super::super::data::ClassArcsData,

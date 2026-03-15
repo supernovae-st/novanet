@@ -233,36 +233,6 @@ pub fn render_help(f: &mut Frame, _app: &App) {
                 Span::styled("Quit", STYLE_DIM),
             ]),
             Line::from(""),
-            // ADR-024: Updated trait names
-            Line::from(vec![Span::styled(
-                "  Trait Filter (Schema view)",
-                STYLE_HIGHLIGHT,
-            )]),
-            Line::from(vec![
-                Span::styled("    fi       ", STYLE_PRIMARY),
-                Span::styled("Filter: defined (■)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    fl       ", STYLE_PRIMARY),
-                Span::styled("Filter: authored (□)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    fk       ", STYLE_PRIMARY),
-                Span::styled("Filter: imported (◊)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    fg       ", STYLE_PRIMARY),
-                Span::styled("Filter: generated (★)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    fa       ", STYLE_PRIMARY),
-                Span::styled("Filter: retrieved (▪)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    ff       ", STYLE_PRIMARY),
-                Span::styled("Clear filter (show all)", STYLE_DIM),
-            ]),
-            Line::from(""),
             // Tree icons legend
             Line::from(vec![Span::styled("  Tree Icons", STYLE_HIGHLIGHT)]),
             Line::from(vec![
@@ -280,10 +250,6 @@ pub fn render_help(f: &mut Frame, _app: &App) {
             Line::from(vec![
                 Span::styled("    │R│ │L│  ", STYLE_PRIMARY),
                 Span::styled("Realm / Layer type", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    d a i g r", STYLE_PRIMARY),
-                Span::styled("Traits (def/aut/imp/gen/ret)", STYLE_DIM),
             ]),
             Line::from(""),
             Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
@@ -306,7 +272,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
     f.render_widget(paragraph, help_area);
 }
 
-/// Color legend overlay: shows Realm, Layer, and Trait color meanings.
+/// Color legend overlay: shows Realm and Layer color meanings.
 pub fn render_legend(f: &mut Frame, app: &App) {
     let area = f.area();
     let width = 45.min(area.width.saturating_sub(POPUP_MARGIN));
@@ -356,33 +322,6 @@ pub fn render_legend(f: &mut Frame, app: &App) {
             ]));
         }
     }
-
-    lines.push(Line::from(""));
-    lines.push(Line::from(vec![Span::styled(
-        "  Traits (border style)",
-        STYLE_HIGHLIGHT,
-    )]));
-    // ADR-024: Updated trait names (Data Origin semantics)
-    lines.push(Line::from(vec![
-        Span::styled("    ─── ", STYLE_PRIMARY),
-        Span::styled("defined (solid)", STYLE_DIM),
-    ]));
-    lines.push(Line::from(vec![
-        Span::styled("    ╌╌╌ ", STYLE_PRIMARY),
-        Span::styled("authored (dashed)", STYLE_DIM),
-    ]));
-    lines.push(Line::from(vec![
-        Span::styled("    ═══ ", STYLE_PRIMARY),
-        Span::styled("imported (double)", STYLE_DIM),
-    ]));
-    lines.push(Line::from(vec![
-        Span::styled("    ··· ", STYLE_PRIMARY),
-        Span::styled("generated (dotted)", STYLE_DIM),
-    ]));
-    lines.push(Line::from(vec![
-        Span::styled("    · · ", STYLE_PRIMARY),
-        Span::styled("retrieved (dotted thin)", STYLE_DIM),
-    ]));
 
     lines.push(Line::from(""));
     lines.push(Line::from(Span::styled(
@@ -755,25 +694,7 @@ mod tests {
         assert!(expected_section.contains("Layer"));
     }
 
-    #[test]
-    fn test_legend_has_trait_section() {
-        // The legend should show "Traits (border style)" section
-        let expected_section = "Traits (border style)";
-        assert!(expected_section.contains("Trait"));
-    }
-
-    #[test]
-    fn test_legend_trait_styles_count() {
-        // ADR-024 Data Origin semantics (5 traits)
-        let expected_traits = [
-            "defined",  // was: invariant
-            "authored", // was: localized
-            "imported", // was: knowledge
-            "generated",
-            "retrieved", // was: aggregated
-        ];
-        assert_eq!(expected_traits.len(), 5);
-    }
+    // Trait tests removed: ADR-024 deprecated traits in v0.19.0
 
     // =========================================================================
     // Help content structure tests

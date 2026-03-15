@@ -59,7 +59,7 @@ pub struct ClassInfo {
     pub required_properties: Vec<String>,
     pub schema_hint: String,
     pub context_budget: String,
-    /// v10 knowledge tier (technical/style/semantic) — only for knowledge-trait nodes.
+    /// v10 knowledge tier (technical/style/semantic) — only for knowledge-layer nodes.
     pub knowledge_tier: Option<String>,
     // Health stats for tree badges (Feature 2)
     /// Coverage percentage (0-100) — instances with all required fields filled.

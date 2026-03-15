@@ -24,7 +24,7 @@ impl TaxonomyTree {
         let (realm_content, layer_content, arc_family_content) =
             Self::build_content_maps(&taxonomy);
 
-        // Query all Classes with their realm, layer, trait, and instance count
+        // Query all Classes with their realm, layer, and instance count
         // Note: Class uses 'label' property as identifier, not 'key'
         // v0.16.4: Count by label match instead of OF_CLASS (which only exists for Locale)
         let cypher = r#"
@@ -106,7 +106,7 @@ ORDER BY realm_key, layer_key, class_key
             let required_properties = row.vec_str("required_properties");
             let schema_hint = row.str("schema_hint");
             let context_budget = row.str("context_budget");
-            // v10: knowledge_tier (optional, only for knowledge-trait nodes)
+            // v10: knowledge_tier (optional, only for knowledge-layer nodes)
             let knowledge_tier = row.opt_str("knowledge_tier");
 
             let class_info = ClassInfo {
@@ -990,7 +990,7 @@ RETURN l.key as layer_key,
     }
 
     /// Load Layer details from Neo4j (classes, stats).
-    /// Simplified - no longer groups by trait.
+    /// Simplified - returns classes with instance counts.
     pub async fn load_layer_details(db: &Db, layer_key: &str) -> crate::Result<LayerDetails> {
         let cypher = r#"
 MATCH (l:Layer {key: $layerKey})

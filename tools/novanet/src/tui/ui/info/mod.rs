@@ -641,7 +641,7 @@ impl<'a> SectionContent<'a> {
 pub struct UnifiedContent<'a> {
     /// IDENTITY: type, category, key, class
     pub identity: SectionContent<'a>,
-    /// LOCATION: realm, layer, trait
+    /// LOCATION: realm, layer
     pub location: SectionContent<'a>,
     /// METRICS: counts, totals, budgets
     pub metrics: SectionContent<'a>,

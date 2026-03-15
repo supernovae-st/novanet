@@ -399,7 +399,7 @@ node:
   name: Culture
   realm: shared
   layer: config
-  trait: imported  # v0.12.0 ADR-024: knowledge→imported
+  # v0.19.0: traits removed (ADR-024 deprecated)
 
   standard_properties:
     key:
