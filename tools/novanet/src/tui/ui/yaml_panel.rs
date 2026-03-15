@@ -14,14 +14,13 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{
-    Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
-};
+use ratatui::widgets::{Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
 use serde_json::Value as JsonValue;
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
 use crate::tui::app::{App, ContentPanelMode};
 use crate::tui::palette;
+use crate::tui::widgets::bordered_block;
 
 // =============================================================================
 // BOX VISUAL STATES v0.13 (enhanced palette)
@@ -481,11 +480,7 @@ fn render_instance_info(
     // Build title with NEO4J badge
     let title = build_neo4j_title(selected, instance_key);
 
-    let block = Block::default()
-        .title(title)
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color));
+    let block = bordered_block(title, border_color);
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
@@ -924,11 +919,7 @@ fn render_section_info(
     // Build title
     let title = build_info_title(selected, name);
 
-    let block = Block::default()
-        .title(title)
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color));
+    let block = bordered_block(title, border_color);
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
@@ -953,11 +944,7 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
     // Build title
     let title = build_info_title(selected, "INFO");
 
-    let block = Block::default()
-        .title(title)
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color));
+    let block = bordered_block(title, border_color);
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
@@ -1189,12 +1176,8 @@ fn render_yaml_content_in_box(
     // Build scroll indicator with directional arrows
     let scroll_hint = scroll_indicator(app.yaml.scroll, total_lines, visible_height);
 
-    let block = Block::default()
-        .title(title)
-        .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color));
+    let block = bordered_block(title, border_color)
+        .title_bottom(Span::styled(scroll_hint, STYLE_DIM));
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);

@@ -14,15 +14,14 @@ use ratatui::Frame;
 use ratatui::layout::{Margin, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{
-  Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
-};
+use ratatui::widgets::{Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
 
 use serde_json::Value as JsonValue;
 
 use crate::tui::app::{App, Focus};
 use crate::tui::data::TreeItem;
 use crate::tui::palette;
+use crate::tui::widgets::bordered_block;
 use crate::tui::theme;
 use crate::tui::widgets::ProgressBar;
 
@@ -69,11 +68,7 @@ pub fn render_identity_panel(f: &mut Frame, area: Rect, app: &mut App) {
     border_color.unwrap_or(palette::BORDER_UNFOCUSED)
   };
 
-  let mut block = Block::default()
-    .title(format!(" {} ", panel_title))
-    .borders(Borders::ALL)
-    .border_type(BorderType::Rounded)
-    .border_style(Style::default().fg(focus_border));
+  let mut block = bordered_block(format!(" {} ", panel_title), focus_border);
 
   // Bottom title: scroll hint when focused and content overflows
   if is_focused && total_lines > visible_height {

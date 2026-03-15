@@ -8,15 +8,13 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{
-    Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
-};
+use ratatui::widgets::{Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
 use super::super::theme;
 use crate::tui::palette;
-use crate::tui::widgets::ProgressBar;
+use crate::tui::widgets::{ProgressBar, bordered_block};
 use super::{
     STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED,
     STYLE_PRIMARY, STYLE_SUCCESS, scroll_indicator, spinner, wrap_text,
@@ -167,12 +165,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let visible_height = area.height.saturating_sub(2) as usize; // -2 for borders
     let scroll_hint = scroll_indicator(app.arcs_scroll, app.arcs_line_count, visible_height);
 
-    let block = Block::default()
-        .title(Line::from(title_spans))
-        .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color));
+    let block = bordered_block(Line::from(title_spans), border_color)
+        .title_bottom(Span::styled(scroll_hint, STYLE_DIM));
 
     let inner = block.inner(area);
     f.render_widget(block, area);

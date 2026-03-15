@@ -23,13 +23,14 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
+use ratatui::widgets::{Clear, Paragraph};
 
 use super::app::{App, NavMode};
 use super::icons;
 use super::palette;
 use super::theme::{self, hex_to_color};
 use super::unicode::{truncate_start_to_width, truncate_to_width};
+use super::widgets::bordered_block;
 
 // =============================================================================
 // CONSTANTS
@@ -418,10 +419,7 @@ fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, t
     }
 
     // Render block with border
-    let block = Block::default()
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER))
+    let block = bordered_block("", COLOR_UNFOCUSED_BORDER)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -776,10 +774,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
     }
 
     let paragraph = Paragraph::new(lines).block(
-        Block::default()
-            .borders(Borders::ALL)
-            .border_type(BorderType::Rounded)
-            .border_style(Style::default().fg(Color::Cyan))
+        bordered_block("", Color::Cyan)
             .style(Style::default().bg(COLOR_OVERLAY_BG)),
     );
 

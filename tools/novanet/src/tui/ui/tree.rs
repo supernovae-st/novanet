@@ -12,7 +12,7 @@ use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
-    Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
 use rustc_hash::FxHashSet;
 
@@ -40,6 +40,7 @@ use crate::tui::data::locale_to_flag;
 use crate::tui::palette;
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::display_width;
+use crate::tui::widgets::bordered_block;
 
 /// Create styled spans with fuzzy match highlighting and optional background.
 /// Matched character positions are shown with a yellow highlight.
@@ -553,11 +554,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         } else {
             " ◆ Schema "
         };
-        let block = Block::default()
-            .title(empty_title)
-            .borders(Borders::ALL)
-            .border_type(BorderType::Rounded)
-            .border_style(Style::default().fg(border_color));
+        let block = bordered_block(empty_title, border_color);
         f.render_widget(block, area);
 
         // Overlay empty state

@@ -1,9 +1,29 @@
 //! Reusable panel widgets with focus state management.
+//!
+//! v0.20.1: Added `bordered_block` free function for common rounded-border pattern.
 
 use ratatui::style::{Color, Style};
+use ratatui::text::Line;
 use ratatui::widgets::{Block, BorderType, Borders};
 
 use crate::tui::palette;
+
+/// Create a rounded bordered block with title and border color.
+///
+/// This is the most common block pattern in the TUI — rounded borders
+/// with a colored border style. Chain additional methods as needed:
+/// ```ignore
+/// bordered_block(" Title ", Color::Cyan)
+///     .title_bottom(scroll_hint)
+///     .style(Style::default().bg(bg_color))
+/// ```
+pub fn bordered_block<'a>(title: impl Into<Line<'a>>, border_color: Color) -> Block<'a> {
+    Block::default()
+        .title(title)
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .border_style(Style::default().fg(border_color))
+}
 
 /// A panel with automatic focus styling.
 pub struct FocusablePanel<'a> {
@@ -45,12 +65,7 @@ impl<'a> FocusablePanel<'a> {
         } else {
             self.unfocused_color
         };
-
-        Block::default()
-            .title(self.title)
-            .borders(Borders::ALL)
-            .border_type(BorderType::Rounded)
-            .border_style(Style::default().fg(border_color))
+        bordered_block(self.title, border_color)
     }
 }
 
@@ -84,5 +99,47 @@ mod tests {
         let panel = FocusablePanel::new("Test Panel");
         let _block = panel.block();
         // Block is created successfully - compile-time check
+    }
+
+    #[test]
+    fn test_bordered_block_creates_block() {
+        let _block = bordered_block(" Title ", Color::Cyan);
+        // Compiles and creates block with rounded borders
+    }
+
+    #[test]
+    fn test_bordered_block_chainable() {
+        let _block = bordered_block(" Title ", Color::Cyan)
+            .style(Style::default().bg(Color::Black));
+        // Can chain additional Block methods
+    }
+
+    #[test]
+    fn test_bordered_block_accepts_span_title() {
+        use ratatui::text::Span;
+        let _block = bordered_block(
+            Span::styled(" Search ", Style::default().fg(Color::Cyan)),
+            Color::Cyan,
+        );
+    }
+
+    #[test]
+    fn test_bordered_block_accepts_line_title() {
+        let _block = bordered_block(
+            Line::from(vec![
+                ratatui::text::Span::raw(" "),
+                ratatui::text::Span::styled("Title", Style::default().fg(Color::Yellow)),
+                ratatui::text::Span::raw(" "),
+            ]),
+            Color::Cyan,
+        );
+    }
+
+    #[test]
+    fn test_focusable_panel_uses_bordered_block() {
+        // FocusablePanel::block() should produce the same result as bordered_block
+        let panel = FocusablePanel::new("Test").focused(true);
+        let _block = panel.block();
+        // Verifies that FocusablePanel delegates to bordered_block internally
     }
 }

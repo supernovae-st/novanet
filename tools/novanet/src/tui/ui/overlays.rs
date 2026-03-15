@@ -4,12 +4,13 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
+use ratatui::widgets::{Clear, Paragraph};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
 use super::hex_to_color;
 use crate::tui::palette;
+use crate::tui::widgets::bordered_block;
 
 // Re-use shared styles and constants from parent module
 use super::{
@@ -104,11 +105,7 @@ pub fn render_search(f: &mut Frame, app: &App) {
         ]));
     }
 
-    let block = Block::default()
-        .title(Span::styled(" Search ", STYLE_INFO))
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(STYLE_INFO)
+    let block = bordered_block(Span::styled(" Search ", STYLE_INFO), Color::Cyan)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -302,11 +299,7 @@ pub fn render_help(f: &mut Frame, _app: &App) {
 
     let title = " Help ";
 
-    let block = Block::default()
-        .title(Span::styled(title, STYLE_ACCENT))
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(STYLE_ACCENT)
+    let block = bordered_block(Span::styled(title, STYLE_ACCENT), Color::Magenta)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -397,11 +390,7 @@ pub fn render_legend(f: &mut Frame, app: &App) {
         STYLE_DIM,
     )));
 
-    let block = Block::default()
-        .title(Span::styled(" Legend ", STYLE_ACCENT))
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(STYLE_ACCENT)
+    let block = bordered_block(Span::styled(" Legend ", STYLE_ACCENT), Color::Magenta)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
