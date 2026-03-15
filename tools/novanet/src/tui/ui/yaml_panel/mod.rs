@@ -23,7 +23,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::Paragraph;
 
-use super::COLOR_MUTED_TEXT;
+use super::{BOX_BORDER_SELECTED, BOX_BORDER_UNFOCUSED, COLOR_MUTED_TEXT, STYLE_PALETTE_DIM};
 use crate::tui::app::{App, ContentPanelMode};
 use crate::tui::palette;
 use crate::tui::widgets::bordered_block;
@@ -31,16 +31,6 @@ use crate::tui::widgets::bordered_block;
 use self::properties::render_instance_info;
 use self::syntax::render_yaml_content_in_box;
 use self::utils::abbreviate_yaml_path;
-
-// =============================================================================
-// BOX VISUAL STATES v0.13 (enhanced palette)
-// =============================================================================
-
-/// Unfocused: Nord Polar Night (dim) - box is NOT selected
-const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
-
-/// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
-const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
 
 // =============================================================================
 // PUBLIC API
@@ -246,7 +236,7 @@ fn render_section_info(
     lines.push(Line::from(""));
     lines.push(Line::from(Span::styled(
         "   Select a Class to view its YAML schema.",
-        Style::default().fg(palette::DIM),
+        STYLE_PALETTE_DIM,
     )));
 
     let title = build_info_title(selected, name);
@@ -267,7 +257,7 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
         Line::from(""),
         Line::from(Span::styled(
             "   Navigate to a node to view its content.",
-            Style::default().fg(palette::DIM),
+            STYLE_PALETTE_DIM,
         )),
     ];
 

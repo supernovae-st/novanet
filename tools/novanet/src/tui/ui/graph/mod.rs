@@ -16,18 +16,8 @@ use ratatui::widgets::{Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarStat
 
 use super::super::app::{App, Focus};
 use super::super::data::TreeItem;
-use super::{STYLE_DIM, scroll_indicator};
-use crate::tui::{palette, widgets::bordered_block};
-
-// =============================================================================
-// BOX VISUAL STATES (matching yaml_panel.rs pattern)
-// =============================================================================
-
-/// Unfocused: Nord Polar Night (dim) - box is NOT selected
-const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
-
-/// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
-const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
+use super::{BOX_BORDER_SELECTED, BOX_BORDER_UNFOCUSED, STYLE_DIM, scroll_indicator};
+use crate::tui::widgets::bordered_block;
 
 // =============================================================================
 // ARC DISPLAY CONSTANTS

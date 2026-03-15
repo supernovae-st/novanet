@@ -32,7 +32,7 @@ use crate::tui::unicode::truncate_to_width;
 
 use serde_json::Value as JsonValue;
 
-use super::{STYLE_DIM, STYLE_MUTED};
+use super::{BOX_BORDER_FOCUSED, BOX_BORDER_SELECTED, BOX_BORDER_UNFOCUSED, STYLE_DIM, STYLE_MUTED};
 
 // =============================================================================
 // YAML-STYLE COLORS FOR PROPERTIES
@@ -158,7 +158,7 @@ impl DataCategory {
             "seed:content" => DataCategory::Content,
             "runtime:nika" => DataCategory::Nika,
             "runtime:mcp" => DataCategory::Mcp,
-            // Legacy fallbacks
+            // Prefix-match fallbacks for partial provenance strings
             s if s.starts_with("seed:schema") => DataCategory::Schema,
             s if s.starts_with("seed:immutable") => DataCategory::Immutable,
             s if s.starts_with("seed:locale") => DataCategory::Locale,
@@ -325,7 +325,7 @@ pub(super) fn build_provenance_section(provenance: Option<&JsonValue>) -> Sectio
         Some(prov) => match prov {
             // Direct JSON object (normal case)
             JsonValue::Object(_) => ProvenanceMeta::from_json(prov),
-            // JSON-encoded string (legacy fallback: provenance stored as string)
+            // JSON-encoded string (provenance stored as string in some seed files)
             JsonValue::String(s) => {
                 if let Ok(parsed) = serde_json::from_str::<JsonValue>(s) {
                     ProvenanceMeta::from_json(&parsed)
@@ -569,19 +569,6 @@ pub(super) fn render_property_line(name: &str, is_required: bool, prop_type: Pro
 }
 
 // =============================================================================
-// VISUAL STATES FOR BOX NAVIGATION
-// =============================================================================
-
-/// Border color for unfocused boxes (dim gray - panel not active)
-const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
-
-/// Border color for focused but not selected boxes (light gray - panel active, other box selected)
-const BOX_BORDER_FOCUSED: Color = palette::NORD_BORDER_FOCUSED;
-
-/// Border color for selected box (cyan bright - active box for copy/scroll)
-const BOX_BORDER_SELECTED: Color = Color::Cyan;
-
-// =============================================================================
 // UNIFIED SECTION TYPES
 // =============================================================================
 
@@ -815,8 +802,7 @@ pub(super) fn json_value_color(value: &JsonValue) -> Color {
 enum BoxVisualState {
     /// Panel not active
     Unfocused,
-    /// Panel active, but this box is not selected
-    /// NOTE: Reserved for future sub-panel focus tracking.
+    /// Panel active, but this box is not selected (will be used for multi-box focus)
     #[allow(dead_code)]
     Focused,
     /// This box is selected (active for copy/scroll)

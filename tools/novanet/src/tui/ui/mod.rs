@@ -28,7 +28,9 @@ use super::app::{App, NavMode};
 use super::icons;
 use super::palette;
 use super::theme::{self, hex_to_color};
-use super::unicode::{truncate_start_to_width, truncate_to_width};
+use super::unicode::truncate_to_width;
+#[cfg(test)]
+use super::unicode::truncate_start_to_width;
 use super::widgets::bordered_block;
 
 // =============================================================================
@@ -77,6 +79,19 @@ const COLOR_BRIGHT_DIM: Color = palette::BRIGHT_DIM;
 
 /// Active Class background (subtle highlight for Class with expanded instances).
 const COLOR_ACTIVE_CLASS_BG: Color = palette::BG_ACTIVE;
+
+// -----------------------------------------------------------------------------
+// Box border constants (centralized for graph, yaml_panel, info panels)
+// -----------------------------------------------------------------------------
+
+/// Unfocused box border: Nord Polar Night (dim) - box not selected.
+pub(super) const BOX_BORDER_UNFOCUSED: Color = palette::NORD_BORDER_UNFOCUSED;
+
+/// Focused box border: Nord slightly brighter - panel active, box not selected.
+pub(super) const BOX_BORDER_FOCUSED: Color = palette::NORD_BORDER_FOCUSED;
+
+/// Selected box border: Solarized Cyan (bright) - active box for copy/scroll.
+pub(super) const BOX_BORDER_SELECTED: Color = palette::SOLARIZED_CYAN;
 
 // -----------------------------------------------------------------------------
 // Layout constants (percentages and sizes)
@@ -149,6 +164,9 @@ pub(super) const STYLE_UNFOCUSED: Style = Style::new().fg(COLOR_UNFOCUSED_BORDER
 
 /// Bright dim text style.
 const STYLE_BRIGHT_DIM: Style = Style::new().fg(COLOR_BRIGHT_DIM);
+
+/// Palette-specific dim style (RGB 100,100,100) used by graph panel and helpers.
+pub(super) const STYLE_PALETTE_DIM: Style = Style::new().fg(palette::DIM);
 
 // =============================================================================
 // SCROLL INDICATOR HELPERS
@@ -268,9 +286,10 @@ pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
 // =============================================================================
 
 /// Types of empty states that can be displayed.
-/// Some variants are defined for future use in error handling paths.
+/// All variants are exercised in tests; only `NoClasses` is constructed in
+/// production so far — others will be wired as error/loading paths mature.
 #[derive(Debug, Clone, Copy)]
-#[allow(dead_code)] // Variants used incrementally as error paths are implemented
+#[allow(dead_code)]
 pub enum EmptyStateClass {
     /// Neo4j connection failed
     NoConnection,
@@ -429,7 +448,7 @@ fn truncate_str(s: &str, max_width: usize) -> String {
 
 /// Safely truncate a UTF-8 string from the START, keeping last N columns.
 /// Prepends "…" if truncated. Used for breadcrumbs where the end is most relevant.
-#[allow(dead_code)] // Used by tests
+#[cfg(test)]
 fn truncate_start(s: &str, max_width: usize) -> String {
     truncate_start_to_width(s, max_width)
 }
