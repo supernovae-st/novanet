@@ -989,7 +989,6 @@ mod tests {
     };
     use crate::tui::theme::{ColorMode, Theme};
     use pretty_assertions::assert_eq;
-    use ratatui::style::Color;
     use rustc_hash::FxHashMap;
 
     // =========================================================================
