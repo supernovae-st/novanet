@@ -126,95 +126,12 @@ pub(crate) fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tui::data::{ClassInfo, LayerInfo, RealmInfo, TaxonomyTree};
-    use crate::tui::theme::{ColorMode, Theme};
+    use crate::tui::data::{ClassInfo, RealmInfo, TaxonomyTree};
+    use crate::tui::testing::{
+        create_empty_tree, create_test_class, create_test_layer, create_test_realm,
+        create_test_theme, create_tree_with_realms,
+    };
     use pretty_assertions::assert_eq;
-    use rustc_hash::FxHashMap;
-
-    fn create_test_theme() -> Theme {
-        Theme::with_mode(ColorMode::TrueColor)
-    }
-
-    fn create_test_class(key: &str) -> ClassInfo {
-        ClassInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            description: String::new(),
-            icon: String::new(),
-            instance_count: 0,
-            arcs: Vec::new(),
-            yaml_path: String::new(),
-            properties: Vec::new(),
-            required_properties: Vec::new(),
-            schema_hint: String::new(),
-            context_budget: String::new(),
-            knowledge_tier: None,
-            health_percent: None,
-            issues_count: None,
-        }
-    }
-
-    fn create_test_layer(key: &str, classes: Vec<ClassInfo>) -> LayerInfo {
-        LayerInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            classes,
-            content: String::new(),
-        }
-    }
-
-    fn create_test_realm(key: &str, layers: Vec<LayerInfo>) -> RealmInfo {
-        RealmInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            icon: "○",
-            layers,
-            content: String::new(),
-        }
-    }
-
-    fn create_empty_tree() -> TaxonomyTree {
-        TaxonomyTree {
-            realms: Vec::new(),
-            arc_families: Vec::new(),
-            stats: Default::default(),
-            collapsed: Default::default(),
-            instances: Default::default(),
-            instance_totals: Default::default(),
-            class_index: FxHashMap::default(),
-            entity_categories: Vec::new(),
-            entity_category_instances: Default::default(),
-            entity_native_groups: Vec::new(),
-            entity_native_by_entity: Default::default(),
-        }
-    }
-
-    fn create_tree_with_realms(realms: Vec<RealmInfo>) -> TaxonomyTree {
-        let mut class_index = FxHashMap::default();
-        for (r_idx, realm) in realms.iter().enumerate() {
-            for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, class_info) in layer.classes.iter().enumerate() {
-                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
-                }
-            }
-        }
-
-        TaxonomyTree {
-            realms,
-            arc_families: Vec::new(),
-            stats: Default::default(),
-            collapsed: Default::default(),
-            instances: Default::default(),
-            instance_totals: Default::default(),
-            class_index,
-            entity_categories: Vec::new(),
-            entity_category_instances: Default::default(),
-            entity_native_groups: Vec::new(),
-            entity_native_by_entity: Default::default(),
-        }
-    }
 
     fn create_test_app_with_tree(tree: TaxonomyTree) -> App {
         let mut app = App::new(TaxonomyTree::mock_for_testing(), String::new());

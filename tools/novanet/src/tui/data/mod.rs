@@ -276,6 +276,7 @@ impl TaxonomyTree {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::tui::testing::{create_test_class, create_test_layer, create_test_realm};
     use std::collections::BTreeMap;
 
     // ========================================================================
@@ -334,50 +335,10 @@ mod tests {
     // Helper functions for creating test data
     // ========================================================================
 
-    fn create_test_class(key: &str, display_name: &str) -> ClassInfo {
-        ClassInfo {
-            key: key.to_string(),
-            display_name: display_name.to_string(),
-            description: String::new(),
-            icon: String::new(),
-            instance_count: 0,
-            arcs: Vec::new(),
-            yaml_path: String::new(),
-            properties: Vec::new(),
-            required_properties: Vec::new(),
-            schema_hint: String::new(),
-            context_budget: String::new(),
-            knowledge_tier: None,
-            health_percent: None,
-            issues_count: None,
-        }
-    }
-
-    fn create_test_layer(key: &str, classes: Vec<ClassInfo>) -> LayerInfo {
-        LayerInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            classes,
-            content: String::new(),
-        }
-    }
-
-    fn create_test_realm(key: &str, layers: Vec<LayerInfo>) -> RealmInfo {
-        RealmInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            icon: "○",
-            layers,
-            content: String::new(),
-        }
-    }
-
     fn create_test_tree() -> TaxonomyTree {
-        let locale_class = create_test_class("Locale", "Locale");
-        let page_class = create_test_class("Page", "Page");
-        let entity_class = create_test_class("Entity", "Entity");
+        let locale_class = create_test_class("Locale");
+        let page_class = create_test_class("Page");
+        let entity_class = create_test_class("Entity");
 
         // Minimal test fixture (4 shared layers: config, locale, geography, knowledge)
         let locale_layer = create_test_layer("locale", vec![locale_class]);

@@ -162,14 +162,12 @@ pub(crate) fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> S
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tui::data::{ClassArcsData, ClassInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree};
+    use crate::tui::data::{ClassArcsData, ClassInfo, Neo4jArc, TaxonomyTree};
     use crate::tui::palette;
-    use crate::tui::theme::{ColorMode, Theme};
-    use rustc_hash::FxHashMap;
-
-    fn create_test_theme() -> Theme {
-        Theme::with_mode(ColorMode::TrueColor)
-    }
+    use crate::tui::testing::{
+        create_test_class, create_test_layer, create_test_realm, create_test_theme,
+        create_tree_with_realms,
+    };
 
     fn create_class_arcs_data(
         class_label: &str,
@@ -190,71 +188,6 @@ mod tests {
             arc_key: arc_key.to_string(),
             other_class: other_class.to_string(),
             family: family.to_string(),
-        }
-    }
-
-    fn create_test_class(key: &str) -> ClassInfo {
-        ClassInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            description: String::new(),
-            icon: String::new(),
-            instance_count: 0,
-            arcs: Vec::new(),
-            yaml_path: String::new(),
-            properties: Vec::new(),
-            required_properties: Vec::new(),
-            schema_hint: String::new(),
-            context_budget: String::new(),
-            knowledge_tier: None,
-            health_percent: None,
-            issues_count: None,
-        }
-    }
-
-    fn create_test_layer(key: &str, classes: Vec<ClassInfo>) -> LayerInfo {
-        LayerInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            classes,
-            content: String::new(),
-        }
-    }
-
-    fn create_test_realm(key: &str, layers: Vec<LayerInfo>) -> RealmInfo {
-        RealmInfo {
-            key: key.to_string(),
-            display_name: key.to_string(),
-            color: "#ffffff".to_string(),
-            icon: "○",
-            layers,
-            content: String::new(),
-        }
-    }
-
-    fn create_tree_with_realms(realms: Vec<RealmInfo>) -> TaxonomyTree {
-        let mut class_index = FxHashMap::default();
-        for (r_idx, realm) in realms.iter().enumerate() {
-            for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, class_info) in layer.classes.iter().enumerate() {
-                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
-                }
-            }
-        }
-
-        TaxonomyTree {
-            realms,
-            arc_families: Vec::new(),
-            stats: Default::default(),
-            collapsed: Default::default(),
-            instances: Default::default(),
-            instance_totals: Default::default(),
-            class_index,
-            entity_categories: Vec::new(),
-            entity_category_instances: Default::default(),
-            entity_native_groups: Vec::new(),
-            entity_native_by_entity: Default::default(),
         }
     }
 
