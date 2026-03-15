@@ -1,6 +1,13 @@
 //! Pure helper functions for tree rendering.
 //!
-//! Box-drawing characters, expand/collapse icons, and health badge formatting.
+//! Box-drawing characters, expand/collapse icons, health badge formatting,
+//! and the make_line helper for building styled tree lines.
+
+use ratatui::style::{Color, Style};
+use ratatui::text::{Line, Span};
+
+use super::highlight::highlight_matches_with_bg;
+use super::super::COLOR_HIGHLIGHT_BG;
 
 /// Get the branch character for tree drawing.
 /// - `└─` for last item (no more siblings)
@@ -50,6 +57,64 @@ pub fn format_health_badge(health_percent: Option<u8>, issues_count: Option<usiz
             "░".repeat(empty as usize),
             percent
         )
+    }
+}
+
+/// Build a styled tree line with cursor indicator, box-drawing prefix, icon, and text.
+///
+/// Handles cursor highlighting (full-line highlight when focused) and
+/// fuzzy search match highlighting for non-cursor lines.
+#[allow(clippy::too_many_arguments)]
+pub fn make_line<'a>(
+    idx: usize,
+    cursor: usize,
+    focused: bool,
+    tree_prefix: &str,
+    icon: &str,
+    text: String,
+    line_color: Color,
+    text_color: Color,
+    match_positions: Option<&[u32]>,
+    bg_color: Option<Color>,
+) -> Line<'a> {
+    let is_cursor = idx == cursor;
+    let cursor_char = if is_cursor { ">" } else { " " };
+    let icon_space = if icon.is_empty() { "" } else { " " };
+
+    if is_cursor && focused {
+        let style = Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White);
+        Line::from(Span::styled(
+            format!(
+                "{}{}{}{}{}",
+                cursor_char, tree_prefix, icon, icon_space, text
+            ),
+            style,
+        ))
+    } else {
+        let base_style = if let Some(bg) = bg_color {
+            Style::default().bg(bg)
+        } else {
+            Style::default()
+        };
+        let mut spans = Vec::with_capacity(8);
+        spans.push(Span::styled(cursor_char.to_string(), base_style));
+        if !tree_prefix.is_empty() {
+            spans.push(Span::styled(
+                tree_prefix.to_string(),
+                base_style.fg(line_color),
+            ));
+        }
+        spans.push(Span::styled(
+            format!("{}{}", icon, icon_space),
+            base_style.fg(text_color),
+        ));
+        spans.extend(highlight_matches_with_bg(
+            &text,
+            match_positions,
+            text_color,
+            bg_color,
+        ));
+        Line::from(spans)
     }
 }
 
